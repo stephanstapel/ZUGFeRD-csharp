@@ -1,0 +1,6 @@
+The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD.
+
+The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
+
+You can find more information about ZUGFeRD here:
+http://www.ferd-net.de/
