@@ -8,6 +8,6 @@ namespace s2industries.ZUGFeRD
     class TaxRegistration
     {
         public string No { get; set; }
-        public string SchemeID { get; set; }
+        public TaxRegistrationSchemeID SchemeID { get; set; }
     }
 }

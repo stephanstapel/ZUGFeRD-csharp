@@ -48,7 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common Libraries\ZUGFeRD\ZUGFeRD.csproj">
+    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj">
       <Project>{B9550547-0A5C-445D-88C7-DD481881E62F}</Project>
       <Name>ZUGFeRD</Name>
     </ProjectReference>

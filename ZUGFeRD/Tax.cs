@@ -10,7 +10,13 @@ namespace s2industries.ZUGFeRD
         public decimal TaxAmount { get; set; }
         public decimal BasisAmount { get; set; }
         public decimal Percent { get; set; }
-        public string TypeCode { get; set; }
-        public string CategoryCode { get; set; }
+        public TaxType TypeCode { get; set; }
+        public TaxCategoryCode CategoryCode { get; set; }
+
+
+        public Tax()
+        {
+            this.CategoryCode = TaxCategoryCode.S;
+        }
     }
 }
