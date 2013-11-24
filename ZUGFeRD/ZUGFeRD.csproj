@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buyer.cs" />
+    <Compile Include="Charge.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="CurrencyCodes.cs" />
     <Compile Include="GlobalID.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="TaxRegistration.cs" />
     <Compile Include="TaxRegistrationSchemeID.cs" />
     <Compile Include="TaxType.cs" />
+    <Compile Include="TradeAllowanceCharge.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

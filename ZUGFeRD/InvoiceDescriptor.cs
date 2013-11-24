@@ -45,7 +45,8 @@ namespace s2industries.ZUGFeRD
         public decimal TotalPrepaidAmount { get; set; }
         public decimal DuePayableAmount { get; set; }
         internal List<Tax> _Taxes { get; set; }
-        internal ServiceCharge _ServiceCharge { get; set; }
+        internal List<ServiceCharge> _ServiceCharges { get; set; }
+        internal List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; }
         internal PaymentTerms _PaymentTerms { get; set; }
    
 
@@ -71,6 +72,8 @@ namespace s2industries.ZUGFeRD
             this.TotalPrepaidAmount = decimal.MinValue;
             this.DuePayableAmount = decimal.MinValue;
             this._Taxes = new List<Tax>();
+            this._ServiceCharges = new List<ServiceCharge>();
+            this._TradeAllowanceCharges = new List<TradeAllowanceCharge>();
 
             this._BuyerTaxRegistration = new List<TaxRegistration>();
             this._SellerTaxRegistration = new List<TaxRegistration>();
@@ -186,9 +189,9 @@ namespace s2industries.ZUGFeRD
         } // !SetDeliveryNoteReferenceDocument()
 
 
-        public void SetLogisticsServiceCharge(decimal amount, string description, TaxType taxTypeCode, TaxCategoryCode taxCategoryCode, decimal taxPercent)
+        public void AddLogisticsServiceCharge(decimal amount, string description, TaxType taxTypeCode, TaxCategoryCode taxCategoryCode, decimal taxPercent)
         {
-            this._ServiceCharge = new ServiceCharge()
+            this._ServiceCharges.Add(new ServiceCharge()
             {
                 Description = description,
                 Amount = amount,
@@ -198,11 +201,30 @@ namespace s2industries.ZUGFeRD
                     TypeCode = taxTypeCode,
                     Percent = taxPercent
                 }
-            };
-        } // !SetLogisticsServiceCharge()
+            });
+        } // !AddLogisticsServiceCharge()
 
 
-        public void setTradePaymentTerms(string description, DateTime dueDate)
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxType taxTypeCode, TaxCategoryCode taxCategoryCode, decimal taxPercent)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = !isDiscount,
+                Reason = reason,
+                BasisAmount = basisAmount,
+                Currency = currency,
+                Amount = actualAmount,
+                Tax = new Tax()
+                {
+                    CategoryCode = taxCategoryCode,
+                    TypeCode = taxTypeCode,
+                    Percent = taxPercent
+                }
+            });
+        } // !AddTradeAllowanceCharge()
+
+
+        public void SetTradePaymentTerms(string description, DateTime dueDate)
         {
             this._PaymentTerms = new PaymentTerms()
             {

@@ -5,10 +5,11 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class ServiceCharge
+    /// <summary>
+    /// Logistische Servicegebühren
+    /// </summary>
+    public class ServiceCharge : Charge
     {
-        public Tax Tax { get; set; }
         public string Description { get; set; }
-        public decimal Amount { get; set; }
     }
 }

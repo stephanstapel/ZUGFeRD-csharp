@@ -101,23 +101,56 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor._Currency.ToString());
             _writeOptionalTaxes(Writer);
 
-            if (this.Descriptor._ServiceCharge != null)
+            if ((this.Descriptor._TradeAllowanceCharges != null) && (this.Descriptor._TradeAllowanceCharges.Count > 0))
             {
-                Writer.WriteStartElement("SpecifiedLogisticsServiceCharge");
-                if (this.Descriptor._ServiceCharge.Description.Length > 0)
+                foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor._TradeAllowanceCharges)
                 {
-                    Writer.WriteElementString("Description", this.Descriptor._ServiceCharge.Description);
-                }
-                Writer.WriteElementString("AppliedAmount", _formatCurrency(this.Descriptor._ServiceCharge.Amount));
-                if (this.Descriptor._ServiceCharge.Tax != null)
-                {
-                    Writer.WriteStartElement("AppliedTradeTax");
-                    Writer.WriteElementString("TypeCode", _translateTaxType(this.Descriptor._ServiceCharge.Tax.TypeCode));
-                    Writer.WriteElementString("CategoryCode", _translateTaxCategoryCode(this.Descriptor._ServiceCharge.Tax.CategoryCode));
-                    Writer.WriteElementString("ApplicablePercent", this.Descriptor._ServiceCharge.Tax.Percent.ToString("#"));
+                    Writer.WriteStartElement("SpecifiedTradeAllowanceCharge");
+                    Writer.WriteElementString("ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+
+                    Writer.WriteStartElement("BasisAmount");
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.ToString("g"));
+                    Writer.WriteValue(_formatCurrency(tradeAllowanceCharge.BasisAmount));
+                    Writer.WriteEndElement();
+                    Writer.WriteElementString("ActualAmount", _formatCurrency(tradeAllowanceCharge.Amount));
+
+                    if (tradeAllowanceCharge.Reason.Length > 0)
+                    {
+                        Writer.WriteElementString("Reason", tradeAllowanceCharge.Reason);
+                    }
+
+                    if (tradeAllowanceCharge.Tax != null)
+                    {
+                        Writer.WriteStartElement("CategoryTradeTax");
+                        Writer.WriteElementString("TypeCode", _translateTaxType(tradeAllowanceCharge.Tax.TypeCode));
+                        Writer.WriteElementString("CategoryCode", _translateTaxCategoryCode(tradeAllowanceCharge.Tax.CategoryCode));
+                        Writer.WriteElementString("ApplicablePercent", tradeAllowanceCharge.Tax.Percent.ToString("#"));
+                        Writer.WriteEndElement();
+                    }
                     Writer.WriteEndElement();
                 }
-                Writer.WriteEndElement();
+            }
+
+            if ((this.Descriptor._ServiceCharges != null) && (this.Descriptor._ServiceCharges.Count > 0))
+            {
+                foreach (ServiceCharge serviceCharge in this.Descriptor._ServiceCharges)
+                {
+                    Writer.WriteStartElement("SpecifiedLogisticsServiceCharge");
+                    if (serviceCharge.Description.Length > 0)
+                    {
+                        Writer.WriteElementString("Description", serviceCharge.Description);
+                    }
+                    Writer.WriteElementString("AppliedAmount", _formatCurrency(serviceCharge.Amount));
+                    if (serviceCharge.Tax != null)
+                    {
+                        Writer.WriteStartElement("AppliedTradeTax");
+                        Writer.WriteElementString("TypeCode", _translateTaxType(serviceCharge.Tax.TypeCode));
+                        Writer.WriteElementString("CategoryCode", _translateTaxCategoryCode(serviceCharge.Tax.CategoryCode));
+                        Writer.WriteElementString("ApplicablePercent", serviceCharge.Tax.Percent.ToString("#"));
+                        Writer.WriteEndElement();
+                    }
+                    Writer.WriteEndElement();
+                }
             }
 
             if (this.Descriptor._PaymentTerms != null)
