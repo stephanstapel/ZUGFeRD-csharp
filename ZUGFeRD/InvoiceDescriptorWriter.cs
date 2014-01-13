@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace s2industries.ZUGFeRD
 {
-    public class InvoiceDescriptorWriter
+    internal class InvoiceDescriptorWriter
     {
         private XmlTextWriter Writer;
         private InvoiceDescriptor Descriptor;

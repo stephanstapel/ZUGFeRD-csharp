@@ -10,6 +10,21 @@ namespace ZUGFeRD_Test
     {
         internal void run()
         {
+            _loadSampleZUGFeRDInvoice();
+        }
+
+
+        private void _loadSampleZUGFeRDInvoice()
+        {
+            string path = @"..\internal\ZUGFeRD-invoice-1.xml";
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.Comfort);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadSampleZUGFeRDInvoice()
+
+        private void _saveSampleZUGFeRDInvoice()
+        {
             InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
             desc.Profile = Profile.Comfort;
             desc.ReferenceOrderNo = "AB-312";
@@ -33,6 +48,6 @@ namespace ZUGFeRD_Test
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
 
             desc.Save("output.xml");
-        }
+        } // !_saveSampleZUGFeRDInvoice()
     }
 }

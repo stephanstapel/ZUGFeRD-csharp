@@ -82,7 +82,7 @@ namespace s2industries.ZUGFeRD
 
         public static InvoiceDescriptor Load(string filename)
         {
-            throw new NotImplementedException();
+            return InvoiceDescriptorReader.Load(filename);
         } // !Load()
 
 

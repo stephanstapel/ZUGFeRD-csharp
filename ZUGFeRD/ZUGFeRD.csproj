@@ -46,6 +46,7 @@
     <Compile Include="CurrencyCodes.cs" />
     <Compile Include="GlobalID.cs" />
     <Compile Include="InvoiceDescriptor.cs" />
+    <Compile Include="InvoiceDescriptorReader.cs" />
     <Compile Include="InvoiceDescriptorWriter.cs" />
     <Compile Include="InvoiceType.cs" />
     <Compile Include="PaymentTerms.cs" />
