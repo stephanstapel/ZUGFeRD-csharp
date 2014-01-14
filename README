@@ -29,6 +29,8 @@ desc.Save("output.xml");
 A description of the library can be found here:
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
 
+The solution is used in CKS.DMS and supported by CKSolution:
+http://www.cksolution.de
 
 You can find more information about ZUGFeRD here:
 http://www.ferd-net.de/
