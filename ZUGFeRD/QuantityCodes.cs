@@ -23,19 +23,32 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class GlobalID
+    /// <summary>
+    /// ISO Quantity Codes
+    /// 
+    /// for web reference, see e.g.
+    /// http://www.robert-kuhlemann.de/iso_masseinheiten.htm
+    /// </summary>
+    public enum QuantityCodes
     {
-        public string ID { get; set; }
-        public string SchemeID { get; set; }
+        Unknown,
+        C62,
+        KGM,
+        MTK
+    }
 
-        public GlobalID()
-        {
-        } // !GlobalID()
 
-        public GlobalID(string schemeID, string ID)
+    public static class QuantityCodesExtensions
+    {
+        public static QuantityCodes FromString(this QuantityCodes _c, string s)
         {
-            this.ID = ID;
-            this.SchemeID = schemeID;
-        } // !GlobalID()
+            return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
+        } // !FromString()
+
+
+        public static string ToString(this QuantityCodes c)
+        {
+            return c.ToString("g");
+        } // !ToString()
     }
 }

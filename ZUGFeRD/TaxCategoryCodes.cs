@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD
     /// <summary>
     /// http://www.unece.org/trade/untdid/d07a/tred/tred5305.htm
     /// </summary>
-    public enum TaxCategoryCode
+    public enum TaxCategoryCodes
     {
         /// <summary>
         /// Mixed tax rate
@@ -122,5 +122,20 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         Z,
         Unknown
+    }
+
+
+    public static class TaxCategoryCodesExtensions
+    {
+        public static TaxCategoryCodes FromString(this TaxCategoryCodes _c, string s)
+        {
+            return (TaxCategoryCodes)Enum.Parse(typeof(TaxCategoryCodes), s);
+        } // !FromString()
+
+
+        public static string ToString(this TaxCategoryCodes codes)
+        {
+            return codes.ToString("g");
+        } // !ToString()
     }
 }

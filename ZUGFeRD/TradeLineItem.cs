@@ -23,19 +23,26 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class GlobalID
+    public class TradeLineItem
     {
-        public string ID { get; set; }
-        public string SchemeID { get; set; }
+        public GlobalID GlobalID { get; set; }
+        public string SellerAssignedID { get; set; }
+        public string BuyerAssignedID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int UnitQuantity { get; set; }
+        public int BilledQuantity { get; set; }
+        public TaxCategoryCodes TaxCategoryCode { get; set; }
+        public decimal TaxPercent { get; set; }
+        public TaxTypes TaxType { get; set; }
+        public decimal NetUnitPrice { get; set; }
+        public decimal GrossUnitPrice { get; set; }
+        public QuantityCodes UnitCode { get; set; }
 
-        public GlobalID()
+        public TradeLineItem()
         {
-        } // !GlobalID()
-
-        public GlobalID(string schemeID, string ID)
-        {
-            this.ID = ID;
-            this.SchemeID = schemeID;
-        } // !GlobalID()
+            this.NetUnitPrice = decimal.MinValue;
+            this.GrossUnitPrice = decimal.MinValue;
+        }
     }
 }

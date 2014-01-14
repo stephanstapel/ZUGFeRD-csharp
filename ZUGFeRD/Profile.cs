@@ -23,24 +23,34 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class Profile : Enumeration
+    public enum Profile
     {
-        public static int readonly Basic = 0;
-        public static int readonly Comfort = 1;
-        public static int readonly Extended = 2;
+        Unknown = 0,
+        Basic = 1,
+        Comfort = 2,
+        Extended = 3
+    }
 
-        public static Profile FromString(string s)
+
+    public static class ProfileExtensions
+    {
+        public static Profile FromString(this Profile _p, string s)
         {
             switch (s)
             {
                 case "urn:ferd:invoice:1.0:basic": return Profile.Basic;
+                case "urn:ferd:invoice:rc:basic": return Profile.Basic;
                 case "urn:ferd:invoice:1.0:comfort": return Profile.Comfort;
+                case "urn:ferd:invoice:rc:comfort": return Profile.Comfort;
                 case "urn:ferd:invoice:1.0:extended": return Profile.Extended;
+                case "urn:ferd:invoice:rc:extended": return Profile.Extended;
             }
+
+            return Profile.Unknown;
         } // !FromString()
 
 
-        public static string ToString(Profile profile)
+        public static string ToString(this Profile profile)
         {
             switch (profile)
             {

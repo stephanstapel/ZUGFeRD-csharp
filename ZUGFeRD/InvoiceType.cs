@@ -31,17 +31,20 @@ namespace s2industries.ZUGFeRD
         CreditNote = 381,
         DebitNote = 383,
         SelfBilledInvoice = 389
+    }
 
 
-        public static InvoiceType FromString(string s)
+    public static class InvoiceTypeExtensions
+    {
+        public static InvoiceType FromString(this InvoiceType _type, string s)
         {
-            case (s) 
+            switch (s) 
             {
-                "380": return InvoiceType.Invoice;
-                "1380": return InvoiceType.Correction;
-                "381": return InvoieType.CreditNote;
-                "383": return InvoiceType.DebitNote;
-                "389": return InvoiceType.SelfBilledInvoice;
+                case "380": return InvoiceType.Invoice;
+                case "1380": return InvoiceType.Correction;
+                case "381": return InvoiceType.CreditNote;
+                case "383": return InvoiceType.DebitNote;
+                case "389": return InvoiceType.SelfBilledInvoice;
             }
             return InvoiceType.Unknown;
         } // !FromString()

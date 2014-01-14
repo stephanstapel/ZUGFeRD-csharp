@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD
     /// <summary>
     /// http://www.unece.org/trade/untdid/d00a/tred/tred5153.htm
     /// </summary>
-    public enum TaxType
+    public enum TaxTypes
     {
         /// <summary>
         /// Value added tax
@@ -36,5 +36,20 @@ namespace s2industries.ZUGFeRD
         /// cycle.
         /// </summary>
         VAT
+    }
+
+
+    public static class TaxTypesExtensions
+    {
+        public static TaxTypes FromString(this TaxTypes _t, string s)
+        {
+            return (TaxTypes)Enum.Parse(typeof(TaxTypes), s);
+        } // !FromString()
+
+
+        public static string ToString(this TaxTypes t)
+        {
+            return t.ToString("g");
+        } // !ToString()
     }
 }

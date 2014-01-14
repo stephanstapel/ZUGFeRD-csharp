@@ -52,14 +52,16 @@
     <Compile Include="PaymentTerms.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuantityCodes.cs" />
     <Compile Include="ServiceCharge.cs" />
     <Compile Include="SubjectCode.cs" />
     <Compile Include="Tax.cs" />
-    <Compile Include="TaxCategoryCode.cs" />
+    <Compile Include="TaxCategoryCodes.cs" />
     <Compile Include="TaxRegistration.cs" />
     <Compile Include="TaxRegistrationSchemeID.cs" />
-    <Compile Include="TaxType.cs" />
+    <Compile Include="TaxTypes.cs" />
     <Compile Include="TradeAllowanceCharge.cs" />
+    <Compile Include="TradeLineItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

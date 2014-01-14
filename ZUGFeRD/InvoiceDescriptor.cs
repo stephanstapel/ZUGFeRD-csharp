@@ -52,6 +52,7 @@ namespace s2industries.ZUGFeRD
         public Profile Profile { get; set; }
         public InvoiceType Type { get; set; }
         public string ReferenceOrderNo { get; set; }
+        public List<TradeLineItem> TradeLineItems { get; set; }
 
         
         public decimal LineTotalAmount { get; set; }
@@ -89,6 +90,7 @@ namespace s2industries.ZUGFeRD
             this.GrandTotalAmount = decimal.MinValue;
             this.TotalPrepaidAmount = decimal.MinValue;
             this.DuePayableAmount = decimal.MinValue;
+            this.TradeLineItems = new List<TradeLineItem>();
             this._Taxes = new List<Tax>();
             this._ServiceCharges = new List<ServiceCharge>();
             this._TradeAllowanceCharges = new List<TradeAllowanceCharge>();
@@ -207,7 +209,7 @@ namespace s2industries.ZUGFeRD
         } // !SetDeliveryNoteReferenceDocument()
 
 
-        public void AddLogisticsServiceCharge(decimal amount, string description, TaxType taxTypeCode, TaxCategoryCode taxCategoryCode, decimal taxPercent)
+        public void AddLogisticsServiceCharge(decimal amount, string description, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             this._ServiceCharges.Add(new ServiceCharge()
             {
@@ -223,7 +225,7 @@ namespace s2industries.ZUGFeRD
         } // !AddLogisticsServiceCharge()
 
 
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxType taxTypeCode, TaxCategoryCode taxCategoryCode, decimal taxPercent)
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -278,7 +280,7 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void AddApplicableTradeTax(decimal taxAmount, decimal basisAmount, decimal percent, TaxType typeCode, TaxCategoryCode categoryCode)
+        public void AddApplicableTradeTax(decimal taxAmount, decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes categoryCode)
         {
             this._Taxes.Add(new Tax()
             {
@@ -296,5 +298,55 @@ namespace s2industries.ZUGFeRD
             InvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
             writer.Save(this, filename);
         } // !Save()
+
+
+        /// <summary>
+        /// TODO: Rabatt fehlt:
+        /// <AppliedTradeAllowanceCharge>
+		///				<ChargeIndicator>false</ChargeIndicator>
+		///				<ActualAmount currencyID="EUR">0.6667</ActualAmount>
+		///				<Reason>Rabatt</Reason>
+        ///			</AppliedTradeAllowanceCharge>
+        /// </summary>
+        /// <param name="globalIDSchemeID"></param>
+        /// <param name="globalID"></param>
+        /// <param name="sellerAssignedID"></param>
+        /// <param name="buyerAssignedID"></param>
+        /// <param name="description"></param>
+        /// <param name="currency"></param>
+        /// <param name="unitCode"></param>
+        /// <param name="unitQuantity"></param>
+        /// <param name="grossUnitPrice"></param>
+        /// <param name="netUnitPrice"></param>
+        /// <param name="billedQuantity"></param>
+        /// <param name="taxType"></param>
+        /// <param name="categoryCode"></param>
+        /// <param name="taxPercent"></param>
+        public void addTradeLineItem(string globalIDSchemeID, string globalID,
+                                     string sellerAssignedID, string buyerAssignedID,
+                                     string name, string description,
+                                     QuantityCodes unitCode, int unitQuantity,
+                                     decimal grossUnitPrice,
+                                     decimal netUnitPrice, 
+                                     int billedQuantity,
+                                     TaxTypes taxType, TaxCategoryCodes categoryCode, decimal taxPercent)
+        {
+            this.TradeLineItems.Add(new TradeLineItem()
+            {
+                GlobalID = new GlobalID(globalIDSchemeID, globalID),
+                SellerAssignedID = sellerAssignedID,
+                BuyerAssignedID = buyerAssignedID,
+                Name = name,
+                Description = description,
+                UnitCode = unitCode,
+                UnitQuantity = unitQuantity,
+                GrossUnitPrice = grossUnitPrice,
+                NetUnitPrice = netUnitPrice,
+                BilledQuantity = billedQuantity,
+                TaxType = taxType,
+                TaxCategoryCode = categoryCode,
+                TaxPercent = taxPercent
+            });
+        } // !addTradeLineItem()
     }
 }
