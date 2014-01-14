@@ -129,7 +129,14 @@ namespace s2industries.ZUGFeRD
     {
         public static TaxCategoryCodes FromString(this TaxCategoryCodes _c, string s)
         {
-            return (TaxCategoryCodes)Enum.Parse(typeof(TaxCategoryCodes), s);
+            try
+            {
+                return (TaxCategoryCodes)Enum.Parse(typeof(TaxCategoryCodes), s);
+            }
+            catch
+            {
+                return TaxCategoryCodes.Unknown;
+            }
         } // !FromString()
 
 

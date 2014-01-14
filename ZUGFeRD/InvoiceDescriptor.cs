@@ -29,24 +29,24 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class InvoiceDescriptor
     {
-        internal string _InvoiceNo { get; set; }
-        internal DateTime _InvoiceDate { get; set; }
+        public string InvoiceNo { get; set; }
+        public DateTime InvoiceDate { get; set; }
         internal string _InvoiceNoAsReference { get; set; }
 
-        internal string _OrderNo { get; set; }
-        internal DateTime _OrderDate { get; set; }
+        public string OrderNo { get; set; }
+        public DateTime OrderDate { get; set; }
 
         internal string _DeliveryNoteNo { get; set; }
         internal DateTime _DeliveryNoteDate { get; set; }
         public DateTime ActualDeliveryDate { get; set; }
 
-        internal CurrencyCodes _Currency { get; set; }
-        internal Party _Buyer { get; set; }
-        internal Contact _BuyerContact { get; set; }
-        internal List<TaxRegistration> _BuyerTaxRegistration { get; set; }
-        internal Party _Seller { get; set; }
-        internal List<TaxRegistration> _SellerTaxRegistration { get; set; }
-        internal List<Tuple<string, SubjectCode>> _Notes { get; set; }
+        public CurrencyCodes Currency { get; set; }
+        public Party Buyer { get; set; }
+        public Contact BuyerContact { get; set; }
+        public List<TaxRegistration> BuyerTaxRegistration { get; set; }
+        public Party Seller { get; set; }
+        public List<TaxRegistration> SellerTaxRegistration { get; set; }
+        public List<Tuple<string, SubjectCodes>> Notes { get; set; }
 
         public bool IsTest { get; set; }
         public Profile Profile { get; set; }
@@ -76,9 +76,9 @@ namespace s2industries.ZUGFeRD
             this.IsTest = false;
             this.Profile = Profile.Basic;
             this.Type = InvoiceType.Invoice;
-            this._Notes = new List<Tuple<string, SubjectCode>>();
-            this._OrderDate = DateTime.MinValue;
-            this._InvoiceDate = DateTime.MinValue;
+            this.Notes = new List<Tuple<string, SubjectCodes>>();
+            this.OrderDate = DateTime.MinValue;
+            this.InvoiceDate = DateTime.MinValue;
             this._DeliveryNoteDate = DateTime.MinValue;
             this.ActualDeliveryDate = DateTime.MinValue;
 
@@ -95,8 +95,8 @@ namespace s2industries.ZUGFeRD
             this._ServiceCharges = new List<ServiceCharge>();
             this._TradeAllowanceCharges = new List<TradeAllowanceCharge>();
 
-            this._BuyerTaxRegistration = new List<TaxRegistration>();
-            this._SellerTaxRegistration = new List<TaxRegistration>();
+            this.BuyerTaxRegistration = new List<TaxRegistration>();
+            this.SellerTaxRegistration = new List<TaxRegistration>();
         }
 
 
@@ -109,23 +109,23 @@ namespace s2industries.ZUGFeRD
         public static InvoiceDescriptor CreateInvoice(string invoiceNo, DateTime invoiceDate, CurrencyCodes currency, string invoiceNoAsReference = "")
         {
             InvoiceDescriptor retval = new InvoiceDescriptor();
-            retval._InvoiceDate = invoiceDate;
-            retval._InvoiceNo = invoiceNo;
-            retval._Currency = currency;
+            retval.InvoiceDate = invoiceDate;
+            retval.InvoiceNo = invoiceNo;
+            retval.Currency = currency;
             retval._InvoiceNoAsReference = invoiceNoAsReference;
             return retval;
         } // !CreateInvoice()
 
 
-        public void AddNote(string note, SubjectCode code = SubjectCode.Unknown)
+        public void AddNote(string note, SubjectCodes code = SubjectCodes.Unknown)
         {
-            this._Notes.Add(new Tuple<string, SubjectCode>(note, code));
+            this.Notes.Add(new Tuple<string, SubjectCodes>(note, code));
         } // !AddNote()
         
 
         public void SetBuyer(string name, string postcode, string city, string street, string streetno, string country, string globalIDSchemeID = "", string globalID = "")
         {
-            this._Buyer = new Party()
+            this.Buyer = new Party()
             {
                 Name = name,
                 Postcode = postcode,
@@ -144,7 +144,7 @@ namespace s2industries.ZUGFeRD
 
         public void SetSeller(string name, string postcode, string city, string street, string streetno, string country, string globalIDSchemeID = "", string globalID = "")
         {
-            this._Seller = new Party()
+            this.Seller = new Party()
             {
                 Name = name,
                 Postcode = postcode,
@@ -163,7 +163,7 @@ namespace s2industries.ZUGFeRD
 
         public void SetBuyerContact(string name, string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")
         {
-            this._BuyerContact = new Contact()
+            this.BuyerContact = new Contact()
             {
                 Name = name,
                 OrgUnit = orgunit,
@@ -176,7 +176,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddBuyerTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
-            this._BuyerTaxRegistration.Add(new TaxRegistration()
+            this.BuyerTaxRegistration.Add(new TaxRegistration()
             {
                 No = no,
                 SchemeID = schemeID
@@ -186,7 +186,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddSellerTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
-            this._SellerTaxRegistration.Add(new TaxRegistration()
+            this.SellerTaxRegistration.Add(new TaxRegistration()
             {
                 No = no,
                 SchemeID = schemeID
@@ -196,8 +196,8 @@ namespace s2industries.ZUGFeRD
 
         public void SetBuyerOrderReferenceDocument(string orderNo, DateTime orderDate)
         {
-            this._OrderNo = orderNo;
-            this._OrderDate = orderDate;
+            this.OrderNo = orderNo;
+            this.OrderDate = orderDate;
         }
 
 

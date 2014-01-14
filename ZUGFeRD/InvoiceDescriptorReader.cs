@@ -18,9 +18,41 @@ namespace s2industries.ZUGFeRD
             nsmgr.AddNamespace("rsm", doc.DocumentElement.OwnerDocument.DocumentElement.NamespaceURI);
 
             InvoiceDescriptor retval = new InvoiceDescriptor();
-            retval.Profile = default(Profile).FromString(_nodeAsString(doc, "//GuidelineSpecifiedDocumentContextParameter/ID", nsmgr));
-            retval.Type = default(InvoiceType).FromString(_nodeAsString(doc, "//rsm:HeaderExchangedDocument/TypeCode", nsmgr));
+            retval.Profile = default(Profile).FromString(_nodeAsString(doc.DocumentElement, "//GuidelineSpecifiedDocumentContextParameter/ID", nsmgr));
+            retval.Type = default(InvoiceType).FromString(_nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/TypeCode", nsmgr));
+            retval.InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:HeaderExchangedDocument/IssueDateTime", nsmgr);
 
+            foreach (XmlNode node in doc.SelectNodes("//rsm:HeaderExchangedDocument/IncludedNote", nsmgr))
+            {
+                string content = _nodeAsString(node, "//Content", nsmgr);
+                string _subjectCode = _nodeAsString(node, "//SubjectCode", nsmgr);
+                SubjectCodes subjectCode = default(SubjectCodes).FromString(_subjectCode);
+                retval.AddNote(content, subjectCode);
+            }
+
+            retval.ReferenceOrderNo = _nodeAsString(doc, "//ApplicableSupplyChainTradeAgreement/BuyerReference", nsmgr);
+
+            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/SellerTradeParty", nsmgr);
+            foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/SellerTradeParty/SpecifiedTaxRegistration", nsmgr))
+            {
+                string id = _nodeAsString(node, "ID", nsmgr);
+                string schemeID = _nodeAsString(node, "ID/@schemeID", nsmgr);
+
+                retval.AddSellerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
+            }
+
+            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/BuyerTradeParty", nsmgr);
+            foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/BuyerTradeParty/SpecifiedTaxRegistration", nsmgr))
+            {
+                string id = _nodeAsString(node, "ID", nsmgr);
+                string schemeID = _nodeAsString(node, "ID/@schemeID", nsmgr);
+
+                retval.AddBuyerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
+            }
+
+            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//BuyerOrderReferencedDocument/IssueDateTime", nsmgr);
+            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//BuyerOrderReferencedDocument/ID", nsmgr);
+            
             foreach(XmlNode node in doc.SelectNodes("//IncludedSupplyChainTradeLineItem"))
             {
                 retval.TradeLineItems.Add(_parseTradeLineItem(node));
@@ -87,12 +119,6 @@ namespace s2industries.ZUGFeRD
         } // _nodeAsString()
 
 
-        private static string _nodeAsString(XmlDocument document, string xpath, XmlNamespaceManager nsmgr = null, string defaultValue = "")
-        {
-            return _nodeAsString(document.DocumentElement, xpath, nsmgr, defaultValue);
-        } // _nodeAsString()
-
-
         private static int _nodeAsInt(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, int defaultValue = 0)
         {
             string temp = _nodeAsString(node, xpath, nsmgr, "");
@@ -121,5 +147,52 @@ namespace s2industries.ZUGFeRD
                 return defaultValue;
             }
         } // !_nodeAsDecimal()
+
+
+        private static DateTime _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null)
+        {
+            string format = "102";
+            try
+            {
+                format = node.Attributes["format"].InnerText;
+            }
+            catch
+            {
+            }
+
+            if (format != "102")
+            {
+                throw new UnsupportedException();
+            }
+
+            string value = node.SelectSingleNode(xpath, nsmgr).InnerText;
+            if (value.Length != 8)
+            {
+                throw new Exception("Wrong length of datetime element");
+            }
+
+            string year = value.Substring(0, 4);
+            string month = value.Substring(4, 2);
+            string day = value.Substring(6, 2);
+
+            return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
+        } // !_nodeAsDateTime()
+
+
+        private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
+        {
+            XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
+
+            return new Party()
+            {
+                GlobalID = new GlobalID(_nodeAsString(node, "//GlobalID/@schemeID", nsmgr),
+                                        _nodeAsString(node, "//GlobalID", nsmgr)),
+                Name = _nodeAsString(node, "//Name", nsmgr),
+                Street = _nodeAsString(node, "//PostalTradeAddress/LineOne", nsmgr),
+                Postcode = _nodeAsString(node, "//PostalTradeAddress/PostcodeCode", nsmgr),
+                City = _nodeAsString(node, "//PostalTradeAddress/CityName", nsmgr),
+                Country = _nodeAsString(node, "//PostalTradeAddress/CountryID", nsmgr)
+            };
+        } // !_nodeAsParty()
     }
 }

@@ -23,9 +23,7 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class TaxRegistration
+    public class UnsupportedException : Exception
     {
-        public string No { get; set; }
-        public TaxRegistrationSchemeID SchemeID { get; set; }
     }
 }

@@ -35,7 +35,9 @@ namespace s2industries.ZUGFeRD
         /// added at each stage in the production/distribution
         /// cycle.
         /// </summary>
-        VAT
+        VAT,
+
+        Unknown
     }
 
 
@@ -43,7 +45,14 @@ namespace s2industries.ZUGFeRD
     {
         public static TaxTypes FromString(this TaxTypes _t, string s)
         {
-            return (TaxTypes)Enum.Parse(typeof(TaxTypes), s);
+            try
+            {
+                return (TaxTypes)Enum.Parse(typeof(TaxTypes), s);
+            }
+            catch
+            {
+                return TaxTypes.Unknown;
+            }
         } // !FromString()
 
 

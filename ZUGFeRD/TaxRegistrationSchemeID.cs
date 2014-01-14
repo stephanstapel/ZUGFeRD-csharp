@@ -49,4 +49,26 @@ namespace s2industries.ZUGFeRD
         VA,
         Unknown
     }
+
+
+    public static class TaxRegistrationSchemeIDExtensions
+    {
+        public static TaxRegistrationSchemeID FromString(this TaxRegistrationSchemeID _scheme, string s)
+        {
+            try
+            {
+                return (TaxRegistrationSchemeID)Enum.Parse(typeof(TaxRegistrationSchemeID), s);
+            }
+            catch
+            {
+                return TaxRegistrationSchemeID.Unknown;
+            }
+        } // !FromString()
+
+
+        public static string ToString(this TaxRegistrationSchemeID codes)
+        {
+            return codes.ToString("g");
+        } // !ToString()
+    }
 }

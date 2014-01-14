@@ -23,7 +23,7 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    class Contact
+    public class Contact
     {
         public string Name { get; set; }
         public string OrgUnit { get; set; }

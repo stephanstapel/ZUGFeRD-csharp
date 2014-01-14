@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD
     /// <summary>
     /// http://www.stylusstudio.com/edifact/D02A/4451.htm
     /// </summary>
-    public enum SubjectCode
+    public enum SubjectCodes
     {
         /// <summary>
         /// Goods description
@@ -51,6 +51,37 @@ namespace s2industries.ZUGFeRD
         /// Additional information concerning dangerous goods.
         /// </summary>
         AAC,
+
+        /// <summary>
+        /// Price conditions
+        /// 
+        /// Information on the price conditions that are expected or given.
+        /// </summary>
+        AAK,
+
         Unknown
+    }
+
+
+
+    public static class SubjectCodesExtensions
+    {
+        public static SubjectCodes FromString(this SubjectCodes _c, string s)
+        {
+            try
+            {
+                return (SubjectCodes)Enum.Parse(typeof(SubjectCodes), s);
+            }
+            catch
+            {
+                return SubjectCodes.Unknown;
+            }
+        } // !FromString()
+
+
+        public static string ToString(this SubjectCodes codes)
+        {
+            return codes.ToString("g");
+        } // !ToString()
     }
 }

@@ -23,7 +23,7 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    internal class Party
+    public class Party
     {
         public string Name { get; set; }
         public string City { get; set; }

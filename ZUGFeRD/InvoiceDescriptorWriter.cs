@@ -57,12 +57,12 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !rsm:SpecifiedExchangedDocumentContext
 
             Writer.WriteStartElement("rsm:HeaderExchangedDocument");
-            Writer.WriteElementString("ID", this.Descriptor._InvoiceNo);
+            Writer.WriteElementString("ID", this.Descriptor.InvoiceNo);
             Writer.WriteElementString("Name", _translateInvoiceType(this.Descriptor.Type));
             Writer.WriteElementString("TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
             Writer.WriteStartElement("IssueDateTime");
             Writer.WriteAttributeString("format", "102");
-            Writer.WriteValue(_formatDate(this.Descriptor._InvoiceDate));
+            Writer.WriteValue(_formatDate(this.Descriptor.InvoiceDate));
             Writer.WriteEndElement(); // !IssueDateTime()
             _writeOptionalNotes(Writer);
             Writer.WriteEndElement(); // !rsm:HeaderExchangedDocument
@@ -73,17 +73,17 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("ApplicableSupplyChainTradeAgreement");
             Writer.WriteElementString("BuyerReference", this.Descriptor.ReferenceOrderNo);
 
-            _writeOptionalParty(Writer, "SellerTradeParty", this.Descriptor._Seller, TaxRegistrations: this.Descriptor._SellerTaxRegistration);
-            _writeOptionalParty(Writer, "BuyerTradeParty", this.Descriptor._Buyer, this.Descriptor._BuyerContact, TaxRegistrations: this.Descriptor._BuyerTaxRegistration);
+            _writeOptionalParty(Writer, "SellerTradeParty", this.Descriptor.Seller, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
+            _writeOptionalParty(Writer, "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
-            if ((this.Descriptor._OrderDate != DateTime.MinValue) && (this.Descriptor._OrderNo.Length > 0))
+            if ((this.Descriptor.OrderDate != DateTime.MinValue) && (this.Descriptor.OrderNo.Length > 0))
             {
                 Writer.WriteStartElement("BuyerOrderReferencedDocument");
                 Writer.WriteStartElement("IssueDateTime");
                 Writer.WriteAttributeString("format", "102");
-                Writer.WriteValue(_formatDate(this.Descriptor._OrderDate));
+                Writer.WriteValue(_formatDate(this.Descriptor.OrderDate));
                 Writer.WriteEndElement(); // !IssueDateTime()
-                Writer.WriteElementString("ID", this.Descriptor._OrderNo);
+                Writer.WriteElementString("ID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
@@ -114,7 +114,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("ApplicableSupplyChainTradeSettlement");
             _writeOptionalElementString(Writer, "PaymentReference", this.Descriptor._InvoiceNoAsReference);
-            Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor._Currency.ToString());
+            Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor.Currency.ToString());
             _writeOptionalTaxes(Writer);
 
             if ((this.Descriptor._TradeAllowanceCharges != null) && (this.Descriptor._TradeAllowanceCharges.Count > 0))
@@ -222,7 +222,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ApplicableTradeTax
                 Writer.WriteStartElement("SpecifiedTradeSettlementMonetarySummation");
                 decimal _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
-                _writeElementWithAttribute(Writer, "LineTotalAmount", "currencyID", this.Descriptor._Currency.ToString(), _formatCurrency(_total));
+                _writeElementWithAttribute(Writer, "LineTotalAmount", "currencyID", this.Descriptor.Currency.ToString(), _formatCurrency(_total));
                 Writer.WriteEndElement(); // SpecifiedTradeSettlementMonetarySummation
                 Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeSettlement
 
@@ -259,7 +259,7 @@ namespace s2industries.ZUGFeRD
             if (value != decimal.MinValue)
             {
                 writer.WriteStartElement(tagName);
-                writer.WriteAttributeString("currencyID", this.Descriptor._Currency.ToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.ToString());
                 writer.WriteValue(_formatCurrency(value));
                 writer.WriteEndElement(); // !tagName
             }
@@ -282,14 +282,14 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ApplicableTradeTax");
 
                 writer.WriteStartElement("CalculatedAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor._Currency.ToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.ToString());
                 writer.WriteValue(_formatCurrency(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("TypeCode", _translateTaxType(tax.TypeCode));
 
                 writer.WriteStartElement("BasisAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor._Currency.ToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.ToString());
                 writer.WriteValue(_formatCurrency(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
@@ -302,13 +302,13 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalNotes(XmlTextWriter writer)
         {
-            if (this.Descriptor._Notes.Count > 0)
+            if (this.Descriptor.Notes.Count > 0)
             {
-                foreach (Tuple<string, SubjectCode> t in this.Descriptor._Notes)
+                foreach (Tuple<string, SubjectCodes> t in this.Descriptor.Notes)
                 {
                     writer.WriteStartElement("IncludedNote");
                     writer.WriteElementString("Content", t.Item1);
-                    if (t.Item2 != SubjectCode.Unknown)
+                    if (t.Item2 != SubjectCodes.Unknown)
                     {
                         writer.WriteElementString("SubjectCode", _translateSubjectCode(t.Item2));
                     }
@@ -440,7 +440,7 @@ namespace s2industries.ZUGFeRD
         } // !_translateTaxRegistrationSchemeID()
 
 
-        private string _translateSubjectCode(SubjectCode code)
+        private string _translateSubjectCode(SubjectCodes code)
         {
             return code.ToString("g");
         } // !_translateSubjectCode()

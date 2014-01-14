@@ -42,7 +42,14 @@ namespace s2industries.ZUGFeRD
     {
         public static QuantityCodes FromString(this QuantityCodes _c, string s)
         {
-            return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
+            try
+            {
+                return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
+            }
+            catch
+            {
+                return QuantityCodes.Unknown;
+            }
         } // !FromString()
 
 

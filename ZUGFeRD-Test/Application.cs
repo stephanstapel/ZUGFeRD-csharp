@@ -49,7 +49,7 @@ namespace ZUGFeRD_Test
             desc.Profile = Profile.Comfort;
             desc.ReferenceOrderNo = "AB-312";
             desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
-            desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCode.AAA);
+            desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCodes.AAA);
             desc.SetBuyer("Kunden Mitte AG", "69876", "Frankfurt", "Kundenstraße", "15", "DE", "0088", "4000001987658");
             desc.AddBuyerTaxRegistration("DE234567890", TaxRegistrationSchemeID.VA);
             desc.SetBuyerContact("Hans Muster");
