@@ -131,6 +131,29 @@ namespace s2industries.ZUGFeRD
         XOF = 952,
         YER = 886,
         ZAR = 710,
-        ZWL = 932
+        ZWL = 932,
+        Unknown = 0
+    }
+
+
+    public static class CurrencyCodesExtensions
+    {
+        public static CurrencyCodes FromString(this CurrencyCodes _c, string s)
+        {
+            try
+            {
+                return (CurrencyCodes)Enum.Parse(typeof(CurrencyCodes), s);
+            }
+            catch
+            {
+                return CurrencyCodes.Unknown;
+            }
+        } // !FromString()
+
+
+        public static string ToString(this CurrencyCodes c)
+        {
+            return c.ToString("g");
+        } // !ToString()
     }
 }

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>s2industries.ZUGFeRD</RootNamespace>
-    <AssemblyName>ZUGFeRD</AssemblyName>
+    <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

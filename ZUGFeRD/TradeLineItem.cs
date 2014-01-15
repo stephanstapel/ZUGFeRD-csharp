@@ -38,11 +38,14 @@ namespace s2industries.ZUGFeRD
         public decimal NetUnitPrice { get; set; }
         public decimal GrossUnitPrice { get; set; }
         public QuantityCodes UnitCode { get; set; }
+        public string Comment { get; set; }
 
         public TradeLineItem()
         {
+            this.Comment = "";
             this.NetUnitPrice = decimal.MinValue;
             this.GrossUnitPrice = decimal.MinValue;
+            this.GlobalID = new GlobalID();
         }
     }
 }

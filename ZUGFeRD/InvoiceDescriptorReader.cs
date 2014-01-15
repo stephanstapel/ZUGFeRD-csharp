@@ -10,7 +10,7 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptorReader
     {
-        public static InvoiceDescriptor Load(FileStream stream)
+        public static InvoiceDescriptor Load(Stream stream)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
@@ -50,8 +50,60 @@ namespace s2industries.ZUGFeRD
                 retval.AddBuyerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
             }
 
+            retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/ActualDeliverySupplyChainEvent/OccurrenceDateTime", nsmgr);
+            retval.DeliveryNoteNo = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/ID", nsmgr);
+            retval.DeliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/IssueDateTime", nsmgr);
+            retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "ApplicableSupplyChainTradeSettlement/PaymentReference", nsmgr);
+            retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/InvoiceCurrencyCode", nsmgr));
+
+            foreach (XmlNode node in doc.SelectNodes("//ApplicableTradeTax", nsmgr))
+            {
+                retval.AddApplicableTradeTax(_nodeAsDecimal(node, "ActualAmount", nsmgr),
+                                             _nodeAsDecimal(node, "BasisAmount", nsmgr),
+                                             _nodeAsDecimal(node, "ApplicablePercent", nsmgr),
+                                             default(TaxTypes).FromString(_nodeAsString(node, "TypeCode", nsmgr)),
+                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, "CategoryCode", nsmgr)));
+            }
+
+            foreach (XmlNode node in doc.SelectNodes("//SpecifiedTradeAllowanceCharge", nsmgr))
+            {
+                retval.AddTradeAllowanceCharge(_nodeAsBool(node, "ChargeIndicator", nsmgr),
+                                               _nodeAsDecimal(node, "BasisAmount", nsmgr),
+                                               retval.Currency,
+                                               _nodeAsDecimal(node, "ActualAmount", nsmgr),
+                                               _nodeAsString(node, "Reason", nsmgr),
+                                               default(TaxTypes).FromString(_nodeAsString(node, "CategoryTradeTax/TypeCode", nsmgr)),
+                                               default(TaxCategoryCodes).FromString(_nodeAsString(node, "CategoryTradeTax/CategoryCode", nsmgr)),
+                                               _nodeAsDecimal(node, "CategoryTradeTax/ApplicablePercent", nsmgr));
+            }
+
+            foreach (XmlNode node in doc.SelectNodes("//SpecifiedLogisticsServiceCharge", nsmgr))
+            {
+                retval.AddLogisticsServiceCharge(_nodeAsDecimal(node, "AppliedAmount", nsmgr),
+                                                 _nodeAsString(node, "Description", nsmgr),
+                                                 default(TaxTypes).FromString(_nodeAsString(node, "AppliedTradeTax/TypeCode", nsmgr)),
+                                                 default(TaxCategoryCodes).FromString(_nodeAsString(node, "AppliedTradeTax/CategoryCode", nsmgr)),
+                                                 _nodeAsDecimal(node, "AppliedTradeTax/ApplicablePercent", nsmgr));
+            }
+
+            retval.PaymentTerms = new PaymentTerms()
+            {
+                Description = _nodeAsString(doc.DocumentElement, "//SpecifiedTradePaymentTerms/Description", nsmgr),
+                DueDate = _nodeAsDateTime(doc.DocumentElement, "//SpecifiedTradePaymentTerms/DueDateDateTime", nsmgr)
+            };
+
+            retval.LineTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/LineTotalAmount", nsmgr);
+            retval.ChargeTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/ChargeTotalAmount", nsmgr);
+            retval.AllowanceTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/AllowanceTotalAmount", nsmgr);
+            retval.TaxBasisAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/TaxBasisTotalAmount", nsmgr);
+            retval.TaxTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/TaxTotalAmount", nsmgr);
+            retval.GrandTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/GrandTotalAmount", nsmgr);
+            retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/TotalPrepaidAmount", nsmgr);
+            retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/DuePayableAmount", nsmgr);
+
             retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//BuyerOrderReferencedDocument/IssueDateTime", nsmgr);
             retval.OrderNo = _nodeAsString(doc.DocumentElement, "//BuyerOrderReferencedDocument/ID", nsmgr);
+            
             
             foreach(XmlNode node in doc.SelectNodes("//IncludedSupplyChainTradeLineItem"))
             {
@@ -74,7 +126,16 @@ namespace s2industries.ZUGFeRD
 
         private static TradeLineItem _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null)
         {
-            return new TradeLineItem()
+            if (tradeLineItem.SelectSingleNode("//AssociatedDocumentLineDocument/IncludedNote/Content") != null)
+            {
+                return new TradeLineItem()
+                {
+                    Comment = _nodeAsString(tradeLineItem, "//AssociatedDocumentLineDocument/IncludedNote/Content", nsmgr)
+                };
+            }
+            else
+            {
+                return new TradeLineItem()
                 {
                     GlobalID = new GlobalID(_nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/GlobalID/@schemeID", nsmgr),
                                             _nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/GlobalID", nsmgr)),
@@ -91,10 +152,32 @@ namespace s2industries.ZUGFeRD
                     GrossUnitPrice = _nodeAsDecimal(tradeLineItem, "//NetPriceProductTradePrice/ChargeAmount", nsmgr),
                     UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, "//BasisQuantity/@unitCode", nsmgr))
                 };
+            }
         } // !_parseTradeLineItem()
 
 
-        private static string _nodeAsString(XmlNode node , string xpath, XmlNamespaceManager nsmgr = null, string defaultValue = "")
+        private static bool _nodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
+        {
+            string value = _nodeAsString(node, xpath, nsmgr);
+            if (value == "")
+            {
+                return defaultValue;
+            }
+            else
+            {
+                if ((value.Trim().ToLower() == "true") || (value.Trim() == "1"))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        } // !_nodeAsBool()
+
+
+        private static string _nodeAsString(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, string defaultValue = "")
         {
             try
             {
@@ -138,7 +221,7 @@ namespace s2industries.ZUGFeRD
         {
             string temp = _nodeAsString(node, xpath, nsmgr, "");
             decimal retval;
-            if (decimal.TryParse(temp, out retval))
+            if (decimal.TryParse(temp, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out retval))
             {
                 return retval;
             }
@@ -164,7 +247,6 @@ namespace s2industries.ZUGFeRD
             {
                 throw new UnsupportedException();
             }
-
             string value = node.SelectSingleNode(xpath, nsmgr).InnerText;
             if (value.Length != 8)
             {

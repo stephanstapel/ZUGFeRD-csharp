@@ -33,7 +33,7 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
-        public void Save(InvoiceDescriptor descriptor, FileStream stream)
+        public void Save(InvoiceDescriptor descriptor, Stream stream)
         {
             this.Descriptor = descriptor;
             this.Writer = new XmlTextWriter(stream, Encoding.UTF8);
@@ -96,30 +96,48 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("OccurrenceDateTime");
                 Writer.WriteAttributeString("format", "102");
                 Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate));
-                Writer.WriteEndElement(); // !IssueDateTime()
-                Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
+                Writer.WriteEndElement(); // !OccurrenceDateTime()
+                Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
             }
 
-            if ((this.Descriptor._DeliveryNoteDate != DateTime.MinValue) && (this.Descriptor._DeliveryNoteNo.Length > 0))
+            if ((this.Descriptor.DeliveryNoteDate != DateTime.MinValue) && (this.Descriptor.DeliveryNoteNo.Length > 0))
             {
                 Writer.WriteStartElement("DeliveryNoteReferencedDocument");
-                Writer.WriteElementString("ID", this.Descriptor._DeliveryNoteNo);
+                Writer.WriteElementString("ID", this.Descriptor.DeliveryNoteNo);
                 Writer.WriteStartElement("IssueDateTime");
                 Writer.WriteAttributeString("format", "102");
-                Writer.WriteValue(_formatDate(this.Descriptor._DeliveryNoteDate));
+                Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteDate));
                 Writer.WriteEndElement(); // !IssueDateTime()
                 Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
             }
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeDelivery
 
             Writer.WriteStartElement("ApplicableSupplyChainTradeSettlement");
-            _writeOptionalElementString(Writer, "PaymentReference", this.Descriptor._InvoiceNoAsReference);
+            _writeOptionalElementString(Writer, "PaymentReference", this.Descriptor.InvoiceNoAsReference);
             Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor.Currency.ToString());
+
+            /**
+             * @todo add writer for this:
+             * <SpecifiedTradeSettlementPaymentMeans>
+	         * <TypeCode>42</TypeCode>
+			 * 	<Information>Überweisung</Information>
+		     * <PayeePartyCreditorFinancialAccount>
+			 * 		<IBANID>DE08700901001234567890</IBANID>
+			 * 		<ProprietaryID>1234567890</ProprietaryID>
+			 * 	</PayeePartyCreditorFinancialAccount>
+			 * 	<PayeeSpecifiedCreditorFinancialInstitution>
+			 * 		<BICID>GENODEF1M04</BICID>
+			 * 		<GermanBankleitzahlID>70090100</GermanBankleitzahlID>
+			 * 		<Name>Hausbank München</Name>
+			 * 	</PayeeSpecifiedCreditorFinancialInstitution>
+			 * </SpecifiedTradeSettlementPaymentMeans>
+             */
+
             _writeOptionalTaxes(Writer);
 
-            if ((this.Descriptor._TradeAllowanceCharges != null) && (this.Descriptor._TradeAllowanceCharges.Count > 0))
+            if ((this.Descriptor.TradeAllowanceCharges != null) && (this.Descriptor.TradeAllowanceCharges.Count > 0))
             {
-                foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor._TradeAllowanceCharges)
+                foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
                 {
                     Writer.WriteStartElement("SpecifiedTradeAllowanceCharge");
                     Writer.WriteElementString("ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
@@ -166,11 +184,11 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            if (this.Descriptor._PaymentTerms != null)
+            if (this.Descriptor.PaymentTerms != null)
             {
                 Writer.WriteStartElement("SpecifiedTradePaymentTerms");
-                _writeOptionalElementString(Writer, "Description", this.Descriptor._PaymentTerms.Description);
-                _writeElementWithAttribute(Writer, "DueDateDateTime", "format", "102", _formatDate(this.Descriptor._PaymentTerms.DueDate));
+                _writeOptionalElementString(Writer, "Description", this.Descriptor.PaymentTerms.Description);
+                _writeElementWithAttribute(Writer, "DueDateDateTime", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate));
                 Writer.WriteEndElement();
             }
 
@@ -187,54 +205,72 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeSettlement
 
-
-            for (int i = 0; i < this.Descriptor.TradeLineItems.Count; i++)
+            int counter = 0;
+            foreach(TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
             {
-                TradeLineItem tradeLineItem = this.Descriptor.TradeLineItems[i];
                 Writer.WriteStartElement("IncludedSupplyChainTradeLineItem");
                 Writer.WriteStartElement("AssociatedDocumentLineDocument");
-                Writer.WriteElementString("LineID", (i+1).ToString());
-                Writer.WriteEndElement(); // AssociatedDocumentLineDocument
 
-                Writer.WriteStartElement("SpecifiedSupplyChainTradeAgreement");
-                
-                Writer.WriteStartElement("GrossPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ChargeAmount", tradeLineItem.GrossUnitPrice);
-                _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.UnitQuantity.ToString());
-                Writer.WriteEndElement(); // GrossPriceProductTradePrice
+                if ((tradeLineItem.BilledQuantity != 0) && (tradeLineItem.Name == null) && (tradeLineItem.Comment.Length > 0))
+                {
+                    Writer.WriteStartElement("IncludedNote");
+                    Writer.WriteElementString("Content", tradeLineItem.Comment);
+                    Writer.WriteEndElement(); // AssociatedDocumentLineDocument
+                }
+                else
+                {
+                    counter += 1;
+                    Writer.WriteElementString("LineID", counter.ToString());
+                    if (tradeLineItem.Comment.Length > 0)
+                    {
+                        Writer.WriteElementString("Content", tradeLineItem.Comment);
+                    }
 
-                Writer.WriteStartElement("NetPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ChargeAmount", tradeLineItem.NetUnitPrice);
-                _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.UnitQuantity.ToString());
-                Writer.WriteEndElement(); // NetPriceProductTradePrice
+                    Writer.WriteEndElement(); // AssociatedDocumentLineDocument
 
-                Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeAgreement
+                    Writer.WriteStartElement("SpecifiedSupplyChainTradeAgreement");
 
-                Writer.WriteStartElement("SpecifiedSupplyChainTradeDelivery");
-                _writeElementWithAttribute(Writer, "BilledQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.BilledQuantity.ToString());
-                Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeDelivery
+                    Writer.WriteStartElement("GrossPriceProductTradePrice");
+                    _writeOptionalAmount(Writer, "ChargeAmount", tradeLineItem.GrossUnitPrice);
+                    _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.UnitQuantity.ToString());
+                    Writer.WriteEndElement(); // GrossPriceProductTradePrice
 
-                Writer.WriteStartElement("SpecifiedSupplyChainTradeSettlement");
-                Writer.WriteStartElement("ApplicableTradeTax");
-                Writer.WriteElementString("TypeCode", tradeLineItem.TaxType.ToString());
-                Writer.WriteElementString("CategoryCode", tradeLineItem.TaxCategoryCode.ToString());
-                Writer.WriteElementString("ApplicablePercent", tradeLineItem.TaxPercent.ToString());
-                Writer.WriteEndElement(); // !ApplicableTradeTax
-                Writer.WriteStartElement("SpecifiedTradeSettlementMonetarySummation");
-                decimal _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
-                _writeElementWithAttribute(Writer, "LineTotalAmount", "currencyID", this.Descriptor.Currency.ToString(), _formatCurrency(_total));
-                Writer.WriteEndElement(); // SpecifiedTradeSettlementMonetarySummation
-                Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeSettlement
+                    Writer.WriteStartElement("NetPriceProductTradePrice");
+                    _writeOptionalAmount(Writer, "ChargeAmount", tradeLineItem.NetUnitPrice);
+                    _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.UnitQuantity.ToString());
+                    Writer.WriteEndElement(); // NetPriceProductTradePrice
 
-                Writer.WriteStartElement("SpecifiedTradeProduct");
-                _writeElementWithAttribute(Writer, "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
-                _writeOptionalElementString(Writer, "SellerAssignedID", tradeLineItem.SellerAssignedID);
-                _writeOptionalElementString(Writer, "BuyerAssignedID", tradeLineItem.BuyerAssignedID);
-                _writeOptionalElementString(Writer, "Description", tradeLineItem.Description);
-                _writeOptionalElementString(Writer, "Name", tradeLineItem.Name);
+                    Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeAgreement
 
-                Writer.WriteEndElement(); // !SpecifiedTradeProduct
+                    Writer.WriteStartElement("SpecifiedSupplyChainTradeDelivery");
+                    _writeElementWithAttribute(Writer, "BilledQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.BilledQuantity.ToString());
+                    Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeDelivery
 
+                    Writer.WriteStartElement("SpecifiedSupplyChainTradeSettlement");
+                    Writer.WriteStartElement("ApplicableTradeTax");
+                    Writer.WriteElementString("TypeCode", tradeLineItem.TaxType.ToString());
+                    Writer.WriteElementString("CategoryCode", tradeLineItem.TaxCategoryCode.ToString());
+                    Writer.WriteElementString("ApplicablePercent", tradeLineItem.TaxPercent.ToString());
+                    Writer.WriteEndElement(); // !ApplicableTradeTax
+                    Writer.WriteStartElement("SpecifiedTradeSettlementMonetarySummation");
+                    decimal _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
+                    _writeElementWithAttribute(Writer, "LineTotalAmount", "currencyID", this.Descriptor.Currency.ToString(), _formatCurrency(_total));
+                    Writer.WriteEndElement(); // SpecifiedTradeSettlementMonetarySummation
+                    Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeSettlement
+
+                    Writer.WriteStartElement("SpecifiedTradeProduct");
+                    if ((tradeLineItem.GlobalID.SchemeID.Length > 0) && (tradeLineItem.GlobalID.ID.Length > 0))
+                    {
+                        _writeElementWithAttribute(Writer, "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
+                    }
+
+                    _writeOptionalElementString(Writer, "SellerAssignedID", tradeLineItem.SellerAssignedID);
+                    _writeOptionalElementString(Writer, "BuyerAssignedID", tradeLineItem.BuyerAssignedID);
+                    _writeOptionalElementString(Writer, "Description", tradeLineItem.Description);
+                    _writeOptionalElementString(Writer, "Name", tradeLineItem.Name);
+
+                    Writer.WriteEndElement(); // !SpecifiedTradeProduct
+                }
                 Writer.WriteEndElement(); // !IncludedSupplyChainTradeLineItem
             } // !foreach(tradeLineItem)
 
@@ -277,7 +313,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(XmlTextWriter writer)
         {
-            foreach (Tax tax in this.Descriptor._Taxes)
+            foreach (Tax tax in this.Descriptor.Taxes)
             {
                 writer.WriteStartElement("ApplicableTradeTax");
 
@@ -385,7 +421,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalElementString(XmlTextWriter writer, string tagName, string value)
         {
-            if (value.Length > 0)
+            if ((value != null) && (value.Length > 0))
             {
                 writer.WriteElementString(tagName, value);
             }

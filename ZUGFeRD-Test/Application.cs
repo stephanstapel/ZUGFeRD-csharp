@@ -67,36 +67,37 @@ namespace ZUGFeRD_Test
             desc.AddTradeAllowanceCharge(true, 137.7m, CurrencyCodes.EUR, 13.73m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 7);
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
 
-            desc.addTradeLineItem("0160", "4012345001235",
-                                  "KR3M", "55T01",
-                                  "Kunstrasen grün 3m breit",
+            desc.addTradeLineCommentItem("Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:");
+            desc.addTradeLineItem("Kunstrasen grün 3m breit",
                                   "300cm x 100 cm",
                                   QuantityCodes.MTK, 1,
                                   4.00m,
                                   3.3333m,
                                   3,
-                                  TaxTypes.VAT, TaxCategoryCodes.S, 19);
+                                  TaxTypes.VAT, TaxCategoryCodes.S, 19,
+                                  "0160", "4012345001235",
+                                  "KR3M", "55T01");
 
-            desc.addTradeLineItem("0160", "4000050986428",
-                                  "SFK5", "55T02",
-                                  "Schweinesteak",
+            desc.addTradeLineItem("Schweinesteak",
                                   "aus Deutschland",
                                   QuantityCodes.KGM, 1,
                                   5.50m,
                                   5.50m,
                                   5,
-                                  TaxTypes.VAT, TaxCategoryCodes.S, 7);
+                                  TaxTypes.VAT, TaxCategoryCodes.S, 7,
+                                  "0160", "4000050986428",
+                                  "SFK5", "55T02");
 
 
-            desc.addTradeLineItem("0160", "4000001234561", 
-                                  "GTRWA5", "55T03", 
-                                  "Mineralwasser Medium 12 x 1,0l PET",
+            desc.addTradeLineItem("Mineralwasser Medium 12 x 1,0l PET",
                                   "",
                                   QuantityCodes.C62, 1,
                                   5.49m,
                                   5.49m,
                                   20,
-                                  TaxTypes.VAT, TaxCategoryCodes.S, 7);
+                                  TaxTypes.VAT, TaxCategoryCodes.S, 7,
+                                  "0160", "4000001234561", 
+                                  "GTRWA5", "55T03");
 
             desc.Save("output.xml");
         } // !_saveSampleZUGFeRDInvoice()

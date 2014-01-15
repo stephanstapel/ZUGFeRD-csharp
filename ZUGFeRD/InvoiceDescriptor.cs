@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 
 namespace s2industries.ZUGFeRD
@@ -31,13 +32,13 @@ namespace s2industries.ZUGFeRD
     {
         public string InvoiceNo { get; set; }
         public DateTime InvoiceDate { get; set; }
-        internal string _InvoiceNoAsReference { get; set; }
+        public string InvoiceNoAsReference { get; set; }
 
         public string OrderNo { get; set; }
         public DateTime OrderDate { get; set; }
 
-        internal string _DeliveryNoteNo { get; set; }
-        internal DateTime _DeliveryNoteDate { get; set; }
+        public string DeliveryNoteNo { get; set; }
+        public DateTime DeliveryNoteDate { get; set; }
         public DateTime ActualDeliveryDate { get; set; }
 
         public CurrencyCodes Currency { get; set; }
@@ -63,15 +64,15 @@ namespace s2industries.ZUGFeRD
         public decimal GrandTotalAmount { get; set; }
         public decimal TotalPrepaidAmount { get; set; }
         public decimal DuePayableAmount { get; set; }
-        internal List<Tax> _Taxes { get; set; }
+        public List<Tax> Taxes { get; set; }
         internal List<ServiceCharge> _ServiceCharges { get; set; }
-        internal List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; }
-        internal PaymentTerms _PaymentTerms { get; set; }
+        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+        public PaymentTerms PaymentTerms { get; set; }
    
 
         public InvoiceDescriptor()
         {
-            this._InvoiceNoAsReference = "";
+            this.InvoiceNoAsReference = "";
 
             this.IsTest = false;
             this.Profile = Profile.Basic;
@@ -79,7 +80,7 @@ namespace s2industries.ZUGFeRD
             this.Notes = new List<Tuple<string, SubjectCodes>>();
             this.OrderDate = DateTime.MinValue;
             this.InvoiceDate = DateTime.MinValue;
-            this._DeliveryNoteDate = DateTime.MinValue;
+            this.DeliveryNoteDate = DateTime.MinValue;
             this.ActualDeliveryDate = DateTime.MinValue;
 
             this.LineTotalAmount = decimal.MinValue;
@@ -91,13 +92,19 @@ namespace s2industries.ZUGFeRD
             this.TotalPrepaidAmount = decimal.MinValue;
             this.DuePayableAmount = decimal.MinValue;
             this.TradeLineItems = new List<TradeLineItem>();
-            this._Taxes = new List<Tax>();
+            this.Taxes = new List<Tax>();
             this._ServiceCharges = new List<ServiceCharge>();
-            this._TradeAllowanceCharges = new List<TradeAllowanceCharge>();
+            this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
 
             this.BuyerTaxRegistration = new List<TaxRegistration>();
             this.SellerTaxRegistration = new List<TaxRegistration>();
         }
+
+
+        public static InvoiceDescriptor Load(Stream stream)
+        {
+            return InvoiceDescriptorReader.Load(stream);
+        } // !Load()
 
 
         public static InvoiceDescriptor Load(string filename)
@@ -112,7 +119,7 @@ namespace s2industries.ZUGFeRD
             retval.InvoiceDate = invoiceDate;
             retval.InvoiceNo = invoiceNo;
             retval.Currency = currency;
-            retval._InvoiceNoAsReference = invoiceNoAsReference;
+            retval.InvoiceNoAsReference = invoiceNoAsReference;
             return retval;
         } // !CreateInvoice()
 
@@ -204,8 +211,8 @@ namespace s2industries.ZUGFeRD
 
         public void SetDeliveryNoteReferenceDocument(string deliveryNoteNo, DateTime deliveryNoteDate)
         {
-            this._DeliveryNoteNo = deliveryNoteNo;
-            this._DeliveryNoteDate = deliveryNoteDate;
+            this.DeliveryNoteNo = deliveryNoteNo;
+            this.DeliveryNoteDate = deliveryNoteDate;
         } // !SetDeliveryNoteReferenceDocument()
 
 
@@ -227,11 +234,12 @@ namespace s2industries.ZUGFeRD
 
         public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Reason = reason,
                 BasisAmount = basisAmount,
+                ActualAmount = actualAmount,
                 Currency = currency,
                 Amount = actualAmount,
                 Tax = new Tax()
@@ -246,7 +254,7 @@ namespace s2industries.ZUGFeRD
 
         public void SetTradePaymentTerms(string description, DateTime dueDate)
         {
-            this._PaymentTerms = new PaymentTerms()
+            this.PaymentTerms = new PaymentTerms()
             {
                 Description = description,
                 DueDate = dueDate
@@ -282,7 +290,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddApplicableTradeTax(decimal taxAmount, decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes categoryCode)
         {
-            this._Taxes.Add(new Tax()
+            this.Taxes.Add(new Tax()
             {
                 TaxAmount = taxAmount,
                 BasisAmount = basisAmount,
@@ -293,11 +301,27 @@ namespace s2industries.ZUGFeRD
         } // !AddApplicableTradeTax()
 
 
+        public void Save(Stream stream)
+        {
+            InvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
+            writer.Save(this, stream);
+        } // !Save()
+
+
         public void Save(string filename)
         {
             InvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
             writer.Save(this, filename);
         } // !Save()
+
+
+        public void addTradeLineCommentItem(string comment)
+        {
+            this.TradeLineItems.Add(new TradeLineItem()
+            {
+                Comment = comment
+            });
+        } // !addTradeLineCommentItem()
 
 
         /// <summary>
@@ -308,28 +332,15 @@ namespace s2industries.ZUGFeRD
 		///				<Reason>Rabatt</Reason>
         ///			</AppliedTradeAllowanceCharge>
         /// </summary>
-        /// <param name="globalIDSchemeID"></param>
-        /// <param name="globalID"></param>
-        /// <param name="sellerAssignedID"></param>
-        /// <param name="buyerAssignedID"></param>
-        /// <param name="description"></param>
-        /// <param name="currency"></param>
-        /// <param name="unitCode"></param>
-        /// <param name="unitQuantity"></param>
-        /// <param name="grossUnitPrice"></param>
-        /// <param name="netUnitPrice"></param>
-        /// <param name="billedQuantity"></param>
-        /// <param name="taxType"></param>
-        /// <param name="categoryCode"></param>
-        /// <param name="taxPercent"></param>
-        public void addTradeLineItem(string globalIDSchemeID, string globalID,
-                                     string sellerAssignedID, string buyerAssignedID,
-                                     string name, string description,
+        public void addTradeLineItem(string name, string description,
                                      QuantityCodes unitCode, int unitQuantity,
                                      decimal grossUnitPrice,
                                      decimal netUnitPrice, 
                                      int billedQuantity,
-                                     TaxTypes taxType, TaxCategoryCodes categoryCode, decimal taxPercent)
+                                     TaxTypes taxType, TaxCategoryCodes categoryCode, decimal taxPercent,
+                                     string comment = "",
+                                     string globalIDSchemeID = "", string globalID = "",
+                                     string sellerAssignedID = "", string buyerAssignedID = "")
         {
             this.TradeLineItems.Add(new TradeLineItem()
             {
@@ -345,7 +356,8 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = billedQuantity,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent
+                TaxPercent = taxPercent,
+                Comment = comment
             });
         } // !addTradeLineItem()
     }

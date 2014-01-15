@@ -51,5 +51,6 @@ namespace s2industries.ZUGFeRD
         public string Reason { get; set; }
         public decimal BasisAmount { get; set; }
         public CurrencyCodes Currency { get; set; }
+        public decimal ActualAmount { get; set; }
     }
 }

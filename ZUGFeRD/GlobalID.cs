@@ -30,6 +30,8 @@ namespace s2industries.ZUGFeRD
 
         public GlobalID()
         {
+            this.ID = "";
+            this.SchemeID = "";
         } // !GlobalID()
 
         public GlobalID(string schemeID, string ID)
