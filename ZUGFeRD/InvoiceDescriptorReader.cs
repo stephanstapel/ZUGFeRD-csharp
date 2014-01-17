@@ -267,6 +267,7 @@ namespace s2industries.ZUGFeRD
 
             return new Party()
             {
+                ID = _nodeAsString(node, "//ID", nsmgr),
                 GlobalID = new GlobalID(_nodeAsString(node, "//GlobalID/@schemeID", nsmgr),
                                         _nodeAsString(node, "//GlobalID", nsmgr)),
                 Name = _nodeAsString(node, "//Name", nsmgr),

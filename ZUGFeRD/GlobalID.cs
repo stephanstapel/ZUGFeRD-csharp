@@ -23,10 +23,24 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Global ID definition according to ISO 6523:
+    /// http://en.wikipedia.org/wiki/ISO_6523
+    /// 
+    /// For a full list of identifiers, see here:
+    /// http://www.oid-info.com/doc/ICD-list.pdf
+    /// 
+    /// Especially important for ZUGFeRD:
+    /// Code 0160 - GTIN - Global Trade Item Number for articles
+    /// Code 0088 - EAN Location Code
+    /// </summary>
     public class GlobalID
     {
         public string ID { get; set; }
         public string SchemeID { get; set; }
+
+        public const string SchemeID_GTIN = "0160";
+        public const string SchemeID_EANLocationCode = "0088";
 
         public GlobalID()
         {

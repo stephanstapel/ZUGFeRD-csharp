@@ -25,6 +25,7 @@ namespace s2industries.ZUGFeRD
 {
     public class Party
     {
+        public string ID { get; set; }
         public string Name { get; set; }
         public string City { get; set; }
         public string Postcode { get; set; }

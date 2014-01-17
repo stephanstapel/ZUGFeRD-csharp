@@ -130,10 +130,11 @@ namespace s2industries.ZUGFeRD
         } // !AddNote()
         
 
-        public void SetBuyer(string name, string postcode, string city, string street, string streetno, string country, string globalIDSchemeID = "", string globalID = "")
+        public void SetBuyer(string name, string postcode, string city, string street, string streetno, string country, string id, string globalIDSchemeID = "", string globalID = "")
         {
             this.Buyer = new Party()
             {
+                ID = id,
                 Name = name,
                 Postcode = postcode,
                 City = city,
@@ -149,10 +150,11 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void SetSeller(string name, string postcode, string city, string street, string streetno, string country, string globalIDSchemeID = "", string globalID = "")
+        public void SetSeller(string name, string postcode, string city, string street, string streetno, string country, string id, string globalIDSchemeID = "", string globalID = "")
         {
             this.Seller = new Party()
             {
+                ID = id,
                 Name = name,
                 Postcode = postcode,
                 City = city,
@@ -333,10 +335,10 @@ namespace s2industries.ZUGFeRD
         ///			</AppliedTradeAllowanceCharge>
         /// </summary>
         public void addTradeLineItem(string name, string description,
-                                     QuantityCodes unitCode, int unitQuantity,
+                                     QuantityCodes unitCode, decimal unitQuantity,
                                      decimal grossUnitPrice,
-                                     decimal netUnitPrice, 
-                                     int billedQuantity,
+                                     decimal netUnitPrice,
+                                     decimal billedQuantity,
                                      TaxTypes taxType, TaxCategoryCodes categoryCode, decimal taxPercent,
                                      string comment = "",
                                      string globalIDSchemeID = "", string globalID = "",

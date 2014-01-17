@@ -30,8 +30,8 @@ namespace s2industries.ZUGFeRD
         public string BuyerAssignedID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int UnitQuantity { get; set; }
-        public int BilledQuantity { get; set; }
+        public decimal UnitQuantity { get; set; }
+        public decimal BilledQuantity { get; set; }
         public TaxCategoryCodes TaxCategoryCode { get; set; }
         public decimal TaxPercent { get; set; }
         public TaxTypes TaxType { get; set; }
