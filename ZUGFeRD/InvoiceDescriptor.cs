@@ -46,6 +46,7 @@ namespace s2industries.ZUGFeRD
         public Contact BuyerContact { get; set; }
         public List<TaxRegistration> BuyerTaxRegistration { get; set; }
         public Party Seller { get; set; }
+        public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; }
         public List<Tuple<string, SubjectCodes>> Notes { get; set; }
 
@@ -168,6 +169,19 @@ namespace s2industries.ZUGFeRD
                 }
             };
         } // !SetSeller()
+
+
+        public void SetSellerContact(string name, string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")
+        {
+            this.SellerContact = new Contact()
+            {
+                Name = name,
+                OrgUnit = orgunit,
+                EmailAddress = emailAddress,
+                PhoneNo = phoneno,
+                FaxNo = faxno
+            };
+        } // !SetSellerContact()
 
 
         public void SetBuyerContact(string name, string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")

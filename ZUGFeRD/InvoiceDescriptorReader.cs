@@ -42,6 +42,18 @@ namespace s2industries.ZUGFeRD
                 retval.AddSellerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
             }
 
+            if (doc.SelectSingleNode("//SellerTradeParty/DefinedTradeContact") != null)
+            {
+                retval.SellerContact = new Contact()
+                {
+                    Name = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/PersonName"),
+                    OrgUnit = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/DepartmentName"),
+                    PhoneNo = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/TelephoneUniversalCommunication/CompleteNumber"),
+                    FaxNo = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/FaxUniversalCommunication/CompleteNumber"),
+                    EmailAddress = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/EmailURIUniversalCommunication/CompleteNumber")
+                };
+            }
+
             retval.Seller = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/BuyerTradeParty", nsmgr);
             foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/BuyerTradeParty/SpecifiedTaxRegistration", nsmgr))
             {
@@ -49,6 +61,18 @@ namespace s2industries.ZUGFeRD
                 string schemeID = _nodeAsString(node, "ID/@schemeID", nsmgr);
 
                 retval.AddBuyerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
+            }
+
+            if (doc.SelectSingleNode("//BuyerTradeParty/DefinedTradeContact") != null)
+            {
+                retval.BuyerContact = new Contact()
+                {
+                    Name = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/PersonName"),
+                    OrgUnit = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/DepartmentName"),
+                    PhoneNo = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/TelephoneUniversalCommunication/CompleteNumber"),
+                    FaxNo = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/FaxUniversalCommunication/CompleteNumber"),
+                    EmailAddress = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/EmailURIUniversalCommunication/CompleteNumber")
+                };
             }
 
             retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/ActualDeliverySupplyChainEvent/OccurrenceDateTime", nsmgr);

@@ -73,7 +73,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("ApplicableSupplyChainTradeAgreement");
             Writer.WriteElementString("BuyerReference", this.Descriptor.ReferenceOrderNo);
 
-            _writeOptionalParty(Writer, "SellerTradeParty", this.Descriptor.Seller, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
+            _writeOptionalParty(Writer, "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
             _writeOptionalParty(Writer, "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
             if ((this.Descriptor.OrderDate != DateTime.MinValue) && (this.Descriptor.OrderNo.Length > 0))
