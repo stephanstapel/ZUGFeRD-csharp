@@ -51,7 +51,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    public static class TaxRegistrationSchemeIDExtensions
+    internal static class TaxRegistrationSchemeIDExtensions
     {
         public static TaxRegistrationSchemeID FromString(this TaxRegistrationSchemeID _scheme, string s)
         {

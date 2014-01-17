@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    public static class InvoiceTypeExtensions
+    internal static class InvoiceTypeExtensions
     {
         public static InvoiceType FromString(this InvoiceType _type, string s)
         {

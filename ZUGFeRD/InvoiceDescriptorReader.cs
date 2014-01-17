@@ -299,7 +299,7 @@ namespace s2industries.ZUGFeRD
                 Street = _nodeAsString(node, "//PostalTradeAddress/LineOne", nsmgr),
                 Postcode = _nodeAsString(node, "//PostalTradeAddress/PostcodeCode", nsmgr),
                 City = _nodeAsString(node, "//PostalTradeAddress/CityName", nsmgr),
-                Country = _nodeAsString(node, "//PostalTradeAddress/CountryID", nsmgr)
+                Country = default(CountryCodes).FromString(_nodeAsString(node, "//PostalTradeAddress/CountryID", nsmgr))
             };
         } // !_nodeAsParty()
     }

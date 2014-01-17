@@ -32,7 +32,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    public static class ProfileExtensions
+    internal static class ProfileExtensions
     {
         public static Profile FromString(this Profile _p, string s)
         {

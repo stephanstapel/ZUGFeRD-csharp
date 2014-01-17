@@ -25,9 +25,6 @@ using System.IO;
 
 namespace s2industries.ZUGFeRD
 {
-    /// <summary>
-    /// TODO: Ländercode als enum
-    /// </summary>
     public class InvoiceDescriptor
     {
         public string InvoiceNo { get; set; }
@@ -131,7 +128,7 @@ namespace s2industries.ZUGFeRD
         } // !AddNote()
         
 
-        public void SetBuyer(string name, string postcode, string city, string street, string streetno, string country, string id, string globalIDSchemeID = "", string globalID = "")
+        public void SetBuyer(string name, string postcode, string city, string street, string streetno, CountryCodes country, string id, string globalIDSchemeID = "", string globalID = "")
         {
             this.Buyer = new Party()
             {
@@ -151,7 +148,7 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void SetSeller(string name, string postcode, string city, string street, string streetno, string country, string id, string globalIDSchemeID = "", string globalID = "")
+        public void SetSeller(string name, string postcode, string city, string street, string streetno, CountryCodes country, string id, string globalIDSchemeID = "", string globalID = "")
         {
             this.Seller = new Party()
             {

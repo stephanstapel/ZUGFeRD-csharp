@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
         public string Name { get; set; }
         public string City { get; set; }
         public string Postcode { get; set; }
-        public string Country { get; set; }
+        public CountryCodes Country { get; set; }
         public string StreetNo { get; set; }
         public string Street { get; set; }
         public GlobalID GlobalID { get; set; }

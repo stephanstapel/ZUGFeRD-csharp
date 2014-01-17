@@ -41,7 +41,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    public static class TaxTypesExtensions
+    internal static class TaxTypesExtensions
     {
         public static TaxTypes FromString(this TaxTypes _t, string s)
         {

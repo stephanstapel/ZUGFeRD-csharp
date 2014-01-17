@@ -384,7 +384,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteElementString("PostcodeCode", Party.Postcode);
                 writer.WriteElementString("LineOne", _formatStreet(Party.Street, Party.StreetNo));
                 writer.WriteElementString("CityName", Party.City);
-                writer.WriteElementString("CountryID", Party.Country);
+                writer.WriteElementString("CountryID", Party.Country.ToString("g"));
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (TaxRegistrations != null)

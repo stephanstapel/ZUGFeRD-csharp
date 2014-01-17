@@ -31,6 +31,8 @@ namespace ZUGFeRD_Test
             _loadSampleZUGFeRDInvoice();
             _saveSampleZUGFeRDInvoice();
             _loadWritteneZUGFeRDInvoice();
+
+            
         } // !run()
 
 
@@ -51,10 +53,10 @@ namespace ZUGFeRD_Test
             desc.ReferenceOrderNo = "AB-312";
             desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
             desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCodes.AAA);
-            desc.SetBuyer("Kunden Mitte AG", "69876", "Frankfurt", "Kundenstraße", "15", "DE", "GE2020211", "0088", "4000001987658");
+            desc.SetBuyer("Kunden Mitte AG", "69876", "Frankfurt", "Kundenstraße", "15", CountryCodes.DE, "GE2020211", "0088", "4000001987658");
             desc.AddBuyerTaxRegistration("DE234567890", TaxRegistrationSchemeID.VA);
             desc.SetBuyerContact("Hans Muster");
-            desc.SetSeller("Lieferant GmbH", "80333", "München", "Lieferantenstraße", "20", "DE", "", "0088", "4000001123452");
+            desc.SetSeller("Lieferant GmbH", "80333", "München", "Lieferantenstraße", "20", CountryCodes.DE, "", "0088", "4000001123452");
             desc.AddSellerTaxRegistration("201/113/40209", TaxRegistrationSchemeID.FC);
             desc.AddSellerTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
             desc.SetBuyerOrderReferenceDocument("2013-471331", new DateTime(2013, 03, 01));

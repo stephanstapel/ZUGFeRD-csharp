@@ -38,7 +38,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    public static class QuantityCodesExtensions
+    internal static class QuantityCodesExtensions
     {
         public static QuantityCodes FromString(this QuantityCodes _c, string s)
         {
