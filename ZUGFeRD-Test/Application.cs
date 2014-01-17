@@ -30,6 +30,7 @@ namespace ZUGFeRD_Test
         {
             _loadSampleZUGFeRDInvoice();
             _saveSampleZUGFeRDInvoice();
+            _loadWritteneZUGFeRDInvoice();
         } // !run()
 
 
@@ -101,5 +102,11 @@ namespace ZUGFeRD_Test
 
             desc.Save("output.xml");
         } // !_saveSampleZUGFeRDInvoice()
+
+
+        private void _loadWritteneZUGFeRDInvoice()
+        {
+            InvoiceDescriptor desc = InvoiceDescriptor.Load("output.xml");
+        } // !_loadWritteneZUGFeRDInvoice()
     }
 }

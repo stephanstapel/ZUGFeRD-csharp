@@ -391,12 +391,15 @@ namespace s2industries.ZUGFeRD
                 {
                     foreach (TaxRegistration _reg in TaxRegistrations)
                     {
-                        writer.WriteStartElement("SpecifiedTaxRegistration");
-                        writer.WriteStartElement("ID");
-                        writer.WriteAttributeString("schemeID", _translateTaxRegistrationSchemeID(_reg.SchemeID));
-                        writer.WriteValue(_reg.No);
-                        writer.WriteEndElement();
-                        writer.WriteEndElement();
+                        if ((_reg.No != null) && (_reg.No.Length > 0))
+                        {
+                            writer.WriteStartElement("SpecifiedTaxRegistration");
+                            writer.WriteStartElement("ID");
+                            writer.WriteAttributeString("schemeID", _translateTaxRegistrationSchemeID(_reg.SchemeID));
+                            writer.WriteValue(_reg.No);
+                            writer.WriteEndElement();
+                            writer.WriteEndElement();
+                        }
                     }
                 }
                 writer.WriteEndElement(); // !*TradeParty
@@ -412,12 +415,34 @@ namespace s2industries.ZUGFeRD
 
                 if (contact.Name.Length > 0)
                 {
-                    writer.WriteElementString("Name", contact.Name);
+                    writer.WriteElementString("PersonName", contact.Name);
                 }
 
-                ///
-                /// TODO: restliche Kontaktattribute einpflegen
-                ///
+                if (contact.OrgUnit.Length > 0)
+                {
+                    writer.WriteElementString("DepartmentName", contact.OrgUnit);
+                }
+
+                if (contact.PhoneNo.Length > 0)
+                {
+                    writer.WriteStartElement("TelephoneUniversalCommunication");
+                    writer.WriteElementString("CompleteNumber", contact.PhoneNo);
+                    writer.WriteEndElement();
+                }
+
+                if (contact.FaxNo.Length > 0)
+                {
+                    writer.WriteStartElement("FaxUniversalCommunication");
+                    writer.WriteElementString("CompleteNumber", contact.FaxNo);
+                    writer.WriteEndElement();
+                }
+
+                if (contact.EmailAddress.Length > 0)
+                {
+                    writer.WriteStartElement("EmailURIUniversalCommunication");
+                    writer.WriteElementString("CompleteNumber", contact.EmailAddress);
+                    writer.WriteEndElement();
+                }
 
                 writer.WriteEndElement();
             }

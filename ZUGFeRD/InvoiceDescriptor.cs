@@ -178,7 +178,7 @@ namespace s2industries.ZUGFeRD
                 OrgUnit = orgunit,
                 EmailAddress = emailAddress,
                 PhoneNo = phoneno,
-                FaXNo = faxno
+                FaxNo = faxno
             };
         } // !SetBuyerContact()
 

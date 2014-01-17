@@ -20,6 +20,7 @@ namespace s2industries.ZUGFeRD
             InvoiceDescriptor retval = new InvoiceDescriptor();
             retval.Profile = default(Profile).FromString(_nodeAsString(doc.DocumentElement, "//GuidelineSpecifiedDocumentContextParameter/ID", nsmgr));
             retval.Type = default(InvoiceType).FromString(_nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/TypeCode", nsmgr));
+            retval.InvoiceNo = _nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/ID", nsmgr);
             retval.InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:HeaderExchangedDocument/IssueDateTime", nsmgr);
 
             foreach (XmlNode node in doc.SelectNodes("//rsm:HeaderExchangedDocument/IncludedNote", nsmgr))
@@ -53,7 +54,7 @@ namespace s2industries.ZUGFeRD
             retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/ActualDeliverySupplyChainEvent/OccurrenceDateTime", nsmgr);
             retval.DeliveryNoteNo = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/ID", nsmgr);
             retval.DeliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/IssueDateTime", nsmgr);
-            retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "ApplicableSupplyChainTradeSettlement/PaymentReference", nsmgr);
+            retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/PaymentReference", nsmgr);
             retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/InvoiceCurrencyCode", nsmgr));
 
             foreach (XmlNode node in doc.SelectNodes("//ApplicableTradeTax", nsmgr))
