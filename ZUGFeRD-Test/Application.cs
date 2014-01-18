@@ -63,12 +63,15 @@ namespace ZUGFeRD_Test
             desc.SetDeliveryNoteReferenceDocument("2013-51111", new DateTime(2013, 6, 3));
             desc.ActualDeliveryDate = new DateTime(2013, 6, 3);
             desc.SetTotals(202.76m, 5.80m, 14.73m, 193.83m, 21.31m, 215.14m, 50.0m, 165.14m);
-            desc.AddApplicableTradeTax(9.06m, 129.37m, 7m, TaxTypes.VAT, TaxCategoryCodes.S);
-            desc.AddApplicableTradeTax(12.25m, 64.46m, 19m, TaxTypes.VAT, TaxCategoryCodes.S);
+            desc.AddApplicableTradeTax(129.37m, 7m, TaxTypes.VAT, TaxCategoryCodes.S);
+            desc.AddApplicableTradeTax(64.46m, 19m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.AddLogisticsServiceCharge(5.80m, "Versandkosten", TaxTypes.VAT, TaxCategoryCodes.S, 7m);
             desc.AddTradeAllowanceCharge(true, 10m, CurrencyCodes.EUR, 1m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 19);
             desc.AddTradeAllowanceCharge(true, 137.7m, CurrencyCodes.EUR, 13.73m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 7);
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
+
+            desc.setPaymentMeans("42", "Überweisung");
+            desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04", "1234567890", "70090100", "Hausbank München");
 
             desc.addTradeLineCommentItem("Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:");
             desc.addTradeLineItem("Kunstrasen grün 3m breit",

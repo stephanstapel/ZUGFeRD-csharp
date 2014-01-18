@@ -81,10 +81,39 @@ namespace s2industries.ZUGFeRD
             retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/PaymentReference", nsmgr);
             retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/InvoiceCurrencyCode", nsmgr));
 
+            PaymentMeans _tempPaymentMeans= new PaymentMeans()
+            {
+                TypeCode = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/TypeCode", nsmgr),
+                Information = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/Information", nsmgr)
+            };
+            if (_tempPaymentMeans.TypeCode.Length > 0)
+            {
+                retval.PaymentMeans = _tempPaymentMeans;
+            }
+
+            XmlNodeList financialAccountNodes = doc.SelectNodes("//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/PayeePartyCreditorFinancialAccount", nsmgr);
+            XmlNodeList financialInstitutions = doc.SelectNodes("//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
+
+            if (financialAccountNodes.Count == financialInstitutions.Count)
+            {
+                for (int i = 0; i < financialAccountNodes.Count; i++)
+                {
+                    BankAccount _account = new BankAccount() 
+                    {
+                        ID = _nodeAsString(financialAccountNodes[0], "ProprietaryID", nsmgr),
+                        IBAN = _nodeAsString(financialAccountNodes[0], "IBANID", nsmgr),
+                        BIC = _nodeAsString(financialInstitutions[0], "BICID", nsmgr),
+                        Bankleitzahl = _nodeAsString(financialInstitutions[0], "GermanBankleitzahlID", nsmgr),
+                        BankName = _nodeAsString(financialInstitutions[0], "Name", nsmgr),
+                    };
+
+                    retval.CreditorBankAccounts.Add(_account);
+                } // !for(i)
+            }
+
             foreach (XmlNode node in doc.SelectNodes("//ApplicableTradeTax", nsmgr))
             {
-                retval.AddApplicableTradeTax(_nodeAsDecimal(node, "ActualAmount", nsmgr),
-                                             _nodeAsDecimal(node, "BasisAmount", nsmgr),
+                retval.AddApplicableTradeTax(_nodeAsDecimal(node, "BasisAmount", nsmgr),
                                              _nodeAsDecimal(node, "ApplicablePercent", nsmgr),
                                              default(TaxTypes).FromString(_nodeAsString(node, "TypeCode", nsmgr)),
                                              default(TaxCategoryCodes).FromString(_nodeAsString(node, "CategoryCode", nsmgr)));

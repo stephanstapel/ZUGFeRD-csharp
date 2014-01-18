@@ -116,6 +116,34 @@ namespace s2industries.ZUGFeRD
             _writeOptionalElementString(Writer, "PaymentReference", this.Descriptor.InvoiceNoAsReference);
             Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor.Currency.ToString());
 
+            if ((this.Descriptor.CreditorBankAccounts.Count > 0) || (this.Descriptor.PaymentMeans != null))
+            {
+                Writer.WriteStartElement("SpecifiedTradeSettlementPaymentMeans");
+
+                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode.Length > 0))
+                {
+                    Writer.WriteElementString("TypeCode", this.Descriptor.PaymentMeans.TypeCode);
+                    Writer.WriteElementString("Information", this.Descriptor.PaymentMeans.Information);
+                }
+
+                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                {
+                    Writer.WriteStartElement("PayeePartyCreditorFinancialAccount");
+                    Writer.WriteElementString("IBANID", account.IBAN);
+                    Writer.WriteElementString("ProprietaryID", account.ID);
+                    Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
+
+                    Writer.WriteStartElement("PayeeSpecifiedCreditorFinancialInstitution");
+                    Writer.WriteElementString("BICID", account.BIC);
+                    Writer.WriteElementString("GermanBankleitzahlID", account.Bankleitzahl);
+                    Writer.WriteElementString("Name", account.BankName);
+                    Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                }
+
+                Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
+            }
+
+
             /**
              * @todo add writer for this:
              * <SpecifiedTradeSettlementPaymentMeans>
@@ -162,9 +190,9 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            if ((this.Descriptor._ServiceCharges != null) && (this.Descriptor._ServiceCharges.Count > 0))
+            if ((this.Descriptor.ServiceCharges != null) && (this.Descriptor.ServiceCharges.Count > 0))
             {
-                foreach (ServiceCharge serviceCharge in this.Descriptor._ServiceCharges)
+                foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
                 {
                     Writer.WriteStartElement("SpecifiedLogisticsServiceCharge");
                     if (serviceCharge.Description.Length > 0)

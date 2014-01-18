@@ -23,27 +23,12 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class Tax
+    public class BankAccount
     {
-        public decimal TaxAmount {
-            get
-            {
-                return this.Percent * this.BasisAmount;
-            }
-        }
-        public decimal BasisAmount { get; set; }
-
-        /// <summary>
-        /// Tax rate
-        /// </summary>
-        public decimal Percent { get; set; }
-        public TaxTypes TypeCode { get; set; }
-        public TaxCategoryCodes CategoryCode { get; set; }
-
-
-        public Tax()
-        {
-            this.CategoryCode = TaxCategoryCodes.S;
-        }
+        public string ID { get; set; }
+        public string IBAN { get; set; }
+        public string BIC { get; set; }
+        public string Bankleitzahl { get; set; }
+        public string BankName { get; set; }
     }
 }

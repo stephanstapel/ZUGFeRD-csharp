@@ -63,9 +63,11 @@ namespace s2industries.ZUGFeRD
         public decimal TotalPrepaidAmount { get; set; }
         public decimal DuePayableAmount { get; set; }
         public List<Tax> Taxes { get; set; }
-        internal List<ServiceCharge> _ServiceCharges { get; set; }
+        public List<ServiceCharge> ServiceCharges { get; set; }
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
         public PaymentTerms PaymentTerms { get; set; }
+        public List<BankAccount> CreditorBankAccounts { get; set; }
+        public PaymentMeans PaymentMeans { get; set; }
    
 
         public InvoiceDescriptor()
@@ -91,11 +93,12 @@ namespace s2industries.ZUGFeRD
             this.DuePayableAmount = decimal.MinValue;
             this.TradeLineItems = new List<TradeLineItem>();
             this.Taxes = new List<Tax>();
-            this._ServiceCharges = new List<ServiceCharge>();
+            this.ServiceCharges = new List<ServiceCharge>();
             this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
 
             this.BuyerTaxRegistration = new List<TaxRegistration>();
             this.SellerTaxRegistration = new List<TaxRegistration>();
+            this.CreditorBankAccounts = new List<BankAccount>();
         }
 
 
@@ -231,7 +234,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddLogisticsServiceCharge(decimal amount, string description, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
-            this._ServiceCharges.Add(new ServiceCharge()
+            this.ServiceCharges.Add(new ServiceCharge()
             {
                 Description = description,
                 Amount = amount,
@@ -301,11 +304,10 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void AddApplicableTradeTax(decimal taxAmount, decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes categoryCode)
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes categoryCode)
         {
             this.Taxes.Add(new Tax()
             {
-                TaxAmount = taxAmount,
                 BasisAmount = basisAmount,
                 Percent = percent,
                 TypeCode = typeCode,
@@ -373,5 +375,28 @@ namespace s2industries.ZUGFeRD
                 Comment = comment
             });
         } // !addTradeLineItem()
+
+
+        public void setPaymentMeans(string paymentCode, string information = "")
+        {
+            this.PaymentMeans = new PaymentMeans
+            {
+                TypeCode = paymentCode,
+                Information = information
+            };
+        } // !setPaymentMeans()
+
+
+        public void addCreditorFinancialAccount(string iban, string bic, string id, string bankleitzahl, string bankName)
+        {
+            this.CreditorBankAccounts.Add(new BankAccount()
+            {
+                ID = id,
+                IBAN = iban,
+                BIC = bic,
+                Bankleitzahl = bankleitzahl,
+                BankName = bankName
+            });
+        } // !addCreditorFinancialAccount()
     }
 }
