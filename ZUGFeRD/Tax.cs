@@ -28,7 +28,7 @@ namespace s2industries.ZUGFeRD
         public decimal TaxAmount {
             get
             {
-                return this.Percent * this.BasisAmount;
+                return 0.01m * this.Percent * this.BasisAmount;
             }
         }
         public decimal BasisAmount { get; set; }
