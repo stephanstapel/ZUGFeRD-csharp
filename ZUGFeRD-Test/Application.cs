@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using s2industries.ZUGFeRD;
+using System.IO;
 
 namespace ZUGFeRD_Test
 {
@@ -32,7 +33,8 @@ namespace ZUGFeRD_Test
             _saveSampleZUGFeRDInvoice();
             _loadWritteneZUGFeRDInvoice();
 
-            
+            _saveSampleZUGFeRDInvoiceViaStream();
+            _loadSampleZUGFeRDInvoiceViaStream();
         } // !run()
 
 
@@ -47,6 +49,47 @@ namespace ZUGFeRD_Test
 
 
         private void _saveSampleZUGFeRDInvoice()
+        {
+            InvoiceDescriptor desc = _createInvoice();
+
+            desc.Save("output.xml");
+        } // !_saveSampleZUGFeRDInvoice()
+
+
+        private void _saveSampleZUGFeRDInvoiceViaStream()
+        {
+            InvoiceDescriptor desc = _createInvoice();
+
+            FileStream fs = new FileStream("file_fromstream.xml", FileMode.Create);
+            desc.Save(fs);
+
+            // try again with a memory stream
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms);
+
+            byte[] data = ms.ToArray();
+            string s = System.Text.Encoding.Default.GetString(data);
+        } // !_saveSampleZUGFeRDInvoiceViaStream()
+
+
+        private void _loadSampleZUGFeRDInvoiceViaStream()
+        {
+            string path = "file_fromstream.xml";
+            FileStream fs = new FileStream(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(fs);
+
+            Assert.AreEqual(desc.Profile, Profile.Comfort);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadSampleZUGFeRDInvoiceViaStream()
+
+
+        private void _loadWritteneZUGFeRDInvoice()
+        {
+            InvoiceDescriptor desc = InvoiceDescriptor.Load("output.xml");
+        } // !_loadWritteneZUGFeRDInvoice()
+
+
+        private InvoiceDescriptor _createInvoice()
         {
             InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
             desc.Profile = Profile.Comfort;
@@ -102,16 +145,9 @@ namespace ZUGFeRD_Test
                                   5.49m,
                                   20,
                                   TaxTypes.VAT, TaxCategoryCodes.S, 7,
-                                  "0160", "4000001234561", 
+                                  "0160", "4000001234561",
                                   "GTRWA5", "55T03");
-
-            desc.Save("output.xml");
-        } // !_saveSampleZUGFeRDInvoice()
-
-
-        private void _loadWritteneZUGFeRDInvoice()
-        {
-            InvoiceDescriptor desc = InvoiceDescriptor.Load("output.xml");
-        } // !_loadWritteneZUGFeRDInvoice()
+            return desc;
+        } // _createInvoice()
     }
 }
