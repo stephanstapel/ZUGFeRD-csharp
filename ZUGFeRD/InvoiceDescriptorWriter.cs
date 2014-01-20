@@ -35,6 +35,11 @@ namespace s2industries.ZUGFeRD
 
         public void Save(InvoiceDescriptor descriptor, Stream stream)
         {
+            if (!stream.CanWrite)
+            {
+                throw new IllegalStreamException("Cannot write to stream");
+            }
+
             this.Descriptor = descriptor;
             this.Writer = new XmlTextWriter(stream, Encoding.UTF8);
             Writer.Formatting = Formatting.Indented;
@@ -195,7 +200,7 @@ namespace s2industries.ZUGFeRD
                 foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
                 {
                     Writer.WriteStartElement("SpecifiedLogisticsServiceCharge");
-                    if (serviceCharge.Description.Length > 0)
+                    if (!String.IsNullOrEmpty(serviceCharge.Description))
                     {
                         Writer.WriteElementString("Description", serviceCharge.Description);
                     }
@@ -239,7 +244,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("IncludedSupplyChainTradeLineItem");
                 Writer.WriteStartElement("AssociatedDocumentLineDocument");
 
-                if ((tradeLineItem.BilledQuantity != 0) && (tradeLineItem.Name == null) && (tradeLineItem.Comment.Length > 0))
+                if ((tradeLineItem.BilledQuantity != 0) && (tradeLineItem.Name == null) && (!String.IsNullOrEmpty(tradeLineItem.Comment)))
                 {
                     Writer.WriteStartElement("IncludedNote");
                     Writer.WriteElementString("Content", tradeLineItem.Comment);
@@ -249,7 +254,7 @@ namespace s2industries.ZUGFeRD
                 {
                     counter += 1;
                     Writer.WriteElementString("LineID", counter.ToString());
-                    if (tradeLineItem.Comment.Length > 0)
+                    if (!String.IsNullOrEmpty(tradeLineItem.Comment))
                     {
                         Writer.WriteElementString("Content", tradeLineItem.Comment);
                     }
@@ -287,7 +292,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeSettlement
 
                     Writer.WriteStartElement("SpecifiedTradeProduct");
-                    if ((tradeLineItem.GlobalID.SchemeID.Length > 0) && (tradeLineItem.GlobalID.ID.Length > 0))
+                    if ((!String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID)) && (!String.IsNullOrEmpty(tradeLineItem.GlobalID.ID)))
                     {
                         _writeElementWithAttribute(Writer, "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
                     }
@@ -307,14 +312,16 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteEndElement(); // !Invoice
             Writer.WriteEndDocument();
-
-            Writer.Close();
+            Writer.Flush();
         } // !Save()
 
 
         public void Save(InvoiceDescriptor descriptor, string filename)
         {
-            Save(descriptor, new FileStream(filename, FileMode.Create, FileAccess.Write));
+            FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
+            Save(descriptor, fs);
+            fs.Flush();
+            fs.Close();
         } // !Save()
 
 
@@ -388,12 +395,12 @@ namespace s2industries.ZUGFeRD
             {
                 writer.WriteStartElement(PartyTag);
 
-                if ((Party.ID != null) && (Party.ID.Length > 0))
+                if (!String.IsNullOrEmpty(Party.ID))
                 {
                     writer.WriteElementString("ID", Party.ID);
                 }
 
-                if ((Party.GlobalID != null) && (Party.GlobalID.ID.Length > 0) && (Party.GlobalID.SchemeID.Length > 0))
+                if ((Party.GlobalID != null) && !String.IsNullOrEmpty(Party.GlobalID.ID) && !String.IsNullOrEmpty(Party.GlobalID.SchemeID))
                 {
                     writer.WriteStartElement("GlobalID");
                     writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID);
@@ -419,7 +426,7 @@ namespace s2industries.ZUGFeRD
                 {
                     foreach (TaxRegistration _reg in TaxRegistrations)
                     {
-                        if ((_reg.No != null) && (_reg.No.Length > 0))
+                        if (!String.IsNullOrEmpty(_reg.No))
                         {
                             writer.WriteStartElement("SpecifiedTaxRegistration");
                             writer.WriteStartElement("ID");
@@ -441,31 +448,31 @@ namespace s2industries.ZUGFeRD
             {
                 writer.WriteStartElement(contactTag);
 
-                if (contact.Name.Length > 0)
+                if (!String.IsNullOrEmpty(contact.Name))
                 {
                     writer.WriteElementString("PersonName", contact.Name);
                 }
 
-                if (contact.OrgUnit.Length > 0)
+                if (!String.IsNullOrEmpty(contact.OrgUnit))
                 {
                     writer.WriteElementString("DepartmentName", contact.OrgUnit);
                 }
 
-                if (contact.PhoneNo.Length > 0)
+                if (!String.IsNullOrEmpty(contact.PhoneNo))
                 {
                     writer.WriteStartElement("TelephoneUniversalCommunication");
                     writer.WriteElementString("CompleteNumber", contact.PhoneNo);
                     writer.WriteEndElement();
                 }
 
-                if (contact.FaxNo.Length > 0)
+                if (!String.IsNullOrEmpty(contact.FaxNo))
                 {
                     writer.WriteStartElement("FaxUniversalCommunication");
                     writer.WriteElementString("CompleteNumber", contact.FaxNo);
                     writer.WriteEndElement();
                 }
 
-                if (contact.EmailAddress.Length > 0)
+                if (!String.IsNullOrEmpty(contact.EmailAddress))
                 {
                     writer.WriteStartElement("EmailURIUniversalCommunication");
                     writer.WriteElementString("CompleteNumber", contact.EmailAddress);
@@ -479,7 +486,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalElementString(XmlTextWriter writer, string tagName, string value)
         {
-            if ((value != null) && (value.Length > 0))
+            if (String.IsNullOrEmpty(value))
             {
                 writer.WriteElementString(tagName, value);
             }
@@ -495,7 +502,7 @@ namespace s2industries.ZUGFeRD
         private string _formatStreet(string street, string streetNo)
         {
             string retval = street;
-            if (streetNo.Length > 0)
+            if (!String.IsNullOrEmpty(streetNo))
             {
                 retval += " " + streetNo;
             }

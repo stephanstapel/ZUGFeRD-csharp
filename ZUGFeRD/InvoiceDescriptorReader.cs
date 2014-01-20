@@ -12,6 +12,11 @@ namespace s2industries.ZUGFeRD
     {
         public static InvoiceDescriptor Load(Stream stream)
         {
+            if (!stream.CanRead)
+            {
+                throw new IllegalStreamException("Cannot read from stream");
+            }
+
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
@@ -86,7 +91,7 @@ namespace s2industries.ZUGFeRD
                 TypeCode = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/TypeCode", nsmgr),
                 Information = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/Information", nsmgr)
             };
-            if (_tempPaymentMeans.TypeCode.Length > 0)
+            if (!String.IsNullOrEmpty(_tempPaymentMeans.TypeCode))
             {
                 retval.PaymentMeans = _tempPaymentMeans;
             }
