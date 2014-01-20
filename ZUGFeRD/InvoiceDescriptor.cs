@@ -316,6 +316,13 @@ namespace s2industries.ZUGFeRD
         } // !AddApplicableTradeTax()
 
 
+        /// <summary>
+        /// Saves the descriptor object into a stream.
+        /// 
+        /// The stream position will be reset to the original position after writing is finished.
+        /// This allows easy further processing of the stream.
+        /// </summary>
+        /// <param name="stream"></param>
         public void Save(Stream stream)
         {
             InvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
