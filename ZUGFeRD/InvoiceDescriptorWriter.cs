@@ -35,10 +35,12 @@ namespace s2industries.ZUGFeRD
 
         public void Save(InvoiceDescriptor descriptor, Stream stream)
         {
-            if (!stream.CanWrite)
+            if (!stream.CanWrite || !stream.CanSeek)
             {
                 throw new IllegalStreamException("Cannot write to stream");
             }
+
+            long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;
             this.Writer = new XmlTextWriter(stream, Encoding.UTF8);
@@ -57,7 +59,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("rsm:SpecifiedExchangedDocumentContext");
             Writer.WriteElementString("TestIndicator", this.Descriptor.IsTest ? "true" : "false");
             Writer.WriteStartElement("GuidelineSpecifiedDocumentContextParameter");
-            Writer.WriteElementString("ID", this.Descriptor.Profile.ToString());
+            Writer.WriteElementString("ID", this.Descriptor.Profile.EnumToString());
             Writer.WriteEndElement(); // !GuidelineSpecifiedDocumentContextParameter
             Writer.WriteEndElement(); // !rsm:SpecifiedExchangedDocumentContext
 
@@ -119,7 +121,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("ApplicableSupplyChainTradeSettlement");
             _writeOptionalElementString(Writer, "PaymentReference", this.Descriptor.InvoiceNoAsReference);
-            Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor.Currency.ToString());
+            Writer.WriteElementString("InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
             if ((this.Descriptor.CreditorBankAccounts.Count > 0) || (this.Descriptor.PaymentMeans != null))
             {
@@ -253,7 +255,7 @@ namespace s2industries.ZUGFeRD
                 else
                 {
                     counter += 1;
-                    Writer.WriteElementString("LineID", counter.ToString());
+                    Writer.WriteElementString("LineID", String.Format("{0}", counter));
                     if (!String.IsNullOrEmpty(tradeLineItem.Comment))
                     {
                         Writer.WriteElementString("Content", tradeLineItem.Comment);
@@ -281,13 +283,13 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("SpecifiedSupplyChainTradeSettlement");
                     Writer.WriteStartElement("ApplicableTradeTax");
-                    Writer.WriteElementString("TypeCode", tradeLineItem.TaxType.ToString());
-                    Writer.WriteElementString("CategoryCode", tradeLineItem.TaxCategoryCode.ToString());
+                    Writer.WriteElementString("TypeCode", tradeLineItem.TaxType.EnumToString());
+                    Writer.WriteElementString("CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
                     Writer.WriteElementString("ApplicablePercent", tradeLineItem.TaxPercent.ToString());
                     Writer.WriteEndElement(); // !ApplicableTradeTax
                     Writer.WriteStartElement("SpecifiedTradeSettlementMonetarySummation");
                     decimal _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
-                    _writeElementWithAttribute(Writer, "LineTotalAmount", "currencyID", this.Descriptor.Currency.ToString(), _formatDecimal(_total));
+                    _writeElementWithAttribute(Writer, "LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
                     Writer.WriteEndElement(); // SpecifiedTradeSettlementMonetarySummation
                     Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeSettlement
 
@@ -313,6 +315,8 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !Invoice
             Writer.WriteEndDocument();
             Writer.Flush();
+
+            stream.Seek(streamPosition, SeekOrigin.Begin);
         } // !Save()
 
 
@@ -330,7 +334,7 @@ namespace s2industries.ZUGFeRD
             if (value != decimal.MinValue)
             {
                 writer.WriteStartElement(tagName);
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.ToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(value));
                 writer.WriteEndElement(); // !tagName
             }
@@ -353,14 +357,14 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ApplicableTradeTax");
 
                 writer.WriteStartElement("CalculatedAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.ToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("TypeCode", _translateTaxType(tax.TypeCode));
 
                 writer.WriteStartElement("BasisAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.ToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 

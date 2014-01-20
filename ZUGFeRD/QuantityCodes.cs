@@ -53,7 +53,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this QuantityCodes c)
+        public static string EnumToString(this QuantityCodes c)
         {
             return c.ToString("g");
         } // !ToString()

@@ -140,7 +140,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this TaxCategoryCodes codes)
+        public static string EnumToString(this TaxCategoryCodes codes)
         {
             return codes.ToString("g");
         } // !ToString()

@@ -79,7 +79,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this SubjectCodes codes)
+        public static string EnumToString(this SubjectCodes codes)
         {
             return codes.ToString("g");
         } // !ToString()

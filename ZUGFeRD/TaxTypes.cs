@@ -56,7 +56,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this TaxTypes t)
+        public static string EnumToString(this TaxTypes t)
         {
             return t.ToString("g");
         } // !ToString()

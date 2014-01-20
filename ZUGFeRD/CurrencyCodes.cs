@@ -151,7 +151,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this CurrencyCodes c)
+        public static string EnumToString(this CurrencyCodes c)
         {
             return c.ToString("g");
         } // !ToString()

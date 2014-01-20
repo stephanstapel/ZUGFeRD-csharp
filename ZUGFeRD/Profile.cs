@@ -50,7 +50,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this Profile profile)
+        public static string EnumToString(this Profile profile)
         {
             switch (profile)
             {

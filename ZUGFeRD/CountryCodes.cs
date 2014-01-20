@@ -1294,7 +1294,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string ToString(this CountryCodes c)
+        public static string EnumToString(this CountryCodes c)
         {
             return c.ToString("g");
         } // !ToString()
