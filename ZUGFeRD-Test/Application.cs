@@ -30,11 +30,9 @@ namespace ZUGFeRD_Test
         internal void run()
         {
             _loadSampleZUGFeRDInvoice();
-            _saveSampleZUGFeRDInvoice();
-            _loadWritteneZUGFeRDInvoice();
 
-            _saveSampleZUGFeRDInvoiceViaStream();
-            _loadSampleZUGFeRDInvoiceViaStream();
+            _saveAndLoadZUGFeRDInvoice();
+            _saveAndLoadZUGFeRDInvoiceViaStream();
         } // !run()
 
 
@@ -48,20 +46,32 @@ namespace ZUGFeRD_Test
         } // !_loadSampleZUGFeRDInvoice()
 
 
-        private void _saveSampleZUGFeRDInvoice()
+        private void _saveAndLoadZUGFeRDInvoice()
+        {
+            string path = "output.xml";
+            InvoiceDescriptor desc = _createInvoice();
+            desc.Save(path);
+
+            InvoiceDescriptor desc2 = InvoiceDescriptor.Load(path);
+        } // !_saveAndLoadZUGFeRDInvoice()
+
+
+        private void _saveAndLoadZUGFeRDInvoiceViaStream()
         {
             InvoiceDescriptor desc = _createInvoice();
 
-            desc.Save("output.xml");
-        } // !_saveSampleZUGFeRDInvoice()
+            string path = "output_stream.xml";
+            FileStream saveStream = new FileStream(path, FileMode.Create);
+            desc.Save(saveStream);
+            saveStream.Close();
 
+            FileStream loadStream = new FileStream(path, FileMode.Open);
+            InvoiceDescriptor desc2 = InvoiceDescriptor.Load(loadStream);
+            loadStream.Close();
 
-        private void _saveSampleZUGFeRDInvoiceViaStream()
-        {
-            InvoiceDescriptor desc = _createInvoice();
+            Assert.AreEqual(desc2.Profile, Profile.Comfort);
+            Assert.AreEqual(desc2.Type, InvoiceType.Invoice);
 
-            FileStream fs = new FileStream("file_fromstream.xml", FileMode.Create);
-            desc.Save(fs);
 
             // try again with a memory stream
             MemoryStream ms = new MemoryStream();
@@ -69,24 +79,7 @@ namespace ZUGFeRD_Test
 
             byte[] data = ms.ToArray();
             string s = System.Text.Encoding.Default.GetString(data);
-        } // !_saveSampleZUGFeRDInvoiceViaStream()
-
-
-        private void _loadSampleZUGFeRDInvoiceViaStream()
-        {
-            string path = "file_fromstream.xml";
-            FileStream fs = new FileStream(path, FileMode.Open);
-            InvoiceDescriptor desc = InvoiceDescriptor.Load(fs);
-
-            Assert.AreEqual(desc.Profile, Profile.Comfort);
-            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
-        } // !_loadSampleZUGFeRDInvoiceViaStream()
-
-
-        private void _loadWritteneZUGFeRDInvoice()
-        {
-            InvoiceDescriptor desc = InvoiceDescriptor.Load("output.xml");
-        } // !_loadWritteneZUGFeRDInvoice()
+        } // !_saveAndLoadZUGFeRDInvoiceViaStream()
 
 
         private InvoiceDescriptor _createInvoice()
