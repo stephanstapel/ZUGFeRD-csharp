@@ -30,19 +30,19 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//rsm:HeaderExchangedDocument/IncludedNote", nsmgr))
             {
-                string content = _nodeAsString(node, "//Content", nsmgr);
-                string _subjectCode = _nodeAsString(node, "//SubjectCode", nsmgr);
+                string content = _nodeAsString(node, ".//Content", nsmgr);
+                string _subjectCode = _nodeAsString(node, ".//SubjectCode", nsmgr);
                 SubjectCodes subjectCode = default(SubjectCodes).FromString(_subjectCode);
                 retval.AddNote(content, subjectCode);
             }
 
             retval.ReferenceOrderNo = _nodeAsString(doc, "//ApplicableSupplyChainTradeAgreement/BuyerReference", nsmgr);
 
-            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/SellerTradeParty", nsmgr);
+            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/SellerTradeParty", nsmgr);
             foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/SellerTradeParty/SpecifiedTaxRegistration", nsmgr))
             {
-                string id = _nodeAsString(node, "ID", nsmgr);
-                string schemeID = _nodeAsString(node, "ID/@schemeID", nsmgr);
+                string id = _nodeAsString(node, ".//ID", nsmgr);
+                string schemeID = _nodeAsString(node, ".//ID/@schemeID", nsmgr);
 
                 retval.AddSellerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
             }
@@ -59,11 +59,11 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/BuyerTradeParty", nsmgr);
+            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/BuyerTradeParty", nsmgr);
             foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/BuyerTradeParty/SpecifiedTaxRegistration", nsmgr))
             {
-                string id = _nodeAsString(node, "ID", nsmgr);
-                string schemeID = _nodeAsString(node, "ID/@schemeID", nsmgr);
+                string id = _nodeAsString(node, ".//ID", nsmgr);
+                string schemeID = _nodeAsString(node, ".//ID/@schemeID", nsmgr);
 
                 retval.AddBuyerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
             }
@@ -105,11 +105,11 @@ namespace s2industries.ZUGFeRD
                 {
                     BankAccount _account = new BankAccount() 
                     {
-                        ID = _nodeAsString(financialAccountNodes[0], "ProprietaryID", nsmgr),
-                        IBAN = _nodeAsString(financialAccountNodes[0], "IBANID", nsmgr),
-                        BIC = _nodeAsString(financialInstitutions[0], "BICID", nsmgr),
-                        Bankleitzahl = _nodeAsString(financialInstitutions[0], "GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(financialInstitutions[0], "Name", nsmgr),
+                        ID = _nodeAsString(financialAccountNodes[0], ".//ProprietaryID", nsmgr),
+                        IBAN = _nodeAsString(financialAccountNodes[0], ".//IBANID", nsmgr),
+                        BIC = _nodeAsString(financialInstitutions[0], ".//BICID", nsmgr),
+                        Bankleitzahl = _nodeAsString(financialInstitutions[0], ".//GermanBankleitzahlID", nsmgr),
+                        BankName = _nodeAsString(financialInstitutions[0], ".//Name", nsmgr),
                     };
 
                     retval.CreditorBankAccounts.Add(_account);
@@ -118,10 +118,10 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ApplicableTradeTax", nsmgr))
             {
-                retval.AddApplicableTradeTax(_nodeAsDecimal(node, "BasisAmount", nsmgr),
-                                             _nodeAsDecimal(node, "ApplicablePercent", nsmgr),
-                                             default(TaxTypes).FromString(_nodeAsString(node, "TypeCode", nsmgr)),
-                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, "CategoryCode", nsmgr)));
+                retval.AddApplicableTradeTax(_nodeAsDecimal(node, ".//BasisAmount", nsmgr),
+                                             _nodeAsDecimal(node, ".//ApplicablePercent", nsmgr),
+                                             default(TaxTypes).FromString(_nodeAsString(node, ".//TypeCode", nsmgr)),
+                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//CategoryCode", nsmgr)));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//SpecifiedTradeAllowanceCharge", nsmgr))
@@ -138,11 +138,11 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//SpecifiedLogisticsServiceCharge", nsmgr))
             {
-                retval.AddLogisticsServiceCharge(_nodeAsDecimal(node, "AppliedAmount", nsmgr),
-                                                 _nodeAsString(node, "Description", nsmgr),
-                                                 default(TaxTypes).FromString(_nodeAsString(node, "AppliedTradeTax/TypeCode", nsmgr)),
-                                                 default(TaxCategoryCodes).FromString(_nodeAsString(node, "AppliedTradeTax/CategoryCode", nsmgr)),
-                                                 _nodeAsDecimal(node, "AppliedTradeTax/ApplicablePercent", nsmgr));
+                retval.AddLogisticsServiceCharge(_nodeAsDecimal(node, ".//AppliedAmount", nsmgr),
+                                                 _nodeAsString(node, ".//Description", nsmgr),
+                                                 default(TaxTypes).FromString(_nodeAsString(node, ".//AppliedTradeTax/TypeCode", nsmgr)),
+                                                 default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//AppliedTradeTax/CategoryCode", nsmgr)),
+                                                 _nodeAsDecimal(node, ".//AppliedTradeTax/ApplicablePercent", nsmgr));
             }
 
             retval.PaymentTerms = new PaymentTerms()
@@ -185,31 +185,31 @@ namespace s2industries.ZUGFeRD
 
         private static TradeLineItem _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null)
         {
-            if (tradeLineItem.SelectSingleNode("//AssociatedDocumentLineDocument/IncludedNote/Content") != null)
+            if (tradeLineItem.SelectSingleNode(".//AssociatedDocumentLineDocument/IncludedNote/Content") != null)
             {
                 return new TradeLineItem()
                 {
-                    Comment = _nodeAsString(tradeLineItem, "//AssociatedDocumentLineDocument/IncludedNote/Content", nsmgr)
+                    Comment = _nodeAsString(tradeLineItem, ".//AssociatedDocumentLineDocument/IncludedNote/Content", nsmgr)
                 };
             }
             else
             {
                 return new TradeLineItem()
                 {
-                    GlobalID = new GlobalID(_nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/GlobalID/@schemeID", nsmgr),
-                                            _nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/GlobalID", nsmgr)),
-                    SellerAssignedID = _nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/SellerAssignedID", nsmgr),
-                    BuyerAssignedID = _nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/BuyerAssignedID", nsmgr),
-                    Name = _nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/Name", nsmgr),
-                    Description = _nodeAsString(tradeLineItem, "//SpecifiedTradeProduct/Description", nsmgr),
-                    UnitQuantity = _nodeAsInt(tradeLineItem, "//BasisQuantity", nsmgr, 1),
-                    BilledQuantity = _nodeAsInt(tradeLineItem, "//BilledQuantity", nsmgr, 1),
-                    TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, "//ApplicableTradeTax/CategoryCode", nsmgr)),
-                    TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, "//ApplicableTradeTax/TypeCode", nsmgr)),
-                    TaxPercent = _nodeAsDecimal(tradeLineItem, "//ApplicableTradeTax/ApplicablePercent", nsmgr),
-                    NetUnitPrice = _nodeAsDecimal(tradeLineItem, "//GrossPriceProductTradePrice/ChargeAmount", nsmgr),
-                    GrossUnitPrice = _nodeAsDecimal(tradeLineItem, "//NetPriceProductTradePrice/ChargeAmount", nsmgr),
-                    UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, "//BasisQuantity/@unitCode", nsmgr))
+                    GlobalID = new GlobalID(_nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/GlobalID/@schemeID", nsmgr),
+                                            _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/GlobalID", nsmgr)),
+                    SellerAssignedID = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/SellerAssignedID", nsmgr),
+                    BuyerAssignedID = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/BuyerAssignedID", nsmgr),
+                    Name = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/Name", nsmgr),
+                    Description = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/Description", nsmgr),
+                    UnitQuantity = _nodeAsInt(tradeLineItem, ".//BasisQuantity", nsmgr, 1),
+                    BilledQuantity = _nodeAsInt(tradeLineItem, ".//BilledQuantity", nsmgr, 1),
+                    TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/CategoryCode", nsmgr)),
+                    TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/TypeCode", nsmgr)),
+                    TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ApplicableTradeTax/ApplicablePercent", nsmgr),
+                    NetUnitPrice = _nodeAsDecimal(tradeLineItem, ".//GrossPriceProductTradePrice/ChargeAmount", nsmgr),
+                    GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//NetPriceProductTradePrice/ChargeAmount", nsmgr),
+                    UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//BasisQuantity/@unitCode", nsmgr))
                 };
             }
         } // !_parseTradeLineItem()
@@ -291,22 +291,33 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsDecimal()
 
 
-        private static DateTime _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null)
+        private static DateTime _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
         {
             string format = "102";
-            try
+
+            XmlNode dateNode = node.SelectSingleNode(xpath, nsmgr);
+            if (dateNode == null)
             {
-                format = node.Attributes["format"].InnerText;
+                if (defaultValue.HasValue)
+                {
+                    return defaultValue.Value;
+                }
+                else
+                {
+                    throw new Exception(String.Format("Invalid date node for path {0}", xpath));
+                }
             }
-            catch
+
+            if (((XmlElement)dateNode).HasAttribute("format"))
             {
+                format = dateNode.Attributes["format"].InnerText;
             }
 
             if (format != "102")
             {
                 throw new UnsupportedException();
             }
-            string value = node.SelectSingleNode(xpath, nsmgr).InnerText;
+            string value = dateNode.InnerText;
             if (value.Length != 8)
             {
                 throw new Exception("Wrong length of datetime element");
@@ -326,14 +337,14 @@ namespace s2industries.ZUGFeRD
 
             return new Party()
             {
-                ID = _nodeAsString(node, "//ID", nsmgr),
-                GlobalID = new GlobalID(_nodeAsString(node, "//GlobalID/@schemeID", nsmgr),
-                                        _nodeAsString(node, "//GlobalID", nsmgr)),
-                Name = _nodeAsString(node, "//Name", nsmgr),
-                Street = _nodeAsString(node, "//PostalTradeAddress/LineOne", nsmgr),
-                Postcode = _nodeAsString(node, "//PostalTradeAddress/PostcodeCode", nsmgr),
-                City = _nodeAsString(node, "//PostalTradeAddress/CityName", nsmgr),
-                Country = default(CountryCodes).FromString(_nodeAsString(node, "//PostalTradeAddress/CountryID", nsmgr))
+                ID = _nodeAsString(node, "ID", nsmgr),
+                GlobalID = new GlobalID(_nodeAsString(node, "GlobalID/@schemeID", nsmgr),
+                                        _nodeAsString(node, "GlobalID", nsmgr)),
+                Name = _nodeAsString(node, "Name", nsmgr),
+                Street = _nodeAsString(node, "PostalTradeAddress/LineOne", nsmgr),
+                Postcode = _nodeAsString(node, "PostalTradeAddress/PostcodeCode", nsmgr),
+                City = _nodeAsString(node, "PostalTradeAddress/CityName", nsmgr),
+                Country = default(CountryCodes).FromString(_nodeAsString(node, "PostalTradeAddress/CountryID", nsmgr))
             };
         } // !_nodeAsParty()
     }
