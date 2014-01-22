@@ -490,7 +490,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalElementString(XmlTextWriter writer, string tagName, string value)
         {
-            if (String.IsNullOrEmpty(value))
+            if (!String.IsNullOrEmpty(value))
             {
                 writer.WriteElementString(tagName, value);
             }

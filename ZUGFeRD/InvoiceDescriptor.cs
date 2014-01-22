@@ -364,7 +364,7 @@ namespace s2industries.ZUGFeRD
                                      string globalIDSchemeID = "", string globalID = "",
                                      string sellerAssignedID = "", string buyerAssignedID = "")
         {
-            this.TradeLineItems.Add(new TradeLineItem()
+            TradeLineItem newItem = new TradeLineItem()
             {
                 GlobalID = new GlobalID(globalIDSchemeID, globalID),
                 SellerAssignedID = sellerAssignedID,
@@ -380,7 +380,9 @@ namespace s2industries.ZUGFeRD
                 TaxCategoryCode = categoryCode,
                 TaxPercent = taxPercent,
                 Comment = comment
-            });
+            };
+
+            this.TradeLineItems.Add(newItem);
         } // !addTradeLineItem()
 
 
