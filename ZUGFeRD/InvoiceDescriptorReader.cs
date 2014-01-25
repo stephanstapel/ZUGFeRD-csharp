@@ -195,7 +195,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                return new TradeLineItem()
+                TradeLineItem item = new TradeLineItem()
                 {
                     GlobalID = new GlobalID(_nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/GlobalID/@schemeID", nsmgr),
                                             _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/GlobalID", nsmgr)),
@@ -203,8 +203,8 @@ namespace s2industries.ZUGFeRD
                     BuyerAssignedID = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/BuyerAssignedID", nsmgr),
                     Name = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/Name", nsmgr),
                     Description = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/Description", nsmgr),
-                    UnitQuantity = _nodeAsInt(tradeLineItem, ".//BasisQuantity", nsmgr, 1),
-                    BilledQuantity = _nodeAsInt(tradeLineItem, ".//BilledQuantity", nsmgr, 1),
+                    UnitQuantity = _nodeAsDecimal(tradeLineItem, ".//BasisQuantity", nsmgr, 1),
+                    BilledQuantity = _nodeAsDecimal(tradeLineItem, ".//BilledQuantity", nsmgr, 1),
                     TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/CategoryCode", nsmgr)),
                     TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/TypeCode", nsmgr)),
                     TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ApplicableTradeTax/ApplicablePercent", nsmgr),
@@ -212,6 +212,8 @@ namespace s2industries.ZUGFeRD
                     GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//NetPriceProductTradePrice/ChargeAmount", nsmgr),
                     UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//BasisQuantity/@unitCode", nsmgr))
                 };
+
+                return item;
             }
         } // !_parseTradeLineItem()
 
@@ -275,7 +277,7 @@ namespace s2industries.ZUGFeRD
                 return defaultValue;
             }
         } // !_nodeAsInt()
-
+            
 
         private static decimal _nodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal defaultValue = 0)
         {

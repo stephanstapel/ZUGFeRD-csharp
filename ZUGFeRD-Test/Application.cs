@@ -38,7 +38,7 @@ namespace ZUGFeRD_Test
 
         private void _loadSampleZUGFeRDInvoice()
         {
-            string path = @"..\..\..\demodata\ZUGFeRD-invoice-1.xml";
+            string path = @"..\..\..\demodata\ZUGFeRD-kroos2.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
