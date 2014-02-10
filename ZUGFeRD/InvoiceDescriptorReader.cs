@@ -294,7 +294,7 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsDecimal()
 
 
-        private static DateTime _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
+        private static DateTime? _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
         {
             string format = "102";
 
@@ -307,7 +307,7 @@ namespace s2industries.ZUGFeRD
                 }
                 else
                 {
-                    throw new Exception(String.Format("Invalid date node for path {0}", xpath));
+                    return null;
                 }
             }
 

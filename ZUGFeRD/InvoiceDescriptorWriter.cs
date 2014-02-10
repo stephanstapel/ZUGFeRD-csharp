@@ -67,10 +67,14 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ID", this.Descriptor.InvoiceNo);
             Writer.WriteElementString("Name", _translateInvoiceType(this.Descriptor.Type));
             Writer.WriteElementString("TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
-            Writer.WriteStartElement("IssueDateTime");
-            Writer.WriteAttributeString("format", "102");
-            Writer.WriteValue(_formatDate(this.Descriptor.InvoiceDate));
-            Writer.WriteEndElement(); // !IssueDateTime()
+
+            if (this.Descriptor.InvoiceDate.HasValue)
+            {
+                Writer.WriteStartElement("IssueDateTime");
+                Writer.WriteAttributeString("format", "102");
+                Writer.WriteValue(_formatDate(this.Descriptor.InvoiceDate.Value));
+                Writer.WriteEndElement(); // !IssueDateTime()
+            }
             _writeOptionalNotes(Writer);
             Writer.WriteEndElement(); // !rsm:HeaderExchangedDocument
             #endregion
@@ -83,13 +87,16 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
             _writeOptionalParty(Writer, "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
-            if ((this.Descriptor.OrderDate != DateTime.MinValue) && (this.Descriptor.OrderNo.Length > 0))
+            if (this.Descriptor.OrderDate.HasValue || (this.Descriptor.OrderNo.Length > 0))
             {
                 Writer.WriteStartElement("BuyerOrderReferencedDocument");
-                Writer.WriteStartElement("IssueDateTime");
-                Writer.WriteAttributeString("format", "102");
-                Writer.WriteValue(_formatDate(this.Descriptor.OrderDate));
-                Writer.WriteEndElement(); // !IssueDateTime()
+                if (this.Descriptor.OrderDate.HasValue)
+                {
+                    Writer.WriteStartElement("IssueDateTime");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
                 Writer.WriteElementString("ID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
@@ -97,24 +104,28 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement
 
             Writer.WriteStartElement("ApplicableSupplyChainTradeDelivery");
-            if (this.Descriptor.ActualDeliveryDate != DateTime.MinValue)
+            if (this.Descriptor.ActualDeliveryDate.HasValue)
             {
                 Writer.WriteStartElement("ActualDeliverySupplyChainEvent");
                 Writer.WriteStartElement("OccurrenceDateTime");
                 Writer.WriteAttributeString("format", "102");
-                Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate));
+                Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate.Value));
                 Writer.WriteEndElement(); // !OccurrenceDateTime()
                 Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
             }
 
-            if ((this.Descriptor.DeliveryNoteDate != DateTime.MinValue) && (this.Descriptor.DeliveryNoteNo.Length > 0))
+            if ((this.Descriptor.DeliveryNoteDate.HasValue) || (this.Descriptor.DeliveryNoteNo.Length > 0))
             {
                 Writer.WriteStartElement("DeliveryNoteReferencedDocument");
                 Writer.WriteElementString("ID", this.Descriptor.DeliveryNoteNo);
-                Writer.WriteStartElement("IssueDateTime");
-                Writer.WriteAttributeString("format", "102");
-                Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteDate));
-                Writer.WriteEndElement(); // !IssueDateTime()
+
+                if (this.Descriptor.DeliveryNoteDate.HasValue)
+                {
+                    Writer.WriteStartElement("IssueDateTime");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteDate.Value));
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
                 Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
             }
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeDelivery
@@ -223,7 +234,10 @@ namespace s2industries.ZUGFeRD
             {
                 Writer.WriteStartElement("SpecifiedTradePaymentTerms");
                 _writeOptionalElementString(Writer, "Description", this.Descriptor.PaymentTerms.Description);
-                _writeElementWithAttribute(Writer, "DueDateDateTime", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate));
+                if (this.Descriptor.PaymentTerms.DueDate.HasValue)
+                {
+                    _writeElementWithAttribute(Writer, "DueDateDateTime", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate.Value));
+                }
                 Writer.WriteEndElement();
             }
 

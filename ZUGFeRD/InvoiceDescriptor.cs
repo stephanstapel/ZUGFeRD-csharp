@@ -28,15 +28,15 @@ namespace s2industries.ZUGFeRD
     public class InvoiceDescriptor
     {
         public string InvoiceNo { get; set; }
-        public DateTime InvoiceDate { get; set; }
+        public DateTime? InvoiceDate { get; set; }
         public string InvoiceNoAsReference { get; set; }
 
         public string OrderNo { get; set; }
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
 
         public string DeliveryNoteNo { get; set; }
-        public DateTime DeliveryNoteDate { get; set; }
-        public DateTime ActualDeliveryDate { get; set; }
+        public DateTime? DeliveryNoteDate { get; set; }
+        public DateTime? ActualDeliveryDate { get; set; }
 
         public CurrencyCodes Currency { get; set; }
         public Party Buyer { get; set; }
