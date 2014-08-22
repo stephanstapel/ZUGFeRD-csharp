@@ -208,8 +208,8 @@ namespace s2industries.ZUGFeRD
                     TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/CategoryCode", nsmgr)),
                     TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/TypeCode", nsmgr)),
                     TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ApplicableTradeTax/ApplicablePercent", nsmgr),
-                    NetUnitPrice = _nodeAsDecimal(tradeLineItem, ".//GrossPriceProductTradePrice/ChargeAmount", nsmgr),
-                    GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//NetPriceProductTradePrice/ChargeAmount", nsmgr),
+                    NetUnitPrice = _nodeAsDecimal(tradeLineItem, ".//NetPriceProductTradePrice/ChargeAmount", nsmgr),
+                    GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//GrossPriceProductTradePrice/ChargeAmount", nsmgr),
                     UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//BasisQuantity/@unitCode", nsmgr))
                 };
 
