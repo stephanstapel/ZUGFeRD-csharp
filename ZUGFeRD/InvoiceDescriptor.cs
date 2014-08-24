@@ -70,7 +70,7 @@ namespace s2industries.ZUGFeRD
         public PaymentMeans PaymentMeans { get; set; }
    
 
-        public InvoiceDescriptor()
+        internal InvoiceDescriptor()
         {
             this.InvoiceNoAsReference = "";
 
