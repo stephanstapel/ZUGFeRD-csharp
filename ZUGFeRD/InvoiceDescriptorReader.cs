@@ -186,6 +186,11 @@ namespace s2industries.ZUGFeRD
 
         private static TradeLineItem _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null)
         {
+            if (tradeLineItem == null)
+            {
+                return null;
+            }
+
             if (tradeLineItem.SelectSingleNode(".//AssociatedDocumentLineDocument/IncludedNote/Content") != null)
             {
                 return new TradeLineItem()
@@ -220,6 +225,11 @@ namespace s2industries.ZUGFeRD
 
         private static bool _nodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
         {
+            if (node == null)
+            {
+                return defaultValue;
+            }
+
             string value = _nodeAsString(node, xpath, nsmgr);
             if (value == "")
             {
@@ -241,6 +251,11 @@ namespace s2industries.ZUGFeRD
 
         private static string _nodeAsString(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, string defaultValue = "")
         {
+            if (node == null)
+            {
+                return defaultValue;
+            }
+
             try
             {
                 XmlNode _node = node.SelectSingleNode(xpath, nsmgr);
@@ -266,6 +281,11 @@ namespace s2industries.ZUGFeRD
 
         private static int _nodeAsInt(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, int defaultValue = 0)
         {
+            if (node == null)
+            {
+                return defaultValue;
+            }
+
             string temp = _nodeAsString(node, xpath, nsmgr, "");
             int retval;
             if (Int32.TryParse(temp, out retval))
@@ -281,6 +301,11 @@ namespace s2industries.ZUGFeRD
 
         private static decimal _nodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal defaultValue = 0)
         {
+            if (node == null)
+            {
+                return defaultValue;
+            }
+
             string temp = _nodeAsString(node, xpath, nsmgr, "");
             decimal retval;
             if (decimal.TryParse(temp, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out retval))
@@ -296,8 +321,12 @@ namespace s2industries.ZUGFeRD
 
         private static DateTime? _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
         {
-            string format = "102";
+            if (node == null)
+            {
+                return defaultValue;
+            }
 
+            string format = "102";
             XmlNode dateNode = node.SelectSingleNode(xpath, nsmgr);
             if (dateNode == null)
             {
@@ -336,8 +365,12 @@ namespace s2industries.ZUGFeRD
 
         private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
-            XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
+            if (baseNode == null)
+            {
+                return null;
+            }
 
+            XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
             return new Party()
             {
                 ID = _nodeAsString(node, "ID", nsmgr),

@@ -78,10 +78,11 @@ namespace s2industries.ZUGFeRD
             this.Profile = Profile.Basic;
             this.Type = InvoiceType.Invoice;
             this.Notes = new List<Tuple<string, SubjectCodes>>();
-            this.OrderDate = DateTime.MinValue;
-            this.InvoiceDate = DateTime.MinValue;
-            this.DeliveryNoteDate = DateTime.MinValue;
-            this.ActualDeliveryDate = DateTime.MinValue;
+            this.OrderNo = "";
+            this.OrderDate = null;
+            this.InvoiceDate = null;
+            this.DeliveryNoteDate = null;
+            this.ActualDeliveryDate = null;
 
             this.LineTotalAmount = decimal.MinValue;
             this.ChargeTotalAmount = decimal.MinValue;

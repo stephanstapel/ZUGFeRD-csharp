@@ -87,7 +87,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
             _writeOptionalParty(Writer, "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
-            if (this.Descriptor.OrderDate.HasValue || (this.Descriptor.OrderNo.Length > 0))
+            if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
             {
                 Writer.WriteStartElement("BuyerOrderReferencedDocument");
                 if (this.Descriptor.OrderDate.HasValue)
@@ -114,7 +114,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
             }
 
-            if ((this.Descriptor.DeliveryNoteDate.HasValue) || (this.Descriptor.DeliveryNoteNo.Length > 0))
+            if ((this.Descriptor.DeliveryNoteDate.HasValue) || ((this.Descriptor.DeliveryNoteNo != null) && (this.Descriptor.DeliveryNoteNo.Length > 0)))
             {
                 Writer.WriteStartElement("DeliveryNoteReferencedDocument");
                 Writer.WriteElementString("ID", this.Descriptor.DeliveryNoteNo);
