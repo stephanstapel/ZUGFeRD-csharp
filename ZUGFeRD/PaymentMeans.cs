@@ -27,5 +27,7 @@ namespace s2industries.ZUGFeRD
     {
         public string TypeCode { get; set; }
         public string Information { get; set; }
+        public string ID { get; set; }
+        public string schemeAgencyID { get; set; }
     }
 }

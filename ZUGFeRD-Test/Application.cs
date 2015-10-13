@@ -38,7 +38,7 @@ namespace ZUGFeRD_Test
 
         private void _loadSampleZUGFeRDInvoice()
         {
-            string path = @"..\..\..\demodata\ZUGFeRD-invoice-1.xml";
+            string path = @"..\..\..\demodata\pha2ma5v.vpc.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             desc.Save("test.xml");
@@ -141,7 +141,7 @@ namespace ZUGFeRD_Test
                                   20,
                                   TaxTypes.VAT, TaxCategoryCodes.S, 7,
                                   "0160", "4000001234561",
-                                  "GTRWA5", "55T03");
+                                  "GTRWA5", "55T03"); 
             return desc;
         } // _createInvoice()
     }

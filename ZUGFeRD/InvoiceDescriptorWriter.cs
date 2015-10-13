@@ -48,11 +48,11 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartDocument();
 
             #region Kopfbereich
-            Writer.WriteStartElement("rsm:Invoice");
-            Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");
-            Writer.WriteAttributeString("xmlns", "rsm", null, "urn:un:unece:uncefact:data:standard:CBFBUY:5");
+            Writer.WriteStartElement("rsm:CrossIndustryDocument");
+            Writer.WriteAttributeString("xmlns", "rsm", null, "urn:ferd:CrossIndustryDocument:invoice:1p0");
+            Writer.WriteAttributeString("xmlns", "ram", null, "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12");
+            Writer.WriteAttributeString("xmlns", "udt", null, "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15");
             Writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
-            Writer.WriteAttributeString("xsi", "schemaLocation", null, "urn:un:unece:uncefact:data:standard:CBFBUY:5 ../Schema/Invoice.xsd");
             #endregion
 
             #region SpecifiedExchangedDocumentContext

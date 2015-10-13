@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BankAccount.cs" />
-    <Compile Include="Buyer.cs" />
+    <Compile Include="Party.cs" />
     <Compile Include="Charge.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="CountryCodes.cs" />
