@@ -32,26 +32,131 @@ namespace s2industries.ZUGFeRD
     public enum QuantityCodes
     {
         Unknown,
+
+        /// <summary>
+        /// Eins (Stück)
+        /// Abkürzung: Stk.
+        /// </summary>
         C62,
-        AY,
+
+        /// <summary>
+        /// Tag
+        /// Abkürzung: Tag(e)
+        /// </summary>
+        DAY,
+
+        /// <summary>
+        /// Hektar
+        /// Abkürzung: ha
+        /// </summary>
         HAR,
+
+        /// <summary>
+        /// Stunde
+        /// Abkürzung: Std.
+        /// </summary>
         HUR,
+
+        /// <summary>
+        /// Kilogramm
+        /// Abkürzung: kg
+        /// </summary>
         KGM,
+
+        /// <summary>
+        /// Kilometer
+        /// Abkürzung: km
+        /// </summary>
         KTM,
+
+        /// <summary>
+        /// Kilowattstune
+        /// Abkürzung: kWh
+        /// </summary>
         KWH,
+
+        /// <summary>
+        /// Pauschale
+        /// Abkürzung: pausch.
+        /// </summary>
         LS,
+
+        /// <summary>
+        /// Liter
+        /// Abkürzung: l
+        /// </summary>
         LTR,
+
+        /// <summary>
+        /// Minute
+        /// Abkürzung: min
+        /// </summary>
         MIN,
+
+        /// <summary>
+        /// Quadratmillimeter
+        /// Abkürzung: mm^2
+        /// </summary>
         MMK,
+
+        /// <summary>
+        /// Millimeter
+        /// Abkürzung: mm 
+        /// </summary>
         MMT,
+
+        /// <summary>
+        /// Kubikmeter
+        /// Abkürzung: m^2
+        /// </summary>
         MTK,
+
+        /// <summary>
+        /// Kubikmeter
+        /// Abkürzung: m^3 
+        /// </summary>
         MTQ,
+
+        /// <summary>
+        /// Meter
+        /// Abkürzung: m
+        /// </summary>
         MTR,
+
+        /// <summary>
+        /// Anzahl Artikel
+        /// Abkürzung: Anz.
+        /// </summary>
         NAR,
+
+        /// <summary>
+        /// Anzahl Paare
+        /// Abkürzung: Pr.
+        /// </summary>
         NPR,
+
+        /// <summary>
+        /// Prozent
+        /// Abkürzung: %
+        /// </summary>
         P1,
+
+        /// <summary>
+        /// Set
+        /// Abkürzung: Set(s)
+        /// </summary>
         SET,
+
+        /// <summary>
+        /// Tonne (metrisch)
+        /// Abkürzung:  t
+        /// </summary>
         TNE,
+
+        /// <summary>
+        /// Woche
+        /// Abkürzung: Woche(n)
+        /// </summary>
         WEE
     }
 

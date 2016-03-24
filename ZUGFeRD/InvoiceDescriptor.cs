@@ -349,11 +349,13 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// TODO: Rabatt fehlt:
-        /// <AppliedTradeAllowanceCharge>
-		///				<ChargeIndicator>false</ChargeIndicator>
-		///				<ActualAmount currencyID="EUR">0.6667</ActualAmount>
-		///				<Reason>Rabatt</Reason>
-        ///			</AppliedTradeAllowanceCharge>
+        /// <ram:AppliedTradeAllowanceCharge>
+		/// 				<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
+		/// 				<ram:CalculationPercent>2.00</ram:CalculationPercent>
+		/// 				<ram:BasisAmount currencyID = "EUR" > 1.5000 </ ram:BasisAmount>
+		/// 				<ram:ActualAmount currencyID = "EUR" > 0.0300 </ ram:ActualAmount>
+		/// 				<ram:Reason>Artikelrabatt 1</ram:Reason>
+		/// 			</ram:AppliedTradeAllowanceCharge>
         /// </summary>
         public void addTradeLineItem(string name, string description,
                                      QuantityCodes unitCode, decimal unitQuantity,
@@ -387,7 +389,7 @@ namespace s2industries.ZUGFeRD
         } // !addTradeLineItem()
 
 
-        public void setPaymentMeans(string paymentCode, string information = "")
+        public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "")
         {
             this.PaymentMeans = new PaymentMeans
             {

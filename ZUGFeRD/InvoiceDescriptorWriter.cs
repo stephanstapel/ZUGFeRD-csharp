@@ -138,9 +138,9 @@ namespace s2industries.ZUGFeRD
             {
                 Writer.WriteStartElement("SpecifiedTradeSettlementPaymentMeans");
 
-                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode.Length > 0))
+                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                 {
-                    Writer.WriteElementString("TypeCode", this.Descriptor.PaymentMeans.TypeCode);
+                    Writer.WriteElementString("TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                     Writer.WriteElementString("Information", this.Descriptor.PaymentMeans.Information);
                 }
 
@@ -189,7 +189,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteElementString("ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
 
                     Writer.WriteStartElement("BasisAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.ToString("g"));
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
                     Writer.WriteElementString("ActualAmount", _formatDecimal(tradeAllowanceCharge.Amount));
@@ -199,8 +199,8 @@ namespace s2industries.ZUGFeRD
                     if (tradeAllowanceCharge.Tax != null)
                     {
                         Writer.WriteStartElement("CategoryTradeTax");
-                        Writer.WriteElementString("TypeCode", _translateTaxType(tradeAllowanceCharge.Tax.TypeCode));
-                        Writer.WriteElementString("CategoryCode", _translateTaxCategoryCode(tradeAllowanceCharge.Tax.CategoryCode));
+                        Writer.WriteElementString("TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
+                        Writer.WriteElementString("CategoryCode", tradeAllowanceCharge.Tax.CategoryCode.EnumToString());
                         Writer.WriteElementString("ApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
                         Writer.WriteEndElement();
                     }
@@ -221,8 +221,8 @@ namespace s2industries.ZUGFeRD
                     if (serviceCharge.Tax != null)
                     {
                         Writer.WriteStartElement("AppliedTradeTax");
-                        Writer.WriteElementString("TypeCode", _translateTaxType(serviceCharge.Tax.TypeCode));
-                        Writer.WriteElementString("CategoryCode", _translateTaxCategoryCode(serviceCharge.Tax.CategoryCode));
+                        Writer.WriteElementString("TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
+                        Writer.WriteElementString("CategoryCode", serviceCharge.Tax.CategoryCode.EnumToString());
                         Writer.WriteElementString("ApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
                         Writer.WriteEndElement();
                     }
@@ -281,18 +281,18 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("GrossPriceProductTradePrice");
                     _writeOptionalAmount(Writer, "ChargeAmount", tradeLineItem.GrossUnitPrice);
-                    _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), tradeLineItem.UnitQuantity.ToString());
+                    _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), tradeLineItem.UnitQuantity.ToString());
                     Writer.WriteEndElement(); // GrossPriceProductTradePrice
 
                     Writer.WriteStartElement("NetPriceProductTradePrice");
                     _writeOptionalAmount(Writer, "ChargeAmount", tradeLineItem.NetUnitPrice);
-                    _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), _formatDecimal(tradeLineItem.UnitQuantity));
+                    _writeElementWithAttribute(Writer, "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity));
                     Writer.WriteEndElement(); // NetPriceProductTradePrice
 
                     Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeAgreement
 
                     Writer.WriteStartElement("SpecifiedSupplyChainTradeDelivery");
-                    _writeElementWithAttribute(Writer, "BilledQuantity", "unitCode", _translateQuantityCode(tradeLineItem.UnitCode), _formatDecimal(tradeLineItem.BilledQuantity));
+                    _writeElementWithAttribute(Writer, "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity));
                     Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeDelivery
 
                     Writer.WriteStartElement("SpecifiedSupplyChainTradeSettlement");
@@ -375,14 +375,14 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
-                writer.WriteElementString("TypeCode", _translateTaxType(tax.TypeCode));
+                writer.WriteElementString("TypeCode", tax.TypeCode.EnumToString());
 
                 writer.WriteStartElement("BasisAmount");
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                writer.WriteElementString("CategoryCode", _translateTaxCategoryCode(tax.CategoryCode));
+                writer.WriteElementString("CategoryCode", tax.CategoryCode.EnumToString());
                 writer.WriteElementString("ApplicablePercent", tax.Percent.ToString("#"));
                 writer.WriteEndElement(); // !ApplicableTradeTax
             }
@@ -399,7 +399,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("Content", t.Item1);
                     if (t.Item2 != SubjectCodes.Unknown)
                     {
-                        writer.WriteElementString("SubjectCode", _translateSubjectCode(t.Item2));
+                        writer.WriteElementString("SubjectCode", t.Item2.EnumToString());
                     }
                     writer.WriteEndElement();
                 }
@@ -437,7 +437,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteElementString("PostcodeCode", Party.Postcode);
                 writer.WriteElementString("LineOne", _formatStreet(Party.Street, Party.StreetNo));
                 writer.WriteElementString("CityName", Party.City);
-                writer.WriteElementString("CountryID", Party.Country.ToString("g"));
+                writer.WriteElementString("CountryID", Party.Country.EnumToString());
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (TaxRegistrations != null)
@@ -448,7 +448,7 @@ namespace s2industries.ZUGFeRD
                         {
                             writer.WriteStartElement("SpecifiedTaxRegistration");
                             writer.WriteStartElement("ID");
-                            writer.WriteAttributeString("schemeID", _translateTaxRegistrationSchemeID(_reg.SchemeID));
+                            writer.WriteAttributeString("schemeID", _reg.SchemeID.EnumToString());
                             writer.WriteValue(_reg.No);
                             writer.WriteEndElement();
                             writer.WriteEndElement();
@@ -551,37 +551,7 @@ namespace s2industries.ZUGFeRD
 
             return (int)type;
         } // !_translateInvoiceType()
-
-
-        private string _translateTaxRegistrationSchemeID(TaxRegistrationSchemeID schemeID)
-        {
-            return schemeID.ToString("g");
-        } // !_translateTaxRegistrationSchemeID()
-
-
-        private string _translateSubjectCode(SubjectCodes code)
-        {
-            return code.ToString("g");
-        } // !_translateSubjectCode()
-
-
-        private string _translateTaxType(TaxTypes type)
-        {
-            return type.ToString("g");
-        } // !_translateTaxType()
-
-
-        private string _translateTaxCategoryCode(TaxCategoryCodes code)
-        {
-            return code.ToString("g");
-        } // !_translateTaxCategoryCode()
-
-
-        private string _translateQuantityCode(QuantityCodes code)
-        {
-            return code.ToString("g");
-        } // !_translateQuantityCode()
-
+        
 
         private string _formatDate(DateTime date)
         {

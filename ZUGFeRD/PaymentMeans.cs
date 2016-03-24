@@ -25,7 +25,7 @@ namespace s2industries.ZUGFeRD
 {
     public class PaymentMeans
     {
-        public string TypeCode { get; set; }
+        public PaymentMeansTypeCodes TypeCode { get; set; }
         public string Information { get; set; }
         public string ID { get; set; }
         public string schemeAgencyID { get; set; }
