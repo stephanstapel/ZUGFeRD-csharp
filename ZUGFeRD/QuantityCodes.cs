@@ -33,8 +33,26 @@ namespace s2industries.ZUGFeRD
     {
         Unknown,
         C62,
+        AY,
+        HAR,
+        HUR,
         KGM,
-        MTK
+        KTM,
+        KWH,
+        LS,
+        LTR,
+        MIN,
+        MMK,
+        MMT,
+        MTK,
+        MTQ,
+        MTR,
+        NAR,
+        NPR,
+        P1,
+        SET,
+        TNE,
+        WEE
     }
 
 
