@@ -89,14 +89,11 @@ namespace s2industries.ZUGFeRD
 
             PaymentMeans _tempPaymentMeans= new PaymentMeans()
             {
-                TypeCode = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/TypeCode", nsmgr),
+                TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/TypeCode", nsmgr)),
                 Information = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/Information", nsmgr)
             };
-            if (!String.IsNullOrEmpty(_tempPaymentMeans.TypeCode))
-            {
-                retval.PaymentMeans = _tempPaymentMeans;
-            }
-
+            retval.PaymentMeans = _tempPaymentMeans;
+            
             XmlNodeList financialAccountNodes = doc.SelectNodes("//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/PayeePartyCreditorFinancialAccount", nsmgr);
             XmlNodeList financialInstitutions = doc.SelectNodes("//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 

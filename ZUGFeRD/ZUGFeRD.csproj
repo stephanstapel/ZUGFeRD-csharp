@@ -53,6 +53,7 @@
     <Compile Include="InvoiceDescriptorWriter.cs" />
     <Compile Include="InvoiceType.cs" />
     <Compile Include="PaymentMeans.cs" />
+    <Compile Include="PaymentMeansTypeCodes.cs" />
     <Compile Include="PaymentTerms.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
