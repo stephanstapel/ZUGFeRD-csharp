@@ -82,8 +82,19 @@ namespace s2industries.ZUGFeRD
             }
 
             retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/ActualDeliverySupplyChainEvent/OccurrenceDateTime", nsmgr);
-            retval.DeliveryNoteNo = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/ID", nsmgr);
-            retval.DeliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/IssueDateTime", nsmgr);
+
+            string _deliveryNoteNo = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/ID", nsmgr);
+            DateTime? _deliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/IssueDateTime", nsmgr);
+
+            if (_deliveryNoteDate.HasValue || !String.IsNullOrEmpty(_deliveryNoteNo))
+            {
+                retval.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
+                {
+                    ID = _deliveryNoteNo,
+                    IssueDateTime = _deliveryNoteDate
+                };
+            }
+
             retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/PaymentReference", nsmgr);
             retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/InvoiceCurrencyCode", nsmgr));
 
@@ -214,6 +225,10 @@ namespace s2industries.ZUGFeRD
                     GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//GrossPriceProductTradePrice/ChargeAmount", nsmgr),
                     UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//BasisQuantity/@unitCode", nsmgr))
                 };
+
+                /**
+                 * @todo parse SpecifiedSupplyChainTradeDelivery/DeliveryNoteReferencedDocument
+                 */
 
                 return item;
             }

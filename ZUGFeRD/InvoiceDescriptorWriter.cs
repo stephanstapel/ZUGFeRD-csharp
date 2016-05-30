@@ -114,20 +114,21 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
             }
 
-            if ((this.Descriptor.DeliveryNoteDate.HasValue) || ((this.Descriptor.DeliveryNoteNo != null) && (this.Descriptor.DeliveryNoteNo.Length > 0)))
+            if (this.Descriptor.DeliveryNoteReferencedDocument != null)
             {
                 Writer.WriteStartElement("DeliveryNoteReferencedDocument");
-                Writer.WriteElementString("ID", this.Descriptor.DeliveryNoteNo);
+                Writer.WriteElementString("ID", this.Descriptor.DeliveryNoteReferencedDocument.ID);
 
-                if (this.Descriptor.DeliveryNoteDate.HasValue)
+                if (this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                 {
                     Writer.WriteStartElement("IssueDateTime");
                     Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteDate.Value));
+                    Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.Value));
                     Writer.WriteEndElement(); // !IssueDateTime()
                 }
                 Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
             }
+
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeDelivery
 
             Writer.WriteStartElement("ApplicableSupplyChainTradeSettlement");
@@ -293,6 +294,25 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("SpecifiedSupplyChainTradeDelivery");
                     _writeElementWithAttribute(Writer, "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity));
+
+                    if (tradeLineItem.DeliveryNoteReferencedDocument != null)
+                    {
+                        Writer.WriteStartElement("DeliveryNoteReferencedDocument");
+                        if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
+                        {
+                            Writer.WriteElementString("ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                        }
+                        if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("IssueDateTime");
+                            Writer.WriteAttributeString("format", "102");
+                            Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value));
+                            Writer.WriteEndElement(); // !IssueDateTime()
+                        }
+
+                        Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
+                    }
+
                     Writer.WriteEndElement(); // !SpecifiedSupplyChainTradeDelivery
 
                     Writer.WriteStartElement("SpecifiedSupplyChainTradeSettlement");

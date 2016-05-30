@@ -39,6 +39,7 @@ namespace s2industries.ZUGFeRD
         public decimal GrossUnitPrice { get; set; }
         public QuantityCodes UnitCode { get; set; }
         public string Comment { get; set; }
+        public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
 
         public TradeLineItem()
         {

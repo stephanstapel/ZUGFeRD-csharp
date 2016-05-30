@@ -34,8 +34,7 @@ namespace s2industries.ZUGFeRD
         public string OrderNo { get; set; }
         public DateTime? OrderDate { get; set; }
 
-        public string DeliveryNoteNo { get; set; }
-        public DateTime? DeliveryNoteDate { get; set; }
+        public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
         public DateTime? ActualDeliveryDate { get; set; }
 
         public CurrencyCodes Currency { get; set; }
@@ -81,7 +80,7 @@ namespace s2industries.ZUGFeRD
             this.OrderNo = "";
             this.OrderDate = null;
             this.InvoiceDate = null;
-            this.DeliveryNoteDate = null;
+            this.DeliveryNoteReferencedDocument = null;
             this.ActualDeliveryDate = null;
 
             this.LineTotalAmount = decimal.MinValue;
@@ -228,8 +227,11 @@ namespace s2industries.ZUGFeRD
 
         public void SetDeliveryNoteReferenceDocument(string deliveryNoteNo, DateTime deliveryNoteDate)
         {
-            this.DeliveryNoteNo = deliveryNoteNo;
-            this.DeliveryNoteDate = deliveryNoteDate;
+            this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
+            {
+                ID = deliveryNoteNo,
+                IssueDateTime = deliveryNoteDate
+            };
         } // !SetDeliveryNoteReferenceDocument()
 
 
@@ -348,7 +350,7 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// TODO: Rabatt fehlt:
+        /// @todo Rabatt ergänzen:
         /// <ram:AppliedTradeAllowanceCharge>
 		/// 				<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
 		/// 				<ram:CalculationPercent>2.00</ram:CalculationPercent>
@@ -365,7 +367,8 @@ namespace s2industries.ZUGFeRD
                                      TaxTypes taxType, TaxCategoryCodes categoryCode, decimal taxPercent,
                                      string comment = "",
                                      string globalIDSchemeID = "", string globalID = "",
-                                     string sellerAssignedID = "", string buyerAssignedID = "")
+                                     string sellerAssignedID = "", string buyerAssignedID = "",
+                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null)
         {
             TradeLineItem newItem = new TradeLineItem()
             {
@@ -384,6 +387,15 @@ namespace s2industries.ZUGFeRD
                 TaxPercent = taxPercent,
                 Comment = comment
             };
+
+            if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
+            {
+                newItem.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
+                {
+                    ID = deliveryNoteID,
+                    IssueDateTime = deliveryNoteDate
+                };
+            }
 
             this.TradeLineItems.Add(newItem);
         } // !addTradeLineItem()
