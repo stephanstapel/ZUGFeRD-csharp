@@ -30,7 +30,10 @@ namespace s2industries.ZUGFeRD
         public string City { get; set; }
         public string Postcode { get; set; }
         public CountryCodes Country { get; set; }
-        public string StreetNo { get; set; }
+
+        /// <summary>
+        /// Straße inklusive Hausnummer
+        /// </summary>
         public string Street { get; set; }
         public GlobalID GlobalID { get; set; }
     }

@@ -81,7 +81,7 @@
 
         public static string EnumToString(this PaymentMeansTypeCodes c)
         {
-            return c.ToString("g");
+            return ((int)c).ToString();
         } // !ToString()
     }
 }

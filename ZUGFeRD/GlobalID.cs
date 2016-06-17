@@ -39,13 +39,36 @@ namespace s2industries.ZUGFeRD
         public string ID { get; set; }
         public string SchemeID { get; set; }
 
-        public const string SchemeID_GTIN = "0160";
-        public const string SchemeID_EANLocationCode = "0088";
+        /// <summary>
+        /// SWIFT (BIC)
+        /// </summary>
+        public const string SchemeID_SWIFT = "0021";
+
+        /// <summary>
+        /// D-U-N-S Number
+        /// </summary>
+        public const string SchemeID_DUNS = "0060";
+
+        /// <summary>
+        /// GS1 Global Location Number (GLN)
+        /// </summary>
+        public const string SchemeID_GLN = "0088";
+
+        /// <summary>
+        /// GS1 Global Trade Item Number (GTIN, EAN)
+        /// </summary>
+        public const string SchemeID_EAN = "0160";
+
+        /// <summary>
+        /// OSCAR (Odette)
+        /// </summary>
+        public const string SchemeID_ODETTE = "0177";
+        public const string SchemeID_Unknown = "0000";
 
         public GlobalID()
         {
             this.ID = "";
-            this.SchemeID = "";
+            this.SchemeID = GlobalID.SchemeID_Unknown;
         } // !GlobalID()
 
         public GlobalID(string schemeID, string ID)

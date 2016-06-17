@@ -30,7 +30,7 @@ namespace s2industries.ZUGFeRD
         public string BuyerAssignedID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal UnitQuantity { get; set; }
+        public decimal? UnitQuantity { get; set; }
         public decimal BilledQuantity { get; set; }
         public TaxCategoryCodes TaxCategoryCode { get; set; }
         public decimal TaxPercent { get; set; }
@@ -40,6 +40,8 @@ namespace s2industries.ZUGFeRD
         public QuantityCodes UnitCode { get; set; }
         public string Comment { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
+        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+        
 
         public TradeLineItem()
         {
@@ -47,6 +49,20 @@ namespace s2industries.ZUGFeRD
             this.NetUnitPrice = decimal.MinValue;
             this.GrossUnitPrice = decimal.MinValue;
             this.GlobalID = new GlobalID();
+            this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
         }
+
+
+        public void addTradeAllowanceCharge(bool chargeIndicator, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
+        {
+            this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = chargeIndicator,
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                Reason = reason
+            });
+        } // !addTradeAllowanceCharge()
     }
 }

@@ -20,71 +20,73 @@ namespace s2industries.ZUGFeRD
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-            nsmgr.AddNamespace("rsm", doc.DocumentElement.OwnerDocument.DocumentElement.NamespaceURI);
+            nsmgr.AddNamespace("rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15");
 
             InvoiceDescriptor retval = new InvoiceDescriptor();
-            retval.IsTest = _nodeAsBool(doc.DocumentElement, "//rsm:SpecifiedExchangedDocumentContext/TestIndicator", nsmgr);
-            retval.Profile = default(Profile).FromString(_nodeAsString(doc.DocumentElement, "//GuidelineSpecifiedDocumentContextParameter/ID", nsmgr));
-            retval.Type = default(InvoiceType).FromString(_nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/TypeCode", nsmgr));
-            retval.InvoiceNo = _nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/ID", nsmgr);
-            retval.InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:HeaderExchangedDocument/IssueDateTime", nsmgr);
+            retval.IsTest = _nodeAsBool(doc.DocumentElement, "//rsm:SpecifiedExchangedDocumentContext/ram:TestIndicator", nsmgr);
+            retval.Profile = default(Profile).FromString(_nodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr));
+            retval.Type = default(InvoiceType).FromString(_nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/ram:TypeCode", nsmgr));
+            retval.InvoiceNo = _nodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/ram:ID", nsmgr);
+            retval.InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:HeaderExchangedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
 
-            foreach (XmlNode node in doc.SelectNodes("//rsm:HeaderExchangedDocument/IncludedNote", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//rsm:HeaderExchangedDocument/ram:IncludedNote", nsmgr))
             {
-                string content = _nodeAsString(node, ".//Content", nsmgr);
-                string _subjectCode = _nodeAsString(node, ".//SubjectCode", nsmgr);
+                string content = _nodeAsString(node, ".//ram:Content", nsmgr);
+                string _subjectCode = _nodeAsString(node, ".//ram:SubjectCode", nsmgr);
                 SubjectCodes subjectCode = default(SubjectCodes).FromString(_subjectCode);
                 retval.AddNote(content, subjectCode);
             }
 
-            retval.ReferenceOrderNo = _nodeAsString(doc, "//ApplicableSupplyChainTradeAgreement/BuyerReference", nsmgr);
+            retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerReference", nsmgr);
 
-            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/SellerTradeParty", nsmgr);
-            foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/SellerTradeParty/SpecifiedTaxRegistration", nsmgr))
+            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:SellerTradeParty", nsmgr);
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
             {
-                string id = _nodeAsString(node, ".//ID", nsmgr);
-                string schemeID = _nodeAsString(node, ".//ID/@schemeID", nsmgr);
+                string id = _nodeAsString(node, ".//ram:ID", nsmgr);
+                string schemeID = _nodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
 
                 retval.AddSellerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
             }
 
-            if (doc.SelectSingleNode("//SellerTradeParty/DefinedTradeContact") != null)
+            if (doc.SelectSingleNode("//ram:SellerTradeParty/ram:DefinedTradeContact", nsmgr) != null)
             {
                 retval.SellerContact = new Contact()
                 {
-                    Name = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/PersonName"),
-                    OrgUnit = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/DepartmentName"),
-                    PhoneNo = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/TelephoneUniversalCommunication/CompleteNumber"),
-                    FaxNo = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/FaxUniversalCommunication/CompleteNumber"),
-                    EmailAddress = _nodeAsString(doc.DocumentElement, "//SellerTradeParty/DefinedTradeContact/EmailURIUniversalCommunication/CompleteNumber")
+                    Name = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:DefinedTradeContact/ram:PersonName", nsmgr),
+                    OrgUnit = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    PhoneNo = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:DefinedTradeContact/ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    FaxNo = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:DefinedTradeContact/ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    EmailAddress = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:DefinedTradeContact/ram:EmailURIUniversalCommunication/ram:CompleteNumber", nsmgr)
                 };
             }
 
-            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ApplicableSupplyChainTradeAgreement/BuyerTradeParty", nsmgr);
-            foreach (XmlNode node in doc.SelectNodes("//ApplicableSupplyChainTradeAgreement/BuyerTradeParty/SpecifiedTaxRegistration", nsmgr))
+            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerTradeParty", nsmgr);
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
             {
-                string id = _nodeAsString(node, ".//ID", nsmgr);
-                string schemeID = _nodeAsString(node, ".//ID/@schemeID", nsmgr);
+                string id = _nodeAsString(node, ".//ram:ID", nsmgr);
+                string schemeID = _nodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
 
                 retval.AddBuyerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
             }
 
-            if (doc.SelectSingleNode("//BuyerTradeParty/DefinedTradeContact") != null)
+            if (doc.SelectSingleNode("//ram:BuyerTradeParty/ram:DefinedTradeContact", nsmgr) != null)
             {
                 retval.BuyerContact = new Contact()
                 {
-                    Name = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/PersonName"),
-                    OrgUnit = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/DepartmentName"),
-                    PhoneNo = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/TelephoneUniversalCommunication/CompleteNumber"),
-                    FaxNo = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/FaxUniversalCommunication/CompleteNumber"),
-                    EmailAddress = _nodeAsString(doc.DocumentElement, "//BuyerTradeParty/DefinedTradeContact/EmailURIUniversalCommunication/CompleteNumber")
+                    Name = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:PersonName", nsmgr),
+                    OrgUnit = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    PhoneNo = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    FaxNo = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    EmailAddress = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:EmailURIUniversalCommunication/ram:CompleteNumber", nsmgr)
                 };
             }
 
-            retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/ActualDeliverySupplyChainEvent/OccurrenceDateTime", nsmgr);
+            retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString", nsmgr);
 
-            string _deliveryNoteNo = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/ID", nsmgr);
-            DateTime? _deliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ApplicableSupplyChainTradeDelivery/DeliveryNoteReferencedDocument/IssueDateTime", nsmgr);
+            string _deliveryNoteNo = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ID", nsmgr);
+            DateTime? _deliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
 
             if (_deliveryNoteDate.HasValue || !String.IsNullOrEmpty(_deliveryNoteNo))
             {
@@ -95,18 +97,18 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/PaymentReference", nsmgr);
-            retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/InvoiceCurrencyCode", nsmgr));
+            retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:PaymentReference", nsmgr);
+            retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:InvoiceCurrencyCode", nsmgr));
 
             PaymentMeans _tempPaymentMeans= new PaymentMeans()
             {
-                TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/TypeCode", nsmgr)),
-                Information = _nodeAsString(doc.DocumentElement, "//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/Information", nsmgr)
+                TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
+                Information = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:Information", nsmgr)
             };
             retval.PaymentMeans = _tempPaymentMeans;
             
-            XmlNodeList financialAccountNodes = doc.SelectNodes("//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/PayeePartyCreditorFinancialAccount", nsmgr);
-            XmlNodeList financialInstitutions = doc.SelectNodes("//ApplicableSupplyChainTradeSettlement/SpecifiedTradeSettlementPaymentMeans/PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
+            XmlNodeList financialAccountNodes = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
+            XmlNodeList financialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 
             if (financialAccountNodes.Count == financialInstitutions.Count)
             {
@@ -114,68 +116,68 @@ namespace s2industries.ZUGFeRD
                 {
                     BankAccount _account = new BankAccount() 
                     {
-                        ID = _nodeAsString(financialAccountNodes[0], ".//ProprietaryID", nsmgr),
-                        IBAN = _nodeAsString(financialAccountNodes[0], ".//IBANID", nsmgr),
-                        BIC = _nodeAsString(financialInstitutions[0], ".//BICID", nsmgr),
-                        Bankleitzahl = _nodeAsString(financialInstitutions[0], ".//GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(financialInstitutions[0], ".//Name", nsmgr),
+                        ID = _nodeAsString(financialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
+                        IBAN = _nodeAsString(financialAccountNodes[0], ".//ram:IBANID", nsmgr),
+                        BIC = _nodeAsString(financialInstitutions[0], ".//ram:BICID", nsmgr),
+                        Bankleitzahl = _nodeAsString(financialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
+                        BankName = _nodeAsString(financialInstitutions[0], ".//ram:Name", nsmgr),
                     };
 
                     retval.CreditorBankAccounts.Add(_account);
                 } // !for(i)
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//ApplicableTradeTax", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:ApplicableTradeTax", nsmgr))
             {
-                retval.AddApplicableTradeTax(_nodeAsDecimal(node, ".//BasisAmount", nsmgr),
-                                             _nodeAsDecimal(node, ".//ApplicablePercent", nsmgr),
-                                             default(TaxTypes).FromString(_nodeAsString(node, ".//TypeCode", nsmgr)),
-                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//CategoryCode", nsmgr)));
+                retval.AddApplicableTradeTax(_nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
+                                             _nodeAsDecimal(node, ".//ram:ApplicablePercent", nsmgr),
+                                             default(TaxTypes).FromString(_nodeAsString(node, ".//ram:TypeCode", nsmgr)),
+                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:CategoryCode", nsmgr)));
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//SpecifiedTradeAllowanceCharge", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))
             {
-                retval.AddTradeAllowanceCharge(_nodeAsBool(node, "ChargeIndicator", nsmgr),
-                                               _nodeAsDecimal(node, "BasisAmount", nsmgr),
+                retval.AddTradeAllowanceCharge(_nodeAsBool(node, "ram:ChargeIndicator", nsmgr),
+                                               _nodeAsDecimal(node, "ram:BasisAmount", nsmgr),
                                                retval.Currency,
-                                               _nodeAsDecimal(node, "ActualAmount", nsmgr),
-                                               _nodeAsString(node, "Reason", nsmgr),
-                                               default(TaxTypes).FromString(_nodeAsString(node, "CategoryTradeTax/TypeCode", nsmgr)),
-                                               default(TaxCategoryCodes).FromString(_nodeAsString(node, "CategoryTradeTax/CategoryCode", nsmgr)),
-                                               _nodeAsDecimal(node, "CategoryTradeTax/ApplicablePercent", nsmgr));
+                                               _nodeAsDecimal(node, "ram:ActualAmount", nsmgr),
+                                               _nodeAsString(node, "ram:Reason", nsmgr),
+                                               default(TaxTypes).FromString(_nodeAsString(node, "ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
+                                               default(TaxCategoryCodes).FromString(_nodeAsString(node, "ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
+                                               _nodeAsDecimal(node, "ram:CategoryTradeTax/ram:ApplicablePercent", nsmgr));
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//SpecifiedLogisticsServiceCharge", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
             {
-                retval.AddLogisticsServiceCharge(_nodeAsDecimal(node, ".//AppliedAmount", nsmgr),
-                                                 _nodeAsString(node, ".//Description", nsmgr),
-                                                 default(TaxTypes).FromString(_nodeAsString(node, ".//AppliedTradeTax/TypeCode", nsmgr)),
-                                                 default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//AppliedTradeTax/CategoryCode", nsmgr)),
-                                                 _nodeAsDecimal(node, ".//AppliedTradeTax/ApplicablePercent", nsmgr));
+                retval.AddLogisticsServiceCharge(_nodeAsDecimal(node, ".//ram:AppliedAmount", nsmgr),
+                                                 _nodeAsString(node, ".//ram:Description", nsmgr),
+                                                 default(TaxTypes).FromString(_nodeAsString(node, ".//ram:AppliedTradeTax/ram:TypeCode", nsmgr)),
+                                                 default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:AppliedTradeTax/ram:CategoryCode", nsmgr)),
+                                                 _nodeAsDecimal(node, ".//ram:AppliedTradeTax/ram:ApplicablePercent", nsmgr));
             }
 
             retval.PaymentTerms = new PaymentTerms()
             {
-                Description = _nodeAsString(doc.DocumentElement, "//SpecifiedTradePaymentTerms/Description", nsmgr),
-                DueDate = _nodeAsDateTime(doc.DocumentElement, "//SpecifiedTradePaymentTerms/DueDateDateTime", nsmgr)
+                Description = _nodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:Description", nsmgr),
+                DueDate = _nodeAsDateTime(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime", nsmgr)
             };
 
-            retval.LineTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/LineTotalAmount", nsmgr);
-            retval.ChargeTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/ChargeTotalAmount", nsmgr);
-            retval.AllowanceTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/AllowanceTotalAmount", nsmgr);
-            retval.TaxBasisAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/TaxBasisTotalAmount", nsmgr);
-            retval.TaxTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/TaxTotalAmount", nsmgr);
-            retval.GrandTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/GrandTotalAmount", nsmgr);
-            retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/TotalPrepaidAmount", nsmgr);
-            retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//SpecifiedTradeSettlementMonetarySummation/DuePayableAmount", nsmgr);
+            retval.LineTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:LineTotalAmount", nsmgr);
+            retval.ChargeTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:ChargeTotalAmount", nsmgr);
+            retval.AllowanceTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:AllowanceTotalAmount", nsmgr);
+            retval.TaxBasisAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TaxBasisTotalAmount", nsmgr);
+            retval.TaxTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TaxTotalAmount", nsmgr);
+            retval.GrandTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:GrandTotalAmount", nsmgr);
+            retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TotalPrepaidAmount", nsmgr);
+            retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:DuePayableAmount", nsmgr);
 
-            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//BuyerOrderReferencedDocument/IssueDateTime", nsmgr);
-            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//BuyerOrderReferencedDocument/ID", nsmgr);
+            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
+            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//ram:BuyerOrderReferencedDocument/ram:ID", nsmgr);
             
             
-            foreach(XmlNode node in doc.SelectNodes("//IncludedSupplyChainTradeLineItem"))
+            foreach(XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
             {
-                retval.TradeLineItems.Add(_parseTradeLineItem(node));
+                retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
             }
             return retval;
         } // !Load()
@@ -199,32 +201,43 @@ namespace s2industries.ZUGFeRD
                 return null;
             }
 
-            if (tradeLineItem.SelectSingleNode(".//AssociatedDocumentLineDocument/IncludedNote/Content") != null)
+            if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument/ram:IncludedNote/ram:Content", nsmgr) != null)
             {
                 return new TradeLineItem()
                 {
-                    Comment = _nodeAsString(tradeLineItem, ".//AssociatedDocumentLineDocument/IncludedNote/Content", nsmgr)
+                    Comment = _nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:IncludedNote/ram:Content", nsmgr)
                 };
             }
             else
             {
                 TradeLineItem item = new TradeLineItem()
                 {
-                    GlobalID = new GlobalID(_nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/GlobalID/@schemeID", nsmgr),
-                                            _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/GlobalID", nsmgr)),
-                    SellerAssignedID = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/SellerAssignedID", nsmgr),
-                    BuyerAssignedID = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/BuyerAssignedID", nsmgr),
-                    Name = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/Name", nsmgr),
-                    Description = _nodeAsString(tradeLineItem, ".//SpecifiedTradeProduct/Description", nsmgr),
-                    UnitQuantity = _nodeAsDecimal(tradeLineItem, ".//BasisQuantity", nsmgr, 1),
-                    BilledQuantity = _nodeAsDecimal(tradeLineItem, ".//BilledQuantity", nsmgr, 1),
-                    TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/CategoryCode", nsmgr)),
-                    TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ApplicableTradeTax/TypeCode", nsmgr)),
-                    TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ApplicableTradeTax/ApplicablePercent", nsmgr),
-                    NetUnitPrice = _nodeAsDecimal(tradeLineItem, ".//NetPriceProductTradePrice/ChargeAmount", nsmgr),
-                    GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//GrossPriceProductTradePrice/ChargeAmount", nsmgr),
-                    UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//BasisQuantity/@unitCode", nsmgr))
+                    GlobalID = new GlobalID(_nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr),
+                                            _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID", nsmgr)),
+                    SellerAssignedID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
+                    BuyerAssignedID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BuyerAssignedID", nsmgr),
+                    Name = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Name", nsmgr),
+                    Description = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),
+                    UnitQuantity = _nodeAsDecimal(tradeLineItem, ".//ram:BasisQuantity", nsmgr, 1),
+                    BilledQuantity = _nodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 1),
+                    TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
+                    TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),
+                    TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ram:ApplicableTradeTax/ram:ApplicablePercent", nsmgr),
+                    NetUnitPrice = _nodeAsDecimal(tradeLineItem, ".//ram:NetPriceProductTradePrice/ram:ChargeAmount", nsmgr),
+                    GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//ram:GrossPriceProductTradePrice/ram:ChargeAmount", nsmgr),
+                    UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:BasisQuantity/@unitCode", nsmgr))
                 };
+
+                /**
+                 * @todo ram:AppliedTradeAllowanceCharge lesen
+                 */
+
+                if (item.UnitCode == QuantityCodes.Unknown)
+                {
+                    // UnitCode alternativ aus BilledQuantity extrahieren
+                    item.UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr));
+                }
+
 
                 /**
                  * @todo parse SpecifiedSupplyChainTradeDelivery/DeliveryNoteReferencedDocument
@@ -385,14 +398,14 @@ namespace s2industries.ZUGFeRD
             XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
             return new Party()
             {
-                ID = _nodeAsString(node, "ID", nsmgr),
-                GlobalID = new GlobalID(_nodeAsString(node, "GlobalID/@schemeID", nsmgr),
-                                        _nodeAsString(node, "GlobalID", nsmgr)),
-                Name = _nodeAsString(node, "Name", nsmgr),
-                Street = _nodeAsString(node, "PostalTradeAddress/LineOne", nsmgr),
-                Postcode = _nodeAsString(node, "PostalTradeAddress/PostcodeCode", nsmgr),
-                City = _nodeAsString(node, "PostalTradeAddress/CityName", nsmgr),
-                Country = default(CountryCodes).FromString(_nodeAsString(node, "PostalTradeAddress/CountryID", nsmgr))
+                ID = _nodeAsString(node, "ram:ID", nsmgr),
+                GlobalID = new GlobalID(_nodeAsString(node, "ram:GlobalID/@schemeID", nsmgr),
+                                        _nodeAsString(node, "ram:GlobalID", nsmgr)),
+                Name = _nodeAsString(node, "ram:Name", nsmgr),
+                Street = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineOne", nsmgr),
+                Postcode = _nodeAsString(node, "ram:PostalTradeAddress/ram:PostcodeCode", nsmgr),
+                City = _nodeAsString(node, "ram:PostalTradeAddress/ram:CityName", nsmgr),
+                Country = default(CountryCodes).FromString(_nodeAsString(node, "ram:PostalTradeAddress/ram:CountryID", nsmgr))
             };
         } // !_nodeAsParty()
     }

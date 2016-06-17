@@ -40,10 +40,14 @@ namespace s2industries.ZUGFeRD
             {
                 case "urn:ferd:invoice:1.0:basic": return Profile.Basic;
                 case "urn:ferd:invoice:rc:basic": return Profile.Basic;
+                case "urn:ferd:CrossIndustryDocument:invoice:1p0:basic": return Profile.Basic;
                 case "urn:ferd:invoice:1.0:comfort": return Profile.Comfort;
                 case "urn:ferd:invoice:rc:comfort": return Profile.Comfort;
+                case "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort": return Profile.Comfort;
+                case "urn:ferd:CrossIndustryDocument:invoice:1p0:E": return Profile.Comfort;
                 case "urn:ferd:invoice:1.0:extended": return Profile.Extended;
                 case "urn:ferd:invoice:rc:extended": return Profile.Extended;
+                case "urn:ferd:CrossIndustryDocument:invoice:1p0:extended": return Profile.Extended;
             }
 
             return Profile.Unknown;
@@ -54,9 +58,9 @@ namespace s2industries.ZUGFeRD
         {
             switch (profile)
             {
-                case Profile.Basic: return "urn:ferd:invoice:1.0:basic";
-                case Profile.Comfort: return "urn:ferd:invoice:1.0:comfort";
-                case Profile.Extended: return "urn:ferd:invoice:1.0:extended";
+                case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
+                case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
+                case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
                 default: return "";
             }
         } // !ToString()

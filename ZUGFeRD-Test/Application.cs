@@ -29,16 +29,24 @@ namespace ZUGFeRD_Test
     {
         internal void run()
         {
+            ZugFerdComfortEinfachGenerator generator = new ZugFerdComfortEinfachGenerator();
+            generator.generate();
+            generator.read();
+
+            ZugFerdExtendedWarenrechnungGenerator generator2 = new ZugFerdExtendedWarenrechnungGenerator();
+            generator2.generate();
+            generator2.read();
+
             _loadSampleZUGFeRDInvoice();
 
-            _saveAndLoadZUGFeRDInvoice();
-            _saveAndLoadZUGFeRDInvoiceViaStream();
+          //  _saveAndLoadZUGFeRDInvoice();
+          //  _saveAndLoadZUGFeRDInvoiceViaStream();
         } // !run()
 
 
         private void _loadSampleZUGFeRDInvoice()
         {
-            string path = @"..\..\..\demodata\pha2ma5v.vpc.xml";
+            string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Einfach_Original.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             desc.Save("test.xml");
@@ -90,11 +98,11 @@ namespace ZUGFeRD_Test
             desc.Profile = Profile.Comfort;
             desc.ReferenceOrderNo = "AB-312";
             desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
-            desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCodes.AAA);
-            desc.SetBuyer("Kunden Mitte AG", "69876", "Frankfurt", "Kundenstraße", "15", CountryCodes.DE, "GE2020211", "0088", "4000001987658");
+            desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCodes.AAK);
+            desc.SetBuyer("Kunden Mitte AG", "69876", "Frankfurt", "Kundenstraße 15", CountryCodes.DE, "GE2020211", new GlobalID(GlobalID.SchemeID_GLN, "4000001987658"));
             desc.AddBuyerTaxRegistration("DE234567890", TaxRegistrationSchemeID.VA);
             desc.SetBuyerContact("Hans Muster");
-            desc.SetSeller("Lieferant GmbH", "80333", "München", "Lieferantenstraße", "20", CountryCodes.DE, "", "0088", "4000001123452");
+            desc.SetSeller("Lieferant GmbH", "80333", "München", "Lieferantenstraße 20", CountryCodes.DE, "", new GlobalID(GlobalID.SchemeID_GLN, "4000001123452"));
             desc.AddSellerTaxRegistration("201/113/40209", TaxRegistrationSchemeID.FC);
             desc.AddSellerTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
             desc.SetBuyerOrderReferenceDocument("2013-471331", new DateTime(2013, 03, 01));
@@ -112,36 +120,48 @@ namespace ZUGFeRD_Test
             desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04", "1234567890", "70090100", "Hausbank München");
 
             desc.addTradeLineCommentItem("Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:");
-            desc.addTradeLineItem("Kunstrasen grün 3m breit",
-                                  "300cm x 100 cm",
-                                  QuantityCodes.MTK, 1,
-                                  4.00m,
-                                  3.3333m,
-                                  3,
-                                  TaxTypes.VAT, TaxCategoryCodes.S, 19,
-                                  "0160", "4012345001235",
-                                  "KR3M", "55T01");
+            desc.addTradeLineItem(name: "Kunstrasen grün 3m breit",
+                                  description: "300cm x 100 cm",
+                                  unitCode: QuantityCodes.MTK,
+                                  unitQuantity: 1,
+                                  grossUnitPrice: 4.00m,
+                                  netUnitPrice: 3.3333m,
+                                  billedQuantity: 3,
+                                  taxType: TaxTypes.VAT, 
+                                  categoryCode: TaxCategoryCodes.S, 
+                                  taxPercent: 19,
+                                  id:new GlobalID(GlobalID.SchemeID_EAN, "4012345001235"),
+                                  sellerAssignedID: "KR3M", 
+                                  buyerAssignedID: "55T01");
 
-            desc.addTradeLineItem("Schweinesteak",
-                                  "aus Deutschland",
-                                  QuantityCodes.KGM, 1,
-                                  5.50m,
-                                  5.50m,
-                                  5,
-                                  TaxTypes.VAT, TaxCategoryCodes.S, 7,
-                                  "0160", "4000050986428",
-                                  "SFK5", "55T02");
+            desc.addTradeLineItem(name: "Schweinesteak",
+                                  description: "aus Deutschland",
+                                  unitCode: QuantityCodes.KGM, 
+                                  unitQuantity: 1,
+                                  grossUnitPrice: 5.50m,
+                                  netUnitPrice: 5.50m,
+                                  billedQuantity: 5,
+                                  taxType: TaxTypes.VAT, 
+                                  categoryCode: TaxCategoryCodes.S, 
+                                  taxPercent: 7,
+                                  id: new GlobalID(GlobalID.SchemeID_EAN,"4000050986428"),
+                                  sellerAssignedID: "SFK5", 
+                                  buyerAssignedID: "55T02");
 
 
-            desc.addTradeLineItem("Mineralwasser Medium 12 x 1,0l PET",
-                                  "",
-                                  QuantityCodes.C62, 1,
-                                  5.49m,
-                                  5.49m,
-                                  20,
-                                  TaxTypes.VAT, TaxCategoryCodes.S, 7,
-                                  "0160", "4000001234561",
-                                  "GTRWA5", "55T03"); 
+            desc.addTradeLineItem(name: "Mineralwasser Medium 12 x 1,0l PET",
+                                  description: "",
+                                  unitCode: QuantityCodes.C62, 
+                                  unitQuantity: 1,
+                                  grossUnitPrice: 5.49m,
+                                  netUnitPrice: 5.49m,
+                                  billedQuantity: 20,
+                                  taxType: TaxTypes.VAT, 
+                                  categoryCode: TaxCategoryCodes.S, 
+                                  taxPercent: 7,
+                                  id: new GlobalID(GlobalID.SchemeID_EAN, "4000001234561"),
+                                  sellerAssignedID: "GTRWA5", 
+                                  buyerAssignedID: "55T03"); 
             return desc;
         } // _createInvoice()
     }

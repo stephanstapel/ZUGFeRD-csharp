@@ -40,6 +40,11 @@ namespace s2industries.ZUGFeRD
         public TaxTypes TypeCode { get; set; }
         public TaxCategoryCodes CategoryCode { get; set; }
 
+        /// <summary>
+        /// Gesamtbetrag Zu- und Abschläge des Steuersatzes, Wert
+        /// </summary>
+        public decimal AllowanceChargeBasisAmount { get; set; }
+
 
         public Tax()
         {

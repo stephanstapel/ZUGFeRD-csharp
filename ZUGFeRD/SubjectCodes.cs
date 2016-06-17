@@ -29,35 +29,35 @@ namespace s2industries.ZUGFeRD
     public enum SubjectCodes
     {
         /// <summary>
-        /// Goods description
+        /// Zusätzliche Konditionen zu diesem Kauf
         /// 
-        /// [7002] Plain language description of the nature of the goods 
-        /// sufficient to identify them at the level required for banking, 
-        /// Customs, statistical or transport purposes, avoiding unnecessary 
-        /// detail (Generic term).
+        /// Angaben zum Eigentumsvorbehalt
         /// </summary>
-        AAA,
+        AAJ,
 
         /// <summary>
-        /// Terms of payments
+        /// Preiskonditionen
         /// 
-        /// [4276] Conditions of payment between the parties to a transaction (generic term).
-        /// </summary>
-        AAB,
-
-        /// <summary>
-        /// Dangerous goods additional information
-        /// 
-        /// Additional information concerning dangerous goods.
-        /// </summary>
-        AAC,
-
-        /// <summary>
-        /// Price conditions
-        /// 
-        /// Information on the price conditions that are expected or given.
+        /// Angaben zu Entgeltminderungen
         /// </summary>
         AAK,
+
+        /// <summary>
+        /// Zahlungsinformation
+        /// 
+        /// Bekanntgabe der Abtretung der
+        /// Forderung (Zession)
+        /// </summary>
+        PMT,
+
+        /// <summary>
+        /// Regulatorische Informationen
+        /// 
+        /// Angaben zum leistenden Unternehmen
+        /// (Angabe Geschäftsführer, HR-Nummer
+        /// etc.)
+        /// </summary>
+        REG,
 
         Unknown
     }

@@ -44,7 +44,7 @@ namespace s2industries.ZUGFeRD
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; }
-        public List<Tuple<string, SubjectCodes>> Notes { get; set; }
+        public List<Tuple<string, SubjectCodes, ContentCodes>> Notes { get; set; }
 
         public bool IsTest { get; set; }
         public Profile Profile { get; set; }
@@ -76,7 +76,7 @@ namespace s2industries.ZUGFeRD
             this.IsTest = false;
             this.Profile = Profile.Basic;
             this.Type = InvoiceType.Invoice;
-            this.Notes = new List<Tuple<string, SubjectCodes>>();
+            this.Notes = new List<Tuple<string, SubjectCodes, ContentCodes>>();
             this.OrderNo = "";
             this.OrderDate = null;
             this.InvoiceDate = null;
@@ -125,13 +125,19 @@ namespace s2industries.ZUGFeRD
         } // !CreateInvoice()
 
 
-        public void AddNote(string note, SubjectCodes code = SubjectCodes.Unknown)
+        public void AddNote(string note, SubjectCodes subjectCode = SubjectCodes.Unknown, ContentCodes contentCode = ContentCodes.Unknown)
         {
-            this.Notes.Add(new Tuple<string, SubjectCodes>(note, code));
+            /**
+             * @todo prüfen:
+             * ST1, ST2, ST3 nur mit AAK
+             * EEV, WEB, VEV nur mit AAJ
+             */
+
+            this.Notes.Add(new Tuple<string, SubjectCodes, ContentCodes>(note, subjectCode, contentCode));
         } // !AddNote()
         
 
-        public void SetBuyer(string name, string postcode, string city, string street, string streetno, CountryCodes country, string id, string globalIDSchemeID = "", string globalID = "")
+        public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country, string id, GlobalID globalID = null)
         {
             this.Buyer = new Party()
             {
@@ -140,18 +146,13 @@ namespace s2industries.ZUGFeRD
                 Postcode = postcode,
                 City = city,
                 Street = street,
-                StreetNo = streetno,
                 Country = country,
-                GlobalID = new GlobalID()
-                {
-                    ID = globalID,
-                    SchemeID = globalIDSchemeID,
-                }
+                GlobalID = globalID
             };
         }
 
 
-        public void SetSeller(string name, string postcode, string city, string street, string streetno, CountryCodes country, string id, string globalIDSchemeID = "", string globalID = "")
+        public void SetSeller(string name, string postcode, string city, string street, CountryCodes country, string id, GlobalID globalID = null)
         {
             this.Seller = new Party()
             {
@@ -160,18 +161,13 @@ namespace s2industries.ZUGFeRD
                 Postcode = postcode,
                 City = city,
                 Street = street,
-                StreetNo = streetno,
                 Country = country,
-                GlobalID = new GlobalID()
-                {
-                    ID = globalID,
-                    SchemeID = globalIDSchemeID,
-                }
+                GlobalID = globalID
             };
         } // !SetSeller()
 
 
-        public void SetSellerContact(string name, string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")
+        public void SetSellerContact(string name = "", string orgunit = "", string emailAddress = "", string phoneno = "", string faxno = "")
         {
             this.SellerContact = new Contact()
             {
@@ -307,14 +303,15 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes categoryCode)
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes categoryCode, decimal allowanceChargeBasisAmount = 0)
         {
             this.Taxes.Add(new Tax()
             {
                 BasisAmount = basisAmount,
                 Percent = percent,
                 TypeCode = typeCode,
-                CategoryCode = categoryCode
+                CategoryCode = categoryCode,
+                AllowanceChargeBasisAmount = allowanceChargeBasisAmount
             });
         } // !AddApplicableTradeTax()
 
@@ -359,20 +356,24 @@ namespace s2industries.ZUGFeRD
 		/// 				<ram:Reason>Artikelrabatt 1</ram:Reason>
 		/// 			</ram:AppliedTradeAllowanceCharge>
         /// </summary>
-        public void addTradeLineItem(string name, string description,
-                                     QuantityCodes unitCode, decimal unitQuantity,
-                                     decimal grossUnitPrice,
-                                     decimal netUnitPrice,
-                                     decimal billedQuantity,
-                                     TaxTypes taxType, TaxCategoryCodes categoryCode, decimal taxPercent,
+        public TradeLineItem addTradeLineItem(string name, 
+                                     string description = null,
+                                     QuantityCodes unitCode = QuantityCodes.Unknown, 
+                                     decimal? unitQuantity = null,
+                                     decimal grossUnitPrice = Decimal.MinValue,
+                                     decimal netUnitPrice = Decimal.MinValue,
+                                     decimal billedQuantity = Decimal.MinValue,
+                                     TaxTypes taxType = TaxTypes.Unknown, 
+                                     TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
+                                     decimal taxPercent = Decimal.MinValue,
                                      string comment = "",
-                                     string globalIDSchemeID = "", string globalID = "",
+                                     GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null)
         {
             TradeLineItem newItem = new TradeLineItem()
             {
-                GlobalID = new GlobalID(globalIDSchemeID, globalID),
+                GlobalID = id,
                 SellerAssignedID = sellerAssignedID,
                 BuyerAssignedID = buyerAssignedID,
                 Name = name,
@@ -398,6 +399,7 @@ namespace s2industries.ZUGFeRD
             }
 
             this.TradeLineItems.Add(newItem);
+            return newItem;
         } // !addTradeLineItem()
 
 
@@ -411,7 +413,7 @@ namespace s2industries.ZUGFeRD
         } // !setPaymentMeans()
 
 
-        public void addCreditorFinancialAccount(string iban, string bic, string id, string bankleitzahl, string bankName)
+        public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             this.CreditorBankAccounts.Add(new BankAccount()
             {
