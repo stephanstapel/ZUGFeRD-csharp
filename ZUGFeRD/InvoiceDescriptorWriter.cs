@@ -352,6 +352,23 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeDelivery");
                     _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
 
+                    if (tradeLineItem.BuyerOrderReferencedDocument != null)
+                    {
+                        Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
+                        if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:IssueDateTime");
+                            Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                        }
+                        if (!String.IsNullOrEmpty(tradeLineItem.BuyerOrderReferencedDocument.ID))
+                        {
+                            Writer.WriteElementString("ram:ID", tradeLineItem.BuyerOrderReferencedDocument.ID);
+                        }
+
+                        Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
+                    }
+
                     if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                     {
                         Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
@@ -367,6 +384,23 @@ namespace s2industries.ZUGFeRD
                         }
 
                         Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
+                    }
+
+                    if (tradeLineItem.ContractReferencedDocument != null)
+                    {
+                        Writer.WriteStartElement("ram:ContractReferencedDocument");
+                        if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:IssueDateTime");
+                            Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                        }
+                        if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
+                        {
+                            Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
+                        }
+
+                        Writer.WriteEndElement(); // !ram:ContractReferencedDocument
                     }
 
                     Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeDelivery

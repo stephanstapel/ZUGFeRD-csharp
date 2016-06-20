@@ -50,7 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BankAccount.cs" />
+    <Compile Include="BaseReferencedDocument.cs" />
+    <Compile Include="BuyerOrderReferencedDocument.cs" />
     <Compile Include="ContentCodes.cs" />
+    <Compile Include="ContractReferencedDocument.cs" />
     <Compile Include="DeliveryNoteReferencedDocument.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="Charge.cs" />

@@ -39,7 +39,9 @@ namespace s2industries.ZUGFeRD
         public decimal GrossUnitPrice { get; set; }
         public QuantityCodes UnitCode { get; set; }
         public string Comment { get; set; }
+        public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
+        public ContractReferencedDocument ContractReferencedDocument { get; set; }
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
         
 
@@ -64,5 +66,35 @@ namespace s2industries.ZUGFeRD
                 Reason = reason
             });
         } // !addTradeAllowanceCharge()
+
+
+        public void setDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime deliveryNoteDate)
+        {
+            this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
+            {
+                 ID = deliveryNoteId,
+                 IssueDateTime = deliveryNoteDate
+            };
+        } // !setDeliveryNoteReferencedDocument()
+
+
+        public void setOrderReferencedDocument(string orderReferencedId, DateTime orderReferencedDate)
+        {
+            this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
+            {
+                ID = orderReferencedId,
+                IssueDateTime = orderReferencedDate
+            };
+        } // !setOrderReferencedDocument()
+
+
+        public void setContractReferencedDocument(string contractReferencedId, DateTime contractReferencedDate)
+        {
+            this.ContractReferencedDocument = new ContractReferencedDocument()
+            {
+                ID = contractReferencedId,
+                IssueDateTime = contractReferencedDate
+            };
+        } // !setContractReferencedDocument()
     }
 }

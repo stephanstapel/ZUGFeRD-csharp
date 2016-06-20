@@ -369,7 +369,8 @@ namespace s2industries.ZUGFeRD
                                      string comment = "",
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
-                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null)
+                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
         {
             TradeLineItem newItem = new TradeLineItem()
             {
@@ -391,11 +392,12 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
             {
-                newItem.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
-                {
-                    ID = deliveryNoteID,
-                    IssueDateTime = deliveryNoteDate
-                };
+                newItem.setDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate.Value);
+            }
+
+            if (!String.IsNullOrEmpty(buyerOrderID) || buyerOrderDate.HasValue)
+            {
+                newItem.setOrderReferencedDocument(buyerOrderID, buyerOrderDate.Value);
             }
 
             this.TradeLineItems.Add(newItem);

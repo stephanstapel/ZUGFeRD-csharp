@@ -171,8 +171,8 @@ namespace s2industries.ZUGFeRD
             retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TotalPrepaidAmount", nsmgr);
             retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:DuePayableAmount", nsmgr);
 
-            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
-            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//ram:BuyerOrderReferencedDocument/ram:ID", nsmgr);
+            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
+            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:ID", nsmgr);
             
             
             foreach(XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
@@ -228,20 +228,56 @@ namespace s2industries.ZUGFeRD
                     UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:BasisQuantity/@unitCode", nsmgr))
                 };
 
-                /**
-                 * @todo ram:AppliedTradeAllowanceCharge lesen
-                 */
+                XmlNodeList appliedTradeAllowanceChargeNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedSupplyChainTradeAgreement/ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge", nsmgr);
+                foreach(XmlNode appliedTradeAllowanceChargeNode in appliedTradeAllowanceChargeNodes)
+                {
+                    bool chargeIndicator = _nodeAsBool(appliedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
+                    decimal basisAmount = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr);
+                    string basisAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
+                    decimal actualAmount = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr);
+                    string actualAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
+                    string reason = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
+                    item.addTradeAllowanceCharge(chargeIndicator,
+                                                 default(CurrencyCodes).FromString(basisAmountCurrency),
+                                                 basisAmount,
+                                                 actualAmount,
+                                                 reason);    
+                }
+                
                 if (item.UnitCode == QuantityCodes.Unknown)
                 {
                     // UnitCode alternativ aus BilledQuantity extrahieren
                     item.UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr));
                 }
 
+                if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedSupplyChainTradeDelivery/ram:BuyerOrderReferencedDocument/ram:ID", nsmgr) != null)
+                {
+                    item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
+                    {
+                        ID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:BuyerOrderReferencedDocument/ram:ID", nsmgr),
+                        IssueDateTime = _nodeAsDateTime(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:BuyerOrderReferencedDocument/ram:IssueDateTime", nsmgr),
+                    };
+                }
 
-                /**
-                 * @todo parse SpecifiedSupplyChainTradeDelivery/DeliveryNoteReferencedDocument
-                 */
+                if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:ID", nsmgr) != null)
+                {
+                    item.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
+                    {
+                        ID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:ID", nsmgr),
+                        IssueDateTime = _nodeAsDateTime(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr),
+                    };
+                }
+
+                if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedSupplyChainTradeDelivery/ram:ContractReferencedDocument/ram:ID", nsmgr) != null)
+                {
+                    item.ContractReferencedDocument = new ContractReferencedDocument()
+                    {
+                        ID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:ContractReferencedDocument/ram:ID", nsmgr),
+                        IssueDateTime = _nodeAsDateTime(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:ContractReferencedDocument/ram:IssueDateTime", nsmgr),
+                    };
+                }
+
 
                 return item;
             }
@@ -351,7 +387,7 @@ namespace s2industries.ZUGFeRD
                 return defaultValue;
             }
 
-            string format = "102";
+            string format = "";
             XmlNode dateNode = node.SelectSingleNode(xpath, nsmgr);
             if (dateNode == null)
             {
@@ -370,21 +406,37 @@ namespace s2industries.ZUGFeRD
                 format = dateNode.Attributes["format"].InnerText;
             }
 
-            if (format != "102")
+            string rawValue = dateNode.InnerText;
+            if ((format == "102") || (rawValue.Length == 8))
             {
+                if (rawValue.Length != 8)
+                {
+                    throw new Exception("Wrong length of datetime element");
+                }
+
+                string year = rawValue.Substring(0, 4);
+                string month = rawValue.Substring(4, 2);
+                string day = rawValue.Substring(6, 2);
+
+                return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
+            }
+            else if (rawValue.Length == 19)
+            {
+                string year = rawValue.Substring(0, 4);
+                string month = rawValue.Substring(5, 2);
+                string day = rawValue.Substring(8, 2);
+
+                string hour = rawValue.Substring(11, 2);
+                string minute = rawValue.Substring(14, 2);
+                string second = rawValue.Substring(17, 2);
+
+                return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day), Int32.Parse(hour), Int32.Parse(minute), Int32.Parse(second));
+            }
+            else
+            { 
                 throw new UnsupportedException();
             }
-            string value = dateNode.InnerText;
-            if (value.Length != 8)
-            {
-                throw new Exception("Wrong length of datetime element");
-            }
-
-            string year = value.Substring(0, 4);
-            string month = value.Substring(4, 2);
-            string day = value.Substring(6, 2);
-
-            return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
+            
         } // !_nodeAsDateTime()
 
 
