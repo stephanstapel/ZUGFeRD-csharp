@@ -68,7 +68,7 @@ namespace s2industries.ZUGFeRD
         } // !addTradeAllowanceCharge()
 
 
-        public void setDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime deliveryNoteDate)
+        public void setDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
@@ -78,7 +78,7 @@ namespace s2industries.ZUGFeRD
         } // !setDeliveryNoteReferencedDocument()
 
 
-        public void setOrderReferencedDocument(string orderReferencedId, DateTime orderReferencedDate)
+        public void setOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
@@ -88,7 +88,7 @@ namespace s2industries.ZUGFeRD
         } // !setOrderReferencedDocument()
 
 
-        public void setContractReferencedDocument(string contractReferencedId, DateTime contractReferencedDate)
+        public void setContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
         {
             this.ContractReferencedDocument = new ContractReferencedDocument()
             {

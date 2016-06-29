@@ -392,12 +392,12 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
             {
-                newItem.setDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate.Value);
+                newItem.setDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
             }
 
             if (!String.IsNullOrEmpty(buyerOrderID) || buyerOrderDate.HasValue)
             {
-                newItem.setOrderReferencedDocument(buyerOrderID, buyerOrderDate.Value);
+                newItem.setOrderReferencedDocument(buyerOrderID, buyerOrderDate);
             }
 
             this.TradeLineItems.Add(newItem);

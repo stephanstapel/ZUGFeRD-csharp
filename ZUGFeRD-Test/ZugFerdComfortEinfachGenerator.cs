@@ -15,8 +15,6 @@ namespace ZUGFeRD_Test
 
             InvoiceDescriptor desc = _generateDescriptor();
             desc.Save(filename);
-
-            desc = InvoiceDescriptor.Load(filename);
         } // !generate()
 
 
@@ -78,7 +76,9 @@ namespace ZUGFeRD_Test
                                   categoryCode: TaxCategoryCodes.S,
                                   taxPercent: 19.00m,
                                   id: new GlobalID(GlobalID.SchemeID_EAN, "4012345001235"),
-                                  sellerAssignedID: "TB100A4");
+                                  sellerAssignedID: "TB100A4").
+                                  addTradeAllowanceCharge(true, CurrencyCodes.EUR, 10m, 11m, "asd");
+
             desc.addTradeLineItem(name: "Joghurt Banane",
                                   unitCode: QuantityCodes.C62,
                                   grossUnitPrice: 5.50m,
