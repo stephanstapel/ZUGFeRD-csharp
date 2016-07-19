@@ -220,7 +220,12 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
-                    Writer.WriteElementString("ram:ActualAmount", _formatDecimal(tradeAllowanceCharge.Amount));
+                    
+                    Writer.WriteStartElement("ram:ActualAmount");
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                    Writer.WriteEndElement();
+
 
                     _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
 
