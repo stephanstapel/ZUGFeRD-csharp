@@ -212,7 +212,9 @@ namespace s2industries.ZUGFeRD
                 foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
                 {
                     Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
-                    Writer.WriteElementString("ram:ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                    Writer.WriteStartElement("ram:ChargeIndicator");
+                    Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                    Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
                     Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
