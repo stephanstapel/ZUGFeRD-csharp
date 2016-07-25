@@ -314,51 +314,6 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeAgreement");
 
-                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
-                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
-                    if (tradeLineItem.UnitQuantity.HasValue)
-                    {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
-                    }
-
-                    foreach(TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
-                    {
-                        Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
-
-                        Writer.WriteStartElement("ram:ChargeIndicator");
-                        Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                        Writer.WriteEndElement(); // !ram:ChargeIndicator
-
-                        Writer.WriteStartElement("ram:BasisAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
-                        Writer.WriteEndElement();
-                        Writer.WriteStartElement("ram:ActualAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
-                        Writer.WriteEndElement();
-
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
-
-                        Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
-                    }
-
-                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
-
-                    Writer.WriteStartElement("ram:NetPriceProductTradePrice");
-                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 4);
-
-                    if (tradeLineItem.UnitQuantity.HasValue)
-                    {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
-                    }
-                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
-
-                    Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeAgreement
-
-                    Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeDelivery");
-                    _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
-
                     if (tradeLineItem.BuyerOrderReferencedDocument != null)
                     {
                         Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
@@ -409,6 +364,51 @@ namespace s2industries.ZUGFeRD
 
                         Writer.WriteEndElement(); // !ram:ContractReferencedDocument
                     }
+
+                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
+                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
+                    if (tradeLineItem.UnitQuantity.HasValue)
+                    {
+                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                    }
+
+                    foreach(TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
+                    {
+                        Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
+
+                        Writer.WriteStartElement("ram:ChargeIndicator");
+                        Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                        Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+                        Writer.WriteStartElement("ram:BasisAmount");
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
+                        Writer.WriteEndElement();
+                        Writer.WriteStartElement("ram:ActualAmount");
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                        Writer.WriteEndElement();
+
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+
+                        Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
+                    }
+
+                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
+
+                    Writer.WriteStartElement("ram:NetPriceProductTradePrice");
+                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 4);
+
+                    if (tradeLineItem.UnitQuantity.HasValue)
+                    {
+                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                    }
+                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
+
+                    Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeAgreement
+
+                    Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeDelivery");
+                    _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
 
                     Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeDelivery
 
