@@ -304,7 +304,8 @@ namespace s2industries.ZUGFeRD
                 else
                 {
                     counter += 1;
-                    Writer.WriteElementString("ram:LineID", String.Format("{0}", counter));
+                    string _lineID = String.Format("{0}", counter);
+                    Writer.WriteElementString("ram:LineID", _lineID);
                     if (!String.IsNullOrEmpty(tradeLineItem.Comment))
                     {
                         Writer.WriteElementString("Content", tradeLineItem.Comment);
@@ -359,12 +360,15 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
                                 Writer.WriteEndElement(); // !ram:IssueDateTime
                             }
+
+                            Writer.WriteElementString("ram:LineID", _lineID);
+
                             if (!String.IsNullOrEmpty(doc.ID))
                             {
                                 Writer.WriteElementString("ram:ID", doc.ID);
                             }
 
-                            Writer.WriteElementString("ram:TypeCode", doc.ReferenceTypeCode.EnumToString());
+                            Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
 
                             Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                         }
