@@ -223,7 +223,7 @@ namespace s2industries.ZUGFeRD
                     
                     Writer.WriteStartElement("ram:ActualAmount");
                     Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                     Writer.WriteEndElement();
 
 
@@ -331,23 +331,6 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
                     }
 
-                    if (tradeLineItem.DeliveryNoteReferencedDocument != null)
-                    {
-                        Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
-                        if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
-                        }
-                        if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
-                        {
-                            Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
-                        }
-
-                        Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
-                    }
-
                     if (tradeLineItem.ContractReferencedDocument != null)
                     {
                         Writer.WriteStartElement("ram:ContractReferencedDocument");
@@ -363,6 +346,28 @@ namespace s2industries.ZUGFeRD
                         }
 
                         Writer.WriteEndElement(); // !ram:ContractReferencedDocument
+                    }
+
+                    if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
+                    {
+                        foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
+                        {
+                            Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                            if (doc.IssueDateTime.HasValue)
+                            {
+                                Writer.WriteStartElement("ram:IssueDateTime");
+                                Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
+                                Writer.WriteEndElement(); // !ram:IssueDateTime
+                            }
+                            if (!String.IsNullOrEmpty(doc.ID))
+                            {
+                                Writer.WriteElementString("ram:ID", doc.ID);
+                            }
+
+                            Writer.WriteElementString("ram:TypeCode", doc.ReferenceTypeCode.EnumToString());
+
+                            Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                        }
                     }
 
                     Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
@@ -409,6 +414,23 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeDelivery");
                     _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
+
+                    if (tradeLineItem.DeliveryNoteReferencedDocument != null)
+                    {
+                        Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
+                        if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:IssueDateTime");
+                            Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                        }
+                        if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
+                        {
+                            Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                        }
+
+                        Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
+                    }
 
                     Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeDelivery
 

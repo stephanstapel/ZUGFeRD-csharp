@@ -42,6 +42,7 @@ namespace s2industries.ZUGFeRD
         public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
         
 
@@ -52,6 +53,7 @@ namespace s2industries.ZUGFeRD
             this.GrossUnitPrice = decimal.MinValue;
             this.GlobalID = new GlobalID();
             this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
+            this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
         }
 
 
@@ -76,6 +78,17 @@ namespace s2industries.ZUGFeRD
                  IssueDateTime = deliveryNoteDate
             };
         } // !setDeliveryNoteReferencedDocument()
+
+
+        public void addAdditionalReferencedDocument(string id, DateTime? date = null, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown)
+        {
+            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            {
+                ID = id,
+                IssueDateTime = date,
+                ReferenceTypeCode = code
+            });
+        } // !addAdditionalReferencedDocument()
 
 
         public void setOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)

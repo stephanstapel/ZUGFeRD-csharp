@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdditionalReferencedDocument.cs" />
     <Compile Include="BankAccount.cs" />
     <Compile Include="BaseReferencedDocument.cs" />
     <Compile Include="BuyerOrderReferencedDocument.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityCodes.cs" />
+    <Compile Include="ReferenceTypeCodes.cs" />
     <Compile Include="ServiceCharge.cs" />
     <Compile Include="SubjectCodes.cs" />
     <Compile Include="Tax.cs" />
