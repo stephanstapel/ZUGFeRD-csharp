@@ -278,7 +278,7 @@ namespace s2industries.ZUGFeRD
                     };
                 }
 
-                XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedSupplyChainTradeDelivery/ram:AdditionalReferenceDocument");
+                XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedSupplyChainTradeDelivery/ram:AdditionalReferenceDocument", nsmgr);
                 foreach(XmlNode referenceNode in referenceNodes)
                 {
                     string _code = _nodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
