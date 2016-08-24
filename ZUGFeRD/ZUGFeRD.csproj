@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +57,7 @@
     <Compile Include="ContentCodes.cs" />
     <Compile Include="ContractReferencedDocument.cs" />
     <Compile Include="DeliveryNoteReferencedDocument.cs" />
+    <Compile Include="InvoiceValidator.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="Charge.cs" />
     <Compile Include="Contact.cs" />
