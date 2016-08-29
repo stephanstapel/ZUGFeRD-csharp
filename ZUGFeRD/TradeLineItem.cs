@@ -57,11 +57,11 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void addTradeAllowanceCharge(bool chargeIndicator, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
+        public void addTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
-                ChargeIndicator = chargeIndicator,
+                ChargeIndicator = !isDiscount,
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,

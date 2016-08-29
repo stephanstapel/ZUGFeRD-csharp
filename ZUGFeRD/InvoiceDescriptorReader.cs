@@ -137,14 +137,14 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))
             {
-                retval.AddTradeAllowanceCharge(_nodeAsBool(node, "ram:ChargeIndicator", nsmgr),
-                                               _nodeAsDecimal(node, "ram:BasisAmount", nsmgr),
+                retval.AddTradeAllowanceCharge(!_nodeAsBool(node, ".//ram:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
+                                               _nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
                                                retval.Currency,
-                                               _nodeAsDecimal(node, "ram:ActualAmount", nsmgr),
-                                               _nodeAsString(node, "ram:Reason", nsmgr),
-                                               default(TaxTypes).FromString(_nodeAsString(node, "ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
-                                               default(TaxCategoryCodes).FromString(_nodeAsString(node, "ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
-                                               _nodeAsDecimal(node, "ram:CategoryTradeTax/ram:ApplicablePercent", nsmgr));
+                                               _nodeAsDecimal(node, ".//ram:ActualAmount", nsmgr),
+                                               _nodeAsString(node, ".//ram:Reason", nsmgr),
+                                               default(TaxTypes).FromString(_nodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
+                                               default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
+                                               _nodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:ApplicablePercent", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -238,7 +238,7 @@ namespace s2industries.ZUGFeRD
                     string actualAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
                     string reason = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
-                    item.addTradeAllowanceCharge(chargeIndicator,
+                    item.addTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                                  default(CurrencyCodes).FromString(basisAmountCurrency),
                                                  basisAmount,
                                                  actualAmount,
