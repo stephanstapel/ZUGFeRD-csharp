@@ -445,7 +445,16 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
                     Writer.WriteEndElement(); // !ram:ApplicableTradeTax
                     Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
-                    decimal _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
+
+                    decimal _total = 0m;
+                    if (tradeLineItem.LineTotalAmount.HasValue)
+                    {
+                        _total = tradeLineItem.LineTotalAmount.Value;
+                    }
+                    else
+                    {
+                        _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
+                    }
                     _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
                     Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                     Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement

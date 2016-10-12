@@ -32,6 +32,7 @@ namespace s2industries.ZUGFeRD
         public string Description { get; set; }
         public decimal? UnitQuantity { get; set; }
         public decimal BilledQuantity { get; set; }
+        public decimal? LineTotalAmount { get; set; }
         public TaxCategoryCodes TaxCategoryCode { get; set; }
         public decimal TaxPercent { get; set; }
         public TaxTypes TaxType { get; set; }
