@@ -261,12 +261,12 @@ namespace s2industries.ZUGFeRD
                     };
                 }
 
-                if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedSupplyChainTradeAgreement/ram:DeliveryNoteReferencedDocument/ram:ID", nsmgr) != null)
+                if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:ID", nsmgr) != null)
                 {
                     item.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
                     {
-                        ID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeAgreement/ram:DeliveryNoteReferencedDocument/ram:ID", nsmgr),
-                        IssueDateTime = _nodeAsDateTime(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeAgreement/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr),
+                        ID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:ID", nsmgr),
+                        IssueDateTime = _nodeAsDateTime(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr),
                     };
                 }
 
