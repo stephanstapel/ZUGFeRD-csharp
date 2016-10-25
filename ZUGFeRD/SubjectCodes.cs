@@ -51,6 +51,15 @@ namespace s2industries.ZUGFeRD
         PMT,
 
         /// <summary>
+        /// Preiskalkulationsschema
+        /// 
+        /// Zum Beispiel Angabe Zählerstand,
+        /// Zähler etc. oder andere Hinweise
+        /// bezüglich Abrechnung.
+        /// </summary>
+        PRF,
+
+        /// <summary>
         /// Regulatorische Informationen
         /// 
         /// Angaben zum leistenden Unternehmen

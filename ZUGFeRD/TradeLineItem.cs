@@ -39,7 +39,7 @@ namespace s2industries.ZUGFeRD
         public decimal NetUnitPrice { get; set; }
         public decimal GrossUnitPrice { get; set; }
         public QuantityCodes UnitCode { get; set; }
-        public string Comment { get; set; }
+        public AssociatedDocument AssociatedDocument { get; set; }
         public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
@@ -49,7 +49,6 @@ namespace s2industries.ZUGFeRD
 
         public TradeLineItem()
         {
-            this.Comment = "";
             this.NetUnitPrice = decimal.MinValue;
             this.GrossUnitPrice = decimal.MinValue;
             this.GlobalID = new GlobalID();

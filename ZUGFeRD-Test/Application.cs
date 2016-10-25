@@ -31,29 +31,40 @@ namespace ZUGFeRD_Test
         {
             ZugFerdComfortEinfachGenerator generator = new ZugFerdComfortEinfachGenerator();
             generator.generate();
-            generator.read();
+            //generator.read();
 
             ZugFerdExtendedWarenrechnungGenerator generator2 = new ZugFerdExtendedWarenrechnungGenerator();
             generator2.generate();
-            generator2.read();
+            //generator2.read();
 
-            _loadSampleZUGFeRDInvoice();
+            //_loadZUGFeRDEinfachOriginalInvoice();
+            _loadZUGFeRDComfortRabatteInvoice();
 
           //  _saveAndLoadZUGFeRDInvoice();
           //  _saveAndLoadZUGFeRDInvoiceViaStream();
         } // !run()
 
 
-        private void _loadSampleZUGFeRDInvoice()
+        private void _loadZUGFeRDEinfachOriginalInvoice()
         {
             string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Einfach_Original.xml";
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.Comfort);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRDEinfachOriginalInvoice()
+
+
+        private void _loadZUGFeRDComfortRabatteInvoice()
+        {
+            string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             desc.Save("test.xml");
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
-        } // !_loadSampleZUGFeRDInvoice()
+        } // !_loadZUGFeRDComfortRabatteInvoice()
 
 
         private void _saveAndLoadZUGFeRDInvoice()

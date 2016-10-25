@@ -341,7 +341,10 @@ namespace s2industries.ZUGFeRD
         {
             this.TradeLineItems.Add(new TradeLineItem()
             {
-                Comment = comment
+                AssociatedDocument = new ZUGFeRD.AssociatedDocument()
+                {
+                    Content = comment
+                }
             });
         } // !addTradeLineCommentItem()
 
@@ -366,7 +369,7 @@ namespace s2industries.ZUGFeRD
                                      TaxTypes taxType = TaxTypes.Unknown, 
                                      TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
                                      decimal taxPercent = Decimal.MinValue,
-                                     string comment = "",
+                                     string comment = null,
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
@@ -386,8 +389,28 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = billedQuantity,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent,
-                Comment = comment
+                TaxPercent = taxPercent
+            };
+
+            int? _lineID = null;
+            if (this.TradeLineItems.Count > 0)
+            {
+                _lineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
+            }
+
+            if (_lineID.HasValue)
+            {
+                _lineID = _lineID.Value + 1;
+            }
+            else
+            {
+                _lineID = 1;
+            }
+
+            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument()
+            {
+                LineID = _lineID,
+                Content = comment
             };
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)

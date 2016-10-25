@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalReferencedDocument.cs" />
+    <Compile Include="AssociatedDocument.cs" />
     <Compile Include="BankAccount.cs" />
     <Compile Include="BaseReferencedDocument.cs" />
     <Compile Include="BuyerOrderReferencedDocument.cs" />

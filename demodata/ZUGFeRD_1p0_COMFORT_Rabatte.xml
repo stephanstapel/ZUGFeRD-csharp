@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+Nutzungsrechte 
+ZUGFeRD Datenformat Version 1.0, 25.6.2014
+Beispiel Version 29.09.2014
+
+Zweck des Forums für elektronische Rechnungen bei der AWV e.V („FeRD“) ist u.a. die Schaffung und Spezifizierung 
+eines offenen Datenformats für strukturierten elektronischen Datenaustausch auf der Grundlage offener und nicht 
+diskriminierender, standardisierter Technologien („ZUGFeRD Datenformat“)
+
+Das ZUGFeRD Datenformat wird nach Maßgabe des FeRD sowohl Unternehmen als auch der öffentlichen Verwaltung 
+frei zugänglich gemacht. Hierfür bietet FeRD allen Unternehmen und Organisationen der öffentlichen Verwaltung eine 
+Lizenz für die Nutzung des urheberrechtlich geschützten ZUGFeRD-Datenformats zu fairen, sachgerechten und nicht 
+diskriminierenden Bedingungen an.
+
+Die Spezifikation des FeRD zur Implementierung des ZUGFeRD Datenformats ist in ihrer jeweils geltenden Fassung 
+abrufbar unter www.ferd-net.de.
+
+Im Einzelnen schließt die Nutzungsgewährung ein: 
+=====================================
+
+FeRD räumt eine Lizenz für die Nutzung des urheberrechtlich geschützten ZUGFeRD Datenformats in der jeweils 
+geltenden und akzeptierten Fassung (www.ferd-net.de) ein. 
+Die Lizenz beinhaltet ein unwiderrufliches Nutzungsrecht einschließlich des Rechts der Weiterentwicklung, 
+Weiterbearbeitung und Verbindung mit anderen Produkten.
+Die Lizenz gilt insbesondere für die Entwicklung, die Gestaltung, die Herstellung, den Verkauf, die Nutzung oder 
+anderweitige Verwendung des ZUGFeRD Datenformats für Hardware- und/oder Softwareprodukte sowie sonstige 
+Anwendungen und Dienste. 
+Diese Lizenz schließt nicht die wesentlichen Patente der Mitglieder von FeRD ein. Als wesentliche Patente sind Patente 
+und Patentanmeldungen weltweit zu verstehen, die einen oder mehrere Patentansprüche beinhalten, bei denen es sich um 
+notwendige Ansprüche handelt. Notwendige Ansprüche sind lediglich jene Ansprüche der Wesentlichen Patente, die durch 
+die Implementierung des ZUGFeRD Datenformats notwendigerweise verletzt würden. 
+Der Lizenznehmer ist berechtigt, seinen jeweiligen Konzerngesellschaften ein unbefristetes, weltweites, nicht übertragbares, 
+unwiderrufliches Nutzungsrecht einschließlich des Rechts der Weiterentwicklung, Weiterbearbeitung und Verbindung mit 
+anderen Produkten einzuräumen. 
+
+Die Lizenz wird kostenfrei zur Verfügung gestellt. 
+
+Außer im Falle vorsätzlichen Verschuldens oder grober Fahrlässigkeit haftet FeRD weder für Nutzungsausfall, entgangenen 
+Gewinn, Datenverlust, Kommunikationsverlust, Einnahmeausfall, Vertragseinbußen, Geschäftsausfall oder für Kosten, 
+Schäden, Verluste oder Haftpflichten im Zusammenhang mit einer Unterbrechung der Geschäftstätigkeit, noch für konkrete, 
+beiläufig entstandene, mittelbare Schäden, Straf- oder Folgeschäden und zwar auch dann nicht, wenn die Möglichkeit der 
+Kosten, Verluste bzw. Schäden hätte normalerweise vorhergesehen werden können.
+
+-->
+<rsm:CrossIndustryDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rsm="urn:ferd:CrossIndustryDocument:invoice:1p0" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15">
+	<rsm:SpecifiedExchangedDocumentContext>
+		<ram:TestIndicator>
+			<udt:Indicator>true</udt:Indicator>
+		</ram:TestIndicator>
+		<!-- Im Echtbetrieb muss der TestIndicator entweder vollständig entfallen oder auf false stehen. -->
+		<ram:GuidelineSpecifiedDocumentContextParameter>
+			<ram:ID>urn:ferd:CrossIndustryDocument:invoice:1p0:comfort</ram:ID>
+		</ram:GuidelineSpecifiedDocumentContextParameter>
+	</rsm:SpecifiedExchangedDocumentContext>
+	<rsm:HeaderExchangedDocument>
+		<ram:ID>471102</ram:ID>
+		<ram:Name>RECHNUNG</ram:Name>
+		<ram:TypeCode>380</ram:TypeCode>
+		<ram:IssueDateTime>
+			<udt:DateTimeString format="102">20130605</udt:DateTimeString>
+		</ram:IssueDateTime>
+		<ram:IncludedNote>
+			<ram:Content>
+Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013. 
+      </ram:Content>
+		</ram:IncludedNote>
+		<ram:IncludedNote>
+			<ram:Content>
+Es bestehen Rabatt- und Bonusvereinbarungen.
+			</ram:Content>
+			<ram:SubjectCode>AAK</ram:SubjectCode>
+		</ram:IncludedNote>
+		<ram:IncludedNote>
+			<ram:Content>Lieferant GmbH				
+Lieferantenstraße 20				
+80333 München				
+Deutschland				
+Geschäftsführer: Hans Muster
+Handelsregisternummer: H A 123
+</ram:Content>
+			<ram:SubjectCode>REG</ram:SubjectCode>
+		</ram:IncludedNote>
+	</rsm:HeaderExchangedDocument>
+	<rsm:SpecifiedSupplyChainTradeTransaction>
+		<ram:ApplicableSupplyChainTradeAgreement>
+			<ram:BuyerReference>AB-312</ram:BuyerReference>
+			<ram:SellerTradeParty>
+				<ram:GlobalID schemeID="0088">4000001123452</ram:GlobalID>
+				<ram:Name>Lieferant GmbH</ram:Name>
+				<ram:PostalTradeAddress>
+					<ram:PostcodeCode>80333</ram:PostcodeCode>
+					<ram:LineOne>Lieferantenstraße 20</ram:LineOne>
+					<ram:CityName>München</ram:CityName>
+					<ram:CountryID>DE</ram:CountryID>
+				</ram:PostalTradeAddress>
+				<ram:SpecifiedTaxRegistration>
+					<ram:ID schemeID="FC">201/113/40209</ram:ID>
+				</ram:SpecifiedTaxRegistration>
+				<ram:SpecifiedTaxRegistration>
+					<ram:ID schemeID="VA">DE123456789</ram:ID>
+				</ram:SpecifiedTaxRegistration>
+			</ram:SellerTradeParty>
+			<ram:BuyerTradeParty>
+				<ram:ID>GE2020211</ram:ID>
+				<ram:GlobalID schemeID="0088">4000001987658</ram:GlobalID>
+				<ram:Name>Kunden AG Mitte</ram:Name>
+				<ram:DefinedTradeContact>
+					<ram:PersonName>Hans Muster</ram:PersonName>
+				</ram:DefinedTradeContact>
+				<ram:PostalTradeAddress>
+					<ram:PostcodeCode>69876</ram:PostcodeCode>
+					<ram:LineOne>Kundenstraße 15</ram:LineOne>
+					<ram:CityName>Frankfurt</ram:CityName>
+					<ram:CountryID>DE</ram:CountryID>
+				</ram:PostalTradeAddress>
+				<ram:SpecifiedTaxRegistration>
+					<ram:ID schemeID="VA">DE234567890</ram:ID>
+				</ram:SpecifiedTaxRegistration>
+			</ram:BuyerTradeParty>
+			<ram:BuyerOrderReferencedDocument>
+				<ram:IssueDateTime>2013-03-01T00:00:00</ram:IssueDateTime>
+				<ram:ID>2013-471331</ram:ID>
+			</ram:BuyerOrderReferencedDocument>
+		</ram:ApplicableSupplyChainTradeAgreement>
+		<ram:ApplicableSupplyChainTradeDelivery>
+			<ram:ActualDeliverySupplyChainEvent>
+				<ram:OccurrenceDateTime>
+					<udt:DateTimeString format="102">20130603</udt:DateTimeString>
+				</ram:OccurrenceDateTime>
+			</ram:ActualDeliverySupplyChainEvent>
+			<ram:DeliveryNoteReferencedDocument>
+				<ram:IssueDateTime>2013-06-03T00:00:00</ram:IssueDateTime>
+				<ram:ID>2013-51112</ram:ID>
+			</ram:DeliveryNoteReferencedDocument>
+		</ram:ApplicableSupplyChainTradeDelivery>
+		<ram:ApplicableSupplyChainTradeSettlement>
+			<ram:PaymentReference>GE2020211-471102</ram:PaymentReference>
+			<ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+			<ram:SpecifiedTradeSettlementPaymentMeans>
+				<ram:TypeCode>42</ram:TypeCode>
+				<ram:Information>Überweisung</ram:Information>
+				<ram:PayeePartyCreditorFinancialAccount>
+					<ram:IBANID>DE08700901001234567890</ram:IBANID>
+					<ram:ProprietaryID>1234567890</ram:ProprietaryID>
+				</ram:PayeePartyCreditorFinancialAccount>
+				<ram:PayeeSpecifiedCreditorFinancialInstitution>
+					<ram:BICID>GENODEF1M04</ram:BICID>
+					<ram:GermanBankleitzahlID>70090100</ram:GermanBankleitzahlID>
+					<ram:Name>Hausbank München</ram:Name>
+				</ram:PayeeSpecifiedCreditorFinancialInstitution>
+			</ram:SpecifiedTradeSettlementPaymentMeans>
+			<ram:ApplicableTradeTax>
+				<ram:CalculatedAmount currencyID="EUR">9.06</ram:CalculatedAmount>
+				<ram:TypeCode>VAT</ram:TypeCode>
+				<ram:BasisAmount currencyID="EUR">129.37</ram:BasisAmount>
+				<ram:CategoryCode>S</ram:CategoryCode>
+				<ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+			</ram:ApplicableTradeTax>
+			<ram:ApplicableTradeTax>
+				<ram:CalculatedAmount currencyID="EUR">12.25</ram:CalculatedAmount>
+				<ram:TypeCode>VAT</ram:TypeCode>
+				<ram:BasisAmount currencyID="EUR">64.46</ram:BasisAmount>
+				<ram:CategoryCode>S</ram:CategoryCode>
+				<ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+			</ram:ApplicableTradeTax>
+			<ram:SpecifiedTradeAllowanceCharge>
+				<ram:ChargeIndicator>
+					<udt:Indicator>false</udt:Indicator>
+				</ram:ChargeIndicator>
+				<ram:BasisAmount currencyID="EUR">10.00</ram:BasisAmount>
+				<ram:ActualAmount currencyID="EUR">1.00</ram:ActualAmount>
+				<ram:Reason>Sondernachlass</ram:Reason>
+				<ram:CategoryTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+				</ram:CategoryTradeTax>
+			</ram:SpecifiedTradeAllowanceCharge>
+			<ram:SpecifiedTradeAllowanceCharge>
+				<ram:ChargeIndicator>
+					<udt:Indicator>false</udt:Indicator>
+				</ram:ChargeIndicator>
+				<ram:BasisAmount currencyID="EUR">137.30</ram:BasisAmount>
+				<ram:ActualAmount currencyID="EUR">13.73</ram:ActualAmount>
+				<ram:Reason>Sondernachlass</ram:Reason>
+				<ram:CategoryTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+				</ram:CategoryTradeTax>
+			</ram:SpecifiedTradeAllowanceCharge>
+			<ram:SpecifiedLogisticsServiceCharge>
+				<ram:Description>Versandkosten</ram:Description>
+				<ram:AppliedAmount currencyID="EUR">5.80</ram:AppliedAmount>
+				<ram:AppliedTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+				</ram:AppliedTradeTax>
+			</ram:SpecifiedLogisticsServiceCharge>
+			<ram:SpecifiedTradePaymentTerms>
+				<ram:Description>Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013</ram:Description>
+				<ram:DueDateDateTime>
+					<udt:DateTimeString format="102">20130704</udt:DateTimeString>
+				</ram:DueDateDateTime>
+			</ram:SpecifiedTradePaymentTerms>
+			<ram:SpecifiedTradeSettlementMonetarySummation>
+				<ram:LineTotalAmount currencyID="EUR">202.76</ram:LineTotalAmount>
+				<ram:ChargeTotalAmount currencyID="EUR">5.80</ram:ChargeTotalAmount>
+				<ram:AllowanceTotalAmount currencyID="EUR">14.73</ram:AllowanceTotalAmount>
+				<ram:TaxBasisTotalAmount currencyID="EUR">193.83</ram:TaxBasisTotalAmount>
+				<ram:TaxTotalAmount currencyID="EUR">21.31</ram:TaxTotalAmount>
+				<ram:GrandTotalAmount currencyID="EUR">215.14</ram:GrandTotalAmount>
+				<ram:TotalPrepaidAmount currencyID="EUR">50.00</ram:TotalPrepaidAmount>
+				<ram:DuePayableAmount currencyID="EUR">165.14</ram:DuePayableAmount>
+			</ram:SpecifiedTradeSettlementMonetarySummation>
+		</ram:ApplicableSupplyChainTradeSettlement>
+		<ram:IncludedSupplyChainTradeLineItem>
+			<ram:AssociatedDocumentLineDocument>
+				<ram:IncludedNote>
+					<ram:Content>Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:</ram:Content>
+				</ram:IncludedNote>				
+			</ram:AssociatedDocumentLineDocument>
+			<ram:SpecifiedSupplyChainTradeSettlement />
+		</ram:IncludedSupplyChainTradeLineItem>
+		<ram:IncludedSupplyChainTradeLineItem>
+			<ram:AssociatedDocumentLineDocument>
+				<ram:LineID>1</ram:LineID>
+			</ram:AssociatedDocumentLineDocument>
+			<ram:SpecifiedSupplyChainTradeAgreement>
+				<ram:GrossPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">4.0000</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="MTK">1.0000</ram:BasisQuantity>
+					<ram:AppliedTradeAllowanceCharge>
+						<ram:ChargeIndicator>
+							<udt:Indicator>false</udt:Indicator>
+						</ram:ChargeIndicator>
+						<ram:ActualAmount currencyID="EUR">0.6667</ram:ActualAmount>
+						<ram:Reason>Rabatt</ram:Reason>
+					</ram:AppliedTradeAllowanceCharge>
+				</ram:GrossPriceProductTradePrice>
+				<ram:NetPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">3.3333</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="MTK">1</ram:BasisQuantity>
+				</ram:NetPriceProductTradePrice>
+			</ram:SpecifiedSupplyChainTradeAgreement>
+			<ram:SpecifiedSupplyChainTradeDelivery>
+				<ram:BilledQuantity unitCode="MTK">3.0000</ram:BilledQuantity>
+			</ram:SpecifiedSupplyChainTradeDelivery>
+			<ram:SpecifiedSupplyChainTradeSettlement>
+				<ram:ApplicableTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+				</ram:ApplicableTradeTax>
+				<ram:SpecifiedTradeSettlementMonetarySummation>
+					<ram:LineTotalAmount currencyID="EUR">10.00</ram:LineTotalAmount>
+				</ram:SpecifiedTradeSettlementMonetarySummation>
+			</ram:SpecifiedSupplyChainTradeSettlement>
+			<ram:SpecifiedTradeProduct>
+				<ram:GlobalID schemeID="0160">4012345001235</ram:GlobalID>
+				<ram:SellerAssignedID>KR3M</ram:SellerAssignedID>
+				<ram:BuyerAssignedID>55T01</ram:BuyerAssignedID>
+				<ram:Name>Kunstrasen grün 3m breit</ram:Name>
+				<ram:Description>300cm x 100 cm</ram:Description>
+			</ram:SpecifiedTradeProduct>
+		</ram:IncludedSupplyChainTradeLineItem>
+		<ram:IncludedSupplyChainTradeLineItem>
+			<ram:AssociatedDocumentLineDocument>
+				<ram:LineID>2</ram:LineID>
+			</ram:AssociatedDocumentLineDocument>
+			<ram:SpecifiedSupplyChainTradeAgreement>
+				<ram:GrossPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">5.5000</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="KGM">1.0000</ram:BasisQuantity>
+				</ram:GrossPriceProductTradePrice>
+				<ram:NetPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">5.5000</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="KGM">1.0000</ram:BasisQuantity>
+				</ram:NetPriceProductTradePrice>
+			</ram:SpecifiedSupplyChainTradeAgreement>
+			<ram:SpecifiedSupplyChainTradeDelivery>
+				<ram:BilledQuantity unitCode="KGM">5.0000</ram:BilledQuantity>
+			</ram:SpecifiedSupplyChainTradeDelivery>
+			<ram:SpecifiedSupplyChainTradeSettlement>
+				<ram:ApplicableTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+				</ram:ApplicableTradeTax>
+				<ram:SpecifiedTradeSettlementMonetarySummation>
+					<ram:LineTotalAmount currencyID="EUR">27.50</ram:LineTotalAmount>
+				</ram:SpecifiedTradeSettlementMonetarySummation>
+			</ram:SpecifiedSupplyChainTradeSettlement>
+			<ram:SpecifiedTradeProduct>
+				<ram:GlobalID schemeID="0160">4000050986428</ram:GlobalID>
+				<ram:SellerAssignedID>SFK5</ram:SellerAssignedID>
+				<ram:BuyerAssignedID>55T02</ram:BuyerAssignedID>
+				<ram:Name>Schweinesteak</ram:Name>
+				<ram:Description>aus Deutschland</ram:Description>
+			</ram:SpecifiedTradeProduct>
+		</ram:IncludedSupplyChainTradeLineItem>
+		<ram:IncludedSupplyChainTradeLineItem>
+			<ram:AssociatedDocumentLineDocument>
+				<ram:LineID>3</ram:LineID>
+			</ram:AssociatedDocumentLineDocument>
+			<ram:SpecifiedSupplyChainTradeAgreement>
+				<ram:GrossPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">5.4900</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+				</ram:GrossPriceProductTradePrice>
+				<ram:NetPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">5.4900</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+				</ram:NetPriceProductTradePrice>
+			</ram:SpecifiedSupplyChainTradeAgreement>
+			<ram:SpecifiedSupplyChainTradeDelivery>
+				<ram:BilledQuantity unitCode="C62">20.0000</ram:BilledQuantity>
+			</ram:SpecifiedSupplyChainTradeDelivery>
+			<ram:SpecifiedSupplyChainTradeSettlement>
+				<ram:ApplicableTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+				</ram:ApplicableTradeTax>
+				<ram:SpecifiedTradeSettlementMonetarySummation>
+					<ram:LineTotalAmount currencyID="EUR">109.80</ram:LineTotalAmount>
+				</ram:SpecifiedTradeSettlementMonetarySummation>
+			</ram:SpecifiedSupplyChainTradeSettlement>
+			<ram:SpecifiedTradeProduct>
+				<ram:GlobalID schemeID="0160">4000001234561</ram:GlobalID>
+				<ram:SellerAssignedID>GTRWA5</ram:SellerAssignedID>
+				<ram:BuyerAssignedID>55T03</ram:BuyerAssignedID>
+				<ram:Name>Mineralwasser Medium 
+12 x 1,0l PET</ram:Name>
+			</ram:SpecifiedTradeProduct>
+		</ram:IncludedSupplyChainTradeLineItem>
+		<ram:IncludedSupplyChainTradeLineItem>
+			<ram:AssociatedDocumentLineDocument>
+				<ram:LineID>4</ram:LineID>
+				<ram:IncludedNote>
+					<ram:Content>nicht rabattierfähig</ram:Content>
+					<ram:SubjectCode>PRF</ram:SubjectCode>
+				</ram:IncludedNote>
+			</ram:AssociatedDocumentLineDocument>
+			<ram:SpecifiedSupplyChainTradeAgreement>
+				<ram:GrossPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">2.7700</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+				</ram:GrossPriceProductTradePrice>
+				<ram:NetPriceProductTradePrice>
+					<ram:ChargeAmount currencyID="EUR">2.7700</ram:ChargeAmount>
+					<ram:BasisQuantity unitCode="C62">1</ram:BasisQuantity>
+				</ram:NetPriceProductTradePrice>
+			</ram:SpecifiedSupplyChainTradeAgreement>
+			<ram:SpecifiedSupplyChainTradeDelivery>
+				<ram:BilledQuantity unitCode="C62">20.0000</ram:BilledQuantity>
+			</ram:SpecifiedSupplyChainTradeDelivery>
+			<ram:SpecifiedSupplyChainTradeSettlement>
+				<ram:ApplicableTradeTax>
+					<ram:TypeCode>VAT</ram:TypeCode>
+					<ram:CategoryCode>S</ram:CategoryCode>
+					<ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+				</ram:ApplicableTradeTax>
+				<ram:SpecifiedTradeSettlementMonetarySummation>
+					<ram:LineTotalAmount currencyID="EUR">55.46</ram:LineTotalAmount>
+				</ram:SpecifiedTradeSettlementMonetarySummation>
+			</ram:SpecifiedSupplyChainTradeSettlement>
+			<ram:SpecifiedTradeProduct>
+				<ram:GlobalID schemeID="0160">4000001234578</ram:GlobalID>
+				<ram:SellerAssignedID>PFA5</ram:SellerAssignedID>
+				<ram:BuyerAssignedID>55T04</ram:BuyerAssignedID>
+				<ram:Name>Pfand</ram:Name>
+			</ram:SpecifiedTradeProduct>
+		</ram:IncludedSupplyChainTradeLineItem>
+	</rsm:SpecifiedSupplyChainTradeTransaction>
+</rsm:CrossIndustryDocument>

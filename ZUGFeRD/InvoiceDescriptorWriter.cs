@@ -100,13 +100,13 @@ namespace s2industries.ZUGFeRD
                 if (this.Descriptor.OrderDate.HasValue)
                 {
                     Writer.WriteStartElement("ram:IssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");
-                    Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
-                    Writer.WriteEndElement(); // !udt:DateTimeString
+                    //Writer.WriteStartElement("udt:DateTimeString");
+                    //Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
+                    //Writer.WriteEndElement(); // !udt:DateTimeString
                     Writer.WriteEndElement(); // !IssueDateTime()
                 }
-                Writer.WriteElementString("ID", this.Descriptor.OrderNo);
+                Writer.WriteElementString("ram:ID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
@@ -288,190 +288,195 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementMonetarySummation
 
             Writer.WriteEndElement(); // !ram:ApplicableSupplyChainTradeSettlement
-
-            int counter = 0;
+            
             foreach(TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
             {
                 Writer.WriteStartElement("ram:IncludedSupplyChainTradeLineItem");
-                Writer.WriteStartElement("ram:AssociatedDocumentLineDocument");
 
-                if ((tradeLineItem.BilledQuantity != 0) && (tradeLineItem.Name == null) && (!String.IsNullOrEmpty(tradeLineItem.Comment)))
-                {
-                    Writer.WriteStartElement("ram:IncludedNote");
-                    Writer.WriteElementString("ram:Content", tradeLineItem.Comment);
+                if (tradeLineItem.AssociatedDocument != null)
+                { 
+                    Writer.WriteStartElement("ram:AssociatedDocumentLineDocument");
+                    if (tradeLineItem.AssociatedDocument.LineID.HasValue)
+                    {
+                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument.LineID));
+                    }
+                    if (!String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.Content))
+                    {
+                        Writer.WriteStartElement("ram:IncludedNote");
+                        Writer.WriteElementString("ram:Content", tradeLineItem.AssociatedDocument.Content);
+                        if (tradeLineItem.AssociatedDocument.ContentSubjectCode != SubjectCodes.Unknown)
+                        {
+                            Writer.WriteElementString("ram:SubjectCode", tradeLineItem.AssociatedDocument.ContentSubjectCode.EnumToString());
+                        }
+                        Writer.WriteEndElement(); // ram:IncludedNote
+                    }
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument
+                }
+
+                if (!String.IsNullOrEmpty(tradeLineItem.AssociatedDocument?.Content) && (tradeLineItem.BilledQuantity == 0) && (String.IsNullOrEmpty(tradeLineItem.Description)))
+                {
+                    Writer.WriteEndElement(); // !ram:IncludedSupplyChainTradeLineItem
+                    continue;
+                }
+
+                Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeAgreement");
+
+                if (tradeLineItem.BuyerOrderReferencedDocument != null)
+                {
+                    Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
+                    if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:IssueDateTime");
+                        Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // !ram:IssueDateTime
+                    }
+                    if (!String.IsNullOrEmpty(tradeLineItem.BuyerOrderReferencedDocument.ID))
+                    {
+                        Writer.WriteElementString("ram:ID", tradeLineItem.BuyerOrderReferencedDocument.ID);
+                    }
+
+                    Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
+                }
+
+                if (tradeLineItem.ContractReferencedDocument != null)
+                {
+                    Writer.WriteStartElement("ram:ContractReferencedDocument");
+                    if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:IssueDateTime");
+                        Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // !ram:IssueDateTime
+                    }
+                    if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
+                    {
+                        Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
+                    }
+
+                    Writer.WriteEndElement(); // !ram:ContractReferencedDocument
+                }
+
+                if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
+                {
+                    foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
+                    {
+                        Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                        if (doc.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:IssueDateTime");
+                            Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                        }
+
+                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
+
+                        if (!String.IsNullOrEmpty(doc.ID))
+                        {
+                            Writer.WriteElementString("ram:ID", doc.ID);
+                        }
+
+                        Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
+
+                        Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    }
+                }
+
+                Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
+                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
+                if (tradeLineItem.UnitQuantity.HasValue)
+                {
+                    _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                }
+
+                foreach(TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
+                {
+                    Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
+
+                    Writer.WriteStartElement("ram:ChargeIndicator");
+                    Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                    Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+                    Writer.WriteStartElement("ram:BasisAmount");
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
+                    Writer.WriteEndElement();
+                    Writer.WriteStartElement("ram:ActualAmount");
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                    Writer.WriteEndElement();
+
+                    _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+
+                    Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
+                }
+
+                Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
+
+                Writer.WriteStartElement("ram:NetPriceProductTradePrice");
+                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 4);
+
+                if (tradeLineItem.UnitQuantity.HasValue)
+                {
+                    _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                }
+                Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
+
+                Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeAgreement
+
+                Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeDelivery");
+                _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
+
+                if (tradeLineItem.DeliveryNoteReferencedDocument != null)
+                {
+                    Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
+                    if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:IssueDateTime");
+                        Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // !ram:IssueDateTime
+                    }
+                    if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
+                    {
+                        Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                    }
+
+                    Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
+                }
+
+                Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeDelivery
+
+                Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeSettlement");
+                Writer.WriteStartElement("ram:ApplicableTradeTax");
+                Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
+                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
+                Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
+                Writer.WriteEndElement(); // !ram:ApplicableTradeTax
+                Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
+
+                decimal _total = 0m;
+                if (tradeLineItem.LineTotalAmount.HasValue)
+                {
+                    _total = tradeLineItem.LineTotalAmount.Value;
                 }
                 else
                 {
-                    counter += 1;
-                    string _lineID = String.Format("{0}", counter);
-                    Writer.WriteElementString("ram:LineID", _lineID);
-                    if (!String.IsNullOrEmpty(tradeLineItem.Comment))
-                    {
-                        Writer.WriteElementString("Content", tradeLineItem.Comment);
-                    }
-
-                    Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument
-
-                    Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeAgreement");
-
-                    if (tradeLineItem.BuyerOrderReferencedDocument != null)
-                    {
-                        Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
-                        if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
-                        }
-                        if (!String.IsNullOrEmpty(tradeLineItem.BuyerOrderReferencedDocument.ID))
-                        {
-                            Writer.WriteElementString("ram:ID", tradeLineItem.BuyerOrderReferencedDocument.ID);
-                        }
-
-                        Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
-                    }
-
-                    if (tradeLineItem.ContractReferencedDocument != null)
-                    {
-                        Writer.WriteStartElement("ram:ContractReferencedDocument");
-                        if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
-                        }
-                        if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
-                        {
-                            Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
-                        }
-
-                        Writer.WriteEndElement(); // !ram:ContractReferencedDocument
-                    }
-
-                    if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
-                    {
-                        foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
-                        {
-                            Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                            if (doc.IssueDateTime.HasValue)
-                            {
-                                Writer.WriteStartElement("ram:IssueDateTime");
-                                Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
-                                Writer.WriteEndElement(); // !ram:IssueDateTime
-                            }
-
-                            Writer.WriteElementString("ram:LineID", _lineID);
-
-                            if (!String.IsNullOrEmpty(doc.ID))
-                            {
-                                Writer.WriteElementString("ram:ID", doc.ID);
-                            }
-
-                            Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
-
-                            Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                        }
-                    }
-
-                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
-                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
-                    if (tradeLineItem.UnitQuantity.HasValue)
-                    {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
-                    }
-
-                    foreach(TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
-                    {
-                        Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
-
-                        Writer.WriteStartElement("ram:ChargeIndicator");
-                        Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                        Writer.WriteEndElement(); // !ram:ChargeIndicator
-
-                        Writer.WriteStartElement("ram:BasisAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
-                        Writer.WriteEndElement();
-                        Writer.WriteStartElement("ram:ActualAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
-                        Writer.WriteEndElement();
-
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
-
-                        Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
-                    }
-
-                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
-
-                    Writer.WriteStartElement("ram:NetPriceProductTradePrice");
-                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 4);
-
-                    if (tradeLineItem.UnitQuantity.HasValue)
-                    {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
-                    }
-                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
-
-                    Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeAgreement
-
-                    Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeDelivery");
-                    _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
-
-                    if (tradeLineItem.DeliveryNoteReferencedDocument != null)
-                    {
-                        Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
-                        if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
-                        }
-                        if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
-                        {
-                            Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
-                        }
-
-                        Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
-                    }
-
-                    Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeDelivery
-
-                    Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeSettlement");
-                    Writer.WriteStartElement("ram:ApplicableTradeTax");
-                    Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
-                    Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
-                    Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
-                    Writer.WriteEndElement(); // !ram:ApplicableTradeTax
-                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
-
-                    decimal _total = 0m;
-                    if (tradeLineItem.LineTotalAmount.HasValue)
-                    {
-                        _total = tradeLineItem.LineTotalAmount.Value;
-                    }
-                    else
-                    {
-                        _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
-                    }
-                    _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
-                    Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
-                    Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
-
-                    Writer.WriteStartElement("ram:SpecifiedTradeProduct");
-                    if ((tradeLineItem.GlobalID != null) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
-                    {
-                        _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
-                    }
-
-                    _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID);
-                    _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID);
-                    _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
-                    _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
-
-                    Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct
+                    _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                 }
+                _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
+                Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
+                Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
+
+                Writer.WriteStartElement("ram:SpecifiedTradeProduct");
+                if ((tradeLineItem.GlobalID != null) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
+                {
+                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
+                }
+
+                _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID);
+                _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID);
+                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
+                _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
+
+                Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct
                 Writer.WriteEndElement(); // !ram:IncludedSupplyChainTradeLineItem
             } // !foreach(tradeLineItem)
 
