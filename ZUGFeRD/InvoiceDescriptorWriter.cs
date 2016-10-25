@@ -106,8 +106,31 @@ namespace s2industries.ZUGFeRD
                     //Writer.WriteEndElement(); // !udt:DateTimeString
                     Writer.WriteEndElement(); // !IssueDateTime()
                 }
+
                 Writer.WriteElementString("ram:ID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
+            }
+
+            if (this.Descriptor.AdditionalReferencedDocument != null)
+            {
+                Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:IssueDateTime");
+                    //Writer.WriteStartElement("udt:DateTimeString");
+                    //Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value, false));
+                    //Writer.WriteEndElement(); // !udt:DateTimeString
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
+
+                if (this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                {
+                    Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode.EnumToString());
+                }
+
+                Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument.ID);
+                Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
             }
 
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement

@@ -34,6 +34,7 @@ namespace s2industries.ZUGFeRD
         public string OrderNo { get; set; }
         public DateTime? OrderDate { get; set; }
 
+        public AdditionalReferencedDocument AdditionalReferencedDocument { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
         public DateTime? ActualDeliveryDate { get; set; }
 
@@ -80,6 +81,7 @@ namespace s2industries.ZUGFeRD
             this.OrderNo = "";
             this.OrderDate = null;
             this.InvoiceDate = null;
+            this.AdditionalReferencedDocument = null;
             this.DeliveryNoteReferencedDocument = null;
             this.ActualDeliveryDate = null;
 

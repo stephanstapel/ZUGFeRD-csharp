@@ -33,7 +33,7 @@ namespace ZUGFeRD_Test
                            "MUSTERHAUSEN",
                            "BAHNHOFSTRASSE 99",
                            CountryCodes.DE,
-                           "",
+                           "549910",
                            new GlobalID(GlobalID.SchemeID_GLN, "4333741000005"));
             desc.SetSellerContact("", emailAddress: "max.mustermann@musterlieferant.de", phoneno: "+49 932 431 500");
             desc.AddSellerTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
@@ -46,11 +46,65 @@ namespace ZUGFeRD_Test
                           "009420",
                           new GlobalID(GlobalID.SchemeID_GLN, "4304171000002"));
             desc.SetBuyerOrderReferenceDocument("B123456789", new DateTime(2013, 08, 01));
-            
-            /**
-             * @todo AdditionalReferenceDocument
-             */
-             
+
+            desc.AdditionalReferencedDocument = new AdditionalReferencedDocument()
+            {
+                ID = "A456123",
+                IssueDateTime = new DateTime(2013, 08, 02),
+                ReferenceTypeCode = ReferenceTypeCodes.VN
+            };
+
+            /// TODO: ApplicableSupplyChainTradeDelivery
+            /// 
+
+            desc.addTradeLineCommentItem("Wichtige Information: Bei Bestellungen bis zum 19.12. ist die Auslieferung bis spätestens 23.12. garantiert.");
+            TradeLineItem item = desc.addTradeLineItem("Zitronensäure 100ml",
+                                                        null,
+                                                        QuantityCodes.C62,
+                                                        null,
+                                                        1,
+                                                        1,
+                                                        100,
+                                                        TaxTypes.VAT,
+                                                        TaxCategoryCodes.S,
+                                                        19,
+                                                        null,
+                                                        new GlobalID("0088", "4123456000014"),
+                                                        "ZS997",
+                                                        "",
+                                                        "",
+                                                        null,
+                                                        "",
+                                                        null);
+
+            item = desc.addTradeLineItem("Gelierzucker Extra 250g",
+                                         null,
+                                         QuantityCodes.C62,
+                                         null,
+                                         1.5m,
+                                         1.45m,
+                                         50,
+                                         TaxTypes.VAT,
+                                         TaxCategoryCodes.S,
+                                         7,
+                                         null,
+                                         new GlobalID("0088", "4123456000021"),
+                                         "GZ250",
+                                         "",
+                                         "",
+                                         null,
+                                         "",
+                                         null);
+            item.addTradeAllowanceCharge(true,
+                                         CurrencyCodes.EUR,
+                                         1.5m,
+                                         0.03m,
+                                         "Artikelrabatt 1");
+            item.addTradeAllowanceCharge(true,
+                                         CurrencyCodes.EUR,
+                                         1m,
+                                         0.02m,
+                                         "Artikelrabatt 2");
 
             return desc;
         } // !_generateDescriptor()

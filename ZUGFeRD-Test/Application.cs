@@ -31,17 +31,17 @@ namespace ZUGFeRD_Test
         {
             ZugFerdComfortEinfachGenerator generator = new ZugFerdComfortEinfachGenerator();
             generator.generate();
-            //generator.read();
+            generator.read();
 
             ZugFerdExtendedWarenrechnungGenerator generator2 = new ZugFerdExtendedWarenrechnungGenerator();
             generator2.generate();
-            //generator2.read();
+            generator2.read();
 
-            //_loadZUGFeRDEinfachOriginalInvoice();
+            _loadZUGFeRDEinfachOriginalInvoice();
             _loadZUGFeRDComfortRabatteInvoice();
 
-          //  _saveAndLoadZUGFeRDInvoice();
-          //  _saveAndLoadZUGFeRDInvoiceViaStream();
+            _saveAndLoadZUGFeRDInvoice();
+            _saveAndLoadZUGFeRDInvoiceViaStream();
         } // !run()
 
 

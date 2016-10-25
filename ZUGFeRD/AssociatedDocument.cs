@@ -11,5 +11,10 @@ namespace s2industries.ZUGFeRD
         public string Content { get; set; }
         public SubjectCodes ContentSubjectCode { get; set; }
         public int? LineID { get; set; }
+
+        public AssociatedDocument()
+        {
+            this.ContentSubjectCode = SubjectCodes.Unknown;
+        }
     }
 }
