@@ -465,6 +465,18 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                 }
 
+                if (tradeLineItem.ActualDeliveryDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent");
+                    Writer.WriteStartElement("ram:OccurrenceDateTime");
+                    Writer.WriteStartElement("udt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
+                    Writer.WriteEndElement(); // "udt:DateTimeString
+                    Writer.WriteEndElement(); // !OccurrenceDateTime()
+                    Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
+                }
+
                 Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeDelivery
 
                 Writer.WriteStartElement("ram:SpecifiedSupplyChainTradeSettlement");

@@ -40,6 +40,7 @@ namespace s2industries.ZUGFeRD
         public decimal GrossUnitPrice { get; set; }
         public QuantityCodes UnitCode { get; set; }
         public AssociatedDocument AssociatedDocument { get; set; }
+        public DateTime? ActualDeliveryDate { get; set; }
         public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
