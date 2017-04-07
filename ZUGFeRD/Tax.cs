@@ -38,7 +38,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public decimal Percent { get; set; }
         public TaxTypes TypeCode { get; set; }
-        public TaxCategoryCodes CategoryCode { get; set; }
+        public TaxCategoryCodes? CategoryCode { get; set; }
 
         /// <summary>
         /// Gesamtbetrag Zu- und Abschläge des Steuersatzes, Wert
