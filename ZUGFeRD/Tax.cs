@@ -25,7 +25,8 @@ namespace s2industries.ZUGFeRD
 {
     public class Tax
     {
-        public decimal TaxAmount {
+        public decimal TaxAmount
+        {
             get
             {
                 return 0.01m * this.Percent * this.BasisAmount;
