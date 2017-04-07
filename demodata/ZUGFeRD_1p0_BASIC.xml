@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
 
 Nutzungsrechte 
 ZUGFeRD Datenformat Version 1.0, 25.6.2014
@@ -146,26 +147,6 @@ Zahlbar innerhalb 30 Tagen netto bis 04.04.2013, 3% Skonto innerhalb 10 Tagen bi
 				<ram:LineID>1</ram:LineID>
 				</ram:AssociatedDocumentLineDocument>
 			<ram:SpecifiedSupplyChainTradeDelivery>
-				<ram:BilledQuantity unitCode="C62">50.0000</ram:BilledQuantity>
-			</ram:SpecifiedSupplyChainTradeDelivery>
-			<ram:SpecifiedSupplyChainTradeSettlement>
-				<ram:SpecifiedTradeSettlementMonetarySummation>
-					<ram:LineTotalAmount currencyID="EUR">275.00</ram:LineTotalAmount>
-				</ram:SpecifiedTradeSettlementMonetarySummation>
-			</ram:SpecifiedSupplyChainTradeSettlement>
-			<ram:SpecifiedTradeProduct>
-				<ram:GlobalID schemeID="0160">4000050986428</ram:GlobalID>
-				<ram:SellerAssignedID>ARNR2</ram:SellerAssignedID>
-				<ram:Name>GTIN: 4000050986428
-Unsere Art.-Nr.: ARNR2
-Joghurt Banane</ram:Name>
-			</ram:SpecifiedTradeProduct>
-		</ram:IncludedSupplyChainTradeLineItem>
-		<ram:IncludedSupplyChainTradeLineItem>
-				<ram:AssociatedDocumentLineDocument>
-				<ram:LineID>2</ram:LineID>
-				</ram:AssociatedDocumentLineDocument>
-			<ram:SpecifiedSupplyChainTradeDelivery>
 				<ram:BilledQuantity unitCode="C62">20.0000</ram:BilledQuantity>
 			</ram:SpecifiedSupplyChainTradeDelivery>
 			<ram:SpecifiedSupplyChainTradeSettlement>
@@ -179,6 +160,26 @@ Joghurt Banane</ram:Name>
 				<ram:Name>GTIN: 4012345001235
 Unsere Art.-Nr.: TB100A4
 Trennblätter A4</ram:Name>
+			</ram:SpecifiedTradeProduct>
+		</ram:IncludedSupplyChainTradeLineItem>
+				<ram:IncludedSupplyChainTradeLineItem>
+				<ram:AssociatedDocumentLineDocument>
+				<ram:LineID>2</ram:LineID>
+				</ram:AssociatedDocumentLineDocument>
+			<ram:SpecifiedSupplyChainTradeDelivery>
+				<ram:BilledQuantity unitCode="C62">50.0000</ram:BilledQuantity>
+			</ram:SpecifiedSupplyChainTradeDelivery>
+			<ram:SpecifiedSupplyChainTradeSettlement>
+				<ram:SpecifiedTradeSettlementMonetarySummation>
+					<ram:LineTotalAmount currencyID="EUR">275.00</ram:LineTotalAmount>
+				</ram:SpecifiedTradeSettlementMonetarySummation>
+			</ram:SpecifiedSupplyChainTradeSettlement>
+			<ram:SpecifiedTradeProduct>
+				<ram:GlobalID schemeID="0160">4000050986428</ram:GlobalID>
+				<ram:SellerAssignedID>ARNR2</ram:SellerAssignedID>
+				<ram:Name>GTIN: 4000050986428
+Unsere Art.-Nr.: ARNR2
+Joghurt Banane</ram:Name>
 			</ram:SpecifiedTradeProduct>
 		</ram:IncludedSupplyChainTradeLineItem>
 	</rsm:SpecifiedSupplyChainTradeTransaction>

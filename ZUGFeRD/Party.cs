@@ -23,18 +23,19 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public class Party
-    {
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string City { get; set; }
-        public string Postcode { get; set; }
-        public CountryCodes Country { get; set; }
+   public class Party
+   {
+      public string ID { get; set; }
+      public string Name { get; set; }
+      public string Receiver { get; set; }
+      public string City { get; set; }
+      public string Postcode { get; set; }
+      public CountryCodes Country { get; set; }
 
-        /// <summary>
-        /// Straße inklusive Hausnummer
-        /// </summary>
-        public string Street { get; set; }
-        public GlobalID GlobalID { get; set; }
-    }
+      /// <summary>
+      /// Straße inklusive Hausnummer
+      /// </summary>
+      public string Street { get; set; }
+      public GlobalID GlobalID { get; set; }
+   }
 }

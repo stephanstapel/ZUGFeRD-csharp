@@ -50,6 +50,7 @@
     <Compile Include="Assert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZugFerdBasicGenerator.cs" />
     <Compile Include="ZugFerdComfortEinfachGenerator.cs" />
     <Compile Include="ZugFerdExtendedWarenrechnungGenerator.cs" />
   </ItemGroup>
@@ -58,9 +59,6 @@
       <Project>{B9550547-0A5C-445D-88C7-DD481881E62F}</Project>
       <Name>ZUGFeRD</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
