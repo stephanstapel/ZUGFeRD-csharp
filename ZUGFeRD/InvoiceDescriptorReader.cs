@@ -108,27 +108,49 @@ namespace s2industries.ZUGFeRD
             PaymentMeans _tempPaymentMeans = new PaymentMeans()
             {
                 TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
-                Information = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:Information", nsmgr)
+                Information = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:Information", nsmgr),
+                SEPACreditorIdentifier = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID", nsmgr),
+                SEPAMandateReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID/@schemaAgencyID", nsmgr)
             };
             retval.PaymentMeans = _tempPaymentMeans;
 
-            XmlNodeList financialAccountNodes = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
-            XmlNodeList financialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
+            XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
+            XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 
-            if (financialAccountNodes.Count == financialInstitutions.Count)
+            if (creditorFinancialAccountNodes.Count == creditorFinancialInstitutions.Count)
             {
-                for (int i = 0; i < financialAccountNodes.Count; i++)
+                for (int i = 0; i < creditorFinancialAccountNodes.Count; i++)
                 {
                     BankAccount _account = new BankAccount()
                     {
-                        ID = _nodeAsString(financialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
-                        IBAN = _nodeAsString(financialAccountNodes[0], ".//ram:IBANID", nsmgr),
-                        BIC = _nodeAsString(financialInstitutions[0], ".//ram:BICID", nsmgr),
-                        Bankleitzahl = _nodeAsString(financialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(financialInstitutions[0], ".//ram:Name", nsmgr),
+                        ID = _nodeAsString(creditorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
+                        IBAN = _nodeAsString(creditorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
+                        BIC = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
+                        Bankleitzahl = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
+                        BankName = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:AccountName", nsmgr),
                     };
 
                     retval.CreditorBankAccounts.Add(_account);
+                } // !for(i)
+            }
+
+            XmlNodeList debitorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount", nsmgr);
+            XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+
+            if (debitorFinancialAccountNodes.Count == debitorFinancialInstitutions.Count)
+            {
+                for (int i = 0; i < debitorFinancialAccountNodes.Count; i++)
+                {
+                    BankAccount _account = new BankAccount()
+                    {
+                        ID = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
+                        IBAN = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
+                        BIC = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
+                        Bankleitzahl = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
+                        BankName = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:Name", nsmgr),
+                    };
+
+                    retval.DebitorBankAccounts.Add(_account);
                 } // !for(i)
             }
 

@@ -27,7 +27,19 @@ namespace s2industries.ZUGFeRD
     {
         public PaymentMeansTypeCodes TypeCode { get; set; }
         public string Information { get; set; }
-        public string ID { get; set; }
-        public string schemeAgencyID { get; set; }
+
+        /// <summary>
+        /// Gläubiger-Identifikationsnummer
+        /// 
+        /// https://de.wikipedia.org/wiki/Gl%C3%A4ubiger-Identifikationsnummer
+        /// </summary>
+        public string SEPACreditorIdentifier { get; set; }
+
+        /// <summary>
+        /// Mandatsreferenz
+        /// 
+        /// https://de.wikipedia.org/wiki/Mandatsreferenz
+        /// </summary>
+        public string SEPAMandateReference { get; set; }
     }
 }

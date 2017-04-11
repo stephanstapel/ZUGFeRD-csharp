@@ -67,6 +67,7 @@ namespace s2industries.ZUGFeRD
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
         public PaymentTerms PaymentTerms { get; set; }
         public List<BankAccount> CreditorBankAccounts { get; set; }
+        public List<BankAccount> DebitorBankAccounts { get; set; }
         public PaymentMeans PaymentMeans { get; set; }
 
 
