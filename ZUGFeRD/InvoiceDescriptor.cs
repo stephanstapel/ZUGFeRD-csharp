@@ -102,6 +102,7 @@ namespace s2industries.ZUGFeRD
             this.BuyerTaxRegistration = new List<TaxRegistration>();
             this.SellerTaxRegistration = new List<TaxRegistration>();
             this.CreditorBankAccounts = new List<BankAccount>();
+            this.DebitorBankAccounts = new List<BankAccount>();
         }
 
 
@@ -438,12 +439,14 @@ namespace s2industries.ZUGFeRD
         } // !addTradeLineItem()
 
 
-        public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "")
+        public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         {
             this.PaymentMeans = new PaymentMeans
             {
                 TypeCode = paymentCode,
-                Information = information
+                Information = information,
+                SEPACreditorIdentifier = identifikationsnummer,
+                SEPAMandateReference = mandatsnummer
             };
         } // !setPaymentMeans()
 
@@ -459,5 +462,17 @@ namespace s2industries.ZUGFeRD
                 BankName = bankName
             });
         } // !addCreditorFinancialAccount()
-    }
+
+        public void addDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
+        {
+            this.DebitorBankAccounts.Add(new BankAccount()
+            {
+                ID = id,
+                IBAN = iban,
+                BIC = bic,
+                Bankleitzahl = bankleitzahl,
+                BankName = bankName
+            });
+        } // !addDebitorFinancialAccount()
+   }
 }
