@@ -184,7 +184,7 @@ namespace s2industries.ZUGFeRD
                     if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
                     {
                         Writer.WriteStartElement("ram:ID");
-                        Writer.WriteAttributeString("schemaAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                        Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
                         Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
                         Writer.WriteEndElement(); // !ram:ID
                     }
