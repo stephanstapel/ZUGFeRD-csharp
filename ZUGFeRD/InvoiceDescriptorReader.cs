@@ -255,10 +255,18 @@ namespace s2industries.ZUGFeRD
             {
                 item.AssociatedDocument = new AssociatedDocument()
                 {
-                    LineID = _nodeAsInt(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, Int32.MaxValue),
-                    Content = _nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:IncludedNote/ram:Content", nsmgr),
-                    ContentSubjectCode = default(SubjectCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:IncludedNote/ram:SubjectCode", nsmgr))
+                    LineID = _nodeAsInt(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, Int32.MaxValue)
                 };
+
+                XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//ram:AssociatedDocumentLineDocument/ram:IncludedNote", nsmgr);
+                foreach(XmlNode noteNode in noteNodes)
+                {
+                    item.AssociatedDocument.Notes.Add(new Note(
+                                content: _nodeAsString(noteNode, ".//ram:Content", nsmgr),
+                                subjectCode: default(SubjectCodes).FromString(_nodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
+                                contentCode: ContentCodes.Unknown
+                    ));
+                }
 
                 if (item.AssociatedDocument.LineID == Int32.MaxValue) // a bit dirty, but works for now
                 {

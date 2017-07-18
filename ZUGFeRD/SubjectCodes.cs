@@ -68,6 +68,12 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         REG,
 
+        /// <summary>
+        /// Supplier remarks
+        /// Remarks from or for a supplier of goods or services.
+        /// </summary>
+        SUR,
+
         Unknown
     }
 

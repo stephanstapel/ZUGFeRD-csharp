@@ -45,7 +45,7 @@ namespace s2industries.ZUGFeRD
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; }
-        public List<Tuple<string, SubjectCodes, ContentCodes>> Notes { get; set; }
+        public List<Note> Notes { get; set; }
 
         public bool IsTest { get; set; }
         public Profile Profile { get; set; }
@@ -78,7 +78,7 @@ namespace s2industries.ZUGFeRD
             this.IsTest = false;
             this.Profile = Profile.Basic;
             this.Type = InvoiceType.Invoice;
-            this.Notes = new List<Tuple<string, SubjectCodes, ContentCodes>>();
+            this.Notes = new List<Note>();
             this.OrderNo = "";
             this.OrderDate = null;
             this.InvoiceDate = null;
@@ -137,7 +137,7 @@ namespace s2industries.ZUGFeRD
              * EEV, WEB, VEV nur mit AAJ
              */
 
-            this.Notes.Add(new Tuple<string, SubjectCodes, ContentCodes>(note, subjectCode, contentCode));
+            this.Notes.Add(new Note(note, subjectCode, contentCode));
         } // !AddNote()
 
 
@@ -350,13 +350,18 @@ namespace s2industries.ZUGFeRD
 
         public void addTradeLineCommentItem(string comment)
         {
-            this.TradeLineItems.Add(new TradeLineItem()
+            TradeLineItem item = new TradeLineItem()
             {
                 AssociatedDocument = new ZUGFeRD.AssociatedDocument()
-                {
-                    Content = comment
-                }
-            });
+            };
+
+            item.AssociatedDocument.Notes.Add(new Note(
+                content: comment,
+                subjectCode: SubjectCodes.Unknown,
+                contentCode: ContentCodes.Unknown
+            ));
+
+            this.TradeLineItems.Add(item);
         } // !addTradeLineCommentItem()
 
 
@@ -421,7 +426,7 @@ namespace s2industries.ZUGFeRD
             newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument()
             {
                 LineID = _lineID,
-                Content = comment
+                Notes = { new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown) }
             };
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)

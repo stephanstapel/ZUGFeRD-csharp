@@ -79,7 +79,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !udt:DateTimeString
                 Writer.WriteEndElement(); // !IssueDateTime
             }
-            _writeOptionalNotes(Writer);
+            _writeNotes(Writer, this.Descriptor.Notes);
             Writer.WriteEndElement(); // !rsm:HeaderExchangedDocument
             #endregion
 
@@ -358,20 +358,12 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument.LineID));
                     }
-                    if (!String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.Content))
-                    {
-                        Writer.WriteStartElement("ram:IncludedNote");
-                        Writer.WriteElementString("ram:Content", tradeLineItem.AssociatedDocument.Content);
-                        if (tradeLineItem.AssociatedDocument.ContentSubjectCode != SubjectCodes.Unknown)
-                        {
-                            Writer.WriteElementString("ram:SubjectCode", tradeLineItem.AssociatedDocument.ContentSubjectCode.EnumToString());
-                        }
-                        Writer.WriteEndElement(); // ram:IncludedNote
-                    }
+                    _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument
                 }
 
-                if (!String.IsNullOrEmpty(tradeLineItem.AssociatedDocument?.Content) && (tradeLineItem.BilledQuantity == 0) && (String.IsNullOrEmpty(tradeLineItem.Description)))
+                // handelt es sich um einen Kommentar?
+                if ((tradeLineItem.AssociatedDocument?.Notes.Count > 0) && (tradeLineItem.BilledQuantity == 0) && (String.IsNullOrEmpty(tradeLineItem.Description)))
                 {
                     Writer.WriteEndElement(); // !ram:IncludedSupplyChainTradeLineItem
                     continue;
@@ -645,26 +637,26 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalTaxes()
 
 
-        private void _writeOptionalNotes(XmlTextWriter writer)
+        private void _writeNotes(XmlTextWriter writer, List<Note> notes)
         {
-            if (this.Descriptor.Notes.Count > 0)
+            if (notes.Count > 0)
             {
-                foreach (Tuple<string, SubjectCodes, ContentCodes> t in this.Descriptor.Notes)
+                foreach (Note note in notes)
                 {
                     writer.WriteStartElement("ram:IncludedNote");
-                    if (t.Item3 != ContentCodes.Unknown)
+                    if (note.ContentCode != ContentCodes.Unknown)
                     {
-                        writer.WriteElementString("ram:ContentCode", t.Item3.EnumToString());
+                        writer.WriteElementString("ram:ContentCode", note.ContentCode.EnumToString());
                     }
-                    writer.WriteElementString("ram:Content", t.Item1);
-                    if (t.Item2 != SubjectCodes.Unknown)
+                    writer.WriteElementString("ram:Content", note.Content);
+                    if (note.SubjectCode != SubjectCodes.Unknown)
                     {
-                        writer.WriteElementString("ram:SubjectCode", t.Item2.EnumToString());
+                        writer.WriteElementString("ram:SubjectCode", note.SubjectCode.EnumToString());
                     }
                     writer.WriteEndElement();
                 }
             }
-        } // !_writeOptionalNotes()
+        } // !_writeNotes()
 
 
         private void _writeOptionalParty(XmlTextWriter writer, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null)

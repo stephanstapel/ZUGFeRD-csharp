@@ -18,6 +18,9 @@ namespace s2industries.ZUGFeRD
         public static void validateAndPrint(InvoiceDescriptor descriptor)
         {
             List<string> output = validate(descriptor);
+
+            System.IO.File.WriteAllText("e:\\temp.txt", string.Join("\n", output));
+
             foreach(string line in output)
             {
                 System.Console.WriteLine(line);
@@ -52,7 +55,7 @@ namespace s2industries.ZUGFeRD
                 }
                 lineTotalPerTax[item.TaxPercent] += _total;
 
-
+                /*
                 retval.Add(String.Format("==> {0}:", ++lineCounter));
                 retval.Add(String.Format("Recalculating item: [{0}]", item.Name));
                 retval.Add(String.Format("Line total formula: {0:0.0000} EUR (net price) x {1:0.0000} (quantity)", item.NetUnitPrice, item.BilledQuantity));
@@ -60,6 +63,9 @@ namespace s2industries.ZUGFeRD
                 retval.Add(String.Format("Recalculated item line total = {0:0.0000} EUR", _total));
                 retval.Add(String.Format("Recalculated item tax = {0:0.00} %", item.TaxPercent));
                 retval.Add(String.Format("Current monetarySummation.lineTotal = {0:0.0000} EUR(the sum of all line totals)", lineTotal));
+                */
+
+                retval.Add(String.Format("{0};{1};{2}", ++lineCounter, item.Name, _total));
             }
 
             retval.Add("==> DONE!");
@@ -123,11 +129,54 @@ namespace s2industries.ZUGFeRD
                 _allowanceTotal += allowance.ActualAmount;
             }
 
-            retval.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", taxTotal, descriptor.TaxTotalAmount));
-            retval.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", lineTotal, descriptor.LineTotalAmount));
-            retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", grandTotal, descriptor.GrandTotalAmount));
-            retval.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", _taxBasisTotal, _taxBasisTotal));
-            retval.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", allowanceTotal, _allowanceTotal));
+            if (Math.Abs(taxTotal - descriptor.TaxTotalAmount) < 0.01m)
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", taxTotal));
+            }
+            else
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", taxTotal, descriptor.TaxTotalAmount));
+            }
+
+            if (Math.Abs(lineTotal - descriptor.LineTotalAmount) < 0.01m)
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", lineTotal));
+            }
+            else
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", lineTotal, descriptor.LineTotalAmount));
+            }
+
+            if (Math.Abs(grandTotal - descriptor.GrandTotalAmount) < 0.01m)
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", grandTotal));
+            }
+            else
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", grandTotal, descriptor.GrandTotalAmount));
+            }
+
+            /**
+             * @todo Richtige Validierung implementieren
+             */
+            if (Math.Abs(_taxBasisTotal - _taxBasisTotal) < 0.01m)
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", _taxBasisTotal));
+            }
+            else
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", _taxBasisTotal, _taxBasisTotal));
+            }
+
+            if (Math.Abs(allowanceTotal - _allowanceTotal) < 0.01m)
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", _allowanceTotal));
+            }
+            else
+            {
+                retval.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", allowanceTotal, _allowanceTotal));
+            }
+
 
             return retval;
         } // !validate()

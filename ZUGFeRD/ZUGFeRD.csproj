@@ -59,6 +59,7 @@
     <Compile Include="ContractReferencedDocument.cs" />
     <Compile Include="DeliveryNoteReferencedDocument.cs" />
     <Compile Include="InvoiceValidator.cs" />
+    <Compile Include="Note.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="Charge.cs" />
     <Compile Include="Contact.cs" />

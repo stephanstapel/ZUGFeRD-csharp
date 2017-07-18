@@ -8,13 +8,7 @@ namespace s2industries.ZUGFeRD
 {
     public class AssociatedDocument
     {
-        public string Content { get; set; }
-        public SubjectCodes ContentSubjectCode { get; set; }
+        public List<Note> Notes { get; set; } = new List<Note>();
         public int? LineID { get; set; }
-
-        public AssociatedDocument()
-        {
-            this.ContentSubjectCode = SubjectCodes.Unknown;
-        }
     }
 }
