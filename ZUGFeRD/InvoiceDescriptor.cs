@@ -423,11 +423,11 @@ namespace s2industries.ZUGFeRD
                 _lineID = 1;
             }
 
-            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument()
+            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(_lineID);
+            if (!String.IsNullOrEmpty(comment))
             {
-                LineID = _lineID,
-                Notes = { new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown) }
-            };
+                newItem.AssociatedDocument.Notes.Add(new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown));
+            }
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
             {

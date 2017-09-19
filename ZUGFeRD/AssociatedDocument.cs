@@ -10,5 +10,16 @@ namespace s2industries.ZUGFeRD
     {
         public List<Note> Notes { get; set; } = new List<Note>();
         public int? LineID { get; set; }
+
+        public AssociatedDocument()
+        {
+
+        }
+
+
+        public AssociatedDocument(int? lineID)
+        {
+            this.LineID = lineID;
+        }
     }
 }
