@@ -67,6 +67,7 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+            Assert.AreEqual(desc.CreditorBankAccounts[0].BankName, "Hausbank München");
         } // !_loadZUGFeRDComfortRabatteInvoice()
 
 

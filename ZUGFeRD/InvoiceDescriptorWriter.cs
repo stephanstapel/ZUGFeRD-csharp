@@ -210,7 +210,7 @@ namespace s2industries.ZUGFeRD
 
                     if (!String.IsNullOrEmpty(account.BankName))
                     {
-                        Writer.WriteElementString("ram:AccountName", account.BankName);
+                        Writer.WriteElementString("ram:Name", account.BankName);
                     }
                     Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
                 }
