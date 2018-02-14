@@ -127,7 +127,7 @@ namespace s2industries.ZUGFeRD
                         IBAN = _nodeAsString(creditorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
                         BIC = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
                         Bankleitzahl = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:AccountName", nsmgr),
+                        BankName = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:Name", nsmgr),
                     };
 
                     retval.CreditorBankAccounts.Add(_account);
