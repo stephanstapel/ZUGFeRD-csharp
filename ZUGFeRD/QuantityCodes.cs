@@ -162,7 +162,25 @@ namespace s2industries.ZUGFeRD
         /// Woche
         /// Abkürzung: Woche(n)
         /// </summary>
-        WEE
+        WEE,
+
+        /// <summary>
+        /// Monat
+        /// Abkürzung: Monat(e)
+        /// </summary>
+        MON,
+
+        /// <summary>
+        /// Jahr
+        /// Abkürzung: Jahr(e) 
+        /// </summary>
+        ANN,
+
+        /// <summary>
+        /// Sekunde
+        /// Abkürzung: Sekunde(n) 
+        /// </summary>
+        SEC
     }
 
 
