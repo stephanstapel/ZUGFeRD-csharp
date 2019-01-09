@@ -801,7 +801,19 @@ namespace s2industries.ZUGFeRD
                 type -= 1000;
             }
 
-            return (int)type;
+            // only these types are allowed
+            // 84: 'Wertbelastung/Wertrechnung ohne Warenbezug'
+            // 380: 'Handelsrechnung (Rechnung für Waren und Dienstleistungen)'
+            // 389: 'Selbst ausgestellte Rechnung (Steuerrechtliche Gutschrift/Gutschriftsverfahren)'
+            switch (type)
+            {
+                case InvoiceType.Correction: return (int)InvoiceType.Invoice;
+                case InvoiceType.CreditNote: return (int)InvoiceType.Invoice;
+                case InvoiceType.DebitNote: return (int)InvoiceType.Invoice;
+                case InvoiceType.Invoice: return (int)InvoiceType.Invoice;
+                case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
+                default: return (int)InvoiceType.Unknown;
+            }
         } // !_translateInvoiceType()
 
 
