@@ -120,11 +120,13 @@ namespace s2industries.ZUGFeRD
 
         public static InvoiceDescriptor CreateInvoice(string invoiceNo, DateTime invoiceDate, CurrencyCodes currency, string invoiceNoAsReference = "")
         {
-            InvoiceDescriptor retval = new InvoiceDescriptor();
-            retval.InvoiceDate = invoiceDate;
-            retval.InvoiceNo = invoiceNo;
-            retval.Currency = currency;
-            retval.InvoiceNoAsReference = invoiceNoAsReference;
+            InvoiceDescriptor retval = new InvoiceDescriptor
+            {
+                InvoiceDate = invoiceDate,
+                InvoiceNo = invoiceNo,
+                Currency = currency,
+                InvoiceNoAsReference = invoiceNoAsReference
+            };
             return retval;
         } // !CreateInvoice()
 
@@ -138,7 +140,7 @@ namespace s2industries.ZUGFeRD
              */
 
             this.Notes.Add(new Note(note, subjectCode, contentCode));
-        } // !AddNote()
+        } // !AddNote()        
 
 
         public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country, string id, GlobalID globalID = null, string receiver = "")
@@ -352,7 +354,10 @@ namespace s2industries.ZUGFeRD
         {
             TradeLineItem item = new TradeLineItem()
             {
-                AssociatedDocument = new ZUGFeRD.AssociatedDocument()
+                AssociatedDocument = new ZUGFeRD.AssociatedDocument(),
+                GrossUnitPrice = 0m,
+                NetUnitPrice= 0m,
+                BilledQuantity = 0m
             };
 
             item.AssociatedDocument.Notes.Add(new Note(
@@ -405,7 +410,8 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = billedQuantity,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent
+                TaxPercent = taxPercent,
+                LineTotalAmount = netUnitPrice * billedQuantity
             };
 
             int? _lineID = null;
