@@ -13,5 +13,8 @@
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
     <FileVersion>2.7.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 </Project>

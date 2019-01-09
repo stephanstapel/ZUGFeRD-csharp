@@ -28,7 +28,7 @@ namespace ZUGFeRD_Test
         static void Main(string[] args)
         {
             Application app = new Application();
-            app.run();
+            app.Run();
         }
     }
 }

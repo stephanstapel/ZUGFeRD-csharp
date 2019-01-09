@@ -27,7 +27,7 @@ namespace ZUGFeRD_Test
 {
     class Application
     {
-        internal void run()
+        internal void Run()
         {
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load("c:\\temp\\zugferd.xml");
