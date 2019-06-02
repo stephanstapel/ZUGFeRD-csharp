@@ -27,7 +27,7 @@ using System.IO;
 
 namespace s2industries.ZUGFeRD
 {
-    internal class InvoiceDescriptorWriter
+    internal class InvoiceDescriptor1Writer : IInvoiceDescriptorWriter
     {
         private XmlTextWriter Writer;
         private InvoiceDescriptor Descriptor;

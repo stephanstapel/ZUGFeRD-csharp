@@ -108,13 +108,37 @@ namespace s2industries.ZUGFeRD
 
         public static InvoiceDescriptor Load(Stream stream)
         {
-            return InvoiceDescriptorReader.Load(stream);
+            IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return reader.Load(stream);
+            }
+
+            reader = new InvoiceDescriptor2Reader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return reader.Load(stream);
+            }
+
+            return null;
         } // !Load()
 
 
         public static InvoiceDescriptor Load(string filename)
         {
-            return InvoiceDescriptorReader.Load(filename);
+            IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return reader.Load(filename);
+            }
+
+            reader = new InvoiceDescriptor2Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return reader.Load(filename);
+            }
+
+            return null;
         } // !Load()
 
 
@@ -336,16 +360,16 @@ namespace s2industries.ZUGFeRD
         /// This allows easy further processing of the stream.
         /// </summary>
         /// <param name="stream"></param>
-        public void Save(Stream stream)
+        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
         {
-            InvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
+            IInvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
             writer.Save(this, stream);
         } // !Save()
 
 
-        public void Save(string filename)
+        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
         {
-            InvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
+            IInvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
             writer.Save(this, filename);
         } // !Save()
 
