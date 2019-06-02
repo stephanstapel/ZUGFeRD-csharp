@@ -23,9 +23,17 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public interface IInvoiceDescriptorWriter
+    public abstract class IInvoiceDescriptorWriter
     {
-        void Save(InvoiceDescriptor descriptor, Stream stream);
-        void Save(InvoiceDescriptor descriptor, string filename);
+        public abstract void Save(InvoiceDescriptor descriptor, Stream stream);
+
+
+        public void Save(InvoiceDescriptor descriptor, string filename)
+        {
+            FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
+            Save(descriptor, fs);
+            fs.Flush();
+            fs.Close();
+        } // !Save()
     }
 }

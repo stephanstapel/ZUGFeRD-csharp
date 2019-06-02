@@ -25,10 +25,11 @@ namespace s2industries.ZUGFeRD
 {
     public enum Profile
     {
-        Unknown = 0,
+        Unknown = 0,        
         Basic = 1,
         Comfort = 2,
-        Extended = 3
+        Extended = 3,
+        Minimum = 4
     }
 
 
@@ -54,14 +55,28 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string EnumToString(this Profile profile)
+        public static string EnumToString(this Profile profile, ZUGFeRDVersion version)
         {
-            switch (profile)
+            if (version == ZUGFeRDVersion.Version1)
             {
-                case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
-                case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
-                case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
-                default: return "";
+                switch (profile)
+                {
+                    case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
+                    case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
+                    case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
+                    default: return "";
+                }
+            }
+            else
+            {
+                switch (profile)
+                {
+                    case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";
+                    case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
+                    case Profile.Comfort: return "urn:cen.eu:en16931:2017";
+                    case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
+                    default: return "";
+                }
             }
         } // !ToString()
     }

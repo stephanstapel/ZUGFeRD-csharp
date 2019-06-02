@@ -33,7 +33,7 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
-        public void Save(InvoiceDescriptor descriptor, Stream stream)
+        public override void Save(InvoiceDescriptor descriptor, Stream stream)
         {
             if (!stream.CanWrite || !stream.CanSeek)
             {
@@ -48,24 +48,26 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartDocument();
 
             #region Kopfbereich
-            Writer.WriteStartElement("rsm:CrossIndustryDocument");
-            Writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
-            Writer.WriteAttributeString("xmlns", "rsm", null, "urn:ferd:CrossIndustryDocument:invoice:1p0");
-            Writer.WriteAttributeString("xmlns", "ram", null, "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12");
-            Writer.WriteAttributeString("xmlns", "udt", null, "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15");
+            Writer.WriteStartElement("rsm:CrossIndustryInvoice");
+            Writer.WriteAttributeString("xmlns", "a", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            Writer.WriteAttributeString("xmlns", "rsm", null, "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            Writer.WriteAttributeString("xmlns", "qdt", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:10");
+            Writer.WriteAttributeString("xmlns", "ram", null, "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");                        
+            Writer.WriteAttributeString("xmlns", "udt", null, "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
             #endregion
 
             #region SpecifiedExchangedDocumentContext
-            Writer.WriteStartElement("rsm:SpecifiedExchangedDocumentContext");
+            Writer.WriteStartElement("rsm:ExchangedDocumentContext");
             Writer.WriteStartElement("ram:TestIndicator");
             Writer.WriteElementString("udt:Indicator", this.Descriptor.IsTest ? "true" : "false");
             Writer.WriteEndElement(); // !ram:TestIndicator
             Writer.WriteStartElement("ram:GuidelineSpecifiedDocumentContextParameter");
-            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString());
+            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version2));
             Writer.WriteEndElement(); // !ram:GuidelineSpecifiedDocumentContextParameter
-            Writer.WriteEndElement(); // !rsm:SpecifiedExchangedDocumentContext
+            Writer.WriteEndElement(); // !rsm:ExchangedDocumentContext
 
-            Writer.WriteStartElement("rsm:HeaderExchangedDocument");
+            Writer.WriteStartElement("rsm:ExchangedDocument");
             Writer.WriteElementString("ram:ID", this.Descriptor.InvoiceNo);
             Writer.WriteElementString("ram:Name", _translateInvoiceType(this.Descriptor.Type));
             Writer.WriteElementString("ram:TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
@@ -80,8 +82,12 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !IssueDateTime
             }
             _writeNotes(Writer, this.Descriptor.Notes);
-            Writer.WriteEndElement(); // !rsm:HeaderExchangedDocument
+            Writer.WriteEndElement(); // !rsm:ExchangedDocument
             #endregion
+
+            /**
+             * @todo continue here to adopt v2 tag names
+             */
 
             #region SpecifiedSupplyChainTradeTransaction
             Writer.WriteStartElement("rsm:SpecifiedSupplyChainTradeTransaction");
@@ -568,15 +574,6 @@ namespace s2industries.ZUGFeRD
             Writer.Flush();
 
             stream.Seek(streamPosition, SeekOrigin.Begin);
-        } // !Save()
-
-
-        public void Save(InvoiceDescriptor descriptor, string filename)
-        {
-            FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            Save(descriptor, fs);
-            fs.Flush();
-            fs.Close();
         } // !Save()
 
 

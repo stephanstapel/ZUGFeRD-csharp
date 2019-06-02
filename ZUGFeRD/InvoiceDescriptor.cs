@@ -362,14 +362,31 @@ namespace s2industries.ZUGFeRD
         /// <param name="stream"></param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
         {
-            IInvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
+            IInvoiceDescriptorWriter writer = null;
+            if (version == ZUGFeRDVersion.Version1)
+            {
+                writer = new InvoiceDescriptor1Writer();
+            }
+            else
+            {
+                writer = new InvoiceDescriptor2Writer();
+            }
+
             writer.Save(this, stream);
         } // !Save()
 
 
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
         {
-            IInvoiceDescriptorWriter writer = new InvoiceDescriptorWriter();
+            IInvoiceDescriptorWriter writer = null;
+            if (version == ZUGFeRDVersion.Version1)
+            {
+                writer = new InvoiceDescriptor1Writer();
+            }
+            else
+            {
+                writer = new InvoiceDescriptor2Writer();
+            }
             writer.Save(this, filename);
         } // !Save()
 

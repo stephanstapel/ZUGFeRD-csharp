@@ -33,7 +33,7 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
-        public void Save(InvoiceDescriptor descriptor, Stream stream)
+        public override void Save(InvoiceDescriptor descriptor, Stream stream)
         {
             if (!stream.CanWrite || !stream.CanSeek)
             {
@@ -61,7 +61,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("udt:Indicator", this.Descriptor.IsTest ? "true" : "false");
             Writer.WriteEndElement(); // !ram:TestIndicator
             Writer.WriteStartElement("ram:GuidelineSpecifiedDocumentContextParameter");
-            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString());
+            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version1));
             Writer.WriteEndElement(); // !ram:GuidelineSpecifiedDocumentContextParameter
             Writer.WriteEndElement(); // !rsm:SpecifiedExchangedDocumentContext
 
@@ -568,16 +568,7 @@ namespace s2industries.ZUGFeRD
             Writer.Flush();
 
             stream.Seek(streamPosition, SeekOrigin.Begin);
-        } // !Save()
-
-
-        public void Save(InvoiceDescriptor descriptor, string filename)
-        {
-            FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            Save(descriptor, fs);
-            fs.Flush();
-            fs.Close();
-        } // !Save()
+        } // !Save()      
 
 
         private void _writeOptionalAmount(XmlTextWriter writer, string tagName, decimal value, int numDecimals = 2)
