@@ -39,6 +39,7 @@ namespace s2industries.ZUGFeRD
         {
             switch (s)
             {
+                // v1
                 case "urn:ferd:invoice:1.0:basic": return Profile.Basic;
                 case "urn:ferd:invoice:rc:basic": return Profile.Basic;
                 case "urn:ferd:CrossIndustryDocument:invoice:1p0:basic": return Profile.Basic;
@@ -49,6 +50,12 @@ namespace s2industries.ZUGFeRD
                 case "urn:ferd:invoice:1.0:extended": return Profile.Extended;
                 case "urn:ferd:invoice:rc:extended": return Profile.Extended;
                 case "urn:ferd:CrossIndustryDocument:invoice:1p0:extended": return Profile.Extended;
+
+                // v2
+                case "urn:zugferd.de:2p0:minimum": return Profile.Minimum;
+                case "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic": return Profile.Basic;
+                case "urn: cen.eu:en16931: 2017": return Profile.Comfort;
+                case "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended": return Profile.Extended;
             }
 
             return Profile.Unknown;
