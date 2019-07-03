@@ -490,19 +490,62 @@ namespace s2industries.ZUGFeRD
             }
 
             string rawValue = dateNode.InnerText;
-            if ((format == "102") || (rawValue.Length == 8))
-            {
-                if (rawValue.Length != 8)
-                {
-                    throw new Exception("Wrong length of datetime element");
-                }
 
+            switch (format)
+            {
+                case "102":
+                    {
+                        if (rawValue.Length != 8)
+                        {
+                            throw new Exception("Wrong length of datetime element");
+                        }
+
+                        string year = rawValue.Substring(0, 4);
+                        string month = rawValue.Substring(4, 2);
+                        string day = rawValue.Substring(6, 2);
+
+                        return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
+                    }
+                case "610":
+                    {
+                        if (rawValue.Length != 6)
+                        {
+                            throw new Exception("Wrong length of datetime element");
+                        }
+
+                        string year = rawValue.Substring(0, 4);
+                        string month = rawValue.Substring(4, 2);                        
+
+                        return new DateTime(Int32.Parse(year), Int32.Parse(month), 1);
+                    }
+                case "616":
+                    {
+                        if (rawValue.Length != 6)
+                        {
+                            throw new Exception("Wrong length of datetime element");
+                        }
+
+                        string year = rawValue.Substring(0, 4);
+                        string week = rawValue.Substring(4, 2);
+
+                        // code from https://capens.net/content/get-first-day-given-week-iso-8601
+                        DateTime jan4 = new DateTime(Int32.Parse(year), 1, 4);                        
+                        DateTime day = jan4.AddDays((Int32.Parse(week) - 1) * 7); // get a day in the requested week                        
+                        int dayOfWeek = ((int)day.DayOfWeek + 6) % 7; // get day of week, with [mon = 0 ... sun = 6] instead of [sun = 0 ... sat = 6]
+
+                        return day.AddDays(-dayOfWeek);
+                    }
+            }
+
+            // if none of the codes above is present, use fallback approach
+            if (rawValue.Length == 8)
+            {
                 string year = rawValue.Substring(0, 4);
                 string month = rawValue.Substring(4, 2);
                 string day = rawValue.Substring(6, 2);
 
                 return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
-            }
+            }            
             else if (rawValue.Length == 19)
             {
                 string year = rawValue.Substring(0, 4);
@@ -519,7 +562,6 @@ namespace s2industries.ZUGFeRD
             {
                 throw new UnsupportedException();
             }
-
         } // !_nodeAsDateTime()
 
 
