@@ -9,9 +9,9 @@
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2018</Copyright>
-    <AssemblyVersion>2.7.0.0</AssemblyVersion>
+    <AssemblyVersion>2.8.0.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>2.7.0.0</FileVersion>
+    <FileVersion>2.8.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
