@@ -45,6 +45,10 @@ namespace s2industries.ZUGFeRD
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; }
+        public Party Invoicee { get; set; }
+        public Party ShipTo { get; set; }
+        public Party Payee { get; set; }
+        public Party ShipFrom { get; set; }
         public List<Note> Notes { get; set; }
 
         public bool IsTest { get; set; }
