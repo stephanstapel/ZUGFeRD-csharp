@@ -503,7 +503,7 @@ namespace s2industries.ZUGFeRD
         } // !setPaymentMeans()
 
 
-        public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
+        public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {
             this.CreditorBankAccounts.Add(new BankAccount()
             {
@@ -511,7 +511,8 @@ namespace s2industries.ZUGFeRD
                 IBAN = iban,
                 BIC = bic,
                 Bankleitzahl = bankleitzahl,
-                BankName = bankName
+                BankName = bankName,
+                Name = name
             });
         } // !addCreditorFinancialAccount()
 

@@ -194,6 +194,10 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram:PayeePartyCreditorFinancialAccount");
                     Writer.WriteElementString("ram:IBANID", account.IBAN);
+                    if (!String.IsNullOrEmpty(account.Name))
+                    {
+                        Writer.WriteElementString("ram:AccountName", account.Name);
+                    }
                     if (!String.IsNullOrEmpty(account.ID))
                     {
                         Writer.WriteElementString("ram:ProprietaryID", account.ID);
