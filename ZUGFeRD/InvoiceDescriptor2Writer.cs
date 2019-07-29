@@ -142,6 +142,13 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement
 
             Writer.WriteStartElement("ram:ApplicableSupplyChainTradeDelivery"); // Pflichteintrag
+
+            if (Descriptor.Profile == Profile.Extended)
+            {
+                _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo);
+                _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom);
+            }
+
             if (this.Descriptor.ActualDeliveryDate.HasValue)
             {
                 Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent");
@@ -172,6 +179,16 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeDelivery
 
             Writer.WriteStartElement("ram:ApplicableSupplyChainTradeSettlement");
+
+            if (Descriptor.Profile == Profile.Extended)
+            {
+                _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee);
+            }
+            if (Descriptor.Profile != Profile.Minimum)
+            {
+                _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
+            }
+
             if (!String.IsNullOrEmpty(this.Descriptor.InvoiceNoAsReference))
             {
                 _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.InvoiceNoAsReference);
