@@ -148,6 +148,7 @@ namespace s2industries.ZUGFeRD
                         BIC = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
                         Bankleitzahl = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
                         BankName = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:Name", nsmgr),
+                        Name = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:AccountName", nsmgr),
                     };
 
                     retval.CreditorBankAccounts.Add(_account);
