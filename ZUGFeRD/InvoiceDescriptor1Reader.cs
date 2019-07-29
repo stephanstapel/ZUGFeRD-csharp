@@ -578,6 +578,11 @@ namespace s2industries.ZUGFeRD
             }
 
             XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
+            if (node == null)
+            {
+                return null;
+            }
+
             Party retval = new Party()
             {
                 ID = _nodeAsString(node, "ram:ID", nsmgr),
