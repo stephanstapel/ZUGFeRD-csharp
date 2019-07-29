@@ -45,12 +45,28 @@ namespace s2industries.ZUGFeRD
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; }
-        public Party Invoicee { get; set; }
-        public Party ShipTo { get; set; }
-        public Party Payee { get; set; }
-        public Party ShipFrom { get; set; }
-        public List<Note> Notes { get; set; }
 
+        /**
+         * This party is optional and only relevant for Extended profile
+         */
+        public Party Invoicee { get; set; }
+
+        /**
+         * This party is optional and only relevant for Extended profile
+         */
+        public Party ShipTo { get; set; }
+
+        /**
+         * This party is optional and only relevant for Extended profile
+         */
+        public Party Payee { get; set; }
+
+        /**
+         * This party is optional and only relevant for Extended profile
+         */
+        public Party ShipFrom { get; set; }
+
+        public List<Note> Notes { get; set; }
         public bool IsTest { get; set; }
         public Profile Profile { get; set; }
         public InvoiceType Type { get; set; }
