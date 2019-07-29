@@ -172,26 +172,48 @@ namespace s2industries.ZUGFeRD
             }
             Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
-            if ((this.Descriptor.CreditorBankAccounts.Count > 0) || (this.Descriptor.PaymentMeans != null))
+            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
             {
-                Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
-
-                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                if (this.Descriptor.PaymentMeans != null)
                 {
-                    Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                    Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
 
-                    if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteStartElement("ram:ID");
-                        Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                        Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                        Writer.WriteEndElement(); // !ram:ID
-                    }
-                }
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
+                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                        {
+                            Writer.WriteStartElement("ram:ID");
+                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
+                            Writer.WriteEndElement(); // !ram:ID
+                        }
+                    }
+                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
+                }
+            }
+            else
+            {
                 foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
                 {
+                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
+
+                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    {
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+
+                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                        {
+                            Writer.WriteStartElement("ram:ID");
+                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
+                            Writer.WriteEndElement(); // !ram:ID
+                        }
+                    }
+
                     Writer.WriteStartElement("ram:PayeePartyCreditorFinancialAccount");
                     Writer.WriteElementString("ram:IBANID", account.IBAN);
                     if (!String.IsNullOrEmpty(account.Name))
@@ -217,10 +239,27 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("ram:Name", account.BankName);
                     }
                     Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
 
                 foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
                 {
+                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
+
+                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    {
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+
+                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                        {
+                            Writer.WriteStartElement("ram:ID");
+                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
+                            Writer.WriteEndElement(); // !ram:ID
+                        }
+                    }
+
                     Writer.WriteStartElement("ram:PayerPartyDebtorFinancialAccount");
                     Writer.WriteElementString("ram:IBANID", account.IBAN);
                     if (!String.IsNullOrEmpty(account.ID))
@@ -242,28 +281,9 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("ram:Name", account.BankName);
                     }
                     Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
+                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
-
-                Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
             }
-
-
-            /**
-             * @todo add writer for this:
-             * <SpecifiedTradeSettlementPaymentMeans>
-            * <TypeCode>42</TypeCode>
-          * 	<Information>Überweisung</Information>
-           * <PayeePartyCreditorFinancialAccount>
-          * 		<IBANID>DE08700901001234567890</IBANID>
-          * 		<ProprietaryID>1234567890</ProprietaryID>
-          * 	</PayeePartyCreditorFinancialAccount>
-          * 	<PayeeSpecifiedCreditorFinancialInstitution>
-          * 		<BICID>GENODEF1M04</BICID>
-          * 		<GermanBankleitzahlID>70090100</GermanBankleitzahlID>
-          * 		<Name>Hausbank München</Name>
-          * 	</PayeeSpecifiedCreditorFinancialInstitution>
-          * </SpecifiedTradeSettlementPaymentMeans>
-             */
 
             _writeOptionalTaxes(Writer);
 
