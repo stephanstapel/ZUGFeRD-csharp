@@ -30,5 +30,6 @@ namespace s2industries.ZUGFeRD
         public string BIC { get; set; }
         public string Bankleitzahl { get; set; }
         public string BankName { get; set; }
+        public string Name { get; set; }
     }
 }

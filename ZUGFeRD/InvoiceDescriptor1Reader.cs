@@ -125,6 +125,7 @@ namespace s2industries.ZUGFeRD
             retval.InvoiceNoAsReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:PaymentReference", nsmgr);
             retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:InvoiceCurrencyCode", nsmgr));
 
+            // TODO: Multiple SpecifiedTradeSettlementPaymentMeans can exist for each account/institution (with different SEPA?)
             PaymentMeans _tempPaymentMeans = new PaymentMeans()
             {
                 TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
@@ -148,6 +149,7 @@ namespace s2industries.ZUGFeRD
                         BIC = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
                         Bankleitzahl = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
                         BankName = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:Name", nsmgr),
+                        Name = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:AccountName", nsmgr),
                     };
 
                     retval.CreditorBankAccounts.Add(_account);
