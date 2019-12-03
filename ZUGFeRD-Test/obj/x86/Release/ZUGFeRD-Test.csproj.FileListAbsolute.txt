@@ -1,0 +1,8 @@
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Release\ZUGFeRD-Test.exe
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Release\ZUGFeRD-Test.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Release\s2industries.ZUGFeRD.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Release\s2industries.ZUGFeRD.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\obj\x86\Release\ZUGFeRD-Test.csprojResolveAssemblyReference.cache
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\obj\x86\Release\ZUGFeRD-Test.exe
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\obj\x86\Release\ZUGFeRD-Test.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\obj\x86\Release\ZUGFeRD-Test.csproj.CoreCompileInputs.cache

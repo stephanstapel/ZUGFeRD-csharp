@@ -1,0 +1,2 @@
+Version 2.0 vom 11.3.2019: Erstveröffentlichung
+Version 2.0 vom 13.3.2019: Leichte textliche Anpassungen in der Datei ZUGFeRD-2.0-Spezifikation.pdf

@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rsm:CrossIndustryDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rsm="urn:ferd:CrossIndustryDocument:invoice:1p0" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15">
+  <rsm:SpecifiedExchangedDocumentContext>
+    <ram:TestIndicator>
+      <udt:Indicator>false</udt:Indicator>
+    </ram:TestIndicator>
+    <ram:GuidelineSpecifiedDocumentContextParameter>
+      <ram:ID>urn:ferd:CrossIndustryDocument:invoice:1p0:extended</ram:ID>
+    </ram:GuidelineSpecifiedDocumentContextParameter>
+  </rsm:SpecifiedExchangedDocumentContext>
+  <rsm:HeaderExchangedDocument>
+    <ram:ID>R413214</ram:ID>
+    <ram:Name>RECHNUNG</ram:Name>
+    <ram:TypeCode>380</ram:TypeCode>
+    <ram:IssueDateTime>
+      <udt:DateTimeString format="102">20160525</udt:DateTimeString>
+    </ram:IssueDateTime>
+    <ram:IncludedNote>
+      <ram:Content>Nowecor AG
+Im Himmelreich 7
+49610 Quakenbrück
+HRB Nr. HRB 201376</ram:Content>
+      <ram:SubjectCode>REG</ram:SubjectCode>
+    </ram:IncludedNote>
+  </rsm:HeaderExchangedDocument>
+  <rsm:SpecifiedSupplyChainTradeTransaction>
+    <ram:ApplicableSupplyChainTradeAgreement>
+      <ram:SellerTradeParty>
+        <ram:Name>Nowecor AG</ram:Name>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>49610</ram:PostcodeCode>
+          <ram:LineOne>Im Himmelreich 7</ram:LineOne>
+          <ram:CityName>Quakenbrück</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">123</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:SellerTradeParty>
+      <ram:BuyerTradeParty>
+        <ram:ID>01180</ram:ID>
+        <ram:GlobalID schemeID="0060">01180</ram:GlobalID>
+        <ram:Name>Voggenauer, Dirk</ram:Name>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>83209</ram:PostcodeCode>
+          <ram:LineOne>Seestraße 11</ram:LineOne>
+          <ram:CityName>Prien a. Chiemsee</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+      </ram:BuyerTradeParty>
+    </ram:ApplicableSupplyChainTradeAgreement>
+    <ram:ApplicableSupplyChainTradeDelivery>
+      <ram:ActualDeliverySupplyChainEvent>
+        <ram:OccurrenceDateTime>
+          <udt:DateTimeString format="102">20160525</udt:DateTimeString>
+        </ram:OccurrenceDateTime>
+      </ram:ActualDeliverySupplyChainEvent>
+    </ram:ApplicableSupplyChainTradeDelivery>
+    <ram:ApplicableSupplyChainTradeSettlement>
+      <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+      <ram:ApplicableTradeTax>
+        <ram:CalculatedAmount currencyID="EUR">4.22</ram:CalculatedAmount>
+        <ram:TypeCode>VAT</ram:TypeCode>
+        <ram:BasisAmount currencyID="EUR">60.34</ram:BasisAmount>
+        <ram:AllowanceChargeBasisAmount currencyID="EUR">0.61</ram:AllowanceChargeBasisAmount>
+        <ram:CategoryCode>S</ram:CategoryCode>
+        <ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+      </ram:ApplicableTradeTax>
+      <ram:ApplicableTradeTax>
+        <ram:CalculatedAmount currencyID="EUR">0.61</ram:CalculatedAmount>
+        <ram:TypeCode>VAT</ram:TypeCode>
+        <ram:BasisAmount currencyID="EUR">3.22</ram:BasisAmount>
+        <ram:AllowanceChargeBasisAmount currencyID="EUR">0.03</ram:AllowanceChargeBasisAmount>
+        <ram:CategoryCode>S</ram:CategoryCode>
+        <ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+      </ram:ApplicableTradeTax>
+      <ram:SpecifiedTradeAllowanceCharge>
+        <ram:ChargeIndicator>
+          <udt:Indicator>false</udt:Indicator>
+        </ram:ChargeIndicator>
+        <ram:BasisAmount currencyID="EUR">60.95</ram:BasisAmount>
+        <ram:ActualAmount currencyID="EUR">0.61</ram:ActualAmount>
+        <ram:Reason>Rechnungsrabatt</ram:Reason>
+        <ram:CategoryTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+        </ram:CategoryTradeTax>
+      </ram:SpecifiedTradeAllowanceCharge>
+      <ram:SpecifiedTradeAllowanceCharge>
+        <ram:ChargeIndicator>
+          <udt:Indicator>false</udt:Indicator>
+        </ram:ChargeIndicator>
+        <ram:BasisAmount currencyID="EUR">3.25</ram:BasisAmount>
+        <ram:ActualAmount currencyID="EUR">0.03</ram:ActualAmount>
+        <ram:Reason>Rechnungsrabatt</ram:Reason>
+        <ram:CategoryTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+        </ram:CategoryTradeTax>
+      </ram:SpecifiedTradeAllowanceCharge>
+      <ram:SpecifiedTradeSettlementMonetarySummation>
+        <ram:LineTotalAmount currencyID="EUR">64.20</ram:LineTotalAmount>
+        <ram:ChargeTotalAmount currencyID="EUR">0.00</ram:ChargeTotalAmount>
+        <ram:AllowanceTotalAmount currencyID="EUR">0.64</ram:AllowanceTotalAmount>
+        <ram:TaxBasisTotalAmount currencyID="EUR">63.56</ram:TaxBasisTotalAmount>
+        <ram:TaxTotalAmount currencyID="EUR">4.83</ram:TaxTotalAmount>
+        <ram:GrandTotalAmount currencyID="EUR">68.39</ram:GrandTotalAmount>
+        <ram:TotalPrepaidAmount currencyID="EUR">0.00</ram:TotalPrepaidAmount>
+        <ram:DuePayableAmount currencyID="EUR">68.39</ram:DuePayableAmount>
+      </ram:SpecifiedTradeSettlementMonetarySummation>
+    </ram:ApplicableSupplyChainTradeSettlement>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>1</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedSupplyChainTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssueDateTime>2016-05-17T00:00:00</ram:IssueDateTime>
+          <ram:ID>AU16104506</ram:ID>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>1</ram:LineID>
+          <ram:ID>71141</ram:ID>
+          <ram:ReferenceTypeCode>AUT</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>1</ram:LineID>
+          <ram:ID>16219893</ram:ID>
+          <ram:ReferenceTypeCode>IV</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">3.2500</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">3.2500</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedSupplyChainTradeAgreement>
+      <ram:SpecifiedSupplyChainTradeDelivery>
+        <ram:BilledQuantity unitCode="C62">1.0000</ram:BilledQuantity>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssueDateTime>2016-05-18T00:00:00</ram:IssueDateTime>
+          <ram:ID>16634697</ram:ID>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedSupplyChainTradeDelivery>
+      <ram:SpecifiedSupplyChainTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:ApplicablePercent>19.00</ram:ApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementMonetarySummation>
+          <ram:LineTotalAmount currencyID="EUR">3.25</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementMonetarySummation>
+      </ram:SpecifiedSupplyChainTradeSettlement>
+      <ram:SpecifiedTradeProduct>
+        <ram:Name>Zuschläge/Versandkosten            </ram:Name>
+      </ram:SpecifiedTradeProduct>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>2</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedSupplyChainTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssueDateTime>2016-05-17T00:00:00</ram:IssueDateTime>
+          <ram:ID>AU16104506</ram:ID>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>2</ram:LineID>
+          <ram:ID>71141</ram:ID>
+          <ram:ReferenceTypeCode>AUT</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>2</ram:LineID>
+          <ram:ID>16219893</ram:ID>
+          <ram:ReferenceTypeCode>IV</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">19.9500</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">19.9500</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedSupplyChainTradeAgreement>
+      <ram:SpecifiedSupplyChainTradeDelivery>
+        <ram:BilledQuantity unitCode="C62">1.0000</ram:BilledQuantity>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssueDateTime>2016-05-18T00:00:00</ram:IssueDateTime>
+          <ram:ID>16634697</ram:ID>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedSupplyChainTradeDelivery>
+      <ram:SpecifiedSupplyChainTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementMonetarySummation>
+          <ram:LineTotalAmount currencyID="EUR">19.95</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementMonetarySummation>
+      </ram:SpecifiedSupplyChainTradeSettlement>
+      <ram:SpecifiedTradeProduct>
+        <ram:SellerAssignedID>112920</ram:SellerAssignedID>
+        <ram:Name>ManuBasic                          </ram:Name>
+        <ram:Description>SMALL HAUT Rechts                  </ram:Description>
+      </ram:SpecifiedTradeProduct>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>3</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedSupplyChainTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssueDateTime>2016-05-18T00:00:00</ram:IssueDateTime>
+          <ram:ID>BP16045871</ram:ID>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>3</ram:LineID>
+          <ram:ID>71141</ram:ID>
+          <ram:ReferenceTypeCode>AUT</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>3</ram:LineID>
+          <ram:ID>16220383</ram:ID>
+          <ram:ReferenceTypeCode>IV</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">20.5000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">20.5000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedSupplyChainTradeAgreement>
+      <ram:SpecifiedSupplyChainTradeDelivery>
+        <ram:BilledQuantity unitCode="C62">1.0000</ram:BilledQuantity>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssueDateTime>2016-05-18T00:00:00</ram:IssueDateTime>
+          <ram:ID>16635254</ram:ID>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedSupplyChainTradeDelivery>
+      <ram:SpecifiedSupplyChainTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementMonetarySummation>
+          <ram:LineTotalAmount currencyID="EUR">20.50</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementMonetarySummation>
+      </ram:SpecifiedSupplyChainTradeSettlement>
+      <ram:SpecifiedTradeProduct>
+        <ram:SellerAssignedID>112780</ram:SellerAssignedID>
+        <ram:Name>Soft Daumen-Schiene plus           </ram:Name>
+        <ram:Description>MEDIUM BLAU                        </ram:Description>
+      </ram:SpecifiedTradeProduct>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>4</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedSupplyChainTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssueDateTime>2016-05-18T00:00:00</ram:IssueDateTime>
+          <ram:ID>BP16045871</ram:ID>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>4</ram:LineID>
+          <ram:ID>71141</ram:ID>
+          <ram:ReferenceTypeCode>AUT</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:AdditionalReferencedDocument>
+          <ram:LineID>4</ram:LineID>
+          <ram:ID>16220383</ram:ID>
+          <ram:ReferenceTypeCode>IV</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">20.5000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">20.5000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedSupplyChainTradeAgreement>
+      <ram:SpecifiedSupplyChainTradeDelivery>
+        <ram:BilledQuantity unitCode="C62">1.0000</ram:BilledQuantity>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssueDateTime>2016-05-18T00:00:00</ram:IssueDateTime>
+          <ram:ID>16635254</ram:ID>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedSupplyChainTradeDelivery>
+      <ram:SpecifiedSupplyChainTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:ApplicablePercent>7.00</ram:ApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementMonetarySummation>
+          <ram:LineTotalAmount currencyID="EUR">20.50</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementMonetarySummation>
+      </ram:SpecifiedSupplyChainTradeSettlement>
+      <ram:SpecifiedTradeProduct>
+        <ram:SellerAssignedID>112780</ram:SellerAssignedID>
+        <ram:Name>Soft Daumen-Schiene plus           </ram:Name>
+        <ram:Description>LARGE BLAU                         </ram:Description>
+      </ram:SpecifiedTradeProduct>
+    </ram:IncludedSupplyChainTradeLineItem>
+  </rsm:SpecifiedSupplyChainTradeTransaction>
+</rsm:CrossIndustryDocument>

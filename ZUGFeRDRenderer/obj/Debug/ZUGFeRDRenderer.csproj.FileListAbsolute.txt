@@ -1,0 +1,11 @@
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\s2industries.ZUGFeRDRenderer.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\s2industries.ZUGFeRDRenderer.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\RazorEngine.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\s2industries.ZUGFeRD.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\System.Web.Razor.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\s2industries.ZUGFeRD.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\RazorEngine.xml
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\bin\Debug\System.Web.Razor.xml
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\obj\Debug\ZUGFeRDRenderer.csprojResolveAssemblyReference.cache
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\obj\Debug\s2industries.ZUGFeRDRenderer.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDRenderer\obj\Debug\s2industries.ZUGFeRDRenderer.pdb

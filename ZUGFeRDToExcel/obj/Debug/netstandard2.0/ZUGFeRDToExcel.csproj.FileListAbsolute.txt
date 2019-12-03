@@ -1,0 +1,12 @@
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\bin\Debug\netstandard2.0\ZUGFeRDToExcel.deps.json
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\bin\Debug\netstandard2.0\ZUGFeRDToExcel.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\bin\Debug\netstandard2.0\s2industries.ZUGFeRD.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\bin\Debug\netstandard2.0\s2industries.ZUGFeRD.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.csprojAssemblyReference.cache
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.csproj.CoreCompileInputs.cache
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.AssemblyInfoInputs.cache
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.AssemblyInfo.cs
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.csproj.CopyComplete
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\bin\Debug\netstandard2.0\ZUGFeRDToExcel.pdb
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.dll
+E:\develop\ZUGFeRD-csharp\ZUGFeRDToExcel\obj\Debug\netstandard2.0\ZUGFeRDToExcel.pdb

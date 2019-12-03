@@ -1,0 +1,12 @@
+Version 2.0 vom 11.3.2019: Erstveröffentlichung
+Version 2.0 vom 13.3.2019: Leichte textliche Anpassungen in der Datei ZUGFeRD-2.0-Spezifikation.pdf
+Version 2.0. vom 21.3.2019: Weitere Schemata zugefügt:
+     "Schema\BASIC und MINIMUM\zugferd2p0_basicwl_minimum_codedb.xml"
+     "Schema\EN16931\zugferd2p0_en16931_codedb.xml"
+     "Schema\EXTENDED\zugferd2p0_extended_codedb.xml"
+Version 2.0.1 vom 15.10.2019: Korrekturversion
+     Aktualisierung Codelisten
+     Fehlerbehebung Gross/Kleinschreibung in der Spezifikationskennung
+     Korrektur einzelner Kardinalitäten
+     Weitere Anpassungen
+     Siehe auch das Dokument ZUGFeRD201_kritische_Fehler_behoben.pdf
