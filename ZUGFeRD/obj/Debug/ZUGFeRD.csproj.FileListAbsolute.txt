@@ -1,6 +1,0 @@
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\bin\Debug\s2industries.ZUGFeRD.dll
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\bin\Debug\s2industries.ZUGFeRD.pdb
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\s2industries.ZUGFeRD.dll
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\s2industries.ZUGFeRD.pdb
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\ZUGFeRD.csproj.CoreCompileInputs.cache
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\ZUGFeRD.csprojAssemblyReference.cache

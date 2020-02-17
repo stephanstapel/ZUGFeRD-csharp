@@ -1,9 +1,0 @@
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\netstandard2.0\ZUGFeRD.csproj.CoreCompileInputs.cache
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\netstandard2.0\ZUGFeRD.AssemblyInfoInputs.cache
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\netstandard2.0\ZUGFeRD.AssemblyInfo.cs
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\bin\Debug\netstandard2.0\s2industries.ZUGFeRD.deps.json
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\bin\Debug\netstandard2.0\s2industries.ZUGFeRD.dll
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\bin\Debug\netstandard2.0\s2industries.ZUGFeRD.pdb
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\netstandard2.0\s2industries.ZUGFeRD.dll
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\netstandard2.0\s2industries.ZUGFeRD.pdb
-E:\develop\ZUGFeRD-csharp\ZUGFeRD\obj\Debug\netstandard2.0\ZUGFeRD.csprojAssemblyReference.cache
