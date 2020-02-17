@@ -511,7 +511,7 @@ namespace s2industries.ZUGFeRD
                         string month = rawValue.Substring(4, 2);
                         string day = rawValue.Substring(6, 2);
 
-                        return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
+                        return _safeParseDateTime(year, month, day);
                     }
                 case "610":
                     {
@@ -522,8 +522,9 @@ namespace s2industries.ZUGFeRD
 
                         string year = rawValue.Substring(0, 4);
                         string month = rawValue.Substring(4, 2);
+                        string day = "1";
 
-                        return new DateTime(Int32.Parse(year), Int32.Parse(month), 1);
+                        return _safeParseDateTime(year, month, day);
                     }
                 case "616":
                     {
@@ -551,7 +552,15 @@ namespace s2industries.ZUGFeRD
                 string month = rawValue.Substring(4, 2);
                 string day = rawValue.Substring(6, 2);
 
-                return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day));
+                return _safeParseDateTime(year, month, day);
+            }
+            else if ((rawValue.Length == 10) && (rawValue[4] == '-') && (rawValue[7] == '-')) // yyyy-mm-dd
+            {
+                string year = rawValue.Substring(0, 4);
+                string month = rawValue.Substring(5, 2);
+                string day = rawValue.Substring(8, 2);
+
+                return _safeParseDateTime(year, month, day);
             }
             else if (rawValue.Length == 19)
             {
@@ -563,13 +572,50 @@ namespace s2industries.ZUGFeRD
                 string minute = rawValue.Substring(14, 2);
                 string second = rawValue.Substring(17, 2);
 
-                return new DateTime(Int32.Parse(year), Int32.Parse(month), Int32.Parse(day), Int32.Parse(hour), Int32.Parse(minute), Int32.Parse(second));
+
+                return _safeParseDateTime(year, month, day, hour, minute, second);
             }
             else
             {
                 throw new UnsupportedException();
             }
         } // !_nodeAsDateTime()
+
+
+        private static DateTime? _safeParseDateTime(string year, string month, string day, string hour = "0", string minute = "0", string second = "0")
+        {
+            if (!Int32.TryParse(year, out int _year))
+            {
+                return null;
+            }
+
+            if (!Int32.TryParse(month, out int _month))
+            {
+                return null;
+            }
+
+            if (!Int32.TryParse(day, out int _day))
+            {
+                return null;
+            }
+
+            if (!Int32.TryParse(hour, out int _hour))
+            {
+                return null;
+            }
+
+            if (!Int32.TryParse(minute, out int _minute))
+            {
+                return null;
+            }
+
+            if (!Int32.TryParse(second, out int _second))
+            {
+                return null;
+            }
+
+            return new DateTime(_year, _month, _day, _hour, _minute, _second);
+        } // !_safeParseDateTime()
 
 
         private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
