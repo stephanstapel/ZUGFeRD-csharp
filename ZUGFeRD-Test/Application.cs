@@ -30,7 +30,7 @@ namespace ZUGFeRD_Test
         internal void Run()
         {
 
-            InvoiceDescriptor desc = InvoiceDescriptor.Load("c:\\temp\\zugferd.xml");
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(@"E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Debug\zugferd.xml");
 
             ZugFerdComfortEinfachGenerator generator = new ZugFerdComfortEinfachGenerator();
             generator.generate();
