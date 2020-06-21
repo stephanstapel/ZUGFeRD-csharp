@@ -25,5 +25,9 @@ namespace s2industries.ZUGFeRD
 {
     public class UnsupportedException : Exception
     {
+        public UnsupportedException(string message)
+            : base(message)
+        {
+        } // !UnsupportedException()
     }
 }

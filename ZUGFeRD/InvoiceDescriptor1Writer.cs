@@ -43,7 +43,7 @@ namespace s2industries.ZUGFeRD
             // validate data
             if ((descriptor.Profile == Profile.BasicWL) || (descriptor.Profile == Profile.Minimum))
             {
-                throw new Exception("Invalid profile used for ZUGFeRD 1.x invoice.");
+                throw new UnsupportedException("Invalid profile used for ZUGFeRD 1.x invoice.");
             }
 
             // write data
@@ -798,27 +798,6 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalContact()
 
 
-        private void _writeOptionalElementString(XmlTextWriter writer, string tagName, string value)
-        {
-            if (!String.IsNullOrEmpty(value))
-            {
-                writer.WriteElementString(tagName, value);
-            }
-        } // !_writeOptionalElementString()
-
-
-        private string _formatDecimal(decimal value, int numDecimals = 2)
-        {
-            string formatString = "0.";
-            for (int i = 0; i < numDecimals; i++)
-            {
-                formatString += "0";
-            }
-
-            return value.ToString(formatString).Replace(",", ".");
-        } // !_formatDecimal()
-
-
         private string _translateInvoiceType(InvoiceType type)
         {
             switch (type)
@@ -854,18 +833,5 @@ namespace s2industries.ZUGFeRD
                 default: return (int)InvoiceType.Unknown;
             }
         } // !_translateInvoiceType()
-
-
-        private string _formatDate(DateTime date, bool formatAs102 = true)
-        {
-            if (formatAs102)
-            {
-                return date.ToString("yyyyMMdd");
-            }
-            else
-            {
-                return date.ToString("yyyy-MM-ddTHH:mm:ss");
-            }
-        } // !_formatDate()
     }
 }
