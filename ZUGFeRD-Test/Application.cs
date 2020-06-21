@@ -26,6 +26,8 @@ namespace ZUGFeRD_Test
     {
         internal void Run()
         {
+            _loadZUGFeRD2Invoice();
+
             InvoiceDescriptor desc = InvoiceDescriptor.Load(@"zugferd.xml");
 
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
@@ -36,25 +38,34 @@ namespace ZUGFeRD_Test
             generator2.generate();
             generator2.read();
 
-            _loadZUGFeRDEinfachOriginalInvoice();
-            _loadZUGFeRDComfortRabatteInvoice();
+            _loadZUGFeRD1EinfachOriginalInvoice();
+            _loadZUGFeRD1ComfortRabatteInvoice();
 
-            _saveAndLoadZUGFeRDInvoice();
-            _saveAndLoadZUGFeRDInvoiceViaStream();
+            _saveAndLoadZUGFeRD1Invoice();
+            _saveAndLoadZUGFeRD1InvoiceViaStream();            
         } // !run()
 
 
-        private void _loadZUGFeRDEinfachOriginalInvoice()
+        private void _loadZUGFeRD2Invoice()
+        {
+            string path = @"..\..\..\demodata\zugferdi201\zugferd_2p0_BASIC_Einfach.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+        } // !_loadZUGFeRD2Invoice()
+
+
+        private void _loadZUGFeRD1EinfachOriginalInvoice()
         {
             string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Einfach_Original.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
-        } // !_loadZUGFeRDEinfachOriginalInvoice()
+        } // !_loadZUGFeRD1EinfachOriginalInvoice()
 
 
-        private void _loadZUGFeRDComfortRabatteInvoice()
+        private void _loadZUGFeRD1ComfortRabatteInvoice()
         {
             string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
@@ -67,17 +78,17 @@ namespace ZUGFeRD_Test
         } // !_loadZUGFeRDComfortRabatteInvoice()
 
 
-        private void _saveAndLoadZUGFeRDInvoice()
+        private void _saveAndLoadZUGFeRD1Invoice()
         {
             string path = "output.xml";
             InvoiceDescriptor desc = _createInvoice();
             desc.Save(path);
 
             InvoiceDescriptor desc2 = InvoiceDescriptor.Load(path);
-        } // !_saveAndLoadZUGFeRDInvoice()
+        } // !_saveAndLoadZUGFeRD1Invoice()
 
 
-        private void _saveAndLoadZUGFeRDInvoiceViaStream()
+        private void _saveAndLoadZUGFeRD1InvoiceViaStream()
         {
             InvoiceDescriptor desc = _createInvoice();
 
@@ -100,7 +111,7 @@ namespace ZUGFeRD_Test
 
             byte[] data = ms.ToArray();
             string s = System.Text.Encoding.Default.GetString(data);
-        } // !_saveAndLoadZUGFeRDInvoiceViaStream()
+        } // !_saveAndLoadZUGFeRD1InvoiceViaStream()
 
 
         private InvoiceDescriptor _createInvoice()

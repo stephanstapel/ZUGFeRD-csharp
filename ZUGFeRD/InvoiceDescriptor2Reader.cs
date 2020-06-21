@@ -257,19 +257,22 @@ namespace s2industries.ZUGFeRD
                     "urn:cen.eu:en16931:2017"
                 };
 
+            long _oldStreamPosition = stream.Position;
             stream.Position = 0;
-            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
             {
                 string data = reader.ReadToEnd();               
                 foreach(string validURI in validURIs)
                 {
                     if (data.Contains(validURI))
                     {
+                        stream.Position = _oldStreamPosition;
                         return true;
                     }
                 }
             }
 
+            stream.Position = _oldStreamPosition;
             return false;
         } // !IsReadableByThisReaderVersion()
         
