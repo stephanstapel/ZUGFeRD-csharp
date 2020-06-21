@@ -1,11 +1,24 @@
-Now part of the ZUGFeRD community:
+Part of the ZUGFeRD community:
 https://github.com/zugferd
 
-
+# Introduction
 The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD.
-
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
+A description of the library can be found here:
+http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
+
+# Using ZUGFeRD 1.x and ZUGFeRD 2.x
+Central class for users is class InvoiceDescriptor.
+This class does not only allow to read and set all ZUGFeRD attributes and structures but also allows to load and save ZUGFeRD files.
+
+In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing either a Stream object or a file path.
+The library will automatically detect the ZUGFeRD version of the file and parse accordingly. As of today (2020-06-21), parsing ZUGFeRD 2.x 
+is not yet finished.
+For saving ZUGFeRD files, use InvoiceDescriptor.Save(). Here, you can also pass either a stream object or a file path. Optionally, you
+can pass the ZUGFeRD version to use, default currently is version 1.x.
+
+# Creating invoices (ZUGFeRD 1.x)
 The code used here is:
 
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
@@ -30,12 +43,12 @@ desc.setTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% S
 
 desc.Save("output.xml");
 
-A description of the library can be found here:
-http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
 
+# Thanks
 The solution is used in CKS.DMS and supported by CKSolution:
 http://www.cksolution.de
 
+# Links
 You can find more information about ZUGFeRD here:
 http://www.ferd-net.de/
 
