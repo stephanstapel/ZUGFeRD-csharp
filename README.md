@@ -6,21 +6,71 @@ The ZUGFeRD library allows to create XML files as required by German electronic 
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
 A description of the library can be found here:
+
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
+
+# Installation
+Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-chsarp'.
+
+You can find more information about the nuget package here:
+
+https://www.nuget.org/packages/ZUGFeRD-csharp/
 
 # Using ZUGFeRD 1.x and ZUGFeRD 2.x
 Central class for users is class InvoiceDescriptor.
 This class does not only allow to read and set all ZUGFeRD attributes and structures but also allows to load and save ZUGFeRD files.
 
-In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing either a Stream object or a file path.
-The library will automatically detect the ZUGFeRD version of the file and parse accordingly. As of today (2020-06-21), parsing ZUGFeRD 2.x 
-is not yet finished.
-For saving ZUGFeRD files, use InvoiceDescriptor.Save(). Here, you can also pass either a stream object or a file path. Optionally, you
-can pass the ZUGFeRD version to use, default currently is version 1.x.
+In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
+
+```csharp
+InvoiceDescriptor descriptor = InvoiceDescriptor.Load("zugferd.xml");
+```
+
+alternatively, you can pass an open stream object:
+
+```csharp
+Stream stream = new FileStream("zugferd.xml", FileMode.Open, FileAccess.Read);
+InvoiceDescriptor descriptor = InvoiceDescriptor.Load(stream);
+```
+
+The library will automatically detect the ZUGFeRD version of the file and parse accordingly. As of today (2020-06-21), parsing ZUGFeRD 2.x is not yet finished.
+For saving ZUGFeRD files, use InvoiceDescriptor.Save(). Here, you can also pass a stream object:
+
+```csharp
+InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
+
+// fill attributes and structures
+
+FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
+descriptor.Save(stream);
+stream.Flush();
+stream.Close();            
+```
+
+Alternatively, you can pass a file path:
+
+```csharp
+InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
+
+// fill attributes and structures
+
+descriptor.Save("zugferd.xml");          
+```
+
+Optionally, you can pass the ZUGFeRD version to use, default currently is version 1.x, e.g.:
+
+```csharp
+InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
+
+// fill attributes and structures
+
+descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version2);          
+```
 
 # Creating invoices (ZUGFeRD 1.x)
 The code used here is:
 
+```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
 desc.Profile = Profile.Comfort;
 desc.ReferenceOrderNo = "AB-312";
@@ -42,7 +92,7 @@ desc.SetLogisticsServiceCharge(5.80m, "Versandkosten", "VAT", "S", 7m);
 desc.setTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
 
 desc.Save("output.xml");
-
+```
 
 # Thanks
 The solution is used in CKS.DMS and supported by CKSolution:
