@@ -26,9 +26,15 @@ namespace ZUGFeRD_Test
     {
         internal void Run()
         {
-            _loadZUGFeRD2Invoice();
+            _loadZUGFeRD2EinfachInvoice();
+            _loadZUGFeRD2ExtendedInvoice();
 
-            InvoiceDescriptor desc = InvoiceDescriptor.Load(@"zugferd.xml");
+            /*
+            _loadZUGFeRD21BasicInvoice();
+            _loadZUGFeRD21BasicWLInvoice();
+            _loadZUGFeRD21ExtendedInvoice();
+            _loadZUGFeRD21MinimumInvoice();
+            */
 
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
@@ -46,13 +52,77 @@ namespace ZUGFeRD_Test
         } // !run()
 
 
-        private void _loadZUGFeRD2Invoice()
+        private void _loadZUGFeRD21BasicInvoice()
+        {
+            string path = @"..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+
+            Assert.AreEqual(desc.Profile, Profile.Basic);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD21BasicInvoice()
+
+
+        private void _loadZUGFeRD21BasicWLInvoice()
+        {
+
+            string path = @"..\..\..\demodata\zugferd21\zugferd_2p1_BASIC-WL_Einfach-factur-x.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+
+            Assert.AreEqual(desc.Profile, Profile.BasicWL);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD21BasicWLInvoice()
+
+
+        private void _loadZUGFeRD21ExtendedInvoice()
+        {
+            string path = @"..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+
+            Assert.AreEqual(desc.Profile, Profile.Extended);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD21ExtendedInvoice()
+
+
+        private void _loadZUGFeRD21MinimumInvoice()
+        {
+            string path = @"..\..\..\demodata\zugferd21\zugferd_2p1_MINIMUM_Rechnung-factur-x.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+
+            Assert.AreEqual(desc.Profile, Profile.Minimum);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD21MinimumInvoice()
+
+
+        private void _loadZUGFeRD2EinfachInvoice()
         {
             string path = @"..\..\..\demodata\zugferdi201\zugferd_2p0_BASIC_Einfach.xml";
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
-        } // !_loadZUGFeRD2Invoice()
+
+            Assert.AreEqual(desc.Profile, Profile.Basic);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD2EinfachInvoice()
+
+
+        private void _loadZUGFeRD2ExtendedInvoice()
+        {
+            string path = @"..\..\..\demodata\zugferdi201\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+
+            Assert.AreEqual(desc.Profile, Profile.Extended);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD2ExtendedInvoice()
 
 
         private void _loadZUGFeRD1EinfachOriginalInvoice()
