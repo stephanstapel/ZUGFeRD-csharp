@@ -117,7 +117,7 @@ namespace ZUGFeRD_Test
 
         private void _loadZUGFeRD2EinfachInvoice()
         {
-            string path = @"..\..\..\demodata\zugferdi201\zugferd_2p0_BASIC_Einfach.xml";
+            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -130,7 +130,7 @@ namespace ZUGFeRD_Test
 
         private void _loadZUGFeRD2ExtendedInvoice()
         {
-            string path = @"..\..\..\demodata\zugferdi201\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
