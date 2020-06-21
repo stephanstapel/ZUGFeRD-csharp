@@ -29,7 +29,8 @@ namespace s2industries.ZUGFeRD
         Basic = 1,
         Comfort = 2,
         Extended = 3,
-        Minimum = 4
+        Minimum = 4,
+        BasicWL = 5
     }
 
 
@@ -56,6 +57,12 @@ namespace s2industries.ZUGFeRD
                 case "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic": return Profile.Basic;
                 case "urn: cen.eu:en16931: 2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended": return Profile.Extended;
+
+                // v2.1
+                case "urn:factur-x.eu:1p0:minimum": return Profile.Minimum;
+                case "urn: cen.eu:en16931: 2017#compliant#urn:factur-x.eu:1p0:basic": return Profile.Basic;
+                case "urn:factur-x.eu:1p0:basicwl": return Profile.BasicWL;
+                case "urn:cen.eu:en16931:2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
             }
 
@@ -88,12 +95,13 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                /**
-                 * @odo add profiles for ZUGFeRD 2.1
-                 */
-
                 switch (profile)
                 {
+                    case Profile.Minimum: return "urn:factur-x.eu:1p0:minimum";
+                    case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic";
+                    case Profile.BasicWL: return "urn:factur-x.eu:1p0:basicwl";
+                    case Profile.Comfort: return "urn:cen.eu:en16931:2017";
+                    case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
                     default: return "";
                 }
             }
