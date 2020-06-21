@@ -58,6 +58,7 @@ namespace ZUGFeRD_Test
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
 
             Assert.AreEqual(desc.Profile, Profile.Basic);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
@@ -71,6 +72,7 @@ namespace ZUGFeRD_Test
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
 
             Assert.AreEqual(desc.Profile, Profile.BasicWL);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
@@ -83,6 +85,7 @@ namespace ZUGFeRD_Test
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
 
             Assert.AreEqual(desc.Profile, Profile.Extended);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
@@ -95,6 +98,7 @@ namespace ZUGFeRD_Test
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
 
             Assert.AreEqual(desc.Profile, Profile.Minimum);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
@@ -107,6 +111,7 @@ namespace ZUGFeRD_Test
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
 
             Assert.AreEqual(desc.Profile, Profile.Basic);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
@@ -119,6 +124,7 @@ namespace ZUGFeRD_Test
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
 
             Assert.AreEqual(desc.Profile, Profile.Extended);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
