@@ -28,6 +28,7 @@ namespace s2industries.ZUGFeRD
         public string Description { get; set; }
         public DateTime? DueDate { get; set; }
 
+
         public PaymentTerms()
         {
             this.DueDate = DateTime.MinValue;
