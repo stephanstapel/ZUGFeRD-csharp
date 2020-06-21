@@ -247,7 +247,10 @@ namespace s2industries.ZUGFeRD
         {
             List<string> validURIs = new List<string>()
                 {
-                    "urn:ferd:CrossIndustryDocument:invoice:1p0:extended",
+                    "urn:factur-x.eu:1p0:basicwl",
+                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",
+                    "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",
+                    "urn:factur-x.eu:1p0:minimum",
                     "urn:cen.eu:en16931:2017"
                 };
 

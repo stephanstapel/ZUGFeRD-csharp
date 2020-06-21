@@ -25,7 +25,7 @@ namespace s2industries.ZUGFeRD
 {
     public enum Profile
     {
-        Unknown = 0,        
+        Unknown = 0,
         Basic = 1,
         Comfort = 2,
         Extended = 3,
@@ -60,7 +60,7 @@ namespace s2industries.ZUGFeRD
 
                 // v2.1
                 case "urn:factur-x.eu:1p0:minimum": return Profile.Minimum;
-                case "urn: cen.eu:en16931: 2017#compliant#urn:factur-x.eu:1p0:basic": return Profile.Basic;
+                case "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic": return Profile.Basic;
                 case "urn:factur-x.eu:1p0:basicwl": return Profile.BasicWL;
                 case "urn:cen.eu:en16931:2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
