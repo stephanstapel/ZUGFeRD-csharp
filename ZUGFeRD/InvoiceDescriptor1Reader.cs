@@ -247,7 +247,10 @@ namespace s2industries.ZUGFeRD
             {
                 "urn:ferd:invoice:1.0:basic",
                 "urn:ferd:invoice:1.0:comfort",
-                "urn:ferd:invoice:1.0:extended"
+                "urn:ferd:invoice:1.0:extended",
+                "urn:ferd:CrossIndustryDocument:invoice:1p0:basic",
+                "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort",
+                "urn:ferd:CrossIndustryDocument:invoice:1p0:extended"
             };
 
             long _oldStreamPosition = stream.Position;
