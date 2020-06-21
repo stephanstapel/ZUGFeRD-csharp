@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsm:CrossIndustryInvoice xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
+                          xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"
+                          xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+                          xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+                          xmlns="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100">
+   <rsm:ExchangedDocumentContext>
+      <ram:GuidelineSpecifiedDocumentContextParameter>
+         <ram:ID>urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2</ram:ID>
+      </ram:GuidelineSpecifiedDocumentContextParameter>
+   </rsm:ExchangedDocumentContext>
+   <rsm:ExchangedDocument>
+      <ram:ID>0815-99-1-a</ram:ID>
+      <ram:TypeCode>380</ram:TypeCode>
+      <ram:IssueDateTime>
+         <udt:DateTimeString format="102">20200621</udt:DateTimeString>
+      </ram:IssueDateTime>
+      <ram:IncludedNote>
+         <ram:Content>Das ist lediglich eine Testrechnung des SCAG eRechnungs-Testgenerators... </ram:Content>
+         <ram:SubjectCode>ADU</ram:SubjectCode>
+      </ram:IncludedNote>
+   </rsm:ExchangedDocument>
+   <rsm:SupplyChainTradeTransaction>
+      <ram:IncludedSupplyChainTradeLineItem>
+         <ram:AssociatedDocumentLineDocument>
+            <ram:LineID>0</ram:LineID>
+         </ram:AssociatedDocumentLineDocument>
+         <ram:SpecifiedTradeProduct>
+            <ram:SellerAssignedID>0815</ram:SellerAssignedID>
+            <ram:Name>Leimbinder</ram:Name>
+            <ram:Description>Leimbinder 2x18m; Birke</ram:Description>
+         </ram:SpecifiedTradeProduct>
+         <ram:SpecifiedLineTradeAgreement>
+            <ram:NetPriceProductTradePrice>
+               <ram:ChargeAmount>1245.98</ram:ChargeAmount>
+            </ram:NetPriceProductTradePrice>
+         </ram:SpecifiedLineTradeAgreement>
+         <ram:SpecifiedLineTradeDelivery>
+            <ram:BilledQuantity unitCode="C62">1</ram:BilledQuantity>
+         </ram:SpecifiedLineTradeDelivery>
+         <ram:SpecifiedLineTradeSettlement>
+            <ram:ApplicableTradeTax>
+               <ram:TypeCode>VAT</ram:TypeCode>
+               <ram:CategoryCode>S</ram:CategoryCode>
+               <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+            </ram:ApplicableTradeTax>
+            <ram:SpecifiedTradeSettlementLineMonetarySummation>
+               <ram:LineTotalAmount>1245.98</ram:LineTotalAmount>
+            </ram:SpecifiedTradeSettlementLineMonetarySummation>
+         </ram:SpecifiedLineTradeSettlement>
+      </ram:IncludedSupplyChainTradeLineItem>
+      <ram:IncludedSupplyChainTradeLineItem>
+         <ram:AssociatedDocumentLineDocument>
+            <ram:LineID>1</ram:LineID>
+         </ram:AssociatedDocumentLineDocument>
+         <ram:SpecifiedTradeProduct>
+            <ram:SellerAssignedID>MON</ram:SellerAssignedID>
+            <ram:Name>Montage</ram:Name>
+            <ram:Description>Montage durch Fachpersonal</ram:Description>
+         </ram:SpecifiedTradeProduct>
+         <ram:SpecifiedLineTradeAgreement>
+            <ram:NetPriceProductTradePrice>
+               <ram:ChargeAmount>200.00</ram:ChargeAmount>
+            </ram:NetPriceProductTradePrice>
+         </ram:SpecifiedLineTradeAgreement>
+         <ram:SpecifiedLineTradeDelivery>
+            <ram:BilledQuantity unitCode="C62">1</ram:BilledQuantity>
+         </ram:SpecifiedLineTradeDelivery>
+         <ram:SpecifiedLineTradeSettlement>
+            <ram:ApplicableTradeTax>
+               <ram:TypeCode>VAT</ram:TypeCode>
+               <ram:CategoryCode>S</ram:CategoryCode>
+               <ram:RateApplicablePercent>7</ram:RateApplicablePercent>
+            </ram:ApplicableTradeTax>
+            <ram:SpecifiedTradeSettlementLineMonetarySummation>
+               <ram:LineTotalAmount>200.00</ram:LineTotalAmount>
+            </ram:SpecifiedTradeSettlementLineMonetarySummation>
+         </ram:SpecifiedLineTradeSettlement>
+      </ram:IncludedSupplyChainTradeLineItem>
+      <ram:ApplicableHeaderTradeAgreement>
+         <ram:BuyerReference>9900 0000 - 1234 56 - 23</ram:BuyerReference>
+         <ram:SellerTradeParty>
+            <ram:GlobalID>Harry Hirsch Holz- und Trockenbau</ram:GlobalID>
+            <ram:Name>Harry Hirsch Holz- und Trockenbau</ram:Name>
+            <ram:DefinedTradeContact>
+               <ram:PersonName>Harry Hirsch</ram:PersonName>
+               <ram:TelephoneUniversalCommunication>
+                  <ram:CompleteNumber>012345 78 657 - 8</ram:CompleteNumber>
+               </ram:TelephoneUniversalCommunication>
+               <ram:EmailURIUniversalCommunication>
+                  <ram:URIID>harry.hirsch@hhhtb.de</ram:URIID>
+               </ram:EmailURIUniversalCommunication>
+            </ram:DefinedTradeContact>
+            <ram:PostalTradeAddress>
+               <ram:PostcodeCode>12345</ram:PostcodeCode>
+               <ram:LineOne>Beispielgasse 17a</ram:LineOne>
+               <ram:LineTwo/>
+               <ram:CityName>Klein Schlappstadt a.d. Lusche</ram:CityName>
+               <ram:CountryID>DE</ram:CountryID>
+            </ram:PostalTradeAddress>
+            <ram:SpecifiedTaxRegistration>
+               <ram:ID schemeID="VAT">DE12345</ram:ID>
+            </ram:SpecifiedTaxRegistration>
+         </ram:SellerTradeParty>
+         <ram:BuyerTradeParty>
+            <ram:ID>Rechnungs Roulette GmbH &amp; Co KG</ram:ID>
+            <ram:Name>Manfred Mustermann</ram:Name>
+            <ram:PostalTradeAddress>
+               <ram:PostcodeCode>12345</ram:PostcodeCode>
+               <ram:LineOne>Beispielgasse 17b</ram:LineOne>
+               <ram:LineTwo/>
+               <ram:CityName>Klein Schlappstadt a.d. Lusche</ram:CityName>
+               <ram:CountryID>DE</ram:CountryID>
+            </ram:PostalTradeAddress>
+         </ram:BuyerTradeParty>
+         <ram:BuyerOrderReferencedDocument>
+            <ram:IssuerAssignedID>0815-99-1</ram:IssuerAssignedID>
+         </ram:BuyerOrderReferencedDocument>
+         <ram:ContractReferencedDocument>
+            <ram:IssuerAssignedID/>
+         </ram:ContractReferencedDocument>
+         <ram:SpecifiedProcuringProject>
+            <ram:ID/>
+            <ram:Name/>
+         </ram:SpecifiedProcuringProject>
+      </ram:ApplicableHeaderTradeAgreement>
+      <ram:ApplicableHeaderTradeDelivery/>
+      <ram:ApplicableHeaderTradeSettlement>
+         <ram:TaxCurrencyCode>EUR</ram:TaxCurrencyCode>
+         <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+         <ram:SpecifiedTradeSettlementPaymentMeans>
+            <ram:TypeCode>30</ram:TypeCode>
+            <ram:PayeePartyCreditorFinancialAccount>
+               <ram:IBANID>DE12500105170648489890</ram:IBANID>
+               <ram:AccountName>Harry Hirsch</ram:AccountName>
+            </ram:PayeePartyCreditorFinancialAccount>
+            <ram:PayeeSpecifiedCreditorFinancialInstitution>
+               <ram:BICID>INGDDEFFXXX</ram:BICID>
+            </ram:PayeeSpecifiedCreditorFinancialInstitution>
+         </ram:SpecifiedTradeSettlementPaymentMeans>
+         <ram:ApplicableTradeTax>
+            <ram:CalculatedAmount>236.74</ram:CalculatedAmount>
+            <ram:TypeCode>VAT</ram:TypeCode>
+            <ram:BasisAmount>1245.98</ram:BasisAmount>
+            <ram:CategoryCode>S</ram:CategoryCode>
+            <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+         </ram:ApplicableTradeTax>
+         <ram:ApplicableTradeTax>
+            <ram:CalculatedAmount>14.00</ram:CalculatedAmount>
+            <ram:TypeCode>VAT</ram:TypeCode>
+            <ram:BasisAmount>200.00</ram:BasisAmount>
+            <ram:CategoryCode>S</ram:CategoryCode>
+            <ram:RateApplicablePercent>7</ram:RateApplicablePercent>
+         </ram:ApplicableTradeTax>
+         <ram:SpecifiedTradePaymentTerms>
+            <ram:Description/>
+            <ram:DueDateDateTime>
+               <udt:DateTimeString format="102">20200621</udt:DateTimeString>
+            </ram:DueDateDateTime>
+         </ram:SpecifiedTradePaymentTerms>
+         <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+            <ram:LineTotalAmount>1445.98</ram:LineTotalAmount>
+            <ram:TaxBasisTotalAmount>1445.98</ram:TaxBasisTotalAmount>
+            <ram:TaxTotalAmount currencyID="EUR">250.74</ram:TaxTotalAmount>
+            <ram:GrandTotalAmount>1696.72</ram:GrandTotalAmount>
+            <ram:DuePayableAmount>1696.72</ram:DuePayableAmount>
+         </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+      </ram:ApplicableHeaderTradeSettlement>
+   </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>

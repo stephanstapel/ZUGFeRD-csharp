@@ -164,6 +164,12 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
+            reader = new InvoiceDescriptor21Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return reader.Load(filename);
+            }
+
             return null;
         } // !Load()
 

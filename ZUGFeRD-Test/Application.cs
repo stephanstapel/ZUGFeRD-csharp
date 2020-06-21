@@ -33,7 +33,8 @@ namespace ZUGFeRD_Test
             _loadZUGFeRD21BasicWLInvoice();
             _loadZUGFeRD21ExtendedInvoice();
             _loadZUGFeRD21MinimumInvoice();
-    
+
+            _loadXRechnungCII();
 
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
@@ -102,6 +103,16 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Profile, Profile.Minimum);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
         } // !_loadZUGFeRD21MinimumInvoice()
+
+
+        private void _loadXRechnungCII()
+        {
+            string path = @"..\..\..\demodata\xRechnung\xRechnung CII.xml";
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.Standard);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+        } // !_loadZUGFeRD1EinfachOriginalInvoice()
 
 
         private void _loadZUGFeRD2EinfachInvoice()
