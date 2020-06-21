@@ -35,5 +35,38 @@ namespace s2industries.ZUGFeRD
             fs.Flush();
             fs.Close();
         } // !Save()
+
+        protected void _writeOptionalElementString(XmlTextWriter writer, string tagName, string value)
+        {
+            if (!String.IsNullOrEmpty(value))
+            {
+                writer.WriteElementString(tagName, value);
+            }
+        } // !_writeOptionalElementString()
+
+
+        protected string _formatDecimal(decimal value, int numDecimals = 2)
+        {
+            string formatString = "0.";
+            for (int i = 0; i < numDecimals; i++)
+            {
+                formatString += "0";
+            }
+
+            return value.ToString(formatString).Replace(",", ".");
+        } // !_formatDecimal()
+
+
+        protected string _formatDate(DateTime date, bool formatAs102 = true)
+        {
+            if (formatAs102)
+            {
+                return date.ToString("yyyyMMdd");
+            }
+            else
+            {
+                return date.ToString("yyyy-MM-ddTHH:mm:ss");
+            }
+        } // !_formatDate()
     }
 }
