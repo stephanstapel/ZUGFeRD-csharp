@@ -75,7 +75,7 @@ namespace s2industries.ZUGFeRD
                     default: return "";
                 }
             }
-            else
+            else if (version == ZUGFeRDVersion.Version20)
             {
                 switch (profile)
                 {
@@ -83,6 +83,17 @@ namespace s2industries.ZUGFeRD
                     case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
                     case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                     case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
+                    default: return "";
+                }
+            }
+            else
+            {
+                /**
+                 * @odo add profiles for ZUGFeRD 2.1
+                 */
+
+                switch (profile)
+                {
                     default: return "";
                 }
             }

@@ -26,7 +26,7 @@ using System.IO;
 
 namespace s2industries.ZUGFeRD
 {
-    internal class InvoiceDescriptor2Reader : IInvoiceDescriptorReader
+    internal class InvoiceDescriptor20Reader : IInvoiceDescriptorReader
     {
         public override InvoiceDescriptor Load(Stream stream)
         {
@@ -252,9 +252,7 @@ namespace s2industries.ZUGFeRD
                     "urn:ferd:invoice:rc:comfort",
                     "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort",
                     "urn:ferd:CrossIndustryDocument:invoice:1p0:E",
-                    "urn:ferd:invoice:rc:extended",
-                    "urn:ferd:CrossIndustryDocument:invoice:1p0:extended",
-                    "urn:cen.eu:en16931:2017"
+                    "urn:ferd:invoice:rc:extended"                    
                 };
 
             long _oldStreamPosition = stream.Position;

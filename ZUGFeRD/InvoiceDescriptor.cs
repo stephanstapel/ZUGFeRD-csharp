@@ -134,7 +134,13 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            reader = new InvoiceDescriptor2Reader();
+            reader = new InvoiceDescriptor20Reader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return reader.Load(stream);
+            }
+
+            reader = new InvoiceDescriptor21Reader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return reader.Load(stream);
@@ -152,7 +158,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            reader = new InvoiceDescriptor2Reader();
+            reader = new InvoiceDescriptor20Reader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
@@ -389,7 +395,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                writer = new InvoiceDescriptor2Writer();
+                writer = new InvoiceDescriptor20Writer();
             }
 
             writer.Save(this, stream);
@@ -405,7 +411,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                writer = new InvoiceDescriptor2Writer();
+                writer = new InvoiceDescriptor20Writer();
             }
             writer.Save(this, filename);
         } // !Save()
