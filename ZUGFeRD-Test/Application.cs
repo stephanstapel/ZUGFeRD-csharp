@@ -16,11 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using s2industries.ZUGFeRD;
+using System;
 using System.IO;
 
 namespace ZUGFeRD_Test
@@ -29,6 +26,8 @@ namespace ZUGFeRD_Test
     {
         internal void Run()
         {
+            InvoiceDescriptor desc21 = InvoiceDescriptor.Load(@"E:\develop\ZUGFeRD-csharp\documentation\zugferd21de\Beispiele\EXTENDED\factur-x.xml");
+            return;
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(@"E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Debug\zugferd.xml");
 
@@ -142,41 +141,41 @@ namespace ZUGFeRD_Test
                                   grossUnitPrice: 4.00m,
                                   netUnitPrice: 3.3333m,
                                   billedQuantity: 3,
-                                  taxType: TaxTypes.VAT, 
-                                  categoryCode: TaxCategoryCodes.S, 
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
                                   taxPercent: 19,
-                                  id:new GlobalID(GlobalID.SchemeID_EAN, "4012345001235"),
-                                  sellerAssignedID: "KR3M", 
+                                  id: new GlobalID(GlobalID.SchemeID_EAN, "4012345001235"),
+                                  sellerAssignedID: "KR3M",
                                   buyerAssignedID: "55T01");
 
             desc.addTradeLineItem(name: "Schweinesteak",
                                   description: "aus Deutschland",
-                                  unitCode: QuantityCodes.KGM, 
+                                  unitCode: QuantityCodes.KGM,
                                   unitQuantity: 1,
                                   grossUnitPrice: 5.50m,
                                   netUnitPrice: 5.50m,
                                   billedQuantity: 5,
-                                  taxType: TaxTypes.VAT, 
-                                  categoryCode: TaxCategoryCodes.S, 
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
                                   taxPercent: 7,
-                                  id: new GlobalID(GlobalID.SchemeID_EAN,"4000050986428"),
-                                  sellerAssignedID: "SFK5", 
+                                  id: new GlobalID(GlobalID.SchemeID_EAN, "4000050986428"),
+                                  sellerAssignedID: "SFK5",
                                   buyerAssignedID: "55T02");
 
 
             desc.addTradeLineItem(name: "Mineralwasser Medium 12 x 1,0l PET",
                                   description: "",
-                                  unitCode: QuantityCodes.C62, 
+                                  unitCode: QuantityCodes.C62,
                                   unitQuantity: 1,
                                   grossUnitPrice: 5.49m,
                                   netUnitPrice: 5.49m,
                                   billedQuantity: 20,
-                                  taxType: TaxTypes.VAT, 
-                                  categoryCode: TaxCategoryCodes.S, 
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
                                   taxPercent: 7,
                                   id: new GlobalID(GlobalID.SchemeID_EAN, "4000001234561"),
-                                  sellerAssignedID: "GTRWA5", 
-                                  buyerAssignedID: "55T03"); 
+                                  sellerAssignedID: "GTRWA5",
+                                  buyerAssignedID: "55T03");
             return desc;
         } // _createInvoice()
     }

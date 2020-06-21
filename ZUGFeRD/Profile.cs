@@ -56,6 +56,7 @@ namespace s2industries.ZUGFeRD
                 case "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic": return Profile.Basic;
                 case "urn: cen.eu:en16931: 2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended": return Profile.Extended;
+                case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
             }
 
             return Profile.Unknown;

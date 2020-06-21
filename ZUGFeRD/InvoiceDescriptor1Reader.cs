@@ -243,7 +243,19 @@ namespace s2industries.ZUGFeRD
 
         public override bool IsReadableByThisReaderVersion(Stream stream)
         {
-            return true;
+            stream.Position = 0;
+            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+            {
+                string data = reader.ReadToEnd();
+
+                // simple check, feel free to extend to proper xml parsing
+                if (data.Contains("rsm:CrossIndustryDocument") && data.Contains("urn:ferd:CrossIndustryDocument:invoice:1p0"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         } // !IsReadableByThisReaderVersion()
 
 
