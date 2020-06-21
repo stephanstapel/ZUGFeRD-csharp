@@ -243,15 +243,23 @@ namespace s2industries.ZUGFeRD
 
         public override bool IsReadableByThisReaderVersion(Stream stream)
         {
+            List<string> validURIs = new List<string>()
+            {
+                "urn:ferd:invoice:1.0:basic",
+                "urn:ferd:invoice:1.0:comfort",
+                "urn:ferd:invoice:1.0:extended"
+            };
+
             stream.Position = 0;
             using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
             {
                 string data = reader.ReadToEnd();
-
-                // simple check, feel free to extend to proper xml parsing
-                if (data.Contains("rsm:CrossIndustryDocument") && data.Contains("urn:ferd:CrossIndustryDocument:invoice:1p0"))
+                foreach (string validURI in validURIs)
                 {
-                    return true;
+                    if (data.Contains(validURI))
+                    {
+                        return true;
+                    }
                 }
             }
 
