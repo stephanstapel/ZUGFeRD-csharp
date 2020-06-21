@@ -28,7 +28,7 @@ namespace ZUGFeRD_Test
         {
             _loadZUGFeRD2Invoice();
 
-            InvoiceDescriptor desc = InvoiceDescriptor.Load(@"zugferd.xml");
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(@"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_BASIC_Einfach.xml");
 
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
