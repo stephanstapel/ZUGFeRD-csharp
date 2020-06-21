@@ -29,12 +29,11 @@ namespace ZUGFeRD_Test
             _loadZUGFeRD2EinfachInvoice();
             _loadZUGFeRD2ExtendedInvoice();
 
-            /*
             _loadZUGFeRD21BasicInvoice();
             _loadZUGFeRD21BasicWLInvoice();
             _loadZUGFeRD21ExtendedInvoice();
             _loadZUGFeRD21MinimumInvoice();
-            */
+    
 
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
