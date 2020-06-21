@@ -13,6 +13,7 @@ http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with
 Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-chsarp'.
 
 You can find more information about the nuget package here:
+
 https://www.nuget.org/packages/ZUGFeRD-csharp/
 
 # Using ZUGFeRD 1.x and ZUGFeRD 2.x
