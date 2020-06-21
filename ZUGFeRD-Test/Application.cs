@@ -57,7 +57,7 @@ namespace ZUGFeRD_Test
 
         private void _loadZUGFeRD1EinfachOriginalInvoice()
         {
-            string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Einfach_Original.xml";
+            string path = @"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
@@ -67,7 +67,7 @@ namespace ZUGFeRD_Test
 
         private void _loadZUGFeRD1ComfortRabatteInvoice()
         {
-            string path = @"..\..\..\demodata\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
+            string path = @"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             desc.Save("test.xml");
