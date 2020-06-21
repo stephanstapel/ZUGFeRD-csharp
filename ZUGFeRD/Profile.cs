@@ -30,7 +30,8 @@ namespace s2industries.ZUGFeRD
         Comfort = 2,
         Extended = 3,
         Minimum = 4,
-        BasicWL = 5
+        BasicWL = 5,
+        Standard = 6
     }
 
 
@@ -64,6 +65,7 @@ namespace s2industries.ZUGFeRD
                 case "urn:factur-x.eu:1p0:basicwl": return Profile.BasicWL;
                 case "urn:cen.eu:en16931:2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
+                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2": return Profile.Standard;
             }
 
             return Profile.Unknown;
