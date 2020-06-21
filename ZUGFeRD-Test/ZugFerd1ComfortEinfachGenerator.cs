@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ZUGFeRD_Test
 {
-    internal class ZugFerdComfortEinfachGenerator
+    internal class ZugFerd1ComfortEinfachGenerator
     {
         public void generate()
         {

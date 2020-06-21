@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ZUGFeRD_Test
 {   
-   class ZugFerdBasicGenerator
+   class ZugFerd1BasicGenerator
    {
       public void generate()
       {

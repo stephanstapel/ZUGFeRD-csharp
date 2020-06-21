@@ -53,9 +53,9 @@
     <Compile Include="Assert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZugFerdBasicGenerator.cs" />
-    <Compile Include="ZugFerdComfortEinfachGenerator.cs" />
-    <Compile Include="ZugFerdExtendedWarenrechnungGenerator.cs" />
+    <Compile Include="ZugFerd1BasicGenerator.cs" />
+    <Compile Include="ZugFerd1ComfortEinfachGenerator.cs" />
+    <Compile Include="ZugFerd1ExtendedWarenrechnungGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ZUGFeRD_Test
 {
-    class ZugFerdExtendedWarenrechnungGenerator
+    class ZugFerd1ExtendedWarenrechnungGenerator
     {
         public void generate()
         {
