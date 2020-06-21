@@ -43,7 +43,7 @@ namespace s2industries.ZUGFeRD
             // validate data
             if ((descriptor.Profile == Profile.BasicWL) || (descriptor.Profile == Profile.Minimum))
             {
-                throw new Exception("Invalid profile used for ZUGFeRD 1.x invoice.");
+                throw new UnsupportedException("Invalid profile used for ZUGFeRD 1.x invoice.");
             }
 
             // write data

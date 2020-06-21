@@ -40,6 +40,13 @@ namespace s2industries.ZUGFeRD
                 throw new IllegalStreamException("Cannot write to stream");
             }
 
+            // validate data
+            if (descriptor.Profile == Profile.BasicWL)
+            {
+                throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice.");
+            }
+
+            // write data
             long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;

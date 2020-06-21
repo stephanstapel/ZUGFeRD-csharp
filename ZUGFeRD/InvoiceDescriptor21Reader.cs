@@ -601,7 +601,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                throw new UnsupportedException();
+                throw new UnsupportedException("Invalid length of datetime value");
             }
         } // !_nodeAsDateTime()
 
