@@ -251,7 +251,8 @@ namespace s2industries.ZUGFeRD
                     "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",
                     "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",
                     "urn:factur-x.eu:1p0:minimum",
-                    "urn:cen.eu:en16931:2017"
+                    "urn:cen.eu:en16931:2017",
+                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2"
                 };
 
             long _oldStreamPosition = stream.Position;
