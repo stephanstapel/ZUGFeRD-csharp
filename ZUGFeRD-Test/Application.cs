@@ -26,16 +26,13 @@ namespace ZUGFeRD_Test
     {
         internal void Run()
         {
-            InvoiceDescriptor desc21 = InvoiceDescriptor.Load(@"E:\develop\ZUGFeRD-csharp\documentation\zugferd21de\Beispiele\EXTENDED\factur-x.xml");
-            return;
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(@"zugferd.xml");
 
-            InvoiceDescriptor desc = InvoiceDescriptor.Load(@"E:\develop\ZUGFeRD-csharp\ZUGFeRD-Test\bin\Debug\zugferd.xml");
-
-            ZugFerdComfortEinfachGenerator generator = new ZugFerdComfortEinfachGenerator();
+            ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
             generator.read();
 
-            ZugFerdExtendedWarenrechnungGenerator generator2 = new ZugFerdExtendedWarenrechnungGenerator();
+            ZugFerd1ExtendedWarenrechnungGenerator generator2 = new ZugFerd1ExtendedWarenrechnungGenerator();
             generator2.generate();
             generator2.read();
 
