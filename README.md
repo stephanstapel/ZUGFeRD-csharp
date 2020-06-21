@@ -96,8 +96,9 @@ descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version2);
 
 
 # Thanks
-The solution is used in CKS.DMS and supported by CKSolution:
-http://www.cksolution.de
+* The solution is used in CKS.DMS and supported by CKSolution: 
+  http://www.cksolution.de
+* https://github.com/cGiesen for starting with ZUGFeRD 2.1 implementation
 
 # Links
 You can find more information about ZUGFeRD here:
