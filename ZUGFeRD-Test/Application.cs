@@ -26,16 +26,23 @@ namespace ZUGFeRD_Test
     {
         internal void Run()
         {
+            // --- ZUGFeRD 2.0x tests ---
+
+            // load demo data
             _loadZUGFeRD2EinfachInvoice();
             _loadZUGFeRD2ExtendedInvoice();
 
             _loadZUGFeRD21BasicInvoice();
             _loadZUGFeRD21BasicWLInvoice();
             _loadZUGFeRD21ExtendedInvoice();
-            _loadZUGFeRD21MinimumInvoice();
+            _loadZUGFeRD21MinimumInvoice();            
 
             _loadXRechnungCII();
 
+            // load demo data, then roundtrip
+            _loadSaveLoadZUGFeRD21BasicInvoice();
+
+            // --- ZUGFeRD 1.x tests ---
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
             generator.read();
@@ -59,6 +66,27 @@ namespace ZUGFeRD_Test
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
             s.Close();
+
+            Assert.AreEqual(desc.Profile, Profile.Basic);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+            Assert.AreEqual(desc.InvoiceNo, "471102");
+            Assert.AreEqual(desc.TradeLineItems.Count, 1);
+            Assert.AreEqual(desc.LineTotalAmount, 198.0m);
+        } // !_loadZUGFeRD21BasicInvoice()
+
+
+        private void _loadSaveLoadZUGFeRD21BasicInvoice()
+        {
+            string path = @"..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor originalDesc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Stream ms = new MemoryStream();
+            originalDesc.Save(ms);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 
             Assert.AreEqual(desc.Profile, Profile.Basic);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
