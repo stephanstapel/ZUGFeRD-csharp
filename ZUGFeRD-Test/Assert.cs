@@ -15,5 +15,15 @@ namespace ZUGFeRD_Test
             }
             return true;
         }
+
+
+        public static bool AreEqual(decimal d1, decimal d2)
+        {
+            if (d1 != d2)
+            {
+                throw new Exception();
+            }
+            return true;
+        }
     }
 }

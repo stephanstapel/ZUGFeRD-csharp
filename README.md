@@ -91,7 +91,10 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 
 // fill attributes and structures
 
-descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version2);          
+
+descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1); // save as version 1.x
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2); // save as version 2.0
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21); // save as version 2.1
 ```
 
 
