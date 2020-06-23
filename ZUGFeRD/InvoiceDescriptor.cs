@@ -395,15 +395,20 @@ namespace s2industries.ZUGFeRD
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
         {
             IInvoiceDescriptorWriter writer = null;
-            if (version == ZUGFeRDVersion.Version1)
+            switch (version)
             {
-                writer = new InvoiceDescriptor1Writer();
+                case ZUGFeRDVersion.Version1:
+                    writer = new InvoiceDescriptor1Writer();
+                    break;
+                case ZUGFeRDVersion.Version20:
+                    writer = new InvoiceDescriptor20Writer();
+                    break;
+                case ZUGFeRDVersion.Version21:
+                    writer = new InvoiceDescriptor21Writer(); 
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                writer = new InvoiceDescriptor20Writer();
-            }
-
             writer.Save(this, stream);
         } // !Save()
 
@@ -411,13 +416,19 @@ namespace s2industries.ZUGFeRD
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
         {
             IInvoiceDescriptorWriter writer = null;
-            if (version == ZUGFeRDVersion.Version1)
+            switch (version)
             {
-                writer = new InvoiceDescriptor1Writer();
-            }
-            else
-            {
-                writer = new InvoiceDescriptor20Writer();
+                case ZUGFeRDVersion.Version1:
+                    writer = new InvoiceDescriptor1Writer();
+                    break;
+                case ZUGFeRDVersion.Version20:
+                    writer = new InvoiceDescriptor20Writer();
+                    break;
+                case ZUGFeRDVersion.Version21:
+                    writer = new InvoiceDescriptor21Writer();
+                    break;
+                default:
+                    break;
             }
             writer.Save(this, filename);
         } // !Save()

@@ -74,38 +74,37 @@ namespace s2industries.ZUGFeRD
 
         public static string EnumToString(this Profile profile, ZUGFeRDVersion version)
         {
-            if (version == ZUGFeRDVersion.Version1)
+            switch (version)
             {
-                switch (profile)
-                {
-                    case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
-                    case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
-                    case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
-                    default: return "";
-                }
-            }
-            else if (version == ZUGFeRDVersion.Version20)
-            {
-                switch (profile)
-                {
-                    case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";
-                    case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
-                    case Profile.Comfort: return "urn:cen.eu:en16931:2017";
-                    case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
-                    default: return "";
-                }
-            }
-            else
-            {
-                switch (profile)
-                {
-                    case Profile.Minimum: return "urn:factur-x.eu:1p0:minimum";
-                    case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic";
-                    case Profile.BasicWL: return "urn:factur-x.eu:1p0:basicwl";
-                    case Profile.Comfort: return "urn:cen.eu:en16931:2017";
-                    case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
-                    default: return "";
-                }
+                case ZUGFeRDVersion.Version1:
+                    switch (profile)
+                    {
+                        case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
+                        case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
+                        case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
+                        default: return "";
+                    }
+                case ZUGFeRDVersion.Version20:
+                    switch (profile)
+                    {
+                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";
+                        case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
+                        case Profile.Comfort: return "urn:cen.eu:en16931:2017";
+                        case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
+                        default: return "";
+                    }
+                case ZUGFeRDVersion.Version21:
+                    switch (profile)
+                    {
+                        case Profile.Minimum: return "urn:factur-x.eu:1p0:minimum";
+                        case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic";
+                        case Profile.BasicWL: return "urn:factur-x.eu:1p0:basicwl";
+                        case Profile.Comfort: return "urn:cen.eu:en16931:2017";
+                        case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
+                        default: return "";
+                    }
+                default:
+                    return "";
             }
         } // !ToString()
     }

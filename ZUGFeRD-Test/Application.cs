@@ -84,7 +84,8 @@ namespace ZUGFeRD_Test
             s.Close();
 
             Stream ms = new MemoryStream();
-            originalDesc.Save(ms);
+            originalDesc.Save(ms,ZUGFeRDVersion.Version21);
+            originalDesc.Save(@"C:\Projekte\Visual Studio\3th-Party\ZUGFeRD-csharp\zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version21);
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 
