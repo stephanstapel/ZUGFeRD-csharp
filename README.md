@@ -101,7 +101,7 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21); // save as version 
 # Thanks
 * The solution is used in CKS.DMS and supported by CKSolution: 
   http://www.cksolution.de
-* https://github.com/cGiesen for starting with ZUGFeRD 2.1 implementation
+* ZUGFeRD 2.1 implementation was done by www.netco-solution.de and used in netCo.Butler
 
 # Links
 You can find more information about ZUGFeRD here:
