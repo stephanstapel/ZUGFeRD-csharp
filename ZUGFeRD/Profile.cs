@@ -26,11 +26,11 @@ namespace s2industries.ZUGFeRD
     public enum Profile
     {
         Unknown = 0,
+        Minimum = 4,
+        BasicWL = 5,
         Basic = 1,
         Comfort = 2,
         Extended = 3,
-        Minimum = 4,
-        BasicWL = 5,
         Standard = 6
     }
 

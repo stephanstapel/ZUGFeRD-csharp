@@ -35,7 +35,7 @@ namespace ZUGFeRD_Test
             _loadZUGFeRD21BasicInvoice();
             _loadZUGFeRD21BasicWLInvoice();
             _loadZUGFeRD21ExtendedInvoice();
-            _loadZUGFeRD21MinimumInvoice();            
+            _loadZUGFeRD21MinimumInvoice();
 
             _loadXRechnungCII();
 
@@ -55,7 +55,7 @@ namespace ZUGFeRD_Test
             _loadZUGFeRD1ComfortRabatteInvoice();
 
             _saveAndLoadZUGFeRD1Invoice();
-            _saveAndLoadZUGFeRD1InvoiceViaStream();            
+            _saveAndLoadZUGFeRD1InvoiceViaStream();
         } // !run()
 
 
@@ -83,8 +83,16 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor originalDesc = InvoiceDescriptor.Load(s);
             s.Close();
 
+            Assert.AreEqual(originalDesc.Profile, Profile.Basic);
+            Assert.AreEqual(originalDesc.Type, InvoiceType.Invoice);
+            Assert.AreEqual(originalDesc.InvoiceNo, "471102");
+            Assert.AreEqual(originalDesc.TradeLineItems.Count, 1);
+            Assert.AreEqual(originalDesc.LineTotalAmount, 198.0m);
+            Assert.AreEqual(originalDesc.Taxes[0].TaxAmount, 37.62m);
+            Assert.AreEqual(originalDesc.Taxes[0].Percent, 19.0m);
+
             Stream ms = new MemoryStream();
-            originalDesc.Save(ms,ZUGFeRDVersion.Version21);
+            originalDesc.Save(ms, ZUGFeRDVersion.Version21);
             originalDesc.Save(@"C:\Projekte\Visual Studio\3th-Party\ZUGFeRD-csharp\zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version21);
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
@@ -94,6 +102,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.InvoiceNo, "471102");
             Assert.AreEqual(desc.TradeLineItems.Count, 1);
             Assert.AreEqual(desc.LineTotalAmount, 198.0m);
+            Assert.AreEqual(desc.Taxes[0].TaxAmount, 37.62m);
+            Assert.AreEqual(desc.Taxes[0].Percent, 19.0m);
         } // !_loadZUGFeRD21BasicInvoice()
 
 
