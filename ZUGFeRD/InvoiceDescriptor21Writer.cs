@@ -350,14 +350,11 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:SpecifiedLineTradeSettlement"); //ToDo: Prüfen
 
                 #region ApplicableTradeTax
-                if (Descriptor.Profile != Profile.Basic)
-                {
-                    Writer.WriteStartElement("ram:ApplicableTradeTax");
-                    Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
-                    Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
-                    Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
-                    Writer.WriteEndElement(); // !ram:ApplicableTradeTax
-                }
+                Writer.WriteStartElement("ram:ApplicableTradeTax");
+                Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
+                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
+                Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
+                Writer.WriteEndElement(); // !ram:ApplicableTradeTax
                 #endregion
 
                 #region SpecifiedTradeSettlementLineMonetarySummation
@@ -449,13 +446,14 @@ namespace s2industries.ZUGFeRD
             if (Descriptor.Profile == Profile.Extended)
             {
                 _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo);
+                //ToDo: UltimateShipToTradeParty
                 _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom);
             }
 
-            #region DeliveryNoteReferencedDocument
+            #region ActualDeliverySupplyChainEvent
             if (this.Descriptor.ActualDeliveryDate.HasValue)
             {
-                Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
+                Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent");
                 Writer.WriteStartElement("ram:OccurrenceDateTime");
                 Writer.WriteStartElement("udt:DateTimeString");
                 Writer.WriteAttributeString("format", "102");
@@ -509,10 +507,10 @@ namespace s2industries.ZUGFeRD
             {
                 if (this.Descriptor.PaymentMeans != null)
                 {
-                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
+                        Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
@@ -523,8 +521,8 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
                             Writer.WriteEndElement(); // !ram:ID
                         }
+                        Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                     }
-                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
             }
             else
@@ -752,7 +750,7 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteStartElement("ram:CalculatedAmount");
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                writer.WriteValue(_formatDecimal(tax.TaxAmount)); 
+                writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
@@ -834,8 +832,8 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram:PostalTradeAddress");
                 writer.WriteElementString("ram:PostcodeCode", Party.Postcode);
                 writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(Party.ContactName) ? Party.Street : Party.ContactName);
-                if (!string.IsNullOrEmpty(Party.ContactName)) 
-                    writer.WriteElementString("ram:LineTwo", Party.Street); 
+                if (!string.IsNullOrEmpty(Party.ContactName))
+                    writer.WriteElementString("ram:LineTwo", Party.Street);
                 writer.WriteElementString("ram:CityName", Party.City);
                 writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
                 writer.WriteEndElement(); // !PostalTradeAddress

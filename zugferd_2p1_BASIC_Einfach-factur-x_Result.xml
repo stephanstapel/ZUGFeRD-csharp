@@ -63,6 +63,11 @@ Trennblätter A4
         <ram:BilledQuantity unitCode="C62">20.0000</ram:BilledQuantity>
       </ram:SpecifiedLineTradeDelivery>
       <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
         <ram:SpecifiedTradeSettlementLineMonetarySummation>
           <ram:LineTotalAmount currencyID="EUR">198.00</ram:LineTotalAmount>
         </ram:SpecifiedTradeSettlementLineMonetarySummation>
@@ -96,15 +101,14 @@ Trennblätter A4
       </ram:BuyerTradeParty>
     </ram:ApplicableHeaderTradeAgreement>
     <ram:ApplicableHeaderTradeDelivery>
-      <ram:DeliveryNoteReferencedDocument>
+      <ram:ActualDeliverySupplyChainEvent>
         <ram:OccurrenceDateTime>
           <udt:DateTimeString format="102">20200305</udt:DateTimeString>
         </ram:OccurrenceDateTime>
-      </ram:DeliveryNoteReferencedDocument>
+      </ram:ActualDeliverySupplyChainEvent>
     </ram:ApplicableHeaderTradeDelivery>
     <ram:ApplicableHeaderTradeSettlement>
       <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
-      <ram:SpecifiedTradeSettlementPaymentMeans />
       <ram:ApplicableTradeTax>
         <ram:CalculatedAmount currencyID="EUR">37.62</ram:CalculatedAmount>
         <ram:TypeCode>VAT</ram:TypeCode>

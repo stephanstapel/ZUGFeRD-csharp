@@ -29,15 +29,15 @@ namespace ZUGFeRD_Test
             // --- ZUGFeRD 2.0x tests ---
 
             // load demo data
-            _loadZUGFeRD2EinfachInvoice();
-            _loadZUGFeRD2ExtendedInvoice();
+            //_loadZUGFeRD2EinfachInvoice();
+            //_loadZUGFeRD2ExtendedInvoice();
 
-            _loadZUGFeRD21BasicInvoice();
-            _loadZUGFeRD21BasicWLInvoice();
-            _loadZUGFeRD21ExtendedInvoice();
-            _loadZUGFeRD21MinimumInvoice();
+            //_loadZUGFeRD21BasicInvoice();
+            //_loadZUGFeRD21BasicWLInvoice();
+            //_loadZUGFeRD21ExtendedInvoice();
+            //_loadZUGFeRD21MinimumInvoice();
 
-            _loadXRechnungCII();
+            //_loadXRechnungCII();
 
             // load demo data, then roundtrip
             _loadSaveLoadZUGFeRD21BasicInvoice();

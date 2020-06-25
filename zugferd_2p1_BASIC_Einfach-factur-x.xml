@@ -35,14 +35,11 @@ Zahlbar innerhalb 30 Tagen netto bis 04.04.2020, 3% Skonto innerhalb 10 Tagen bi
   </rsm:ExchangedDocument>
   <rsm:SupplyChainTradeTransaction>
     <ram:IncludedSupplyChainTradeLineItem>
-
       <ram:AssociatedDocumentLineDocument>
         <ram:LineID>1</ram:LineID>
       </ram:AssociatedDocumentLineDocument>
-
       <ram:SpecifiedTradeProduct>
         <ram:GlobalID schemeID="0160">4012345001235</ram:GlobalID>
-
         <ram:Name>GTIN: 4012345001235
 Unsere Art.-Nr.: TB100A4
 Trennblätter A4
