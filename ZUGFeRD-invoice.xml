@@ -2,35 +2,17 @@
 <rsm:CrossIndustryInvoice xmlns:a="urn:un:unece:uncefact:data:standard:QualifiedDataType:100" xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:10" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
   <rsm:ExchangedDocumentContext>
     <ram:GuidelineSpecifiedDocumentContextParameter>
-      <ram:ID>urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic</ram:ID>
+      <ram:ID>urn:cen.eu:en16931:2017</ram:ID>
     </ram:GuidelineSpecifiedDocumentContextParameter>
   </rsm:ExchangedDocumentContext>
   <rsm:ExchangedDocument>
-    <ram:ID>471102</ram:ID>
+    <ram:ID>NUMMER2</ram:ID>
     <ram:TypeCode>380</ram:TypeCode>
     <ram:IssueDateTime>
-      <udt:DateTimeString format="102">20200305</udt:DateTimeString>
+      <udt:DateTimeString format="102">20200625</udt:DateTimeString>
     </ram:IssueDateTime>
     <ram:IncludedNote>
-      <ram:Content>Rechnung gemäß Bestellung vom 01.03.2020.</ram:Content>
-    </ram:IncludedNote>
-    <ram:IncludedNote>
-      <ram:Content>Lieferant GmbH				
-Lieferantenstraße 20				
-80333 München				
-Deutschland				
-Geschäftsführer: Hans Muster
-Handelsregisternummer: H A 123
-      </ram:Content>
-    </ram:IncludedNote>
-    <ram:IncludedNote>
-      <ram:Content>Unsere GLN: 4000001123452
-Ihre GLN: 4000001987658
-Ihre Kundennummer: GE2020211
-
-
-Zahlbar innerhalb 30 Tagen netto bis 04.04.2020, 3% Skonto innerhalb 10 Tagen bis 15.03.2020.
-      </ram:Content>
+      <ram:Content>Rechnung NUMMER2 vom 25.06.2020 00:00:00.</ram:Content>
     </ram:IncludedNote>
   </rsm:ExchangedDocument>
   <rsm:SupplyChainTradeTransaction>
@@ -39,20 +21,20 @@ Zahlbar innerhalb 30 Tagen netto bis 04.04.2020, 3% Skonto innerhalb 10 Tagen bi
         <ram:LineID>1</ram:LineID>
       </ram:AssociatedDocumentLineDocument>
       <ram:SpecifiedTradeProduct>
-        <ram:GlobalID schemeID="0160">4012345001235</ram:GlobalID>
-        <ram:Name>GTIN: 4012345001235
-Unsere Art.-Nr.: TB100A4
-Trennblätter A4
-        </ram:Name>
+        <ram:Name>Rechnungsbetrag</ram:Name>
       </ram:SpecifiedTradeProduct>
       <ram:SpecifiedLineTradeAgreement>
         <ram:NetPriceProductTradePrice>
-          <ram:ChargeAmount currencyID="EUR">9.90</ram:ChargeAmount>
-          <ram:BasisQuantity unitCode="C62">1.00</ram:BasisQuantity>
+          <ram:ChargeAmount currencyID="EUR">20374.6200</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="LS">1.0000</ram:BasisQuantity>
         </ram:NetPriceProductTradePrice>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount currencyID="EUR">24245.8000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="LS">1.0000</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
       </ram:SpecifiedLineTradeAgreement>
       <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="C62">20.00</ram:BilledQuantity>
+        <ram:BilledQuantity unitCode="LS">1.0000</ram:BilledQuantity>
       </ram:SpecifiedLineTradeDelivery>
       <ram:SpecifiedLineTradeSettlement>
         <ram:ApplicableTradeTax>
@@ -61,67 +43,68 @@ Trennblätter A4
           <ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>
         </ram:ApplicableTradeTax>
         <ram:SpecifiedTradeSettlementLineMonetarySummation>
-          <ram:LineTotalAmount currencyID="EUR">198.00</ram:LineTotalAmount>
+          <ram:LineTotalAmount currencyID="EUR">20374.62</ram:LineTotalAmount>
         </ram:SpecifiedTradeSettlementLineMonetarySummation>
       </ram:SpecifiedLineTradeSettlement>
     </ram:IncludedSupplyChainTradeLineItem>
     <ram:ApplicableHeaderTradeAgreement>
       <ram:SellerTradeParty>
-        <ram:Name>Lieferant GmbH</ram:Name>
+        <ram:ID>CENSORED</ram:ID>
+        <ram:GlobalID schemeID="0088">CENSORED</ram:GlobalID>
+        <ram:Name>CENSORED</ram:Name>
         <ram:PostalTradeAddress>
-          <ram:PostcodeCode>80333</ram:PostcodeCode>
-          <ram:LineOne>Lieferantenstraße 20</ram:LineOne>
-          <ram:CityName>München</ram:CityName>
+          <ram:PostcodeCode>CENSORED</ram:PostcodeCode>
+          <ram:LineOne>CENSORED</ram:LineOne>
+          <ram:CityName>CENSORED</ram:CityName>
           <ram:CountryID>DE</ram:CountryID>
         </ram:PostalTradeAddress>
         <ram:SpecifiedTaxRegistration>
-          <ram:ID schemeID="FC">201/113/40209</ram:ID>
-        </ram:SpecifiedTaxRegistration>
-        <ram:SpecifiedTaxRegistration>
-          <ram:ID schemeID="VA">DE123456789</ram:ID>
+          <ram:ID schemeID="VA">CENSORED</ram:ID>
         </ram:SpecifiedTaxRegistration>
       </ram:SellerTradeParty>
       <ram:BuyerTradeParty>
-        <ram:Name>Kunden AG Mitte</ram:Name>
+        <ram:Name>CENSORED</ram:Name>
         <ram:PostalTradeAddress>
-          <ram:PostcodeCode>69876</ram:PostcodeCode>
-          <ram:LineOne>Hans Muster</ram:LineOne>
-          <ram:LineTwo>Kundenstraße 15</ram:LineTwo>
-          <ram:CityName>Frankfurt</ram:CityName>
+          <ram:PostcodeCode>CENSORED</ram:PostcodeCode>
+          <ram:LineOne>CENSORED</ram:LineOne>
+          <ram:CityName>CENSORED</ram:CityName>
           <ram:CountryID>DE</ram:CountryID>
         </ram:PostalTradeAddress>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">CENSORED</ram:ID>
+        </ram:SpecifiedTaxRegistration>
       </ram:BuyerTradeParty>
     </ram:ApplicableHeaderTradeAgreement>
-    <ram:ApplicableHeaderTradeDelivery>
-      <ram:ActualDeliverySupplyChainEvent>
-        <ram:OccurrenceDateTime>
-          <udt:DateTimeString format="102">20200305</udt:DateTimeString>
-        </ram:OccurrenceDateTime>
-      </ram:ActualDeliverySupplyChainEvent>
-    </ram:ApplicableHeaderTradeDelivery>
+    <ram:ApplicableHeaderTradeDelivery />
     <ram:ApplicableHeaderTradeSettlement>
       <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+      <ram:SpecifiedTradeSettlementPaymentMeans>
+        <ram:PayeePartyCreditorFinancialAccount>
+          <ram:IBANID>CENSORED</ram:IBANID>
+        </ram:PayeePartyCreditorFinancialAccount>
+        <ram:PayeeSpecifiedCreditorFinancialInstitution>
+          <ram:BICID>CENSORED</ram:BICID>
+        </ram:PayeeSpecifiedCreditorFinancialInstitution>
+      </ram:SpecifiedTradeSettlementPaymentMeans>
       <ram:ApplicableTradeTax>
-        <ram:CalculatedAmount currencyID="EUR">37.62</ram:CalculatedAmount>
+        <ram:CalculatedAmount currencyID="EUR">3871.18</ram:CalculatedAmount>
         <ram:TypeCode>VAT</ram:TypeCode>
-        <ram:BasisAmount currencyID="EUR">198.00</ram:BasisAmount>
+        <ram:BasisAmount currencyID="EUR">20374.62</ram:BasisAmount>
         <ram:CategoryCode>S</ram:CategoryCode>
         <ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>
       </ram:ApplicableTradeTax>
       <ram:SpecifiedTradePaymentTerms>
+        <ram:Description>Zahlbar innerhalb 30 Tagen netto bis 25.07.2020 00:00:00</ram:Description>
         <ram:DueDateDateTime>
-          <udt:DateTimeString format="102">20200404</udt:DateTimeString>
+          <udt:DateTimeString format="102">20200725</udt:DateTimeString>
         </ram:DueDateDateTime>
       </ram:SpecifiedTradePaymentTerms>
       <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
-        <ram:LineTotalAmount currencyID="EUR">198.00</ram:LineTotalAmount>
-        <ram:ChargeTotalAmount currencyID="EUR">0.00</ram:ChargeTotalAmount>
-        <ram:AllowanceTotalAmount currencyID="EUR">0.00</ram:AllowanceTotalAmount>
-        <ram:TaxBasisTotalAmount currencyID="EUR">198.00</ram:TaxBasisTotalAmount>
-        <ram:TaxTotalAmount currencyID="EUR">37.62</ram:TaxTotalAmount>
-        <ram:GrandTotalAmount currencyID="EUR">235.62</ram:GrandTotalAmount>
-        <ram:TotalPrepaidAmount currencyID="EUR">0.00</ram:TotalPrepaidAmount>
-        <ram:DuePayableAmount currencyID="EUR">235.62</ram:DuePayableAmount>
+        <ram:LineTotalAmount currencyID="EUR">20374.62</ram:LineTotalAmount>
+        <ram:TaxBasisTotalAmount currencyID="EUR">20374.62</ram:TaxBasisTotalAmount>
+        <ram:TaxTotalAmount currencyID="EUR">3871.18</ram:TaxTotalAmount>
+        <ram:GrandTotalAmount currencyID="EUR">24245.80</ram:GrandTotalAmount>
+        <ram:DuePayableAmount currencyID="EUR">24245.80</ram:DuePayableAmount>
       </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
     </ram:ApplicableHeaderTradeSettlement>
   </rsm:SupplyChainTradeTransaction>
