@@ -77,7 +77,20 @@ namespace s2industries.ZUGFeRD
             //Gruppierung der Eigenschaften, die das gesamte Dokument betreffen.
             Writer.WriteStartElement("rsm:ExchangedDocument");
             Writer.WriteElementString("ram:ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
-            Writer.WriteElementString("ram:Name", _translateInvoiceType(this.Descriptor.Type)); //Dokumentenart (Freitext)
+            switch (Descriptor.Profile)
+            {
+                //case Profile.Standard:
+                //case Profile.Minimum:
+                //case Profile.BasicWL:
+                //case Profile.Basic:
+                //case Profile.Comfort:
+                case Profile.Extended:
+                    Writer.WriteElementString("ram:Name", _translateInvoiceType(this.Descriptor.Type)); //Dokumentenart (Freitext)
+                    break;
+                default:
+                    break;
+            }
+
             Writer.WriteElementString("ram:TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
             //ToDo: LanguageID      //Sprachkennzeichen
             //ToDo: IncludedNote    //Freitext zur Rechnung
@@ -519,13 +532,13 @@ namespace s2industries.ZUGFeRD
                         {
                             _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                         }
+                        _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
                         //ToDo: TotalAllowanceChargeAmount
                         //Gesamtbetrag der Positionszu- und Abschläge
                         break;
                     default:
                         break;
                 }
-                _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
 
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                 #endregion
