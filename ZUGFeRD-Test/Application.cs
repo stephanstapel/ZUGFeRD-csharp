@@ -74,17 +74,6 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.InvoiceNo, "471102");
             Assert.AreEqual(desc.TradeLineItems.Count, 1);
             Assert.AreEqual(desc.LineTotalAmount, 198.0m);
-
-
-            List<string> sourcepaths = System.IO.Directory.GetFiles("e:\\zugferd\\original", "*.xml").ToList();
-            foreach(string sourcepath in sourcepaths)
-            {
-                string targetPath = "e:\\zugferd\\profile-aware-speichern\\" + System.IO.Path.GetFileName(sourcepath);
-
-
-                InvoiceDescriptor invoice = InvoiceDescriptor.Load(sourcepath);
-                invoice.Save(targetPath, ZUGFeRDVersion.Version21);
-            }
         } // !_loadZUGFeRD21BasicInvoice()
 
 
