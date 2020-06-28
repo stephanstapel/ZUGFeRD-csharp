@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD
             fs.Close();
         } // !Save()
 
-        protected void _writeOptionalElementString(XmlTextWriter writer, string tagName, string value)
+        internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value)
         {
             if (!String.IsNullOrEmpty(value))
             {
