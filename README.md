@@ -91,14 +91,17 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 
 // fill attributes and structures
 
-descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version2);          
+
+descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1); // save as version 1.x
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2); // save as version 2.0
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21); // save as version 2.1
 ```
 
 
 # Thanks
 * The solution is used in CKS.DMS and supported by CKSolution: 
   http://www.cksolution.de
-* https://github.com/cGiesen for starting with ZUGFeRD 2.1 implementation
+* ZUGFeRD 2.1 implementation was done by www.netco-solution.de and used in netCo.Butler
 
 # Links
 You can find more information about ZUGFeRD here:
