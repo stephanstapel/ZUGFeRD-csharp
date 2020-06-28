@@ -384,7 +384,8 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);
-            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
+
+            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);            
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
             _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);
             _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);
@@ -619,13 +620,13 @@ namespace s2industries.ZUGFeRD
         } // !Save()      
 
 
-        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal value, int numDecimals = 2)
+        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2)
         {
-            if (value != decimal.MinValue)
+            if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName);
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                writer.WriteValue(_formatDecimal(value, numDecimals));
+                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
         } // !_writeOptionalAmount()

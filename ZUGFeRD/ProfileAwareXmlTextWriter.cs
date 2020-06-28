@@ -24,10 +24,17 @@ using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
+    internal class StackInfo
+    {
+        public Profile Profile;
+        public bool IsVisible;
+    }
+
+
     internal class ProfileAwareXmlTextWriter
     {
         private XmlTextWriter TextWriter;
-        private Stack<Profile> XmlStack = new Stack<Profile>();
+        private Stack<StackInfo> XmlStack = new Stack<StackInfo>();
         private Profile CurrentProfile = Profile.Unknown;
 
 
@@ -78,15 +85,14 @@ namespace s2industries.ZUGFeRD
                 _profile = this.CurrentProfile;
             }
 
-            this.XmlStack.Push(_profile);
-
-            if (!_DoesProfileFitIntoStack(_profile))
+            if (!_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(_profile))
             {
+                this.XmlStack.Push(new StackInfo() { Profile = _profile, IsVisible = false });
                 return;
             }
-            if (!_DoesProfileFitToCurrentProfile(_profile))
+            else
             {
-                return;
+                this.XmlStack.Push(new StackInfo() { Profile = _profile, IsVisible = true });
             }
 
             // write value
@@ -107,8 +113,8 @@ namespace s2industries.ZUGFeRD
 
         public void WriteEndElement()
         {
-            Profile profileForCurrentXmlLevel = this.XmlStack.Pop();
-            if (_DoesProfileFitToCurrentProfile(profileForCurrentXmlLevel) && _DoesProfileFitIntoStack(profileForCurrentXmlLevel))
+            StackInfo infoForCurrentXmlLevel = this.XmlStack.Pop();
+            if (_DoesProfileFitToCurrentProfile(infoForCurrentXmlLevel.Profile) && _IsNodeVisible())
             {
                 this.TextWriter?.WriteEndElement();
             }
@@ -123,12 +129,7 @@ namespace s2industries.ZUGFeRD
                 _profile = this.CurrentProfile;
             }
 
-            if (!_DoesProfileFitIntoStack(_profile))
-            {
-                return;
-            }
-
-            if (!_DoesProfileFitToCurrentProfile(_profile))
+            if (!_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(_profile))
             {
                 return;
             }
@@ -168,13 +169,8 @@ namespace s2industries.ZUGFeRD
 
         public void WriteAttributeString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
         {
-            Profile profileOfCurrentNode = this.XmlStack.First();
-            if (!_DoesProfileFitToCurrentProfile(profileOfCurrentNode))
-            {
-                return;
-            }
-
-            if (!_DoesProfileFitToCurrentProfile(profile))
+            StackInfo infoForCurrentNode = this.XmlStack.First();
+            if (!infoForCurrentNode.IsVisible)
             {
                 return;
             }
@@ -197,32 +193,14 @@ namespace s2industries.ZUGFeRD
 
         public void WriteValue(string value, Profile profile = Profile.Unknown)
         {
-            Profile profileOfCurrentNode = this.XmlStack.First();
-            if (!_DoesProfileFitToCurrentProfile(profileOfCurrentNode))
-            {
-                return;
-            }
-
-            if (!_DoesProfileFitToCurrentProfile(profile))
+            StackInfo infoForCurrentNode = this.XmlStack.First();
+            if (!infoForCurrentNode.IsVisible)
             {
                 return;
             }
 
             // write value
-            /*
-            if (!String.IsNullOrEmpty(prefix))
-            {
-                this.TextWriter?.WriteAttributeString(prefix, localName, ns, value);
-            }
-            else if (!String.IsNullOrEmpty(ns))
-            {
-                this.TextWriter?.WriteAttributeString(localName, ns, value);
-            }
-            else
-            */
-            {
-                this.TextWriter?.WriteValue(value);
-            }
+            this.TextWriter?.WriteValue(value);
         } // !WriteAttributeString()
 
 
@@ -242,24 +220,18 @@ namespace s2industries.ZUGFeRD
         } // !_DoesProfileFitToCurrentProfile()
 
 
-        private bool _DoesProfileFitIntoStack(Profile profile)
-        {
-            if (profile == Profile.Unknown)
+        private bool _IsNodeVisible()
+        {            
+            foreach (StackInfo stackInfo in this.XmlStack)
             {
-                return true;
-            }
-
-            foreach (Profile stackProfile in this.XmlStack)
-            {
-                Profile bitmask = stackProfile & profile;
-                if (bitmask != profile)
-                {
+                if (!stackInfo.IsVisible)
+                { 
                     return false;
                 }
             }
 
             return true;
-        } // !_DoesProfileFitIntoStack()
+        } // !_IsNodeVisible()
         #endregion // !Stack Management
 
 
