@@ -18,7 +18,9 @@
  */
 using s2industries.ZUGFeRD;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ZUGFeRD_Test
 {
@@ -32,7 +34,7 @@ namespace ZUGFeRD_Test
             //_loadZUGFeRD2EinfachInvoice();
             //_loadZUGFeRD2ExtendedInvoice();
 
-            //_loadZUGFeRD21BasicInvoice();
+            _loadZUGFeRD21BasicInvoice();
             //_loadZUGFeRD21BasicWLInvoice();
             //_loadZUGFeRD21ExtendedInvoice();
             //_loadZUGFeRD21MinimumInvoice();
@@ -94,7 +96,7 @@ namespace ZUGFeRD_Test
 
             Stream ms = new MemoryStream();
             originalDesc.Save(ms, ZUGFeRDVersion.Version21);
-            originalDesc.Save(@"C:\Projekte\Visual Studio\3th-Party\ZUGFeRD-csharp\zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version21);
+            originalDesc.Save(@"zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version21);
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 

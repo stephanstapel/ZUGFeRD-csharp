@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor20Writer : IInvoiceDescriptorWriter
     {
-        private XmlTextWriter Writer;
+        private ProfileAwareXmlTextWriter Writer;
         private InvoiceDescriptor Descriptor;
 
 
@@ -50,7 +50,7 @@ namespace s2industries.ZUGFeRD
             long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;
-            this.Writer = new XmlTextWriter(stream, Encoding.UTF8);
+            this.Writer = new ProfileAwareXmlTextWriter(stream, Encoding.UTF8, descriptor.Profile);
             Writer.Formatting = Formatting.Indented;
             Writer.WriteStartDocument();
 
@@ -413,7 +413,12 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);
             _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);
             _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);
-            _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount);
+
+            if (this.Descriptor.TotalPrepaidAmount.HasValue)
+            {
+                _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount.Value);
+            }
+
             _writeOptionalAmount(Writer, "ram:DuePayableAmount", this.Descriptor.DuePayableAmount);
             Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementMonetarySummation
 
@@ -643,19 +648,19 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        private void _writeOptionalAmount(XmlTextWriter writer, string tagName, decimal value, int numDecimals = 2)
+        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2)
         {
-            if (value != decimal.MinValue)
+            if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName);
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                writer.WriteValue(_formatDecimal(value, numDecimals));
+                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
         } // !_writeOptionalAmount()
 
 
-        private void _writeElementWithAttribute(XmlTextWriter writer, string tagName, string attributeName, string attributeValue, string nodeValue)
+        private void _writeElementWithAttribute(ProfileAwareXmlTextWriter writer, string tagName, string attributeName, string attributeValue, string nodeValue)
         {
             writer.WriteStartElement(tagName);
             writer.WriteAttributeString(attributeName, attributeValue);
@@ -664,7 +669,7 @@ namespace s2industries.ZUGFeRD
         } // !_writeElementWithAttribute()
 
 
-        private void _writeOptionalTaxes(XmlTextWriter writer)
+        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
             foreach (Tax tax in this.Descriptor.Taxes)
             {
@@ -700,7 +705,7 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalTaxes()
 
 
-        private void _writeNotes(XmlTextWriter writer, List<Note> notes)
+        private void _writeNotes(ProfileAwareXmlTextWriter writer, List<Note> notes)
         {
             if (notes.Count > 0)
             {
@@ -722,7 +727,7 @@ namespace s2industries.ZUGFeRD
         } // !_writeNotes()
 
 
-        private void _writeOptionalParty(XmlTextWriter writer, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null)
         {
             if (Party != null)
             {
@@ -780,7 +785,7 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalParty()
 
 
-        private void _writeOptionalContact(XmlTextWriter writer, string contactTag, Contact contact)
+        private void _writeOptionalContact(ProfileAwareXmlTextWriter writer, string contactTag, Contact contact)
         {
             if (contact != null)
             {
