@@ -26,20 +26,65 @@ namespace s2industries.ZUGFeRD
     public class TradeLineItem
     {
         public GlobalID GlobalID { get; set; }
+        /// <summary>
+        /// Artikelnummer des Verkäufers
+        /// </summary>
         public string SellerAssignedID { get; set; }
+        /// <summary>
+        /// Artikelnummer des Käufers
+        /// </summary>
         public string BuyerAssignedID { get; set; }
+        /// <summary>
+        /// Artikelname
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Artikel Beschreibung
+        /// </summary>
         public string Description { get; set; }
+        /// <summary>
+        /// Menge, enthalten
+        /// </summary>
         public decimal? UnitQuantity { get; set; }
+        /// <summary>
+        /// Basismenge zum Artikelpreis
+        /// </summary>
         public decimal BilledQuantity { get; set; }
+        /// <summary>
+        /// Nettobetrag der Rechnungsposition
+        /// </summary>
         public decimal? LineTotalAmount { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public TaxCategoryCodes TaxCategoryCode { get; set; }
+        /// <summary>
+        /// Steuersatz
+        /// </summary>
         public decimal TaxPercent { get; set; }
+        /// <summary>
+        /// Steuertyp
+        /// </summary>
         public TaxTypes TaxType { get; set; }
+        /// <summary>
+        /// Netto Einzelpreis
+        /// </summary>
         public decimal NetUnitPrice { get; set; }
+        /// <summary>
+        /// Brutto Einzelpreis
+        /// </summary>
         public decimal GrossUnitPrice { get; set; }
+        /// <summary>
+        /// Einheit der Preisbasismenge
+        /// </summary>
         public QuantityCodes UnitCode { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public AssociatedDocument AssociatedDocument { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime? ActualDeliveryDate { get; set; }
         public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }

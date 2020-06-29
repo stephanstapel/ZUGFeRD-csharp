@@ -8,7 +8,13 @@ namespace s2industries.ZUGFeRD
 {
     public class BaseReferencedDocument
     {
+        /// <summary>
+        /// Bestellnummer / Lieferscheinummer
+        /// </summary>
         public string ID { get; set; }
+        /// <summary>
+        /// Bestelldatum / Lieferdatum
+        /// </summary>
         public DateTime? IssueDateTime { get; set; }
     }
 }

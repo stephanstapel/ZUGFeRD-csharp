@@ -92,6 +92,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(originalDesc.LineTotalAmount, 198.0m);
             Assert.AreEqual(originalDesc.Taxes[0].TaxAmount, 37.62m);
             Assert.AreEqual(originalDesc.Taxes[0].Percent, 19.0m);
+            originalDesc.IsTest = false;
 
             Stream ms = new MemoryStream();
             originalDesc.Save(ms, ZUGFeRDVersion.Version21);
