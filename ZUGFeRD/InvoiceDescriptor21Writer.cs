@@ -121,7 +121,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument.LineID));
                     }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes);
-                    Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument
+                    Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended)
                 }
                 #endregion
 
@@ -145,7 +145,7 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
 
-                Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct
+                Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended)
                 #endregion
 
                 #region SpecifiedLineTradeAgreement
@@ -221,7 +221,7 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
                             }
 
-                            Writer.WriteEndElement(); // !ram:ContractReferencedDocument
+                            Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
                         }
                         #endregion
 
@@ -286,14 +286,14 @@ namespace s2industries.ZUGFeRD
 
                             #region BasisAmount
                             Writer.WriteStartElement("ram:BasisAmount");
-                            Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                            Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
                             Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
                             Writer.WriteEndElement();
                             #endregion
 
                             #region ActualAmount
                             Writer.WriteStartElement("ram:ActualAmount");
-                            Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                            Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
                             Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                             Writer.WriteEndElement();
                             #endregion
@@ -303,33 +303,21 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                         }
 
-                        Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
+                        Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended)
                         #endregion
-                        #endregion
+                        #endregion // !GrossPriceProductTradePrice(Comfort|Extended)
 
                         #region NetPriceProductTradePrice
                         //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
-                        switch (Descriptor.Profile)
-                        {
-                            //case Profile.Standard:
-                            //case Profile.Minimum:
-                            //case Profile.BasicWL:
-                            case Profile.Basic:
-                            case Profile.Comfort:
-                            case Profile.Extended:
-                                Writer.WriteStartElement("ram:NetPriceProductTradePrice");
-                                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 2);
+                        Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended);
+                        _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 2);
 
-                                if (tradeLineItem.UnitQuantity.HasValue)
-                                {
-                                    _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
-                                }
-                                Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
-                                break;
-                            default:
-                                break;
+                        if (tradeLineItem.UnitQuantity.HasValue)
+                        {
+                            _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
                         }
-                        #endregion
+                        Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended)
+                        #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended)
 
                         #region UltimateCustomerOrderReferencedDocument
                         //ToDo: UltimateCustomerOrderReferencedDocument
@@ -394,26 +382,12 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:SpecifiedLineTradeSettlement"); //ToDo: Prüfen
 
                 #region ApplicableTradeTax
-                //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die Umsatzsteuer enthält, die für die in der betreffenden Rechnungsposition in Rechnung gestellten Waren und Dienstleistungen gilt
-                switch (Descriptor.Profile)
-                {
-                    //case Profile.Standard:
-                    //case Profile.Minimum:
-                    //case Profile.BasicWL:
-                    case Profile.Basic:
-                    case Profile.Comfort:
-                    case Profile.Extended:
-                        Writer.WriteStartElement("ram:ApplicableTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
-                        Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
-                        Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
-                        Writer.WriteEndElement(); // !ram:ApplicableTradeTax
-                        break;
-                    default:
-                        break;
-                }
-
-                #endregion
+                Writer.WriteStartElement("ram:ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended);
+                Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
+                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
+                Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
+                Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended)
+                #endregion // !ApplicableTradeTax(Basic|Comfort|Extended)
 
                 #region BillingSpecifiedPeriod
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den für die Rechnungsposition maßgeblichen Zeitraum enthält
@@ -469,7 +443,12 @@ namespace s2industries.ZUGFeRD
                         {
                             _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                         }
-                        _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
+
+                        Writer.WriteStartElement("ram:LineTotalAmount");
+                        Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                        Writer.WriteValue(_formatDecimal(_total));
+                        Writer.WriteEndElement(); // !ram:LineTotalAmount
+                        
                         //ToDo: TotalAllowanceChargeAmount
                         //Gesamtbetrag der Positionszu- und Abschläge
                         break;
@@ -556,13 +535,9 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram:ApplicableHeaderTradeDelivery"); // Pflichteintrag
-
-            if (Descriptor.Profile == Profile.Extended)
-            {
-                _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo);
-                //ToDo: UltimateShipToTradeParty
-                _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom);
-            }
+            _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo, profile : Profile.Extended);
+            //ToDo: UltimateShipToTradeParty
+            _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom, profile: Profile.Extended);
 
             #region ActualDeliverySupplyChainEvent
             if (this.Descriptor.ActualDeliveryDate.HasValue)
@@ -745,12 +720,12 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
 
                     Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                     Writer.WriteEndElement();
 
@@ -840,7 +815,7 @@ namespace s2industries.ZUGFeRD
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName);
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
                 writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
@@ -863,21 +838,21 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram:ApplicableTradeTax");
 
                 writer.WriteStartElement("ram:CalculatedAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
                 writer.WriteStartElement("ram:BasisAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
                 if (tax.AllowanceChargeBasisAmount != 0)
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
@@ -914,11 +889,11 @@ namespace s2industries.ZUGFeRD
         } // !_writeNotes()
 
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null, Profile profile = Profile.Unknown)
         {
             if (Party != null)
             {
-                writer.WriteStartElement(PartyTag);
+                writer.WriteStartElement(PartyTag, profile);
 
                 if (!String.IsNullOrEmpty(Party.ID))
                 {
