@@ -175,6 +175,15 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
+            if (profile != Profile.Unknown)
+            {
+                Profile bitmask = profile & this.CurrentProfile;
+                if (bitmask != this.CurrentProfile)
+                {
+                    return;
+                }
+            }
+
             // write value
             if (!String.IsNullOrEmpty(prefix))
             {

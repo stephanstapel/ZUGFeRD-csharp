@@ -41,7 +41,6 @@ namespace ZUGFeRD_Test
 
             //_loadXRechnungCII();
 
-            // load demo data, then roundtrip
             _loadSaveLoadZUGFeRD21BasicInvoice();
 
             // --- ZUGFeRD 1.x tests ---
@@ -59,7 +58,7 @@ namespace ZUGFeRD_Test
             _saveAndLoadZUGFeRD1Invoice();
             _saveAndLoadZUGFeRD1InvoiceViaStream();
         } // !run()
-
+        
 
         private void _loadZUGFeRD21BasicInvoice()
         {
@@ -95,7 +94,7 @@ namespace ZUGFeRD_Test
             originalDesc.IsTest = false;
 
             Stream ms = new MemoryStream();
-            originalDesc.Save(ms, ZUGFeRDVersion.Version21);
+            originalDesc.Save(ms, ZUGFeRDVersion.Version21, Profile.Basic);
             originalDesc.Save(@"zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version21);
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
@@ -165,7 +164,7 @@ namespace ZUGFeRD_Test
             string path = @"..\..\..\demodata\xRechnung\xRechnung CII.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
-            Assert.AreEqual(desc.Profile, Profile.Standard);
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
             Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
             Assert.AreEqual(desc.TradeLineItems.Count, 2);
@@ -232,7 +231,7 @@ namespace ZUGFeRD_Test
         {
             string path = "output.xml";
             InvoiceDescriptor desc = _createInvoice();
-            desc.Save(path);
+            desc.Save(path, ZUGFeRDVersion.Version1, Profile.Comfort);
 
             InvoiceDescriptor desc2 = InvoiceDescriptor.Load(path);
         } // !_saveAndLoadZUGFeRD1Invoice()
@@ -244,7 +243,7 @@ namespace ZUGFeRD_Test
 
             string path = "output_stream.xml";
             FileStream saveStream = new FileStream(path, FileMode.Create);
-            desc.Save(saveStream);
+            desc.Save(saveStream, ZUGFeRDVersion.Version1, Profile.Comfort);
             saveStream.Close();
 
             FileStream loadStream = new FileStream(path, FileMode.Open);
@@ -257,7 +256,7 @@ namespace ZUGFeRD_Test
 
             // try again with a memory stream
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms);
+            desc.Save(ms, ZUGFeRDVersion.Version1, Profile.Comfort);
 
             byte[] data = ms.ToArray();
             string s = System.Text.Encoding.Default.GetString(data);
@@ -266,8 +265,7 @@ namespace ZUGFeRD_Test
 
         private InvoiceDescriptor _createInvoice()
         {
-            InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-            desc.Profile = Profile.Comfort;
+            InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");            
             desc.ReferenceOrderNo = "AB-312";
             desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
             desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCodes.AAK);
@@ -288,7 +286,7 @@ namespace ZUGFeRD_Test
             desc.AddTradeAllowanceCharge(true, 137.7m, CurrencyCodes.EUR, 13.73m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 7);
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
 
-            desc.setPaymentMeans(PaymentMeansTypeCodes.PaymentMeans_42, "Überweisung");
+            desc.setPaymentMeans(PaymentMeansTypeCodes.PaymentToBankAccount, "Überweisung");
             desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04", "1234567890", "70090100", "Hausbank München");
 
             desc.addTradeLineCommentItem("Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:");

@@ -68,7 +68,7 @@ namespace s2industries.ZUGFeRD
 
         public List<Note> Notes { get; set; }
         public bool IsTest { get; set; }
-        public Profile Profile { get; set; }
+        public Profile Profile { get; internal set; }
         public InvoiceType Type { get; set; }
         public string ReferenceOrderNo { get; set; }
         public List<TradeLineItem> TradeLineItems { get; set; }
@@ -392,7 +392,7 @@ namespace s2industries.ZUGFeRD
         /// This allows easy further processing of the stream.
         /// </summary>
         /// <param name="stream"></param>
-        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
+        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             IInvoiceDescriptorWriter writer = null;
             switch (version)
@@ -413,7 +413,7 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1)
+        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             IInvoiceDescriptorWriter writer = null;
             switch (version)

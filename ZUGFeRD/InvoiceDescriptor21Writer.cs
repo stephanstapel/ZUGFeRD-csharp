@@ -148,234 +148,188 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended)
                 #endregion
 
-                #region SpecifiedLineTradeAgreement
+                #region SpecifiedLineTradeAgreement (Basic, Comfort, Extended)
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den Preis für die in der betreffenden Rechnungsposition in Rechnung gestellten Waren und Dienstleistungen enthält
-                switch (Descriptor.Profile)
-                {
-                    //case Profile.Standard:
-                    //case Profile.Minimum:
-                    //case Profile.BasicWL:
-                    case Profile.Basic:
-                    case Profile.Comfort:
-                    case Profile.Extended:
-                        Writer.WriteStartElement("ram:SpecifiedLineTradeAgreement");
 
-                        #region BuyerOrderReferencedDocument
-                        //Detailangaben zur zugehörigen Bestellung
-                        switch (Descriptor.Profile)
+                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended }.Contains(descriptor.Profile))
+                {                 
+                    Writer.WriteStartElement("ram:SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended);
+
+                    #region BuyerOrderReferencedDocument (Comfort, Extended)
+                    //Detailangaben zur zugehörigen Bestellung                   
+                    if (tradeLineItem.BuyerOrderReferencedDocument != null)
+                    {
+                        Writer.WriteStartElement("ram:BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended);
+
+                        #region IssuerAssignedID
+                        //Bestellnummer
+                        if (!String.IsNullOrEmpty(tradeLineItem.BuyerOrderReferencedDocument.ID))
                         {
-                            //case Profile.Standard:
-                            //case Profile.Minimum:
-                            //case Profile.BasicWL:
-                            //case Profile.Basic:
-                            case Profile.Comfort:
-                            case Profile.Extended:
-                                if (tradeLineItem.BuyerOrderReferencedDocument != null)
-                                {
-                                    Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
-
-                                    #region IssuerAssignedID
-                                    //Bestellnummer
-                                    if (!String.IsNullOrEmpty(tradeLineItem.BuyerOrderReferencedDocument.ID))
-                                    {
-                                        Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID);
-                                    }
-                                    #endregion
-
-                                    #region LineID
-                                    //Referenz zur Bestellposition
-                                    //ToDo: fehlt ganz
-                                    #endregion
-
-                                    #region FormattedIssueDateTime
-                                    if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
-                                    {
-                                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                                        Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
-                                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
-                                    }
-                                    #endregion
-
-                                    Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
-                                }
-                                break;
-                            default:
-                                break;
+                            Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID);
                         }
-
                         #endregion
 
-                        #region ContractReferencedDocument
-                        //Detailangaben zum zugehörigen Vertrag
-                        if (tradeLineItem.ContractReferencedDocument != null)
+                        #region LineID
+                        //Referenz zur Bestellposition
+                        //ToDo: fehlt ganz
+                        #endregion
+
+                        #region FormattedIssueDateTime
+                        if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:ContractReferencedDocument", Profile.Extended);
-                            if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                        }
+                        #endregion
+
+                        Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
+                    }
+                    #endregion
+
+                    #region ContractReferencedDocument
+                    //Detailangaben zum zugehörigen Vertrag
+                    if (tradeLineItem.ContractReferencedDocument != null)
+                    {
+                        Writer.WriteStartElement("ram:ContractReferencedDocument", Profile.Extended);
+                        if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:IssueDateTime");
+                            Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                        }
+                        if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
+                        {
+                            Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
+                        }
+
+                        Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
+                    }
+                    #endregion
+
+                    #region AdditionalReferencedDocument (Extended)
+                    //Detailangaben zu einer zusätzlichen Dokumentenreferenz                        
+                    if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
+                    {
+                        foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
+                        {
+                            Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
+                            if (doc.IssueDateTime.HasValue)
                             {
                                 Writer.WriteStartElement("ram:IssueDateTime");
-                                Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
+                                Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
                                 Writer.WriteEndElement(); // !ram:IssueDateTime
                             }
-                            if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
+
+                            Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
+
+                            if (!String.IsNullOrEmpty(doc.ID))
                             {
-                                Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
+                                Writer.WriteElementString("ram:ID", doc.ID);
                             }
 
-                            Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
+                            Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
+
+                            Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                         }
+                    }
+                    #endregion
+
+                    #region GrossPriceProductTradePrice (Comfort, Extended)
+                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended);
+                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 2);
+                    if (tradeLineItem.UnitQuantity.HasValue)
+                    {
+                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
+                    }
+
+                    #region AppliedTradeAllowanceCharge
+                    foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
+                    {
+                        Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
+
+                        #region ChargeIndicator
+                        Writer.WriteStartElement("ram:ChargeIndicator");
+                        Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                        Writer.WriteEndElement(); // !ram:ChargeIndicator
                         #endregion
 
-                        #region AdditionalReferencedDocument
-                        //Detailangaben zu einer zusätzlichen Dokumentenreferenz
-                        switch (Descriptor.Profile)
-                        {
-                            //case Profile.Standard:
-                            //case Profile.Minimum:
-                            //case Profile.BasicWL:
-                            //case Profile.Basic:
-                            //case Profile.Comfort:
-                            case Profile.Extended:
-                                if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
-                                {
-                                    foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
-                                    {
-                                        Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                                        if (doc.IssueDateTime.HasValue)
-                                        {
-                                            Writer.WriteStartElement("ram:IssueDateTime");
-                                            Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
-                                            Writer.WriteEndElement(); // !ram:IssueDateTime
-                                        }
-
-                                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
-
-                                        if (!String.IsNullOrEmpty(doc.ID))
-                                        {
-                                            Writer.WriteElementString("ram:ID", doc.ID);
-                                        }
-
-                                        Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
-
-                                        Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                                    }
-                                }
-                                break;
-                            default:
-                                break;
-                        }
+                        #region BasisAmount
+                        Writer.WriteStartElement("ram:BasisAmount");
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
+                        Writer.WriteEndElement();
                         #endregion
 
-                        #region GrossPriceProductTradePrice
-                        Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended);
-                        _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 2);
-                        if (tradeLineItem.UnitQuantity.HasValue)
-                        {
-                            _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
-                        }
-
-                        #region AppliedTradeAllowanceCharge
-                        foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
-                        {
-                            Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
-
-                            #region ChargeIndicator
-                            Writer.WriteStartElement("ram:ChargeIndicator");
-                            Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                            Writer.WriteEndElement(); // !ram:ChargeIndicator
-                            #endregion
-
-                            #region BasisAmount
-                            Writer.WriteStartElement("ram:BasisAmount");
-                            Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
-                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
-                            Writer.WriteEndElement();
-                            #endregion
-
-                            #region ActualAmount
-                            Writer.WriteStartElement("ram:ActualAmount");
-                            Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
-                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
-                            Writer.WriteEndElement();
-                            #endregion
-
-                            _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
-
-                            Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
-                        }
-
-                        Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended)
+                        #region ActualAmount
+                        Writer.WriteStartElement("ram:ActualAmount");
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
+                        Writer.WriteEndElement();
                         #endregion
-                        #endregion // !GrossPriceProductTradePrice(Comfort|Extended)
 
-                        #region NetPriceProductTradePrice
-                        //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
-                        Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended);
-                        _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 2);
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
 
-                        if (tradeLineItem.UnitQuantity.HasValue)
-                        {
-                            _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
-                        }
-                        Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended)
-                        #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended)
+                        Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
+                    }
 
-                        #region UltimateCustomerOrderReferencedDocument
-                        //ToDo: UltimateCustomerOrderReferencedDocument
-                        #endregion
-                        Writer.WriteEndElement(); // ram:SpecifiedLineTradeAgreement
-                        break;
-                    default:
-                        break;
+                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended)
+                    #endregion
+                    #endregion // !GrossPriceProductTradePrice(Comfort|Extended)
+
+                    #region NetPriceProductTradePrice
+                    //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
+                    Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended);
+                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 2);
+
+                    if (tradeLineItem.UnitQuantity.HasValue)
+                    {
+                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
+                    }
+                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended)
+                    #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended)
+
+                    #region UltimateCustomerOrderReferencedDocument
+                    //ToDo: UltimateCustomerOrderReferencedDocument
+                    #endregion
+                    Writer.WriteEndElement(); // ram:SpecifiedLineTradeAgreement                       
                 }
                 #endregion
 
-                #region SpecifiedLineTradeDelivery
-                //Gruppierung von Lieferangaben aus Positionsebene
-                switch (Descriptor.Profile)
+                #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
+                Writer.WriteStartElement("ram:SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended);
+                _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 2));
+
+                if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
-                    //case Profile.Standard:
-                    //case Profile.Minimum:
-                    //case Profile.BasicWL:
-                    case Profile.Basic:
-                    case Profile.Comfort:
-                    case Profile.Extended:
-                        Writer.WriteStartElement("ram:SpecifiedLineTradeDelivery");
-                        _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 2));
+                    Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
+                    if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:IssueDateTime");
+                        Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // !ram:IssueDateTime
+                    }
+                    if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
+                    {
+                        Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                    }
 
-                        if (tradeLineItem.DeliveryNoteReferencedDocument != null)
-                        {
-                            Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
-                            if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
-                            {
-                                Writer.WriteStartElement("ram:IssueDateTime");
-                                Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
-                                Writer.WriteEndElement(); // !ram:IssueDateTime
-                            }
-                            if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
-                            {
-                                Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
-                            }
-
-                            Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
-                        }
-
-                        if (tradeLineItem.ActualDeliveryDate.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent");
-                            Writer.WriteStartElement("ram:OccurrenceDateTime");
-                            Writer.WriteStartElement("udt:DateTimeString");
-                            Writer.WriteAttributeString("format", "102");
-                            Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
-                            Writer.WriteEndElement(); // "udt:DateTimeString
-                            Writer.WriteEndElement(); // !OccurrenceDateTime()
-                            Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
-                        }
-
-                        Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
-                        break;
-                    default:
-                        break;
+                    Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                 }
+
+                if (tradeLineItem.ActualDeliveryDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent");
+                    Writer.WriteStartElement("ram:OccurrenceDateTime");
+                    Writer.WriteStartElement("udt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
+                    Writer.WriteEndElement(); // "udt:DateTimeString
+                    Writer.WriteEndElement(); // !OccurrenceDateTime()
+                    Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
+                }
+
+                Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
                 #endregion
 
                 #region SpecifiedLineTradeSettlement
@@ -389,73 +343,36 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended)
                 #endregion // !ApplicableTradeTax(Basic|Comfort|Extended)
 
-                #region BillingSpecifiedPeriod
+                #region BillingSpecifiedPeriod (Comfort, Extended)
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den für die Rechnungsposition maßgeblichen Zeitraum enthält
-                switch (Descriptor.Profile)
-                {
-                    //case Profile.Standard:
-                    //case Profile.Minimum:
-                    //case Profile.BasicWL:
-                    //case Profile.Basic:
-                    case Profile.Comfort:
-                    case Profile.Extended:
-                        //ToDo: BillingSpecifiedPeriod
-                        break;
-                    default:
-                        break;
-                }
+                //ToDo: BillingSpecifiedPeriod für Comfort und Extended
                 #endregion
 
                 #region SpecifiedTradeAllowanceCharge
-                //Abschläge auf Ebene der Rechnungsposition
-                switch (Descriptor.Profile)
-                {
-                    //case Profile.Standard:
-                    //case Profile.Minimum:
-                    //case Profile.BasicWL:
-                    case Profile.Basic:
-                    case Profile.Comfort:
-                    case Profile.Extended:
-                        //ToDo: SpecifiedTradeAllowanceCharge
-                        break;
-                    default:
-                        break;
-                }
+                //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended)               
+                //ToDo: SpecifiedTradeAllowanceCharge für Basic, Comfort und Extended
                 #endregion
 
-                #region SpecifiedTradeSettlementLineMonetarySummation
+                #region SpecifiedTradeSettlementLineMonetarySummation (Basic, Comfort, Extended)
                 //Detailinformationen zu Positionssummen
-                Writer.WriteStartElement("ram:SpecifiedTradeSettlementLineMonetarySummation");
-                switch (Descriptor.Profile)
+                Writer.WriteStartElement("ram:SpecifiedTradeSettlementLineMonetarySummation");            
+                decimal _total = 0m;
+                if (tradeLineItem.LineTotalAmount.HasValue)
                 {
-                    //case Profile.Standard:
-                    //case Profile.Minimum:
-                    //case Profile.BasicWL:
-                    case Profile.Basic:
-                    case Profile.Comfort:
-                    case Profile.Extended:
-                        decimal _total = 0m;
-                        if (tradeLineItem.LineTotalAmount.HasValue)
-                        {
-                            _total = tradeLineItem.LineTotalAmount.Value;
-                        }
-                        else
-                        {
-                            _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
-                        }
-
-                        Writer.WriteStartElement("ram:LineTotalAmount");
-                        Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
-                        Writer.WriteValue(_formatDecimal(_total));
-                        Writer.WriteEndElement(); // !ram:LineTotalAmount
-                        
-                        //ToDo: TotalAllowanceChargeAmount
-                        //Gesamtbetrag der Positionszu- und Abschläge
-                        break;
-                    default:
-                        break;
+                    _total = tradeLineItem.LineTotalAmount.Value;
+                }
+                else
+                {
+                    _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                 }
 
+                Writer.WriteStartElement("ram:LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended);
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                Writer.WriteValue(_formatDecimal(_total));
+                Writer.WriteEndElement(); // !ram:LineTotalAmount
+                        
+                //ToDo: TotalAllowanceChargeAmount
+                //Gesamtbetrag der Positionszu- und Abschläge
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                 #endregion
 
@@ -591,7 +508,7 @@ namespace s2industries.ZUGFeRD
             }
             Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
-            #region SpecifiedTradeSettlementPaymentMeans
+            #region SpecifiedTradeSettlementPaymentMeans (alle außer Minimum)
             if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
             {
                 if (this.Descriptor.PaymentMeans != null)
@@ -599,7 +516,7 @@ namespace s2industries.ZUGFeRD
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
+                        Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
@@ -915,7 +832,7 @@ namespace s2industries.ZUGFeRD
 
                 if (Contact != null)
                 {
-                    _writeOptionalContact(writer, "ram:DefinedTradeContact", Contact);
+                    _writeOptionalContact(writer, "ram:DefinedTradeContact", Contact, Profile.Extended | Profile.XRechnung);
                 }
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
@@ -947,11 +864,11 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalParty()
 
 
-        private void _writeOptionalContact(ProfileAwareXmlTextWriter writer, string contactTag, Contact contact)
+        private void _writeOptionalContact(ProfileAwareXmlTextWriter writer, string contactTag, Contact contact, Profile profile = Profile.Unknown)
         {
             if (contact != null)
             {
-                writer.WriteStartElement(contactTag);
+                writer.WriteStartElement(contactTag, profile);
 
                 if (!String.IsNullOrEmpty(contact.Name))
                 {

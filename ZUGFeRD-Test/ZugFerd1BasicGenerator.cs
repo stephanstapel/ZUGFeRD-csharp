@@ -20,8 +20,7 @@ namespace ZUGFeRD_Test
 
       private InvoiceDescriptor _generateDescriptor()
       {
-         InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 3, 5), CurrencyCodes.EUR, "2013-471102");
-         desc.Profile = Profile.Basic;
+         InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 3, 5), CurrencyCodes.EUR, "2013-471102");         
          desc.AddNote("Rechnung gemäß Bestellung vom 01.03.2013.");
 
          StringBuilder lieferantNote = new StringBuilder();
@@ -100,7 +99,7 @@ namespace ZUGFeRD_Test
       {
          InvoiceDescriptor tempDesc = _generateDescriptor();
          MemoryStream ms = new MemoryStream();
-         tempDesc.Save(ms);
+         tempDesc.Save(ms, ZUGFeRDVersion.Version1, Profile.Basic);
          string s = Encoding.ASCII.GetString(ms.ToArray());
          InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 
