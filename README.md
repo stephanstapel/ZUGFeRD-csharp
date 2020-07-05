@@ -60,7 +60,7 @@ Stream stream = new FileStream("zugferd.xml", FileMode.Open, FileAccess.Read);
 InvoiceDescriptor descriptor = InvoiceDescriptor.Load(stream);
 ```
 
-The library will automatically detect the ZUGFeRD version of the file and parse accordingly. As of today (2020-06-21), parsing ZUGFeRD 2.x is not yet finished.
+The library will automatically detect the ZUGFeRD version of the file and parse accordingly. As of today (2020-07-05), parsing ZUGFeRD 2.x is not yet finished.
 For saving ZUGFeRD files, use InvoiceDescriptor.Save(). Here, you can also pass a stream object:
 
 ```csharp
@@ -69,7 +69,7 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 // fill attributes and structures
 
 FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
-descriptor.Save(stream);
+descriptor.Save(stream, ZUGFeRDVersion.Version1, Profile.Basic);
 stream.Flush();
 stream.Close();            
 ```
@@ -81,7 +81,7 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 
 // fill attributes and structures
 
-descriptor.Save("zugferd.xml");          
+descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version1, Profile.Basic);          
 ```
 
 Optionally, you can pass the ZUGFeRD version to use, default currently is version 1.x, e.g.:
@@ -92,10 +92,33 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 // fill attributes and structures
 
 
-descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1); // save as version 1.x
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2); // save as version 2.0
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21); // save as version 2.1
+descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1
 ```
+
+# Support for profiles
+The library contains support for all profiles that are supported by the ZUGFeRD formats:
+
+| Profile         	| Version1 	| Version2 	| Version21 	|
+|-----------------	|----------	|----------	|-----------	|
+| MINIMUM         	|          	| X        	| X         	|
+| BASIC WL        	|          	| X        	| X         	|
+| BASIC           	| X        	| X        	| X         	|
+| COMFORT/EN16391 	| X        	| X        	| X         	|
+| XRECHNUNG       	|          	|          	| X         	|
+| EXTENDED        	| X        	| X        	| X         	|
+
+please note that version 1 implementation of the library is not strict, i.e. it will output all information available into the invoice xml, regardless of the profiles that is used. Reading various files with different profiles will generate the correct output.
+
+Beginning with version 2.1, the output is corresponding exactly to the profile that is used.
+
+If you want to write the invoice xml with a certain ZUGFeRD version and a certain profile, make sure to use the parameters of the Save method:
+
+descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x, profile Basic
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0, profile Basic
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1, profile Basic
+descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as version 2.1, profile XRechnung
 
 
 # Thanks
