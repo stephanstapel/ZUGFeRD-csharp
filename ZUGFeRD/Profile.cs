@@ -87,8 +87,9 @@ namespace s2industries.ZUGFeRD
                 case ZUGFeRDVersion.Version20:
                     switch (profile)
                     {
-                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";
+                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";                        
                         case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
+                        case Profile.BasicWL: return "urn:zugferd.de:2p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version");
