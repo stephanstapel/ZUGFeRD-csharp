@@ -20,8 +20,7 @@ namespace ZUGFeRD_Test
 
         private InvoiceDescriptor _generateDescriptor()
         { 
-            InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "2013-471102");
-            desc.Profile = Profile.Comfort;
+            InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "2013-471102");            
             desc.AddNote("Rechnung gemäß Bestellung vom 01.03.2013.");
 
             StringBuilder lieferantNote = new StringBuilder();
@@ -53,7 +52,7 @@ namespace ZUGFeRD_Test
             desc.SetBuyerContact("Hans Muster");
 
             desc.ActualDeliveryDate = new DateTime(2013, 03, 05);
-            desc.setPaymentMeans(PaymentMeansTypeCodes.PaymentMeans_31, "Überweisung");
+            desc.setPaymentMeans(PaymentMeansTypeCodes.DebitTransfer, "Überweisung");
             desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04");
             desc.AddApplicableTradeTax(275.0m, 7.0m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.AddApplicableTradeTax(198.00m, 19.0m, TaxTypes.VAT, TaxCategoryCodes.S);
@@ -97,7 +96,7 @@ namespace ZUGFeRD_Test
         {
             InvoiceDescriptor tempDesc = _generateDescriptor();
             MemoryStream ms = new MemoryStream();
-            tempDesc.Save(ms);
+            tempDesc.Save(ms, ZUGFeRDVersion.Version1, Profile.Comfort);
             string  s = Encoding.ASCII.GetString(ms.ToArray());
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 

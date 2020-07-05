@@ -12,7 +12,7 @@ namespace ZUGFeRD_Test
         public void generate()
         {
             InvoiceDescriptor desc = _generateDescriptor();
-            desc.Save("ZUGFeRD_1p0_EXTENDED_Warenrechnung.xml");
+            desc.Save("ZUGFeRD_1p0_EXTENDED_Warenrechnung.xml", ZUGFeRDVersion.Version1, Profile.Extended);
         } // !generate()
 
 
@@ -20,7 +20,6 @@ namespace ZUGFeRD_Test
         {
             InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("R87654321012345", new DateTime(2013, 8, 6), CurrencyCodes.EUR);
             desc.IsTest = true;
-            desc.Profile = Profile.Extended;
 
             desc.AddNote("Es bestehen Rabatt- oder Bonusvereinbarungen.", SubjectCodes.AAK, ContentCodes.ST3);
             desc.AddNote("Der Verkäufer bleibt Eigentümer der Waren bis zu vollständigen Erfüllung der Kaufpreisforderung.", SubjectCodes.AAJ, ContentCodes.EEV);
@@ -114,7 +113,7 @@ namespace ZUGFeRD_Test
         {
             InvoiceDescriptor tempDesc = _generateDescriptor();
             MemoryStream ms = new MemoryStream();
-            tempDesc.Save(ms);
+            tempDesc.Save(ms, ZUGFeRDVersion.Version1, Profile.Extended);
             string s = Encoding.ASCII.GetString(ms.ToArray());
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 

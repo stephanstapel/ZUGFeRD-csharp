@@ -9,53 +9,84 @@
 
         /// <summary>
         /// Keine Zahlungsart definiert
+        /// Available in: Extended
         /// </summary>
-        PaymentMeans_1 = 1,
+        NotDefined = 1,
 
         /// <summary>
         /// Belastung durch automatisierte Clearingstelle, Z.B. bei Abwicklung durch Zahlungsdienstleister wie Online-Bezahlsysteme
         /// </summary>
-        PaymentMeans_3 = 3,
+        AutomatedClearingHouseDebit = 3,
 
         /// <summary>
         /// Bar
+        /// Available in: Basic, Extended
         /// </summary>
-        PaymentMeans_10 = 10,
+        InCash = 10,
 
         /// <summary>
         /// Scheck
+        /// Available in: Basic, Extended
         /// </summary>
-        PaymentMeans_20 = 20,
+        Cheque = 20,
+
+        /// <summary>
+        /// Available in: Basic, Extended
+        /// </summary>
+        CreditTransfer = 30,
 
         /// <summary>
         /// Lastschriftübermittlung:
         /// Zahlung durch Belastung eines Geldbetrages eines
         /// Kontos zugunsten eines anderen.
         /// Überweisung international und nationale SEPA-Überweisung
+        /// 
+        /// Available in: Extended
         /// </summary>
-        PaymentMeans_31 = 31,
+        DebitTransfer = 31,
 
         /// <summary>
         /// Zahlung an Bankkonto
         /// Überweisung national, vor SEPA-Umstellung
+        /// Available in: Basic, Extended
         /// </summary>
-        PaymentMeans_42 = 42,
+        PaymentToBankAccount = 42,
 
         /// <summary>
         /// Bankkkarte, Kreditkarte
+        /// Available in: Basic, Extended
         /// </summary>
-        PaymentMeans_48 = 48,
+        BankCard = 48,
 
         /// <summary>
         /// Lastschriftverfahren
+        /// 
+        /// Available in: Basic, Extended
+        /// /// </summary>
+        DirectDebit = 49,
+
+        /// <summary>
+        /// Available in: Basic, Extended
+        /// </summary>        
+        StandingAgreement = 57,
+
+
+        /// <summary>
+        /// Available in: Basic, Extended
         /// </summary>
-        PaymentMeans_49 = 49,
+        SEPACreditTransfer = 58,
+
+        /// <summary>
+        /// Available in: Basic, Extended
+        /// </summary>        
+        SEPADirectDebit = 59,
 
         /// <summary>
         /// Ausgleich zwischen Partnern.
         /// Beträge, die zwei Partner sich gegenseitig schulden werden ausgeglichen um unnütze Zahlungen zu vermeiden.
+        /// Available in: Basic, Extended
         /// </summary>
-        PaymentMeans_97 = 97
+        ClearingBetweenPartners = 97
     }
 
 
@@ -65,15 +96,19 @@
         {
             switch (s)
             {
-                case "1": return PaymentMeansTypeCodes.PaymentMeans_1;
-                case "3": return PaymentMeansTypeCodes.PaymentMeans_3;
-                case "10": return PaymentMeansTypeCodes.PaymentMeans_10;
-                case "20": return PaymentMeansTypeCodes.PaymentMeans_20;
-                case "31": return PaymentMeansTypeCodes.PaymentMeans_31;
-                case "42": return PaymentMeansTypeCodes.PaymentMeans_42;
-                case "48": return PaymentMeansTypeCodes.PaymentMeans_48;
-                case "49": return PaymentMeansTypeCodes.PaymentMeans_49;
-                case "97": return PaymentMeansTypeCodes.PaymentMeans_97;
+                case "1": return PaymentMeansTypeCodes.NotDefined;
+                case "3": return PaymentMeansTypeCodes.AutomatedClearingHouseDebit;
+                case "10": return PaymentMeansTypeCodes.InCash;
+                case "20": return PaymentMeansTypeCodes.Cheque;
+                case "30": return PaymentMeansTypeCodes.CreditTransfer;
+                case "31": return PaymentMeansTypeCodes.DebitTransfer;
+                case "42": return PaymentMeansTypeCodes.PaymentToBankAccount;
+                case "48": return PaymentMeansTypeCodes.BankCard;
+                case "49": return PaymentMeansTypeCodes.DirectDebit;
+                case "57": return PaymentMeansTypeCodes.StandingAgreement;
+                case "58": return PaymentMeansTypeCodes.SEPACreditTransfer;
+                case "59": return PaymentMeansTypeCodes.SEPADirectDebit;
+                case "97": return PaymentMeansTypeCodes.ClearingBetweenPartners;
             }
             return PaymentMeansTypeCodes.Unknown;
         } // !FromString()
