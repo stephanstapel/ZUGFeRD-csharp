@@ -394,6 +394,8 @@ namespace s2industries.ZUGFeRD
         /// <param name="stream"></param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
+            this.Profile = profile;            
+
             IInvoiceDescriptorWriter writer = null;
             switch (version)
             {
