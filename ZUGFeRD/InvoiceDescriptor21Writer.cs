@@ -256,14 +256,14 @@ namespace s2industries.ZUGFeRD
 
                         #region BasisAmount
                         Writer.WriteStartElement("ram:BasisAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
                         Writer.WriteEndElement();
                         #endregion
 
                         #region ActualAmount
                         Writer.WriteStartElement("ram:ActualAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                         Writer.WriteEndElement();
                         #endregion
@@ -367,7 +367,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 Writer.WriteStartElement("ram:LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended);
-                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(_total));
                 Writer.WriteEndElement(); // !ram:LineTotalAmount
                         
@@ -637,12 +637,12 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
 
                     Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString(), Profile.Extended);
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                     Writer.WriteEndElement();
 
@@ -705,7 +705,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);               //Summe der Nettobeträge aller Rechnungspositionen
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);           //Summe der Zuschläge auf Dokumentenebene
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);     //Summe der Abschläge auf Dokumentenebene
-            _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);            //Rechnungsgesamtbetrag ohne Umsatzsteuer
+            _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount, profile : Profile.Extended);  //Rechnungsgesamtbetrag ohne Umsatzsteuer
             _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);                 //Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
             //ToDo: RoundingAmount  //Rundungsbetrag
             _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);             //Rechnungsgesamtbetrag einschließlich Umsatzsteuer
@@ -727,12 +727,12 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2)
+        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, Profile profile = Profile.Unknown)
         {
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName);
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
@@ -755,21 +755,21 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram:ApplicableTradeTax");
 
                 writer.WriteStartElement("ram:CalculatedAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
                 writer.WriteStartElement("ram:BasisAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
                 if (tax.AllowanceChargeBasisAmount != 0)
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString(), Profile.Extended);
+                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
