@@ -115,13 +115,13 @@ namespace s2industries.ZUGFeRD
                 //Gruppierung von allgemeinen Positionsangaben
                 if (tradeLineItem.AssociatedDocument != null)
                 {
-                    Writer.WriteStartElement("ram:AssociatedDocumentLineDocument", Profile.Basic | Profile.Comfort | Profile.Extended);
+                    Writer.WriteStartElement("ram:AssociatedDocumentLineDocument", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                     if (tradeLineItem.AssociatedDocument.LineID.HasValue)
                     {
                         Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument.LineID));
                     }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes);
-                    Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended)
+                    Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended|XRechnung)
                 }
                 #endregion
 
@@ -134,7 +134,7 @@ namespace s2industries.ZUGFeRD
 
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
-                Writer.WriteStartElement("ram:SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended);
+                Writer.WriteStartElement("ram:SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 if ((tradeLineItem.GlobalID != null) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
                 {
                     _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
@@ -145,21 +145,21 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
 
-                Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended)
+                Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended|XRechnung)
                 #endregion
 
-                #region SpecifiedLineTradeAgreement (Basic, Comfort, Extended)
+                #region SpecifiedLineTradeAgreement (Basic, Comfort, Extended, XRechnung)
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den Preis für die in der betreffenden Rechnungsposition in Rechnung gestellten Waren und Dienstleistungen enthält
 
-                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended }.Contains(descriptor.Profile))
+                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung }.Contains(descriptor.Profile))
                 {                 
-                    Writer.WriteStartElement("ram:SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended);
+                    Writer.WriteStartElement("ram:SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
 
-                    #region BuyerOrderReferencedDocument (Comfort, Extended)
+                    #region BuyerOrderReferencedDocument (Comfort, Extended, XRechnung)
                     //Detailangaben zur zugehörigen Bestellung                   
                     if (tradeLineItem.BuyerOrderReferencedDocument != null)
                     {
-                        Writer.WriteStartElement("ram:BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended);
+                        Writer.WriteStartElement("ram:BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung);
 
                         #region IssuerAssignedID
                         //Bestellnummer
@@ -235,8 +235,8 @@ namespace s2industries.ZUGFeRD
                     }
                     #endregion
 
-                    #region GrossPriceProductTradePrice (Comfort, Extended)
-                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended);
+                    #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)
+                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung);
                     _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 2);
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
@@ -273,21 +273,21 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                     }
 
-                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended)
+                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
                     #endregion
-                    #endregion // !GrossPriceProductTradePrice(Comfort|Extended)
+                    #endregion // !GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
 
                     #region NetPriceProductTradePrice
                     //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
-                    Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended);
+                    Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                     _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 2);
 
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
                         _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
                     }
-                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended)
-                    #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended)
+                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
+                    #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
 
                     #region UltimateCustomerOrderReferencedDocument
                     //ToDo: UltimateCustomerOrderReferencedDocument
@@ -297,7 +297,7 @@ namespace s2industries.ZUGFeRD
                 #endregion
 
                 #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
-                Writer.WriteStartElement("ram:SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended);
+                Writer.WriteStartElement("ram:SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 2));
 
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
@@ -336,12 +336,12 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:SpecifiedLineTradeSettlement"); //ToDo: Prüfen
 
                 #region ApplicableTradeTax
-                Writer.WriteStartElement("ram:ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended);
+                Writer.WriteStartElement("ram:ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
                 Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
                 Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
-                Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended)
-                #endregion // !ApplicableTradeTax(Basic|Comfort|Extended)
+                Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
+                #endregion // !ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
 
                 #region BillingSpecifiedPeriod (Comfort, Extended)
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den für die Rechnungsposition maßgeblichen Zeitraum enthält
@@ -366,7 +366,7 @@ namespace s2industries.ZUGFeRD
                     _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                 }
 
-                Writer.WriteStartElement("ram:LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended);
+                Writer.WriteStartElement("ram:LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(_total));
                 Writer.WriteEndElement(); // !ram:LineTotalAmount
