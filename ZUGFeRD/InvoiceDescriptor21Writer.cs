@@ -101,10 +101,6 @@ namespace s2industries.ZUGFeRD
             #region SpecifiedSupplyChainTradeTransaction
             //Gruppierung der Informationen zum Geschäftsvorfall
             Writer.WriteStartElement("rsm:SupplyChainTradeTransaction");
-            //if (!String.IsNullOrEmpty(this.Descriptor.ReferenceOrderNo))
-            //{
-            //    Writer.WriteElementString("ram:BuyerReference", this.Descriptor.ReferenceOrderNo);
-            //}
 
             #region  IncludedSupplyChainTradeLineItem
             foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
@@ -395,6 +391,10 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeAgreement
             Writer.WriteStartElement("ram:ApplicableHeaderTradeAgreement");//CG
+            if (!String.IsNullOrEmpty(this.Descriptor.ReferenceOrderNo))
+            { 
+                Writer.WriteElementString("ram:BuyerReference", this.Descriptor.ReferenceOrderNo);
+            }
 
             #region SellerTradeParty
             _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
