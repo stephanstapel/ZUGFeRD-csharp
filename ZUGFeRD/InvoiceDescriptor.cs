@@ -90,6 +90,16 @@ namespace s2industries.ZUGFeRD
         public List<BankAccount> DebitorBankAccounts { get; set; }
         public PaymentMeans PaymentMeans { get; set; }
 
+        /// <summary>
+        /// BillingPeriodEnd needs to be set too
+        /// </summary>
+        public DateTime? BillingPeriodStart { get; set; }
+
+        /// <summary>
+        /// BillingPeriodStart needs to be set too
+        /// </summary>
+        public DateTime? BillingPeriodEnd { get; set; }
+
 
         internal InvoiceDescriptor()
         {
