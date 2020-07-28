@@ -14,7 +14,7 @@ namespace ZUGFeRD_Test
             string filename = "ZUGFeRD_1p0_COMFORT_Einfach.xml";
 
             InvoiceDescriptor desc = _generateDescriptor();
-            desc.Save(filename);
+            desc.Save(filename, ZUGFeRDVersion.Version1, Profile.Comfort);
         } // !generate()
 
 

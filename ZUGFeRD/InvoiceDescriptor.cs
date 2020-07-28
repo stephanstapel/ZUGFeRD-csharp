@@ -420,6 +420,8 @@ namespace s2industries.ZUGFeRD
 
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
+            this.Profile = profile;
+
             IInvoiceDescriptorWriter writer = null;
             switch (version)
             {

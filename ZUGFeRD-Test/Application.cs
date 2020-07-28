@@ -219,7 +219,7 @@ namespace ZUGFeRD_Test
             string path = @"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
-            desc.Save("test.xml");
+            desc.Save("test.xml", ZUGFeRDVersion.Version1, Profile.Comfort);
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
