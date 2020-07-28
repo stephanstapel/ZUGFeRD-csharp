@@ -577,6 +577,23 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
                     Writer.WriteEndElement(); // !ram:ApplicableTradeTax
                 }
+
+                if(Descriptor.BillingPeriodStart.HasValue && Descriptor.BillingPeriodEnd.HasValue)
+                {
+                    Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
+
+                    Writer.WriteStartElement("ram:StartDateTime");
+                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
+                    Writer.WriteEndElement(); // !StartDateTime
+                
+                
+                    Writer.WriteStartElement("ram:EndDateTime");
+                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
+                    Writer.WriteEndElement(); // !EndDateTime
+                    
+                    Writer.WriteEndElement(); // !BillingSpecifiedPeriod
+                }
+
                 Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
 
                 decimal _total = 0m;
