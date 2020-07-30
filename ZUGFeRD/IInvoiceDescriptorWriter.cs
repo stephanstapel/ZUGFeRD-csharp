@@ -37,11 +37,11 @@ namespace s2industries.ZUGFeRD
             fs.Close();
         } // !Save()
 
-        internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value)
+        internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value, Profile profile = Profile.Unknown)
         {
             if (!String.IsNullOrEmpty(value))
             {
-                writer.WriteElementString(tagName, value);
+                writer.WriteElementString(tagName, value, profile);
             }
         } // !_writeOptionalElementString()
 
