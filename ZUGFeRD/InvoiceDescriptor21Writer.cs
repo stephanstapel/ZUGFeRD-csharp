@@ -341,6 +341,10 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
                 Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
+                if (!String.IsNullOrEmpty(_translateTaxCategoryCodes(tradeLineItem.TaxCategoryCode)))
+                {
+                    Writer.WriteElementString("ram:ExemptionReason", _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode));
+                }
                 Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
                 Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
                 #endregion // !ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
@@ -755,7 +759,7 @@ namespace s2industries.ZUGFeRD
 
             stream.Seek(streamPosition, SeekOrigin.Begin);
         } // !Save()
-
+       
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, Profile profile = Profile.Unknown)
         {
@@ -936,6 +940,46 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalContact()
 
 
+        private string _translateTaxCategoryCode(TaxCategoryCodes taxCategoryCode)
+        {
+            switch (taxCategoryCode)
+            {
+                case TaxCategoryCodes.A:
+                    break;
+                case TaxCategoryCodes.AA:
+                    break;
+                case TaxCategoryCodes.AB:
+                    break;
+                case TaxCategoryCodes.AC:
+                    break;
+                case TaxCategoryCodes.AD:
+                    break;
+                case TaxCategoryCodes.AE:
+                    return "Umkehrung der Steuerschuldnerschaft";
+                case TaxCategoryCodes.B:
+                    break;
+                case TaxCategoryCodes.C:
+                    break;
+                case TaxCategoryCodes.E:
+                    break;
+                case TaxCategoryCodes.G:
+                    break;
+                case TaxCategoryCodes.H:
+                    break;
+                case TaxCategoryCodes.O:
+                    break;
+                case TaxCategoryCodes.S:
+                    break;
+                case TaxCategoryCodes.Z:
+                    break;
+                case TaxCategoryCodes.Unknown:
+                    break;
+            }
+
+            return null;
+        }
+
+
         private string _translateInvoiceType(InvoiceType type)
         {
             switch (type)
@@ -971,5 +1015,6 @@ namespace s2industries.ZUGFeRD
                 default: return (int)InvoiceType.Unknown;
             }
         } // !_translateInvoiceType()
+        }
     }
 }

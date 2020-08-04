@@ -68,6 +68,11 @@ namespace s2industries.ZUGFeRD
         AD,
 
         /// <summary>
+        /// VAT Reverse charge
+        /// </summary>
+        AE,
+
+        /// <summary>
         /// Transferred (VAT)
         /// 
         /// VAT not to be paid to the issuer of the invoice but
