@@ -961,17 +961,17 @@ namespace s2industries.ZUGFeRD
                 case TaxCategoryCodes.C:
                     break;
                 case TaxCategoryCodes.E:
-                    break;
+                    return "steuerbefreit";
                 case TaxCategoryCodes.G:
-                    break;
+                    return "freier Ausfuhrartikel, Steuer nicht erhoben";
                 case TaxCategoryCodes.H:
                     break;
                 case TaxCategoryCodes.O:
-                    break;
+                    return "Dienstleistungen außerhalb des Steueranwendungsbereichs";
                 case TaxCategoryCodes.S:
-                    break;
+                    return "Normalsatz";
                 case TaxCategoryCodes.Z:
-                    break;
+                    return "nach dem Nullsatz zu versteuernde Waren";
                 case TaxCategoryCodes.Unknown:
                     break;
             }
