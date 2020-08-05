@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30323.103
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZUGFeRD", "ZUGFeRD.csproj", "{B4E6DB09-6ECD-4157-B7F3-4298F3A01A2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4E6DB09-6ECD-4157-B7F3-4298F3A01A2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E6DB09-6ECD-4157-B7F3-4298F3A01A2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E6DB09-6ECD-4157-B7F3-4298F3A01A2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E6DB09-6ECD-4157-B7F3-4298F3A01A2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {870ABF4E-51C9-4BF7-9C8C-27D87C593553}
+	EndGlobalSection
+EndGlobal

@@ -341,7 +341,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
                 Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
-                if (!String.IsNullOrEmpty(_translateTaxCategoryCodes(tradeLineItem.TaxCategoryCode)))
+                if (!String.IsNullOrEmpty(_translateTaxCategoryCode(tradeLineItem.TaxCategoryCode)))
                 {
                     Writer.WriteElementString("ram:ExemptionReason", _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode));
                 }
@@ -1014,7 +1014,6 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
                 default: return (int)InvoiceType.Unknown;
             }
-        } // !_translateInvoiceType()
-        }
+        } // !_translateInvoiceType()        
     }
 }
