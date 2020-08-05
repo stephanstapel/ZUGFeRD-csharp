@@ -16,6 +16,15 @@ You can find more information about the nuget package here:
 
 https://www.nuget.org/packages/ZUGFeRD-csharp/
 
+# Building on your own
+Prerequisites:
+* Visual Studio >= 2017
+* .net Framework >= 4.6.1 (for .net Standard 2.0 support)
+
+Open ZUGFeRD/ZUGFeRD.sln solution file. Chose Release or Debug mode and hit 'Build'. That's it.
+
+For running the demo, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the application.
+
 # Creating invoices
 Central class for users is class InvoiceDescriptor.
 This class does not only allow to read and set all ZUGFeRD attributes and structures but also allows to load and save ZUGFeRD files.
