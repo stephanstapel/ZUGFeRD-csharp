@@ -492,20 +492,20 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
 
-                        Writer.WriteStartElement("ram:ChargeIndicator");
+                        Writer.WriteStartElement("ram:ChargeIndicator", Profile.Comfort | Profile.Extended);
                         Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                         Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-                        Writer.WriteStartElement("ram:BasisAmount");
+                        Writer.WriteStartElement("ram:BasisAmount", Profile.Extended);
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                         Writer.WriteEndElement();
-                        Writer.WriteStartElement("ram:ActualAmount");
+                        Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort);
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                         Writer.WriteEndElement();
 
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
 
                         Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                     }
