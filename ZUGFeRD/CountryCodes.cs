@@ -44,7 +44,6 @@ namespace s2industries.ZUGFeRD
     /// 
     /// f.close()
     /// g.close()
-
     /// </summary>
     public enum CountryCodes
     {
