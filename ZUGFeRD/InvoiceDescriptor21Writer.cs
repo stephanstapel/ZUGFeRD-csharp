@@ -176,9 +176,12 @@ namespace s2industries.ZUGFeRD
                         #region IssueDateTime
                         if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("qdt:DateTimeString");
+                            Writer.WriteAttributeString("format", "102");
+                            Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value));
+                            Writer.WriteEndElement(); // !qdt:DateTimeString
+                            Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
                         #endregion
 
