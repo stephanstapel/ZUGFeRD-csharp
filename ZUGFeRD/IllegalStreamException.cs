@@ -23,6 +23,9 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// The stream where the ZUGFeRD data shall be saved is not valid, e.g. closed.
+    /// </summary>
     public class IllegalStreamException : Exception
     {
         public IllegalStreamException(string message = "")
