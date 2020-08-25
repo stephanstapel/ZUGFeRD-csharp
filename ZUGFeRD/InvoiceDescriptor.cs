@@ -283,7 +283,7 @@ namespace s2industries.ZUGFeRD
         {
             this.OrderNo = orderNo;
             this.OrderDate = orderDate;
-        }
+        } // !SetBuyerOrderReferenceDocument()
 
 
 
@@ -450,6 +450,23 @@ namespace s2industries.ZUGFeRD
                 NetUnitPrice= 0m,
                 BilledQuantity = 0m
             };
+
+            int? _lineID = null;
+            if (this.TradeLineItems.Count > 0)
+            {
+                _lineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
+            }
+
+            if (_lineID.HasValue)
+            {
+                _lineID = _lineID.Value + 1;
+            }
+            else
+            {
+                _lineID = 1;
+            }
+
+            item.AssociatedDocument = new ZUGFeRD.AssociatedDocument(_lineID);
 
             item.AssociatedDocument.Notes.Add(new Note(
                 content: comment,

@@ -141,7 +141,8 @@ namespace s2industries.ZUGFeRD
 
                 _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID);
                 _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID);
-                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
+                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name, ALL_PROFILES ^ Profile.XRechnung);
+                _writeOptionalElementString(Writer, "ram:Name", !isCommentItem ? tradeLineItem.Name : "TEXT", Profile.XRechnung); // XRechnung erfordert einen Item-Namen
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
 
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended|XRechnung)
