@@ -43,13 +43,6 @@ namespace ZUGFeRD_Test
 
             _loadSaveLoadZUGFeRD21BasicInvoice();
 
-
-            string path = "output.xml";
-            InvoiceDescriptor desc = _createInvoice();
-            desc.Save(path, ZUGFeRDVersion.Version21, Profile.XRechnung);
-            return;
-
-
             // --- ZUGFeRD 1.x tests ---
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
