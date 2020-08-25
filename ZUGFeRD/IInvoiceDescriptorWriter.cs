@@ -31,11 +31,18 @@ namespace s2industries.ZUGFeRD
 
         public void Save(InvoiceDescriptor descriptor, string filename)
         {
-            FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            Save(descriptor, fs);
-            fs.Flush();
-            fs.Close();
+            if (Validate(descriptor, true))
+            {
+                FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
+                Save(descriptor, fs);
+                fs.Flush();
+                fs.Close();
+            }
         } // !Save()
+
+
+        internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);
+
 
         internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value, Profile profile = Profile.Unknown)
         {

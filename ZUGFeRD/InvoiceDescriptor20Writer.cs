@@ -38,13 +38,7 @@ namespace s2industries.ZUGFeRD
             if (!stream.CanWrite || !stream.CanSeek)
             {
                 throw new IllegalStreamException("Cannot write to stream");
-            }
-
-            // validate data
-            if (descriptor.Profile == Profile.BasicWL)
-            {
-                throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice.");
-            }
+            }            
 
             // write data
             long streamPosition = stream.Position;
@@ -880,5 +874,20 @@ namespace s2industries.ZUGFeRD
                 default: return (int)InvoiceType.Unknown;
             }
         } // !_translateInvoiceType()
+
+
+        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        {            
+            if (descriptor.Profile == Profile.BasicWL)
+            {
+                if (throwExceptions)
+                {
+                    throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice.");
+                }
+                return false;
+            }
+
+            return true;
+        } // !Validate()
     }
 }

@@ -43,6 +43,13 @@ namespace ZUGFeRD_Test
 
             _loadSaveLoadZUGFeRD21BasicInvoice();
 
+
+            string path = "output.xml";
+            InvoiceDescriptor desc = _createInvoice();
+            desc.Save(path, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            return;
+
+
             // --- ZUGFeRD 1.x tests ---
             ZugFerd1ComfortEinfachGenerator generator = new ZugFerd1ComfortEinfachGenerator();
             generator.generate();
@@ -273,14 +280,15 @@ namespace ZUGFeRD_Test
             desc.AddBuyerTaxRegistration("DE234567890", TaxRegistrationSchemeID.VA);
             desc.SetBuyerContact("Hans Muster");
             desc.SetSeller("Lieferant GmbH", "80333", "München", "Lieferantenstraße 20", CountryCodes.DE, "", new GlobalID(GlobalID.SchemeID_GLN, "4000001123452"));
+            desc.SetSellerContact("Frau Mustermann", "Vertrieb", "mustermann@lieferant.internal", "0049-89-12345678");
             desc.AddSellerTaxRegistration("201/113/40209", TaxRegistrationSchemeID.FC);
             desc.AddSellerTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
             desc.SetBuyerOrderReferenceDocument("2013-471331", new DateTime(2013, 03, 01));
             desc.SetDeliveryNoteReferenceDocument("2013-51111", new DateTime(2013, 6, 3));
             desc.ActualDeliveryDate = new DateTime(2013, 6, 3);
             desc.SetTotals(202.76m, 5.80m, 14.73m, 193.83m, 21.31m, 215.14m, 50.0m, 165.14m);
-            desc.AddApplicableTradeTax(129.37m, 7m, TaxTypes.VAT, TaxCategoryCodes.S);
-            desc.AddApplicableTradeTax(64.46m, 19m, TaxTypes.VAT, TaxCategoryCodes.S);
+            desc.AddApplicableTradeTax(123.57m, 7m, TaxTypes.VAT, TaxCategoryCodes.S);
+            desc.AddApplicableTradeTax(9m, 19m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.AddLogisticsServiceCharge(5.80m, "Versandkosten", TaxTypes.VAT, TaxCategoryCodes.S, 7m);
             desc.AddTradeAllowanceCharge(true, 10m, CurrencyCodes.EUR, 1m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 19);
             desc.AddTradeAllowanceCharge(true, 137.7m, CurrencyCodes.EUR, 13.73m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 7);
@@ -331,7 +339,9 @@ namespace ZUGFeRD_Test
                                   taxPercent: 7,
                                   id: new GlobalID(GlobalID.SchemeID_EAN, "4000001234561"),
                                   sellerAssignedID: "GTRWA5",
-                                  buyerAssignedID: "55T03");
+                                  buyerAssignedID: "55T03",
+                                  buyerOrderID: "123",
+                                  buyerOrderDate: new DateTime(2013, 6, 1));
             return desc;
         } // _createInvoice()
     }

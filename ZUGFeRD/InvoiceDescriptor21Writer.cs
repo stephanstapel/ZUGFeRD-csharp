@@ -765,7 +765,49 @@ namespace s2industries.ZUGFeRD
 
             stream.Seek(streamPosition, SeekOrigin.Begin);
         } // !Save()
-       
+
+
+        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        {
+            if (descriptor.Profile == Profile.BasicWL)
+            {
+                if (throwExceptions) { throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice."); }
+                return false;
+            }
+
+            if (descriptor.Profile == Profile.XRechnung)
+            {
+                if (descriptor.Seller != null)
+                {
+                    if (descriptor.SellerContact == null)
+                    {
+                        if (throwExceptions) { throw new MissingDataException("Seller contact required when seller is set."); }
+                        return false;
+                    }
+                    else
+                    {
+                        if (String.IsNullOrEmpty(descriptor.SellerContact.EmailAddress))
+                        {
+                            if (throwExceptions) { throw new MissingDataException("Seller contact email address is required (BT-43)."); }
+                            return false;
+                        }
+                        if (String.IsNullOrEmpty(descriptor.SellerContact.PhoneNo))
+                        {
+                            if (throwExceptions) { throw new MissingDataException("Seller contact phone no is required (BT-42)."); }
+                            return false;
+                        }
+                        if (String.IsNullOrEmpty(descriptor.SellerContact.Name) && String.IsNullOrEmpty(descriptor.SellerContact.OrgUnit))
+                        {
+                            if (throwExceptions) { throw new MissingDataException("Seller contact point (name or org unit) no is required (BT-41)."); }
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        } // !Validate()
+
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, Profile profile = Profile.Unknown)
         {

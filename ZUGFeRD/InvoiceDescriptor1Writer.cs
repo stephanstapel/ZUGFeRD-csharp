@@ -634,7 +634,13 @@ namespace s2industries.ZUGFeRD
             Writer.Flush();
 
             stream.Seek(streamPosition, SeekOrigin.Begin);
-        } // !Save()      
+        } // !Save()  
+
+
+        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        {
+            return true;
+        } // !Validate()
 
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2)
