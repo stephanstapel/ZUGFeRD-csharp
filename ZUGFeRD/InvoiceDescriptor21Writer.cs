@@ -350,8 +350,13 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteElementString("ram:ExemptionReason", _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode));
                 }
-                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());                    
-                Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));                    
+                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
+
+                if (tradeLineItem.TaxCategoryCode != TaxCategoryCodes.O) // notwendig, damit die Validierung klappt
+                {
+                    Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
+                }
+
                 Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
                 #endregion // !ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
 
@@ -746,7 +751,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);           //Summe der Zuschläge auf Dokumentenebene
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);     //Summe der Abschläge auf Dokumentenebene
             _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);  //Rechnungsgesamtbetrag ohne Umsatzsteuer
-            _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);                 //Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
+            _writeOptionalAmountWithForcedCurrency(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);                 //Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
             //ToDo: RoundingAmount  //Rundungsbetrag
             _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);             //Rechnungsgesamtbetrag einschließlich Umsatzsteuer
             _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount);         //Vorauszahlungsbetrag
@@ -819,6 +824,18 @@ namespace s2industries.ZUGFeRD
                 writer.WriteEndElement(); // !tagName
             }
         } // !_writeOptionalAmount()
+
+
+        private void _writeOptionalAmountWithForcedCurrency(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, Profile profile = Profile.Unknown)
+        {
+            if (value.HasValue && (value.Value != decimal.MinValue))
+            {
+                writer.WriteStartElement(tagName);
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
+                writer.WriteEndElement(); // !tagName
+            }
+        } // !_writeOptionalAmountWithForcedCurrency()
 
 
         private void _writeElementWithAttribute(ProfileAwareXmlTextWriter writer, string tagName, string attributeName, string attributeValue, string nodeValue)

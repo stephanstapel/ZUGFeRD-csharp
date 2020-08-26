@@ -448,7 +448,8 @@ namespace s2industries.ZUGFeRD
                 AssociatedDocument = new ZUGFeRD.AssociatedDocument(),
                 GrossUnitPrice = 0m,
                 NetUnitPrice= 0m,
-                BilledQuantity = 0m
+                BilledQuantity = 0m,
+                TaxCategoryCode = TaxCategoryCodes.O
             };
 
             int? _lineID = null;

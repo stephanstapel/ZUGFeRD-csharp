@@ -279,7 +279,14 @@ namespace ZUGFeRD_Test
             desc.SetBuyerOrderReferenceDocument("2013-471331", new DateTime(2013, 03, 01));
             desc.SetDeliveryNoteReferenceDocument("2013-51111", new DateTime(2013, 6, 3));
             desc.ActualDeliveryDate = new DateTime(2013, 6, 3);
-            desc.SetTotals(202.76m, 5.80m, 14.73m, 193.83m, 21.31m, 215.14m, 50.0m, 165.14m);
+            desc.SetTotals(lineTotalAmount: 147.30m,
+                chargeTotalAmount: 0m,
+                allowanceTotalAmount: 14.73m,
+                taxBasisAmount: 132.57m,
+                taxTotalAmount: 10.36m,
+                grandTotalAmount: 142.93m,
+                totalPrepaidAmount: 50m,
+                duePayableAmount: 92.93m);            
             desc.AddApplicableTradeTax(123.57m, 7m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.AddApplicableTradeTax(9m, 19m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.AddLogisticsServiceCharge(5.80m, "Versandkosten", TaxTypes.VAT, TaxCategoryCodes.S, 7m);
@@ -333,8 +340,7 @@ namespace ZUGFeRD_Test
                                   id: new GlobalID(GlobalID.SchemeID_EAN, "4000001234561"),
                                   sellerAssignedID: "GTRWA5",
                                   buyerAssignedID: "55T03",
-                                  buyerOrderID: "123",
-                                  buyerOrderDate: new DateTime(2013, 6, 1));
+                                  buyerOrderID: "123");
             return desc;
         } // _createInvoice()
     }
