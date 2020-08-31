@@ -23,6 +23,9 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// A certain value or setting is not supported, e.g. in the selected version of ZUGFeRD
+    /// </summary>
     public class UnsupportedException : Exception
     {
         public UnsupportedException(string message)

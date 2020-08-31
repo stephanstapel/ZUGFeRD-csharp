@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -22,10 +22,18 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    public enum ZUGFeRDVersion
+    /// <summary>
+    /// This exception is thrown when data is missing that is mandatory for a certain ZUGFeRD version or profile.
+    /// </summary>
+    public class MissingDataException : Exception
     {
-        Version1 = 100,
-        Version20 = 200,
-        Version21 = 210
+        /// <summary>
+        /// Initializes a new MissingDataException object
+        /// </summary>
+        /// <param name="message"></param>
+        public MissingDataException(string message)
+            : base(message)
+        {
+        } // !MissingDataException()
     }
 }

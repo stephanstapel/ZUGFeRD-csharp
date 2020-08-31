@@ -38,13 +38,7 @@ namespace s2industries.ZUGFeRD
             if (!stream.CanWrite || !stream.CanSeek)
             {
                 throw new IllegalStreamException("Cannot write to stream");
-            }
-
-            // validate data
-            if (descriptor.Profile == Profile.BasicWL)
-            {
-                throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice.");
-            }
+            }            
 
             // write data
             long streamPosition = stream.Position;
@@ -112,15 +106,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
                 if (this.Descriptor.OrderDate.HasValue)
                 {
-                    Writer.WriteStartElement("ram:IssueDateTime");
-                    //Writer.WriteStartElement("udt:DateTimeString");
-                    //Writer.WriteAttributeString("format", "102");
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                    Writer.WriteStartElement("udt:DateTimeString");                    
                     Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
-                    //Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
+                    Writer.WriteEndElement(); // !udt:DateTimeString
+                    Writer.WriteEndElement(); // !FormattedIssueDateTime
                 }
 
-                Writer.WriteElementString("ram:ID", this.Descriptor.OrderNo);
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
@@ -129,12 +122,11 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:AdditionalReferencedDocument");
                 if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
                 {
-                    Writer.WriteStartElement("ram:IssueDateTime");
-                    //Writer.WriteStartElement("udt:DateTimeString");
-                    //Writer.WriteAttributeString("format", "102");
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                    Writer.WriteStartElement("udt:DateTimeString");                    
                     Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value, false));
-                    //Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
+                    Writer.WriteEndElement(); // !udt:DateTimeString
+                    Writer.WriteEndElement(); // !FormattedIssueDateTime
                 }
 
                 if (this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
@@ -174,12 +166,12 @@ namespace s2industries.ZUGFeRD
 
                 if (this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                 {
-                    Writer.WriteStartElement("ram:IssueDateTime");
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
                     Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
                     Writer.WriteEndElement(); // !IssueDateTime
                 }
 
-                Writer.WriteElementString("ram:ID", this.Descriptor.DeliveryNoteReferencedDocument.ID);
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.DeliveryNoteReferencedDocument.ID);
                 Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
             }
 
@@ -472,13 +464,13 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteStartElement("ram:ContractReferencedDocument");
                         if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:IssueDateTime");
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
                             Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                            Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
                         if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
                         {
-                            Writer.WriteElementString("ram:ID", tradeLineItem.ContractReferencedDocument.ID);
+                            Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
                         }
 
                         Writer.WriteEndElement(); // !ram:ContractReferencedDocument
@@ -491,16 +483,16 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteStartElement("ram:AdditionalReferencedDocument");
                             if (doc.IssueDateTime.HasValue)
                             {
-                                Writer.WriteStartElement("ram:IssueDateTime");
+                                Writer.WriteStartElement("ram:FormattedIssueDateTime");
                                 Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
-                                Writer.WriteEndElement(); // !ram:IssueDateTime
+                                Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                             }
 
                             Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
 
                             if (!String.IsNullOrEmpty(doc.ID))
                             {
-                                Writer.WriteElementString("ram:ID", doc.ID);
+                                Writer.WriteElementString("ram:IssuerAssignedID", doc.ID);
                             }
 
                             Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
@@ -882,5 +874,20 @@ namespace s2industries.ZUGFeRD
                 default: return (int)InvoiceType.Unknown;
             }
         } // !_translateInvoiceType()
+
+
+        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        {            
+            if (descriptor.Profile == Profile.BasicWL)
+            {
+                if (throwExceptions)
+                {
+                    throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice.");
+                }
+                return false;
+            }
+
+            return true;
+        } // !Validate()
     }
 }

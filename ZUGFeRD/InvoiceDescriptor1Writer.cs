@@ -316,30 +316,30 @@ namespace s2industries.ZUGFeRD
                 foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
                 {
                     Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
-                    Writer.WriteStartElement("ram:ChargeIndicator");
+                    Writer.WriteStartElement("ram:ChargeIndicator", Profile.Comfort | Profile.Extended);
                     Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-                    Writer.WriteStartElement("ram:BasisAmount");
+                    Writer.WriteStartElement("ram:BasisAmount", Profile.Extended);
                     Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
 
-                    Writer.WriteStartElement("ram:ActualAmount");
+                    Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort | Profile.Extended);
                     Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                     Writer.WriteEndElement();
 
 
-                    _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+                    _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
 
                     if (tradeAllowanceCharge.Tax != null)
                     {
                         Writer.WriteStartElement("ram:CategoryTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram:TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString(), Profile.Comfort | Profile.Extended);
                         if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
+                            Writer.WriteElementString("ram:CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString(), Profile.Comfort | Profile.Extended);
+                        Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent), Profile.Comfort | Profile.Extended);
                         Writer.WriteEndElement();
                     }
                     Writer.WriteEndElement();
@@ -353,16 +353,16 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge");
                     if (!String.IsNullOrEmpty(serviceCharge.Description))
                     {
-                        Writer.WriteElementString("ram:Description", serviceCharge.Description);
+                        Writer.WriteElementString("ram:Description", serviceCharge.Description, Profile.Comfort | Profile.Extended);
                     }
-                    Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
+                    Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount), Profile.Comfort | Profile.Extended);
                     if (serviceCharge.Tax != null)
                     {
                         Writer.WriteStartElement("ram:AppliedTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString(), Profile.Comfort | Profile.Extended);
                         if (serviceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
+                            Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString(), Profile.Comfort | Profile.Extended);
+                        Writer.WriteElementString("ram:ApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent), Profile.Comfort | Profile.Extended);
                         Writer.WriteEndElement();
                     }
                     Writer.WriteEndElement();
@@ -492,20 +492,20 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
 
-                        Writer.WriteStartElement("ram:ChargeIndicator");
+                        Writer.WriteStartElement("ram:ChargeIndicator", Profile.Comfort | Profile.Extended);
                         Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                         Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-                        Writer.WriteStartElement("ram:BasisAmount");
+                        Writer.WriteStartElement("ram:BasisAmount", Profile.Extended);
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                         Writer.WriteEndElement();
-                        Writer.WriteStartElement("ram:ActualAmount");
+                        Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort);
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                         Writer.WriteEndElement();
 
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
 
                         Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                     }
@@ -634,7 +634,13 @@ namespace s2industries.ZUGFeRD
             Writer.Flush();
 
             stream.Seek(streamPosition, SeekOrigin.Begin);
-        } // !Save()      
+        } // !Save()  
+
+
+        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        {
+            return true;
+        } // !Validate()
 
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2)
