@@ -174,7 +174,7 @@ namespace s2industries.ZUGFeRD
                 retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", grandTotal, descriptor.GrandTotalAmount));
             }
 
-            /**
+            /*
              * @todo Richtige Validierung implementieren
              */
             if (Math.Abs(_taxBasisTotal - _taxBasisTotal) < 0.01m)

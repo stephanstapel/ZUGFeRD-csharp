@@ -86,7 +86,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !rsm:ExchangedDocument
             #endregion
 
-            /**
+            /*
              * @todo continue here to adopt v2 tag names
              */
 
@@ -308,7 +308,7 @@ namespace s2industries.ZUGFeRD
             }
 
 
-            /**
+            /*
              * @todo add writer for this:
              * <SpecifiedTradeSettlementPaymentMeans>
             * <TypeCode>42</TypeCode>

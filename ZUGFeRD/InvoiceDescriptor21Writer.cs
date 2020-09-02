@@ -97,7 +97,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !rsm:ExchangedDocument
             #endregion
 
-            /**
+            /*
              * @todo continue here to adopt v2 tag names
              */
 

@@ -149,7 +149,9 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            return null;
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this stream!");
+
+            // return null;
         } // !Load()
 
 
@@ -173,7 +175,9 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            return null;
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this file '" + filename + "'!");
+
+            // return null;
         } // !Load()
 
 
@@ -192,7 +196,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddNote(string note, SubjectCodes subjectCode = SubjectCodes.Unknown, ContentCodes contentCode = ContentCodes.Unknown)
         {
-            /**
+            /*
              * @todo prüfen:
              * ST1, ST2, ST3 nur mit AAK
              * EEV, WEB, VEV nur mit AAJ
@@ -387,6 +391,20 @@ namespace s2industries.ZUGFeRD
             this.Taxes.Add(tax);
         } // !AddApplicableTradeTax()
 
+        private IInvoiceDescriptorWriter SelectInvoiceDescriptorWriter(ZUGFeRDVersion version)
+        {
+            switch (version)
+            {
+                case ZUGFeRDVersion.Version1:
+                    return new InvoiceDescriptor1Writer();
+                case ZUGFeRDVersion.Version20:
+                    return new InvoiceDescriptor20Writer();
+                case ZUGFeRDVersion.Version21:
+                    return new InvoiceDescriptor21Writer();
+                default:
+                    throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
+            }
+        }
 
         /// <summary>
         /// Saves the descriptor object into a stream.
@@ -394,49 +412,30 @@ namespace s2industries.ZUGFeRD
         /// The stream position will be reset to the original position after writing is finished.
         /// This allows easy further processing of the stream.
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">Data stream</param>
+        /// <param name="version">ZUGFeRD version, defaults to Version 1</param>
+        /// <param name="profile">Profile (BASIC, STANDARD, EXTENDED, ...), defaults to BASIC</param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;            
-
-            IInvoiceDescriptorWriter writer = null;
-            switch (version)
-            {
-                case ZUGFeRDVersion.Version1:
-                    writer = new InvoiceDescriptor1Writer();
-                    break;
-                case ZUGFeRDVersion.Version20:
-                    writer = new InvoiceDescriptor20Writer();
-                    break;
-                case ZUGFeRDVersion.Version21:
-                    writer = new InvoiceDescriptor21Writer(); 
-                    break;
-                default:
-                    break;
-            }
+            IInvoiceDescriptorWriter writer = SelectInvoiceDescriptorWriter(version);
             writer.Save(this, stream);
         } // !Save()
 
 
+        /// <summary>
+        /// Saves the descriptor object into a file with given name.
+        /// 
+        /// The stream position will be reset to the original position after writing is finished.
+        /// This allows easy further processing of the stream.
+        /// </summary>
+        /// <param name="filename">Name of the file</param>
+        /// <param name="version">ZUGFeRD version, defaults to Version 1</param>
+        /// <param name="profile">Profile (BASIC, STANDARD, EXTENDED, ...), defaults to BASIC</param>
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;
-
-            IInvoiceDescriptorWriter writer = null;
-            switch (version)
-            {
-                case ZUGFeRDVersion.Version1:
-                    writer = new InvoiceDescriptor1Writer();
-                    break;
-                case ZUGFeRDVersion.Version20:
-                    writer = new InvoiceDescriptor20Writer();
-                    break;
-                case ZUGFeRDVersion.Version21:
-                    writer = new InvoiceDescriptor21Writer();
-                    break;
-                default:
-                    break;
-            }
+            IInvoiceDescriptorWriter writer = SelectInvoiceDescriptorWriter(version);
             writer.Save(this, filename);
         } // !Save()
 
@@ -481,13 +480,13 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// @todo Rabatt ergänzen:
-        /// <ram:AppliedTradeAllowanceCharge>
-        /// 				<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
-        /// 				<ram:CalculationPercent>2.00</ram:CalculationPercent>
-        /// 				<ram:BasisAmount currencyID = "EUR" > 1.5000 </ ram:BasisAmount>
-        /// 				<ram:ActualAmount currencyID = "EUR" > 0.0300 </ ram:ActualAmount>
-        /// 				<ram:Reason>Artikelrabatt 1</ram:Reason>
-        /// 			</ram:AppliedTradeAllowanceCharge>
+        ///     <ram:AppliedTradeAllowanceCharge>
+        /// 		<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
+        /// 		<ram:CalculationPercent>2.00</ram:CalculationPercent>
+        /// 		<ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
+        /// 		<ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
+        /// 		<ram:Reason>Artikelrabatt 1</ram:Reason>
+        /// 	</ram:AppliedTradeAllowanceCharge>
         /// </summary>
         public TradeLineItem addTradeLineItem(string name,
                                      string description = null,
