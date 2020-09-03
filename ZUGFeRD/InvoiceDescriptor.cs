@@ -46,24 +46,24 @@ namespace s2industries.ZUGFeRD
         public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party Invoicee { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party ShipTo { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party Payee { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party ShipFrom { get; set; }
 
         public List<Note> Notes { get; set; }
@@ -394,7 +394,9 @@ namespace s2industries.ZUGFeRD
         /// The stream position will be reset to the original position after writing is finished.
         /// This allows easy further processing of the stream.
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">The stream where the data should be saved to.</param>
+        /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
+        /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;            
@@ -441,7 +443,14 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
+        [Obsolete("This function is deprecated. Please use AddTradeLineCommentItem() instead")]
         public void addTradeLineCommentItem(string comment)
+        {
+            AddTradeLineCommentItem(comment);
+        } // !addTradeLineCommentItem()
+
+
+        public void AddTradeLineCommentItem(string comment)
         {
             TradeLineItem item = new TradeLineItem()
             {
@@ -476,11 +485,31 @@ namespace s2industries.ZUGFeRD
             ));
 
             this.TradeLineItems.Add(item);
-        } // !addTradeLineCommentItem()
+        } // !AddTradeLineCommentItem()
 
+
+        [Obsolete("This function is deprecated. Please use AddTradeLineItem() instead")]
+        public TradeLineItem addTradeLineItem(string name,
+                                     string description = null,
+                                     QuantityCodes unitCode = QuantityCodes.Unknown,
+                                     decimal? unitQuantity = null,
+                                     decimal grossUnitPrice = Decimal.MinValue,
+                                     decimal netUnitPrice = Decimal.MinValue,
+                                     decimal billedQuantity = Decimal.MinValue,
+                                     TaxTypes taxType = TaxTypes.Unknown,
+                                     TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
+                                     decimal taxPercent = Decimal.MinValue,
+                                     string comment = null,
+                                     GlobalID id = null,
+                                     string sellerAssignedID = "", string buyerAssignedID = "",
+                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
+        {
+            return AddTradeLineItem(name, description, unitCode, unitQuantity, grossUnitPrice, netUnitPrice, billedQuantity, taxType, categoryCode, taxPercent, comment, id, sellerAssignedID, buyerAssignedID, deliveryNoteID, deliveryNoteDate, buyerOrderID, buyerOrderDate);
+        } // !addTradeLineItem()
 
         /// <summary>
-        /// @todo Rabatt ergänzen:
+        /// TODO Rabatt ergänzen:
         /// <ram:AppliedTradeAllowanceCharge>
         /// 				<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
         /// 				<ram:CalculationPercent>2.00</ram:CalculationPercent>
@@ -489,7 +518,7 @@ namespace s2industries.ZUGFeRD
         /// 				<ram:Reason>Artikelrabatt 1</ram:Reason>
         /// 			</ram:AppliedTradeAllowanceCharge>
         /// </summary>
-        public TradeLineItem addTradeLineItem(string name,
+        public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
                                      QuantityCodes unitCode = QuantityCodes.Unknown,
                                      decimal? unitQuantity = null,
@@ -556,11 +585,18 @@ namespace s2industries.ZUGFeRD
 
             this.TradeLineItems.Add(newItem);
             return newItem;
-        } // !addTradeLineItem()
+        } // !AddTradeLineItem()
 
 
+        [Obsolete("This function is deprecated. Please use SetPaymentMeans() instead.")]
         public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         {
+            SetPaymentMeans(paymentCode, information, identifikationsnummer, mandatsnummer);
+        } // !setPaymentMeans()
+
+
+        public void SetPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
+        { 
             this.PaymentMeans = new PaymentMeans
             {
                 TypeCode = paymentCode,
@@ -568,10 +604,17 @@ namespace s2industries.ZUGFeRD
                 SEPACreditorIdentifier = identifikationsnummer,
                 SEPAMandateReference = mandatsnummer
             };
-        } // !setPaymentMeans()
+        } // !SetPaymentMeans()
 
 
+        [Obsolete("This function is deprecated. Please use AddCreditorFinancialAccount() instead.")]
         public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
+        {
+            AddCreditorFinancialAccount(iban, bic, id, bankleitzahl, bankName, name);
+        } // !addCreditorFinancialAccount()
+
+
+        public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {
             this.CreditorBankAccounts.Add(new BankAccount()
             {
@@ -582,9 +625,17 @@ namespace s2industries.ZUGFeRD
                 BankName = bankName,
                 Name = name
             });
-        } // !addCreditorFinancialAccount()
+        } // !AddCreditorFinancialAccount()
 
+
+        [Obsolete("This function is deprecated. Please use AddDebitorFinancialAccount() instead.")]
         public void addDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
+        {
+            AddDebitorFinancialAccount(iban, bic, id, bankleitzahl, bankName);
+        } // !addDebitorFinancialAccount()
+
+
+        public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             this.DebitorBankAccounts.Add(new BankAccount()
             {
@@ -594,6 +645,6 @@ namespace s2industries.ZUGFeRD
                 Bankleitzahl = bankleitzahl,
                 BankName = bankName
             });
-        } // !addDebitorFinancialAccount()
+        } // !AddDebitorFinancialAccount()
    }
 }

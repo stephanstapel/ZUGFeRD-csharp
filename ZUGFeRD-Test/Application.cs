@@ -294,11 +294,11 @@ namespace ZUGFeRD_Test
             desc.AddTradeAllowanceCharge(true, 137.7m, CurrencyCodes.EUR, 13.73m, "Sondernachlass", TaxTypes.VAT, TaxCategoryCodes.S, 7);
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
 
-            desc.setPaymentMeans(PaymentMeansTypeCodes.PaymentToBankAccount, "Überweisung");
-            desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04", "1234567890", "70090100", "Hausbank München");
+            desc.SetPaymentMeans(PaymentMeansTypeCodes.PaymentToBankAccount, "Überweisung");
+            desc.AddCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04", "1234567890", "70090100", "Hausbank München");
 
-            desc.addTradeLineCommentItem("Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:");
-            desc.addTradeLineItem(name: "Kunstrasen grün 3m breit",
+            desc.AddTradeLineCommentItem("Wir erlauben uns Ihnen folgende Positionen aus der Lieferung Nr. 2013-51112 in Rechnung zu stellen:");
+            desc.AddTradeLineItem(name: "Kunstrasen grün 3m breit",
                                   description: "300cm x 100 cm",
                                   unitCode: QuantityCodes.MTK,
                                   unitQuantity: 1,
@@ -312,7 +312,7 @@ namespace ZUGFeRD_Test
                                   sellerAssignedID: "KR3M",
                                   buyerAssignedID: "55T01");
 
-            desc.addTradeLineItem(name: "Schweinesteak",
+            desc.AddTradeLineItem(name: "Schweinesteak",
                                   description: "aus Deutschland",
                                   unitCode: QuantityCodes.KGM,
                                   unitQuantity: 1,
@@ -327,7 +327,7 @@ namespace ZUGFeRD_Test
                                   buyerAssignedID: "55T02");
 
 
-            desc.addTradeLineItem(name: "Mineralwasser Medium 12 x 1,0l PET",
+            desc.AddTradeLineItem(name: "Mineralwasser Medium 12 x 1,0l PET",
                                   description: "",
                                   unitCode: QuantityCodes.C62,
                                   unitQuantity: 1,
