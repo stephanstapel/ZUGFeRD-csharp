@@ -46,6 +46,11 @@ namespace s2industries.ZUGFeRD
         DAY,
 
         /// <summary>
+        /// Piece: A unit of count defining the number of pieces (piece: a single item, article or exemplar).
+        /// </summary>
+        H87,
+
+        /// <summary>
         /// Hektar
         /// Abkürzung: ha
         /// </summary>
