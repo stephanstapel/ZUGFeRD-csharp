@@ -28,6 +28,10 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class UnsupportedException : Exception
     {
+        /// <summary>
+        /// Initializes a new UnsupportedException object
+        /// </summary>
+        /// <param name="message"></param>
         public UnsupportedException(string message)
             : base(message)
         {

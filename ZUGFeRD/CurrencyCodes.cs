@@ -136,7 +136,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    internal static class CurrencyCodesExtensions
+    public static class CurrencyCodesExtensions
     {
         public static CurrencyCodes FromString(this CurrencyCodes _c, string s)
         {

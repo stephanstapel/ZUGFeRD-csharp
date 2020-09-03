@@ -140,7 +140,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    internal static class InvoiceTypeExtensions
+    public static class InvoiceTypeExtensions
     {
 
         public static InvoiceType FromString(this InvoiceType _i, string s)
