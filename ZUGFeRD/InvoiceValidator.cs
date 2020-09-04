@@ -33,20 +33,37 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class InvoiceValidator
     {
+
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use ValidateAndPrint() instead.")]
         public static void validateAndPrint(InvoiceDescriptor descriptor)
         {
-            List<string> output = validate(descriptor);
+            ValidateAndPrint(descriptor, "e:\\temp.txt");
+        }
+#pragma warning restore IDE1006
 
-            System.IO.File.WriteAllText("e:\\temp.txt", string.Join("\n", output));
+        public static void ValidateAndPrint(InvoiceDescriptor descriptor, string filename)
+        {
+            List<string> output = Validate(descriptor);
 
-            foreach(string line in output)
+            System.IO.File.WriteAllText(filename, string.Join("\n", output));
+
+            foreach (string line in output)
             {
                 System.Console.WriteLine(line);
             }
         } // !validateAndPrint()
 
 
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use Validate() instead.")]
         public static List<string> validate(InvoiceDescriptor descriptor)
+        {
+            return Validate(descriptor);
+        }
+#pragma warning restore IDE1006
+
+        public static List<string> Validate(InvoiceDescriptor descriptor)
         {
             List<string> retval = new List<string>();
             if (descriptor == null)

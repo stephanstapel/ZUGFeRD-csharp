@@ -337,7 +337,7 @@ namespace s2industries.ZUGFeRD
                 string actualAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
                 string reason = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
-                item.addTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
+                item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                                 default(CurrencyCodes).FromString(basisAmountCurrency),
                                                 basisAmount,
                                                 actualAmount,
@@ -387,7 +387,7 @@ namespace s2industries.ZUGFeRD
             {
                 string _code = _nodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
 
-                item.addAdditionalReferencedDocument(
+                item.AddAdditionalReferencedDocument(
                     id: _nodeAsString(referenceNode, "ram:IssuerAssignedID", nsmgr),
                     date: _nodeAsDateTime(referenceNode, "ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr),
                     code: default(ReferenceTypeCodes).FromString(_code)

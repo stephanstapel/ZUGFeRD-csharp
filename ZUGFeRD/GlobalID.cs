@@ -63,6 +63,10 @@ namespace s2industries.ZUGFeRD
         /// OSCAR (Odette)
         /// </summary>
         public const string SchemeID_ODETTE = "0177";
+
+        /// <summary>
+        /// Unknown means, we have a problem ...
+        /// </summary>
         public const string SchemeID_Unknown = "0000";
 
         public GlobalID()

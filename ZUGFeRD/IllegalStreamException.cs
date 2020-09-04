@@ -28,6 +28,10 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class IllegalStreamException : Exception
     {
+        /// <summary>
+        /// Initializes a new IllegalStreamException object
+        /// </summary>
+        /// <param name="message"></param>
         public IllegalStreamException(string message = "")
             : base(message)
         { 
