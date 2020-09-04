@@ -103,7 +103,14 @@ namespace s2industries.ZUGFeRD
         }
 
 
+        [Obsolete("This function is deprecated. Please use AddTradeAllowanceCharge() instead.")]
         public void addTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
+        {
+            AddTradeAllowanceCharge(isDiscount, currency, basisAmount, actualAmount, reason);
+        } // !addTradeAllowanceCharge()
+
+
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -113,20 +120,34 @@ namespace s2industries.ZUGFeRD
                 BasisAmount = basisAmount,
                 Reason = reason
             });
-        } // !addTradeAllowanceCharge()
+        } // !AddTradeAllowanceCharge()
 
 
+        [Obsolete("This function is obsolete. Please use SetDeliveryNoteReferencedDocument() instead.")]
         public void setDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
+        {
+            SetDeliveryNoteReferencedDocument(deliveryNoteId, deliveryNoteDate);
+        } // !setDeliveryNoteReferencedDocument()
+
+
+        public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
                  ID = deliveryNoteId,
                  IssueDateTime = deliveryNoteDate
             };
-        } // !setDeliveryNoteReferencedDocument()
+        } // !SetDeliveryNoteReferencedDocument()
 
 
+        [Obsolete("This function is deprecated. Please use AddAdditionalReferencedDocument() instead.")]
         public void addAdditionalReferencedDocument(string id, DateTime? date = null, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown)
+        {
+            AddAdditionalReferencedDocument(id, date, code);
+        } // !addAdditionalReferencedDocument()
+
+
+        public void AddAdditionalReferencedDocument(string id, DateTime? date = null, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -134,26 +155,39 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = date,
                 ReferenceTypeCode = code
             });
-        } // !addAdditionalReferencedDocument()
+        } // !AddAdditionalReferencedDocument()
 
 
+        [Obsolete("This function is deprecated. Please use SetOrderReferencedDocument() instead.")]
         public void setOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
+        {
+            SetOrderReferencedDocument(orderReferencedId, orderReferencedDate);
+        } // !setOrderReferencedDocument()
+
+
+        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
                 ID = orderReferencedId,
                 IssueDateTime = orderReferencedDate
             };
-        } // !setOrderReferencedDocument()
+        } // !SetOrderReferencedDocument()
 
 
+        [Obsolete("This function is obsolete. Please use SetContractReferencedDocument() instead.")]
         public void setContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
+        {
+            SetContractReferencedDocument(contractReferencedId, contractReferencedDate);
+        } // !setContractReferencedDocument()
+
+        public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
         {
             this.ContractReferencedDocument = new ContractReferencedDocument()
             {
                 ID = contractReferencedId,
                 IssueDateTime = contractReferencedDate
             };
-        } // !setContractReferencedDocument()
+        } // !SetContractReferencedDocument()
     }
 }

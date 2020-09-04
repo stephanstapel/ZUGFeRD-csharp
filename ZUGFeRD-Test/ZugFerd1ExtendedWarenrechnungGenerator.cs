@@ -74,8 +74,8 @@ namespace ZUGFeRD_Test
             /// TODO: ApplicableSupplyChainTradeDelivery
             /// 
 
-            desc.addTradeLineCommentItem("Wichtige Information: Bei Bestellungen bis zum 19.12. ist die Auslieferung bis spätestens 23.12. garantiert.");
-            TradeLineItem item = desc.addTradeLineItem("Zitronensäure 100ml",
+            desc.AddTradeLineCommentItem("Wichtige Information: Bei Bestellungen bis zum 19.12. ist die Auslieferung bis spätestens 23.12. garantiert.");
+            TradeLineItem item = desc.AddTradeLineItem("Zitronensäure 100ml",
                                                         null,
                                                         QuantityCodes.C62,
                                                         null,
@@ -94,7 +94,7 @@ namespace ZUGFeRD_Test
                                                         "",
                                                         null);
 
-            item = desc.addTradeLineItem("Gelierzucker Extra 250g",
+            item = desc.AddTradeLineItem("Gelierzucker Extra 250g",
                                          null,
                                          QuantityCodes.C62,
                                          null,
@@ -112,12 +112,12 @@ namespace ZUGFeRD_Test
                                          null,
                                          "",
                                          null);
-            item.addTradeAllowanceCharge(true,
+            item.AddTradeAllowanceCharge(true,
                                          CurrencyCodes.EUR,
                                          1.5m,
                                          0.03m,
                                          "Artikelrabatt 1");
-            item.addTradeAllowanceCharge(true,
+            item.AddTradeAllowanceCharge(true,
                                          CurrencyCodes.EUR,
                                          1m,
                                          0.02m,

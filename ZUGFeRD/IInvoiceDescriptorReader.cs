@@ -23,7 +23,7 @@ using System.Xml.XPath;
 
 namespace s2industries.ZUGFeRD
 {
-    public abstract class IInvoiceDescriptorReader
+    internal abstract class IInvoiceDescriptorReader
     {
         public abstract InvoiceDescriptor Load(Stream stream);        
         public abstract bool IsReadableByThisReaderVersion(Stream stream);

@@ -38,7 +38,7 @@ namespace s2industries.ZUGFeRD
             if (!stream.CanWrite || !stream.CanSeek)
             {
                 throw new IllegalStreamException("Cannot write to stream");
-            }            
+            }
 
             // write data
             long streamPosition = stream.Position;
@@ -54,7 +54,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteAttributeString("xmlns", "rsm", null, "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
             Writer.WriteAttributeString("xmlns", "qdt", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:10");
             Writer.WriteAttributeString("xmlns", "ram", null, "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
-            Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");                        
+            Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");
             Writer.WriteAttributeString("xmlns", "udt", null, "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
             #endregion
 
@@ -107,7 +107,7 @@ namespace s2industries.ZUGFeRD
                 if (this.Descriptor.OrderDate.HasValue)
                 {
                     Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");                    
+                    Writer.WriteStartElement("udt:DateTimeString");
                     Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
                     Writer.WriteEndElement(); // !udt:DateTimeString
                     Writer.WriteEndElement(); // !FormattedIssueDateTime
@@ -123,7 +123,7 @@ namespace s2industries.ZUGFeRD
                 if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
                 {
                     Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");                    
+                    Writer.WriteStartElement("udt:DateTimeString");
                     Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value, false));
                     Writer.WriteEndElement(); // !udt:DateTimeString
                     Writer.WriteEndElement(); // !FormattedIssueDateTime
@@ -398,7 +398,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement();
             }
 
-            Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
+            Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
@@ -877,7 +877,7 @@ namespace s2industries.ZUGFeRD
 
 
         internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
-        {            
+        {
             if (descriptor.Profile == Profile.BasicWL)
             {
                 if (throwExceptions)

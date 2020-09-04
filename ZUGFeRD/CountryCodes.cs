@@ -1296,7 +1296,7 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    public static class CountryCodesExtensions
+    internal static class CountryCodesExtensions
     {
         public static CountryCodes FromString(this CountryCodes _c, string s)
         {
