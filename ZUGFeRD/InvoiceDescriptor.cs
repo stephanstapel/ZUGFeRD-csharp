@@ -149,7 +149,9 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            return null;
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this stream!");
+
+            // return null;
         } // !Load()
 
 
@@ -173,7 +175,9 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            return null;
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this file '" + filename + "'!");
+
+            // return null;
         } // !Load()
 
 
@@ -192,7 +196,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddNote(string note, SubjectCodes subjectCode = SubjectCodes.Unknown, ContentCodes contentCode = ContentCodes.Unknown)
         {
-            /**
+            /*
              * @todo prüfen:
              * ST1, ST2, ST3 nur mit AAK
              * EEV, WEB, VEV nur mit AAJ
@@ -387,6 +391,20 @@ namespace s2industries.ZUGFeRD
             this.Taxes.Add(tax);
         } // !AddApplicableTradeTax()
 
+        private IInvoiceDescriptorWriter SelectInvoiceDescriptorWriter(ZUGFeRDVersion version)
+        {
+            switch (version)
+            {
+                case ZUGFeRDVersion.Version1:
+                    return new InvoiceDescriptor1Writer();
+                case ZUGFeRDVersion.Version20:
+                    return new InvoiceDescriptor20Writer();
+                case ZUGFeRDVersion.Version21:
+                    return new InvoiceDescriptor21Writer();
+                default:
+                    throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
+            }
+        }
 
         /// <summary>
         /// Saves the descriptor object into a stream.
@@ -400,55 +418,34 @@ namespace s2industries.ZUGFeRD
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;            
-
-            IInvoiceDescriptorWriter writer = null;
-            switch (version)
-            {
-                case ZUGFeRDVersion.Version1:
-                    writer = new InvoiceDescriptor1Writer();
-                    break;
-                case ZUGFeRDVersion.Version20:
-                    writer = new InvoiceDescriptor20Writer();
-                    break;
-                case ZUGFeRDVersion.Version21:
-                    writer = new InvoiceDescriptor21Writer(); 
-                    break;
-                default:
-                    break;
-            }
+            IInvoiceDescriptorWriter writer = SelectInvoiceDescriptorWriter(version);
             writer.Save(this, stream);
         } // !Save()
 
 
+        /// <summary>
+        /// Saves the descriptor object into a file with given name.
+        /// 
+        /// The stream position will be reset to the original position after writing is finished.
+        /// This allows easy further processing of the stream.
+        /// </summary>
+        /// <param name="filename">The filename where the data should be saved to.</param>
+        /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
+        /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;
-
-            IInvoiceDescriptorWriter writer = null;
-            switch (version)
-            {
-                case ZUGFeRDVersion.Version1:
-                    writer = new InvoiceDescriptor1Writer();
-                    break;
-                case ZUGFeRDVersion.Version20:
-                    writer = new InvoiceDescriptor20Writer();
-                    break;
-                case ZUGFeRDVersion.Version21:
-                    writer = new InvoiceDescriptor21Writer();
-                    break;
-                default:
-                    break;
-            }
+            IInvoiceDescriptorWriter writer = SelectInvoiceDescriptorWriter(version);
             writer.Save(this, filename);
         } // !Save()
 
-
+#pragma warning disable IDE1006
         [Obsolete("This function is deprecated. Please use AddTradeLineCommentItem() instead")]
         public void addTradeLineCommentItem(string comment)
         {
             AddTradeLineCommentItem(comment);
         } // !addTradeLineCommentItem()
-
+#pragma warning restore IDE1006
 
         public void AddTradeLineCommentItem(string comment)
         {
@@ -488,6 +485,7 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeLineCommentItem()
 
 
+#pragma warning disable IDE1006
         [Obsolete("This function is deprecated. Please use AddTradeLineItem() instead")]
         public TradeLineItem addTradeLineItem(string name,
                                      string description = null,
@@ -507,16 +505,17 @@ namespace s2industries.ZUGFeRD
         {
             return AddTradeLineItem(name, description, unitCode, unitQuantity, grossUnitPrice, netUnitPrice, billedQuantity, taxType, categoryCode, taxPercent, comment, id, sellerAssignedID, buyerAssignedID, deliveryNoteID, deliveryNoteDate, buyerOrderID, buyerOrderDate);
         } // !addTradeLineItem()
+#pragma warning restore IDE1006
 
         /// <summary>
         /// TODO Rabatt ergänzen:
         /// <ram:AppliedTradeAllowanceCharge>
-        /// 				<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
-        /// 				<ram:CalculationPercent>2.00</ram:CalculationPercent>
-        /// 				<ram:BasisAmount currencyID = "EUR" > 1.5000 </ ram:BasisAmount>
-        /// 				<ram:ActualAmount currencyID = "EUR" > 0.0300 </ ram:ActualAmount>
-        /// 				<ram:Reason>Artikelrabatt 1</ram:Reason>
-        /// 			</ram:AppliedTradeAllowanceCharge>
+        ///     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
+        ///     <ram:CalculationPercent>2.00</ram:CalculationPercent>
+        ///     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
+        ///     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
+        ///     <ram:Reason>Artikelrabatt 1</ram:Reason>
+        /// </ram:AppliedTradeAllowanceCharge>
         /// </summary>
         public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
@@ -575,12 +574,12 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
             {
-                newItem.setDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
+                newItem.SetDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
             }
 
             if (!String.IsNullOrEmpty(buyerOrderID) || buyerOrderDate.HasValue)
             {
-                newItem.setOrderReferencedDocument(buyerOrderID, buyerOrderDate);
+                newItem.SetOrderReferencedDocument(buyerOrderID, buyerOrderDate);
             }
 
             this.TradeLineItems.Add(newItem);
@@ -588,11 +587,13 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeLineItem()
 
 
+#pragma warning disable IDE1006
         [Obsolete("This function is deprecated. Please use SetPaymentMeans() instead.")]
         public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         {
             SetPaymentMeans(paymentCode, information, identifikationsnummer, mandatsnummer);
         } // !setPaymentMeans()
+#pragma warning restore IDE1006
 
 
         public void SetPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
@@ -607,11 +608,13 @@ namespace s2industries.ZUGFeRD
         } // !SetPaymentMeans()
 
 
+#pragma warning disable IDE1006
         [Obsolete("This function is deprecated. Please use AddCreditorFinancialAccount() instead.")]
         public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {
             AddCreditorFinancialAccount(iban, bic, id, bankleitzahl, bankName, name);
         } // !addCreditorFinancialAccount()
+#pragma warning restore IDE1006
 
 
         public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
@@ -628,11 +631,13 @@ namespace s2industries.ZUGFeRD
         } // !AddCreditorFinancialAccount()
 
 
+#pragma warning disable IDE1006
         [Obsolete("This function is deprecated. Please use AddDebitorFinancialAccount() instead.")]
         public void addDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             AddDebitorFinancialAccount(iban, bic, id, bankleitzahl, bankName);
         } // !addDebitorFinancialAccount()
+#pragma warning restore IDE1006
 
 
         public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)

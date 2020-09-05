@@ -179,7 +179,7 @@ namespace s2industries.ZUGFeRD
                     {
                         if (rawValue.Length != 8)
                         {
-                            throw new Exception("Wrong length of datetime element");
+                            throw new Exception("Wrong length of datetime 102 element");
                         }
 
                         string year = rawValue.Substring(0, 4);
@@ -192,7 +192,7 @@ namespace s2industries.ZUGFeRD
                     {
                         if (rawValue.Length != 6)
                         {
-                            throw new Exception("Wrong length of datetime element");
+                            throw new Exception("Wrong length of datetime 610 element");
                         }
 
                         string year = rawValue.Substring(0, 4);
@@ -205,7 +205,7 @@ namespace s2industries.ZUGFeRD
                     {
                         if (rawValue.Length != 6)
                         {
-                            throw new Exception("Wrong length of datetime element");
+                            throw new Exception("Wrong length of datetime 616 element");
                         }
 
                         string year = rawValue.Substring(0, 4);

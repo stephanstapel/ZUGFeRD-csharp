@@ -68,7 +68,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class ContentCodesExtensions
     {
-        public static ContentCodes FromString(this ContentCodes _c, string s)
+        public static ContentCodes FromString(this ContentCodes _, string s)
         {
             try
             {

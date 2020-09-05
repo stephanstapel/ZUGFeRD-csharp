@@ -81,7 +81,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class SubjectCodesExtensions
     {
-        public static SubjectCodes FromString(this SubjectCodes _c, string s)
+        public static SubjectCodes FromString(this SubjectCodes _, string s)
         {
             try
             {

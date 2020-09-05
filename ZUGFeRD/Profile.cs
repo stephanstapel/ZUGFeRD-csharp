@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class ProfileExtensions
     {
-        public static Profile FromString(this Profile _p, string s)
+        public static Profile FromString(this Profile _, string s)
         {
             switch (s)
             {
@@ -56,7 +56,7 @@ namespace s2industries.ZUGFeRD
                 // v2
                 case "urn:zugferd.de:2p0:minimum": return Profile.Minimum;
                 case "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic": return Profile.Basic;
-                case "urn: cen.eu:en16931: 2017": return Profile.Comfort;
+                case "urn: cen.eu:en16931: 2017": return Profile.Comfort; // Spaces inserted to prevent clash with v2.1
                 case "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended": return Profile.Extended;
 
                 // v2.1
@@ -82,7 +82,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
                         case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
                         case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
-                        default: throw new Exception("Unsupported profile for ZUGFeRD version");
+                        default: throw new Exception("Unsupported profile for ZUGFeRD version 1");
                     }
                 case ZUGFeRDVersion.Version20:
                     switch (profile)
@@ -92,7 +92,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.BasicWL: return "urn:zugferd.de:2p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
-                        default: throw new Exception("Unsupported profile for ZUGFeRD version");
+                        default: throw new Exception("Unsupported profile for ZUGFeRD version 20");
                     }
                 case ZUGFeRDVersion.Version21:
                     switch (profile)
@@ -103,10 +103,11 @@ namespace s2industries.ZUGFeRD
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
                         case Profile.XRechnung: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2";
-                        default: throw new Exception("Unsupported profile for ZUGFeRD version");
+                        default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    
                 default:
-                    return "";
+                    // return "";
+                    throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
         } // !ToString()
     }

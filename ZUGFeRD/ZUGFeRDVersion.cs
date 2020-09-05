@@ -22,10 +22,22 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Enumeration of the different ZUGFeRD versions supported by ZUGFeRD-csharp
+    /// </summary>
     public enum ZUGFeRDVersion
     {
+        /// <summary>
+        /// Version 1.x - first public ZUGFeRD version
+        /// </summary>
         Version1 = 100,
+        /// <summary>
+        /// Version 2.0 - second major ZUGFeRD version 
+        /// </summary>
         Version20 = 200,
+        /// <summary>
+        /// Version 2.1 - unified with french factur-x 1.0, supports XRechnung
+        /// </summary>
         Version21 = 210
     }
 }
