@@ -391,7 +391,7 @@ namespace s2industries.ZUGFeRD
             this.Taxes.Add(tax);
         } // !AddApplicableTradeTax()
 
-        private IInvoiceDescriptorWriter SelectInvoiceDescriptorWriter(ZUGFeRDVersion version)
+        private IInvoiceDescriptorWriter _selectInvoiceDescriptorWriter(ZUGFeRDVersion version)
         {
             switch (version)
             {
@@ -404,7 +404,8 @@ namespace s2industries.ZUGFeRD
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
-        }
+        } // !_selectInvoiceDescriptorWriter()
+
 
         /// <summary>
         /// Saves the descriptor object into a stream.
@@ -418,7 +419,7 @@ namespace s2industries.ZUGFeRD
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;            
-            IInvoiceDescriptorWriter writer = SelectInvoiceDescriptorWriter(version);
+            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
             writer.Save(this, stream);
         } // !Save()
 
@@ -435,7 +436,7 @@ namespace s2industries.ZUGFeRD
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;
-            IInvoiceDescriptorWriter writer = SelectInvoiceDescriptorWriter(version);
+            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
             writer.Save(this, filename);
         } // !Save()
 

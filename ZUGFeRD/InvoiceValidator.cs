@@ -214,6 +214,6 @@ namespace s2industries.ZUGFeRD
 
 
             return retval;
-        } // !validate()
+        } // !Validate()
     }
 }

@@ -23,14 +23,48 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// ZUGFeRD allows reading and writing invoices in various profiles, each containing different density of information.
+    /// </summary>
     public enum Profile
     {
+        /// <summary>
+        /// Fallback value
+        /// </summary>
         Unknown = 65536,
+
+        /// <summary>
+        /// Contains core line
+        /// information required or useful for buyers for their process automation.
+        /// </summary>
         Basic = 1,
+
+        /// <summary>
+        /// The Comfort profile corresponds to the European standard EN 16931.
+        /// 
+        /// Invoices in this profile contain all necessary information and thus are valid electronic invoices.
+        /// </summary>
         Comfort = 2,
+
+        /// <summary>
+        /// Based on the Comfort/ EN 16931 profile. Contains additional information.
+        /// </summary>
         Extended = 4,
+
+        /// <summary>
+        /// corresponding to the minimum invoice information
+        /// </summary>
         Minimum = 8,
+
+        /// <summary>
+        /// Invoices in this profile are no valid electronic invoices.
+        /// They contain document level invoice information that are mostly required or useful for buyers for their process automation.
+        /// </summary>
         BasicWL = 16,
+
+        /// <summary>
+        /// Invoice fomat based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770)
+        /// </summary>
         XRechnung = 32
     }
 

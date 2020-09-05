@@ -24,8 +24,16 @@ using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Reference documents are supposed to hold additional data you might want to show on item level.
+    /// 
+    /// Reference documents are used e.g. for commissions on item level
+    /// </summary>
     public class AdditionalReferencedDocument : BaseReferencedDocument
     {
+        /// <summary>
+        /// Reference documents are strongly typed, specify ReferenceTypeCode to allow easy processing by invoicee
+        /// </summary>
         public ReferenceTypeCodes ReferenceTypeCode { get; set; }
     }
 }

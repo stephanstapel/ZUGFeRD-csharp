@@ -29,7 +29,7 @@ namespace ZUGFeRD_Test
     {
         internal void Run()
         {
-            InvoiceDescriptor desc = _createNewInvoice();
+            InvoiceDescriptor desc = _createInvoice();
             desc.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
 
             // --- ZUGFeRD 2.0x tests ---

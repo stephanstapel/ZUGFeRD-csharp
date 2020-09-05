@@ -30,6 +30,8 @@ namespace s2industries.ZUGFeRD
         /// Bestellnummer / Lieferscheinummer
         /// </summary>
         public string ID { get; set; }
+
+
         /// <summary>
         /// Bestelldatum / Lieferdatum
         /// </summary>

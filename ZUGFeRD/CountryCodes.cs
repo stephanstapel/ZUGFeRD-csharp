@@ -26,25 +26,26 @@ namespace s2industries.ZUGFeRD
     /// <summary>
     /// Country codes based on ISO 3166
     /// source:
-    /// http://www.iso.org/iso/home/standards/country_codes/country_names_and_code_elements_txt.htm
+    /// https://cemil.dev/countrieslist
     ///
-    /// Note: You don't get a parseable file any more from that URL
     /// 
     /// enum can be re-generated using:
     /// 
-    /// f = file("countries.txt")
-    /// g = file("output.cs", "w+")
+    /// g = open('output.cs', 'w+')
     /// 
-    /// for line in f.readlines():
-    ///     parts = line.replace("\n", "").split(";")
+    /// with open('countries.json') as json_file:
+    /// data = json.load(json_file)
+    /// for p in data:
+    ///     alphaTwo = p['alpha-2']
+    ///     countryCode = p['country-code']
+    ///     name = p['name']
+    ///     g.write('/// <summary>\n')
+    ///     g.write('/// ' + name + '\n')
+    ///     g.write('/// ' + alphaTwo + ' = ' + countryCode + '\n')
+    ///     g.write('/// </summary>\n')
+    ///     g.write(alphaTwo + ' = ' + countryCode + ',\n')
+    ///     g.write('\n')
     /// 
-    ///     g.write("/// <summary>\n")
-    ///     g.write("/// " + parts[0] + "\n")
-    ///     g.write("/// </summary>\n")
-    ///     g.write(parts[1] + ",\n")
-    ///     g.write("\n")    
-    /// 
-    /// f.close()
     /// g.close()
     /// 
     /// Enumeration of Country Codes

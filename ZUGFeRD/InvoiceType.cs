@@ -25,17 +25,6 @@ namespace s2industries.ZUGFeRD
 {
     public enum InvoiceType
     {
-
-/*
-        // Old definitions:
-        Unknown = 0,
-        Invoice = 380,
-        Correction = 1380,
-        CreditNote = 381,
-        DebitNote = 383,
-        SelfBilledInvoice = 389
-*/
-
         /// <summary>
         /// Self billed credit note (261)
         /// is a Credit Note
@@ -145,16 +134,6 @@ namespace s2industries.ZUGFeRD
 
         public static InvoiceType FromString(this InvoiceType _, string s)
         {
-/*
-            switch (s)
-            {
-                case "380": return InvoiceType.Invoice;
-                case "1380": return InvoiceType.Correction;
-                case "381": return InvoiceType.CreditNote;
-                case "383": return InvoiceType.DebitNote;
-                case "389": return InvoiceType.SelfBilledInvoice;
-            }
-*/
             try
             {
                 return (InvoiceType) Enum.Parse(typeof(InvoiceType), s);
@@ -170,7 +149,5 @@ namespace s2industries.ZUGFeRD
         {
             return i.ToString("g");
         } // !ToString()
-
     }
-
 }

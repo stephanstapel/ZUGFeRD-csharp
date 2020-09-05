@@ -61,6 +61,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         ST3,
 
+        /// <summary>
+        /// Unbekannter Wert
+        /// </summary>
         Unknown
     }
 
