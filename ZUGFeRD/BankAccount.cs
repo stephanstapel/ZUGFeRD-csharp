@@ -23,13 +23,40 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// This class holds information about a bank account. The class is used in different places,
+    /// e.g. for holding supplier and customer bank information
+    /// </summary>
     public class BankAccount
     {
+        /// <summary>
+        /// National account number (not SEPA) 
+        /// </summary>
         public string ID { get; set; }
+
+        /// <summary>
+        /// IBAN identifier for the bank account. This information is not yet validated.
+        /// </summary>
         public string IBAN { get; set; }
+
+        /// <summary>
+        /// Payment service provider identifier
+        /// </summary>
         public string BIC { get; set; }
+
+        /// <summary>
+        /// Legacy bank identifier
+        /// </summary>
         public string Bankleitzahl { get; set; }
+
+        /// <summary>
+        /// Clear text name of the bank
+        /// </summary>
         public string BankName { get; set; }
+
+        /// <summary>
+        /// Payment account name
+        /// </summary>
         public string Name { get; set; }
     }
 }
