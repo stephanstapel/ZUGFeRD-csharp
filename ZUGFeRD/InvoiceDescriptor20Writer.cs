@@ -843,11 +843,18 @@ namespace s2industries.ZUGFeRD
         {
             switch (type)
             {
+                case InvoiceType.SelfBilledInvoice:
                 case InvoiceType.Invoice: return "RECHNUNG";
-                case InvoiceType.Correction: return "KORREKTURRECHNUNG";
+                case InvoiceType.SelfBilledCreditNote:
                 case InvoiceType.CreditNote: return "GUTSCHRIFT";
-                case InvoiceType.DebitNote: return "";
-                case InvoiceType.SelfBilledInvoice: return "";
+                case InvoiceType.DebitNote: return "BELASTUNGSANZEIGE";                
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";                                
+                case InvoiceType.PartialInvoice: return "TEILRECHNUNG";
+                case InvoiceType.PrepaymentInvoice: return "VORAUSZAHLUNGSRECHNUNG";
+                case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
+                case InvoiceType.Correction:
+                case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
+                case InvoiceType.Unknown: return "";                    
                 default: return "";
             }
         } // !_translateInvoiceType()
@@ -860,23 +867,16 @@ namespace s2industries.ZUGFeRD
                 type -= 1000;
             }
 
-            // only these types are allowed
-            // 84: 'Wertbelastung/Wertrechnung ohne Warenbezug'
-            // 380: 'Handelsrechnung (Rechnung für Waren und Dienstleistungen)'
-            // 389: 'Selbst ausgestellte Rechnung (Steuerrechtliche Gutschrift/Gutschriftsverfahren)'
-            switch (type)
+            if (type == InvoiceType.CorrectionOld)
             {
-                case InvoiceType.Correction: return (int)InvoiceType.Invoice;
-                case InvoiceType.CreditNote: return (int)InvoiceType.Invoice;
-                case InvoiceType.DebitNote: return (int)InvoiceType.Invoice;
-                case InvoiceType.Invoice: return (int)InvoiceType.Invoice;
-                case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
-                default: return (int)InvoiceType.Unknown;
+                return (int)InvoiceType.Correction;
             }
+
+            return (int)type;            
         } // !_translateInvoiceType()
 
 
-        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+    internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
         {
             if (descriptor.Profile == Profile.BasicWL)
             {
@@ -889,5 +889,5 @@ namespace s2industries.ZUGFeRD
 
             return true;
         } // !Validate()
-    }
+}
 }

@@ -829,6 +829,7 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.Invoice: return "RECHNUNG";
                 case InvoiceType.Correction: return "KORREKTURRECHNUNG";
                 case InvoiceType.CreditNote: return "GUTSCHRIFT";
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";
                 case InvoiceType.DebitNote: return "";
                 case InvoiceType.SelfBilledInvoice: return "";
                 default: return "";
@@ -847,14 +848,15 @@ namespace s2industries.ZUGFeRD
             // 84: 'Wertbelastung/Wertrechnung ohne Warenbezug'
             // 380: 'Handelsrechnung (Rechnung für Waren und Dienstleistungen)'
             // 389: 'Selbst ausgestellte Rechnung (Steuerrechtliche Gutschrift/Gutschriftsverfahren)'
+            //
+            // this is documented in ZUGFeRD-Format_1p0_c1p0_Codelisten.pdf
+            // all other types are mapped accordingly
             switch (type)
             {
-                case InvoiceType.Correction: return (int)InvoiceType.Invoice;
-                case InvoiceType.CreditNote: return (int)InvoiceType.Invoice;
-                case InvoiceType.DebitNote: return (int)InvoiceType.Invoice;
-                case InvoiceType.Invoice: return (int)InvoiceType.Invoice;
                 case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
-                default: return (int)InvoiceType.Unknown;
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return (int)InvoiceType.DebitnoteRelatedToFinancialAdjustments;
+                case InvoiceType.Unknown: return (int)InvoiceType.Unknown;                                
+                default: return (int)InvoiceType.Invoice;
             }
         } // !_translateInvoiceType()
     }

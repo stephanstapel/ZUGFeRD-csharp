@@ -23,8 +23,16 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Type codes for the various kinds of documents that can be represented using ZUGFeRD.
+    /// </summary>
     public enum InvoiceType
     {
+        /// <summary>
+        /// Document/message for providing debit information related to financial adjustments to the relevant party.
+        /// </summary>
+        DebitnoteRelatedToFinancialAdjustments = 84,
+
         /// <summary>
         /// Self billed credit note (261)
         /// is a Credit Note
