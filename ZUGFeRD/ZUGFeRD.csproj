@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.2.0</Version>
+    <Version>4.0.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD.</Description>
