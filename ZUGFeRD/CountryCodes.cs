@@ -23,33 +23,34 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+
+    // You can regenerate the codes using:
+    //
+    // https://cemil.dev/countrieslist
+    //
+    // g = open('output.cs', 'w+')
+    // 
+    // with open('countries.json') as json_file:
+    // data = json.load(json_file)
+    // for p in data:
+    //     alphaTwo = p['alpha-2']
+    //     countryCode = p['country-code']
+    //     name = p['name']
+    //     g.write('/// <summary>\n')
+    //     g.write('/// ' + name + '\n')
+    //     g.write('/// ' + alphaTwo + ' = ' + countryCode + '\n')
+    //     g.write('/// </summary>\n')
+    //     g.write(alphaTwo + ' = ' + countryCode + ',\n')
+    //     g.write('\n')
+    // 
+    // g.close()
+    //
+    // Kosovo needs manual addition and special treatment
+
     /// <summary>
-    /// Country codes based on ISO 3166
-    /// source:
-    /// https://cemil.dev/countrieslist
-    ///
+    /// Country codes based on ISO 3166 source
+    /// with addition of Kosovo according to ZUGFeRD standard
     /// 
-    /// enum can be re-generated using:
-    /// 
-    /// g = open('output.cs', 'w+')
-    /// 
-    /// with open('countries.json') as json_file:
-    /// data = json.load(json_file)
-    /// for p in data:
-    ///     alphaTwo = p['alpha-2']
-    ///     countryCode = p['country-code']
-    ///     name = p['name']
-    ///     g.write('/// <summary>\n')
-    ///     g.write('/// ' + name + '\n')
-    ///     g.write('/// ' + alphaTwo + ' = ' + countryCode + '\n')
-    ///     g.write('/// </summary>\n')
-    ///     g.write(alphaTwo + ' = ' + countryCode + ',\n')
-    ///     g.write('\n')
-    /// 
-    /// g.close()
-    /// 
-    /// Enumeration of Country Codes
-    /// in the form
     /// English short name
     /// Alpha-2 code = numeric code
     /// </summary>
