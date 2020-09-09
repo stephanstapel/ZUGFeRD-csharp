@@ -126,6 +126,9 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsInt()
 
 
+        /// <summary>
+        ///  reads the value from given xpath and interprets the value as decimal
+        /// </summary>
         protected static decimal? _nodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal? defaultValue = null)
         {
             if (node == null)
@@ -145,6 +148,9 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsDecimal()
 
 
+        /// <summary>
+        ///  reads the value from given xpath and interprets the value as date time
+        /// </summary>
         protected static DateTime? _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
         {
             if (node == null)
