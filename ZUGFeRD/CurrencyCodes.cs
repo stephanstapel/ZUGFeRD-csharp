@@ -23,6 +23,53 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    // Source: https://raw.githubusercontent.com/datasets/currency-codes/master/data/codes-all.csv
+    // 
+    // You can regenerate the codes using:
+    // 
+    // import csv
+    // 
+    // currencies = {}
+    // 
+    // with open('currencies.csv', newline= '') as f:
+    // lines = csv.reader(f, delimiter = ',', quotechar = '"')
+    // for line in lines:        
+    //     if len(line) < 4:
+    //         continue
+    // 
+    //     country = line[0]
+    //     currency = line[1]
+    //     alphaThree = line[2]
+    //     code = line[3]
+    // 
+    //     if len(code) == 0:
+    //         continue
+    // 
+    //     # first line
+    //     if country.find('Entity') > -1:
+    //         continue
+    // 
+    //     if currency.find('Zimbabwe Dollar (old)') > -1:
+    //         continue
+    // 
+    //     if code in currencies:
+    //         continue
+    // 
+    //     currencies[code] = { 'country' : country, 'currency' : currency, 'alphaThree' : alphaThree, 'code' : code }
+    // 
+    // g = open('currencies.cs', 'w+')
+    // 
+    // for currency in currencies.values():    
+    //     g.write('/// <summary>\n')
+    //     g.write('/// Country: ' + currency['country'] + '\n')
+    //     g.write('/// Currency: ' + currency['currency'] + '\n')
+    //     g.write('/// </summary>\n')
+    //     g.write(currency['alphaThree'] + ' = ' + currency['code'] + ',\n')
+    //     g.write('\n')
+    // 
+    // g.close()
+
+
     /// <summary>
     /// Full usage of http://csharpmoney.codeplex.com/ not required here,
     /// mapping of ISO codes sufficient.
@@ -30,50 +77,6 @@ namespace s2industries.ZUGFeRD
     /// ISO 4217 currency codes
     /// 
     /// Source: https://raw.githubusercontent.com/datasets/currency-codes/master/data/codes-all.csv
-    /// 
-    /// You can regenerate the codes using:
-    /// 
-    /// import csv
-    /// 
-    /// currencies = {}
-    /// 
-    /// with open('currencies.csv', newline= '') as f:
-    /// lines = csv.reader(f, delimiter = ',', quotechar = '"')
-    /// for line in lines:        
-    ///     if len(line) < 4:
-    ///         continue
-    /// 
-    ///     country = line[0]
-    ///     currency = line[1]
-    ///     alphaThree = line[2]
-    ///     code = line[3]
-    /// 
-    ///     if len(code) == 0:
-    ///         continue
-    /// 
-    ///     # first line
-    ///     if country.find('Entity') > -1:
-    ///         continue
-    /// 
-    ///     if currency.find('Zimbabwe Dollar (old)') > -1:
-    ///         continue
-    /// 
-    ///     if code in currencies:
-    ///         continue
-    /// 
-    ///     currencies[code] = { 'country' : country, 'currency' : currency, 'alphaThree' : alphaThree, 'code' : code }
-    /// 
-    /// g = open('currencies.cs', 'w+')
-    /// 
-    /// for currency in currencies.values():    
-    ///     g.write('/// <summary>\n')
-    ///     g.write('/// Country: ' + currency['country'] + '\n')
-    ///     g.write('/// Currency: ' + currency['currency'] + '\n')
-    ///     g.write('/// </summary>\n')
-    ///     g.write(currency['alphaThree'] + ' = ' + currency['code'] + ',\n')
-    ///     g.write('\n')
-    /// 
-    /// g.close()
     /// </summary>
     public enum CurrencyCodes
     {

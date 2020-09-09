@@ -53,6 +53,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// corresponding to the minimum invoice information
+        /// Invoices in this profile are no valid electronic invoices.
+        /// They contain document level invoice information that are mostly required or useful for buyers for their process automation.
         /// </summary>
         Minimum = 8,
 
@@ -63,7 +65,7 @@ namespace s2industries.ZUGFeRD
         BasicWL = 16,
 
         /// <summary>
-        /// Invoice fomat based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770)
+        /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770)
         /// </summary>
         XRechnung = 32
     }

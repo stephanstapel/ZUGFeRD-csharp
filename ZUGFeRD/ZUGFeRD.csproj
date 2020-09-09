@@ -5,7 +5,7 @@
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD.</Description>
-    <PackageLicenseUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2020</Copyright>
