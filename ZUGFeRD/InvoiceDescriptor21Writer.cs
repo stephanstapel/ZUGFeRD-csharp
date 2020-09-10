@@ -277,7 +277,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement();
                         #endregion
 
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended | Profile.XRechnung);
 
                         Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                     }
