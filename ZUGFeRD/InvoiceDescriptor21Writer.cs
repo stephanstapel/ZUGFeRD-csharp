@@ -589,17 +589,8 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
                     Writer.WriteElementString("ram:BICID", account.BIC);
-
-                    if (!String.IsNullOrEmpty(account.Bankleitzahl))
-                    {
-                        Writer.WriteElementString("ram:GermanBankleitzahlID", account.Bankleitzahl);
-                    }
-
-                    if (!String.IsNullOrEmpty(account.BankName))
-                    {
-                        Writer.WriteElementString("ram:Name", account.BankName);
-                    }
                     Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
 
@@ -623,6 +614,10 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteStartElement("ram:PayerPartyDebtorFinancialAccount");
                     Writer.WriteElementString("ram:IBANID", account.IBAN);
+                    if (!String.IsNullOrEmpty(account.Name))
+                    {
+                        Writer.WriteElementString("ram:AccountName", account.Name);
+                    }
                     if (!String.IsNullOrEmpty(account.ID))
                     {
                         Writer.WriteElementString("ram:ProprietaryID", account.ID);
@@ -630,18 +625,9 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
 
                     Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
-                    Writer.WriteElementString("ram:BICID", account.BIC);
-
-                    if (!String.IsNullOrEmpty(account.Bankleitzahl))
-                    {
-                        Writer.WriteElementString("ram:GermanBankleitzahlID", account.Bankleitzahl);
-                    }
-
-                    if (!String.IsNullOrEmpty(account.BankName))
-                    {
-                        Writer.WriteElementString("ram:Name", account.BankName);
-                    }
+                    Writer.WriteElementString("ram:BICID", account.BIC);                                  
                     Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
+
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
             }
