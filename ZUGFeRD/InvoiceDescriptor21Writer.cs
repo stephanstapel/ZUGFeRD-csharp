@@ -312,16 +312,20 @@ namespace s2industries.ZUGFeRD
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
                     Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument", ALL_PROFILES ^ Profile.XRechnung);
-                    if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
-                    {
-                        Writer.WriteStartElement("ram:IssueDateTime");
-                        Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
-                        Writer.WriteEndElement(); // !ram:IssueDateTime
-                    }
                     if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
                     {
-                        Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                        Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
                     }
+
+                    if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // "qdt:DateTimeString
+                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                    }                    
 
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                 }
@@ -503,8 +507,8 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("qdt:DateTimeString");
                     Writer.WriteAttributeString("format", "102");
                     Writer.WriteValue(_formatDate(this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.Value));
-                    Writer.WriteEndElement(); // "udt:DateTimeString
-                    Writer.WriteEndElement(); // !ram:IssueDateTime
+                    Writer.WriteEndElement(); // "qdt:DateTimeString
+                    Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                 }
                 
                 Writer.WriteEndElement(); // !DeliveryNoteReferencedDocument
