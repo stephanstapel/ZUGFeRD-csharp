@@ -50,7 +50,7 @@ desc.SetTotals(202.76m, 5.80m, 14.73m, 193.83m, 21.31m, 215.14m, 50.0m, 165.14m)
 desc.AddApplicableTradeTax(9.06m, 129.37m, 7m, "VAT", "S");
 desc.AddApplicableTradeTax(12.25m, 64.46m, 19m, "VAT", "S");
 desc.SetLogisticsServiceCharge(5.80m, "Versandkosten", "VAT", "S", 7m);
-desc.setTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
+desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
 
 desc.Save("output.xml");
 ```
