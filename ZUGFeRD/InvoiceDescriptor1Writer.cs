@@ -500,7 +500,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                         Writer.WriteEndElement();
-                        Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort);
+                        Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort | Profile.Extended);
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                         Writer.WriteEndElement();
