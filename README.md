@@ -2,7 +2,7 @@ Part of the ZUGFeRD community:
 https://github.com/zugferd
 
 # Introduction
-The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD.
+The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor format XRechnung.
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
 A description of the library can be found here:
@@ -55,7 +55,7 @@ desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% S
 desc.Save("output.xml");
 ```
 
-# Using ZUGFeRD 1.x and ZUGFeRD 2.x
+# Using ZUGFeRD 1.x, ZUGFeRD 2.x and XRechnung
 In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
 
 ```csharp
