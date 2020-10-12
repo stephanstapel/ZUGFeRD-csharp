@@ -25,9 +25,19 @@ using System.IO;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Represents a ZUGFeRD/ Factur-X invoice
+    /// </summary>
     public class InvoiceDescriptor
     {
+        /// <summary>
+        /// Invoice Number
+        /// </summary>
         public string InvoiceNo { get; set; }
+
+        /// <summary>
+        /// Invoice date
+        /// </summary>
         public DateTime? InvoiceDate { get; set; } = null;
         public string InvoiceNoAsReference { get; set; } = "";
 
@@ -38,6 +48,9 @@ namespace s2industries.ZUGFeRD
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; } = null;
         public DateTime? ActualDeliveryDate { get; set; } = null;
 
+        /// <summary>
+        /// Currency of the invoice
+        /// </summary>
         public CurrencyCodes Currency { get; set; }
         public Party Buyer { get; set; }
         public Contact BuyerContact { get; set; }

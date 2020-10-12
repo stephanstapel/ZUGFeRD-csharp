@@ -35,15 +35,31 @@ namespace s2industries.ZUGFeRD
         /// Reference documents are strongly typed, specify ReferenceTypeCode to allow easy processing by invoicee
         /// </summary>
         public ReferenceTypeCodes ReferenceTypeCode { get; set; }
-        
+
+        /// <summary>
+        /// The identifier of the tendering or batch the invoice refers to, or an identifier for an object 
+        /// given by the seller the invoice refers to, or an identifier of the documents substantiating the invoice.
+        /// </summary>
         public string IssuerAssignedID { get; set; }
 
+        /// <summary>
+        /// Description of document
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// An attached document embedded as binary object or sent together with the invoice.
+        /// </summary>
         public byte[] AttachmentBinaryObject { get; set; } = null;
 
+        /// <summary>
+        /// Filename of attachment
+        /// </summary>
         public string Filename { get; set; }
 
+        /// <summary>
+        /// Type of the reference document
+        /// </summary>
         public AdditionalReferencedDocumentTypeCode TypeCode { get; set; }
     }
 }
