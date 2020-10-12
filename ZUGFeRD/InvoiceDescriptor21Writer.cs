@@ -220,33 +220,34 @@ namespace s2industries.ZUGFeRD
                     #endregion
 
                     #region AdditionalReferencedDocument (Extended)
+
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz                        
-                    if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
+                    if (tradeLineItem.AdditionalReferencedDocuments != null)
                     {
-                        foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
+                        foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                         {
                             Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
-                            if (doc.IssueDateTime.HasValue)
+                            if (document.IssueDateTime.HasValue)
                             {
                                 Writer.WriteStartElement("ram:IssueDateTime");
                                 Writer.WriteStartElement("udt:DateTimeString");
                                 Writer.WriteAttributeString("format", "102");
-                                Writer.WriteValue(_formatDate(doc.IssueDateTime.Value));
+                                Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
                                 Writer.WriteEndElement(); // !udt:DateTimeString
                                 Writer.WriteEndElement(); // !ram:IssueDateTime
                             }
 
                             Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
 
-                            if (!String.IsNullOrEmpty(doc.ID))
+                            if (!String.IsNullOrEmpty(document.ID))
                             {
-                                Writer.WriteElementString("ram:IssuerAssignedID", doc.ID);
+                                Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
                             }
 
-                            Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
+                            Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
 
                             Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                        }
+                        } // !foreach(document)
                     }
                     #endregion
 
@@ -452,38 +453,43 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region AdditionalReferencedDocument
-            for (int i = 0; i < this.Descriptor.AdditionalReferencedDocuments.Count; i++)
-            {
-                if (this.Descriptor.AdditionalReferencedDocuments[i] != null)
+            if (this.Descriptor.AdditionalReferencedDocuments != null)
+            { 
+                foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
                 {
                     Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                    if (this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.HasValue)
+                    Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
+                    Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());                    
+
+                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
                     {
-                        Writer.WriteStartElement("ram:IssueDateTime");
-                        //Writer.WriteStartElement("udt:DateTimeString");
-                        //Writer.WriteAttributeString("format", "102");
-                        Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.Value));
-                        //Writer.WriteEndElement(); // !udt:DateTimeString
-                        Writer.WriteEndElement(); // !IssueDateTime()
+                        Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
                     }
 
-                    if (this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    if (!String.IsNullOrEmpty(document.Name))
                     {
-                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode.EnumToString());
+                        Writer.WriteElementString("ram:Name", document.Name);
                     }
 
-                    if (this.Descriptor.AdditionalReferencedDocuments[i].AttachmentBinaryObject != null && this.Descriptor.AdditionalReferencedDocuments[i].AttachmentBinaryObject != "")
-                    {
-                        Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.AdditionalReferencedDocuments[i].IssuerAssignedID);
-                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocuments[i].TypeCode.EnumValueToString());
+                    if (document.AttachmentBinaryObject != null)
+                    {                        
                         Writer.WriteStartElement("ram:AttachmentBinaryObject");
-                        Writer.WriteAttributeString("filename", this.Descriptor.AdditionalReferencedDocuments[i].IssuerAssignedID);
-                        Writer.WriteAttributeString("mimeCode", this.Descriptor.AdditionalReferencedDocuments[i].mimeCode);
-                        Writer.WriteValue(this.Descriptor.AdditionalReferencedDocuments[i].AttachmentBinaryObject);
+                        Writer.WriteAttributeString("filename", document.Filename);
+                        Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                        Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
                         Writer.WriteEndElement(); // !AttachmentBinaryObject()
                     }
 
-                    // Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument[i].ID); // Not Required
+                    if (document.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
+                        Writer.WriteEndElement(); // !qdt:DateTimeString
+                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                    }
+
                     Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                 }
             }

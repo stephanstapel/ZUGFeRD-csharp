@@ -61,6 +61,8 @@ namespace ZUGFeRD_Test
 
             _saveAndLoadZUGFeRD1Invoice();
             _saveAndLoadZUGFeRD1InvoiceViaStream();
+
+            _createAndSaveXRechnungWithAttachment();
         } // !run()
         
 
@@ -266,7 +268,23 @@ namespace ZUGFeRD_Test
             string s = System.Text.Encoding.Default.GetString(data);
         } // !_saveAndLoadZUGFeRD1InvoiceViaStream()
 
-    
+
+        private void _createAndSaveXRechnungWithAttachment()
+        {
+            InvoiceDescriptor desc = _createInvoice();
+            byte[] data = System.IO.File.ReadAllBytes("ZUGFeRD-Test.exe");
+            desc.AddAdditionalReferencedDocument(
+                issuerAssignedID: "My-File",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "Ausführbare Datei",
+                attachmentBinaryObject: data,
+                filename: "ZUGFeRD-Test.exe");
+
+            desc.Save("xrechnung-with-attachment.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
+        } // !_createAndSaveXRechnungWithAttachment()
+
+
+
         private InvoiceDescriptor _createInvoice()
         {
             InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2018, 03, 05), CurrencyCodes.EUR);

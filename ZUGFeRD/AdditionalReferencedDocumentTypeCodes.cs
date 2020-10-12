@@ -42,6 +42,11 @@ namespace s2industries.ZUGFeRD
         /// price and sales catalog
         /// </summary>
         PriceSalesCatalogueResponse = 50,
+
+        /// <summary>
+        /// Unknown reference document type
+        /// </summary>
+        Unknown = 65536
     }
 
 

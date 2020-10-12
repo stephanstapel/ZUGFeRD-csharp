@@ -28,23 +28,23 @@ namespace s2industries.ZUGFeRD
     public class InvoiceDescriptor
     {
         public string InvoiceNo { get; set; }
-        public DateTime? InvoiceDate { get; set; }
-        public string InvoiceNoAsReference { get; set; }
+        public DateTime? InvoiceDate { get; set; } = null;
+        public string InvoiceNoAsReference { get; set; } = "";
 
-        public string OrderNo { get; set; }
-        public DateTime? OrderDate { get; set; }
+        public string OrderNo { get; set; } = "";
+        public DateTime? OrderDate { get; set; } = null;
 
-        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
-        public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
-        public DateTime? ActualDeliveryDate { get; set; }
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; internal set; } = new List<AdditionalReferencedDocument>();
+        public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; } = null;
+        public DateTime? ActualDeliveryDate { get; set; } = null;
 
         public CurrencyCodes Currency { get; set; }
         public Party Buyer { get; set; }
         public Contact BuyerContact { get; set; }
-        public List<TaxRegistration> BuyerTaxRegistration { get; set; }
+        public List<TaxRegistration> BuyerTaxRegistration { get; set; } = new List<TaxRegistration>();
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
-        public List<TaxRegistration> SellerTaxRegistration { get; set; }
+        public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
@@ -66,67 +66,33 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party ShipFrom { get; set; }
 
-        public List<Note> Notes { get; set; }
-        public bool IsTest { get; set; }
-        public Profile Profile { get; internal set; }
-        public InvoiceType Type { get; set; }
+        public List<Note> Notes { get; set; } = new List<Note>();
+        public bool IsTest { get; set; } = false;
+        public Profile Profile { get; internal set; } = Profile.Basic;
+        public InvoiceType Type { get; set; } = InvoiceType.Invoice;
         public string ReferenceOrderNo { get; set; }
-        public List<TradeLineItem> TradeLineItems { get; set; }
+        public List<TradeLineItem> TradeLineItems { get; set; } = new List<TradeLineItem>();
 
 
-        public decimal LineTotalAmount { get; set; }
-        public decimal? ChargeTotalAmount { get; set; }
-        public decimal? AllowanceTotalAmount { get; set; }
-        public decimal? TaxBasisAmount { get; set; }
-        public decimal TaxTotalAmount { get; set; }
-        public decimal GrandTotalAmount { get; set; }
-        public decimal? TotalPrepaidAmount { get; set; }
-        public decimal DuePayableAmount { get; set; }
-        public List<Tax> Taxes { get; set; }
-        public List<ServiceCharge> ServiceCharges { get; set; }
-        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+        public decimal LineTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? ChargeTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? AllowanceTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? TaxBasisAmount { get; set; } = Decimal.MinValue;
+        public decimal TaxTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal GrandTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? TotalPrepaidAmount { get; set; } = Decimal.MinValue;
+        public decimal DuePayableAmount { get; set; } = Decimal.MinValue;
+        public List<Tax> Taxes { get; set; } = new List<Tax>();
+        public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
+        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
         public PaymentTerms PaymentTerms { get; set; }
-        public List<BankAccount> CreditorBankAccounts { get; set; }
-        public List<BankAccount> DebitorBankAccounts { get; set; }
+        public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
+        public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
         public PaymentMeans PaymentMeans { get; set; }
 
         public DateTime? BillingPeriodStart { get; set; }
         public DateTime? BillingPeriodEnd { get; set; }
 
-
-        internal InvoiceDescriptor()
-        {
-            this.InvoiceNoAsReference = "";
-
-            this.IsTest = false;
-            this.Profile = Profile.Basic;
-            this.Type = InvoiceType.Invoice;
-            this.Notes = new List<Note>();
-            this.OrderNo = "";
-            this.OrderDate = null;
-            this.InvoiceDate = null;
-            this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
-            this.DeliveryNoteReferencedDocument = null;
-            this.ActualDeliveryDate = null;
-
-            this.LineTotalAmount = decimal.MinValue;
-            this.ChargeTotalAmount = decimal.MinValue;
-            this.AllowanceTotalAmount = decimal.MinValue;
-            this.TaxBasisAmount = decimal.MinValue;
-            this.TaxTotalAmount = decimal.MinValue;
-            this.GrandTotalAmount = decimal.MinValue;
-            this.TotalPrepaidAmount = decimal.MinValue;
-            this.DuePayableAmount = decimal.MinValue;
-            this.TradeLineItems = new List<TradeLineItem>();
-            this.Taxes = new List<Tax>();
-            this.ServiceCharges = new List<ServiceCharge>();
-            this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
-
-            this.BuyerTaxRegistration = new List<TaxRegistration>();
-            this.SellerTaxRegistration = new List<TaxRegistration>();
-            this.CreditorBankAccounts = new List<BankAccount>();
-            this.DebitorBankAccounts = new List<BankAccount>();
-        }
 
 
         /// <summary>
@@ -298,18 +264,21 @@ namespace s2industries.ZUGFeRD
                 SchemeID = schemeID
             });
         } // !AddSellerTaxRegistration()
-        
 
-        public void AddAdditionalReferencedDocument( string AttachmentBinaryObject, string mimeCode, string IssuerAssignedID, AdditionalReferencedDocumentTypeCode TypeCode, string Name = null, ReferenceTypeCodes ReferenceTypeCode = ReferenceTypeCodes.Unknown){
-            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument(){
-                ReferenceTypeCode = ReferenceTypeCode,
-                IssuerAssignedID = IssuerAssignedID,
-                Name = Name,
-                AttachmentBinaryObject = AttachmentBinaryObject,
-                mimeCode = mimeCode,
-                TypeCode = TypeCode
+
+        public void AddAdditionalReferencedDocument(string issuerAssignedID, DateTime? issueDateTime = null, AdditionalReferencedDocumentTypeCode typeCode = AdditionalReferencedDocumentTypeCode.Unknown, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        {
+            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            {
+                ReferenceTypeCode = referenceTypeCode,
+                IssuerAssignedID = issuerAssignedID,
+                IssueDateTime = issueDateTime,
+                Name = name,
+                AttachmentBinaryObject = attachmentBinaryObject,
+                Filename = filename,
+                TypeCode = typeCode
             });
-        } // !SetAdditionalReferencedDocument()
+        } // !AddAdditionalReferencedDocument()
 
 
         public void SetBuyerOrderReferenceDocument(string orderNo, DateTime orderDate)

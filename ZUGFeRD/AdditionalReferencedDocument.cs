@@ -40,9 +40,9 @@ namespace s2industries.ZUGFeRD
 
         public string Name { get; set; }
 
-        public string AttachmentBinaryObject { get; set; }
+        public byte[] AttachmentBinaryObject { get; set; } = null;
 
-        public string mimeCode { get; set; }
+        public string Filename { get; set; }
 
         public AdditionalReferencedDocumentTypeCode TypeCode { get; set; }
     }

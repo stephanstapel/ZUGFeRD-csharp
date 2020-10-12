@@ -64,12 +64,7 @@ namespace ZUGFeRD_Test
                           new GlobalID(GlobalID.SchemeID_GLN, "4304171000002"));
             desc.SetBuyerOrderReferenceDocument("B123456789", new DateTime(2013, 08, 01));
 
-            desc.AdditionalReferencedDocument = new AdditionalReferencedDocument()
-            {
-                ID = "A456123",
-                IssueDateTime = new DateTime(2013, 08, 02),
-                ReferenceTypeCode = ReferenceTypeCodes.VN
-            };
+            desc.AddAdditionalReferencedDocument(issuerAssignedID: "A456123", issueDateTime: new DateTime(2013, 08, 02), referenceTypeCode: ReferenceTypeCodes.VN);
 
             /// TODO: ApplicableSupplyChainTradeDelivery
             /// 
