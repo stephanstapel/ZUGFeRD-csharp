@@ -124,26 +124,29 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
-            if (this.Descriptor.AdditionalReferencedDocument != null)
+            for (int i = 0; i < this.Descriptor.AdditionalReferencedDocuments.Count; i++)
             {
-                Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
+                if (this.Descriptor.AdditionalReferencedDocuments != null)
                 {
-                    Writer.WriteStartElement("ram:IssueDateTime");
-                    //Writer.WriteStartElement("udt:DateTimeString");
-                    //Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value, false));
-                    //Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
-                }
+                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:IssueDateTime");
+                        //Writer.WriteStartElement("udt:DateTimeString");
+                        //Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.Value, false));
+                        //Writer.WriteEndElement(); // !udt:DateTimeString
+                        Writer.WriteEndElement(); // !IssueDateTime()
+                    }
 
-                if (this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-                {
-                    Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode.EnumToString());
-                }
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode.EnumToString());
+                    }
 
-                Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument.ID);
-                Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocuments[i].ID);
+                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                }
             }
 
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement
@@ -391,7 +394,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);
 
-            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);            
+            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
             _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);
             _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);
@@ -506,7 +509,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                         Writer.WriteEndElement();
-                        Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort);
+                        Writer.WriteStartElement("ram:ActualAmount", Profile.Comfort | Profile.Extended);
                         Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                         Writer.WriteEndElement();
@@ -584,19 +587,19 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ApplicableTradeTax
                 }
 
-                if(Descriptor.BillingPeriodStart.HasValue && Descriptor.BillingPeriodEnd.HasValue)
+                if (Descriptor.BillingPeriodStart.HasValue && Descriptor.BillingPeriodEnd.HasValue)
                 {
                     Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
 
                     Writer.WriteStartElement("ram:StartDateTime");
                     _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
                     Writer.WriteEndElement(); // !StartDateTime
-                
-                
+
+
                     Writer.WriteStartElement("ram:EndDateTime");
                     _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
                     Writer.WriteEndElement(); // !EndDateTime
-                    
+
                     Writer.WriteEndElement(); // !BillingSpecifiedPeriod
                 }
 
@@ -861,7 +864,7 @@ namespace s2industries.ZUGFeRD
             {
                 case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
                 case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return (int)InvoiceType.DebitnoteRelatedToFinancialAdjustments;
-                case InvoiceType.Unknown: return (int)InvoiceType.Unknown;                                
+                case InvoiceType.Unknown: return (int)InvoiceType.Unknown;
                 default: return (int)InvoiceType.Invoice;
             }
         } // !_translateInvoiceType()

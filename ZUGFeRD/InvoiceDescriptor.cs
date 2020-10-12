@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
         public string OrderNo { get; set; }
         public DateTime? OrderDate { get; set; }
 
-        public AdditionalReferencedDocument AdditionalReferencedDocument { get; set; }
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
         public DateTime? ActualDeliveryDate { get; set; }
 
@@ -105,7 +105,7 @@ namespace s2industries.ZUGFeRD
             this.OrderNo = "";
             this.OrderDate = null;
             this.InvoiceDate = null;
-            this.AdditionalReferencedDocument = null;
+            this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
             this.DeliveryNoteReferencedDocument = null;
             this.ActualDeliveryDate = null;
 
@@ -298,6 +298,18 @@ namespace s2industries.ZUGFeRD
                 SchemeID = schemeID
             });
         } // !AddSellerTaxRegistration()
+        
+
+        public void AddAdditionalReferencedDocument( string AttachmentBinaryObject, string mimeCode, string IssuerAssignedID, AdditionalReferencedDocumentTypeCode TypeCode, string Name = null, ReferenceTypeCodes ReferenceTypeCode = ReferenceTypeCodes.Unknown){
+            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument(){
+                ReferenceTypeCode = ReferenceTypeCode,
+                IssuerAssignedID = IssuerAssignedID,
+                Name = Name,
+                AttachmentBinaryObject = AttachmentBinaryObject,
+                mimeCode = mimeCode,
+                TypeCode = TypeCode
+            });
+        } // !SetAdditionalReferencedDocument()
 
 
         public void SetBuyerOrderReferenceDocument(string orderNo, DateTime orderDate)
@@ -305,7 +317,6 @@ namespace s2industries.ZUGFeRD
             this.OrderNo = orderNo;
             this.OrderDate = orderDate;
         } // !SetBuyerOrderReferenceDocument()
-
 
 
         public void SetDeliveryNoteReferenceDocument(string deliveryNoteNo, DateTime deliveryNoteDate)

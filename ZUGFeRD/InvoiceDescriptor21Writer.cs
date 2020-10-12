@@ -452,26 +452,40 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region AdditionalReferencedDocument
-            if (this.Descriptor.AdditionalReferencedDocument != null)
+            for (int i = 0; i < this.Descriptor.AdditionalReferencedDocuments.Count; i++)
             {
-                Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
+                if (this.Descriptor.AdditionalReferencedDocuments[i] != null)
                 {
-                    Writer.WriteStartElement("ram:IssueDateTime");
-                    //Writer.WriteStartElement("udt:DateTimeString");
-                    //Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value));
-                    //Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
-                }
+                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:IssueDateTime");
+                        //Writer.WriteStartElement("udt:DateTimeString");
+                        //Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.Value));
+                        //Writer.WriteEndElement(); // !udt:DateTimeString
+                        Writer.WriteEndElement(); // !IssueDateTime()
+                    }
 
-                if (this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-                {
-                    Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode.EnumToString());
-                }
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode.EnumToString());
+                    }
 
-                Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument.ID);
-                Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].AttachmentBinaryObject != null && this.Descriptor.AdditionalReferencedDocuments[i].AttachmentBinaryObject != "")
+                    {
+                        Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.AdditionalReferencedDocuments[i].IssuerAssignedID);
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocuments[i].TypeCode.EnumValueToString());
+                        Writer.WriteStartElement("ram:AttachmentBinaryObject");
+                        Writer.WriteAttributeString("filename", this.Descriptor.AdditionalReferencedDocuments[i].IssuerAssignedID);
+                        Writer.WriteAttributeString("mimeCode", this.Descriptor.AdditionalReferencedDocuments[i].mimeCode);
+                        Writer.WriteValue(this.Descriptor.AdditionalReferencedDocuments[i].AttachmentBinaryObject);
+                        Writer.WriteEndElement(); // !AttachmentBinaryObject()
+                    }
+
+                    // Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument[i].ID); // Not Required
+                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                }
             }
             #endregion
 
