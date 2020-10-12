@@ -2,7 +2,7 @@ Part of the ZUGFeRD community:
 https://github.com/zugferd
 
 # Introduction
-The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor format XRechnung.
+The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor Factur-X. One special profil for Factur-X is the German XRechnung.
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
 A description of the library can be found here:
@@ -109,6 +109,40 @@ descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // sa
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1
 ```
+
+# Special features for XRechnung
+In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
+
+```csharp
+descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as XRechnung
+```
+
+However, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the xrechnung.xml document:
+
+```csharp
+InvoiceDescriptor desc = _createInvoice();
+byte[] data = System.IO.File.ReadAllBytes("my-calculation.xlsx");
+desc.AddAdditionalReferencedDocument(
+    issuerAssignedID: "calculation-sheet",
+    typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+    name: "Calculation as the basis for the invoice",
+    attachmentBinaryObject: data,
+    filename: "my-calculation.xlsx");
+
+desc.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);            
+```
+
+The resulting xrechnung.xml file will then contain the calculation file content, encoded in base64.
+Please note that there are only few mime types supported by the XRechnung standard. At the time of writing this tutorial, those are listed here:
+https://projekte.kosit.org/xrechnung/xrechnung/-/issues/59
+
+- application/pdf
+- image/png
+- image/jpeg
+- text/csv
+- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+- application/vnd.oasis.opendocument.spreadsheet
+- application/xml
 
 # Support for profiles
 The library contains support for all profiles that are supported by the ZUGFeRD formats:
