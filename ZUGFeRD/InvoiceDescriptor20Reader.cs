@@ -28,6 +28,14 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor20Reader : IInvoiceDescriptorReader
     {
+        /// <summary>
+        /// Parses the ZUGFeRD invoice from the given stream.
+        /// 
+        /// Make sure that the stream is open, otherwise an IllegalStreamException exception is thrown.
+        /// Important: the stream will not be closed by this function.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns>The parsed ZUGFeRD invoice</returns>
         public override InvoiceDescriptor Load(Stream stream)
         {
             if (!stream.CanRead)

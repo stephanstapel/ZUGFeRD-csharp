@@ -33,6 +33,12 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
+        /// <summary>
+        /// Saves the given invoice to the given stream.
+        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.        
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <param name="stream"></param>
         public override void Save(InvoiceDescriptor descriptor, Stream stream)
         {
             if (!stream.CanWrite || !stream.CanSeek)

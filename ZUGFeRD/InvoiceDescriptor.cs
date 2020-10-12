@@ -129,6 +129,16 @@ namespace s2industries.ZUGFeRD
         }
 
 
+        /// <summary>
+        /// Loads a ZUGFeRD invoice from a stream.
+        /// 
+        /// Please make sure that the stream is open, otherwise this call will raise an IllegalStreamException.
+        /// 
+        /// Important: the stream will not be closed by this function, make sure to close it by yourself!
+        /// 
+        /// </summary>
+        /// <param name="stream">Stream where to read the ZUGFeRD invoice</param>
+        /// <returns></returns>
         public static InvoiceDescriptor Load(Stream stream)
         {
             IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
@@ -155,6 +165,13 @@ namespace s2industries.ZUGFeRD
         } // !Load()
 
 
+        /// <summary>
+        /// Loads a ZUGFeRD invoice from a file.
+        /// 
+        /// Please make sure that the file is exists, otherwise this call will raise a FileNotFoundException.
+        /// </summary>
+        /// <param name="filename">Name of the ZUGFeRD invoice file</param>
+        /// <returns></returns>
         public static InvoiceDescriptor Load(string filename)
         {
             IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
@@ -317,6 +334,19 @@ namespace s2industries.ZUGFeRD
         } // !AddLogisticsServiceCharge()
 
 
+        /// <summary>
+        /// Adds an allowance or charge on document level.
+        /// 
+        /// Allowance represents a discount whereas charge represents a surcharge.
+        /// </summary>
+        /// <param name="isDiscount">Marks if the allowance charge is a discount. Please note that in contrary to this function, the xml file indicated a surcharge, not a discount (value will be inverted)</param>
+        /// <param name="basisAmount">Base amount (basis of allowance)</param>
+        /// <param name="currency">Curency of the allowance</param>
+        /// <param name="actualAmount">Actual allowance charge amount</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxPercent">VAT rate for the allowance</param>
         public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
@@ -425,10 +455,7 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// Saves the descriptor object into a file with given name.
-        /// 
-        /// The stream position will be reset to the original position after writing is finished.
-        /// This allows easy further processing of the stream.
+        /// Saves the descriptor object into a file with given name.        
         /// </summary>
         /// <param name="filename">The filename where the data should be saved to.</param>
         /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>

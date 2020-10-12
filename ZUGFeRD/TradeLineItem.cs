@@ -112,6 +112,14 @@ namespace s2industries.ZUGFeRD
 #pragma warning restore IDE1006
 
 
+        /// <summary>
+        /// As an allowance or charge on item level, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
         public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()

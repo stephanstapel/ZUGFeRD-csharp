@@ -36,7 +36,10 @@ namespace s2industries.ZUGFeRD
                 throw new FileNotFoundException();
             }
 
-            return Load(new FileStream(filename, FileMode.Open, FileAccess.Read));
+            Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            InvoiceDescriptor retval = Load(fs);
+            fs.Close();
+            return retval;
         } // !Load()
 
 
@@ -47,7 +50,10 @@ namespace s2industries.ZUGFeRD
                 throw new FileNotFoundException();
             }
 
-            return IsReadableByThisReaderVersion(new FileStream(filename, FileMode.Open, FileAccess.Read));
+            Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            bool retval = IsReadableByThisReaderVersion(fs);
+            fs.Close();
+            return retval;            
         } // !IsReadableByThisReaderVersion()
 
 
