@@ -117,25 +117,28 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
-            if (this.Descriptor.AdditionalReferencedDocument != null)
+            for (int i = 0; i < this.Descriptor.AdditionalReferencedDocuments.Count; i++)
             {
-                Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
+                if (this.Descriptor.AdditionalReferencedDocuments != null)
                 {
-                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");
-                    Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value, false));
-                    Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !FormattedIssueDateTime
-                }
+                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        Writer.WriteStartElement("udt:DateTimeString");
+                        Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocuments[i].IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // !udt:DateTimeString
+                        Writer.WriteEndElement(); // !FormattedIssueDateTime
+                    }
 
-                if (this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-                {
-                    Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode.EnumToString());
-                }
+                    if (this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocuments[i].ReferenceTypeCode.EnumToString());
+                    }
 
-                Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument.ID);
-                Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocuments[i].ID);
+                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                }
             }
 
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement

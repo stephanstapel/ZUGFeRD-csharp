@@ -35,5 +35,15 @@ namespace s2industries.ZUGFeRD
         /// Reference documents are strongly typed, specify ReferenceTypeCode to allow easy processing by invoicee
         /// </summary>
         public ReferenceTypeCodes ReferenceTypeCode { get; set; }
+        
+        public string IssuerAssignedID { get; set; }
+
+        public string Name { get; set; }
+
+        public string AttachmentBinaryObject { get; set; }
+
+        public string mimeCode { get; set; }
+
+        public AdditionalReferencedDocumentTypeCode TypeCode { get; set; }
     }
 }
