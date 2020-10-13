@@ -172,7 +172,7 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); 
 ```
 
 # Extracting xml attachments from pdf files
-I'm getting asked frequently on how one can extract the ZUGFeRD/ Factur-X/ XRechnung attachment from existing PDF files.
+I am  frequently asked how to extract the ZUGFeRD/ Factur-X/ XRechnung attachment from existing PDF files.
 
 There is a nice article on stackoverflow on how this can be achieved using itextsharp:
 
