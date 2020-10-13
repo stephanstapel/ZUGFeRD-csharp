@@ -24,7 +24,7 @@ Prerequisites:
 * Visual Studio >= 2017
 * .net Framework >= 4.6.1 (for .net Standard 2.0 support)
 
-Open ZUGFeRD/ZUGFeRD.sln solution file. Chose Release or Debug mode and hit 'Build'. That's it.
+Open ZUGFeRD/ZUGFeRD.sln solution file. Choose Release or Debug mode and hit 'Build'. That's it.
 
 For running the demo, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the application.
 
