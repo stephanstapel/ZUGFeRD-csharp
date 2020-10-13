@@ -136,7 +136,7 @@ desc.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
 ```
 
 The resulting xrechnung.xml file will then contain the calculation file content. As this is not standardized, the decision was to encode the attachments in base64.
-Please note that there are only few mime types supported by the XRechnung standard. The supported mime types are defined in BT-125. At the time of writing this tutorial, those are also listed in the discussion you find over here: https://projekte.kosit.org/xrechnung/xrechnung/-/issues/59
+Please note that there are only few mime types supported by the XRechnung standard. The supported mime types are defined in BG-24 and BT-125. At the time of writing this tutorial, those are also listed in the discussion you find over here: https://projekte.kosit.org/xrechnung/xrechnung/-/issues/59
 
 - application/pdf
 - image/png
