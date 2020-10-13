@@ -9,6 +9,9 @@ A description of the library can be found here:
 
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
 
+# License
+Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
+
 # Installation
 Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-chsarp'.
 
