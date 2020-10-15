@@ -9,6 +9,17 @@ A description of the library can be found here:
 
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
 
+## Relationship between the different standard
+Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
+
+- ZUGFeRD was developed by a German initiative as a standard for electronic invoices.
+- ZUGFeRD 2.1 is identical to the German/ French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0).
+- The standard Factur-X 1.0 (respectively ZUGFeRD 2.1) is conform with the European norm EN 16931.
+- EN 16931 in turn is based on worldwide UN/CEFACT standard 'Cross Industry Invoice' (CII).
+- XRechnung as another German standard is a subset of EN 16931. It comes with its own validation rules.
+- This means that both Factur-X 1.0 (respectively ZUGFeRD 2.1) and XRechnung are conform with EN 16931. This does not automatically result that those invoices are per se identical
+- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two formats
+
 # License
 Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
 
