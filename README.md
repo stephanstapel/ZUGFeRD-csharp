@@ -65,6 +65,8 @@ desc.AddApplicableTradeTax(9.06m, 129.37m, 7m, "VAT", "S");
 desc.AddApplicableTradeTax(12.25m, 64.46m, 19m, "VAT", "S");
 desc.SetLogisticsServiceCharge(5.80m, "Versandkosten", "VAT", "S", 7m);
 desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
+desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt AB-312", ID = "AB-312"};
+desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
 
 desc.Save("output.xml");
 ```

@@ -126,6 +126,13 @@ namespace s2industries.ZUGFeRD
         /// Corrected Invoice (384) instead
         /// </summary>
         CorrectionOld = 1380,
+        
+        /// <summary>
+        /// Cancellation (457)
+        ///
+        /// Storno
+        /// </summary>
+        Cancellation = 457,
 
         /// <summary>
         /// Unknown (0)
