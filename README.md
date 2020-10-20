@@ -65,9 +65,6 @@ desc.AddApplicableTradeTax(9.06m, 129.37m, 7m, "VAT", "S");
 desc.AddApplicableTradeTax(12.25m, 64.46m, 19m, "VAT", "S");
 desc.SetLogisticsServiceCharge(5.80m, "Versandkosten", "VAT", "S", 7m);
 desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
-desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt AB-312", ID = "AB-312"};
-desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
-
 desc.Save("output.xml");
 ```
 
@@ -124,6 +121,17 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1
+```
+
+# Special references
+The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
+
+```csharp
+// you can optionally add a reference to a procuring project:
+desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt AB-312", ID = "AB-312"};
+
+// you can optionally reference a contract:
+desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
 ```
 
 # Special features for XRechnung
