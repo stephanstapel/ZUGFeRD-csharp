@@ -48,6 +48,10 @@ namespace s2industries.ZUGFeRD
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; } = null;
         public DateTime? ActualDeliveryDate { get; set; } = null;
 
+        public ContractReferencedDocument ContractReferencedDocument { get; set; }
+
+        public SpecifiedProcuringProject SpecifiedProcuringProject { get; set; }
+
         /// <summary>
         /// Currency of the invoice
         /// </summary>

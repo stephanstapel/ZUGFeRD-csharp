@@ -426,11 +426,11 @@ namespace s2industries.ZUGFeRD
             }
 
             #region SellerTradeParty
-            _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration, descriptor.Profile);
+            _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
             #endregion
 
             #region BuyerTradeParty
-            _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
+            _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
             #endregion
 
             #region BuyerOrderReferencedDocument
@@ -449,6 +449,34 @@ namespace s2industries.ZUGFeRD
                 }
                 
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
+            }
+            #endregion
+
+            if (Descriptor.SpecifiedProcuringProject != null)
+            {
+
+                Writer.WriteStartElement("ram:SpecifiedProcuringProject", Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                Writer.WriteElementString("ram:ID", Descriptor.SpecifiedProcuringProject.ID, Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                Writer.WriteElementString("ram:Name", Descriptor.SpecifiedProcuringProject.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                Writer.WriteEndElement(); // !ram:SpecifiedProcuringProject
+            }
+
+            #region ContractReferencedDocument
+            if (this.Descriptor.ContractReferencedDocument != null)
+            {
+                Writer.WriteStartElement("ram:ContractReferencedDocument");
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.ContractReferencedDocument.ID);
+                if (this.Descriptor.ContractReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime", ALL_PROFILES ^ Profile.XRechnung);
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.ContractReferencedDocument.IssueDateTime.Value));
+                    Writer.WriteEndElement(); // !qdt:DateTimeString
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
+                
+                Writer.WriteEndElement(); // !ContractReferencedDocument
             }
             #endregion
 
