@@ -18,9 +18,19 @@
  */
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Details about a project reference
+    /// </summary>
     public class SpecifiedProcuringProject
     {
+        /// <summary>
+        /// Project reference ID
+        /// </summary>
         public string ID { get; set; }
+
+        /// <summary>
+        /// Project name
+        /// </summary>
         public string Name { get; set; }
     }
 }

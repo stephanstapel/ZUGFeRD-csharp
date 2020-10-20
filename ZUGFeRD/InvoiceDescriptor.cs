@@ -44,12 +44,31 @@ namespace s2industries.ZUGFeRD
         public string OrderNo { get; set; } = "";
         public DateTime? OrderDate { get; set; } = null;
 
+        /// <summary>
+        /// Details of an additional document reference
+        /// 
+        /// A new reference document is added by AddAdditionalReferenceDocument()
+        /// </summary>
         public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; internal set; } = new List<AdditionalReferencedDocument>();
+
+        /// <summary>
+        /// Detailed information about the corresponding delivery note
+        /// </summary>
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; } = null;
+
+        /// <summary>
+        /// Actual delivery date
+        /// </summary>
         public DateTime? ActualDeliveryDate { get; set; } = null;
 
+        /// <summary>
+        /// Detailed information on the associated contract
+        /// </summary>
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
 
+        /// <summary>
+        /// Details about a project reference
+        /// </summary>
         public SpecifiedProcuringProject SpecifiedProcuringProject { get; set; }
 
         /// <summary>
@@ -283,6 +302,16 @@ namespace s2industries.ZUGFeRD
         } // !AddSellerTaxRegistration()
 
 
+        /// <summary>
+        /// Add an additional reference document
+        /// </summary>
+        /// <param name="issuerAssignedID">Document number</param>
+        /// <param name="issueDateTime">Document Date</param>
+        /// <param name="typeCode"></param>
+        /// <param name="name"></param>
+        /// <param name="referenceTypeCode">Type of the referenced document</param>
+        /// <param name="attachmentBinaryObject"></param>
+        /// <param name="filename"></param>
         public void AddAdditionalReferencedDocument(string issuerAssignedID, DateTime? issueDateTime = null, AdditionalReferencedDocumentTypeCode typeCode = AdditionalReferencedDocumentTypeCode.Unknown, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
