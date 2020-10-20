@@ -110,7 +110,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class PaymentMeansTypeCodesExtensions
     {
-        public static PaymentMeansTypeCodes FromString(this PaymentMeansTypeCodes _type, string s)
+        public static PaymentMeansTypeCodes FromString(this PaymentMeansTypeCodes _, string s)
         {
             switch (s)
             {

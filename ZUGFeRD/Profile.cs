@@ -23,21 +23,57 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// ZUGFeRD allows reading and writing invoices in various profiles, each containing different density of information.
+    /// </summary>
     public enum Profile
     {
+        /// <summary>
+        /// Fallback value
+        /// </summary>
         Unknown = 65536,
+
+        /// <summary>
+        /// Contains core line
+        /// information required or useful for buyers for their process automation.
+        /// </summary>
         Basic = 1,
+
+        /// <summary>
+        /// The Comfort profile corresponds to the European standard EN 16931.
+        /// 
+        /// Invoices in this profile contain all necessary information and thus are valid electronic invoices.
+        /// </summary>
         Comfort = 2,
+
+        /// <summary>
+        /// Based on the Comfort/ EN 16931 profile. Contains additional information.
+        /// </summary>
         Extended = 4,
+
+        /// <summary>
+        /// corresponding to the minimum invoice information
+        /// Invoices in this profile are no valid electronic invoices.
+        /// They contain document level invoice information that are mostly required or useful for buyers for their process automation.
+        /// </summary>
         Minimum = 8,
+
+        /// <summary>
+        /// Invoices in this profile are no valid electronic invoices.
+        /// They contain document level invoice information that are mostly required or useful for buyers for their process automation.
+        /// </summary>
         BasicWL = 16,
+
+        /// <summary>
+        /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770)
+        /// </summary>
         XRechnung = 32
     }
 
 
     internal static class ProfileExtensions
     {
-        public static Profile FromString(this Profile _p, string s)
+        public static Profile FromString(this Profile _, string s)
         {
             switch (s)
             {
@@ -56,7 +92,7 @@ namespace s2industries.ZUGFeRD
                 // v2
                 case "urn:zugferd.de:2p0:minimum": return Profile.Minimum;
                 case "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic": return Profile.Basic;
-                case "urn: cen.eu:en16931: 2017": return Profile.Comfort;
+                case "urn: cen.eu:en16931: 2017": return Profile.Comfort; // Spaces inserted to prevent clash with v2.1
                 case "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended": return Profile.Extended;
 
                 // v2.1
@@ -82,7 +118,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.Basic: return "urn:ferd:CrossIndustryDocument:invoice:1p0:basic";
                         case Profile.Comfort: return "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort";
                         case Profile.Extended: return "urn:ferd:CrossIndustryDocument:invoice:1p0:extended";
-                        default: throw new Exception("Unsupported profile for ZUGFeRD version");
+                        default: throw new Exception("Unsupported profile for ZUGFeRD version 1");
                     }
                 case ZUGFeRDVersion.Version20:
                     switch (profile)
@@ -92,7 +128,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.BasicWL: return "urn:zugferd.de:2p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
-                        default: throw new Exception("Unsupported profile for ZUGFeRD version");
+                        default: throw new Exception("Unsupported profile for ZUGFeRD version 20");
                     }
                 case ZUGFeRDVersion.Version21:
                     switch (profile)
@@ -103,10 +139,11 @@ namespace s2industries.ZUGFeRD
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
                         case Profile.XRechnung: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2";
-                        default: throw new Exception("Unsupported profile for ZUGFeRD version");
+                        default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    
                 default:
-                    return "";
+                    // return "";
+                    throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
         } // !ToString()
     }

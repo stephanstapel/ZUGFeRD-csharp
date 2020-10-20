@@ -23,7 +23,7 @@ using System.Xml.XPath;
 
 namespace s2industries.ZUGFeRD
 {
-    public abstract class IInvoiceDescriptorReader
+    internal abstract class IInvoiceDescriptorReader
     {
         public abstract InvoiceDescriptor Load(Stream stream);        
         public abstract bool IsReadableByThisReaderVersion(Stream stream);
@@ -36,7 +36,10 @@ namespace s2industries.ZUGFeRD
                 throw new FileNotFoundException();
             }
 
-            return Load(new FileStream(filename, FileMode.Open, FileAccess.Read));
+            Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            InvoiceDescriptor retval = Load(fs);
+            fs.Close();
+            return retval;
         } // !Load()
 
 
@@ -47,7 +50,10 @@ namespace s2industries.ZUGFeRD
                 throw new FileNotFoundException();
             }
 
-            return IsReadableByThisReaderVersion(new FileStream(filename, FileMode.Open, FileAccess.Read));
+            Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            bool retval = IsReadableByThisReaderVersion(fs);
+            fs.Close();
+            return retval;            
         } // !IsReadableByThisReaderVersion()
 
 
@@ -126,6 +132,9 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsInt()
 
 
+        /// <summary>
+        ///  reads the value from given xpath and interprets the value as decimal
+        /// </summary>
         protected static decimal? _nodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal? defaultValue = null)
         {
             if (node == null)
@@ -145,6 +154,9 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsDecimal()
 
 
+        /// <summary>
+        ///  reads the value from given xpath and interprets the value as date time
+        /// </summary>
         protected static DateTime? _nodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
         {
             if (node == null)
@@ -179,7 +191,7 @@ namespace s2industries.ZUGFeRD
                     {
                         if (rawValue.Length != 8)
                         {
-                            throw new Exception("Wrong length of datetime element");
+                            throw new Exception("Wrong length of datetime element (format 102)");
                         }
 
                         string year = rawValue.Substring(0, 4);
@@ -192,7 +204,7 @@ namespace s2industries.ZUGFeRD
                     {
                         if (rawValue.Length != 6)
                         {
-                            throw new Exception("Wrong length of datetime element");
+                            throw new Exception("Wrong length of datetime element (format 610)");
                         }
 
                         string year = rawValue.Substring(0, 4);
@@ -205,7 +217,7 @@ namespace s2industries.ZUGFeRD
                     {
                         if (rawValue.Length != 6)
                         {
-                            throw new Exception("Wrong length of datetime element");
+                            throw new Exception("Wrong length of datetime element (format 616)");
                         }
 
                         string year = rawValue.Substring(0, 4);

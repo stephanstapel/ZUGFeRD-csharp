@@ -64,18 +64,13 @@ namespace ZUGFeRD_Test
                           new GlobalID(GlobalID.SchemeID_GLN, "4304171000002"));
             desc.SetBuyerOrderReferenceDocument("B123456789", new DateTime(2013, 08, 01));
 
-            desc.AdditionalReferencedDocument = new AdditionalReferencedDocument()
-            {
-                ID = "A456123",
-                IssueDateTime = new DateTime(2013, 08, 02),
-                ReferenceTypeCode = ReferenceTypeCodes.VN
-            };
+            desc.AddAdditionalReferencedDocument(issuerAssignedID: "A456123", issueDateTime: new DateTime(2013, 08, 02), referenceTypeCode: ReferenceTypeCodes.VN);
 
             /// TODO: ApplicableSupplyChainTradeDelivery
             /// 
 
-            desc.addTradeLineCommentItem("Wichtige Information: Bei Bestellungen bis zum 19.12. ist die Auslieferung bis spätestens 23.12. garantiert.");
-            TradeLineItem item = desc.addTradeLineItem("Zitronensäure 100ml",
+            desc.AddTradeLineCommentItem("Wichtige Information: Bei Bestellungen bis zum 19.12. ist die Auslieferung bis spätestens 23.12. garantiert.");
+            TradeLineItem item = desc.AddTradeLineItem("Zitronensäure 100ml",
                                                         null,
                                                         QuantityCodes.C62,
                                                         null,
@@ -94,7 +89,7 @@ namespace ZUGFeRD_Test
                                                         "",
                                                         null);
 
-            item = desc.addTradeLineItem("Gelierzucker Extra 250g",
+            item = desc.AddTradeLineItem("Gelierzucker Extra 250g",
                                          null,
                                          QuantityCodes.C62,
                                          null,
@@ -112,12 +107,12 @@ namespace ZUGFeRD_Test
                                          null,
                                          "",
                                          null);
-            item.addTradeAllowanceCharge(true,
+            item.AddTradeAllowanceCharge(true,
                                          CurrencyCodes.EUR,
                                          1.5m,
                                          0.03m,
                                          "Artikelrabatt 1");
-            item.addTradeAllowanceCharge(true,
+            item.AddTradeAllowanceCharge(true,
                                          CurrencyCodes.EUR,
                                          1m,
                                          0.02m,

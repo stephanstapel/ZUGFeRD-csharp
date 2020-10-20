@@ -24,7 +24,7 @@ using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
-    public abstract class IInvoiceDescriptorWriter
+    internal abstract class IInvoiceDescriptorWriter
     {
         public abstract void Save(InvoiceDescriptor descriptor, Stream stream);
 

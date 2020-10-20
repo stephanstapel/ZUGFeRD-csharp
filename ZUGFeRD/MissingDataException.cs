@@ -30,7 +30,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Initializes a new MissingDataException object
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Cleartext message of the exception containing clear text information about the reason for the exception</param>
         public MissingDataException(string message)
             : base(message)
         {

@@ -23,1283 +23,1564 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+
+    // You can regenerate the codes using:
+    //
+    // https://cemil.dev/countrieslist
+    //
+    // g = open('output.cs', 'w+')
+    // 
+    // with open('countries.json') as json_file:
+    // data = json.load(json_file)
+    // for p in data:
+    //     alphaTwo = p['alpha-2']
+    //     countryCode = p['country-code']
+    //     name = p['name']
+    //     g.write('/// <summary>\n')
+    //     g.write('/// ' + name + '\n')
+    //     g.write('/// ' + alphaTwo + ' = ' + countryCode + '\n')
+    //     g.write('/// </summary>\n')
+    //     g.write(alphaTwo + ' = ' + countryCode + ',\n')
+    //     g.write('\n')
+    // 
+    // g.close()
+    //
+    // Kosovo needs manual addition and special treatment
+
     /// <summary>
-    /// Country codes based on ISO 3166
-    /// source:
-    /// http://www.iso.org/iso/home/standards/country_codes/country_names_and_code_elements_txt.htm
+    /// Country codes based on ISO 3166 source
+    /// with addition of Kosovo according to ZUGFeRD standard
     /// 
-    /// enum can be re-generated using:
-    /// 
-    /// f = file("countries.txt")
-    /// g = file("output.cs", "w+")
-    /// 
-    /// for line in f.readlines():
-    ///     parts = line.replace("\n", "").split(";")
-    /// 
-    ///     g.write("/// <summary>\n")
-    ///     g.write("/// " + parts[0] + "\n")
-    ///     g.write("/// </summary>\n")
-    ///     g.write(parts[1] + ",\n")
-    ///     g.write("\n")    
-    /// 
-    /// f.close()
-    /// g.close()
+    /// English short name
+    /// Alpha-2 code = numeric code
     /// </summary>
     public enum CountryCodes
     {
+
+        /// <summary>
+        /// Andorra
+        /// AD = 20
+        /// </summary>
+        AD = 20,
+
         /// <summary>
-        /// AFGHANISTAN
+        /// United Arab Emirates (the)
+        /// AE = 784
         /// </summary>
-        AF,
+        AE = 784,
 
         /// <summary>
-        /// ÅLAND ISLANDS
+        /// Afghanistan
+        /// AF = 4
         /// </summary>
-        AX,
+        AF = 4,
 
         /// <summary>
-        /// ALBANIA
+        /// Antigua and Barbuda
+        /// AG = 28
         /// </summary>
-        AL,
+        AG = 28,
 
         /// <summary>
-        /// ALGERIA
+        /// Anguilla
+        /// AI = 660
         /// </summary>
-        DZ,
+        AI = 660,
 
         /// <summary>
-        /// AMERICAN SAMOA
+        /// Albania
+        /// AL = 8
         /// </summary>
-        AS,
+        AL = 8,
 
         /// <summary>
-        /// ANDORRA
+        /// Armenia
+        /// AM = 51
         /// </summary>
-        AD,
+        AM = 51,
 
         /// <summary>
-        /// ANGOLA
+        /// Angola
+        /// AO = 24
         /// </summary>
-        AO,
+        AO = 24,
 
         /// <summary>
-        /// ANGUILLA
+        /// Antarctica
+        /// AQ = 10
         /// </summary>
-        AI,
+        AQ = 10,
 
         /// <summary>
-        /// ANTARCTICA
+        /// Argentina
+        /// AR = 32
         /// </summary>
-        AQ,
+        AR = 32,
 
         /// <summary>
-        /// ANTIGUA AND BARBUDA
+        /// American Samoa
+        /// AS = 16
         /// </summary>
-        AG,
+        AS = 16,
 
         /// <summary>
-        /// ARGENTINA
+        /// Austria
+        /// AT = 40
         /// </summary>
-        AR,
+        AT = 40,
 
         /// <summary>
-        /// ARMENIA
+        /// Australia
+        /// AU = 36
         /// </summary>
-        AM,
+        AU = 36,
 
         /// <summary>
-        /// ARUBA
+        /// Aruba
+        /// AW = 533
         /// </summary>
-        AW,
+        AW = 533,
 
         /// <summary>
-        /// AUSTRALIA
+        /// �land Islands
+        /// AX = 248
         /// </summary>
-        AU,
+        AX = 248,
 
         /// <summary>
-        /// AUSTRIA
+        /// Azerbaijan
+        /// AZ = 31
         /// </summary>
-        AT,
+        AZ = 31,
 
         /// <summary>
-        /// AZERBAIJAN
+        /// Bosnia and Herzegovina
+        /// BA = 70
         /// </summary>
-        AZ,
+        BA = 70,
 
         /// <summary>
-        /// BAHAMAS
+        /// Barbados
+        /// BB = 52
         /// </summary>
-        BS,
+        BB = 52,
 
         /// <summary>
-        /// BAHRAIN
+        /// Bangladesh
+        /// BD = 50
         /// </summary>
-        BH,
+        BD = 50,
 
         /// <summary>
-        /// BANGLADESH
+        /// Belgium
+        /// BE = 56
         /// </summary>
-        BD,
+        BE = 56,
 
         /// <summary>
-        /// BARBADOS
+        /// Burkina Faso
+        /// BF = 854
         /// </summary>
-        BB,
+        BF = 854,
 
         /// <summary>
-        /// BELARUS
+        /// Bulgaria
+        /// BG = 100
         /// </summary>
-        BY,
+        BG = 100,
 
         /// <summary>
-        /// BELGIUM
+        /// Bahrain
+        /// BH = 48
         /// </summary>
-        BE,
+        BH = 48,
 
         /// <summary>
-        /// BELIZE
+        /// Burundi
+        /// BI = 108
         /// </summary>
-        BZ,
+        BI = 108,
 
         /// <summary>
-        /// BENIN
+        /// Benin
+        /// BJ = 204
         /// </summary>
-        BJ,
+        BJ = 204,
 
         /// <summary>
-        /// BERMUDA
+        /// Saint Barthélem
+        /// BL = 652
         /// </summary>
-        BM,
+        BL = 652,
 
         /// <summary>
-        /// BHUTAN
+        /// Bermuda
+        /// BM = 60
         /// </summary>
-        BT,
+        BM = 60,
 
         /// <summary>
-        /// BOLIVIA, PLURINATIONAL STATE OF
+        /// Brunei Darussalam
+        /// BN = 96
         /// </summary>
-        BO,
+        BN = 96,
 
         /// <summary>
-        /// BONAIRE, SINT EUSTATIUS AND SABA
+        /// Bolivia (Plurinational State of)
+        /// BO = 68
         /// </summary>
-        BQ,
+        BO = 68,
 
         /// <summary>
-        /// BOSNIA AND HERZEGOVINA
+        /// Bonaire, Sint Eustatius and Saba
+        /// BQ = 535
         /// </summary>
-        BA,
+        BQ = 535,
 
         /// <summary>
-        /// BOTSWANA
+        /// Brazil
+        /// BR = 76
         /// </summary>
-        BW,
+        BR = 76,
 
         /// <summary>
-        /// BOUVET ISLAND
+        /// Bahamas (the)
+        /// BS = 44
         /// </summary>
-        BV,
+        BS = 44,
 
         /// <summary>
-        /// BRAZIL
+        /// Bhutan
+        /// BT = 64
         /// </summary>
-        BR,
+        BT = 64,
 
         /// <summary>
-        /// BRITISH INDIAN OCEAN TERRITORY
+        /// Bouvet Island
+        /// BV = 74
         /// </summary>
-        IO,
+        BV = 74,
 
         /// <summary>
-        /// BRUNEI DARUSSALAM
+        /// Botswana
+        /// BW = 72
         /// </summary>
-        BN,
+        BW = 72,
 
         /// <summary>
-        /// BULGARIA
+        /// Belarus
+        /// BY = 112
         /// </summary>
-        BG,
+        BY = 112,
 
         /// <summary>
-        /// BURKINA FASO
+        /// Belize
+        /// BZ = 84
         /// </summary>
-        BF,
+        BZ = 84,
 
         /// <summary>
-        /// BURUNDI
+        /// Canada
+        /// CA = 124
         /// </summary>
-        BI,
+        CA = 124,
 
         /// <summary>
-        /// CAMBODIA
+        /// Cocos (Keeling) Islands (the)
+        /// CC = 166
         /// </summary>
-        KH,
+        CC = 166,
 
         /// <summary>
-        /// CAMEROON
+        /// Congo (the Democratic Republic of the)
+        /// CD = 180
         /// </summary>
-        CM,
+        CD = 180,
 
         /// <summary>
-        /// CANADA
+        /// Central African Republic (the)
+        /// CF = 140
         /// </summary>
-        CA,
+        CF = 140,
 
         /// <summary>
-        /// CAPE VERDE
+        /// Congo (the)
+        /// CG = 178
         /// </summary>
-        CV,
+        CG = 178,
 
         /// <summary>
-        /// CAYMAN ISLANDS
+        /// Switzerland
+        /// CH = 756
         /// </summary>
-        KY,
+        CH = 756,
 
         /// <summary>
-        /// CENTRAL AFRICAN REPUBLIC
+        /// Côte d'Ivoir
+        /// CI = 384
         /// </summary>
-        CF,
+        CI = 384,
 
         /// <summary>
-        /// CHAD
+        /// Cook Islands (the)
+        /// CK = 184
         /// </summary>
-        TD,
+        CK = 184,
 
         /// <summary>
-        /// CHILE
+        /// Chile
+        /// CL = 152
         /// </summary>
-        CL,
+        CL = 152,
 
         /// <summary>
-        /// CHINA
+        /// Cameroon
+        /// CM = 120
         /// </summary>
-        CN,
+        CM = 120,
 
         /// <summary>
-        /// CHRISTMAS ISLAND
+        /// China
+        /// CN = 156
         /// </summary>
-        CX,
+        CN = 156,
 
         /// <summary>
-        /// COCOS (KEELING) ISLANDS
+        /// Colombia
+        /// CO = 170
         /// </summary>
-        CC,
+        CO = 170,
 
         /// <summary>
-        /// COLOMBIA
+        /// Costa Rica
+        /// CR = 188
         /// </summary>
-        CO,
+        CR = 188,
 
         /// <summary>
-        /// COMOROS
+        /// Cuba
+        /// CU = 192
         /// </summary>
-        KM,
+        CU = 192,
 
         /// <summary>
-        /// CONGO
+        /// Cabo Verde
+        /// CV = 132
         /// </summary>
-        CG,
+        CV = 132,
 
         /// <summary>
-        /// CONGO, THE DEMOCRATIC REPUBLIC OF THE
+        /// Curaça
+        /// CW = 531
         /// </summary>
-        CD,
+        CW = 531,
 
         /// <summary>
-        /// COOK ISLANDS
+        /// Christmas Island
+        /// CX = 162
         /// </summary>
-        CK,
+        CX = 162,
 
         /// <summary>
-        /// COSTA RICA
+        /// Cyprus
+        /// CY = 196
         /// </summary>
-        CR,
+        CY = 196,
 
         /// <summary>
-        /// CÔTE D'IVOIRE
+        /// Czechia
+        /// CZ = 203
         /// </summary>
-        CI,
+        CZ = 203,
 
         /// <summary>
-        /// CROATIA
+        /// Germany
+        /// DE = 276
         /// </summary>
-        HR,
+        DE = 276,
 
         /// <summary>
-        /// CUBA
+        /// Djibouti
+        /// DJ = 262
         /// </summary>
-        CU,
+        DJ = 262,
 
         /// <summary>
-        /// CURAÇAO
+        /// Denmark
+        /// DK = 208
         /// </summary>
-        CW,
+        DK = 208,
 
         /// <summary>
-        /// CYPRUS
+        /// Dominica
+        /// DM = 212
         /// </summary>
-        CY,
+        DM = 212,
 
         /// <summary>
-        /// CZECH REPUBLIC
+        /// Dominican Republic (the)
+        /// DO = 214
         /// </summary>
-        CZ,
+        DO = 214,
 
         /// <summary>
-        /// DENMARK
+        /// Algeria
+        /// DZ = 12
         /// </summary>
-        DK,
+        DZ = 12,
 
         /// <summary>
-        /// DJIBOUTI
+        /// Ecuador
+        /// EC = 218
         /// </summary>
-        DJ,
+        EC = 218,
 
         /// <summary>
-        /// DOMINICA
+        /// Estonia
+        /// EE = 233
         /// </summary>
-        DM,
+        EE = 233,
 
         /// <summary>
-        /// DOMINICAN REPUBLIC
+        /// Egypt
+        /// EG = 818
         /// </summary>
-        DO,
+        EG = 818,
 
         /// <summary>
-        /// ECUADOR
+        /// Western Sahara*
+        /// EH = 732
         /// </summary>
-        EC,
+        EH = 732,
 
         /// <summary>
-        /// EGYPT
+        /// Eritrea
+        /// ER = 232
         /// </summary>
-        EG,
+        ER = 232,
 
         /// <summary>
-        /// EL SALVADOR
+        /// Spain
+        /// ES = 724
         /// </summary>
-        SV,
+        ES = 724,
 
         /// <summary>
-        /// EQUATORIAL GUINEA
+        /// Ethiopia
+        /// ET = 231
         /// </summary>
-        GQ,
+        ET = 231,
 
         /// <summary>
-        /// ERITREA
+        /// Finland
+        /// FI = 246
         /// </summary>
-        ER,
+        FI = 246,
 
         /// <summary>
-        /// ESTONIA
+        /// Fiji
+        /// FJ = 242
         /// </summary>
-        EE,
+        FJ = 242,
 
         /// <summary>
-        /// ETHIOPIA
+        /// Falkland Islands (the) [Malvinas]
+        /// FK = 238
         /// </summary>
-        ET,
+        FK = 238,
 
         /// <summary>
-        /// FALKLAND ISLANDS (MALVINAS)
+        /// Micronesia (Federated States of)
+        /// FM = 583
         /// </summary>
-        FK,
+        FM = 583,
 
         /// <summary>
-        /// FAROE ISLANDS
+        /// Faroe Islands (the)
+        /// FO = 234
         /// </summary>
-        FO,
+        FO = 234,
 
         /// <summary>
-        /// FIJI
+        /// France
+        /// FR = 250
         /// </summary>
-        FJ,
+        FR = 250,
 
         /// <summary>
-        /// FINLAND
+        /// Gabon
+        /// GA = 266
         /// </summary>
-        FI,
+        GA = 266,
 
         /// <summary>
-        /// FRANCE
+        /// United Kingdom of Great Britain and Northern Ireland (the)
+        /// GB = 826
         /// </summary>
-        FR,
+        GB = 826,
 
         /// <summary>
-        /// FRENCH GUIANA
+        /// Grenada
+        /// GD = 308
         /// </summary>
-        GF,
+        GD = 308,
 
         /// <summary>
-        /// FRENCH POLYNESIA
+        /// Georgia
+        /// GE = 268
         /// </summary>
-        PF,
+        GE = 268,
 
         /// <summary>
-        /// FRENCH SOUTHERN TERRITORIES
+        /// Guernsey
+        /// GG = 831
         /// </summary>
-        TF,
+        GF = 254,
 
         /// <summary>
-        /// GABON
+        /// Guernsey
+        /// GG = 831
         /// </summary>
-        GA,
+        GG = 831,
 
         /// <summary>
-        /// GAMBIA
+        /// Ghana
+        /// GH = 288
         /// </summary>
-        GM,
+        GH = 288,
 
         /// <summary>
-        /// GEORGIA
+        /// Gibraltar
+        /// GI = 292
         /// </summary>
-        GE,
+        GI = 292,
 
         /// <summary>
-        /// GERMANY
+        /// Greenland
+        /// GL = 304
         /// </summary>
-        DE,
+        GL = 304,
 
         /// <summary>
-        /// GHANA
+        /// Gambia (the)
+        /// GM = 270
         /// </summary>
-        GH,
+        GM = 270,
 
         /// <summary>
-        /// GIBRALTAR
+        /// Guinea
+        /// GN = 324
         /// </summary>
-        GI,
+        GN = 324,
 
         /// <summary>
-        /// GREECE
+        /// Guadeloupe
+        /// GP = 312
         /// </summary>
-        GR,
+        GP = 312,
 
         /// <summary>
-        /// GREENLAND
+        /// Equatorial Guinea
+        /// GQ = 226
         /// </summary>
-        GL,
+        GQ = 226,
 
         /// <summary>
-        /// GRENADA
+        /// Greece
+        /// GR = 300
         /// </summary>
-        GD,
+        GR = 300,
 
         /// <summary>
-        /// GUADELOUPE
+        /// South Georgia and the South Sandwich Islands
+        /// GS = 239
         /// </summary>
-        GP,
+        GS = 239,
 
         /// <summary>
-        /// GUAM
+        /// Guatemala
+        /// GT = 320
         /// </summary>
-        GU,
+        GT = 320,
 
         /// <summary>
-        /// GUATEMALA
+        /// Guam
+        /// GU = 316
         /// </summary>
-        GT,
+        GU = 316,
 
         /// <summary>
-        /// GUERNSEY
+        /// Guinea-Bissau
+        /// GW = 624
         /// </summary>
-        GG,
+        GW = 624,
 
         /// <summary>
-        /// GUINEA
+        /// Guyana
+        /// GY = 328
         /// </summary>
-        GN,
+        GY = 328,
 
         /// <summary>
-        /// GUINEA-BISSAU
+        /// Hong Kong
+        /// HK = 344
         /// </summary>
-        GW,
+        HK = 344,
 
         /// <summary>
-        /// GUYANA
+        /// Heard Island and McDonald Islands
+        /// HM = 334
         /// </summary>
-        GY,
+        HM = 334,
 
         /// <summary>
-        /// HAITI
+        /// Honduras
+        /// HN = 340
         /// </summary>
-        HT,
+        HN = 340,
 
         /// <summary>
-        /// HEARD ISLAND AND MCDONALD ISLANDS
+        /// Croatia
+        /// HR = 191
         /// </summary>
-        HM,
+        HR = 191,
 
         /// <summary>
-        /// HOLY SEE (VATICAN CITY STATE)
+        /// Haiti
+        /// HT = 332
         /// </summary>
-        VA,
+        HT = 332,
 
         /// <summary>
-        /// HONDURAS
+        /// Hungary
+        /// HU = 348
         /// </summary>
-        HN,
+        HU = 348,
 
         /// <summary>
-        /// HONG KONG
+        /// Indonesia
+        /// ID = 360
         /// </summary>
-        HK,
+        ID = 360,
 
         /// <summary>
-        /// HUNGARY
+        /// Ireland
+        /// IE = 372
         /// </summary>
-        HU,
+        IE = 372,
 
         /// <summary>
-        /// ICELAND
+        /// Israel
+        /// IL = 376
         /// </summary>
-        IS,
+        IL = 376,
 
         /// <summary>
-        /// INDIA
+        /// Isle of Man
+        /// IM = 833
         /// </summary>
-        IN,
+        IM = 833,
 
         /// <summary>
-        /// INDONESIA
+        /// India
+        /// IN = 356
         /// </summary>
-        ID,
+        IN = 356,
 
         /// <summary>
-        /// IRAN, ISLAMIC REPUBLIC OF
+        /// British Indian Ocean Territory (the)
+        /// IO = 86
         /// </summary>
-        IR,
+        IO = 86,
 
         /// <summary>
-        /// IRAQ
+        /// Iraq
+        /// IQ = 368
         /// </summary>
-        IQ,
+        IQ = 368,
 
         /// <summary>
-        /// IRELAND
+        /// Iran (Islamic Republic of)
+        /// IR = 364
         /// </summary>
-        IE,
+        IR = 364,
 
         /// <summary>
-        /// ISLE OF MAN
+        /// Iceland
+        /// IS = 352
         /// </summary>
-        IM,
+        IS = 352,
 
         /// <summary>
-        /// ISRAEL
+        /// Italy
+        /// IT = 380
         /// </summary>
-        IL,
+        IT = 380,
 
         /// <summary>
-        /// ITALY
+        /// Jersey
+        /// JE = 832
         /// </summary>
-        IT,
+        JE = 832,
 
         /// <summary>
-        /// JAMAICA
+        /// Jamaica
+        /// JM = 388
         /// </summary>
-        JM,
+        JM = 388,
 
         /// <summary>
-        /// JAPAN
+        /// Jordan
+        /// JO = 400
         /// </summary>
-        JP,
+        JO = 400,
 
         /// <summary>
-        /// JERSEY
+        /// Japan
+        /// JP = 392
         /// </summary>
-        JE,
+        JP = 392,
 
         /// <summary>
-        /// JORDAN
+        /// Kenya
+        /// KE = 404
         /// </summary>
-        JO,
+        KE = 404,
 
         /// <summary>
-        /// KAZAKHSTAN
+        /// Kyrgyzstan
+        /// KG = 417
         /// </summary>
-        KZ,
+        KG = 417,
 
         /// <summary>
-        /// KENYA
+        /// Cambodia
+        /// KH = 116
         /// </summary>
-        KE,
+        KH = 116,
 
         /// <summary>
-        /// KIRIBATI
+        /// Kiribati
+        /// KI = 296
         /// </summary>
-        KI,
+        KI = 296,
 
         /// <summary>
-        /// KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF
+        /// Comoros (the)
+        /// KM = 174
         /// </summary>
-        KP,
+        KM = 174,
 
         /// <summary>
-        /// KOREA, REPUBLIC OF
+        /// Saint Kitts and Nevis
+        /// KN = 659
         /// </summary>
-        KR,
+        KN = 659,
 
         /// <summary>
-        /// KUWAIT
+        /// Korea (the Democratic People's Republic of)
+        /// KP = 408
         /// </summary>
-        KW,
+        KP = 408,
 
         /// <summary>
-        /// KYRGYZSTAN
+        /// Korea (the Republic of)
+        /// KR = 410
         /// </summary>
-        KG,
+        KR = 410,
 
         /// <summary>
-        /// LAO PEOPLE'S DEMOCRATIC REPUBLIC
+        /// Kuwait
+        /// KW = 414
         /// </summary>
-        LA,
+        KW = 414,
 
         /// <summary>
-        /// LATVIA
+        /// Cayman Islands (the)
+        /// KY = 136
         /// </summary>
-        LV,
+        KY = 136,
 
         /// <summary>
-        /// LEBANON
+        /// Kazakhstan
+        /// KZ = 398
         /// </summary>
-        LB,
+        KZ = 398,
 
         /// <summary>
-        /// LESOTHO
+        /// Lao People's Democratic Republic (the)
+        /// LA = 418
         /// </summary>
-        LS,
+        LA = 418,
 
         /// <summary>
-        /// LIBERIA
+        /// Lebanon
+        /// LB = 422
         /// </summary>
-        LR,
+        LB = 422,
 
         /// <summary>
-        /// LIBYA
+        /// Saint Lucia
+        /// LC = 662
         /// </summary>
-        LY,
+        LC = 662,
 
         /// <summary>
-        /// LIECHTENSTEIN
+        /// Liechtenstein
+        /// LI = 438
         /// </summary>
-        LI,
+        LI = 438,
 
         /// <summary>
-        /// LITHUANIA
+        /// Sri Lanka
+        /// LK = 144
         /// </summary>
-        LT,
+        LK = 144,
 
         /// <summary>
-        /// LUXEMBOURG
+        /// Liberia
+        /// LR = 430
         /// </summary>
-        LU,
+        LR = 430,
 
         /// <summary>
-        /// MACAO
+        /// Lesotho
+        /// LS = 426
         /// </summary>
-        MO,
+        LS = 426,
 
         /// <summary>
-        /// MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF
+        /// Lithuania
+        /// LT = 440
         /// </summary>
-        MK,
+        LT = 440,
 
         /// <summary>
-        /// MADAGASCAR
+        /// Luxembourg
+        /// LU = 442
         /// </summary>
-        MG,
+        LU = 442,
 
         /// <summary>
-        /// MALAWI
+        /// Latvia
+        /// LV = 428
         /// </summary>
-        MW,
+        LV = 428,
 
         /// <summary>
-        /// MALAYSIA
+        /// Libya
+        /// LY = 434
         /// </summary>
-        MY,
+        LY = 434,
 
         /// <summary>
-        /// MALDIVES
+        /// Morocco
+        /// MA = 504
         /// </summary>
-        MV,
+        MA = 504,
 
         /// <summary>
-        /// MALI
+        /// Monaco
+        /// MC = 492
         /// </summary>
-        ML,
+        MC = 492,
 
         /// <summary>
-        /// MALTA
+        /// Moldova (the Republic of)
+        /// MD = 498
         /// </summary>
-        MT,
+        MD = 498,
 
         /// <summary>
-        /// MARSHALL ISLANDS
+        /// Montenegro
+        /// ME = 499
         /// </summary>
-        MH,
+        ME = 499,
 
         /// <summary>
-        /// MARTINIQUE
+        /// Saint Martin (French part)
+        /// MF = 663
         /// </summary>
-        MQ,
+        MF = 663,
 
         /// <summary>
-        /// MAURITANIA
+        /// Madagascar
+        /// MG = 450
         /// </summary>
-        MR,
+        MG = 450,
 
         /// <summary>
-        /// MAURITIUS
+        /// Marshall Islands (the)
+        /// MH = 584
         /// </summary>
-        MU,
+        MH = 584,
 
         /// <summary>
-        /// MAYOTTE
+        /// North Macedonia
+        /// MK = 807
         /// </summary>
-        YT,
+        MK = 807,
 
         /// <summary>
-        /// MEXICO
+        /// Mali
+        /// ML = 466
         /// </summary>
-        MX,
+        ML = 466,
 
         /// <summary>
-        /// MICRONESIA, FEDERATED STATES OF
+        /// Myanmar
+        /// MM = 104
         /// </summary>
-        FM,
+        MM = 104,
 
         /// <summary>
-        /// MOLDOVA, REPUBLIC OF
+        /// Mongolia
+        /// MN = 496
         /// </summary>
-        MD,
+        MN = 496,
 
         /// <summary>
-        /// MONACO
+        /// Macao
+        /// MO = 446
         /// </summary>
-        MC,
+        MO = 446,
 
         /// <summary>
-        /// MONGOLIA
+        /// Northern Mariana Islands (the)
+        /// MP = 580
         /// </summary>
-        MN,
+        MP = 580,
 
         /// <summary>
-        /// MONTENEGRO
+        /// Martinique
+        /// MQ = 474
         /// </summary>
-        ME,
+        MQ = 474,
 
         /// <summary>
-        /// MONTSERRAT
+        /// Mauritania
+        /// MR = 478
         /// </summary>
-        MS,
+        MR = 478,
 
         /// <summary>
-        /// MOROCCO
+        /// Montserrat
+        /// MS = 500
         /// </summary>
-        MA,
+        MS = 500,
 
         /// <summary>
-        /// MOZAMBIQUE
+        /// Malta
+        /// MT = 470
         /// </summary>
-        MZ,
+        MT = 470,
 
         /// <summary>
-        /// MYANMAR
+        /// Mauritius
+        /// MU = 480
         /// </summary>
-        MM,
+        MU = 480,
 
         /// <summary>
-        /// NAMIBIA
+        /// Maldives
+        /// MV = 462
         /// </summary>
-        NA,
+        MV = 462,
 
         /// <summary>
-        /// NAURU
+        /// Malawi
+        /// MW = 454
         /// </summary>
-        NR,
+        MW = 454,
 
         /// <summary>
-        /// NEPAL
+        /// Malaysia
+        /// MY = 458
         /// </summary>
-        NP,
+        MX = 484,
 
         /// <summary>
-        /// NETHERLANDS
+        /// Malaysia
+        /// MY = 458
         /// </summary>
-        NL,
+        MY = 458,
 
         /// <summary>
-        /// NEW CALEDONIA
+        /// Mozambique
+        /// MZ = 508
         /// </summary>
-        NC,
+        MZ = 508,
 
         /// <summary>
-        /// NEW ZEALAND
+        /// Namibia
+        /// NA = 516
         /// </summary>
-        NZ,
+        NA = 516,
 
         /// <summary>
-        /// NICARAGUA
+        /// New Caledonia
+        /// NC = 540
         /// </summary>
-        NI,
+        NC = 540,
 
         /// <summary>
-        /// NIGER
+        /// Niger (the)
+        /// NE = 562
         /// </summary>
-        NE,
+        NE = 562,
 
         /// <summary>
-        /// NIGERIA
+        /// Norfolk Island
+        /// NF = 574
         /// </summary>
-        NG,
+        NF = 574,
 
         /// <summary>
-        /// NIUE
+        /// Nigeria
+        /// NG = 566
         /// </summary>
-        NU,
+        NG = 566,
 
         /// <summary>
-        /// NORFOLK ISLAND
+        /// Nicaragua
+        /// NI = 558
         /// </summary>
-        NF,
+        NI = 558,
 
         /// <summary>
-        /// NORTHERN MARIANA ISLANDS
+        /// Netherlands (the)
+        /// NL = 528
         /// </summary>
-        MP,
+        NL = 528,
 
         /// <summary>
-        /// NORWAY
+        /// Norway
+        /// NO = 578
         /// </summary>
-        NO,
+        NO = 578,
 
         /// <summary>
-        /// OMAN
+        /// Nepal
+        /// NP = 524
         /// </summary>
-        OM,
+        NP = 524,
 
         /// <summary>
-        /// PAKISTAN
+        /// Nauru
+        /// NR = 520
         /// </summary>
-        PK,
+        NR = 520,
 
         /// <summary>
-        /// PALAU
+        /// Niue
+        /// NU = 570
         /// </summary>
-        PW,
+        NU = 570,
 
         /// <summary>
-        /// PALESTINE, STATE OF
+        /// New Zealand
+        /// NZ = 554
         /// </summary>
-        PS,
+        NZ = 554,
 
         /// <summary>
-        /// PANAMA
+        /// Oman
+        /// OM = 512
         /// </summary>
-        PA,
+        OM = 512,
 
         /// <summary>
-        /// PAPUA NEW GUINEA
+        /// Panama
+        /// PA = 591
         /// </summary>
-        PG,
+        PA = 591,
 
         /// <summary>
-        /// PARAGUAY
+        /// Peru
+        /// PE = 604
         /// </summary>
-        PY,
+        PE = 604,
 
         /// <summary>
-        /// PERU
+        /// French Polynesia
+        /// PF = 258
         /// </summary>
-        PE,
+        PF = 258,
 
         /// <summary>
-        /// PHILIPPINES
+        /// Papua New Guinea
+        /// PG = 598
         /// </summary>
-        PH,
+        PG = 598,
 
         /// <summary>
-        /// PITCAIRN
+        /// Philippines (the)
+        /// PH = 608
         /// </summary>
-        PN,
+        PH = 608,
 
         /// <summary>
-        /// POLAND
+        /// Pakistan
+        /// PK = 586
         /// </summary>
-        PL,
+        PK = 586,
 
         /// <summary>
-        /// PORTUGAL
+        /// Poland
+        /// PL = 616
         /// </summary>
-        PT,
+        PL = 616,
 
         /// <summary>
-        /// PUERTO RICO
+        /// Saint Pierre and Miquelon
+        /// PM = 666
         /// </summary>
-        PR,
+        PM = 666,
 
         /// <summary>
-        /// QATAR
+        /// Pitcairn
+        /// PN = 612
         /// </summary>
-        QA,
+        PN = 612,
 
         /// <summary>
-        /// RÉUNION
+        /// Puerto Rico
+        /// PR = 630
         /// </summary>
-        RE,
+        PR = 630,
 
         /// <summary>
-        /// ROMANIA
+        /// Palestine, State of
+        /// PS = 275
         /// </summary>
-        RO,
+        PS = 275,
 
         /// <summary>
-        /// RUSSIAN FEDERATION
+        /// Portugal
+        /// PT = 620
         /// </summary>
-        RU,
+        PT = 620,
 
         /// <summary>
-        /// RWANDA
+        /// Palau
+        /// PW = 585
         /// </summary>
-        RW,
+        PW = 585,
 
         /// <summary>
-        /// SAINT BARTHÉLEMY
+        /// Paraguay
+        /// PY = 600
         /// </summary>
-        BL,
+        PY = 600,
 
         /// <summary>
-        /// SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA
+        /// Qatar
+        /// QA = 634
         /// </summary>
-        SH,
+        QA = 634,
 
         /// <summary>
-        /// SAINT KITTS AND NEVIS
+        /// Réunio
+        /// RE = 638
         /// </summary>
-        KN,
+        RE = 638,
 
         /// <summary>
-        /// SAINT LUCIA
+        /// Romania
+        /// RO = 642
         /// </summary>
-        LC,
+        RO = 642,
 
         /// <summary>
-        /// SAINT MARTIN (FRENCH PART)
+        /// Serbia
+        /// RS = 688
         /// </summary>
-        MF,
+        RS = 688,
 
         /// <summary>
-        /// SAINT PIERRE AND MIQUELON
+        /// Russian Federation (the)
+        /// RU = 643
         /// </summary>
-        PM,
+        RU = 643,
 
         /// <summary>
-        /// SAINT VINCENT AND THE GRENADINES
+        /// Rwanda
+        /// RW = 646
         /// </summary>
-        VC,
+        RW = 646,
 
         /// <summary>
-        /// SAMOA
+        /// Saudi Arabia
+        /// SA = 682
         /// </summary>
-        WS,
+        SA = 682,
 
         /// <summary>
-        /// SAN MARINO
+        /// Solomon Islands
+        /// SB = 90
         /// </summary>
-        SM,
+        SB = 90,
 
         /// <summary>
-        /// SAO TOME AND PRINCIPE
+        /// Seychelles
+        /// SC = 690
         /// </summary>
-        ST,
+        SC = 690,
 
         /// <summary>
-        /// SAUDI ARABIA
+        /// Sudan (the)
+        /// SD = 729
         /// </summary>
-        SA,
+        SD = 729,
 
         /// <summary>
-        /// SENEGAL
+        /// Sweden
+        /// SE = 752
         /// </summary>
-        SN,
+        SE = 752,
 
         /// <summary>
-        /// SERBIA
+        /// Singapore
+        /// SG = 702
         /// </summary>
-        RS,
+        SG = 702,
 
         /// <summary>
-        /// SEYCHELLES
+        /// Saint Helena, Ascension and Tristan da Cunha
+        /// SH = 654
         /// </summary>
-        SC,
+        SH = 654,
 
         /// <summary>
-        /// SIERRA LEONE
+        /// Slovenia
+        /// SI = 705
         /// </summary>
-        SL,
+        SI = 705,
 
         /// <summary>
-        /// SINGAPORE
+        /// Svalbard and Jan Mayen
+        /// SJ = 744
         /// </summary>
-        SG,
+        SJ = 744,
 
         /// <summary>
-        /// SINT MAARTEN (DUTCH PART)
+        /// Slovakia
+        /// SK = 703
         /// </summary>
-        SX,
+        SK = 703,
 
         /// <summary>
-        /// SLOVAKIA
+        /// Sierra Leone
+        /// SL = 694
         /// </summary>
-        SK,
+        SL = 694,
 
         /// <summary>
-        /// SLOVENIA
+        /// San Marino
+        /// SM = 674
         /// </summary>
-        SI,
+        SM = 674,
 
         /// <summary>
-        /// SOLOMON ISLANDS
+        /// Senegal
+        /// SN = 686
         /// </summary>
-        SB,
+        SN = 686,
 
         /// <summary>
-        /// SOMALIA
+        /// Somalia
+        /// SO = 706
         /// </summary>
-        SO,
+        SO = 706,
 
         /// <summary>
-        /// SOUTH AFRICA
+        /// Suriname
+        /// SR = 740
         /// </summary>
-        ZA,
+        SR = 740,
 
         /// <summary>
-        /// SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS
+        /// South Sudan
+        /// SS = 728
         /// </summary>
-        GS,
+        SS = 728,
 
         /// <summary>
-        /// SOUTH SUDAN
+        /// Sao Tome and Principe
+        /// ST = 678
         /// </summary>
-        SS,
+        ST = 678,
 
         /// <summary>
-        /// SPAIN
+        /// El Salvador
+        /// SV = 222
         /// </summary>
-        ES,
+        SV = 222,
 
         /// <summary>
-        /// SRI LANKA
+        /// Sint Maarten (Dutch part)
+        /// SX = 534
         /// </summary>
-        LK,
+        SX = 534,
 
         /// <summary>
-        /// SUDAN
+        /// Syrian Arab Republic (the)
+        /// SY = 760
         /// </summary>
-        SD,
+        SY = 760,
 
         /// <summary>
-        /// SURINAME
+        /// Eswatini
+        /// SZ = 748
         /// </summary>
-        SR,
+        SZ = 748,
 
         /// <summary>
-        /// SVALBARD AND JAN MAYEN
+        /// Turks and Caicos Islands (the)
+        /// TC = 796
         /// </summary>
-        SJ,
+        TC = 796,
 
         /// <summary>
-        /// SWAZILAND
+        /// Chad
+        /// TD = 148
         /// </summary>
-        SZ,
+        TD = 148,
 
         /// <summary>
-        /// SWEDEN
+        /// French Southern Territories (the)
+        /// TF = 260
         /// </summary>
-        SE,
+        TF = 260,
 
         /// <summary>
-        /// SWITZERLAND
+        /// Togo
+        /// TG = 768
         /// </summary>
-        CH,
+        TG = 768,
 
         /// <summary>
-        /// SYRIAN ARAB REPUBLIC
+        /// Thailand
+        /// TH = 764
         /// </summary>
-        SY,
+        TH = 764,
 
         /// <summary>
-        /// TAIWAN, PROVINCE OF CHINA
+        /// Tajikistan
+        /// TJ = 762
         /// </summary>
-        TW,
+        TJ = 762,
 
         /// <summary>
-        /// TAJIKISTAN
+        /// Tokelau
+        /// TK = 772
         /// </summary>
-        TJ,
+        TK = 772,
 
         /// <summary>
-        /// TANZANIA, UNITED REPUBLIC OF
+        /// Timor-Leste
+        /// TL = 626
         /// </summary>
-        TZ,
+        TL = 626,
 
         /// <summary>
-        /// THAILAND
+        /// Turkmenistan
+        /// TM = 795
         /// </summary>
-        TH,
+        TM = 795,
 
         /// <summary>
-        /// TIMOR-LESTE
+        /// Tunisia
+        /// TN = 788
         /// </summary>
-        TL,
+        TN = 788,
 
         /// <summary>
-        /// TOGO
+        /// Tonga
+        /// TO = 776
         /// </summary>
-        TG,
+        TO = 776,
 
         /// <summary>
-        /// TOKELAU
+        /// Turkey
+        /// TR = 792
         /// </summary>
-        TK,
+        TR = 792,
 
         /// <summary>
-        /// TONGA
+        /// Trinidad and Tobago
+        /// TT = 780
         /// </summary>
-        TO,
+        TT = 780,
 
         /// <summary>
-        /// TRINIDAD AND TOBAGO
+        /// Tuvalu
+        /// TV = 798
         /// </summary>
-        TT,
+        TV = 798,
 
         /// <summary>
-        /// TUNISIA
+        /// Taiwan (Province of China)
+        /// TW = 158
         /// </summary>
-        TN,
+        TW = 158,
 
         /// <summary>
-        /// TURKEY
+        /// Tanzania, the United Republic of
+        /// TZ = 834
         /// </summary>
-        TR,
+        TZ = 834,
 
         /// <summary>
-        /// TURKMENISTAN
+        /// Ukraine
+        /// UA = 804
         /// </summary>
-        TM,
+        UA = 804,
 
         /// <summary>
-        /// TURKS AND CAICOS ISLANDS
+        /// Uganda
+        /// UG = 800
         /// </summary>
-        TC,
+        UG = 800,
 
         /// <summary>
-        /// TUVALU
+        /// United States Minor Outlying Islands (the)
+        /// UM = 581
         /// </summary>
-        TV,
+        UM = 581,
 
         /// <summary>
-        /// UGANDA
+        /// United States of America (the)
+        /// US = 840
         /// </summary>
-        UG,
+        US = 840,
 
         /// <summary>
-        /// UKRAINE
+        /// Uruguay
+        /// UY = 858
         /// </summary>
-        UA,
+        UY = 858,
 
         /// <summary>
-        /// UNITED ARAB EMIRATES
+        /// Uzbekistan
+        /// UZ = 860
         /// </summary>
-        AE,
+        UZ = 860,
 
         /// <summary>
-        /// UNITED KINGDOM
+        /// Holy See (the)
+        /// VA = 336
         /// </summary>
-        GB,
+        VA = 336,
 
         /// <summary>
-        /// UNITED STATES
+        /// Saint Vincent and the Grenadines
+        /// VC = 670
         /// </summary>
-        US,
+        VC = 670,
 
         /// <summary>
-        /// UNITED STATES MINOR OUTLYING ISLANDS
+        /// Venezuela (Bolivarian Republic of)
+        /// VE = 862
         /// </summary>
-        UM,
+        VE = 862,
 
         /// <summary>
-        /// URUGUAY
+        /// Virgin Islands (British)
+        /// VG = 92
         /// </summary>
-        UY,
+        VG = 92,
 
         /// <summary>
-        /// UZBEKISTAN
+        /// Virgin Islands (U.S.)
+        /// VI = 850
         /// </summary>
-        UZ,
+        VI = 850,
 
         /// <summary>
-        /// VANUATU
+        /// Viet Nam
+        /// VN = 704
         /// </summary>
-        VU,
+        VN = 704,
 
         /// <summary>
-        /// VENEZUELA, BOLIVARIAN REPUBLIC OF
+        /// Vanuatu
+        /// VU = 548
         /// </summary>
-        VE,
+        VU = 548,
 
         /// <summary>
-        /// VIET NAM
+        /// Wallis and Futuna
+        /// WF = 876
         /// </summary>
-        VN,
+        WF = 876,
 
         /// <summary>
-        /// VIRGIN ISLANDS, BRITISH
+        /// Samoa
+        /// WS = 882
         /// </summary>
-        VG,
+        WS = 882,
 
         /// <summary>
-        /// VIRGIN ISLANDS, U.S.
+        /// Yemen
+        /// YE = 887
         /// </summary>
-        VI,
+        YE = 887,
 
         /// <summary>
-        /// WALLIS AND FUTUNA
+        /// Mayotte
+        /// YT = 175
         /// </summary>
-        WF,
+        YT = 175,
 
         /// <summary>
-        /// WESTERN SAHARA
+        /// South Africa
+        /// ZA = 710
         /// </summary>
-        EH,
+        ZA = 710,
 
         /// <summary>
-        /// YEMEN
+        /// Zambia
+        /// ZM = 894
         /// </summary>
-        YE,
+        ZM = 894,
 
         /// <summary>
-        /// ZAMBIA
+        /// Zimbabwe
+        /// ZW = 716
         /// </summary>
-        ZM,
+        ZW = 716,
 
         /// <summary>
-        /// ZIMBABWE
+        /// Kosovo
+        /// 1A = 999
+        /// This is a temporary code,
+        /// special treatment required as enums
+        /// don't like members starting with a number!
         /// </summary>
-        ZW,
+        _1A = 999,
+
+        /// <summary>
+        /// Fall back for unsupported
+        /// Country Codes
+        /// Unknown = 0
+        /// </summary>
+        Unknown = 0
+
 
-        Unknown
     }
 
 
-    public static class CountryCodesExtensions
+    internal static class CountryCodesExtensions
     {
-        public static CountryCodes FromString(this CountryCodes _c, string s)
+        public static CountryCodes FromString(this CountryCodes _, string s)
         {
+            // Special treatment for temporary code of Kosovo
+            if ("1A" == s)
+            {
+                return CountryCodes._1A;
+            }
+
             try
             {
                 return (CountryCodes)Enum.Parse(typeof(CountryCodes), s);
@@ -1313,7 +1594,8 @@ namespace s2industries.ZUGFeRD
 
         public static string EnumToString(this CountryCodes c)
         {
-            return c.ToString("g");
+            // Special treatment for temporary code of Kosovo
+            return (CountryCodes._1A == c ? "1A" : c.ToString("g"));
         } // !ToString()
     }
 }

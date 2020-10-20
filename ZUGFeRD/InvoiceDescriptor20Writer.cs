@@ -33,12 +33,18 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
+        /// <summary>
+        /// Saves the given invoice to the given stream.
+        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.        
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <param name="stream"></param>
         public override void Save(InvoiceDescriptor descriptor, Stream stream)
         {
             if (!stream.CanWrite || !stream.CanSeek)
             {
                 throw new IllegalStreamException("Cannot write to stream");
-            }            
+            }
 
             // write data
             long streamPosition = stream.Position;
@@ -54,7 +60,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteAttributeString("xmlns", "rsm", null, "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
             Writer.WriteAttributeString("xmlns", "qdt", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:10");
             Writer.WriteAttributeString("xmlns", "ram", null, "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
-            Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");                        
+            Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");
             Writer.WriteAttributeString("xmlns", "udt", null, "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
             #endregion
 
@@ -86,7 +92,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !rsm:ExchangedDocument
             #endregion
 
-            /**
+            /*
              * @todo continue here to adopt v2 tag names
              */
 
@@ -107,7 +113,7 @@ namespace s2industries.ZUGFeRD
                 if (this.Descriptor.OrderDate.HasValue)
                 {
                     Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");                    
+                    Writer.WriteStartElement("udt:DateTimeString");
                     Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
                     Writer.WriteEndElement(); // !udt:DateTimeString
                     Writer.WriteEndElement(); // !FormattedIssueDateTime
@@ -117,25 +123,29 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
-            if (this.Descriptor.AdditionalReferencedDocument != null)
+
+            if (this.Descriptor.AdditionalReferencedDocuments != null)
             {
-                Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                if (this.Descriptor.AdditionalReferencedDocument.IssueDateTime.HasValue)
+                foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
                 {
-                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");                    
-                    Writer.WriteValue(_formatDate(this.Descriptor.AdditionalReferencedDocument.IssueDateTime.Value, false));
-                    Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !FormattedIssueDateTime
-                }
+                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                    if (document.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        Writer.WriteStartElement("udt:DateTimeString");
+                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value, false));
+                        Writer.WriteEndElement(); // !udt:DateTimeString
+                        Writer.WriteEndElement(); // !FormattedIssueDateTime
+                    }
 
-                if (this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-                {
-                    Writer.WriteElementString("ram:TypeCode", this.Descriptor.AdditionalReferencedDocument.ReferenceTypeCode.EnumToString());
-                }
+                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
+                    }
 
-                Writer.WriteElementString("ram:ID", this.Descriptor.AdditionalReferencedDocument.ID);
-                Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    Writer.WriteElementString("ram:ID", document.ID);
+                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                } // !foreach(document)
             }
 
             Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement
@@ -308,7 +318,7 @@ namespace s2industries.ZUGFeRD
             }
 
 
-            /**
+            /*
              * @todo add writer for this:
              * <SpecifiedTradeSettlementPaymentMeans>
             * <TypeCode>42</TypeCode>
@@ -398,7 +408,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement();
             }
 
-            Writer.WriteStartElement("ram:SpecifiedTradeSettlementMonetarySummation");
+            Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
@@ -476,29 +486,29 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ContractReferencedDocument
                     }
 
-                    if ((tradeLineItem.AdditionalReferencedDocuments != null) && (tradeLineItem.AdditionalReferencedDocuments.Count > 0))
+                    if (tradeLineItem.AdditionalReferencedDocuments != null)
                     {
-                        foreach (AdditionalReferencedDocument doc in tradeLineItem.AdditionalReferencedDocuments)
+                        foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                         {
                             Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                            if (doc.IssueDateTime.HasValue)
+                            if (document.IssueDateTime.HasValue)
                             {
                                 Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                                Writer.WriteValue(_formatDate(doc.IssueDateTime.Value, false));
+                                Writer.WriteValue(_formatDate(document.IssueDateTime.Value, false));
                                 Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                             }
 
                             Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
 
-                            if (!String.IsNullOrEmpty(doc.ID))
+                            if (!String.IsNullOrEmpty(document.ID))
                             {
-                                Writer.WriteElementString("ram:IssuerAssignedID", doc.ID);
+                                Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
                             }
 
-                            Writer.WriteElementString("ram:ReferenceTypeCode", doc.ReferenceTypeCode.EnumToString());
+                            Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
 
                             Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                        }
+                        } // !foreach(document)
                     }
 
                     Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
@@ -843,11 +853,18 @@ namespace s2industries.ZUGFeRD
         {
             switch (type)
             {
+                case InvoiceType.SelfBilledInvoice:
                 case InvoiceType.Invoice: return "RECHNUNG";
-                case InvoiceType.Correction: return "KORREKTURRECHNUNG";
+                case InvoiceType.SelfBilledCreditNote:
                 case InvoiceType.CreditNote: return "GUTSCHRIFT";
-                case InvoiceType.DebitNote: return "";
-                case InvoiceType.SelfBilledInvoice: return "";
+                case InvoiceType.DebitNote: return "BELASTUNGSANZEIGE";                
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";                                
+                case InvoiceType.PartialInvoice: return "TEILRECHNUNG";
+                case InvoiceType.PrepaymentInvoice: return "VORAUSZAHLUNGSRECHNUNG";
+                case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
+                case InvoiceType.Correction:
+                case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
+                case InvoiceType.Unknown: return "";                    
                 default: return "";
             }
         } // !_translateInvoiceType()
@@ -860,24 +877,17 @@ namespace s2industries.ZUGFeRD
                 type -= 1000;
             }
 
-            // only these types are allowed
-            // 84: 'Wertbelastung/Wertrechnung ohne Warenbezug'
-            // 380: 'Handelsrechnung (Rechnung für Waren und Dienstleistungen)'
-            // 389: 'Selbst ausgestellte Rechnung (Steuerrechtliche Gutschrift/Gutschriftsverfahren)'
-            switch (type)
+            if (type == InvoiceType.CorrectionOld)
             {
-                case InvoiceType.Correction: return (int)InvoiceType.Invoice;
-                case InvoiceType.CreditNote: return (int)InvoiceType.Invoice;
-                case InvoiceType.DebitNote: return (int)InvoiceType.Invoice;
-                case InvoiceType.Invoice: return (int)InvoiceType.Invoice;
-                case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
-                default: return (int)InvoiceType.Unknown;
+                return (int)InvoiceType.Correction;
             }
+
+            return (int)type;            
         } // !_translateInvoiceType()
 
 
-        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
-        {            
+    internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        {
             if (descriptor.Profile == Profile.BasicWL)
             {
                 if (throwExceptions)
@@ -889,5 +899,5 @@ namespace s2industries.ZUGFeRD
 
             return true;
         } // !Validate()
-    }
+}
 }

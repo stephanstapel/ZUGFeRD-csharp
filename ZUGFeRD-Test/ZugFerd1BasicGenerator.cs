@@ -77,7 +77,7 @@ namespace ZUGFeRD_Test
                        id: null);
 
          desc.ActualDeliveryDate = new DateTime(2013, 03, 05);
-         desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04");
+         desc.AddCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04");
          desc.AddApplicableTradeTax(275.0m, 7.0m, TaxTypes.VAT);
          desc.AddApplicableTradeTax(198.00m, 19.0m, TaxTypes.VAT);
 
@@ -87,7 +87,7 @@ namespace ZUGFeRD_Test
                         taxBasisAmount: 473.00m,
                         taxTotalAmount: 56.87m,
                         grandTotalAmount: 529.87m);
-         desc.addTradeLineItem(name: $"GTIN: 4012345001235{Environment.NewLine}Unsere Art.-Nr.: TB100A4{Environment.NewLine}Trennblätter A4",
+         desc.AddTradeLineItem(name: $"GTIN: 4012345001235{Environment.NewLine}Unsere Art.-Nr.: TB100A4{Environment.NewLine}Trennblätter A4",
                                   unitCode: QuantityCodes.C62,
                                   grossUnitPrice: 9.90m,
                                   netUnitPrice: 9.90m,
@@ -98,7 +98,7 @@ namespace ZUGFeRD_Test
                                   id: new GlobalID(GlobalID.SchemeID_EAN, "4012345001235"),
                                   sellerAssignedID: "TB100A4");
 
-         desc.addTradeLineItem(name: $"GTIN: 4000050986428{Environment.NewLine}Unsere Art.-Nr.: ARNR2{Environment.NewLine}Joghurt Banane",
+         desc.AddTradeLineItem(name: $"GTIN: 4000050986428{Environment.NewLine}Unsere Art.-Nr.: ARNR2{Environment.NewLine}Joghurt Banane",
                                 unitCode: QuantityCodes.C62,
                                   grossUnitPrice: 5.50m,
                                   netUnitPrice: 5.50m,

@@ -70,8 +70,8 @@ namespace ZUGFeRD_Test
             desc.SetBuyerContact("Hans Muster");
 
             desc.ActualDeliveryDate = new DateTime(2013, 03, 05);
-            desc.setPaymentMeans(PaymentMeansTypeCodes.DebitTransfer, "Überweisung");
-            desc.addCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04");
+            desc.SetPaymentMeans(PaymentMeansTypeCodes.DebitTransfer, "Überweisung");
+            desc.AddCreditorFinancialAccount("DE08700901001234567890", "GENODEF1M04");
             desc.AddApplicableTradeTax(275.0m, 7.0m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.AddApplicableTradeTax(198.00m, 19.0m, TaxTypes.VAT, TaxCategoryCodes.S);
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2013, 3% Skonto innerhalb 10 Tagen bis 15.03.2013",
@@ -84,7 +84,7 @@ namespace ZUGFeRD_Test
                            529.87m,
                            0.00m,
                            529.87m);
-            desc.addTradeLineItem(name: "Trennblätter A4",
+            desc.AddTradeLineItem(name: "Trennblätter A4",
                                   unitCode: QuantityCodes.C62,
                                   grossUnitPrice: 9.90m,
                                   netUnitPrice: 9.90m,
@@ -95,7 +95,7 @@ namespace ZUGFeRD_Test
                                   id: new GlobalID(GlobalID.SchemeID_EAN, "4012345001235"),
                                   sellerAssignedID: "TB100A4");
 
-            desc.addTradeLineItem(name: "Joghurt Banane",
+            desc.AddTradeLineItem(name: "Joghurt Banane",
                                   unitCode: QuantityCodes.C62,
                                   grossUnitPrice: 5.50m,
                                   netUnitPrice: 5.50m,

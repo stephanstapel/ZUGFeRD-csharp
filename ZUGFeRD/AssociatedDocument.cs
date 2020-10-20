@@ -24,18 +24,27 @@ using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Representation for general information on item level
+    /// </summary>
     public class AssociatedDocument
     {
+        /// <summary>
+        ///  Detailed information in free text form
+        /// </summary>
         public List<Note> Notes { get; set; } = new List<Note>();
+
+        /// <summary>
+        /// identifier of the invoice line item
+        /// </summary>
         public int? LineID { get; set; }
 
-        public AssociatedDocument()
-        {
 
-        }
-
-
-        public AssociatedDocument(int? lineID)
+        /// <summary>
+        /// Initializes a new associated document object, optionally passing a certain lineID
+        /// </summary>
+        /// <param name="lineID"></param>
+        public AssociatedDocument(int? lineID = null)
         {
             this.LineID = lineID;
         }

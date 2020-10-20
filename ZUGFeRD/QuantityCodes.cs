@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum QuantityCodes
     {
-        Unknown,
+        Unknown = 0,
 
         /// <summary>
         /// Eins (Stück)
@@ -44,6 +44,11 @@ namespace s2industries.ZUGFeRD
         /// Abkürzung: Tag(e)
         /// </summary>
         DAY,
+
+        /// <summary>
+        /// Piece: A unit of count defining the number of pieces (piece: a single item, article or exemplar).
+        /// </summary>
+        H87,
 
         /// <summary>
         /// Hektar
@@ -186,7 +191,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class QuantityCodesExtensions
     {
-        public static QuantityCodes FromString(this QuantityCodes _c, string s)
+        public static QuantityCodes FromString(this QuantityCodes _, string s)
         {
             try
             {

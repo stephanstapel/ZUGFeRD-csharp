@@ -263,16 +263,16 @@ namespace ZUGFeRDToExcel
 
             i += 1;
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Charge total amount");
-            new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(descriptor.ChargeTotalAmount, "0.00");
+            new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(descriptor.ChargeTotalAmount.Value, "0.00");
 
             i += 1;
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Allowance total amount");
-            new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(descriptor.AllowanceTotalAmount, "0.00");
+            new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(descriptor.AllowanceTotalAmount.Value, "0.00");
             string cellForAllowanceTotal = new ExcelCell(headWorksheet, HeadColumns.ANALYSIS, i).setFormula(String.Format("={0}", cellForAllowanceAnalysis)).formatWithDecimals().setColor(ExcelColors.Green).getCellAddress();
 
             i += 1;
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Tax basis amount");
-            new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(descriptor.TaxBasisAmount, "0.00");
+            new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(descriptor.TaxBasisAmount.Value, "0.00");
             string cellForTaxBasisAmount = new ExcelCell(headWorksheet, HeadColumns.ANALYSIS, i).setFormula(String.Format("={0}+{1}", cellForLineTotalAmount, cellForAllowanceTotal)).formatWithDecimals().setColor(ExcelColors.Green).getCellAddress();
 
             i += 1;

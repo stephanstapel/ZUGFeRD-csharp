@@ -28,6 +28,14 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor21Reader : IInvoiceDescriptorReader
     {
+        /// <summary>
+        /// Parses the ZUGFeRD invoice from the given stream.
+        /// 
+        /// Make sure that the stream is open, otherwise an IllegalStreamException exception is thrown.
+        /// Important: the stream will not be closed by this function.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns>The parsed ZUGFeRD invoice</returns>
         public override InvoiceDescriptor Load(Stream stream)
         {
             if (!stream.CanRead)
@@ -357,7 +365,7 @@ namespace s2industries.ZUGFeRD
                 string actualAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
                 string reason = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
-                item.addTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
+                item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                                 default(CurrencyCodes).FromString(basisAmountCurrency),
                                                 basisAmount,
                                                 actualAmount,
@@ -407,7 +415,7 @@ namespace s2industries.ZUGFeRD
             {
                 string _code = _nodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
 
-                item.addAdditionalReferencedDocument(
+                item.AddAdditionalReferencedDocument(
                     id: _nodeAsString(referenceNode, "ram:IssuerAssignedID", nsmgr),
                     date: _nodeAsDateTime(referenceNode, "ram:IssueDateTime/udt:DateTimeString", nsmgr),
                     code: default(ReferenceTypeCodes).FromString(_code)

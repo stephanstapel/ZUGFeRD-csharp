@@ -61,6 +61,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         ST3,
 
+        /// <summary>
+        /// Unbekannter Wert
+        /// </summary>
         Unknown
     }
 
@@ -68,7 +71,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class ContentCodesExtensions
     {
-        public static ContentCodes FromString(this ContentCodes _c, string s)
+        public static ContentCodes FromString(this ContentCodes _, string s)
         {
             try
             {

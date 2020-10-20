@@ -25,110 +25,99 @@ using System.IO;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Represents a ZUGFeRD/ Factur-X invoice
+    /// </summary>
     public class InvoiceDescriptor
     {
+        /// <summary>
+        /// Invoice Number
+        /// </summary>
         public string InvoiceNo { get; set; }
-        public DateTime? InvoiceDate { get; set; }
-        public string InvoiceNoAsReference { get; set; }
 
-        public string OrderNo { get; set; }
-        public DateTime? OrderDate { get; set; }
+        /// <summary>
+        /// Invoice date
+        /// </summary>
+        public DateTime? InvoiceDate { get; set; } = null;
+        public string InvoiceNoAsReference { get; set; } = "";
 
-        public AdditionalReferencedDocument AdditionalReferencedDocument { get; set; }
-        public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
-        public DateTime? ActualDeliveryDate { get; set; }
+        public string OrderNo { get; set; } = "";
+        public DateTime? OrderDate { get; set; } = null;
 
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; internal set; } = new List<AdditionalReferencedDocument>();
+        public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; } = null;
+        public DateTime? ActualDeliveryDate { get; set; } = null;
+
+        /// <summary>
+        /// Currency of the invoice
+        /// </summary>
         public CurrencyCodes Currency { get; set; }
         public Party Buyer { get; set; }
         public Contact BuyerContact { get; set; }
-        public List<TaxRegistration> BuyerTaxRegistration { get; set; }
+        public List<TaxRegistration> BuyerTaxRegistration { get; set; } = new List<TaxRegistration>();
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
-        public List<TaxRegistration> SellerTaxRegistration { get; set; }
+        public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party Invoicee { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party ShipTo { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party Payee { get; set; }
 
-        /**
-         * This party is optional and only relevant for Extended profile
-         */
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
         public Party ShipFrom { get; set; }
 
-        public List<Note> Notes { get; set; }
-        public bool IsTest { get; set; }
-        public Profile Profile { get; internal set; }
-        public InvoiceType Type { get; set; }
+        public List<Note> Notes { get; set; } = new List<Note>();
+        public bool IsTest { get; set; } = false;
+        public Profile Profile { get; internal set; } = Profile.Basic;
+        public InvoiceType Type { get; set; } = InvoiceType.Invoice;
         public string ReferenceOrderNo { get; set; }
-        public List<TradeLineItem> TradeLineItems { get; set; }
+        public List<TradeLineItem> TradeLineItems { get; set; } = new List<TradeLineItem>();
 
 
-        public decimal LineTotalAmount { get; set; }
-        public decimal? ChargeTotalAmount { get; set; }
-        public decimal? AllowanceTotalAmount { get; set; }
-        public decimal? TaxBasisAmount { get; set; }
-        public decimal TaxTotalAmount { get; set; }
-        public decimal GrandTotalAmount { get; set; }
-        public decimal? TotalPrepaidAmount { get; set; }
-        public decimal DuePayableAmount { get; set; }
-        public List<Tax> Taxes { get; set; }
-        public List<ServiceCharge> ServiceCharges { get; set; }
-        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+        public decimal LineTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? ChargeTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? AllowanceTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? TaxBasisAmount { get; set; } = Decimal.MinValue;
+        public decimal TaxTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal GrandTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? TotalPrepaidAmount { get; set; } = Decimal.MinValue;
+        public decimal DuePayableAmount { get; set; } = Decimal.MinValue;
+        public List<Tax> Taxes { get; set; } = new List<Tax>();
+        public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
+        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
         public PaymentTerms PaymentTerms { get; set; }
-        public List<BankAccount> CreditorBankAccounts { get; set; }
-        public List<BankAccount> DebitorBankAccounts { get; set; }
+        public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
+        public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
         public PaymentMeans PaymentMeans { get; set; }
 
         public DateTime? BillingPeriodStart { get; set; }
         public DateTime? BillingPeriodEnd { get; set; }
 
 
-        internal InvoiceDescriptor()
-        {
-            this.InvoiceNoAsReference = "";
 
-            this.IsTest = false;
-            this.Profile = Profile.Basic;
-            this.Type = InvoiceType.Invoice;
-            this.Notes = new List<Note>();
-            this.OrderNo = "";
-            this.OrderDate = null;
-            this.InvoiceDate = null;
-            this.AdditionalReferencedDocument = null;
-            this.DeliveryNoteReferencedDocument = null;
-            this.ActualDeliveryDate = null;
-
-            this.LineTotalAmount = decimal.MinValue;
-            this.ChargeTotalAmount = decimal.MinValue;
-            this.AllowanceTotalAmount = decimal.MinValue;
-            this.TaxBasisAmount = decimal.MinValue;
-            this.TaxTotalAmount = decimal.MinValue;
-            this.GrandTotalAmount = decimal.MinValue;
-            this.TotalPrepaidAmount = decimal.MinValue;
-            this.DuePayableAmount = decimal.MinValue;
-            this.TradeLineItems = new List<TradeLineItem>();
-            this.Taxes = new List<Tax>();
-            this.ServiceCharges = new List<ServiceCharge>();
-            this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
-
-            this.BuyerTaxRegistration = new List<TaxRegistration>();
-            this.SellerTaxRegistration = new List<TaxRegistration>();
-            this.CreditorBankAccounts = new List<BankAccount>();
-            this.DebitorBankAccounts = new List<BankAccount>();
-        }
-
-
+        /// <summary>
+        /// Loads a ZUGFeRD invoice from a stream.
+        /// 
+        /// Please make sure that the stream is open, otherwise this call will raise an IllegalStreamException.
+        /// 
+        /// Important: the stream will not be closed by this function, make sure to close it by yourself!
+        /// 
+        /// </summary>
+        /// <param name="stream">Stream where to read the ZUGFeRD invoice</param>
+        /// <returns></returns>
         public static InvoiceDescriptor Load(Stream stream)
         {
             IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
@@ -149,10 +138,19 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            return null;
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this stream!");
+
+            // return null;
         } // !Load()
 
 
+        /// <summary>
+        /// Loads a ZUGFeRD invoice from a file.
+        /// 
+        /// Please make sure that the file is exists, otherwise this call will raise a FileNotFoundException.
+        /// </summary>
+        /// <param name="filename">Name of the ZUGFeRD invoice file</param>
+        /// <returns></returns>
         public static InvoiceDescriptor Load(string filename)
         {
             IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
@@ -173,7 +171,9 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            return null;
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this file '" + filename + "'!");
+
+            // return null;
         } // !Load()
 
 
@@ -192,7 +192,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddNote(string note, SubjectCodes subjectCode = SubjectCodes.Unknown, ContentCodes contentCode = ContentCodes.Unknown)
         {
-            /**
+            /*
              * @todo prüfen:
              * ST1, ST2, ST3 nur mit AAK
              * EEV, WEB, VEV nur mit AAJ
@@ -279,12 +279,26 @@ namespace s2industries.ZUGFeRD
         } // !AddSellerTaxRegistration()
 
 
+        public void AddAdditionalReferencedDocument(string issuerAssignedID, DateTime? issueDateTime = null, AdditionalReferencedDocumentTypeCode typeCode = AdditionalReferencedDocumentTypeCode.Unknown, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        {
+            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            {
+                ReferenceTypeCode = referenceTypeCode,
+                IssuerAssignedID = issuerAssignedID,
+                IssueDateTime = issueDateTime,
+                Name = name,
+                AttachmentBinaryObject = attachmentBinaryObject,
+                Filename = filename,
+                TypeCode = typeCode
+            });
+        } // !AddAdditionalReferencedDocument()
+
+
         public void SetBuyerOrderReferenceDocument(string orderNo, DateTime orderDate)
         {
             this.OrderNo = orderNo;
             this.OrderDate = orderDate;
         } // !SetBuyerOrderReferenceDocument()
-
 
 
         public void SetDeliveryNoteReferenceDocument(string deliveryNoteNo, DateTime deliveryNoteDate)
@@ -313,6 +327,19 @@ namespace s2industries.ZUGFeRD
         } // !AddLogisticsServiceCharge()
 
 
+        /// <summary>
+        /// Adds an allowance or charge on document level.
+        /// 
+        /// Allowance represents a discount whereas charge represents a surcharge.
+        /// </summary>
+        /// <param name="isDiscount">Marks if the allowance charge is a discount. Please note that in contrary to this function, the xml file indicated a surcharge, not a discount (value will be inverted)</param>
+        /// <param name="basisAmount">Base amount (basis of allowance)</param>
+        /// <param name="currency">Curency of the allowance</param>
+        /// <param name="actualAmount">Actual allowance charge amount</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxPercent">VAT rate for the allowance</param>
         public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
@@ -333,7 +360,7 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeAllowanceCharge()
 
 
-        public void SetTradePaymentTerms(string description, DateTime dueDate)
+        public void SetTradePaymentTerms(string description, DateTime? dueDate = null)
         {
             this.PaymentTerms = new PaymentTerms()
             {
@@ -387,6 +414,21 @@ namespace s2industries.ZUGFeRD
             this.Taxes.Add(tax);
         } // !AddApplicableTradeTax()
 
+        private IInvoiceDescriptorWriter _selectInvoiceDescriptorWriter(ZUGFeRDVersion version)
+        {
+            switch (version)
+            {
+                case ZUGFeRDVersion.Version1:
+                    return new InvoiceDescriptor1Writer();
+                case ZUGFeRDVersion.Version20:
+                    return new InvoiceDescriptor20Writer();
+                case ZUGFeRDVersion.Version21:
+                    return new InvoiceDescriptor21Writer();
+                default:
+                    throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
+            }
+        } // !_selectInvoiceDescriptorWriter()
+
 
         /// <summary>
         /// Saves the descriptor object into a stream.
@@ -394,54 +436,39 @@ namespace s2industries.ZUGFeRD
         /// The stream position will be reset to the original position after writing is finished.
         /// This allows easy further processing of the stream.
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">The stream where the data should be saved to.</param>
+        /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
+        /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;            
-
-            IInvoiceDescriptorWriter writer = null;
-            switch (version)
-            {
-                case ZUGFeRDVersion.Version1:
-                    writer = new InvoiceDescriptor1Writer();
-                    break;
-                case ZUGFeRDVersion.Version20:
-                    writer = new InvoiceDescriptor20Writer();
-                    break;
-                case ZUGFeRDVersion.Version21:
-                    writer = new InvoiceDescriptor21Writer(); 
-                    break;
-                default:
-                    break;
-            }
+            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
             writer.Save(this, stream);
         } // !Save()
 
 
+        /// <summary>
+        /// Saves the descriptor object into a file with given name.        
+        /// </summary>
+        /// <param name="filename">The filename where the data should be saved to.</param>
+        /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
+        /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
         {
             this.Profile = profile;
-
-            IInvoiceDescriptorWriter writer = null;
-            switch (version)
-            {
-                case ZUGFeRDVersion.Version1:
-                    writer = new InvoiceDescriptor1Writer();
-                    break;
-                case ZUGFeRDVersion.Version20:
-                    writer = new InvoiceDescriptor20Writer();
-                    break;
-                case ZUGFeRDVersion.Version21:
-                    writer = new InvoiceDescriptor21Writer();
-                    break;
-                default:
-                    break;
-            }
+            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
             writer.Save(this, filename);
         } // !Save()
 
-
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use AddTradeLineCommentItem() instead")]
         public void addTradeLineCommentItem(string comment)
+        {
+            AddTradeLineCommentItem(comment);
+        } // !addTradeLineCommentItem()
+#pragma warning restore IDE1006
+
+        public void AddTradeLineCommentItem(string comment)
         {
             TradeLineItem item = new TradeLineItem()
             {
@@ -476,20 +503,40 @@ namespace s2industries.ZUGFeRD
             ));
 
             this.TradeLineItems.Add(item);
-        } // !addTradeLineCommentItem()
+        } // !AddTradeLineCommentItem()
 
 
-        /// <summary>
-        /// @todo Rabatt ergänzen:
-        /// <ram:AppliedTradeAllowanceCharge>
-        /// 				<ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
-        /// 				<ram:CalculationPercent>2.00</ram:CalculationPercent>
-        /// 				<ram:BasisAmount currencyID = "EUR" > 1.5000 </ ram:BasisAmount>
-        /// 				<ram:ActualAmount currencyID = "EUR" > 0.0300 </ ram:ActualAmount>
-        /// 				<ram:Reason>Artikelrabatt 1</ram:Reason>
-        /// 			</ram:AppliedTradeAllowanceCharge>
-        /// </summary>
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use AddTradeLineItem() instead")]
         public TradeLineItem addTradeLineItem(string name,
+                                     string description = null,
+                                     QuantityCodes unitCode = QuantityCodes.Unknown,
+                                     decimal? unitQuantity = null,
+                                     decimal grossUnitPrice = Decimal.MinValue,
+                                     decimal netUnitPrice = Decimal.MinValue,
+                                     decimal billedQuantity = Decimal.MinValue,
+                                     TaxTypes taxType = TaxTypes.Unknown,
+                                     TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
+                                     decimal taxPercent = Decimal.MinValue,
+                                     string comment = null,
+                                     GlobalID id = null,
+                                     string sellerAssignedID = "", string buyerAssignedID = "",
+                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
+        {
+            return AddTradeLineItem(name, description, unitCode, unitQuantity, grossUnitPrice, netUnitPrice, billedQuantity, taxType, categoryCode, taxPercent, comment, id, sellerAssignedID, buyerAssignedID, deliveryNoteID, deliveryNoteDate, buyerOrderID, buyerOrderDate);
+        } // !addTradeLineItem()
+#pragma warning restore IDE1006
+
+        // TODO Rabatt ergänzen:
+        // <ram:AppliedTradeAllowanceCharge>
+        //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
+        //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
+        //     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
+        //     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
+        //     <ram:Reason>Artikelrabatt 1</ram:Reason>
+        // </ram:AppliedTradeAllowanceCharge>
+        public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
                                      QuantityCodes unitCode = QuantityCodes.Unknown,
                                      decimal? unitQuantity = null,
@@ -546,21 +593,30 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
             {
-                newItem.setDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
+                newItem.SetDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
             }
 
             if (!String.IsNullOrEmpty(buyerOrderID) || buyerOrderDate.HasValue)
             {
-                newItem.setOrderReferencedDocument(buyerOrderID, buyerOrderDate);
+                newItem.SetOrderReferencedDocument(buyerOrderID, buyerOrderDate);
             }
 
             this.TradeLineItems.Add(newItem);
             return newItem;
-        } // !addTradeLineItem()
+        } // !AddTradeLineItem()
 
 
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use SetPaymentMeans() instead.")]
         public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         {
+            SetPaymentMeans(paymentCode, information, identifikationsnummer, mandatsnummer);
+        } // !setPaymentMeans()
+#pragma warning restore IDE1006
+
+
+        public void SetPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
+        { 
             this.PaymentMeans = new PaymentMeans
             {
                 TypeCode = paymentCode,
@@ -568,10 +624,19 @@ namespace s2industries.ZUGFeRD
                 SEPACreditorIdentifier = identifikationsnummer,
                 SEPAMandateReference = mandatsnummer
             };
-        } // !setPaymentMeans()
+        } // !SetPaymentMeans()
 
 
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use AddCreditorFinancialAccount() instead.")]
         public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
+        {
+            AddCreditorFinancialAccount(iban, bic, id, bankleitzahl, bankName, name);
+        } // !addCreditorFinancialAccount()
+#pragma warning restore IDE1006
+
+
+        public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {
             this.CreditorBankAccounts.Add(new BankAccount()
             {
@@ -582,9 +647,19 @@ namespace s2industries.ZUGFeRD
                 BankName = bankName,
                 Name = name
             });
-        } // !addCreditorFinancialAccount()
+        } // !AddCreditorFinancialAccount()
 
+
+#pragma warning disable IDE1006
+        [Obsolete("This function is deprecated. Please use AddDebitorFinancialAccount() instead.")]
         public void addDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
+        {
+            AddDebitorFinancialAccount(iban, bic, id, bankleitzahl, bankName);
+        } // !addDebitorFinancialAccount()
+#pragma warning restore IDE1006
+
+
+        public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             this.DebitorBankAccounts.Add(new BankAccount()
             {
@@ -594,6 +669,6 @@ namespace s2industries.ZUGFeRD
                 Bankleitzahl = bankleitzahl,
                 BankName = bankName
             });
-        } // !addDebitorFinancialAccount()
+        } // !AddDebitorFinancialAccount()
    }
 }

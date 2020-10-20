@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum ReferenceTypeCodes
     {
-        Unknown, 
+        Unknown = 0, 
 
         /// <summary>
         /// Auftragsbestätigungsnummer
@@ -202,7 +202,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class ReferenceTypeCodesExtensions
     {
-        public static ReferenceTypeCodes FromString(this ReferenceTypeCodes _c, string s)
+        public static ReferenceTypeCodes FromString(this ReferenceTypeCodes _, string s)
         {
             try
             {

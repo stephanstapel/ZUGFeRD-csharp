@@ -28,6 +28,14 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor1Reader : IInvoiceDescriptorReader
     {
+        /// <summary>
+        /// Parses the ZUGFeRD invoice from the given stream.
+        /// 
+        /// Make sure that the stream is open, otherwise an IllegalStreamException exception is thrown.
+        /// Important: the stream will not be closed by this function.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns>The parsed ZUGFeRD invoice</returns>
         public override InvoiceDescriptor Load(Stream stream)
         {
             if (!stream.CanRead)
@@ -139,7 +147,7 @@ namespace s2industries.ZUGFeRD
                 SEPAMandateReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID/@schemeAgencyID", nsmgr)
             };
             retval.PaymentMeans = _tempPaymentMeans;
-            
+
             retval.BillingPeriodStart = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime", nsmgr);
             retval.BillingPeriodEnd = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:EndDateTime", nsmgr);
 
@@ -219,14 +227,14 @@ namespace s2industries.ZUGFeRD
                 DueDate = _nodeAsDateTime(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime", nsmgr)
             };
 
-            retval.LineTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount", nsmgr, 0).Value;
-            retval.ChargeTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:ChargeTotalAmount", nsmgr, null);
-            retval.AllowanceTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:AllowanceTotalAmount", nsmgr, null);
-            retval.TaxBasisAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxBasisTotalAmount", nsmgr, null);
-            retval.TaxTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr, 0).Value;
-            retval.GrandTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount", nsmgr, 0).Value;
-            retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount", nsmgr, null);
-            retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount", nsmgr, 0).Value;
+            retval.LineTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:LineTotalAmount", nsmgr, 0).Value;
+            retval.ChargeTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:ChargeTotalAmount", nsmgr, null);
+            retval.AllowanceTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:AllowanceTotalAmount", nsmgr, null);
+            retval.TaxBasisAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TaxBasisTotalAmount", nsmgr, null);
+            retval.TaxTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TaxTotalAmount", nsmgr, 0).Value;
+            retval.GrandTotalAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:GrandTotalAmount", nsmgr, 0).Value;
+            retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:TotalPrepaidAmount", nsmgr, null);
+            retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:DuePayableAmount", nsmgr, 0).Value;
 
             retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
             if (!retval.OrderDate.HasValue)
@@ -335,7 +343,7 @@ namespace s2industries.ZUGFeRD
                 string actualAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
                 string reason = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
-                item.addTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
+                item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                                 default(CurrencyCodes).FromString(basisAmountCurrency),
                                                 basisAmount,
                                                 actualAmount,
@@ -385,7 +393,7 @@ namespace s2industries.ZUGFeRD
             {
                 string _code = _nodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
 
-                item.addAdditionalReferencedDocument(
+                item.AddAdditionalReferencedDocument(
                     id: _nodeAsString(referenceNode, "ram:ID", nsmgr),
                     date: _nodeAsDateTime(referenceNode, "ram:IssueDateTim", nsmgr),
                     code: default(ReferenceTypeCodes).FromString(_code)
@@ -431,7 +439,7 @@ namespace s2industries.ZUGFeRD
 
             string lineOne = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineOne", nsmgr);
             string lineTwo = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineTwo", nsmgr);
-  
+
             if (!String.IsNullOrEmpty(lineTwo))
             {
                 retval.ContactName = lineOne;

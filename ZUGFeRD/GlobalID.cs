@@ -36,7 +36,18 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class GlobalID
     {
+        /// <summary>
+        /// The identification of articles based on a registered scheme
+        /// 
+        /// The global identifier of the article is a globally unique identifier of the product being assigned to it by its producer, bases on the rules of a global standardisation body.
+        /// </summary>
         public string ID { get; set; }
+
+        /// <summary>
+        /// The identification of items based on a registered scheme
+        /// 
+        /// The schema of identification must be composed of the entries of the list published by the ISO/IEC 6523 Maintenance Agency.
+        /// </summary>
         public string SchemeID { get; set; }
 
         /// <summary>
@@ -63,15 +74,23 @@ namespace s2industries.ZUGFeRD
         /// OSCAR (Odette)
         /// </summary>
         public const string SchemeID_ODETTE = "0177";
+
+        /// <summary>
+        /// Unknown means, we have a problem ...
+        /// </summary>
         public const string SchemeID_Unknown = "0000";
 
+#pragma warning disable CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         public GlobalID()
+#pragma warning restore CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         {
             this.ID = "";
             this.SchemeID = GlobalID.SchemeID_Unknown;
         } // !GlobalID()
 
+#pragma warning disable CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         public GlobalID(string schemeID, string ID)
+#pragma warning restore CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         {
             this.ID = ID;
             this.SchemeID = schemeID;

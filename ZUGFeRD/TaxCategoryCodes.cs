@@ -132,7 +132,7 @@ namespace s2industries.ZUGFeRD
 
     internal static class TaxCategoryCodesExtensions
     {
-        public static TaxCategoryCodes FromString(this TaxCategoryCodes _c, string s)
+        public static TaxCategoryCodes FromString(this TaxCategoryCodes _, string s)
         {
             try
             {

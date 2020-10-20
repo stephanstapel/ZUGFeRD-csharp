@@ -24,12 +24,17 @@ using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Base class for reference documents of all kinds.
+    /// </summary>
     public class BaseReferencedDocument
     {
         /// <summary>
         /// Bestellnummer / Lieferscheinummer
         /// </summary>
         public string ID { get; set; }
+
+
         /// <summary>
         /// Bestelldatum / Lieferdatum
         /// </summary>
