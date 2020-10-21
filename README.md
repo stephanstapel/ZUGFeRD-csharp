@@ -18,7 +18,7 @@ Since there are a lot terms and standards around electronic invoices, I'd like t
 - EN 16931 in turn is based on worldwide UN/CEFACT standard 'Cross Industry Invoice' (CII).
 - XRechnung as another German standard is a subset of EN 16931. It is defined by another party called KoSIT (https://www.xoev.de/). It comes with its own validation rules (https://www.ferd-net.de/standards/what-is-xrechnung/index.html).
 - This means that both Factur-X 1.0 (respectively ZUGFeRD 2.1) and XRechnung are conform with EN 16931. This does not automatically result that those invoices are per se identical
-- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two formats
+- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two sister formats
 
 # License
 Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
