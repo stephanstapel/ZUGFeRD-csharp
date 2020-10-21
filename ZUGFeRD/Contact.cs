@@ -23,12 +23,35 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Detail information of a contact person of e.g. a party
+    /// </summary>
     public class Contact
     {
+        /// <summary>
+        /// Contact Name
+        /// </summary>        
         public string Name { get; set; }
+
+        /// <summary>
+        /// Contact organizational unit (with a party)
+        /// </summary>
         public string OrgUnit { get; set; }
+
+        /// <summary>
+        /// Contact email address
+        /// </summary>        
         public string EmailAddress { get; set; }
+
+        /// <summary>
+        /// Contact phone number
+        /// </summary>        
         public string PhoneNo { get; set; }
+        
+
+        /// <summary>
+        /// Contact fax number
+        /// </summary>
         public string FaxNo { get; set; }
     }
 }

@@ -932,33 +932,33 @@ namespace s2industries.ZUGFeRD
         } // !_writeNotes()
 
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null, Profile profile = Profile.Unknown)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string partyTag, Party party, Contact contact = null, List<TaxRegistration> taxRegistrations = null, Profile profile = Profile.Unknown)
         {
-            if (Party != null)
+            if (party != null)
             {
-                writer.WriteStartElement(PartyTag, profile);
+                writer.WriteStartElement(partyTag, profile);
 
-                if (!String.IsNullOrEmpty(Party.ID))
+                if (!String.IsNullOrEmpty(party.ID))
                 {
-                    writer.WriteElementString("ram:ID", Party.ID);
+                    writer.WriteElementString("ram:ID", party.ID);
                 }
 
-                if ((Party.GlobalID != null) && !String.IsNullOrEmpty(Party.GlobalID.ID) && !String.IsNullOrEmpty(Party.GlobalID.SchemeID))
+                if ((party.GlobalID != null) && !String.IsNullOrEmpty(party.GlobalID.ID) && !String.IsNullOrEmpty(party.GlobalID.SchemeID))
                 {
                     writer.WriteStartElement("ram:GlobalID");
-                    writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID);
-                    writer.WriteValue(Party.GlobalID.ID);
+                    writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID);
+                    writer.WriteValue(party.GlobalID.ID);
                     writer.WriteEndElement();
                 }
 
-                if (!String.IsNullOrEmpty(Party.Name))
+                if (!String.IsNullOrEmpty(party.Name))
                 {
-                    writer.WriteElementString("ram:Name", Party.Name);
+                    writer.WriteElementString("ram:Name", party.Name);
                 }
 
-                if (Contact != null)
+                if (contact != null)
                 {
-                    _writeOptionalContact(writer, "ram:DefinedTradeContact", Contact, Profile.Extended | Profile.XRechnung);
+                    _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung);
                 }
                 else if ((profile & Profile.XRechnung) == Profile.XRechnung)
                 {
@@ -966,17 +966,17 @@ namespace s2industries.ZUGFeRD
                 }
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
-                writer.WriteElementString("ram:PostcodeCode", Party.Postcode);
-                writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(Party.ContactName) ? Party.Street : Party.ContactName);
-                if (!string.IsNullOrEmpty(Party.ContactName))
-                    writer.WriteElementString("ram:LineTwo", Party.Street);
-                writer.WriteElementString("ram:CityName", Party.City);
-                writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+                writer.WriteElementString("ram:PostcodeCode", party.Postcode);
+                writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(party.ContactName) ? party.Street : party.ContactName);
+                if (!string.IsNullOrEmpty(party.ContactName))
+                    writer.WriteElementString("ram:LineTwo", party.Street);
+                writer.WriteElementString("ram:CityName", party.City);
+                writer.WriteElementString("ram:CountryID", party.Country.EnumToString());
                 writer.WriteEndElement(); // !PostalTradeAddress
 
-                if (TaxRegistrations != null)
+                if (taxRegistrations != null)
                 {
-                    foreach (TaxRegistration _reg in TaxRegistrations)
+                    foreach (TaxRegistration _reg in taxRegistrations)
                     {
                         if (!String.IsNullOrEmpty(_reg.No))
                         {

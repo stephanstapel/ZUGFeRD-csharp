@@ -23,9 +23,23 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Abstract base class for the various types
+    /// of charges
+    /// </summary>
     public abstract class Charge
     {
+        /// <summary>
+        /// Tax that is applied to the charge
+        /// </summary>
+        /// <value></value>
         public Tax Tax { get; set; }
+
+
+        /// <summary>
+        /// Monetary charge amount, presented in the respective currency
+        /// </summary>
+        /// <value></value>
         public decimal Amount { get; set; }
     }
 }
