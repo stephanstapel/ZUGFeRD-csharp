@@ -97,8 +97,8 @@ namespace s2industries.ZUGFeRD
              */
 
             #region SpecifiedSupplyChainTradeTransaction
-            Writer.WriteStartElement("rsm:SpecifiedSupplyChainTradeTransaction");
-            Writer.WriteStartElement("ram:ApplicableSupplyChainTradeAgreement");
+            Writer.WriteStartElement("rsm:SupplyChainTradeTransaction");
+            Writer.WriteStartElement("ram:ApplicableHeaderTradeAgreement");
             if (!String.IsNullOrEmpty(this.Descriptor.ReferenceOrderNo))
             {
                 Writer.WriteElementString("ram:BuyerReference", this.Descriptor.ReferenceOrderNo);
@@ -110,15 +110,6 @@ namespace s2industries.ZUGFeRD
             if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
             {
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
-                if (this.Descriptor.OrderDate.HasValue)
-                {
-                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");
-                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
-                    Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !FormattedIssueDateTime
-                }
-
                 Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
@@ -148,7 +139,7 @@ namespace s2industries.ZUGFeRD
                 } // !foreach(document)
             }
 
-            Writer.WriteEndElement(); // !ApplicableSupplyChainTradeAgreement
+            Writer.WriteEndElement(); // !ApplicableHeaderTradeAgreement
 
             Writer.WriteStartElement("ram:ApplicableSupplyChainTradeDelivery"); // Pflichteintrag
 
@@ -471,11 +462,11 @@ namespace s2industries.ZUGFeRD
 
                     if (tradeLineItem.ContractReferencedDocument != null)
                     {
-                        Writer.WriteStartElement("ram:ContractReferencedDocument");
+                        Writer.WriteStartElement("ram:InvoiceReferencedDocument");
                         if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                         {
                             Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, false));
+                            Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, true));
                             Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
                         if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
@@ -483,7 +474,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
                         }
 
-                        Writer.WriteEndElement(); // !ram:ContractReferencedDocument
+                        Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
                     }
 
                     if (tradeLineItem.AdditionalReferencedDocuments != null)
@@ -659,7 +650,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:IncludedSupplyChainTradeLineItem
             } // !foreach(tradeLineItem)
 
-            Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeTransaction
+            Writer.WriteEndElement(); // !ram:SupplyChainTradeTransaction
             #endregion
 
             Writer.WriteEndElement(); // !ram:Invoice
