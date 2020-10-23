@@ -211,9 +211,11 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                         Writer.WriteStartElement("ram:BasisAmount");
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                         Writer.WriteEndElement();
                         Writer.WriteStartElement("ram:ActualAmount");
+                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                         Writer.WriteEndElement();
 
@@ -322,9 +324,7 @@ namespace s2industries.ZUGFeRD
                     _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                 }
 
-                Writer.WriteStartElement("ram:LineTotalAmount");
-                Writer.WriteValue(_formatDecimal(_total));
-                Writer.WriteEndElement(); // ram:LineTotalAmount
+                _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementLineMonetarySummation
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeSettlement
 
@@ -567,11 +567,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
 
                     Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
+                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
                     Writer.WriteEndElement();
 
 
@@ -627,19 +629,19 @@ namespace s2industries.ZUGFeRD
             }
 
             Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
-            _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount, forceCurrency: true);
+            _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);
+            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
+            _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
+            _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);
+            _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);
+            _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);
 
             if (this.Descriptor.TotalPrepaidAmount.HasValue)
             {
-                _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount.Value, forceCurrency: true);
+                _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount.Value);
             }
 
-            _writeOptionalAmount(Writer, "ram:DuePayableAmount", this.Descriptor.DuePayableAmount, forceCurrency: true);
+            _writeOptionalAmount(Writer, "ram:DuePayableAmount", this.Descriptor.DuePayableAmount);
             Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementHeaderMonetarySummation
 
             Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
@@ -655,15 +657,12 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false)
+        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2)
         {
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName);
-                if (forceCurrency)
-                {
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                }
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
@@ -686,18 +685,21 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram:ApplicableTradeTax");
 
                 writer.WriteStartElement("ram:CalculatedAmount");
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
                 writer.WriteStartElement("ram:BasisAmount");
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
                 if (tax.AllowanceChargeBasisAmount != 0)
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
+                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
