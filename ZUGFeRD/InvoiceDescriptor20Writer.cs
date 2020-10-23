@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -18,11 +18,9 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Xml;
-using System.Globalization;
-using System.IO;
 
 
 namespace s2industries.ZUGFeRD
@@ -338,12 +336,10 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
 
                     Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                     Writer.WriteEndElement();
 
@@ -518,11 +514,9 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                         Writer.WriteStartElement("ram:BasisAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                         Writer.WriteEndElement();
                         Writer.WriteStartElement("ram:ActualAmount");
-                        Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                         Writer.WriteEndElement();
 
@@ -599,7 +593,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ApplicableTradeTax
                 }
 
-                if(Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
+                if (Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
                 {
                     Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                     if (Descriptor.BillingPeriodStart.HasValue)
@@ -631,7 +625,9 @@ namespace s2industries.ZUGFeRD
                     _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                 }
 
-                _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
+                Writer.WriteStartElement("ram:LineTotalAmount");
+                Writer.WriteValue(_formatDecimal(_total));
+                Writer.WriteEndElement(); // ram:LineTotalAmount
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                 Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
 
@@ -666,7 +662,6 @@ namespace s2industries.ZUGFeRD
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName);
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
@@ -689,21 +684,18 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram:ApplicableTradeTax");
 
                 writer.WriteStartElement("ram:CalculatedAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
                 writer.WriteStartElement("ram:BasisAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
                 if (tax.AllowanceChargeBasisAmount != 0)
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
@@ -848,14 +840,14 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.Invoice: return "RECHNUNG";
                 case InvoiceType.SelfBilledCreditNote:
                 case InvoiceType.CreditNote: return "GUTSCHRIFT";
-                case InvoiceType.DebitNote: return "BELASTUNGSANZEIGE";                
-                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";                                
+                case InvoiceType.DebitNote: return "BELASTUNGSANZEIGE";
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";
                 case InvoiceType.PartialInvoice: return "TEILRECHNUNG";
                 case InvoiceType.PrepaymentInvoice: return "VORAUSZAHLUNGSRECHNUNG";
                 case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
                 case InvoiceType.Correction:
                 case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
-                case InvoiceType.Unknown: return "";                    
+                case InvoiceType.Unknown: return "";
                 default: return "";
             }
         } // !_translateInvoiceType()
@@ -873,11 +865,11 @@ namespace s2industries.ZUGFeRD
                 return (int)InvoiceType.Correction;
             }
 
-            return (int)type;            
+            return (int)type;
         } // !_translateInvoiceType()
 
 
-    internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
+        internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
         {
             if (descriptor.Profile == Profile.BasicWL)
             {
@@ -890,5 +882,5 @@ namespace s2industries.ZUGFeRD
 
             return true;
         } // !Validate()
-}
+    }
 }
