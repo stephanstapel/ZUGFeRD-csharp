@@ -24,6 +24,9 @@ using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Detailed information on the associated contract
+    /// </summary>
     public class ContractReferencedDocument : BaseReferencedDocument
     {
     }
