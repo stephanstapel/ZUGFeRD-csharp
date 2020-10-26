@@ -281,6 +281,19 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetBuyerContact()
 
+        /// <summary>
+        /// Sets the SpecifiedProcuringProject
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <param name="name">ProjectName</param>
+        public void SetSpecifiedProcuringProject(string id, string name)
+        {
+            this.SpecifiedProcuringProject = new SpecifiedProcuringProject()
+            {
+                ID = id,
+                Name = name
+            };
+        } // SetSpecifiedProcuringProject
 
         public void AddBuyerTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
