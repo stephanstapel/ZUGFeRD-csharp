@@ -23,17 +23,43 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+   /// <summary>
+   /// Detailed information about a party that has a certain role within an invoice
+   /// </summary>
    public class Party
    {
+      /// <summary>
+      /// Party identifier
+      /// </summary>
       public string ID { get; set; }
+
+      /// <summary>
+      /// Party name, e.g. company name
+      /// </summary>      
       public string Name { get; set; }
+
+      /// <summary>
+      /// Name of the contact at the party
+      /// </summary>
       public string ContactName { get; set; }
+
+      /// <summary>
+      /// City, not including postcode (separate property)
+      /// </summary>   
       public string City { get; set; }
+
+      /// <summary>
+      /// Party postcode, represented in the respective country format
+      /// </summary>      
       public string Postcode { get; set; }
+
+      /// <summary>
+      /// Party country
+      /// </summary>      
       public CountryCodes Country { get; set; }
 
       /// <summary>
-      /// Straße inklusive Hausnummer
+      /// Street name and number
       /// </summary>
       public string Street { get; set; }
       public GlobalID GlobalID { get; set; }
