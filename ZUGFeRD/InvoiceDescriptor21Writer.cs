@@ -572,235 +572,251 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeSettlement
-            Writer.WriteStartElement("ram:ApplicableHeaderTradeSettlement");
+                Writer.WriteStartElement("ram:ApplicableHeaderTradeSettlement");
 
-            if (Descriptor.Profile == Profile.Extended)
-            {
-                _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee);
-            }
-            if (Descriptor.Profile != Profile.Minimum)
-            {
-                _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
-            }
-
-            if (!String.IsNullOrEmpty(this.Descriptor.InvoiceNoAsReference))
-            {
-                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.InvoiceNoAsReference);
-            }
-            Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
-
-            #region SpecifiedTradeSettlementPaymentMeans (alle außer Minimum)
-            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
-            {
-                if (this.Descriptor.PaymentMeans != null)
+                if (Descriptor.Profile == Profile.Extended)
                 {
+                    _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee);
+                }
+                if (Descriptor.Profile != Profile.Minimum)
+                {
+                    _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
+                }
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                if (!String.IsNullOrEmpty(this.Descriptor.InvoiceNoAsReference))
+                {
+                    _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.InvoiceNoAsReference);
+                }
+                Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
+
+                #region SpecifiedTradeSettlementPaymentMeans (alle außer Minimum)
+                if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
+                {
+                    if (this.Descriptor.PaymentMeans != null)
                     {
-                        Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
-                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                        if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                         {
-                            Writer.WriteStartElement("ram:ID");
-                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                            Writer.WriteEndElement(); // !ram:ID
+                            Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                            Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                            Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+
+                            if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                            {
+                                Writer.WriteStartElement("ram:ID");
+                                Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                                Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
+                                Writer.WriteEndElement(); // !ram:ID
+                            }
+                            Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                         }
+                    }
+                }
+                else
+                {
+                    foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
+
+                        if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                        {
+                            Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                            Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+
+                            if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                            {
+                                Writer.WriteStartElement("ram:ID");
+                                Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                                Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
+                                Writer.WriteEndElement(); // !ram:ID
+                            }
+                        }
+
+                        Writer.WriteStartElement("ram:PayeePartyCreditorFinancialAccount");
+                        Writer.WriteElementString("ram:IBANID", account.IBAN);
+                        if (!String.IsNullOrEmpty(account.Name))
+                        {
+                            Writer.WriteElementString("ram:AccountName", account.Name);
+                        }
+                        if (!String.IsNullOrEmpty(account.ID))
+                        {
+                            Writer.WriteElementString("ram:ProprietaryID", account.ID);
+                        }
+                        Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
+
+                        Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
+                        Writer.WriteElementString("ram:BICID", account.BIC);
+                        Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+
+                        Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
+                    }
+
+                    foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
+
+                        if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                        {
+                            Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                            Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+
+                            if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                            {
+                                Writer.WriteStartElement("ram:ID");
+                                Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                                Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
+                                Writer.WriteEndElement(); // !ram:ID
+                            }
+                        }
+
+                        Writer.WriteStartElement("ram:PayerPartyDebtorFinancialAccount");
+                        Writer.WriteElementString("ram:IBANID", account.IBAN);
+                        if (!String.IsNullOrEmpty(account.Name))
+                        {
+                            Writer.WriteElementString("ram:AccountName", account.Name);
+                        }
+                        if (!String.IsNullOrEmpty(account.ID))
+                        {
+                            Writer.WriteElementString("ram:ProprietaryID", account.ID);
+                        }
+                        Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
+
+                        Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
+                        Writer.WriteElementString("ram:BICID", account.BIC);                                  
+                        Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
+
                         Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                     }
                 }
-            }
-            else
-            {
-                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                #endregion
+
+                #region ApplicableTradeTax
+                _writeOptionalTaxes(Writer);
+                #endregion
+
+                #region BillingSpecifiedPeriod
+                if(Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
                 {
-                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
-
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                    if (Descriptor.BillingPeriodStart.HasValue)
                     {
-                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+                        Writer.WriteStartElement("ram:StartDateTime");
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
+                        Writer.WriteEndElement(); // !StartDateTime
+                    }
 
-                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                    if (Descriptor.BillingPeriodEnd.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:EndDateTime");
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
+                        Writer.WriteEndElement(); // !EndDateTime
+                    }
+                    Writer.WriteEndElement(); // !BillingSpecifiedPeriod
+                }
+                #endregion
+
+                if ((this.Descriptor.TradeAllowanceCharges != null) && (this.Descriptor.TradeAllowanceCharges.Count > 0))
+                {
+                    foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
+                        Writer.WriteStartElement("ram:ChargeIndicator");
+                        Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                        Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+                        Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
+                        Writer.WriteEndElement();
+
+                        Writer.WriteStartElement("ram:ActualAmount");
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
+                        Writer.WriteEndElement();
+
+
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
+
+                        if (tradeAllowanceCharge.Tax != null)
                         {
-                            Writer.WriteStartElement("ram:ID");
-                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                            Writer.WriteEndElement(); // !ram:ID
+                            Writer.WriteStartElement("ram:CategoryTradeTax");
+                            Writer.WriteElementString("ram:TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
+                            if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
+                                Writer.WriteElementString("ram:CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString());
+                            Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
+                            Writer.WriteEndElement();
                         }
-                    }
-
-                    Writer.WriteStartElement("ram:PayeePartyCreditorFinancialAccount");
-                    Writer.WriteElementString("ram:IBANID", account.IBAN);
-                    if (!String.IsNullOrEmpty(account.Name))
-                    {
-                        Writer.WriteElementString("ram:AccountName", account.Name);
-                    }
-                    if (!String.IsNullOrEmpty(account.ID))
-                    {
-                        Writer.WriteElementString("ram:ProprietaryID", account.ID);
-                    }
-                    Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
-
-                    Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
-                    Writer.WriteElementString("ram:BICID", account.BIC);
-                    Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
-
-                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
-                }
-
-                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
-                {
-                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
-
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
-                    {
-                        Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
-
-                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
-                        {
-                            Writer.WriteStartElement("ram:ID");
-                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                            Writer.WriteEndElement(); // !ram:ID
-                        }
-                    }
-
-                    Writer.WriteStartElement("ram:PayerPartyDebtorFinancialAccount");
-                    Writer.WriteElementString("ram:IBANID", account.IBAN);
-                    if (!String.IsNullOrEmpty(account.Name))
-                    {
-                        Writer.WriteElementString("ram:AccountName", account.Name);
-                    }
-                    if (!String.IsNullOrEmpty(account.ID))
-                    {
-                        Writer.WriteElementString("ram:ProprietaryID", account.ID);
-                    }
-                    Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
-
-                    Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
-                    Writer.WriteElementString("ram:BICID", account.BIC);                                  
-                    Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
-
-                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
-                }
-            }
-            #endregion
-
-            #region ApplicableTradeTax
-            _writeOptionalTaxes(Writer);
-            #endregion
-
-            #region BillingSpecifiedPeriod
-            if(Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
-            {
-                Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                if (Descriptor.BillingPeriodStart.HasValue)
-                {
-                    Writer.WriteStartElement("ram:StartDateTime");
-                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
-                    Writer.WriteEndElement(); // !StartDateTime
-                }
-
-                if (Descriptor.BillingPeriodEnd.HasValue)
-                {
-                    Writer.WriteStartElement("ram:EndDateTime");
-                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
-                    Writer.WriteEndElement(); // !EndDateTime
-                }
-                Writer.WriteEndElement(); // !BillingSpecifiedPeriod
-            }
-            #endregion
-
-            if ((this.Descriptor.TradeAllowanceCharges != null) && (this.Descriptor.TradeAllowanceCharges.Count > 0))
-            {
-                foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
-                {
-                    Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
-                    Writer.WriteStartElement("ram:ChargeIndicator");
-                    Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                    Writer.WriteEndElement(); // !ram:ChargeIndicator
-
-                    Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
-                    Writer.WriteEndElement();
-
-                    Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
-                    Writer.WriteEndElement();
-
-
-                    _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason);
-
-                    if (tradeAllowanceCharge.Tax != null)
-                    {
-                        Writer.WriteStartElement("ram:CategoryTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
-                        if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
                         Writer.WriteEndElement();
                     }
-                    Writer.WriteEndElement();
                 }
-            }
 
-            if ((this.Descriptor.ServiceCharges != null) && (this.Descriptor.ServiceCharges.Count > 0))
-            {
-                foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
+                if ((this.Descriptor.ServiceCharges != null) && (this.Descriptor.ServiceCharges.Count > 0))
                 {
-                    Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ Profile.XRechnung);
-                    if (!String.IsNullOrEmpty(serviceCharge.Description))
+                    foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
                     {
-                        Writer.WriteElementString("ram:Description", serviceCharge.Description);
-                    }
-                    Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
-                    if (serviceCharge.Tax != null)
-                    {
-                        Writer.WriteStartElement("ram:AppliedTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
-                        if (serviceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
+                        Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ Profile.XRechnung);
+                        if (!String.IsNullOrEmpty(serviceCharge.Description))
+                        {
+                            Writer.WriteElementString("ram:Description", serviceCharge.Description);
+                        }
+                        Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
+                        if (serviceCharge.Tax != null)
+                        {
+                            Writer.WriteStartElement("ram:AppliedTradeTax");
+                            Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
+                            if (serviceCharge.Tax.CategoryCode.HasValue)
+                                Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
+                            Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
+                            Writer.WriteEndElement();
+                        }
                         Writer.WriteEndElement();
                     }
+                }
+
+                if (this.Descriptor.PaymentTerms != null)
+                {
+                    Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
+                    _writeOptionalElementString(Writer, "ram:Description", this.Descriptor.PaymentTerms.Description);
+                    if (this.Descriptor.PaymentTerms.DueDate.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:DueDateDateTime");
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate.Value));
+                        Writer.WriteEndElement(); // !ram:DueDateDateTime
+                    }
                     Writer.WriteEndElement();
                 }
-            }
 
-            if (this.Descriptor.PaymentTerms != null)
-            {
-                Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
-                _writeOptionalElementString(Writer, "ram:Description", this.Descriptor.PaymentTerms.Description);
-                if (this.Descriptor.PaymentTerms.DueDate.HasValue)
+                #region SpecifiedTradeSettlementHeaderMonetarySummation
+                //Gesamtsummen auf Dokumentenebene
+                Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
+                _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);                          // Summe der Nettobeträge aller Rechnungspositionen
+                _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);                      // Summe der Zuschläge auf Dokumentenebene
+                _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);                // Summe der Abschläge auf Dokumentenebene
+                _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);                       // Rechnungsgesamtbetrag ohne Umsatzsteuer
+                _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);       // Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
+                //ToDo: RoundingAmount  //Rundungsbetrag
+                _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);                       // Rechnungsgesamtbetrag einschließlich Umsatzsteuer
+                _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount);                   // Vorauszahlungsbetrag
+                _writeOptionalAmount(Writer, "ram:DuePayableAmount", this.Descriptor.DuePayableAmount);                       // Fälliger Zahlungsbetrag
+                Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementMonetarySummation
+                #endregion
+
+                #region InvoiceReferencedDocument
+                if (this.Descriptor.InvoiceReferencedDocument != null)
                 {
-                    Writer.WriteStartElement("ram:DueDateDateTime");
-                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate.Value));
-                    Writer.WriteEndElement(); // !ram:DueDateDateTime
+                    Writer.WriteStartElement("ram:InvoiceReferencedDocument");
+                    _writeOptionalElementString(Writer, "ram:IssuerAssignedID", this.Descriptor.InvoiceReferencedDocument.ID);
+                    if (this.Descriptor.InvoiceReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(this.Descriptor.InvoiceReferencedDocument.IssueDateTime.Value));
+                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                    }
+                    Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
                 }
-                Writer.WriteEndElement();
-            }
-            #endregion
+                #endregion
 
-            #region SpecifiedTradeSettlementHeaderMonetarySummation
-            //Gesamtsummen auf Dokumentenebene
-            Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
-            _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);                          // Summe der Nettobeträge aller Rechnungspositionen
-            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);                      // Summe der Zuschläge auf Dokumentenebene
-            _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);                // Summe der Abschläge auf Dokumentenebene
-            _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);                       // Rechnungsgesamtbetrag ohne Umsatzsteuer
-            _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);       // Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
-            //ToDo: RoundingAmount  //Rundungsbetrag
-            _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);                       // Rechnungsgesamtbetrag einschließlich Umsatzsteuer
-            _writeOptionalAmount(Writer, "ram:TotalPrepaidAmount", this.Descriptor.TotalPrepaidAmount);                   // Vorauszahlungsbetrag
-            _writeOptionalAmount(Writer, "ram:DuePayableAmount", this.Descriptor.DuePayableAmount);                       // Fälliger Zahlungsbetrag
-            Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementMonetarySummation
-            #endregion
+                Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
 
-            Writer.WriteEndElement(); // !ram:ApplicableSupplyChainTradeSettlement
+            #endregion
 
             Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeTransaction
             #endregion

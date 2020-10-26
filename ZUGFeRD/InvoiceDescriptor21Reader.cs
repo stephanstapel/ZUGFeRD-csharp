@@ -238,6 +238,12 @@ namespace s2industries.ZUGFeRD
             retval.TotalPrepaidAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount", nsmgr, null);
             retval.DuePayableAmount = _nodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount", nsmgr, 0).Value;
 
+            retval.InvoiceReferencedDocument = new InvoiceReferencedDocument()
+            {
+                ID = _nodeAsString(doc.DocumentElement, "//ram:InvoiceReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
+            };
+
             retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
             if (!retval.OrderDate.HasValue)
             {
