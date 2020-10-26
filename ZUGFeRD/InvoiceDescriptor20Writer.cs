@@ -343,6 +343,14 @@ namespace s2industries.ZUGFeRD
             if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
             {
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
+                if (this.Descriptor.OrderDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                    Writer.WriteStartElement("udt:DateTimeString");
+                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
+                    Writer.WriteEndElement(); // !udt:DateTimeString	
+                    Writer.WriteEndElement(); // !FormattedIssueDateTime	
+                }
                 Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
