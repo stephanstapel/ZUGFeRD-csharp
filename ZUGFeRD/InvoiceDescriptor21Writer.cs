@@ -419,35 +419,35 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeAgreement
-            Writer.WriteStartElement("ram:ApplicableHeaderTradeAgreement");//CG
-            if (!String.IsNullOrEmpty(this.Descriptor.ReferenceOrderNo))
-            { 
-                Writer.WriteElementString("ram:BuyerReference", this.Descriptor.ReferenceOrderNo);
-            }
-
-            #region SellerTradeParty
-            _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
-            #endregion
-
-            #region BuyerTradeParty
-            _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
-            #endregion
-
-            #region BuyerOrderReferencedDocument
-            if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
-            {
-                Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
-                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
-                if (this.Descriptor.OrderDate.HasValue)
-                {
-                    Writer.WriteStartElement("ram:FormattedIssueDateTime", ALL_PROFILES ^ Profile.XRechnung);
-                    Writer.WriteStartElement("qdt:DateTimeString");
-                    Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
-                    Writer.WriteEndElement(); // !qdt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
+                Writer.WriteStartElement("ram:ApplicableHeaderTradeAgreement");//CG
+                if (!String.IsNullOrEmpty(this.Descriptor.ReferenceOrderNo))
+                { 
+                    Writer.WriteElementString("ram:BuyerReference", this.Descriptor.ReferenceOrderNo);
                 }
-                
+
+                #region SellerTradeParty
+                _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
+                #endregion
+
+                #region BuyerTradeParty
+                _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
+                #endregion
+
+                #region BuyerOrderReferencedDocument
+                if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
+                {
+                    Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
+                    Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
+                    if (this.Descriptor.OrderDate.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime", ALL_PROFILES ^ Profile.XRechnung);
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
+                        Writer.WriteEndElement(); // !qdt:DateTimeString
+                        Writer.WriteEndElement(); // !IssueDateTime()
+                    }
+                    
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
             #endregion
@@ -473,57 +473,66 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteAttributeString("format", "102");
                     Writer.WriteValue(_formatDate(this.Descriptor.ContractReferencedDocument.IssueDateTime.Value));
                     Writer.WriteEndElement(); // !qdt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
+                    Writer.WriteEndElement(); // !IssueDateTime()                    
                 }
-                
-                Writer.WriteEndElement(); // !ContractReferencedDocument
-            }
-            #endregion
+             }
+             #endregion
 
-            #region AdditionalReferencedDocument
-            if (this.Descriptor.AdditionalReferencedDocuments != null)
-            { 
-                foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
+                #region AdditionalReferencedDocument
+                if (this.Descriptor.AdditionalReferencedDocuments != null)
+                { 
+                    foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
+                    {
+                        Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                        Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
+                        Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());                    
+
+                        if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                        {
+                            Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
+                        }
+
+                        if (!String.IsNullOrEmpty(document.Name))
+                        {
+                            Writer.WriteElementString("ram:Name", document.Name);
+                        }
+
+                        if (document.AttachmentBinaryObject != null)
+                        {                        
+                            Writer.WriteStartElement("ram:AttachmentBinaryObject");
+                            Writer.WriteAttributeString("filename", document.Filename);
+                            Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                            Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+                            Writer.WriteEndElement(); // !AttachmentBinaryObject()
+                        }
+
+                        if (document.IssueDateTime.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("qdt:DateTimeString");
+                            Writer.WriteAttributeString("format", "102");
+                            Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
+                            Writer.WriteEndElement(); // !qdt:DateTimeString
+                            Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                        }
+
+                        Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    }
+                }
+                #endregion
+
+                #region SpecifiedProcuringProject
+                if (Descriptor.SpecifiedProcuringProject != null)
                 {
-                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                    Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
-                    Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());                    
 
-                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-                    {
-                        Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
-                    }
-
-                    if (!String.IsNullOrEmpty(document.Name))
-                    {
-                        Writer.WriteElementString("ram:Name", document.Name);
-                    }
-
-                    if (document.AttachmentBinaryObject != null)
-                    {                        
-                        Writer.WriteStartElement("ram:AttachmentBinaryObject");
-                        Writer.WriteAttributeString("filename", document.Filename);
-                        Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
-                        Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
-                        Writer.WriteEndElement(); // !AttachmentBinaryObject()
-                    }
-
-                    if (document.IssueDateTime.HasValue)
-                    {
-                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                        Writer.WriteStartElement("qdt:DateTimeString");
-                        Writer.WriteAttributeString("format", "102");
-                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
-                        Writer.WriteEndElement(); // !qdt:DateTimeString
-                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
-                    }
-
-                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    Writer.WriteStartElement("ram:SpecifiedProcuringProject", Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                    Writer.WriteElementString("ram:ID", Descriptor.SpecifiedProcuringProject.ID, Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                    Writer.WriteElementString("ram:Name", Descriptor.SpecifiedProcuringProject.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                    Writer.WriteEndElement(); // !ram:SpecifiedProcuringProject
                 }
-            }
-            #endregion
+                #endregion
 
-            Writer.WriteEndElement(); // !ApplicableHeaderTradeAgreement
+                Writer.WriteEndElement(); // !ApplicableHeaderTradeAgreement
             #endregion
 
             #region ApplicableHeaderTradeDelivery
