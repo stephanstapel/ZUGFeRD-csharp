@@ -459,25 +459,19 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal allowanceChargeBasisAmount = 0)
-        {
-            Tax tax = new Tax()
-            {
-                BasisAmount = basisAmount,
-                Percent = percent,
-                TypeCode = typeCode,
-                AllowanceChargeBasisAmount = allowanceChargeBasisAmount
-            };
-
-            if ((categoryCode != null) && (categoryCode.Value != TaxCategoryCodes.Unknown))
-            {
-                tax.CategoryCode = categoryCode;
-            }
-
-            this.Taxes.Add(tax);
-        } // !AddApplicableTradeTax()
-
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode, decimal allowanceChargeBasisAmount, TaxExemptionReasonCodes? exemptionReasonCode,string exemptionReason)
+        /// <summary>
+        /// Add information about VAT and apply to the invoice line items for goods and services on the invoice.
+        /// 
+        /// This tax is added per VAT/ tax rate.
+        /// </summary>
+        /// <param name="basisAmount"></param>
+        /// <param name="percent">Tax rate where the tax belongs to</param>
+        /// <param name="typeCode"></param>
+        /// <param name="categoryCode"></param>
+        /// <param name="allowanceChargeBasisAmount"></param>
+        /// <param name="exemptionReasonCode"></param>
+        /// <param name="exemptionReason"></param>
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal allowanceChargeBasisAmount = 0, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
         {
             Tax tax = new Tax()
             {
