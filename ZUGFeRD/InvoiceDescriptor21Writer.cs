@@ -142,14 +142,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 if ((tradeLineItem.GlobalID != null) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
                 {
-                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
+                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended);
                 }
 
-                _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID);
-                _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID);
-                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name, ALL_PROFILES ^ Profile.XRechnung);
+                _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID, Profile.Comfort | Profile.Extended);
+                _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID, Profile.Comfort | Profile.Extended);
+                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name, Profile.Basic | Profile.Comfort | Profile.Extended);
                 _writeOptionalElementString(Writer, "ram:Name", !isCommentItem ? tradeLineItem.Name : "TEXT", Profile.XRechnung); // XRechnung erfordert einen Item-Namen
-                _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
+                _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description, Profile.Comfort | Profile.Extended);
 
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended|XRechnung)
                 #endregion
@@ -893,9 +893,9 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalAmount()
 
 
-        private void _writeElementWithAttribute(ProfileAwareXmlTextWriter writer, string tagName, string attributeName, string attributeValue, string nodeValue)
+        private void _writeElementWithAttribute(ProfileAwareXmlTextWriter writer, string tagName, string attributeName, string attributeValue, string nodeValue, Profile profile = Profile.Unknown)
         {
-            writer.WriteStartElement(tagName);
+            writer.WriteStartElement(tagName, profile);
             writer.WriteAttributeString(attributeName, attributeValue);
             writer.WriteValue(nodeValue);
             writer.WriteEndElement(); // !tagName
