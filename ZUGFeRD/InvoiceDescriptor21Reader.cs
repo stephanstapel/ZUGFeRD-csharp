@@ -199,7 +199,10 @@ namespace s2industries.ZUGFeRD
                 retval.AddApplicableTradeTax(_nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
                                              _nodeAsDecimal(node, ".//ram:RateApplicablePercent", nsmgr, 0).Value,
                                              default(TaxTypes).FromString(_nodeAsString(node, ".//ram:TypeCode", nsmgr)),
-                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:CategoryCode", nsmgr)));
+                                             default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:CategoryCode", nsmgr)),
+                                             0,
+                                             default(TaxExemptionReasonCodes).FromString(_nodeAsString(node, ".//ram:ExemptionReasonCode", nsmgr)),
+                                             _nodeAsString(node, ".//ram:ExemptionReason", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))

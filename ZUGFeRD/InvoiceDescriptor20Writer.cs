@@ -715,6 +715,11 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
+                if (!String.IsNullOrEmpty(tax.ExemptionReason))
+                {
+                    writer.WriteElementString("ram:ExemptionReason", tax.ExemptionReason);
+                }
+
                 writer.WriteStartElement("ram:BasisAmount");
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
@@ -732,6 +737,12 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram:CategoryCode", tax.CategoryCode?.EnumToString());
                 }
+
+                if (tax.ExemptionReasonCode.HasValue)
+                {
+                    writer.WriteElementString("ram:ExemptionReasonCode", tax.ExemptionReasonCode?.EnumToString());
+                }
+
                 writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tax.Percent));
                 writer.WriteEndElement(); // !ApplicableTradeTax
             }
