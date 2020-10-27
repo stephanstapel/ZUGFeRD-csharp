@@ -121,7 +121,8 @@ namespace s2industries.ZUGFeRD
         public List<Tax> Taxes { get; set; } = new List<Tax>();
         public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
-        public PaymentTerms PaymentTerms { get; set; }
+        public PaymentTerms PaymentTerms { get; set; }        
+        public InvoiceReferencedDocument InvoiceReferencedDocument { get; set; }
         public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
         public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
         public PaymentMeans PaymentMeans { get; set; }
@@ -282,6 +283,21 @@ namespace s2industries.ZUGFeRD
         } // !SetBuyerContact()
 
 
+        /// <summary>
+        /// Sets the SpecifiedProcuringProject
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <param name="name">ProjectName</param>
+        public void SetSpecifiedProcuringProject(string id, string name)
+        {
+            this.SpecifiedProcuringProject = new SpecifiedProcuringProject()
+            {
+                ID = id,
+                Name = name
+            };
+        } // SetSpecifiedProcuringProject
+
+
         public void AddBuyerTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
             this.BuyerTaxRegistration.Add(new TaxRegistration()
@@ -399,6 +415,20 @@ namespace s2industries.ZUGFeRD
             {
                 Description = description,
                 DueDate = dueDate
+            };
+        }
+
+        /// <summary>
+        /// Set Information about Preceding Invoice
+        /// </summary>
+        /// <param name="id">Preceding InvoiceNo</param>
+        /// <param name="IssueDateTime">Preceding Invoice Date</param>
+        public void SetInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null)
+        {
+            this.InvoiceReferencedDocument = new InvoiceReferencedDocument()
+            {
+                ID = id,
+                IssueDateTime = IssueDateTime
             };
         }
 

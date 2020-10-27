@@ -652,6 +652,22 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "ram:DuePayableAmount", this.Descriptor.DuePayableAmount);
             Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementHeaderMonetarySummation
 
+            #region InvoiceReferencedDocument
+            if (this.Descriptor.InvoiceReferencedDocument != null)
+            {
+                Writer.WriteStartElement("ram:InvoiceReferencedDocument");
+                _writeOptionalElementString(Writer, "ram:IssuerAssignedID", this.Descriptor.InvoiceReferencedDocument.ID);
+                if (this.Descriptor.InvoiceReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                    _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(this.Descriptor.InvoiceReferencedDocument.IssueDateTime.Value));
+                    Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                }
+                Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
+            }
+            #endregion
+
+
             Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
 
             Writer.WriteEndElement(); // !ram:SupplyChainTradeTransaction
