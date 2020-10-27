@@ -450,16 +450,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
-            #endregion
-
-            if (Descriptor.SpecifiedProcuringProject != null)
-            {
-
-                Writer.WriteStartElement("ram:SpecifiedProcuringProject", Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                Writer.WriteElementString("ram:ID", Descriptor.SpecifiedProcuringProject.ID, Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                Writer.WriteElementString("ram:Name", Descriptor.SpecifiedProcuringProject.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                Writer.WriteEndElement(); // !ram:SpecifiedProcuringProject
-            }
+            #endregion            
 
             #region ContractReferencedDocument
             if (this.Descriptor.ContractReferencedDocument != null)
