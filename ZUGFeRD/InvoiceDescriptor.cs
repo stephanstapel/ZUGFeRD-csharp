@@ -477,6 +477,27 @@ namespace s2industries.ZUGFeRD
             this.Taxes.Add(tax);
         } // !AddApplicableTradeTax()
 
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode, decimal allowanceChargeBasisAmount, TaxExemptionReasonCodes? exemptionReasonCode,string exemptionReason)
+        {
+            Tax tax = new Tax()
+            {
+                BasisAmount = basisAmount,
+                Percent = percent,
+                TypeCode = typeCode,
+                AllowanceChargeBasisAmount = allowanceChargeBasisAmount,
+                ExemptionReasonCode = exemptionReasonCode,
+                ExemptionReason = exemptionReason
+            };
+
+            if ((categoryCode != null) && (categoryCode.Value != TaxCategoryCodes.Unknown))
+            {
+                tax.CategoryCode = categoryCode;
+            }
+
+            this.Taxes.Add(tax);
+        } // !AddApplicableTradeTax()
+
+
         private IInvoiceDescriptorWriter _selectInvoiceDescriptorWriter(ZUGFeRDVersion version)
         {
             switch (version)

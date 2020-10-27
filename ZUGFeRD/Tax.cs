@@ -47,6 +47,17 @@ namespace s2industries.ZUGFeRD
         public decimal AllowanceChargeBasisAmount { get; set; }
 
 
+        /// <summary>
+        /// ExemptionReasonCode for no Tax
+        /// </summary>
+        public TaxExemptionReasonCodes? ExemptionReasonCode { get; set; }
+
+
+        /// <summary>
+        /// Exemption Reason Text for no Tax
+        /// </summary>
+        public string ExemptionReason { get; set; }
+
         public Tax()
         {
             this.CategoryCode = TaxCategoryCodes.S;

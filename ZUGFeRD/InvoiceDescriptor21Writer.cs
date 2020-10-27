@@ -361,6 +361,8 @@ namespace s2industries.ZUGFeRD
                 }
                 Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
 
+
+
                 if (tradeLineItem.TaxCategoryCode != TaxCategoryCodes.O) // notwendig, damit die Validierung klappt
                 {
                     Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
@@ -905,6 +907,11 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
+                if (! String.IsNullOrEmpty(tax.ExemptionReason))
+                {
+                    writer.WriteElementString("ram:ExemptionReason", tax.ExemptionReason);
+                }
+
                 writer.WriteStartElement("ram:BasisAmount");
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
@@ -920,6 +927,12 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram:CategoryCode", tax.CategoryCode?.EnumToString());
                 }
+
+                if (tax.ExemptionReasonCode.HasValue)
+                {
+                    writer.WriteElementString("ram:ExemptionReasonCode", tax.ExemptionReasonCode?.EnumToString());
+                }
+
                 writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tax.Percent));
                 writer.WriteEndElement(); // !RateApplicablePercent
             }
