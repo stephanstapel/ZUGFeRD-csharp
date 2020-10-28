@@ -104,9 +104,9 @@ namespace s2industries.ZUGFeRD
                 if (tradeLineItem.AssociatedDocument != null)
                 {
                     Writer.WriteStartElement("ram:AssociatedDocumentLineDocument");
-                    if (tradeLineItem.AssociatedDocument.LineID.HasValue)
+                    if (!String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.LineID))
                     {
-                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument.LineID));
+                        Writer.WriteElementString("ram:LineID", tradeLineItem.AssociatedDocument.LineID);
                     }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument

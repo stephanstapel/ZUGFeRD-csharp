@@ -37,14 +37,14 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// identifier of the invoice line item
         /// </summary>
-        public int? LineID { get; set; }
+        public string LineID { get; set; }
 
 
         /// <summary>
         /// Initializes a new associated document object, optionally passing a certain lineID
         /// </summary>
         /// <param name="lineID"></param>
-        public AssociatedDocument(int? lineID = null)
+        public AssociatedDocument(string lineID)
         {
             this.LineID = lineID;
         }

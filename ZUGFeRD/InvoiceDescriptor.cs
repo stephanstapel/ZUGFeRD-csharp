@@ -550,33 +550,28 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        public void AddTradeLineCommentItem(string comment)
+        public void AddTradeLineCommentItem(string comment,string lineID = "")
         {
+            if(String.IsNullOrEmpty(lineID))
+            {
+                lineID = GetNextLineId();
+            }
+            else
+            {
+                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.ToLower() == lineID.ToLower()))
+                {
+                    throw new ArgumentException("LineID must be unique");
+                }
+            }
+
             TradeLineItem item = new TradeLineItem()
             {
-                AssociatedDocument = new ZUGFeRD.AssociatedDocument(),
+                AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID),
                 GrossUnitPrice = 0m,
                 NetUnitPrice= 0m,
                 BilledQuantity = 0m,
                 TaxCategoryCode = TaxCategoryCodes.O
             };
-
-            int? _lineID = null;
-            if (this.TradeLineItems.Count > 0)
-            {
-                _lineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
-            }
-
-            if (_lineID.HasValue)
-            {
-                _lineID = _lineID.Value + 1;
-            }
-            else
-            {
-                _lineID = 1;
-            }
-
-            item.AssociatedDocument = new ZUGFeRD.AssociatedDocument(_lineID);
 
             item.AssociatedDocument.Notes.Add(new Note(
                 content: comment,
@@ -610,7 +605,9 @@ namespace s2industries.ZUGFeRD
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null,
+                                     string lineID = ""
+                                     )
         {
             TradeLineItem newItem = new TradeLineItem()
             {
@@ -630,22 +627,19 @@ namespace s2industries.ZUGFeRD
                 LineTotalAmount = netUnitPrice * billedQuantity
             };
 
-            int? _lineID = null;
-            if (this.TradeLineItems.Count > 0)
+            if (String.IsNullOrEmpty(lineID))
             {
-                _lineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
-            }
-
-            if (_lineID.HasValue)
-            {
-                _lineID = _lineID.Value + 1;
+                lineID = GetNextLineId();
             }
             else
             {
-                _lineID = 1;
+                if(this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.ToLower() == lineID.ToLower()))
+                {
+                    throw new ArgumentException("LineID must be unique");
+                }
             }
 
-            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(_lineID);
+            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID);
             if (!String.IsNullOrEmpty(comment))
             {
                 newItem.AssociatedDocument.Notes.Add(new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown));
@@ -702,5 +696,25 @@ namespace s2industries.ZUGFeRD
                 BankName = bankName
             });
         } // !AddDebitorFinancialAccount()
-   }
+
+        private string GetNextLineId()
+        {
+            string _lastLineID = "0";
+            int _lastnumericLineID = 0;
+
+            if (this.TradeLineItems.Count > 0)
+            {
+                _lastLineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
+            }
+
+            if (!int.TryParse(_lastLineID, out _lastnumericLineID))
+            {
+                throw new ArgumentException("When using non numeric LineIds, the LineId must be given for each TradeLineItem");
+            }
+
+            _lastnumericLineID++;
+            return _lastnumericLineID.ToString();
+        }
+
+    }
 }
