@@ -549,13 +549,6 @@ namespace s2industries.ZUGFeRD
             writer.Save(this, filename);
         } // !Save()
 
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use AddTradeLineCommentItem() instead")]
-        public void addTradeLineCommentItem(string comment)
-        {
-            AddTradeLineCommentItem(comment);
-        } // !addTradeLineCommentItem()
-#pragma warning restore IDE1006
 
         public void AddTradeLineCommentItem(string comment)
         {
@@ -594,28 +587,6 @@ namespace s2industries.ZUGFeRD
             this.TradeLineItems.Add(item);
         } // !AddTradeLineCommentItem()
 
-
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use AddTradeLineItem() instead")]
-        public TradeLineItem addTradeLineItem(string name,
-                                     string description = null,
-                                     QuantityCodes unitCode = QuantityCodes.Unknown,
-                                     decimal? unitQuantity = null,
-                                     decimal grossUnitPrice = Decimal.MinValue,
-                                     decimal netUnitPrice = Decimal.MinValue,
-                                     decimal billedQuantity = Decimal.MinValue,
-                                     TaxTypes taxType = TaxTypes.Unknown,
-                                     TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
-                                     decimal taxPercent = Decimal.MinValue,
-                                     string comment = null,
-                                     GlobalID id = null,
-                                     string sellerAssignedID = "", string buyerAssignedID = "",
-                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
-        {
-            return AddTradeLineItem(name, description, unitCode, unitQuantity, grossUnitPrice, netUnitPrice, billedQuantity, taxType, categoryCode, taxPercent, comment, id, sellerAssignedID, buyerAssignedID, deliveryNoteID, deliveryNoteDate, buyerOrderID, buyerOrderDate);
-        } // !addTradeLineItem()
-#pragma warning restore IDE1006
 
         // TODO Rabatt ergänzen:
         // <ram:AppliedTradeAllowanceCharge>
@@ -695,15 +666,6 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeLineItem()
 
 
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use SetPaymentMeans() instead.")]
-        public void setPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
-        {
-            SetPaymentMeans(paymentCode, information, identifikationsnummer, mandatsnummer);
-        } // !setPaymentMeans()
-#pragma warning restore IDE1006
-
-
         public void SetPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         { 
             this.PaymentMeans = new PaymentMeans
@@ -714,15 +676,6 @@ namespace s2industries.ZUGFeRD
                 SEPAMandateReference = mandatsnummer
             };
         } // !SetPaymentMeans()
-
-
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use AddCreditorFinancialAccount() instead.")]
-        public void addCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
-        {
-            AddCreditorFinancialAccount(iban, bic, id, bankleitzahl, bankName, name);
-        } // !addCreditorFinancialAccount()
-#pragma warning restore IDE1006
 
 
         public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
@@ -737,16 +690,6 @@ namespace s2industries.ZUGFeRD
                 Name = name
             });
         } // !AddCreditorFinancialAccount()
-
-
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use AddDebitorFinancialAccount() instead.")]
-        public void addDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
-        {
-            AddDebitorFinancialAccount(iban, bic, id, bankleitzahl, bankName);
-        } // !addDebitorFinancialAccount()
-#pragma warning restore IDE1006
-
 
         public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {

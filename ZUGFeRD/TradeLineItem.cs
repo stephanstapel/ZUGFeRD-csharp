@@ -99,6 +99,9 @@ namespace s2industries.ZUGFeRD
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
         
 
+        /// <summary>
+        /// Initializes a new/ empty trade line item
+        /// </summary>
         public TradeLineItem()
         {
             this.NetUnitPrice = decimal.MinValue;
@@ -107,15 +110,6 @@ namespace s2industries.ZUGFeRD
             this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
             this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
         }
-
-
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use AddTradeAllowanceCharge() instead.")]
-        public void addTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
-        {
-            AddTradeAllowanceCharge(isDiscount, currency, basisAmount, actualAmount, reason);
-        } // !addTradeAllowanceCharge()
-#pragma warning restore IDE1006
 
 
         /// <summary>
@@ -139,15 +133,6 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeAllowanceCharge()
 
 
-#pragma warning disable IDE1006
-        [Obsolete("This function is obsolete. Please use SetDeliveryNoteReferencedDocument() instead.")]
-        public void setDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
-        {
-            SetDeliveryNoteReferencedDocument(deliveryNoteId, deliveryNoteDate);
-        } // !setDeliveryNoteReferencedDocument()
-#pragma warning restore IDE1006
-
-
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
@@ -156,15 +141,6 @@ namespace s2industries.ZUGFeRD
                  IssueDateTime = deliveryNoteDate
             };
         } // !SetDeliveryNoteReferencedDocument()
-
-
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use AddAdditionalReferencedDocument() instead.")]
-        public void addAdditionalReferencedDocument(string id, DateTime? date = null, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown)
-        {
-            AddAdditionalReferencedDocument(id, date, code);
-        } // !addAdditionalReferencedDocument()
-#pragma warning restore IDE1006
 
 
         public void AddAdditionalReferencedDocument(string id, DateTime? date = null, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown)
@@ -178,15 +154,6 @@ namespace s2industries.ZUGFeRD
         } // !AddAdditionalReferencedDocument()
 
 
-#pragma warning disable IDE1006
-        [Obsolete("This function is deprecated. Please use SetOrderReferencedDocument() instead.")]
-        public void setOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
-        {
-            SetOrderReferencedDocument(orderReferencedId, orderReferencedDate);
-        } // !setOrderReferencedDocument()
-#pragma warning restore IDE1006
-
-
         public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
@@ -195,15 +162,6 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = orderReferencedDate
             };
         } // !SetOrderReferencedDocument()
-
-
-#pragma warning disable IDE1006
-        [Obsolete("This function is obsolete. Please use SetContractReferencedDocument() instead.")]
-        public void setContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
-        {
-            SetContractReferencedDocument(contractReferencedId, contractReferencedDate);
-        } // !setContractReferencedDocument()
-#pragma warning restore IDE1006
 
         public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
         {
