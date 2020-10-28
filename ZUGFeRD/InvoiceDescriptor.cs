@@ -39,9 +39,20 @@ namespace s2industries.ZUGFeRD
         /// Invoice date
         /// </summary>
         public DateTime? InvoiceDate { get; set; } = null;
-        public string InvoiceNoAsReference { get; set; } = "";
 
+        /// <summary>
+        /// A textual value used to establish a link between the payment and the invoice, issued by the seller.
+        /// </summary>
+        public string PaymentReference { get; set; } = "";
+
+        /// <summary>
+        /// Order Id
+        /// </summary>
         public string OrderNo { get; set; } = "";
+
+        /// <summary>
+        /// Order date 
+        /// </summary>
         public DateTime? OrderDate { get; set; } = null;
 
         /// <summary>
@@ -208,7 +219,7 @@ namespace s2industries.ZUGFeRD
                 InvoiceDate = invoiceDate,
                 InvoiceNo = invoiceNo,
                 Currency = currency,
-                InvoiceNoAsReference = invoiceNoAsReference
+                PaymentReference = invoiceNoAsReference
             };
             return retval;
         } // !CreateInvoice()

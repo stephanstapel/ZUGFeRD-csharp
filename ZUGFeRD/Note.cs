@@ -24,12 +24,32 @@ using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// An aggregation of business terms to disclose free text which is invoice-relevant, as well as their qualification.
+    /// </summary>
     public class Note
     {
+        /// <summary>
+        /// A free text containing unstructured information which is relevant for the invoice as a whole.
+        /// </summary>
         public string Content { get; set; }
+
+        /// <summary>
+        /// The qualification of the free text of an invoice of BT-22
+        /// </summary>
         public SubjectCodes SubjectCode { get; set; } = SubjectCodes.Unknown;
+
+        /// <summary>
+        /// Bilaterally agreed text blocks which, here, are transferred as code.
+        /// </summary>
         public ContentCodes ContentCode { get; set; } = ContentCodes.Unknown;
 
+        /// <summary>
+        /// Initialize a new node
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="subjectCode"></param>
+        /// <param name="contentCode"></param>
         public Note(string content, SubjectCodes subjectCode, ContentCodes contentCode)
         {
             this.Content = content;

@@ -23,8 +23,16 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Structure for holding tax information (generally applicable trade tax)
+    /// </summary>
     public class Tax
     {
+        /// <summary>
+        /// Returns the amount of the tax (Percent * BasisAmount)
+        /// 
+        /// This information is calculated live.
+        /// </summary>
         public decimal TaxAmount
         {
             get
@@ -32,17 +40,31 @@ namespace s2industries.ZUGFeRD
                 return 0.01m * this.Percent * this.BasisAmount;
             }
         }
+
+        /// <summary>
+        /// VAT category taxable amount
+        /// </summary>
         public decimal BasisAmount { get; set; }
 
         /// <summary>
         /// Tax rate
         /// </summary>
         public decimal Percent { get; set; }
-        public TaxTypes TypeCode { get; set; }
-        public TaxCategoryCodes? CategoryCode { get; set; }
 
         /// <summary>
-        /// Gesamtbetrag Zu- und Abschläge des Steuersatzes, Wert
+        /// Type of tax.
+        /// 
+        /// Generally, the fixed value is: "VAT"
+        /// </summary>
+        public TaxTypes TypeCode { get; set; } = TaxTypes.VAT;
+
+        /// <summary>
+        /// The code valid for the invoiced goods sales tax category.
+        /// </summary>
+        public TaxCategoryCodes? CategoryCode { get; set; } = TaxCategoryCodes.S;
+
+        /// <summary>
+        /// Total amount of charges / allowances on document level
         /// </summary>
         public decimal AllowanceChargeBasisAmount { get; set; }
 
@@ -57,10 +79,5 @@ namespace s2industries.ZUGFeRD
         /// Exemption Reason Text for no Tax
         /// </summary>
         public string ExemptionReason { get; set; }
-
-        public Tax()
-        {
-            this.CategoryCode = TaxCategoryCodes.S;
-        }
     }
 }

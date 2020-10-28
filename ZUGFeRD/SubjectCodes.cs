@@ -74,6 +74,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         SUR,
 
+        /// <summary>
+        /// Unknon/ invalid subject code
+        /// </summary>
         Unknown
     }
 

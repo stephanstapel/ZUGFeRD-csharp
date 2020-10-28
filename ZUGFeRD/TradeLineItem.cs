@@ -23,8 +23,14 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    ///  Structure holding item information
+    /// </summary>
     public class TradeLineItem
     {
+        /// <summary>
+        /// Identifier of an item according to a registered scheme
+        /// </summary>
         public GlobalID GlobalID { get; set; }
         /// <summary>
         /// Artikelnummer des Verkäufers
