@@ -24,6 +24,9 @@ using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Structure containing details of the associated order
+    /// </summary>
     public class BuyerOrderReferencedDocument : BaseReferencedDocument
     {
     }

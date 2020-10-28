@@ -199,9 +199,9 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
             }
 
-            if (!String.IsNullOrEmpty(this.Descriptor.InvoiceNoAsReference))
+            if (!String.IsNullOrEmpty(this.Descriptor.PaymentReference))
             {
-                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.InvoiceNoAsReference);
+                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.PaymentReference);
             }
             Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 

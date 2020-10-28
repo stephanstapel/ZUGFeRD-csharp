@@ -25,7 +25,14 @@ namespace s2industries.ZUGFeRD
 {
     public class PaymentMeans
     {
+        /// <summary>
+        /// The means expressed as code, for how a payment is expected to be or has been settled.
+        /// </summary>
         public PaymentMeansTypeCodes TypeCode { get; set; }
+
+        /// <summary>
+        /// The means expressed as code, for how a payment is expected to be or has been settled.
+        /// </summary>
         public string Information { get; set; }
 
         /// <summary>

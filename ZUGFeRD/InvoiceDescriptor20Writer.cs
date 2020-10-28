@@ -430,9 +430,9 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
             }
 
-            if (!String.IsNullOrEmpty(this.Descriptor.InvoiceNoAsReference))
+            if (!String.IsNullOrEmpty(this.Descriptor.PaymentReference))
             {
-                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.InvoiceNoAsReference);
+                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.PaymentReference);
             }
             Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
@@ -715,6 +715,11 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteElementString("ram:TypeCode", tax.TypeCode.EnumToString());
 
+                if (!String.IsNullOrEmpty(tax.ExemptionReason))
+                {
+                    writer.WriteElementString("ram:ExemptionReason", tax.ExemptionReason);
+                }
+
                 writer.WriteStartElement("ram:BasisAmount");
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
@@ -732,6 +737,12 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram:CategoryCode", tax.CategoryCode?.EnumToString());
                 }
+
+                if (tax.ExemptionReasonCode.HasValue)
+                {
+                    writer.WriteElementString("ram:ExemptionReasonCode", tax.ExemptionReasonCode?.EnumToString());
+                }
+
                 writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tax.Percent));
                 writer.WriteEndElement(); // !ApplicableTradeTax
             }

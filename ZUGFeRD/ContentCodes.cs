@@ -23,6 +23,9 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Code for free text unstructured information about the invoice as a whole
+    /// </summary>
     public enum ContentCodes
     {
         /// <summary>

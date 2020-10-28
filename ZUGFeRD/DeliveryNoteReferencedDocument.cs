@@ -23,6 +23,9 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Structure containing detailed information about the corresponding delivery note
+    /// </summary>
     public class DeliveryNoteReferencedDocument : BaseReferencedDocument
     {
     }

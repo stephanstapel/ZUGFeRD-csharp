@@ -31,6 +31,9 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum QuantityCodes
     {
+        /// <summary>
+        /// Unknown/ invalid quantity code
+        /// </summary>
         Unknown = 0,
 
         /// <summary>

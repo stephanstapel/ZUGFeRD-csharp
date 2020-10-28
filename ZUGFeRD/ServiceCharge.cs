@@ -24,10 +24,13 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
-    /// Logistische Servicegebühren
+    /// Transport and packaging costs
     /// </summary>
     public class ServiceCharge : Charge
     {
+        /// <summary>
+        /// Unstructured text information about the service charge.
+        /// </summary>
         public string Description { get; set; }
     }
 }

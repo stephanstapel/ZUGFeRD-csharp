@@ -23,9 +23,19 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    ///  Structure for holding detailed information on tax information for sender, businss partner and recipient
+    /// </summary>
     public class TaxRegistration
     {
+        /// <summary>
+        /// Tax registration number of the party
+        /// </summary>
         public string No { get; set; }
+
+        /// <summary>
+        /// Scheme identifier attribute
+        /// </summary>
         public TaxRegistrationSchemeID SchemeID { get; set; }
     }
 }
