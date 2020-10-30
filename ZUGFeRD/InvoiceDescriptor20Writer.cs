@@ -132,7 +132,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct
 
-                if (Descriptor.Profile != Profile.Basic)
+                if (Descriptor.Profile != Profile.Minimum && Descriptor.Profile != Profile.BasicWL)
                 {
                     Writer.WriteStartElement("ram:SpecifiedLineTradeAgreement");
 
