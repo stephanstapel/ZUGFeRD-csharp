@@ -283,7 +283,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("ram:SpecifiedLineTradeSettlement");
 
-                if (Descriptor.Profile != Profile.Basic)
+                if (Descriptor.Profile != Profile.Minimum && Descriptor.Profile != Profile.BasicWL)
                 {
                     Writer.WriteStartElement("ram:ApplicableTradeTax");
                     Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
