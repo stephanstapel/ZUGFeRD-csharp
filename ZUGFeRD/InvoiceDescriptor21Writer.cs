@@ -482,7 +482,7 @@ namespace s2industries.ZUGFeRD
 
                     if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
                     {
-                        Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
+                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
                     }
 
                     if (!String.IsNullOrEmpty(document.Name))

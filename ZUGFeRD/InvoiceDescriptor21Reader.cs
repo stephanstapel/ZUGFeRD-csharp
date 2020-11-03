@@ -113,6 +113,42 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
+            /// TODO: Read SellerOrderReferencedDocument
+            /// TODO: Read BuyerOrderReferencedDocument
+            /// TODO: Read ContractReferencedDocument
+
+            if (doc.SelectSingleNode("//ram:AdditionalReferencedDocument", nsmgr) != null)
+            {
+                string _issuerAssignedID = _nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:IssuerAssignedID", nsmgr);                
+                string _typeCode = _nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:TypeCode", nsmgr);
+                string _referenceTypeCode = _nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:ReferenceTypeCode", nsmgr);
+                string _name = _nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:Name", nsmgr);
+                DateTime? _date = _nodeAsDateTime(doc.DocumentElement, "//ram:AdditionalReferencedDocument/ram:FormattedIssueDateTime/ram:IssueDateTime/qdt:DateTimeString", nsmgr);
+
+                if (doc.SelectSingleNode("//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject", nsmgr) != null)
+                {
+                    string _filename = _nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject/@filename", nsmgr);
+                    byte[] data = Convert.FromBase64String(_nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject", nsmgr));
+
+                    retval.AddAdditionalReferencedDocument(issuerAssignedID: _issuerAssignedID,
+                                                           issueDateTime: _date,
+                                                           typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
+                                                           referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
+                                                           name: _name,
+                                                           attachmentBinaryObject: data,
+                                                           filename: _filename);
+                }
+                else
+                {
+                    retval.AddAdditionalReferencedDocument(issuerAssignedID: _issuerAssignedID,
+                                                           issueDateTime: _date,
+                                                           typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
+                                                           referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
+                                                           name: _name);
+                }
+            }
+
+
             retval.ShipTo = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty", nsmgr);
             retval.ShipFrom = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty", nsmgr);
             retval.ActualDeliveryDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString", nsmgr);

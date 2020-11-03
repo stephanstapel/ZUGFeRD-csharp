@@ -280,7 +280,10 @@ namespace ZUGFeRD_Test
                 attachmentBinaryObject: data,
                 filename: "ZUGFeRD-Test.exe");
 
-            desc.Save("xrechnung-with-attachment.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
+
+            string filename = "xrechnung-with-attachment.xml";
+            desc.Save(filename, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(filename);
         } // !_createAndSaveXRechnungWithAttachment()
 
 
