@@ -88,10 +88,26 @@ namespace s2industries.ZUGFeRD
         C,
 
         /// <summary>
+        /// Value Added Tax (VAT) margin scheme - travel agents
+        /// 
+        /// Indication that the VAT margin scheme for travel agents
+        /// is applied.
+        /// </summary>
+        D,
+
+        /// <summary>
         /// Exempt from tax
         /// Code specifying that taxes are not applicable.
         /// </summary>
         E,
+
+        /// <summary>
+        /// Value Added Tax (VAT) margin scheme - second-hand goods
+        /// 
+        /// Indication that the VAT margin scheme for second-hand
+        /// goods is applied.
+        /// </summary>
+        F,
 
         /// <summary>
         /// Free export item, tax not charged
@@ -105,6 +121,53 @@ namespace s2industries.ZUGFeRD
         /// Code specifying a higher rate of duty or tax or fee.
         /// </summary>
         H,
+
+        /// <summary>
+        /// Value Added Tax (VAT) margin scheme - works of art Margin scheme Works of art
+        /// 
+        /// Indication that the VAT margin scheme for works of art
+        /// is applied.
+        /// </summary>
+        I,
+
+        /// <summary>
+        /// Value Added Tax (VAT) margin scheme - collector'
+        /// 
+        /// Indication that the VAT margin scheme for collector's
+        /// items and antiques is applied items and antiques
+        /// </summary>
+        J,
+
+        /// <summary>
+        /// VAT exempt for EEA intra-community supply of goods and services
+        /// 
+        /// A tax category code indicating the item is VAT exempt
+        /// due to an intra-community supply in the European
+        /// Economic Area.
+        /// </summary>
+        K,
+
+        /// <summary>
+        /// Canary Islands general indirect tax
+        /// 
+        /// Impuesto General Indirecto Canario (IGIC) is an indirect
+        /// tax levied on goods and services supplied in the Canary
+        /// Islands (Spain) by traders and professionals, as well as
+        /// on import of goods.
+        /// </summary>
+        L,
+
+        /// <summary>
+        /// Tax for production, services and importation in Ceuta and Melilla
+        /// 
+        /// Impuesto sobre la Produccion, los Servicios y la
+        /// Importacion (IPSI) is an indirect municipal tax, levied
+        /// on the production, processing and import of all kinds of
+        /// movable tangible property, the supply of services and
+        /// the transfer of immovable property located in the cities
+        /// of Ceuta and Melilla.
+        /// </summary>
+        M,
 
         /// <summary>
         /// Services outside scope of tax
