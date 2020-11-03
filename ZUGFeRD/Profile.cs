@@ -102,6 +102,7 @@ namespace s2industries.ZUGFeRD
                 case "urn:cen.eu:en16931:2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2": return Profile.XRechnung;
+                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0": return Profile.XRechnung;
             }
 
             return Profile.Unknown;
@@ -138,7 +139,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.BasicWL: return "urn:factur-x.eu:1p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
-                        case Profile.XRechnung: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2";
+                        case Profile.XRechnung: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    
                 default:
