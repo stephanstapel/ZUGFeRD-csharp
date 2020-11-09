@@ -550,11 +550,18 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        public void AddTradeLineCommentItem(string comment,string lineID = "")
+        public void AddTradeLineCommentItem(string comment)
+        {
+            AddTradeLineCommentItem(GetNextLineId(), comment);
+
+        } // !AddTradeLineCommentItem()
+
+
+        public void AddTradeLineCommentItem(string lineID, string comment)
         {
             if(String.IsNullOrEmpty(lineID))
             {
-                lineID = GetNextLineId();
+                throw new ArgumentException("LineID cannot be Null or Empty");
             }
             else
             {
@@ -583,7 +590,7 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeLineCommentItem()
 
 
-        // TODO Rabatt ergänzen:
+
         // <ram:AppliedTradeAllowanceCharge>
         //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
         //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
@@ -605,8 +612,54 @@ namespace s2industries.ZUGFeRD
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                     string lineID = ""
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
+        {
+            return AddTradeLineItem(lineID: GetNextLineId(),
+                             name: name,
+                             description: description,
+                             unitCode: unitCode,
+                             unitQuantity: unitQuantity,
+                             grossUnitPrice: grossUnitPrice,
+                             netUnitPrice: netUnitPrice,
+                             billedQuantity: billedQuantity,
+                             taxType: taxType,
+                             categoryCode: categoryCode,
+                             taxPercent: taxPercent,
+                             comment: comment,
+                             id: id,
+                             sellerAssignedID: sellerAssignedID,
+                             deliveryNoteID: deliveryNoteID,
+                             buyerOrderID: buyerOrderID);
+
+        } // !AddTradeLineItem()
+
+
+
+
+        // TODO Rabatt ergänzen:
+        // <ram:AppliedTradeAllowanceCharge>
+        //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
+        //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
+        //     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
+        //     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
+        //     <ram:Reason>Artikelrabatt 1</ram:Reason>
+        // </ram:AppliedTradeAllowanceCharge>
+        public TradeLineItem AddTradeLineItem(string lineID,
+                                     string name,
+                                     string description = null,
+                                     QuantityCodes unitCode = QuantityCodes.Unknown,
+                                     decimal? unitQuantity = null,
+                                     decimal grossUnitPrice = Decimal.MinValue,
+                                     decimal netUnitPrice = Decimal.MinValue,
+                                     decimal billedQuantity = Decimal.MinValue,
+                                     TaxTypes taxType = TaxTypes.Unknown,
+                                     TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
+                                     decimal taxPercent = Decimal.MinValue,
+                                     string comment = null,
+                                     GlobalID id = null,
+                                     string sellerAssignedID = "", string buyerAssignedID = "",
+                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null
                                      )
         {
             TradeLineItem newItem = new TradeLineItem()
@@ -629,7 +682,7 @@ namespace s2industries.ZUGFeRD
 
             if (String.IsNullOrEmpty(lineID))
             {
-                lineID = GetNextLineId();
+                throw new ArgumentException("LineID cannot be Null or Empty");
             }
             else
             {
