@@ -389,11 +389,8 @@ namespace s2industries.ZUGFeRD
 
 
             if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument", nsmgr) != null)
-            {              
-                item.AssociatedDocument = new AssociatedDocument()
-                {
-                    LineID = _nodeAsInt(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, Int32.MaxValue)
-                };
+            {
+                item.AssociatedDocument = new AssociatedDocument(_nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr));
 
                 XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//ram:AssociatedDocumentLineDocument/ram:IncludedNote", nsmgr);
                 foreach (XmlNode noteNode in noteNodes)
@@ -405,10 +402,6 @@ namespace s2industries.ZUGFeRD
                     ));
                 }
 
-                if (item.AssociatedDocument.LineID == Int32.MaxValue) // a bit dirty, but works for now
-                {
-                    item.AssociatedDocument.LineID = null;
-                }
             }
 
             XmlNodeList appliedTradeAllowanceChargeNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedSupplyChainTradeAgreement/ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge", nsmgr);

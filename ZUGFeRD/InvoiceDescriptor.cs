@@ -552,31 +552,33 @@ namespace s2industries.ZUGFeRD
 
         public void AddTradeLineCommentItem(string comment)
         {
+            AddTradeLineCommentItem(GetNextLineId(), comment);
+
+        } // !AddTradeLineCommentItem()
+
+
+        public void AddTradeLineCommentItem(string lineID, string comment)
+        {
+            if(String.IsNullOrEmpty(lineID))
+            {
+                throw new ArgumentException("LineID cannot be Null or Empty");
+            }
+            else
+            {
+                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.ToLower() == lineID.ToLower()))
+                {
+                    throw new ArgumentException("LineID must be unique");
+                }
+            }
+
             TradeLineItem item = new TradeLineItem()
             {
-                AssociatedDocument = new ZUGFeRD.AssociatedDocument(),
+                AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID),
                 GrossUnitPrice = 0m,
                 NetUnitPrice= 0m,
                 BilledQuantity = 0m,
                 TaxCategoryCode = TaxCategoryCodes.O
             };
-
-            int? _lineID = null;
-            if (this.TradeLineItems.Count > 0)
-            {
-                _lineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
-            }
-
-            if (_lineID.HasValue)
-            {
-                _lineID = _lineID.Value + 1;
-            }
-            else
-            {
-                _lineID = 1;
-            }
-
-            item.AssociatedDocument = new ZUGFeRD.AssociatedDocument(_lineID);
 
             item.AssociatedDocument.Notes.Add(new Note(
                 content: comment,
@@ -588,7 +590,7 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeLineCommentItem()
 
 
-        // TODO Rabatt ergänzen:
+
         // <ram:AppliedTradeAllowanceCharge>
         //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
         //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
@@ -612,6 +614,54 @@ namespace s2industries.ZUGFeRD
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderID = "", DateTime? buyerOrderDate = null)
         {
+            return AddTradeLineItem(lineID: GetNextLineId(),
+                             name: name,
+                             description: description,
+                             unitCode: unitCode,
+                             unitQuantity: unitQuantity,
+                             grossUnitPrice: grossUnitPrice,
+                             netUnitPrice: netUnitPrice,
+                             billedQuantity: billedQuantity,
+                             taxType: taxType,
+                             categoryCode: categoryCode,
+                             taxPercent: taxPercent,
+                             comment: comment,
+                             id: id,
+                             sellerAssignedID: sellerAssignedID,
+                             deliveryNoteID: deliveryNoteID,
+                             buyerOrderID: buyerOrderID);
+
+        } // !AddTradeLineItem()
+
+
+
+
+        // TODO Rabatt ergänzen:
+        // <ram:AppliedTradeAllowanceCharge>
+        //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
+        //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
+        //     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
+        //     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
+        //     <ram:Reason>Artikelrabatt 1</ram:Reason>
+        // </ram:AppliedTradeAllowanceCharge>
+        public TradeLineItem AddTradeLineItem(string lineID,
+                                     string name,
+                                     string description = null,
+                                     QuantityCodes unitCode = QuantityCodes.Unknown,
+                                     decimal? unitQuantity = null,
+                                     decimal grossUnitPrice = Decimal.MinValue,
+                                     decimal netUnitPrice = Decimal.MinValue,
+                                     decimal billedQuantity = Decimal.MinValue,
+                                     TaxTypes taxType = TaxTypes.Unknown,
+                                     TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
+                                     decimal taxPercent = Decimal.MinValue,
+                                     string comment = null,
+                                     GlobalID id = null,
+                                     string sellerAssignedID = "", string buyerAssignedID = "",
+                                     string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null
+                                     )
+        {
             TradeLineItem newItem = new TradeLineItem()
             {
                 GlobalID = id,
@@ -630,22 +680,19 @@ namespace s2industries.ZUGFeRD
                 LineTotalAmount = netUnitPrice * billedQuantity
             };
 
-            int? _lineID = null;
-            if (this.TradeLineItems.Count > 0)
+            if (String.IsNullOrEmpty(lineID))
             {
-                _lineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
-            }
-
-            if (_lineID.HasValue)
-            {
-                _lineID = _lineID.Value + 1;
+                throw new ArgumentException("LineID cannot be Null or Empty");
             }
             else
             {
-                _lineID = 1;
+                if(this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.ToLower() == lineID.ToLower()))
+                {
+                    throw new ArgumentException("LineID must be unique");
+                }
             }
 
-            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(_lineID);
+            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID);
             if (!String.IsNullOrEmpty(comment))
             {
                 newItem.AssociatedDocument.Notes.Add(new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown));
@@ -702,5 +749,25 @@ namespace s2industries.ZUGFeRD
                 BankName = bankName
             });
         } // !AddDebitorFinancialAccount()
-   }
+
+        private string GetNextLineId()
+        {
+            string _lastLineID = "0";
+            int _lastnumericLineID = 0;
+
+            if (this.TradeLineItems.Count > 0)
+            {
+                _lastLineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
+            }
+
+            if (!int.TryParse(_lastLineID, out _lastnumericLineID))
+            {
+                throw new ArgumentException("When using non numeric LineIds, the LineId must be given for each TradeLineItem");
+            }
+
+            _lastnumericLineID++;
+            return _lastnumericLineID.ToString();
+        }
+
+    }
 }
