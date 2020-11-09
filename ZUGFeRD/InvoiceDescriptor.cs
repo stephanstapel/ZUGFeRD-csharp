@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-
+using System.Runtime.CompilerServices;
 
 namespace s2industries.ZUGFeRD
 {
@@ -550,13 +550,26 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
+        /// <summary>
+        /// Adds a new comment as a dedicated line of the invoice.
+        /// 
+        /// The line id is generated automatically
+        /// </summary>
+        /// <param name="comment"></param>
         public void AddTradeLineCommentItem(string comment)
         {
-            AddTradeLineCommentItem(GetNextLineId(), comment);
+            AddTradeLineCommentItem(_getNextLineId(), comment);
 
         } // !AddTradeLineCommentItem()
 
 
+        /// <summary>
+        /// Adds a new comment as a dedicated line of the invoice.
+        /// 
+        /// The line id is passed as a parameter
+        /// </summary>
+        /// <param name="lineID"></param>
+        /// <param name="comment"></param>
         public void AddTradeLineCommentItem(string lineID, string comment)
         {
             if(String.IsNullOrEmpty(lineID))
@@ -591,13 +604,29 @@ namespace s2industries.ZUGFeRD
 
 
 
-        // <ram:AppliedTradeAllowanceCharge>
-        //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
-        //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
-        //     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
-        //     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
-        //     <ram:Reason>Artikelrabatt 1</ram:Reason>
-        // </ram:AppliedTradeAllowanceCharge>
+
+        /// <summary>
+        /// Adds a new line to the invoice. The line id is generated automatically.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <param name="unitCode"></param>
+        /// <param name="unitQuantity"></param>
+        /// <param name="grossUnitPrice"></param>
+        /// <param name="netUnitPrice"></param>
+        /// <param name="billedQuantity"></param>
+        /// <param name="taxType"></param>
+        /// <param name="categoryCode"></param>
+        /// <param name="taxPercent"></param>
+        /// <param name="comment"></param>
+        /// <param name="id"></param>
+        /// <param name="sellerAssignedID"></param>
+        /// <param name="buyerAssignedID"></param>
+        /// <param name="deliveryNoteID"></param>
+        /// <param name="deliveryNoteDate"></param>
+        /// <param name="buyerOrderID"></param>
+        /// <param name="buyerOrderDate"></param>
+        /// <returns></returns>        
         public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
                                      QuantityCodes unitCode = QuantityCodes.Unknown,
@@ -614,7 +643,7 @@ namespace s2industries.ZUGFeRD
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderID = "", DateTime? buyerOrderDate = null)
         {
-            return AddTradeLineItem(lineID: GetNextLineId(),
+            return AddTradeLineItem(lineID: _getNextLineId(),
                              name: name,
                              description: description,
                              unitCode: unitCode,
@@ -635,7 +664,9 @@ namespace s2industries.ZUGFeRD
 
 
 
-
+        /// <summary>
+        /// Adds a new line to the invoice. The line id is passed as a parameter.
+        /// </summary>
         // TODO Rabatt ergänzen:
         // <ram:AppliedTradeAllowanceCharge>
         //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
@@ -649,9 +680,9 @@ namespace s2industries.ZUGFeRD
                                      string description = null,
                                      QuantityCodes unitCode = QuantityCodes.Unknown,
                                      decimal? unitQuantity = null,
-                                     decimal grossUnitPrice = Decimal.MinValue,
-                                     decimal netUnitPrice = Decimal.MinValue,
-                                     decimal billedQuantity = Decimal.MinValue,
+                                     decimal grossUnitPrice = 0,
+                                     decimal netUnitPrice = 0,
+                                     decimal billedQuantity = 0,
                                      TaxTypes taxType = TaxTypes.Unknown,
                                      TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
                                      decimal taxPercent = Decimal.MinValue,
@@ -676,8 +707,7 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = billedQuantity,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent,
-                LineTotalAmount = netUnitPrice * billedQuantity
+                TaxPercent = taxPercent                
             };
 
             if (String.IsNullOrEmpty(lineID))
@@ -738,6 +768,7 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddCreditorFinancialAccount()
 
+
         public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             this.DebitorBankAccounts.Add(new BankAccount()
@@ -750,24 +781,11 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddDebitorFinancialAccount()
 
-        private string GetNextLineId()
+
+        private string _getNextLineId()
         {
-            string _lastLineID = "0";
-            int _lastnumericLineID = 0;
-
-            if (this.TradeLineItems.Count > 0)
-            {
-                _lastLineID = this.TradeLineItems.Last().AssociatedDocument.LineID;
-            }
-
-            if (!int.TryParse(_lastLineID, out _lastnumericLineID))
-            {
-                throw new ArgumentException("When using non numeric LineIds, the LineId must be given for each TradeLineItem");
-            }
-
-            _lastnumericLineID++;
-            return _lastnumericLineID.ToString();
-        }
-
+            int highestLineId = this.TradeLineItems.Select(i => { if (Int32.TryParse(i.AssociatedDocument?.LineID, out int id) == true) return id; else return 0; }).DefaultIfEmpty(0).Max();
+            return (highestLineId + 1).ToString();
+        } // !_getNextLineId()
     }
 }
