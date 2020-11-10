@@ -68,6 +68,29 @@ desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% S
 desc.Save("output.xml");
 ```
 
+## Handling of line ids
+The library allows to operate in two modes: you can either let the library generate the line ids automatically or you can alternatively pass distinct line ids. This is helpful if you want to convert existing invoices, e.g. from ERP systems, to ZUGFeRD/ Factur-X.
+
+To let the library create line ids, you can use:
+
+```csharp
+InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
+desc.AddTradeLineItem("Item name", "Detail description", QuantityCodes.PCE, ....);
+```
+
+This will generate an invoice with trade line item numbered as '1'.
+
+To pass pre-defined line ids, this is the way to go:
+
+```csharp
+InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
+desc.AddTradeLineItem(lineId: "0001", "Item name", "Detail description", QuantityCodes.PCE, ....);
+desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", QuantityCodes.PCE, ....);
+```
+
+which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
+
+
 # Using ZUGFeRD 1.x, ZUGFeRD 2.x and XRechnung
 In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
 
