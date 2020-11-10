@@ -67,7 +67,13 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770)
         /// </summary>
-        XRechnung = 32
+        XRechnung = 32,
+
+        /// <summary>
+        /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770).
+        /// Important note: using this profile will generate a version 1 XRechnung (as valid until 31/12/2020)
+        /// </summary>
+        XRechnung1 = 64
     }
 
 
@@ -101,7 +107,7 @@ namespace s2industries.ZUGFeRD
                 case "urn:factur-x.eu:1p0:basicwl": return Profile.BasicWL;
                 case "urn:cen.eu:en16931:2017": return Profile.Comfort;
                 case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2": return Profile.XRechnung;
+                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2": return Profile.XRechnung1;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0": return Profile.XRechnung;
             }
 
@@ -139,6 +145,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.BasicWL: return "urn:factur-x.eu:1p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
+                        case Profile.XRechnung1: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2";
                         case Profile.XRechnung: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    

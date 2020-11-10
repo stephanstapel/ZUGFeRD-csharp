@@ -137,17 +137,17 @@ namespace ZUGFeRD_Test
 
 
         [TestMethod]
-        public void TestReferenceXRechnungCII()
+        public void TestReferenceXRechnung1CII()
         {
             string path = @"..\..\..\demodata\xRechnung\xRechnung CII.xml";
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
-            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+            Assert.AreEqual(desc.Profile, Profile.XRechnung1);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
             Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
             Assert.AreEqual(desc.TradeLineItems.Count, 2);
             Assert.AreEqual(desc.LineTotalAmount, 1445.98m);
-        } // !TestReferenceXRechnungCII()
+        } // !TestReferenceXRechnung1CII()
 
 
         [TestMethod]
@@ -181,6 +181,38 @@ namespace ZUGFeRD_Test
                     break;
                 }
             }
-        }
+        } // !TestInvoiceWithAttachment()
+
+
+        [TestMethod]
+        public void TestXRechnung1()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung1);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(desc.Profile, Profile.XRechnung1);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Profile, Profile.XRechnung1);
+        } // !TestXRechnung1()
+
+
+        [TestMethod]
+        public void TestXRechnung2()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Profile, Profile.XRechnung);
+        } // !TestXRechnung2()
     }
 }
