@@ -91,7 +91,7 @@ desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", Quantit
 which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
 
 
-# Using ZUGFeRD 1.x, ZUGFeRD 2.x and XRechnung
+# Using ZUGFeRD 1.x, ZUGFeRD 2.x
 In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
 
 ```csharp
@@ -146,6 +146,8 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // sa
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1
 ```
 
+For reading and writing XRechnung invoices, please see below.
+
 # Special references
 The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
 
@@ -157,14 +159,25 @@ desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt 
 desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
 ```
 
-# Special features for XRechnung
+# Support for XRechnung
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
 
 ```csharp
-descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as XRechnung
+descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as XRechnung 2.0
 ```
 
-However, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the xrechnung.xml document:
+This will save the invoice as XRechnung 2.0 as valid from 2021/01/01.
+
+If you want to store invoices which are validated successfully by the KoSIT validator before 2021/01/01, you can still write invoices in the old format:
+
+```csharp
+descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung1); // save as XRechnung 1.2
+```
+
+The content is 100% identical to XRechnung 2.0, just the headers will be different.
+
+
+Furthermore, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the xrechnung.xml document:
 
 ```csharp
 InvoiceDescriptor desc = _createInvoice();
