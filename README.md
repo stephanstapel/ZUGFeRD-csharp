@@ -37,7 +37,7 @@ Prerequisites:
 
 Open ZUGFeRD/ZUGFeRD.sln solution file. Choose Release or Debug mode and hit 'Build'. That's it.
 
-For running the demo, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the application.
+For running the tests, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the unit tests. The tests show good cases on how to use the library.
 
 # Creating invoices
 Central class for users is class InvoiceDescriptor.
