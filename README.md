@@ -9,7 +9,7 @@ A description of the library can be found here:
 
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
 
-## Relationship between the different standard
+## Relationship between the different standards
 Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
 
 - ZUGFeRD was developed by a German initiative as a standard for electronic invoices (https://www.ferd-net.de/).
