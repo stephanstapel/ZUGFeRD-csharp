@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD
             { ".jpg", "image/jpeg" },
             { ".jpeg", "image/jpeg" },
             { ".csv", "text/csv" },
-            { ".xslx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+            { ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
             { ".ods", "application/vnd.oasis.opendocument.spreadsheet" },
             { ".xml", "application/xml" }
         };
