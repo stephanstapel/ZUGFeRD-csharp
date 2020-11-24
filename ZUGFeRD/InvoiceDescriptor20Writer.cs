@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -33,7 +33,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Saves the given invoice to the given stream.
-        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.        
+        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="stream"></param>
@@ -56,7 +56,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("rsm:CrossIndustryInvoice");
             Writer.WriteAttributeString("xmlns", "a", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
             Writer.WriteAttributeString("xmlns", "rsm", null, "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
-            Writer.WriteAttributeString("xmlns", "qdt", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:10");
+            Writer.WriteAttributeString("xmlns", "qdt", null, "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
             Writer.WriteAttributeString("xmlns", "ram", null, "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
             Writer.WriteAttributeString("xmlns", "xs", null, "http://www.w3.org/2001/XMLSchema");
             Writer.WriteAttributeString("xmlns", "udt", null, "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
@@ -233,7 +233,7 @@ namespace s2industries.ZUGFeRD
                 }
                 Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
 
-                Writer.WriteEndElement(); // !ram:SpecifiedLineTradeAgreement                
+                Writer.WriteEndElement(); // !ram:SpecifiedLineTradeAgreement
 
                 if (Descriptor.Profile != Profile.Basic)
                 {
@@ -284,7 +284,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
                 Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
                 Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
-                Writer.WriteEndElement(); // !ram:ApplicableTradeTax                
+                Writer.WriteEndElement(); // !ram:ApplicableTradeTax
 
                 if (Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
                 {
@@ -337,15 +337,16 @@ namespace s2industries.ZUGFeRD
             if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
             {
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
                 if (this.Descriptor.OrderDate.HasValue)
                 {
                     Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    Writer.WriteStartElement("udt:DateTimeString");
-                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value, false));
-                    Writer.WriteEndElement(); // !udt:DateTimeString	
-                    Writer.WriteEndElement(); // !FormattedIssueDateTime	
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
+                    Writer.WriteEndElement(); // !qdt:DateTimeString
+                    Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                 }
-                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
