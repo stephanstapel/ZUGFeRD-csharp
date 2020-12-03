@@ -118,7 +118,7 @@ namespace s2industries.ZUGFeRD
         public Profile Profile { get; internal set; } = Profile.Basic;
         public InvoiceType Type { get; set; } = InvoiceType.Invoice;
         public string ReferenceOrderNo { get; set; }
-        public List<TradeLineItem> TradeLineItems { get; set; } = new List<TradeLineItem>();
+        public List<TradeLineItem> TradeLineItems { get; internal set; } = new List<TradeLineItem>();
 
 
         public decimal LineTotalAmount { get; set; } = Decimal.MinValue;
