@@ -103,9 +103,6 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !rsm:ExchangedDocument
             #endregion
 
-            /*
-             * @todo continue here to adopt v2 tag names
-             */
 
             #region SpecifiedSupplyChainTradeTransaction
             //Gruppierung der Informationen zum Geschäftsvorfall
@@ -428,12 +425,17 @@ namespace s2industries.ZUGFeRD
             }
 
             #region SellerTradeParty
+            // BT-31: this.Descriptor.SellerTaxRegistration
             _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
             #endregion
 
             #region BuyerTradeParty
+            // BT-48: this.Descriptor.BuyerTaxRegistration
             _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
             #endregion
+
+            /// TODO: implement SellerTaxRepresentativeTradeParty
+            /// BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
 
             #region BuyerOrderReferencedDocument
             if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
@@ -574,14 +576,8 @@ namespace s2industries.ZUGFeRD
             #region ApplicableHeaderTradeSettlement
             Writer.WriteStartElement("ram:ApplicableHeaderTradeSettlement");
 
-            if (Descriptor.Profile == Profile.Extended)
-            {
-                _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee);
-            }
-            if (Descriptor.Profile != Profile.Minimum)
-            {
-                _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
-            }
+            _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee, profile: Profile.Extended);
+            _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee, profile: ALL_PROFILES ^ Profile.Minimum);
 
             if (!String.IsNullOrEmpty(this.Descriptor.PaymentReference))
             {
