@@ -1060,10 +1060,10 @@ namespace s2industries.ZUGFeRD
                 {
                     _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
-                else if ( ((profile & Profile.XRechnung) == Profile.XRechnung) || ((profile & Profile.XRechnung1) == Profile.XRechnung1) )
-                {
-                    _writeOptionalContact(writer, "ram:DefinedTradeContact", new Contact(), Profile.XRechnung1 | Profile.XRechnung);
-                }
+                //else if ( ((profile & Profile.XRechnung) == Profile.XRechnung) || ((profile & Profile.XRechnung1) == Profile.XRechnung1) )
+                //{
+                //    _writeOptionalContact(writer, "ram:DefinedTradeContact", new Contact(), Profile.XRechnung1 | Profile.XRechnung);
+                //}
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
                 writer.WriteElementString("ram:PostcodeCode", party.Postcode);
