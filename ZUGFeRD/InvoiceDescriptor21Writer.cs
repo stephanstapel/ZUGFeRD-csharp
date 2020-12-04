@@ -407,7 +407,40 @@ namespace s2industries.ZUGFeRD
 
                 #region ReceivableSpecifiedTradeAccountingAccount
                 //Detailinformationen zur Buchungsreferenz
-                //ToDo: ReceivableSpecifiedTradeAccountingAccount
+                if (descriptor.Profile == Profile.XRechnung1 || descriptor.Profile == Profile.XRechnung && tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts.Count > 0)
+                {
+                    //only one ReceivableSpecifiedTradeAccountingAccount (BT-133) is allowed in Profile XRechnung
+                    Writer.WriteStartElement("ram:ReceivableSpecifiedTradeAccountingAccount", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    {
+                        Writer.WriteStartElement("ram:ID");
+                        Writer.WriteValue(tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts[0].TradeAccountID);  //BT-133
+                        Writer.WriteEndElement(); // !ram:ID
+                    }
+                    Writer.WriteEndElement(); // !ram:ReceivableSpecifiedTradeAccountingAccount
+                }
+                else
+                {
+                    //multiple ReceivableSpecifiedTradeAccountingAccounts are allowed in other profiles
+                    foreach (ReceivableSpecifiedTradeAccountingAccount RSTA in tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts)
+                    {
+                        Writer.WriteStartElement("ram:ReceivableSpecifiedTradeAccountingAccount", Profile.Comfort | Profile.Extended);
+
+                        {
+                            Writer.WriteStartElement("ram:ID");
+                            Writer.WriteValue(RSTA.TradeAccountID);
+                            Writer.WriteEndElement(); // !ram:ID
+                        }
+
+                        if (RSTA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unspecified)
+                        {
+                            Writer.WriteStartElement("ram:TypeCode", Profile.Extended);
+                            Writer.WriteValue(((int)RSTA.TradeAccountTypeCode).ToString());
+                            Writer.WriteEndElement(); // !ram:TypeCode
+                        }
+
+                        Writer.WriteEndElement(); // !ram:ReceivableSpecifiedTradeAccountingAccount
+                    }
+                }
                 #endregion
 
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeSettlement
@@ -810,6 +843,48 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
+            #region ReceivableSpecifiedTradeAccountingAccount
+            if (this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts != null && this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts.Count > 0)
+            {
+                if (descriptor.Profile == Profile.XRechnung1 || descriptor.Profile == Profile.XRechnung)
+                {
+                    if (!string.IsNullOrEmpty(this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts[0].TradeAccountID))
+                    {
+                        Writer.WriteStartElement("ram:ReceivableSpecifiedTradeAccountingAccount");
+                        {
+                            //BT-19
+                            Writer.WriteStartElement("ram:ID");
+                            Writer.WriteValue(this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts[0].TradeAccountID);
+                            Writer.WriteEndElement(); // !ram:ID
+                        }
+                        Writer.WriteEndElement(); // !ram:ReceivableSpecifiedTradeAccountingAccount
+                    }
+                }
+                else
+                {
+                    foreach (ReceivableSpecifiedTradeAccountingAccount RSTAA in this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts)
+                    {
+                        Writer.WriteStartElement("ram:ReceivableSpecifiedTradeAccountingAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended);
+                        
+                        {   
+                            //BT-19
+                            Writer.WriteStartElement("ram:ID", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended);
+                            Writer.WriteValue(RSTAA.TradeAccountID);
+                            Writer.WriteEndElement(); // !ram:ID
+                        }
+
+                        if (RSTAA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unspecified)
+                        {
+                            Writer.WriteStartElement("ram:TypeCode", Profile.Extended);
+                            Writer.WriteValue(((int)RSTAA.TradeAccountTypeCode).ToString());
+                            Writer.WriteEndElement(); // !ram:TypeCode
+                        }
+
+                        Writer.WriteEndElement(); // !ram:ReceivableSpecifiedTradeAccountingAccount
+                    }
+                }
+            }
+            #endregion
             Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
 
             #endregion
