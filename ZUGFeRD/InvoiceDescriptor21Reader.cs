@@ -419,10 +419,11 @@ namespace s2industries.ZUGFeRD
                             //TODO
                             break;
                         case "ram:ReceivableSpecifiedTradeAccountingAccount":
-                            ReceivableSpecifiedTradeAccountingAccount RSTAA = new ReceivableSpecifiedTradeAccountingAccount();
-                            RSTAA.TradeAccountID = _nodeAsString(LineTradeSettlementNode, "./ram:ID", nsmgr);
-                            RSTAA.TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(LineTradeSettlementNode, ".//ram:TypeCode", nsmgr);
-                            item.ReceivableSpecifiedTradeAccountingAccounts.Add(RSTAA);
+                            item.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+                            {
+                                TradeAccountID = _nodeAsString(LineTradeSettlementNode, "./ram:ID", nsmgr),
+                                TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(LineTradeSettlementNode, ".//ram:TypeCode", nsmgr)
+                            });
                             break;
                     }
                 }
