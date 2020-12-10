@@ -119,6 +119,13 @@ namespace s2industries.ZUGFeRD
         public bool IsTest { get; set; } = false;
         public Profile Profile { get; internal set; } = Profile.Basic;
         public InvoiceType Type { get; set; } = InvoiceType.Invoice;
+
+        /// <summary>
+        /// The identifier is defined by the buyer (e.g. contact ID, department, office ID, project code), but provided by the seller in the invoice. 
+        /// In France it needs to be filled with 999, if not available.
+        /// 
+        /// BT-10
+        /// </summary>
         public string ReferenceOrderNo { get; set; }
         public List<TradeLineItem> TradeLineItems { get; internal set; } = new List<TradeLineItem>();
 
