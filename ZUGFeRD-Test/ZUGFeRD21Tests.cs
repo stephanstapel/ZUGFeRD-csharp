@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -214,5 +215,56 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.Profile, Profile.XRechnung);
         } // !TestXRechnung2()
+
+        [TestMethod]
+        public void TestContractReferencedDocumentWithXRechnung()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.ContractReferencedDocument = new ContractReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.ContractReferencedDocument.ID, uuid);
+            Assert.AreEqual(loadedInvoice.ContractReferencedDocument.IssueDateTime, null); // explicitly not to be set in XRechnung
+        } // !TestContractReferencedDocumentWithXRechnung()
+ 
+
+        [TestMethod]
+        public void TestContractReferencedDocumentWithExtended()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.ContractReferencedDocument = new ContractReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(desc.Profile, Profile.Extended);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.ContractReferencedDocument.ID, uuid);
+            Assert.AreEqual(loadedInvoice.ContractReferencedDocument.IssueDateTime, issueDateTime); // explicitly not to be set in XRechnung
+        } // !TestContractReferencedDocumentWithExtended()        
     }
 }
