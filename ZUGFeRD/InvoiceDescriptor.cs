@@ -74,6 +74,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Detailed information on the associated contract
+        /// 
+        /// BT-12
         /// </summary>
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
 
