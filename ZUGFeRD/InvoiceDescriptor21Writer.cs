@@ -457,6 +457,7 @@ namespace s2industries.ZUGFeRD
             #endregion            
 
             #region ContractReferencedDocument
+            // BT-12
             if (this.Descriptor.ContractReferencedDocument != null)
             {
                 Writer.WriteStartElement("ram:ContractReferencedDocument");
@@ -470,6 +471,8 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !qdt:DateTimeString
                     Writer.WriteEndElement(); // !IssueDateTime()                    
                 }
+
+                Writer.WriteEndElement(); // !ram:ContractReferencedDocument
             }
             #endregion
 
