@@ -33,11 +33,14 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class InvoiceValidator
     {
-        public static void ValidateAndPrint(InvoiceDescriptor descriptor, string filename)
+        public static void ValidateAndPrint(InvoiceDescriptor descriptor, string filename = null)
         {
             List<string> output = Validate(descriptor);
 
-            System.IO.File.WriteAllText(filename, string.Join("\n", output));
+            if (!String.IsNullOrEmpty(filename))
+            {
+                System.IO.File.WriteAllText(filename, string.Join("\n", output));
+            }
 
             foreach (string line in output)
             {
