@@ -430,22 +430,49 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ApplicableHeaderTradeDelivery
 
             Writer.WriteStartElement("ram:ApplicableHeaderTradeSettlement");
+            // order of sub-elements of ApplicableHeaderTradeSettlement:
+            //   1. CreditorReferenceID (optional)
+            //   2. PaymentReference (optional)
+            //   3. TaxCurrencyCode (optional)
+            //   4. InvoiceCurrencyCode (optional)
+            //   5. InvoiceIssuerReference (optional)
+            //   6. InvoicerTradeParty (optional)
+            //   7. InvoiceeTradeParty (optional)
+            //   8. PayeeTradeParty (optional)
+            //   9. TaxApplicableTradeCurrencyExchange (optional)
+            //  10. SpecifiedTradeSettlementPaymentMeans (optional)
+            //  11. ApplicableTradeTax (optional)
+            //  12. BillingSpecifiedPeriod (optional)
+            //  13. SpecifiedTradeAllowanceCharge (optional)
+            //  14. SpecifiedLogisticsServiceCharge (optional)
+            //  15. SpecifiedTradePaymentTerms (optional)
+            //  16. SpecifiedTradeSettlementHeaderMonetarySummation
+            //  17. InvoiceReferencedDocument (optional)
+            //  18. ReceivableSpecifiedTradeAccountingAccount (optional)
+            //  19. SpecifiedAdvancePayment (optional)
 
+            //   2. PaymentReference (optional)
+            if (!String.IsNullOrEmpty(this.Descriptor.PaymentReference))
+            {
+                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.PaymentReference);
+            }
+
+            //   4. InvoiceCurrencyCode (optional)
+            Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
+
+            //   7. InvoiceeTradeParty (optional)
             if (Descriptor.Profile == Profile.Extended)
             {
                 _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee);
             }
+
+            //   8. PayeeTradeParty (optional)
             if (Descriptor.Profile != Profile.Minimum)
             {
                 _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee);
             }
 
-            if (!String.IsNullOrEmpty(this.Descriptor.PaymentReference))
-            {
-                _writeOptionalElementString(Writer, "ram:PaymentReference", this.Descriptor.PaymentReference);
-            }
-            Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
-
+            //  10. SpecifiedTradeSettlementPaymentMeans (optional)
             if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
             {
                 if (this.Descriptor.PaymentMeans != null)
@@ -573,8 +600,10 @@ namespace s2industries.ZUGFeRD
           * </SpecifiedTradeSettlementPaymentMeans>
              */
 
+            //  11. ApplicableTradeTax (optional)
             _writeOptionalTaxes(Writer);
 
+            //  13. SpecifiedTradeAllowanceCharge (optional)
             if ((this.Descriptor.TradeAllowanceCharges != null) && (this.Descriptor.TradeAllowanceCharges.Count > 0))
             {
                 foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
@@ -610,6 +639,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
+            //  14. SpecifiedLogisticsServiceCharge (optional)
             if ((this.Descriptor.ServiceCharges != null) && (this.Descriptor.ServiceCharges.Count > 0))
             {
                 foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
@@ -633,6 +663,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
+            //  15. SpecifiedTradePaymentTerms (optional)
             if (this.Descriptor.PaymentTerms != null)
             {
                 Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
@@ -646,6 +677,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement();
             }
 
+            //  16. SpecifiedTradeSettlementHeaderMonetarySummation
             Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
@@ -663,6 +695,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ram:SpecifiedTradeSettlementHeaderMonetarySummation
 
             #region InvoiceReferencedDocument
+            //  17. InvoiceReferencedDocument (optional)
             if (this.Descriptor.InvoiceReferencedDocument != null)
             {
                 Writer.WriteStartElement("ram:InvoiceReferencedDocument");
