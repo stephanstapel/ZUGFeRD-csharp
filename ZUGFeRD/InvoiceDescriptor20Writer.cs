@@ -136,17 +136,32 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.BuyerOrderReferencedDocument != null)
                 {
-                    Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
-                    if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
-                    {
-                        Writer.WriteStartElement("ram:IssueDateTime");
-                        Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
-                        Writer.WriteEndElement(); // !ram:IssueDateTime
-                    }
+                    Writer.WriteStartElement("ram:BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+
+                    #region IssuerAssignedID
+                    //Bestellnummer
                     if (!String.IsNullOrEmpty(tradeLineItem.BuyerOrderReferencedDocument.ID))
                     {
-                        Writer.WriteElementString("ram:ID", tradeLineItem.BuyerOrderReferencedDocument.ID);
+                        Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID);
                     }
+                    #endregion
+
+                    #region LineID
+                    //Referenz zur Bestellposition
+                    //ToDo: fehlt ganz
+                    #endregion
+
+                    #region IssueDateTime
+                    if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value));
+                        Writer.WriteEndElement(); // !qdt:DateTimeString
+                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                    }
+                    #endregion
 
                     Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
                 }
