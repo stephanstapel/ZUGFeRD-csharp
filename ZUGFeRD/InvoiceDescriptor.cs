@@ -793,7 +793,7 @@ namespace s2industries.ZUGFeRD
 
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
         {
-            AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unspecified);
+            AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
         }
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {

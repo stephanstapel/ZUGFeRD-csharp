@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// TypeCode not set
         /// </summary>
-        Unspecified = 0,
+        Unknown = 0,
         /// <summary>
         /// The code indicates a financial account
         /// </summary>
@@ -60,5 +60,27 @@ namespace s2industries.ZUGFeRD
         /// The code indicates a job cost accounting
         /// </summary>
         Job_Cost_Accounting = 7
+    }
+
+
+    internal static class AccountingAccountTypeCodesExtensions
+    {
+        public static AccountingAccountTypeCodes FromString(this AccountingAccountTypeCodes _, string s)
+        {
+            try
+            {
+                return (AccountingAccountTypeCodes)Enum.Parse(typeof(AccountingAccountTypeCodes), s);
+            }
+            catch
+            {
+                return AccountingAccountTypeCodes.Unknown;
+            }
+        } // !FromString()
+
+
+        public static string EnumToString(this AccountingAccountTypeCodes c)
+        {
+            return c.ToString("g");
+        } // !ToString()
     }
 }

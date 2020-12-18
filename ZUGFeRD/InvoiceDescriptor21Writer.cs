@@ -431,7 +431,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement(); // !ram:ID
                         }
 
-                        if (RSTA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unspecified)
+                        if (RSTA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
                         {
                             Writer.WriteStartElement("ram:TypeCode", Profile.Extended);
                             Writer.WriteValue(((int)RSTA.TradeAccountTypeCode).ToString());
@@ -912,7 +912,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement(); // !ram:ID
                         }
 
-                        if (RSTAA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unspecified)
+                        if (RSTAA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
                         {
                             Writer.WriteStartElement("ram:TypeCode", Profile.Extended);
                             Writer.WriteValue(((int)RSTAA.TradeAccountTypeCode).ToString());
