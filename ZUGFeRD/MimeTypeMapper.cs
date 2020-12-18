@@ -48,7 +48,7 @@ namespace s2industries.ZUGFeRD
             if (!String.IsNullOrEmpty(filename))
             {
                 string extension = System.IO.Path.GetExtension(filename);                
-                if (!String.IsNullOrEmpty(extension) && _MimeTypes.TryGetValue(extension, out string mimeType))
+                if (!String.IsNullOrEmpty(extension) && _MimeTypes.TryGetValue(extension.ToLower(), out string mimeType))
                 {
                     return mimeType;
                 }                    

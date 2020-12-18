@@ -97,7 +97,8 @@ namespace s2industries.ZUGFeRD
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
         public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
-        
+        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; }
+
 
         /// <summary>
         /// Initializes a new/ empty trade line item
@@ -109,6 +110,7 @@ namespace s2industries.ZUGFeRD
             this.GlobalID = new GlobalID();
             this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
             this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
+            this.ReceivableSpecifiedTradeAccountingAccounts = new List<ReceivableSpecifiedTradeAccountingAccount>();
         }
 
 
@@ -171,5 +173,18 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = contractReferencedDate
             };
         } // !SetContractReferencedDocument()
+
+        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
+        {
+            AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unspecified);
+        }
+        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+        {
+            this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+            {
+                TradeAccountID = AccountID,
+                TradeAccountTypeCode = AccountTypeCode
+            });
+        }
     }
 }

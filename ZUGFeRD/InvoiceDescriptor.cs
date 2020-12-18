@@ -143,6 +143,7 @@ namespace s2industries.ZUGFeRD
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
         public PaymentTerms PaymentTerms { get; set; }        
         public InvoiceReferencedDocument InvoiceReferencedDocument { get; set; }
+        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; internal set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
         public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
         public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
         public PaymentMeans PaymentMeans { get; set; }
@@ -790,6 +791,18 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddDebitorFinancialAccount()
 
+        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
+        {
+            AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unspecified);
+        }
+        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+        {
+            this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+            {
+                TradeAccountID = AccountID,
+                TradeAccountTypeCode = AccountTypeCode
+            });
+        }
 
         private string _getNextLineId()
         {
