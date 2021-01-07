@@ -11,6 +11,7 @@
 *.nupkg
 *.nuspec
 nuget/
+internal/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
