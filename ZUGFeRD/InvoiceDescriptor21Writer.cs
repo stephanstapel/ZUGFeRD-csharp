@@ -253,7 +253,7 @@ namespace s2industries.ZUGFeRD
                     _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 2);
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
+                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                     }
 
                     #region AppliedTradeAllowanceCharge
@@ -295,7 +295,7 @@ namespace s2industries.ZUGFeRD
 
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 2));
+                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                     }
                     Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)                    
                     #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
@@ -309,7 +309,7 @@ namespace s2industries.ZUGFeRD
 
                 #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
                 Writer.WriteStartElement("ram:SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 2));
+                _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
 
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
