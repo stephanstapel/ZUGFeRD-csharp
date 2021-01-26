@@ -407,7 +407,7 @@ namespace s2industries.ZUGFeRD
 
                 #region ReceivableSpecifiedTradeAccountingAccount
                 //Detailinformationen zur Buchungsreferenz
-                if (descriptor.Profile == Profile.XRechnung1 || descriptor.Profile == Profile.XRechnung && tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts.Count > 0)
+                if ((descriptor.Profile == Profile.XRechnung1 || descriptor.Profile == Profile.XRechnung) && tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts.Count > 0)
                 {
                     //only one ReceivableSpecifiedTradeAccountingAccount (BT-133) is allowed in Profile XRechnung
                     Writer.WriteStartElement("ram:ReceivableSpecifiedTradeAccountingAccount", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
