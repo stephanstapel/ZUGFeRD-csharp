@@ -465,7 +465,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="grandTotalAmount">Bruttosumme</param>
         /// <param name="totalPrepaidAmount">Anzahlungsbetrag</param>
         /// <param name="duePayableAmount">Zahlbetrag</param>
-        /// <param name="roundingAmount">RoundingAmount / Rundungsbetrag, profile COMFORT</param>
+        /// <param name="roundingAmount">RoundingAmount / Rundungsbetrag, profile COMFORT and EXTENDED</param>
         public void SetTotals(decimal lineTotalAmount = decimal.MinValue, decimal chargeTotalAmount = decimal.MinValue,
                               decimal allowanceTotalAmount = decimal.MinValue, decimal taxBasisAmount = decimal.MinValue,
                               decimal taxTotalAmount = decimal.MinValue, decimal grandTotalAmount = decimal.MinValue,
