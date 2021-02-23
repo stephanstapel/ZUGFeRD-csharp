@@ -985,7 +985,7 @@ namespace s2industries.ZUGFeRD
         {
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
-                writer.WriteStartElement(tagName);
+                writer.WriteStartElement(tagName, profile);
                 if (forceCurrency)
                 {
                     writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
