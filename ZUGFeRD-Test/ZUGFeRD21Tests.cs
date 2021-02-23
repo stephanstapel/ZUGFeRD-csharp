@@ -287,5 +287,27 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.ID, uuid);
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.IssueDateTime, issueDateTime); // explicitly not to be set in XRechnung
         } // !TestContractReferencedDocumentWithExtended()        
+
+        [TestMethod]
+        public void TestTotalRounding()
+        {
+            var uuid = Guid.NewGuid().ToString();
+            var issueDateTime = DateTime.Today;
+
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.ContractReferencedDocument = new ContractReferencedDocument
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+            desc.SetTotals(1.99m, 0m, 0m, 0m, 0m, 2m, 0m, 2m, 0.01m);
+
+            var ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.RoundingAmount, 0.01m);
+        } 
     }
 }

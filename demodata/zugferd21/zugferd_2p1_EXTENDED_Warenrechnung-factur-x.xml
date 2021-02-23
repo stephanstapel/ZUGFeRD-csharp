@@ -560,10 +560,9 @@ WEEE-Reg-Nr.: DE87654321
       <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
         <ram:LineTotalAmount>457.20</ram:LineTotalAmount>
         <ram:ChargeTotalAmount>3.00</ram:ChargeTotalAmount>
-        <ram:AllowanceTotalAmount>11.20</ram:AllowanceTotalAmount>
+        <ram:AllowanceTotalAmount>11.21</ram:AllowanceTotalAmount>
         <ram:TaxBasisTotalAmount>448.99</ram:TaxBasisTotalAmount>
 		<ram:TaxTotalAmount currencyID="EUR">70.00</ram:TaxTotalAmount>
-        <ram:RoundingAmount>0.01</ram:RoundingAmount>
         <ram:GrandTotalAmount>518.99</ram:GrandTotalAmount>
         <ram:TotalPrepaidAmount>0.00</ram:TotalPrepaidAmount>
         <ram:DuePayableAmount>518.99</ram:DuePayableAmount>
