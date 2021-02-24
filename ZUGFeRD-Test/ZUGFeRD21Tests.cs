@@ -167,7 +167,6 @@ namespace ZUGFeRD_Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.Invoicee, null);
-            Assert.AreEqual(loadedInvoice.TaxBasisAmount, null);
         } // !TestMinimumInvoice()
 
 

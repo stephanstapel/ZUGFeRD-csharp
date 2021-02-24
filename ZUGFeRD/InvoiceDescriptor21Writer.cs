@@ -859,6 +859,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);                              // S umme der Zuschläge auf Dokumentenebene
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);                        // Summe der Abschläge auf Dokumentenebene
             _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount, profile: Profile.Extended);   // Rechnungsgesamtbetrag ohne Umsatzsteuer
+
             _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);               // Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
                                                                                                                                    // ToDo: RoundingAmount  //Rundungsbetrag
             _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);                                // Rechnungsgesamtbetrag einschließlich Umsatzsteuer
