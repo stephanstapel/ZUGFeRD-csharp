@@ -76,7 +76,7 @@ namespace ZUGFeRD_Test
             desc.SetTotals(1.99m, 0m, 0m, 0m, 0m, 2m, 0m, 2m, 0.01m);
 
             var msExtended = new MemoryStream();
-            desc.Save(msExtended, ZUGFeRDVersion.Version21, Profile.Extended);
+            desc.Save(msExtended, ZUGFeRDVersion.Version20, Profile.Extended);
             msExtended.Seek(0, SeekOrigin.Begin);
 
             var loadedInvoice = InvoiceDescriptor.Load(msExtended);
