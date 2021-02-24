@@ -302,12 +302,19 @@ namespace ZUGFeRD_Test
             };
             desc.SetTotals(1.99m, 0m, 0m, 0m, 0m, 2m, 0m, 2m, 0.01m);
 
-            var ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
-            ms.Seek(0, SeekOrigin.Begin);
+            var msExtended = new MemoryStream();
+            desc.Save(msExtended, ZUGFeRDVersion.Version21, Profile.Extended);
+            msExtended.Seek(0, SeekOrigin.Begin);
 
-            var loadedInvoice = InvoiceDescriptor.Load(ms);
+            var loadedInvoice = InvoiceDescriptor.Load(msExtended);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0.01m);
+
+            var msBasic = new MemoryStream();
+            desc.Save(msBasic, ZUGFeRDVersion.Version21);
+            msBasic.Seek(0, SeekOrigin.Begin);
+
+            loadedInvoice = InvoiceDescriptor.Load(msBasic);
+            Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
         } 
     }
 }
