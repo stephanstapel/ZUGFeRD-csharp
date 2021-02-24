@@ -473,7 +473,7 @@ namespace s2industries.ZUGFeRD
             /// BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
 
             #region BuyerOrderReferencedDocument
-            if (this.Descriptor.OrderDate.HasValue || ((this.Descriptor.OrderNo != null) && (this.Descriptor.OrderNo.Length > 0)))
+            if (String.IsNullOrEmpty(this.Descriptor.OrderNo))
             {
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
                 Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
@@ -985,7 +985,7 @@ namespace s2industries.ZUGFeRD
         {
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
-                writer.WriteStartElement(tagName);
+                writer.WriteStartElement(tagName, profile);
                 if (forceCurrency)
                 {
                     writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());

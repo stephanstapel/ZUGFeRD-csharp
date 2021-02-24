@@ -152,6 +152,27 @@ namespace ZUGFeRD_Test
 
 
         [TestMethod]
+        public void TestMinimumInvoice()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.Invoicee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
+            {
+                Name = "Test"
+            };
+            desc.TaxBasisAmount = 73; // this information will not be stored in the output file since it is available in Extended profile only
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Minimum);
+            string s = Encoding.ASCII.GetString(ms.ToArray());
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Invoicee, null);
+            Assert.AreEqual(loadedInvoice.TaxBasisAmount, null);
+        } // !TestMinimumInvoice()
+
+
+        [TestMethod]
         public void TestInvoiceWithAttachment()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
