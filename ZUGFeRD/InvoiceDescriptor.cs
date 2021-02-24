@@ -365,14 +365,24 @@ namespace s2industries.ZUGFeRD
         } // !AddAdditionalReferencedDocument()
 
 
-        public void SetBuyerOrderReferenceDocument(string orderNo, DateTime orderDate)
+        /// <summary>
+        /// Sets details of the associated order
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="orderDate"></param>
+        public void SetBuyerOrderReferenceDocument(string orderNo, DateTime? orderDate = null)
         {
             this.OrderNo = orderNo;
             this.OrderDate = orderDate;
         } // !SetBuyerOrderReferenceDocument()
 
 
-        public void SetDeliveryNoteReferenceDocument(string deliveryNoteNo, DateTime deliveryNoteDate)
+        /// <summary>
+        /// Sets detailed information about the corresponding delivery note
+        /// </summary>
+        /// <param name="deliveryNoteNo"></param>
+        /// <param name="deliveryNoteDate"></param>
+        public void SetDeliveryNoteReferenceDocument(string deliveryNoteNo, DateTime? deliveryNoteDate = null)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
