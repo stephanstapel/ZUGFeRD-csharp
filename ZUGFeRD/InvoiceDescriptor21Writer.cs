@@ -473,7 +473,7 @@ namespace s2industries.ZUGFeRD
             /// BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
 
             #region BuyerOrderReferencedDocument
-            if (String.IsNullOrEmpty(this.Descriptor.OrderNo))
+            if (!String.IsNullOrEmpty(this.Descriptor.OrderNo))
             {
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
                 Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
