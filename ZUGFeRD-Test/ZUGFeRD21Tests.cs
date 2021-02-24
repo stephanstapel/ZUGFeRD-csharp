@@ -162,8 +162,7 @@ namespace ZUGFeRD_Test
             desc.TaxBasisAmount = 73; // this information will not be stored in the output file since it is available in Extended profile only
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Minimum);
-            string s = Encoding.ASCII.GetString(ms.ToArray());
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Minimum);            
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
