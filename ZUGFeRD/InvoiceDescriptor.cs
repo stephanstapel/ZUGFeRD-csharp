@@ -137,6 +137,7 @@ namespace s2industries.ZUGFeRD
         public decimal TaxTotalAmount { get; set; } = Decimal.MinValue;
         public decimal GrandTotalAmount { get; set; } = Decimal.MinValue;
         public decimal? TotalPrepaidAmount { get; set; } = Decimal.MinValue;
+        public decimal? RoundingAmount { get; set; } = Decimal.MinValue;
         public decimal DuePayableAmount { get; set; } = Decimal.MinValue;
         public List<Tax> Taxes { get; set; } = new List<Tax>();
         public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
@@ -474,10 +475,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="grandTotalAmount">Bruttosumme</param>
         /// <param name="totalPrepaidAmount">Anzahlungsbetrag</param>
         /// <param name="duePayableAmount">Zahlbetrag</param>
+        /// <param name="roundingAmount">RoundingAmount / Rundungsbetrag, profile COMFORT and EXTENDED</param>
         public void SetTotals(decimal lineTotalAmount = decimal.MinValue, decimal chargeTotalAmount = decimal.MinValue,
                               decimal allowanceTotalAmount = decimal.MinValue, decimal taxBasisAmount = decimal.MinValue,
                               decimal taxTotalAmount = decimal.MinValue, decimal grandTotalAmount = decimal.MinValue,
-                              decimal totalPrepaidAmount = decimal.MinValue, decimal duePayableAmount = decimal.MinValue)
+                              decimal totalPrepaidAmount = decimal.MinValue, decimal duePayableAmount = decimal.MinValue,
+                              decimal roundingAmount = decimal.MinValue)
         {
             this.LineTotalAmount = lineTotalAmount;
             this.ChargeTotalAmount = chargeTotalAmount;
@@ -487,6 +490,7 @@ namespace s2industries.ZUGFeRD
             this.GrandTotalAmount = grandTotalAmount;
             this.TotalPrepaidAmount = totalPrepaidAmount;
             this.DuePayableAmount = duePayableAmount;
+            this.RoundingAmount = roundingAmount;
         }
 
 
