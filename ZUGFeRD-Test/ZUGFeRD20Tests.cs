@@ -59,6 +59,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
         } // !TestReferenceExtendedInvoice()
         
+
         [TestMethod]
         public void TestTotalRounding()
         {
@@ -88,7 +89,6 @@ namespace ZUGFeRD_Test
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
-        } 
-
+        } // !TestTotalRounding()
     }
 }

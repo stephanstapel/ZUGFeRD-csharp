@@ -286,6 +286,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.IssueDateTime, issueDateTime); // explicitly not to be set in XRechnung
         } // !TestContractReferencedDocumentWithExtended()        
 
+
         [TestMethod]
         public void TestTotalRounding()
         {
@@ -313,6 +314,6 @@ namespace ZUGFeRD_Test
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
-        } 
+        } // !TestTotalRounding()
     }
 }

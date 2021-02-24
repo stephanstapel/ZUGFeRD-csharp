@@ -108,8 +108,7 @@ namespace ZUGFeRD_Test
                            taxTotalAmount: 56.87m,
                            grandTotalAmount: 529.87m,
                            totalPrepaidAmount: 0.0m,
-                           duePayableAmount: 529.87m,
-                           roundingAmount: 0.0m
+                           duePayableAmount: 529.87m                           
                           );
 
             return desc;
