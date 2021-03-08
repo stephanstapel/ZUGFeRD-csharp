@@ -116,8 +116,24 @@ namespace s2industries.ZUGFeRD
         public Party ShipFrom { get; set; }
 
         public List<Note> Notes { get; set; } = new List<Note>();
+
+        /// <summary>
+        /// The Indicator type may be used when implementing a new system in order to mark the invoice as „trial invoice“.
+        /// </summary>
         public bool IsTest { get; set; } = false;
+
+        /// <summary>
+        /// Representation of information that should be used for the document.
+        /// 
+        /// As the library can be used to both write ZUGFeRD files and read ZUGFeRD files, the profile serves two purposes:
+        /// It indicates the profile that was used to write the ZUGFeRD file that was loaded or the profile that is to be used when 
+        /// the document is saved.
+        /// </summary>
         public Profile Profile { get; internal set; } = Profile.Basic;
+
+        /// <summary>
+        /// Indicates the type of the document, if it represents an invoice, a credit note or one of the available 'sub types'
+        /// </summary>
         public InvoiceType Type { get; set; } = InvoiceType.Invoice;
 
         /// <summary>
@@ -127,17 +143,74 @@ namespace s2industries.ZUGFeRD
         /// BT-10
         /// </summary>
         public string ReferenceOrderNo { get; set; }
+
+        /// <summary>
+        /// An aggregation of business terms containing information about individual invoice positions
+        /// </summary>
         public List<TradeLineItem> TradeLineItems { get; internal set; } = new List<TradeLineItem>();
 
-
+        /// <summary>
+        /// Sum of all invoice line net amounts in the invoice
+        /// </summary>
         public decimal LineTotalAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// Sum of all surcharges on document level in the invoice
+        /// 
+        /// Surcharges on line level are included in the invoice line net amount which is summed up into the sum of invoice line net amount.
+        /// </summary>
         public decimal? ChargeTotalAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// Sum of discounts on document level in the invoice
+        /// 
+        /// Discounts on line level are included in the invoice line net amount which is summed up into the sum of invoice line net amount.
+        /// </summary>
         public decimal? AllowanceTotalAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// The total amount of the invoice without VAT.
+        /// 
+        /// The invoice total amount without VAT is the sum of invoice line net amount minus sum of discounts on document level plus sum of surcharges on document level.
+        /// </summary>
         public decimal? TaxBasisAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// The total VAT amount for the invoice.
+        /// The VAT total amount expressed in the accounting currency accepted or required in the country of the seller
+        /// 
+        /// To be used when the VAT accounting currency (BT-6) differs from the Invoice currency code (BT-5) in accordance 
+        /// with article 230 of Directive 2006/112 / EC on VAT. The VAT amount in accounting currency is not used
+        /// in the calculation of the Invoice totals..
+        /// </summary>
         public decimal TaxTotalAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// Invoice total amount with VAT
+        /// 
+        /// The invoice total amount with VAT is the invoice without VAT plus the invoice total VAT amount.
+        /// </summary>
         public decimal GrandTotalAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// Sum of amount paid in advance
+        /// 
+        /// This amount is subtracted from the invoice total amount with VAT to calculate the amount due for payment.
+        /// </summary>
         public decimal? TotalPrepaidAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// The amount to be added to the invoice total to round the amount to be paid.
+        /// </summary>
         public decimal? RoundingAmount { get; set; } = Decimal.MinValue;
+
+        /// <summary>
+        /// The outstanding amount that is requested to be paid.
+        /// 
+        /// This amount is the invoice total amount with VAT minus the paid amount that has 
+        /// been paid in advance. The amount is zero in case of a fully paid invoice.
+        /// The amount may be negative; in that case the seller owes the amount to the buyer.
+        /// </summary>
         public decimal DuePayableAmount { get; set; } = Decimal.MinValue;
         public List<Tax> Taxes { get; set; } = new List<Tax>();
         public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
