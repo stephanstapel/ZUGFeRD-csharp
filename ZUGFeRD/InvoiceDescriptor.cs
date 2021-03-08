@@ -152,28 +152,28 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Sum of all invoice line net amounts in the invoice
         /// </summary>
-        public decimal LineTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? LineTotalAmount { get; set; } = null;
 
         /// <summary>
         /// Sum of all surcharges on document level in the invoice
         /// 
         /// Surcharges on line level are included in the invoice line net amount which is summed up into the sum of invoice line net amount.
         /// </summary>
-        public decimal? ChargeTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? ChargeTotalAmount { get; set; } = null;
 
         /// <summary>
         /// Sum of discounts on document level in the invoice
         /// 
         /// Discounts on line level are included in the invoice line net amount which is summed up into the sum of invoice line net amount.
         /// </summary>
-        public decimal? AllowanceTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? AllowanceTotalAmount { get; set; } = null;
 
         /// <summary>
         /// The total amount of the invoice without VAT.
         /// 
         /// The invoice total amount without VAT is the sum of invoice line net amount minus sum of discounts on document level plus sum of surcharges on document level.
         /// </summary>
-        public decimal? TaxBasisAmount { get; set; } = Decimal.MinValue;
+        public decimal? TaxBasisAmount { get; set; } = null;
 
         /// <summary>
         /// The total VAT amount for the invoice.
@@ -183,26 +183,26 @@ namespace s2industries.ZUGFeRD
         /// with article 230 of Directive 2006/112 / EC on VAT. The VAT amount in accounting currency is not used
         /// in the calculation of the Invoice totals..
         /// </summary>
-        public decimal TaxTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? TaxTotalAmount { get; set; } = null;
 
         /// <summary>
         /// Invoice total amount with VAT
         /// 
         /// The invoice total amount with VAT is the invoice without VAT plus the invoice total VAT amount.
         /// </summary>
-        public decimal GrandTotalAmount { get; set; } = Decimal.MinValue;
+        public decimal? GrandTotalAmount { get; set; } = null;
 
         /// <summary>
         /// Sum of amount paid in advance
         /// 
         /// This amount is subtracted from the invoice total amount with VAT to calculate the amount due for payment.
         /// </summary>
-        public decimal? TotalPrepaidAmount { get; set; } = Decimal.MinValue;
+        public decimal? TotalPrepaidAmount { get; set; } = null;
 
         /// <summary>
         /// The amount to be added to the invoice total to round the amount to be paid.
         /// </summary>
-        public decimal? RoundingAmount { get; set; } = Decimal.MinValue;
+        public decimal? RoundingAmount { get; set; } = null;
 
         /// <summary>
         /// The outstanding amount that is requested to be paid.
@@ -211,7 +211,7 @@ namespace s2industries.ZUGFeRD
         /// been paid in advance. The amount is zero in case of a fully paid invoice.
         /// The amount may be negative; in that case the seller owes the amount to the buyer.
         /// </summary>
-        public decimal DuePayableAmount { get; set; } = Decimal.MinValue;
+        public decimal? DuePayableAmount { get; set; } = null;
         public List<Tax> Taxes { get; set; } = new List<Tax>();
         public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
@@ -549,11 +549,11 @@ namespace s2industries.ZUGFeRD
         /// <param name="totalPrepaidAmount">Anzahlungsbetrag</param>
         /// <param name="duePayableAmount">Zahlbetrag</param>
         /// <param name="roundingAmount">RoundingAmount / Rundungsbetrag, profile COMFORT and EXTENDED</param>
-        public void SetTotals(decimal lineTotalAmount = decimal.MinValue, decimal chargeTotalAmount = decimal.MinValue,
-                              decimal allowanceTotalAmount = decimal.MinValue, decimal taxBasisAmount = decimal.MinValue,
-                              decimal taxTotalAmount = decimal.MinValue, decimal grandTotalAmount = decimal.MinValue,
-                              decimal totalPrepaidAmount = decimal.MinValue, decimal duePayableAmount = decimal.MinValue,
-                              decimal roundingAmount = decimal.MinValue)
+        public void SetTotals(decimal? lineTotalAmount = null, decimal? chargeTotalAmount = null,
+                              decimal? allowanceTotalAmount = null, decimal? taxBasisAmount = null,
+                              decimal? taxTotalAmount = null, decimal? grandTotalAmount = null,
+                              decimal? totalPrepaidAmount = null, decimal? duePayableAmount = null,
+                              decimal? roundingAmount = null)
         {
             this.LineTotalAmount = lineTotalAmount;
             this.ChargeTotalAmount = chargeTotalAmount;
