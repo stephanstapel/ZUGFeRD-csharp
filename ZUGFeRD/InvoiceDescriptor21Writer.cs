@@ -386,9 +386,9 @@ namespace s2industries.ZUGFeRD
                 {
                     _total = tradeLineItem.LineTotalAmount.Value;
                 }
-                else
+                else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
-                    _total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
+                    _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
                 }
 
                 Writer.WriteStartElement("ram:LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);

@@ -75,11 +75,11 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Netto Einzelpreis
         /// </summary>
-        public decimal NetUnitPrice { get; set; }
+        public decimal? NetUnitPrice { get; set; }
         /// <summary>
         /// Brutto Einzelpreis
         /// </summary>
-        public decimal GrossUnitPrice { get; set; }
+        public decimal? GrossUnitPrice { get; set; }
         /// <summary>
         /// Einheit der Preisbasismenge
         /// </summary>
