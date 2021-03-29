@@ -1,10 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Version>6.0.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
-    <Description>The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD.</Description>
+    <Description>ZUGFeRD and it's successor Factur-X are initiatives from German (respectively European) government to foster electronic invoices.
+It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
+A special favor is the so-called XRechnung which is also supported by this library.
+
+This library allows to create these xml descriptors in an easy way.
+
+To help developing the library, please become a sponsor:
+https://github.com/sponsors/stephanstapel
+
+Find more about the library here:
+https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
@@ -17,6 +27,30 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReleaseNotes>6.0.0:
+
+
+All versions:
+
+* New handling of optional values: decimal? is used all over, replacing decimal.MinValue as default value
+
+* Fix for writing BuyerOrderReferencedDocument (#135)
+
+* Added documentation
+
+
+
+ZUGFeRD 2.1/ Factur-X/ XRechnung:
+
+* Fix for quantity decimals (#132)
+
+* Support for rounding amount (#134)
+
+
+
+ZUGFeRD 2.0:
+
+* Support for rounding amount (#134)</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Debug</OutputPath>
