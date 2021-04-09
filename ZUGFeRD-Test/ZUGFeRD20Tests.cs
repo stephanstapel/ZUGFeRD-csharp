@@ -90,5 +90,15 @@ namespace ZUGFeRD_Test
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
         } // !TestTotalRounding()
+
+        [TestMethod]
+        public void TestMissingPropertiesAreNull()
+        {
+            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            var invoiceDescriptor = InvoiceDescriptor.Load(path);
+
+            Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
+            Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
+        } // !TestMissingPropertiesAreNull()
     }
 }

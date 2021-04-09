@@ -27,7 +27,7 @@ namespace s2industries.ZUGFeRD
     public class TradeLineItem
     {
         /// <summary>
-        /// Laufende Nummer der Rechnungsposition
+        /// Eindeutige Bezeichnung für die betreffende Rechnungsposition
         /// </summary>
         public string LineID;
         /// <summary>
@@ -63,11 +63,11 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public decimal? LineTotalAmount { get; set; }
         /// <summary>
-        /// Beginn des Abrechnungszeitraum
+        /// Beginn des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
         /// </summary>
         public DateTime? BillingPeriodStart { get; set; }
         /// <summary>
-        /// Ende des Abrechnungszeitraum
+        /// Ende des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
         /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
         /// <summary>

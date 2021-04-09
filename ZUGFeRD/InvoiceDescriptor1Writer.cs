@@ -587,17 +587,17 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ApplicableTradeTax
                 }
 
-                if (Descriptor.BillingPeriodStart.HasValue && Descriptor.BillingPeriodEnd.HasValue)
+                if (tradeLineItem.BillingPeriodStart.HasValue && tradeLineItem.BillingPeriodEnd.HasValue)
                 {
                     Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                     Writer.WriteStartElement("ram:StartDateTime");
-                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
+                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodStart.Value));
                     Writer.WriteEndElement(); // !StartDateTime
 
 
                     Writer.WriteStartElement("ram:EndDateTime");
-                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
+                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodEnd.Value));
                     Writer.WriteEndElement(); // !EndDateTime
 
                     Writer.WriteEndElement(); // !BillingSpecifiedPeriod
