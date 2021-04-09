@@ -221,7 +221,6 @@ namespace s2industries.ZUGFeRD
         public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
         public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
         public PaymentMeans PaymentMeans { get; set; }
-
         public DateTime? BillingPeriodStart { get; set; }
         public DateTime? BillingPeriodEnd { get; set; }
 
@@ -683,6 +682,7 @@ namespace s2industries.ZUGFeRD
 
             TradeLineItem item = new TradeLineItem()
             {
+                LineID = lineID,
                 AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID),
                 GrossUnitPrice = 0m,
                 NetUnitPrice= 0m,
@@ -738,7 +738,8 @@ namespace s2industries.ZUGFeRD
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null,
+                                     DateTime? billingPeriodStart = null, DateTime? billingPerdiodEnd = null)
         {
             return AddTradeLineItem(lineID: _getNextLineId(),
                              name: name,
@@ -755,7 +756,9 @@ namespace s2industries.ZUGFeRD
                              id: id,
                              sellerAssignedID: sellerAssignedID,
                              deliveryNoteID: deliveryNoteID,
-                             buyerOrderID: buyerOrderID);
+                             buyerOrderID: buyerOrderID,
+                             billingPeriodStart: billingPeriodStart,
+                             billingPeriodEnd: BillingPeriodEnd);
 
         } // !AddTradeLineItem()
 
@@ -787,11 +790,12 @@ namespace s2industries.ZUGFeRD
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null
-                                     )
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null,
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
         {
             TradeLineItem newItem = new TradeLineItem()
             {
+                LineID = lineID,
                 GlobalID = id,
                 SellerAssignedID = sellerAssignedID,
                 BuyerAssignedID = buyerAssignedID,
@@ -804,7 +808,9 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = billedQuantity,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent                
+                TaxPercent = taxPercent,
+                BillingPeriodStart = billingPeriodStart,
+                BillingPeriodEnd = billingPeriodEnd
             };
 
             if (String.IsNullOrEmpty(lineID))

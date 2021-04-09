@@ -18,8 +18,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -28,6 +26,10 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class TradeLineItem
     {
+        /// <summary>
+        /// Laufende Nummer der Rechnungsposition
+        /// </summary>
+        public string LineID;
         /// <summary>
         /// Identifier of an item according to a registered scheme
         /// </summary>
@@ -60,6 +62,14 @@ namespace s2industries.ZUGFeRD
         /// Nettobetrag der Rechnungsposition
         /// </summary>
         public decimal? LineTotalAmount { get; set; }
+        /// <summary>
+        /// Beginn des Abrechnungszeitraum
+        /// </summary>
+        public DateTime? BillingPeriodStart { get; set; }
+        /// <summary>
+        /// Ende des Abrechnungszeitraum
+        /// </summary>
+        public DateTime? BillingPeriodEnd { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -139,8 +149,8 @@ namespace s2industries.ZUGFeRD
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
-                 ID = deliveryNoteId,
-                 IssueDateTime = deliveryNoteDate
+                ID = deliveryNoteId,
+                IssueDateTime = deliveryNoteDate
             };
         } // !SetDeliveryNoteReferencedDocument()
 
