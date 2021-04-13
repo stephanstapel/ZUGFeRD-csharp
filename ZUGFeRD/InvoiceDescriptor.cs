@@ -764,14 +764,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds a new line to the invoice. The line id is passed as a parameter.
         /// </summary>
-        // TODO Rabatt ergänzen:
-        // <ram:AppliedTradeAllowanceCharge>
-        //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
-        //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
-        //     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
-        //     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
-        //     <ram:Reason>Artikelrabatt 1</ram:Reason>
-        // </ram:AppliedTradeAllowanceCharge>
         public TradeLineItem AddTradeLineItem(string lineID,
                                      string name,
                                      string description = null,
