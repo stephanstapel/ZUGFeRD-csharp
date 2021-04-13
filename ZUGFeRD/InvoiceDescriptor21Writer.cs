@@ -236,9 +236,9 @@ namespace s2industries.ZUGFeRD
 
                             Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
 
-                            if (!String.IsNullOrEmpty(document.IssuerAssignedID))
+                            if (!String.IsNullOrEmpty(document.ID))
                             {
-                                Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
+                                Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
                             }
 
                             Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
