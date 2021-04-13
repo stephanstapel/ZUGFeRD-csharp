@@ -21,6 +21,7 @@ using s2industries.ZUGFeRD;
 using System;
 using System.IO;
 using System.Linq;
+using ZUGFeRD;
 
 namespace ZUGFeRD_Test
 {
@@ -61,6 +62,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(originalDesc.TradeLineItems.Count, 1);
             Assert.IsTrue(originalDesc.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
             Assert.IsTrue(originalDesc.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
+            Assert.IsTrue(originalDesc.TradeLineItems.TrueForAll(x => x.ApplicableProductCharacteristics.Count == 0));
             Assert.AreEqual(originalDesc.LineTotalAmount, 198.0m);
             Assert.AreEqual(originalDesc.Taxes[0].TaxAmount, 37.62m);
             Assert.AreEqual(originalDesc.Taxes[0].Percent, 19.0m);
@@ -76,8 +78,9 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
             Assert.AreEqual(desc.InvoiceNo, "471102");
             Assert.AreEqual(desc.TradeLineItems.Count, 1);
-            Assert.IsTrue(originalDesc.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
-            Assert.IsTrue(originalDesc.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
+            Assert.IsTrue(desc.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
+            Assert.IsTrue(desc.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
+            Assert.IsTrue(desc.TradeLineItems.TrueForAll(x => x.ApplicableProductCharacteristics.Count == 0));
             Assert.AreEqual(desc.LineTotalAmount, 198.0m);
             Assert.AreEqual(desc.Taxes[0].TaxAmount, 37.62m);
             Assert.AreEqual(desc.Taxes[0].Percent, 19.0m);
@@ -333,9 +336,106 @@ namespace ZUGFeRD_Test
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
+            // Test LineID
             tradeLineItem.LineID = "2"; 
-            Assert.AreEqual(tradeLineItem.BillingPeriodStart, new DateTime(2021, 01, 01));
-            Assert.AreEqual(tradeLineItem.BillingPeriodEnd, new DateTime(2021, 01, 31));
+
+            // Test BillingPeriod
+            Assert.AreEqual(new DateTime(2021, 01, 01), tradeLineItem.BillingPeriodStart);
+            Assert.AreEqual(new DateTime(2021, 01, 31), tradeLineItem.BillingPeriodEnd);
+
+            // Test Product Characteristics
+            var firstProductCharacteristic = tradeLineItem.ApplicableProductCharacteristics[0];
+            Assert.AreEqual("METER_LOCATION", firstProductCharacteristic.Description);
+            Assert.AreEqual("DE213410213", firstProductCharacteristic.Value);
+
+            var secondProductCharacteristic = tradeLineItem.ApplicableProductCharacteristics[1];
+            Assert.AreEqual("METER_NUMBER", secondProductCharacteristic.Description);
+            Assert.AreEqual("123", secondProductCharacteristic.Value);
+
         } // !TestReadTradeLineSettlement()
+
+
+        [TestMethod]
+        public void TestTradeLineSettlement()
+        {
+            // Read XRechnung
+            string path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor originalDesc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            // Modifiy trade line settlement data
+            originalDesc.TradeLineItems.Add(new TradeLineItem()
+            {
+                BillingPeriodStart = new DateTime(2020, 1, 1),
+                BillingPeriodEnd = new DateTime(2021, 1, 1),
+                BilledQuantity = 5,
+                ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
+                {
+                    new ApplicableProductCharacteristic()
+                    {
+                        Description = "Description_1_1",
+                        Value = "Value_1_1"
+                    },
+                    new ApplicableProductCharacteristic()
+                    {
+                        Description = "Description_1_2",
+                        Value = "Value_1_2"
+                    },
+                }.ToList(),
+                NetUnitPrice = 1,
+            });
+
+            originalDesc.TradeLineItems.Add(new TradeLineItem()
+            {
+                BillingPeriodStart = new DateTime(2021, 1, 1),
+                BillingPeriodEnd = new DateTime(2022, 1, 1),
+                BilledQuantity = 10,
+                ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
+                {
+                    new ApplicableProductCharacteristic()
+                    {
+                        Description = "Description_2_1",
+                        Value = "Value_2_1"
+                    },
+                    new ApplicableProductCharacteristic()
+                    {
+                        Description = "Description_2_2",
+                        Value = "Value_2_2"
+                    },
+                }.ToList(),
+                NetUnitPrice = 1,
+            });
+
+            originalDesc.IsTest = false;
+
+            Stream ms = new MemoryStream();
+            originalDesc.Save(ms, ZUGFeRDVersion.Version21, Profile.Basic);
+            originalDesc.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
+
+            // Load Invoice and compare to expected
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
+
+            var firstTradeLineItem = desc.TradeLineItems[0];
+
+            Assert.AreEqual(5, firstTradeLineItem.BilledQuantity);
+            Assert.AreEqual(new DateTime(2020, 1, 1), firstTradeLineItem.BillingPeriodStart);
+            Assert.AreEqual(new DateTime(2021, 1, 1), firstTradeLineItem.BillingPeriodEnd);
+            Assert.AreEqual("Description_1_1", firstTradeLineItem.ApplicableProductCharacteristics[0].Description);
+            Assert.AreEqual("Value_1_1", firstTradeLineItem.ApplicableProductCharacteristics[0].Value);
+            Assert.AreEqual("Description_1_2", firstTradeLineItem.ApplicableProductCharacteristics[1].Description);
+            Assert.AreEqual("Value_1_2", firstTradeLineItem.ApplicableProductCharacteristics[1].Value);
+
+            var secondTradeLineItem = desc.TradeLineItems[1];
+
+            Assert.AreEqual(10, secondTradeLineItem.BilledQuantity);
+            Assert.AreEqual(new DateTime(2021, 1, 1), secondTradeLineItem.BillingPeriodStart);
+            Assert.AreEqual(new DateTime(2022, 1, 1), secondTradeLineItem.BillingPeriodEnd);
+            Assert.AreEqual("Description_2_1", secondTradeLineItem.ApplicableProductCharacteristics[0].Description);
+            Assert.AreEqual("Value_2_1", secondTradeLineItem.ApplicableProductCharacteristics[0].Value);
+            Assert.AreEqual("Description_2_2", secondTradeLineItem.ApplicableProductCharacteristics[1].Description);
+            Assert.AreEqual("Value_2_2", secondTradeLineItem.ApplicableProductCharacteristics[1].Value);
+        }
     }
 }

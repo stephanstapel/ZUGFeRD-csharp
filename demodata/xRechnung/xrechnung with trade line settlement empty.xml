@@ -112,49 +112,6 @@ costs, losses or damages could normally have been foreseen.-->
     </ram:IncludedNote>
   </rsm:ExchangedDocument>
   <rsm:SupplyChainTradeTransaction>
-    <ram:IncludedSupplyChainTradeLineItem>
-      <ram:AssociatedDocumentLineDocument>
-        <ram:LineID>2</ram:LineID>
-      </ram:AssociatedDocumentLineDocument>
-      <ram:SpecifiedTradeProduct>
-        <ram:GlobalID schemeID="0160">4012345001235</ram:GlobalID>
-        <ram:Name>Abrechnungskreis 1</ram:Name>
-		<ram:ApplicableProductCharacteristic>
-		<ram:Description>METER_LOCATION</ram:Description>
-		<ram:Value>DE213410213</ram:Value>
-		</ram:ApplicableProductCharacteristic>
-		<ram:ApplicableProductCharacteristic>
-		<ram:Description>METER_NUMBER</ram:Description>
-		<ram:Value>123</ram:Value>
-		</ram:ApplicableProductCharacteristic>
-      </ram:SpecifiedTradeProduct>
-	        <ram:SpecifiedLineTradeAgreement>
-        <ram:NetPriceProductTradePrice>
-          <ram:ChargeAmount>15387.08</ram:ChargeAmount>
-        </ram:NetPriceProductTradePrice>
-      </ram:SpecifiedLineTradeAgreement>
-      <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="C62">1.0000</ram:BilledQuantity>
-      </ram:SpecifiedLineTradeDelivery>
-			<ram:SpecifiedLineTradeSettlement>
-				<ram:ApplicableTradeTax>
-					<ram:TypeCode>VAT</ram:TypeCode>
-					<ram:CategoryCode>S</ram:CategoryCode>
-					<ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>
-				</ram:ApplicableTradeTax>
-				<ram:BillingSpecifiedPeriod>
-					<ram:StartDateTime>
-						<udt:DateTimeString format="102">20210101</udt:DateTimeString>
-					</ram:StartDateTime>
-					<ram:EndDateTime>
-						<udt:DateTimeString format="102">20210131</udt:DateTimeString>
-					</ram:EndDateTime>
-				</ram:BillingSpecifiedPeriod>
-				<ram:SpecifiedTradeSettlementLineMonetarySummation>
-					<ram:LineTotalAmount>311.33</ram:LineTotalAmount>
-				</ram:SpecifiedTradeSettlementLineMonetarySummation>
-			</ram:SpecifiedLineTradeSettlement>
-    </ram:IncludedSupplyChainTradeLineItem>
     <ram:ApplicableHeaderTradeAgreement>
 	  <ram:BuyerReference>04011000-12345-34</ram:BuyerReference>
       <ram:SellerTradeParty>

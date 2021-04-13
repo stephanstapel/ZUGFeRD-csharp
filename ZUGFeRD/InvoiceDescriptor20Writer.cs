@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -129,6 +130,17 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID);
                 _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
+
+                if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Any())
+                {
+                    foreach (var productCharacteristic in tradeLineItem.ApplicableProductCharacteristics)
+                    {
+                        Writer.WriteStartElement("ram:ApplicableProductCharacteristic");
+                        _writeOptionalElementString(Writer, "ram:Description", productCharacteristic.Description);
+                        _writeOptionalElementString(Writer, "ram:Value", productCharacteristic.Value);
+                        Writer.WriteEndElement(); // !ram:ApplicableProductCharacteristic
+                    }
+                }
 
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct
 

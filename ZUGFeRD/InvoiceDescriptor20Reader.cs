@@ -23,6 +23,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.IO;
+using ZUGFeRD;
 
 namespace s2industries.ZUGFeRD
 {
@@ -324,6 +325,18 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodStart = _nodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString", nsmgr),
                 BillingPeriodEnd = _nodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString", nsmgr),
             };
+
+            if (tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic", nsmgr) != null)
+            {
+                foreach (XmlNode applicableProductCharacteristic in tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic", nsmgr))
+                {
+                    item.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic()
+                    {
+                        Description = _nodeAsString(applicableProductCharacteristic, ".//ram:Description", nsmgr),
+                        Value = _nodeAsString(applicableProductCharacteristic, ".//ram:Value", nsmgr),
+                    });
+                }
+            }
 
             if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument", nsmgr) != null)
             {

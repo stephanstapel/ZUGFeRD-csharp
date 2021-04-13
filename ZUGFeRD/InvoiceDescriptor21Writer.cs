@@ -148,6 +148,17 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalElementString(Writer, "ram:Name", !isCommentItem ? tradeLineItem.Name : "TEXT", Profile.XRechnung1 | Profile.XRechnung); // XRechnung erfordert einen Item-Namen
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
+                if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Any())
+                {
+                    foreach (var productCharacteristic in tradeLineItem.ApplicableProductCharacteristics)
+                    {
+                        Writer.WriteStartElement("ram:ApplicableProductCharacteristic");
+                        _writeOptionalElementString(Writer, "ram:Description", productCharacteristic.Description);
+                        _writeOptionalElementString(Writer, "ram:Value", productCharacteristic.Value);
+                        Writer.WriteEndElement(); // !ram:ApplicableProductCharacteristic
+                    }
+                }
+
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended|XRechnung)
                 #endregion
 

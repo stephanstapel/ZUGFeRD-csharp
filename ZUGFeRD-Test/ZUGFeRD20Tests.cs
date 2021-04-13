@@ -100,5 +100,14 @@ namespace ZUGFeRD_Test
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
         } // !TestMissingPropertiesAreNull()
+
+        [TestMethod]
+        public void TestMissingPropertListsEmpty()
+        {
+            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            var invoiceDescriptor = InvoiceDescriptor.Load(path);
+
+            Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.ApplicableProductCharacteristics.Count == 0));
+        } // !TestMissingPropertListsEmpty()
     }
 }
