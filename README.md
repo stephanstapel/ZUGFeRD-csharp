@@ -246,7 +246,7 @@ One trade product can have one or more product characteristics, which can contai
         }
     }.ToList()
 });
-``
+```
 
 # Extracting xml attachments from pdf files
 I am  frequently asked how to extract the ZUGFeRD/ Factur-X/ XRechnung attachment from existing PDF files.
