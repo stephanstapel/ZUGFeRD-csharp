@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -129,6 +130,17 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID);
                 _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name);
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description);
+
+                if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Any())
+                {
+                    foreach (var productCharacteristic in tradeLineItem.ApplicableProductCharacteristics)
+                    {
+                        Writer.WriteStartElement("ram:ApplicableProductCharacteristic");
+                        _writeOptionalElementString(Writer, "ram:Description", productCharacteristic.Description);
+                        _writeOptionalElementString(Writer, "ram:Value", productCharacteristic.Value);
+                        Writer.WriteEndElement(); // !ram:ApplicableProductCharacteristic
+                    }
+                }
 
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct
 
@@ -301,20 +313,20 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
                 Writer.WriteEndElement(); // !ram:ApplicableTradeTax
 
-                if (Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
+                if (tradeLineItem.BillingPeriodStart.HasValue || tradeLineItem.BillingPeriodEnd.HasValue)
                 {
                     Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                    if (Descriptor.BillingPeriodStart.HasValue)
+                    if (tradeLineItem.BillingPeriodStart.HasValue)
                     {
                         Writer.WriteStartElement("ram:StartDateTime");
-                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodStart.Value));
                         Writer.WriteEndElement(); // !StartDateTime
                     }
 
-                    if (Descriptor.BillingPeriodEnd.HasValue)
+                    if (tradeLineItem.BillingPeriodEnd.HasValue)
                     {
                         Writer.WriteStartElement("ram:EndDateTime");
-                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodEnd.Value));
                         Writer.WriteEndElement(); // !EndDateTime
                     }
                     Writer.WriteEndElement(); // !BillingSpecifiedPeriod

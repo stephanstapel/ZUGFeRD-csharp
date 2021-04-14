@@ -230,7 +230,23 @@ desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1
 ```
 
 # Working with product characteristics
-TODO
+Product characteristics are used to add information for the specified trade product in the 'ApplicableProductCharacteristic' section.
+One trade product can have one or more product characteristics, which can contain description, value, typecode and value measurand elements.
+
+ ```csharp
+// you can optionally add product characteristics:
+ desc.TradeLineItems.Add(new TradeLineItem()
+{
+    ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
+    {
+        new ApplicableProductCharacteristic()
+        {
+            Description = "Description",
+            Value = "Value"
+        }
+    }.ToList()
+});
+```
 
 # Extracting xml attachments from pdf files
 I am  frequently asked how to extract the ZUGFeRD/ Factur-X/ XRechnung attachment from existing PDF files.

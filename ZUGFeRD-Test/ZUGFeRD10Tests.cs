@@ -18,7 +18,6 @@
  */
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
-using System;
 using System.IO;
 
 namespace ZUGFeRD_Test
@@ -27,7 +26,6 @@ namespace ZUGFeRD_Test
     public class ZUGFeRD10Tests
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
-
 
         [TestMethod]
         public void TestReferenceComfortInvoice()
@@ -92,5 +90,16 @@ namespace ZUGFeRD_Test
             string s = System.Text.Encoding.Default.GetString(data);
             // TODO: Add more asserts
         } // !TestStoringInvoiceViaStream()
+
+
+        [TestMethod]
+        public void TestMissingPropertiesAreNull()
+        {
+            string path = @"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
+            var invoiceDescriptor = InvoiceDescriptor.Load(path);
+
+            Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
+            Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
+        } // !TestMissingPropertiesAreNull()
     }
 }

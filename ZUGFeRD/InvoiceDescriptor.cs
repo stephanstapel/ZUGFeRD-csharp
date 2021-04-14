@@ -281,12 +281,12 @@ namespace s2industries.ZUGFeRD
         /// SpecifiedTradeSettlementPaymentMeans can be repeated for each account. The code 
         /// for the type of payment within the element typecode (BT-81) should therefore not 
         /// differ within the repetitions.
-        /// </summary>
+        /// </summary> 
         public PaymentMeans PaymentMeans { get; set; }
-
+ 
         /// <summary>
         /// Detailed information about the invoicing period, start date
-        /// </summary>
+        /// </summary>   
         public DateTime? BillingPeriodStart { get; set; }
 
         /// <summary>
@@ -728,7 +728,6 @@ namespace s2industries.ZUGFeRD
 
         } // !AddTradeLineCommentItem()
 
-
         /// <summary>
         /// Adds a new comment as a dedicated line of the invoice.
         /// 
@@ -752,6 +751,7 @@ namespace s2industries.ZUGFeRD
 
             TradeLineItem item = new TradeLineItem()
             {
+                LineID = lineID,
                 AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID),
                 GrossUnitPrice = 0m,
                 NetUnitPrice= 0m,
@@ -807,7 +807,8 @@ namespace s2industries.ZUGFeRD
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null)
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null,
+                                     DateTime? billingPeriodStart = null, DateTime? billingPerdiodEnd = null)
         {
             return AddTradeLineItem(lineID: _getNextLineId(),
                              name: name,
@@ -824,7 +825,9 @@ namespace s2industries.ZUGFeRD
                              id: id,
                              sellerAssignedID: sellerAssignedID,
                              deliveryNoteID: deliveryNoteID,
-                             buyerOrderID: buyerOrderID);
+                             buyerOrderID: buyerOrderID,
+                             billingPeriodStart: billingPeriodStart,
+                             billingPeriodEnd: BillingPeriodEnd);
 
         } // !AddTradeLineItem()
 
@@ -848,11 +851,12 @@ namespace s2industries.ZUGFeRD
                                      GlobalID id = null,
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                     string buyerOrderID = "", DateTime? buyerOrderDate = null
-                                     )
+                                     string buyerOrderID = "", DateTime? buyerOrderDate = null,
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
         {
             TradeLineItem newItem = new TradeLineItem()
             {
+                LineID = lineID,
                 GlobalID = id,
                 SellerAssignedID = sellerAssignedID,
                 BuyerAssignedID = buyerAssignedID,
@@ -865,7 +869,9 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = billedQuantity,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent                
+                TaxPercent = taxPercent,
+                BillingPeriodStart = billingPeriodStart,
+                BillingPeriodEnd = billingPeriodEnd
             };
 
             if (String.IsNullOrEmpty(lineID))

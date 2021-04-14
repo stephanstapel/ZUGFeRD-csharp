@@ -148,6 +148,17 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalElementString(Writer, "ram:Name", !isCommentItem ? tradeLineItem.Name : "TEXT", Profile.XRechnung1 | Profile.XRechnung); // XRechnung erfordert einen Item-Namen
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
+                if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Any())
+                {
+                    foreach (var productCharacteristic in tradeLineItem.ApplicableProductCharacteristics)
+                    {
+                        Writer.WriteStartElement("ram:ApplicableProductCharacteristic");
+                        _writeOptionalElementString(Writer, "ram:Description", productCharacteristic.Description);
+                        _writeOptionalElementString(Writer, "ram:Value", productCharacteristic.Value);
+                        Writer.WriteEndElement(); // !ram:ApplicableProductCharacteristic
+                    }
+                }
+
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended|XRechnung)
                 #endregion
 
@@ -368,9 +379,25 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
                 #endregion // !ApplicableTradeTax(Basic|Comfort|Extended|XRechnung)
 
-                #region BillingSpecifiedPeriod (Comfort, Extended)
-                //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den für die Rechnungsposition maßgeblichen Zeitraum enthält
-                //ToDo: BillingSpecifiedPeriod für Comfort und Extended
+                #region BillingSpecifiedPeriod
+                if (tradeLineItem.BillingPeriodStart.HasValue || tradeLineItem.BillingPeriodEnd.HasValue)
+                {
+                    Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    if (tradeLineItem.BillingPeriodStart.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:StartDateTime");
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodStart.Value));
+                        Writer.WriteEndElement(); // !StartDateTime
+                    }
+
+                    if (tradeLineItem.BillingPeriodEnd.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:EndDateTime");
+                        _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodEnd.Value));
+                        Writer.WriteEndElement(); // !EndDateTime
+                    }
+                    Writer.WriteEndElement(); // !BillingSpecifiedPeriod
+                }
                 #endregion
 
                 #region SpecifiedTradeAllowanceCharge

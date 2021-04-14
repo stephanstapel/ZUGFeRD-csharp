@@ -18,8 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ZUGFeRD;
 
 namespace s2industries.ZUGFeRD
 {
@@ -28,6 +27,10 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class TradeLineItem
     {
+        /// <summary>
+        /// Eindeutige Bezeichnung für die betreffende Rechnungsposition
+        /// </summary>
+        public string LineID;
         /// <summary>
         /// Identifier of an item according to a registered scheme
         /// </summary>
@@ -60,6 +63,14 @@ namespace s2industries.ZUGFeRD
         /// Nettobetrag der Rechnungsposition
         /// </summary>
         public decimal? LineTotalAmount { get; set; }
+        /// <summary>
+        /// Beginn des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
+        /// </summary>
+        public DateTime? BillingPeriodStart { get; set; }
+        /// <summary>
+        /// Ende des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
+        /// </summary>
+        public DateTime? BillingPeriodEnd { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -99,6 +110,10 @@ namespace s2industries.ZUGFeRD
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
         public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; }
 
+        /// <summary>
+        /// Zusätzliche Produkteigenschaften
+        /// </summary>
+        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; }
 
         /// <summary>
         /// Initializes a new/ empty trade line item
@@ -111,6 +126,7 @@ namespace s2industries.ZUGFeRD
             this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
             this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
             this.ReceivableSpecifiedTradeAccountingAccounts = new List<ReceivableSpecifiedTradeAccountingAccount>();
+            this.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>();
         }
 
 
@@ -139,8 +155,8 @@ namespace s2industries.ZUGFeRD
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
-                 ID = deliveryNoteId,
-                 IssueDateTime = deliveryNoteDate
+                ID = deliveryNoteId,
+                IssueDateTime = deliveryNoteDate
             };
         } // !SetDeliveryNoteReferencedDocument()
 
