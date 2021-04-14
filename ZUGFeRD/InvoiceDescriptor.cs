@@ -728,7 +728,6 @@ namespace s2industries.ZUGFeRD
 
         } // !AddTradeLineCommentItem()
 
-
         /// <summary>
         /// Adds a new comment as a dedicated line of the invoice.
         /// 

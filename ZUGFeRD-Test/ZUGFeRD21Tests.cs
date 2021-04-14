@@ -326,24 +326,44 @@ namespace ZUGFeRD_Test
 
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
-        } // !TestMissingPropertiesAreNull()
-
+        }
 
         [TestMethod]
-        public void TestReadTradeLineSettlement()
+        public void TestMissingPropertiesAreEmpty()
+        {
+            var path = @"..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            var invoiceDescriptor = InvoiceDescriptor.Load(path);
+
+            Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.ApplicableProductCharacteristics.Count == 0));
+        }
+
+        [TestMethod]
+        public void TestReadTradeLineBillingPeriod()
         {
             var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement data.xml";
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
-            // Test LineID
-            tradeLineItem.LineID = "2"; 
-
-            // Test BillingPeriod
             Assert.AreEqual(new DateTime(2021, 01, 01), tradeLineItem.BillingPeriodStart);
             Assert.AreEqual(new DateTime(2021, 01, 31), tradeLineItem.BillingPeriodEnd);
+        }
 
-            // Test Product Characteristics
+        [TestMethod]
+        public void TestReadTradeLineLineID()
+        {
+            var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement data.xml";
+            var invoiceDescriptor = InvoiceDescriptor.Load(path);
+            var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
+            Assert.AreEqual("2", tradeLineItem.LineID);
+        }
+
+        [TestMethod]
+        public void TestReadTradeLineProductCharacteristics()
+        {
+            var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement data.xml";
+            var invoiceDescriptor = InvoiceDescriptor.Load(path);
+            var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
+
             var firstProductCharacteristic = tradeLineItem.ApplicableProductCharacteristics[0];
             Assert.AreEqual("METER_LOCATION", firstProductCharacteristic.Description);
             Assert.AreEqual("DE213410213", firstProductCharacteristic.Value);
@@ -351,26 +371,21 @@ namespace ZUGFeRD_Test
             var secondProductCharacteristic = tradeLineItem.ApplicableProductCharacteristics[1];
             Assert.AreEqual("METER_NUMBER", secondProductCharacteristic.Description);
             Assert.AreEqual("123", secondProductCharacteristic.Value);
-
-        } // !TestReadTradeLineSettlement()
+        }
 
 
         [TestMethod]
-        public void TestTradeLineSettlement()
+        public void TestWriteTradeLineProductCharacteristics()
         {
-            // Read XRechnung
-            string path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
 
-            Stream s = File.Open(path, FileMode.Open);
-            InvoiceDescriptor originalDesc = InvoiceDescriptor.Load(s);
-            s.Close();
+            var fileStream = File.Open(path, FileMode.Open);
+            var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
+            fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalDesc.TradeLineItems.Add(new TradeLineItem()
+            originalInvoiceDescriptor.TradeLineItems.Add(new TradeLineItem()
             {
-                BillingPeriodStart = new DateTime(2020, 1, 1),
-                BillingPeriodEnd = new DateTime(2021, 1, 1),
-                BilledQuantity = 5,
                 ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
                 {
                     new ApplicableProductCharacteristic()
@@ -384,14 +399,10 @@ namespace ZUGFeRD_Test
                         Value = "Value_1_2"
                     },
                 }.ToList(),
-                NetUnitPrice = 1,
             });
 
-            originalDesc.TradeLineItems.Add(new TradeLineItem()
+            originalInvoiceDescriptor.TradeLineItems.Add(new TradeLineItem()
             {
-                BillingPeriodStart = new DateTime(2021, 1, 1),
-                BillingPeriodEnd = new DateTime(2022, 1, 1),
-                BilledQuantity = 10,
                 ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
                 {
                     new ApplicableProductCharacteristic()
@@ -404,38 +415,166 @@ namespace ZUGFeRD_Test
                         Description = "Description_2_2",
                         Value = "Value_2_2"
                     },
-                }.ToList(),
-                NetUnitPrice = 1,
+                }.ToList()
             });
 
-            originalDesc.IsTest = false;
+            originalInvoiceDescriptor.IsTest = false;
 
-            Stream ms = new MemoryStream();
-            originalDesc.Save(ms, ZUGFeRDVersion.Version21, Profile.Basic);
-            originalDesc.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
+            using (var memoryStream = new MemoryStream())
+            {
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version21, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
 
-            // Load Invoice and compare to expected
-            InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
+                // Load Invoice and compare to expected
+                var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
 
-            var firstTradeLineItem = desc.TradeLineItems[0];
+                var firstTradeLineItem = invoiceDescriptor.TradeLineItems[0];
+                Assert.AreEqual("Description_1_1", firstTradeLineItem.ApplicableProductCharacteristics[0].Description);
+                Assert.AreEqual("Value_1_1", firstTradeLineItem.ApplicableProductCharacteristics[0].Value);
+                Assert.AreEqual("Description_1_2", firstTradeLineItem.ApplicableProductCharacteristics[1].Description);
+                Assert.AreEqual("Value_1_2", firstTradeLineItem.ApplicableProductCharacteristics[1].Value);
 
-            Assert.AreEqual(5, firstTradeLineItem.BilledQuantity);
-            Assert.AreEqual(new DateTime(2020, 1, 1), firstTradeLineItem.BillingPeriodStart);
-            Assert.AreEqual(new DateTime(2021, 1, 1), firstTradeLineItem.BillingPeriodEnd);
-            Assert.AreEqual("Description_1_1", firstTradeLineItem.ApplicableProductCharacteristics[0].Description);
-            Assert.AreEqual("Value_1_1", firstTradeLineItem.ApplicableProductCharacteristics[0].Value);
-            Assert.AreEqual("Description_1_2", firstTradeLineItem.ApplicableProductCharacteristics[1].Description);
-            Assert.AreEqual("Value_1_2", firstTradeLineItem.ApplicableProductCharacteristics[1].Value);
+                var secondTradeLineItem = invoiceDescriptor.TradeLineItems[1];
+                Assert.AreEqual("Description_2_1", secondTradeLineItem.ApplicableProductCharacteristics[0].Description);
+                Assert.AreEqual("Value_2_1", secondTradeLineItem.ApplicableProductCharacteristics[0].Value);
+                Assert.AreEqual("Description_2_2", secondTradeLineItem.ApplicableProductCharacteristics[1].Description);
+                Assert.AreEqual("Value_2_2", secondTradeLineItem.ApplicableProductCharacteristics[1].Value);
+            }
+        }
 
-            var secondTradeLineItem = desc.TradeLineItems[1];
+        [TestMethod]
+        public void TestWriteTradeLineBillingPeriod()
+        {
+            // Read XRechnung
+            string path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
 
-            Assert.AreEqual(10, secondTradeLineItem.BilledQuantity);
-            Assert.AreEqual(new DateTime(2021, 1, 1), secondTradeLineItem.BillingPeriodStart);
-            Assert.AreEqual(new DateTime(2022, 1, 1), secondTradeLineItem.BillingPeriodEnd);
-            Assert.AreEqual("Description_2_1", secondTradeLineItem.ApplicableProductCharacteristics[0].Description);
-            Assert.AreEqual("Value_2_1", secondTradeLineItem.ApplicableProductCharacteristics[0].Value);
-            Assert.AreEqual("Description_2_2", secondTradeLineItem.ApplicableProductCharacteristics[1].Description);
-            Assert.AreEqual("Value_2_2", secondTradeLineItem.ApplicableProductCharacteristics[1].Value);
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor originalInvoiceDescriptor = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            // Modifiy trade line settlement data
+            originalInvoiceDescriptor.TradeLineItems.Add(new TradeLineItem()
+            {
+                BillingPeriodStart = new DateTime(2020, 1, 1),
+                BillingPeriodEnd = new DateTime(2021, 1, 1),
+            });
+
+            originalInvoiceDescriptor.TradeLineItems.Add(new TradeLineItem()
+            {
+                BillingPeriodStart = new DateTime(2021, 1, 1),
+                BillingPeriodEnd = new DateTime(2022, 1, 1)
+            });
+
+            originalInvoiceDescriptor.IsTest = false;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version21, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
+
+                // Load Invoice and compare to expected
+                var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
+
+                var firstTradeLineItem = invoiceDescriptor.TradeLineItems[0];
+                Assert.AreEqual(new DateTime(2020, 1, 1), firstTradeLineItem.BillingPeriodStart);
+                Assert.AreEqual(new DateTime(2021, 1, 1), firstTradeLineItem.BillingPeriodEnd);
+
+                var secondTradeLineItem = invoiceDescriptor.TradeLineItems[1];
+                Assert.AreEqual(new DateTime(2021, 1, 1), secondTradeLineItem.BillingPeriodStart);
+                Assert.AreEqual(new DateTime(2022, 1, 1), secondTradeLineItem.BillingPeriodEnd);
+            }
+        }
+
+        [TestMethod]
+        public void TestWriteTradeLineBilledQuantity()
+        {
+            // Read XRechnung
+            var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+
+            var fileStream = File.Open(path, FileMode.Open);
+            var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
+            fileStream.Close();
+
+            // Modifiy trade line settlement data
+            originalInvoiceDescriptor.TradeLineItems.Add(new TradeLineItem()
+            {
+                BilledQuantity = 10,
+                NetUnitPrice = 1
+            });
+
+            originalInvoiceDescriptor.IsTest = false;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version21, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
+
+                // Load Invoice and compare to expected
+                var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
+                Assert.AreEqual(10, invoiceDescriptor.TradeLineItems[0].BilledQuantity);
+            }
+        }
+
+        [TestMethod]
+        public void TestWriteTradeLineNetUnitPrice()
+        {
+            // Read XRechnung
+            var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+
+            var fileStream = File.Open(path, FileMode.Open);
+            var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
+            fileStream.Close();
+
+            // Modifiy trade line settlement data
+            originalInvoiceDescriptor.TradeLineItems.Add(new TradeLineItem()
+            {
+                NetUnitPrice = 25
+            });
+
+            originalInvoiceDescriptor.IsTest = false;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version21, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
+
+                // Load Invoice and compare to expected
+                var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
+                Assert.AreEqual(25, invoiceDescriptor.TradeLineItems[0].NetUnitPrice);
+            }
+        }
+
+        [TestMethod]
+        public void TestWriteTradeLineLineID()
+        {
+            // Read XRechnung
+            var path = @"..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+
+            var fileStream = File.Open(path, FileMode.Open);
+            var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
+            fileStream.Close();
+
+            // Modifiy trade line settlement data
+            originalInvoiceDescriptor.TradeLineItems.RemoveAll(_ => true);
+
+            originalInvoiceDescriptor.AddTradeLineCommentItem("2", "Comment_2");
+            originalInvoiceDescriptor.AddTradeLineCommentItem("3", "Comment_3");
+            originalInvoiceDescriptor.IsTest = false;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version21, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version21);
+
+                // Load Invoice and compare to expected
+                var invoiceDescriptor = InvoiceDescriptor.Load(@"xrechnung with trade line settlement filled.xml");
+
+                var firstTradeLineItem = invoiceDescriptor.TradeLineItems[0];
+                Assert.AreEqual("2", firstTradeLineItem.LineID);
+
+                var secondTradeLineItem = invoiceDescriptor.TradeLineItems[1];
+                Assert.AreEqual("3", secondTradeLineItem.LineID);
+            }
         }
     }
 }
