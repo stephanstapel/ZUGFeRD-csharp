@@ -88,7 +88,18 @@ namespace s2industries.ZUGFeRD
         /// Currency of the invoice
         /// </summary>
         public CurrencyCodes Currency { get; set; }
+
+
+        /// <summary>
+        /// Information about the buyer
+        /// </summary>
         public Party Buyer { get; set; }
+
+        /// <summary>
+        /// Buyer contact information
+        ///  
+        /// A group of business terms providing contact information relevant for the buyer.
+        /// </summary>
         public Contact BuyerContact { get; set; }
         public List<TaxRegistration> BuyerTaxRegistration { get; set; } = new List<TaxRegistration>();
         public Party Seller { get; set; }
@@ -115,6 +126,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party ShipFrom { get; set; }
 
+        /// <summary>
+        /// Free text on header level
+        /// </summary>
         public List<Note> Notes { get; set; } = new List<Note>();
 
         /// <summary>
@@ -212,16 +226,72 @@ namespace s2industries.ZUGFeRD
         /// The amount may be negative; in that case the seller owes the amount to the buyer.
         /// </summary>
         public decimal? DuePayableAmount { get; set; } = null;
+
+        /// <summary>
+        /// A group of business terms providing information about VAT breakdown by different categories, rates and exemption reasons
+        /// </summary>
         public List<Tax> Taxes { get; set; } = new List<Tax>();
+
+        /// <summary>
+        /// Transport and packaging costs
+        /// </summary>
         public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
+
+        /// <summary>
+        /// Detailed information on discounts and charges
+        /// </summary>
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
-        public PaymentTerms PaymentTerms { get; set; }        
+
+        /// <summary>
+        /// Detailed information about payment terms               
+        /// </summary>
+        public PaymentTerms PaymentTerms { get; set; }
+
+        /// <summary>
+        /// A group of business terms providing information about a preceding invoices.
+        /// 
+        /// To be used in case: 
+        /// — a preceding invoice is corrected; 
+        /// — preceding partial invoices are referred to from a final invoice; 
+        /// — preceding pre-payment invoices are referred to from a final invoice.
+        /// </summary>
         public InvoiceReferencedDocument InvoiceReferencedDocument { get; set; }
+
+        /// <summary>
+        /// Detailed information about the accounting reference
+        /// </summary>
         public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; internal set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
+
+        /// <summary>
+        /// Credit Transfer
+        /// 
+        /// A group of business terms to specify credit transfer payments
+        /// </summary>
         public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
+
+        /// <summary>
+        /// Buyer bank information
+        /// </summary>
         public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
+
+        /// <summary>
+        /// Payment instructions
+        /// 
+        /// /// If various accounts for credit transfers shall be transferred, the element 
+        /// SpecifiedTradeSettlementPaymentMeans can be repeated for each account. The code 
+        /// for the type of payment within the element typecode (BT-81) should therefore not 
+        /// differ within the repetitions.
+        /// </summary> 
         public PaymentMeans PaymentMeans { get; set; }
+ 
+        /// <summary>
+        /// Detailed information about the invoicing period, start date
+        /// </summary>   
         public DateTime? BillingPeriodStart { get; set; }
+
+        /// <summary>
+        /// Detailed information about the invoicing period, end date
+        /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
 
 
@@ -767,14 +837,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds a new line to the invoice. The line id is passed as a parameter.
         /// </summary>
-        // TODO Rabatt ergänzen:
-        // <ram:AppliedTradeAllowanceCharge>
-        //     <ram:ChargeIndicator><udt:Indicator>false</udt:Indicator></ram:ChargeIndicator>
-        //     <ram:CalculationPercent>2.00</ram:CalculationPercent>
-        //     <ram:BasisAmount currencyID = "EUR" > 1.5000 </ram:BasisAmount>
-        //     <ram:ActualAmount currencyID = "EUR" > 0.0300 </ram:ActualAmount>
-        //     <ram:Reason>Artikelrabatt 1</ram:Reason>
-        // </ram:AppliedTradeAllowanceCharge>
         public TradeLineItem AddTradeLineItem(string lineID,
                                      string name,
                                      string description = null,
