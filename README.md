@@ -68,29 +68,6 @@ desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% S
 desc.Save("output.xml");
 ```
 
-## Handling of line ids
-The library allows to operate in two modes: you can either let the library generate the line ids automatically or you can alternatively pass distinct line ids. This is helpful if you want to convert existing invoices, e.g. from ERP systems, to ZUGFeRD/ Factur-X.
-
-To let the library create line ids, you can use:
-
-```csharp
-InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem("Item name", "Detail description", QuantityCodes.PCE, ....);
-```
-
-This will generate an invoice with trade line item numbered as '1'.
-
-To pass pre-defined line ids, this is the way to go:
-
-```csharp
-InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem(lineId: "0001", "Item name", "Detail description", QuantityCodes.PCE, ....);
-desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", QuantityCodes.PCE, ....);
-```
-
-which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
-
-
 # Using ZUGFeRD 1.x, ZUGFeRD 2.x
 In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
 
@@ -148,16 +125,6 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // s
 
 For reading and writing XRechnung invoices, please see below.
 
-# Special references
-The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
-
-```csharp
-// you can optionally add a reference to a procuring project:
-desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt AB-312", ID = "AB-312"};
-
-// you can optionally reference a contract:
-desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
-```
 
 # Support for XRechnung
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
@@ -227,6 +194,43 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // sa
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1, profile Basic
 descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as version 2.1, profile XRechnung
 ```
+
+
+# Handling of line ids
+The library allows to operate in two modes: you can either let the library generate the line ids automatically or you can alternatively pass distinct line ids. This is helpful if you want to convert existing invoices, e.g. from ERP systems, to ZUGFeRD/ Factur-X.
+
+To let the library create line ids, you can use:
+
+```csharp
+InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
+desc.AddTradeLineItem("Item name", "Detail description", QuantityCodes.PCE, ....);
+```
+
+This will generate an invoice with trade line item numbered as '1'.
+
+To pass pre-defined line ids, this is the way to go:
+
+```csharp
+InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
+desc.AddTradeLineItem(lineId: "0001", "Item name", "Detail description", QuantityCodes.PCE, ....);
+desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", QuantityCodes.PCE, ....);
+```
+
+which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
+
+# Special references
+The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
+
+```csharp
+// you can optionally add a reference to a procuring project:
+desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt AB-312", ID = "AB-312"};
+
+// you can optionally reference a contract:
+desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
+```
+
+# Working with product characteristics
+TODO
 
 # Extracting xml attachments from pdf files
 I am  frequently asked how to extract the ZUGFeRD/ Factur-X/ XRechnung attachment from existing PDF files.
