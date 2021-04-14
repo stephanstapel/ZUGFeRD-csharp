@@ -615,6 +615,28 @@ namespace s2industries.ZUGFeRD
             //  11. ApplicableTradeTax (optional)
             _writeOptionalTaxes(Writer);
 
+            #region BillingSpecifiedPeriod
+            //  12. BillingSpecifiedPeriod (optional)
+            if (Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
+            {
+                Writer.WriteStartElement("ram:BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                if (Descriptor.BillingPeriodStart.HasValue)
+                {
+                    Writer.WriteStartElement("ram:StartDateTime");
+                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodStart.Value));
+                    Writer.WriteEndElement(); // !StartDateTime
+                }
+
+                if (Descriptor.BillingPeriodEnd.HasValue)
+                {
+                    Writer.WriteStartElement("ram:EndDateTime");
+                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.BillingPeriodEnd.Value));
+                    Writer.WriteEndElement(); // !EndDateTime
+                }
+                Writer.WriteEndElement(); // !BillingSpecifiedPeriod
+            }
+            #endregion
+
             //  13. SpecifiedTradeAllowanceCharge (optional)
             if ((this.Descriptor.TradeAllowanceCharges != null) && (this.Descriptor.TradeAllowanceCharges.Count > 0))
             {
