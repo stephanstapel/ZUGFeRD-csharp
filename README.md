@@ -237,14 +237,14 @@ One trade product can have one or more product characteristics, which can contai
 // you can optionally add product characteristics:
  desc.TradeLineItems.Add(new TradeLineItem()
 {
-    ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
+    ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>
     {
         new ApplicableProductCharacteristic()
         {
             Description = "Description",
             Value = "Value"
         }
-    }.ToList()
+    }
 });
 ```
 
