@@ -47,7 +47,6 @@ Using InvoiceDescriptor to create invoices is straight forward:
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.Profile = Profile.Comfort;
 desc.ReferenceOrderNo = "AB-312";
 desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
 desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", "AAK");
@@ -65,7 +64,7 @@ desc.AddApplicableTradeTax(9.06m, 129.37m, 7m, "VAT", "S");
 desc.AddApplicableTradeTax(12.25m, 64.46m, 19m, "VAT", "S");
 desc.SetLogisticsServiceCharge(5.80m, "Versandkosten", "VAT", "S", 7m);
 desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
-desc.Save("output.xml");
+descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version1, Profile.Basic);
 ```
 
 # Using ZUGFeRD 1.x, ZUGFeRD 2.x
