@@ -247,9 +247,9 @@ namespace s2industries.ZUGFeRD
 
                             Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
 
-                            if (!String.IsNullOrEmpty(document.ID))
+                            if (!String.IsNullOrEmpty(document.IssuerAssignedID))
                             {
-                                Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
+                                Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
                             }
 
                             Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
@@ -279,7 +279,7 @@ namespace s2industries.ZUGFeRD
                         #endregion
 
                         #region BasisAmount
-                        Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
                         Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
                         Writer.WriteEndElement();
                         #endregion
@@ -290,7 +290,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement();
                         #endregion
 
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
 
                         Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                     }
