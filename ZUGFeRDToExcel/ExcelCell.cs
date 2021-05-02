@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -100,14 +101,22 @@ namespace ZUGFeRDToExcel
         } // !setFormula()
 
 
-        internal ExcelCell setValue(decimal value, string formatString)
+        internal ExcelCell setValue(decimal? value, string formatString)
         {
-            ExcelCell retval = this.setText(value.ToString(formatString));
-            if (formatString.Contains(".#") || formatString.Contains(".0"))
+            if (!value.HasValue)
             {
-                retval.formatWithDecimals();
+                ExcelCell retval = this.setText("");
+                return retval;
             }
-            return retval;
+            else
+            {
+                ExcelCell retval = this.setText(value.Value.ToString(formatString));
+                if (formatString.Contains(".#") || formatString.Contains(".0"))
+                {
+                    retval.formatWithDecimals();
+                }
+                return retval;
+            }
         } // !setValue()
 
 
