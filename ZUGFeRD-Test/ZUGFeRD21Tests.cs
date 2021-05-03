@@ -290,7 +290,7 @@ namespace ZUGFeRD_Test
 
 
         [TestMethod]
-        public void TestTotalRounding()
+        public void TestTotalRoundingExtended()
         {
             var uuid = Guid.NewGuid().ToString();
             var issueDateTime = DateTime.Today;
@@ -316,7 +316,39 @@ namespace ZUGFeRD_Test
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
-        } // !TestTotalRounding()
+        } // !TestTotalRoundingExtended()
+
+
+        [TestMethod]
+        public void TestTotalRoundingXRechnung()
+        {
+            var uuid = Guid.NewGuid().ToString();
+            var issueDateTime = DateTime.Today;
+
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.ContractReferencedDocument = new ContractReferencedDocument
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+            desc.SetTotals(1.99m, 0m, 0m, 0m, 0m, 2m, 0m, 2m, 0.01m);
+
+            var msExtended = new MemoryStream();
+            desc.Save(msExtended, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            msExtended.Seek(0, SeekOrigin.Begin);
+
+            var loadedInvoice = InvoiceDescriptor.Load(msExtended);
+            Assert.AreEqual(loadedInvoice.RoundingAmount, 0.01m);
+
+            var msBasic = new MemoryStream();
+            desc.Save(msBasic, ZUGFeRDVersion.Version21);
+            msBasic.Seek(0, SeekOrigin.Begin);
+
+            loadedInvoice = InvoiceDescriptor.Load(msBasic);
+            Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
+        } // !TestTotalRoundingExtended()
+
+
 
         [TestMethod]
         public void TestMissingPropertiesAreNull()
