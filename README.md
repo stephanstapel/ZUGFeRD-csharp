@@ -26,7 +26,7 @@ Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
 # Sponsoring
 Implementing and maintaining this library is a lot of hard work. Support me in this work and help making this library better:
 
-[:heart: Sponsor on github](https://github.com/sponsors/stephanstapel)
+[:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
 
 
 # Installation
