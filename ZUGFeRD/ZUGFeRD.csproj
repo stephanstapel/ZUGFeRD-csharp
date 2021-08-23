@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <Version>6.0.0</Version>
+    <TargetFrameworks>netstandard2.0;net461;net480</TargetFrameworks>
+    <Version>6.1.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>ZUGFeRD and it's successor Factur-X are initiatives from German (respectively European) government to foster electronic invoices.
@@ -19,38 +19,29 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2021</Copyright>
-    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+    <AssemblyVersion>6.1.0.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>6.0.0.0</FileVersion>
+    <FileVersion>6.1.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>6.0.0:
-
-
-All versions:
-
-* New handling of optional values: decimal? is used all over, replacing decimal.MinValue as default value
-
-* Fix for writing BuyerOrderReferencedDocument (#135)
-
-* Added documentation
-
-
-
-ZUGFeRD 2.1/ Factur-X/ XRechnung:
-
-* Fix for quantity decimals (#132)
-
-* Support for rounding amount (#134)
-
-
+    <PackageReleaseNotes>All versions of ZUGFeRD:
+    Added documentation
 
 ZUGFeRD 2.0:
+    Addition of product characteristics on item level
+    Addition of billing specified period on item level
 
-* Support for rounding amount (#134)</PackageReleaseNotes>
+ZUGFeRD 2.1/ XREchnung:
+    Addition of product characteristics on item level
+    Addition of billing specified period on item level
+    Bugfix for decimals of GrossPriceProductTradePrice
+    XRechnung fix for AppliedTradeAllowanceCharge (#152 )
+    RoundingAmount extended to XRechnung (#153)</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>ZUGFeRD-csharp</PackageId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Debug</OutputPath>
