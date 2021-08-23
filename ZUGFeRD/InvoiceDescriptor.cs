@@ -756,6 +756,7 @@ namespace s2industries.ZUGFeRD
                 GrossUnitPrice = 0m,
                 NetUnitPrice= 0m,
                 BilledQuantity = 0m,
+                UnitCode = QuantityCodes.C62,
                 TaxCategoryCode = TaxCategoryCodes.O
             };
 
