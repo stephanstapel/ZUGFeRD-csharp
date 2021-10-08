@@ -1136,18 +1136,15 @@ namespace s2industries.ZUGFeRD
                 {
                     _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
-                //else if ( ((profile & Profile.XRechnung) == Profile.XRechnung) || ((profile & Profile.XRechnung1) == Profile.XRechnung1) )
-                //{
-                //    _writeOptionalContact(writer, "ram:DefinedTradeContact", new Contact(), Profile.XRechnung1 | Profile.XRechnung);
-                //}
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
-                writer.WriteElementString("ram:PostcodeCode", party.Postcode);
-                writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(party.ContactName) ? party.Street : party.ContactName);
+                writer.WriteElementString("ram:PostcodeCode", party.Postcode); // BT-53
+                writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(party.ContactName) ? party.Street : party.ContactName); // BT-50
                 if (!string.IsNullOrEmpty(party.ContactName))
-                    writer.WriteElementString("ram:LineTwo", party.Street);
-                writer.WriteElementString("ram:CityName", party.City);
-                writer.WriteElementString("ram:CountryID", party.Country.EnumToString());
+                    writer.WriteElementString("ram:LineTwo", party.Street); // BT-51
+                // no implementation of BT-163 (ram:LineThree) so far
+                writer.WriteElementString("ram:CityName", party.City); // BT-52
+                writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // BT-55
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (taxRegistrations != null)
