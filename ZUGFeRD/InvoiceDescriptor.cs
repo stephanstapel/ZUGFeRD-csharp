@@ -793,6 +793,8 @@ namespace s2industries.ZUGFeRD
         /// <param name="deliveryNoteDate"></param>
         /// <param name="buyerOrderID"></param>
         /// <param name="buyerOrderDate"></param>
+        /// <param name="billingPeriodStart"></param>
+        /// <param name="billingPeriodEnd"></param>
         /// <returns></returns>        
         public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
@@ -809,7 +811,7 @@ namespace s2industries.ZUGFeRD
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                     DateTime? billingPeriodStart = null, DateTime? billingPerdiodEnd = null)
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
         {
             return AddTradeLineItem(lineID: _getNextLineId(),
                              name: name,
@@ -827,6 +829,7 @@ namespace s2industries.ZUGFeRD
                              sellerAssignedID: sellerAssignedID,
                              deliveryNoteID: deliveryNoteID,
                              buyerOrderID: buyerOrderID,
+                             buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,
                              billingPeriodEnd: BillingPeriodEnd);
 
@@ -946,10 +949,13 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddDebitorFinancialAccount()
 
+
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
         }
+
+
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
