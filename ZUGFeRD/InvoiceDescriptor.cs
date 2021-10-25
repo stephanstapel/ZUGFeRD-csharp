@@ -831,7 +831,7 @@ namespace s2industries.ZUGFeRD
                              buyerOrderID: buyerOrderID,
                              buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,
-                             billingPeriodEnd: BillingPeriodEnd);
+                             billingPeriodEnd: billingPeriodEnd);
 
         } // !AddTradeLineItem()
 
