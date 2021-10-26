@@ -73,7 +73,13 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Kilometer
-        /// Abkürzung: km
+        /// Abkürzung: km (Rec20r13)
+        /// </summary>
+        KMT,
+
+        /// <summary>
+        /// Kilometer
+        /// Abkürzung: km (Rec20r16)
         /// </summary>
         KTM,
 
