@@ -73,7 +73,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Kilometer
-        /// Abkürzung: km (Rec20r13)
+        /// Abkürzung: km (Rec20r13) für XRechnung
         /// </summary>
         KMT,
 
