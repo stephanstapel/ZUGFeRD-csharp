@@ -9,7 +9,12 @@ A description of the library can be found here:
 
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
 
-## Relationship between the different standards
+# Sponsoring
+Implementing and maintaining this library is a lot of hard work. I'm doing this in my spare time, there is no company behind developing ZUGFeRD-chsarp. Support me in this work and help making this library better:
+
+[:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
+
+# Relationship between the different standards
 Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
 
 - ZUGFeRD was developed by a German initiative as a standard for electronic invoices (https://www.ferd-net.de/).
@@ -22,12 +27,6 @@ Since there are a lot terms and standards around electronic invoices, I'd like t
 
 # License
 Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
-
-# Sponsoring
-Implementing and maintaining this library is a lot of hard work. Support me in this work and help making this library better:
-
-[:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
-
 
 # Installation
 Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-chsarp'.
