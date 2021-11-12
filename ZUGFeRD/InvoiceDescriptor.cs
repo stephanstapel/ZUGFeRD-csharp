@@ -922,6 +922,37 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetPaymentMeans()
 
+        /// <summary>
+        ///     Sets up the payment means for SEPA direct debit.
+        /// </summary>
+        public void SetPaymentMeansSepaDirectDebit(string sepaCreditorIdentifier, string sepaMandateReference, string information = "")
+        {
+            this.PaymentMeans = new PaymentMeans
+            {
+                TypeCode = PaymentMeansTypeCodes.SEPADirectDebit,
+                Information = information,
+                SEPACreditorIdentifier = sepaCreditorIdentifier,
+                SEPAMandateReference = sepaMandateReference
+            };
+        } // !SetPaymentMeans()
+
+        /// <summary>
+        ///     Sets up the payment means for payment via financial card.
+        /// </summary>
+        public void SetPaymentMeansFinancialCard(string financialCardId, string financialCardCardholder, string information = "")
+        {
+            this.PaymentMeans = new PaymentMeans
+            {
+                TypeCode = PaymentMeansTypeCodes.SEPADirectDebit,
+                Information = information,
+                FinancialCard = new FinancialCard
+                {
+                    Id = financialCardId,
+                    CardholderName = financialCardCardholder
+                }
+            };
+        } // !SetPaymentMeans()
+
 
         public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {

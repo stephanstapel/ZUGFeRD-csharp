@@ -18,8 +18,10 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 
@@ -65,9 +67,14 @@ namespace s2industries.ZUGFeRD
 
             #region SpecifiedExchangedDocumentContext
             Writer.WriteStartElement("rsm:ExchangedDocumentContext");
-            Writer.WriteStartElement("ram:TestIndicator");
-            Writer.WriteElementString("udt:Indicator", this.Descriptor.IsTest ? "true" : "false");
-            Writer.WriteEndElement(); // !ram:TestIndicator
+
+            if (Descriptor.IsTest)
+            {
+                Writer.WriteStartElement("ram:TestIndicator");
+                Writer.WriteElementString("udt:Indicator", "true");
+                Writer.WriteEndElement(); // !ram:TestIndicator
+            }
+
             Writer.WriteStartElement("ram:GuidelineSpecifiedDocumentContextParameter");
             Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version20));
             Writer.WriteEndElement(); // !ram:GuidelineSpecifiedDocumentContextParameter
@@ -221,7 +228,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
+                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, false, 4);
                 if (tradeLineItem.UnitQuantity.HasValue)
                 {
                     _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
@@ -236,11 +243,9 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 4));
                     Writer.WriteEndElement();
                     Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                     Writer.WriteEndElement();
 
@@ -252,7 +257,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
 
                 Writer.WriteStartElement("ram:NetPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 4);
+                _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, false, 4);
 
                 if (tradeLineItem.UnitQuantity.HasValue)
                 {
@@ -345,7 +350,8 @@ namespace s2industries.ZUGFeRD
                     _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
                 }
 
-                _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
+                Writer.WriteElementString("ram:LineTotalAmount", _formatDecimal(_total));
+
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementLineMonetarySummation
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeSettlement
 
@@ -463,6 +469,12 @@ namespace s2industries.ZUGFeRD
             //  18. ReceivableSpecifiedTradeAccountingAccount (optional)
             //  19. SpecifiedAdvancePayment (optional)
 
+            //   1. CreditorReferenceID (optional)
+            if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
+            {
+                _writeOptionalElementString(Writer, "ram:CreditorReferenceID", Descriptor.PaymentMeans?.SEPACreditorIdentifier, Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1);
+            }
+
             //   2. PaymentReference (optional)
             if (!String.IsNullOrEmpty(this.Descriptor.PaymentReference))
             {
@@ -496,12 +508,12 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
-                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                        if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            Writer.WriteStartElement("ram:ID");
-                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                            Writer.WriteEndElement(); // !ram:ID
+                            Writer.WriteStartElement("ram:ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended);
+                            Writer.WriteElementString("ram:ID", Descriptor.PaymentMeans.FinancialCard.Id);
+                            Writer.WriteElementString("ram:CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName);
+                            Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
                         }
                     }
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
@@ -518,12 +530,12 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
-                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
+                        if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            Writer.WriteStartElement("ram:ID");
-                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                            Writer.WriteEndElement(); // !ram:ID
+                            Writer.WriteStartElement("ram:ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended);
+                            Writer.WriteElementString("ram:ID", Descriptor.PaymentMeans.FinancialCard.Id);
+                            Writer.WriteElementString("ram:CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName);
+                            Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
                         }
                     }
 
@@ -559,14 +571,6 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
-
-                        if (!String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPACreditorIdentifier) && !String.IsNullOrEmpty(this.Descriptor.PaymentMeans.SEPAMandateReference))
-                        {
-                            Writer.WriteStartElement("ram:ID");
-                            Writer.WriteAttributeString("schemeAgencyID", this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                            Writer.WriteValue(this.Descriptor.PaymentMeans.SEPAMandateReference);
-                            Writer.WriteEndElement(); // !ram:ID
-                        }
                     }
 
                     Writer.WriteStartElement("ram:PayerPartyDebtorFinancialAccount");
@@ -577,19 +581,30 @@ namespace s2industries.ZUGFeRD
                     }
                     Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
 
-                    Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
-                    Writer.WriteElementString("ram:BICID", account.BIC);
-
-                    if (!String.IsNullOrEmpty(account.Bankleitzahl))
+                    if (!string.IsNullOrEmpty(account.BIC) || 
+                        !string.IsNullOrEmpty(account.Bankleitzahl) ||
+                        !string.IsNullOrEmpty(account.BankName))
                     {
-                        Writer.WriteElementString("ram:GermanBankleitzahlID", account.Bankleitzahl);
+                        Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
+                        
+                        if (!String.IsNullOrEmpty(account.BIC))
+                        {
+                            Writer.WriteElementString("ram:BICID", account.BIC);
+                        }
+
+                        if (!String.IsNullOrEmpty(account.Bankleitzahl))
+                        {
+                            Writer.WriteElementString("ram:GermanBankleitzahlID", account.Bankleitzahl);
+                        }
+
+                        if (!String.IsNullOrEmpty(account.BankName))
+                        {
+                            Writer.WriteElementString("ram:Name", account.BankName);
+                        }
+
+                        Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
                     }
 
-                    if (!String.IsNullOrEmpty(account.BankName))
-                    {
-                        Writer.WriteElementString("ram:Name", account.BankName);
-                    }
-                    Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
             }
@@ -648,12 +663,10 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
                     Writer.WriteStartElement("ram:BasisAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
                     Writer.WriteEndElement();
 
                     Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteAttributeString("currencyID", tradeAllowanceCharge.Currency.EnumToString());
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
                     Writer.WriteEndElement();
 
@@ -698,16 +711,17 @@ namespace s2industries.ZUGFeRD
             }
 
             //  15. SpecifiedTradePaymentTerms (optional)
-            if (this.Descriptor.PaymentTerms != null)
+            if (this.Descriptor.PaymentTerms != null || !string.IsNullOrEmpty(Descriptor.PaymentMeans?.SEPAMandateReference))
             {
                 Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
-                _writeOptionalElementString(Writer, "ram:Description", this.Descriptor.PaymentTerms.Description);
-                if (this.Descriptor.PaymentTerms.DueDate.HasValue)
+                _writeOptionalElementString(Writer, "ram:Description", this.Descriptor.PaymentTerms?.Description);
+                if (this.Descriptor.PaymentTerms?.DueDate.HasValue ?? false)
                 {
                     Writer.WriteStartElement("ram:DueDateDateTime");
                     _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate.Value));
                     Writer.WriteEndElement(); // !ram:DueDateDateTime
                 }
+                _writeOptionalElementString(Writer, "ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                 Writer.WriteEndElement();
             }
 
@@ -717,7 +731,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
             _writeOptionalAmount(Writer, "ram:TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);
-            _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount);
+            _writeOptionalAmount(Writer, "ram:TaxTotalAmount", this.Descriptor.TaxTotalAmount, true);
             _writeOptionalAmount(Writer, "ram:RoundingAmount", this.Descriptor.RoundingAmount, profile: Profile.Comfort | Profile.Extended);  // RoundingAmount  //Rundungsbetrag
             _writeOptionalAmount(Writer, "ram:GrandTotalAmount", this.Descriptor.GrandTotalAmount);
 
@@ -759,12 +773,15 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, Profile profile = Profile.Unknown)
+        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, bool currencyIdRequired = false, int numDecimals = 2, Profile profile = Profile.Unknown)
         {
             if (value.HasValue && (value.Value != decimal.MinValue))
             {
                 writer.WriteStartElement(tagName, profile);
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                if (currencyIdRequired)
+                {
+                    writer.WriteAttributeString("currencyID", Descriptor.Currency.EnumToString());
+                }
                 writer.WriteValue(_formatDecimal(value.Value, numDecimals));
                 writer.WriteEndElement(); // !tagName
             }
@@ -787,7 +804,6 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram:ApplicableTradeTax");
 
                 writer.WriteStartElement("ram:CalculatedAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.TaxAmount));
                 writer.WriteEndElement(); // !CalculatedAmount
 
@@ -799,14 +815,12 @@ namespace s2industries.ZUGFeRD
                 }
 
                 writer.WriteStartElement("ram:BasisAmount");
-                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
                 if (tax.AllowanceChargeBasisAmount != 0)
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }

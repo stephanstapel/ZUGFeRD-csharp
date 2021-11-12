@@ -72,7 +72,7 @@ namespace s2industries.ZUGFeRD
 
             retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerReference", nsmgr);
 
-            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:SellerTradeParty", nsmgr);
+            retval.Seller = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty", nsmgr);
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
             {
                 string id = _nodeAsString(node, ".//ram:ID", nsmgr);
@@ -93,8 +93,8 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerTradeParty", nsmgr);
-            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
+            retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty", nsmgr);
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
             {
                 string id = _nodeAsString(node, ".//ram:ID", nsmgr);
                 string schemeID = _nodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
@@ -139,23 +139,35 @@ namespace s2industries.ZUGFeRD
             retval.Payee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:PayeeTradeParty", nsmgr);
 
             retval.PaymentReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:PaymentReference", nsmgr);
-            retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:InvoiceCurrencyCode", nsmgr));
+            retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode", nsmgr));
 
             // TODO: Multiple SpecifiedTradeSettlementPaymentMeans can exist for each account/institution (with different SEPA?)
             PaymentMeans _tempPaymentMeans = new PaymentMeans()
             {
-                TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
+                TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
                 Information = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:Information", nsmgr),
-                SEPACreditorIdentifier = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID", nsmgr),
-                SEPAMandateReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID/@schemeAgencyID", nsmgr)
+                SEPACreditorIdentifier = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:CreditorReferenceID", nsmgr),
+                SEPAMandateReference = _nodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DirectDebitMandateID", nsmgr),
             };
+            var financialCardId = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:ID", nsmgr);
+            var financialCardCardholderName = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:CardholderName", nsmgr);
+            
+            if (!string.IsNullOrEmpty(financialCardId) || !string.IsNullOrEmpty(financialCardCardholderName))
+            {
+                _tempPaymentMeans.FinancialCard = new FinancialCard()
+                {
+                    Id = financialCardId,
+                    CardholderName = financialCardCardholderName
+                };
+            }
+
             retval.PaymentMeans = _tempPaymentMeans;
             
             retval.BillingPeriodStart = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime", nsmgr);
             retval.BillingPeriodEnd = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:EndDateTime", nsmgr);
 
-            XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
-            XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
+            XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
+            XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 
             if (creditorFinancialAccountNodes.Count == creditorFinancialInstitutions.Count)
             {
@@ -174,26 +186,52 @@ namespace s2industries.ZUGFeRD
                     retval.CreditorBankAccounts.Add(_account);
                 } // !for(i)
             }
+            
+            var specifiedTradeSettlementPaymentMeansNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans", nsmgr);
 
-            XmlNodeList debitorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount", nsmgr);
-            XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
-
-            if (debitorFinancialAccountNodes.Count == debitorFinancialInstitutions.Count)
+            foreach (var specifiedTradeSettlementPaymentMeansNode in specifiedTradeSettlementPaymentMeansNodes.OfType<XmlNode>())
             {
-                for (int i = 0; i < debitorFinancialAccountNodes.Count; i++)
+                var payerPartyDebtorFinancialAccountNode = specifiedTradeSettlementPaymentMeansNode.SelectSingleNode("ram:PayerPartyDebtorFinancialAccount", nsmgr);
+                
+                if (payerPartyDebtorFinancialAccountNode == null)
                 {
-                    BankAccount _account = new BankAccount()
-                    {
-                        ID = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
-                        IBAN = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
-                        BIC = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
-                        Bankleitzahl = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:Name", nsmgr),
-                    };
+                    continue;
+                }
+                
+                var _account = new BankAccount()
+                {
+                    ID = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:ProprietaryID", nsmgr),
+                    IBAN = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:IBANID", nsmgr),
+                    Bankleitzahl = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:GermanBankleitzahlID", nsmgr),
+                    BankName = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:Name", nsmgr),
+                };
 
-                    retval.DebitorBankAccounts.Add(_account);
-                } // !for(i)
+                var payerSpecifiedDebtorFinancialInstitutionNode = specifiedTradeSettlementPaymentMeansNode.SelectSingleNode("ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+                if (payerSpecifiedDebtorFinancialInstitutionNode != null)
+                    _account.BIC = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:BICID", nsmgr);
+
+                retval.DebitorBankAccounts.Add(_account);
             }
+
+            //XmlNodeList debitorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount", nsmgr);
+            //XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+
+            //if (debitorFinancialAccountNodes.Count == debitorFinancialInstitutions.Count)
+            //{
+            //    for (int i = 0; i < debitorFinancialAccountNodes.Count; i++)
+            //    {
+            //        BankAccount _account = new BankAccount()
+            //        {
+            //            ID = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
+            //            IBAN = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
+            //            BIC = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
+            //            Bankleitzahl = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
+            //            BankName = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:Name", nsmgr),
+            //        };
+
+            //        retval.DebitorBankAccounts.Add(_account);
+            //    } // !for(i)
+            //}
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:ApplicableTradeTax", nsmgr))
             {
@@ -229,7 +267,7 @@ namespace s2industries.ZUGFeRD
 
             retval.PaymentTerms = new PaymentTerms()
             {
-                Description = _nodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:Description", nsmgr),
+                Description = _nodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:Description", nsmgr).Trim(),
                 DueDate = _nodeAsDateTime(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime", nsmgr)
             };
 
@@ -269,6 +307,16 @@ namespace s2industries.ZUGFeRD
         {
             List<string> validURIs = new List<string>()
                 {
+                    "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", // Factur-X 1.03 EXTENDED
+                    "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", // ZUGFeRD 2.0 EXTENDED
+                    "urn:cen.eu:en16931:2017", // ZUGFeRD 2.0 EN 16931 & Factur-X 1.03 EN 16931
+                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", // Factur-X 1.03 BASIC
+                    "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", // ZUGFeRD 2.0 BASIC
+                    "urn:factur-x.eu:1p0:basicwl", // Factur-X 1.03 BASIC WL
+                    "urn:zugferd.de:2p0:basicwl", // ZUGFeRD 2.0 BASIC
+                    "urn:factur-x.eu:1p0:minimum", // Factur-X 1.03 MINIMUM
+                    "urn:zugferd.de:2p0:minimum", // ZUGFeRD 2.0 MINIMUM
+
                     "urn:ferd:invoice:rc:basic",
                     "urn:ferd:CrossIndustryDocument:invoice:1p0:basic",
                     "urn:ferd:invoice:rc:comfort",
@@ -318,7 +366,7 @@ namespace s2industries.ZUGFeRD
                 LineTotalAmount = _nodeAsDecimal(tradeLineItem, ".//ram:LineTotalAmount", nsmgr, 0),
                 TaxCategoryCode = default(TaxCategoryCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
                 TaxType = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),
-                TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ram:ApplicableTradeTax/ram:ApplicablePercent", nsmgr, 0).Value,
+                TaxPercent = _nodeAsDecimal(tradeLineItem, ".//ram:ApplicableTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
                 NetUnitPrice = _nodeAsDecimal(tradeLineItem, ".//ram:NetPriceProductTradePrice/ram:ChargeAmount", nsmgr, 0).Value,
                 GrossUnitPrice = _nodeAsDecimal(tradeLineItem, ".//ram:GrossPriceProductTradePrice/ram:ChargeAmount", nsmgr, 0).Value,
                 UnitCode = default(QuantityCodes).FromString(_nodeAsString(tradeLineItem, ".//ram:BasisQuantity/@unitCode", nsmgr)),
