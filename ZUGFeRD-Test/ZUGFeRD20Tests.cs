@@ -128,6 +128,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("TB100A4", invoiceDescriptor.TradeLineItems[0].SellerAssignedID);
             Assert.AreEqual("Trennblätter A4", invoiceDescriptor.TradeLineItems[0].Name);
             Assert.AreEqual(20m, invoiceDescriptor.TradeLineItems[0].BilledQuantity);
+            Assert.AreEqual(QuantityCodes.C62, invoiceDescriptor.TradeLineItems[0].UnitCode);
             Assert.AreEqual(9.9m, invoiceDescriptor.TradeLineItems[0].NetUnitPrice);
             Assert.AreEqual(9.9m, invoiceDescriptor.TradeLineItems[0].GrossUnitPrice);
             Assert.AreEqual(TaxCategoryCodes.S, invoiceDescriptor.TradeLineItems[0].TaxCategoryCode);
@@ -141,6 +142,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("ARNR2", invoiceDescriptor.TradeLineItems[1].SellerAssignedID);
             Assert.AreEqual("Joghurt Banane", invoiceDescriptor.TradeLineItems[1].Name);
             Assert.AreEqual(50m, invoiceDescriptor.TradeLineItems[1].BilledQuantity);
+            Assert.AreEqual(QuantityCodes.C62, invoiceDescriptor.TradeLineItems[0].UnitCode);
             Assert.AreEqual(5.5m, invoiceDescriptor.TradeLineItems[1].NetUnitPrice);
             Assert.AreEqual(5.5m, invoiceDescriptor.TradeLineItems[1].GrossUnitPrice);
             Assert.AreEqual(TaxCategoryCodes.S, invoiceDescriptor.TradeLineItems[1].TaxCategoryCode);
@@ -170,7 +172,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
-            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", invoiceDescriptor.PaymentTerms.Description);
+            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", invoiceDescriptor.PaymentTerms.Description.Trim());
 
             Assert.AreEqual(CurrencyCodes.EUR, invoiceDescriptor.Currency);
             Assert.AreEqual(473.00m, invoiceDescriptor.LineTotalAmount);
