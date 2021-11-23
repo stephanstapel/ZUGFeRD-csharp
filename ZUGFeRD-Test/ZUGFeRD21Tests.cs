@@ -118,6 +118,18 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.InvoiceNo, "R87654321012345");
             Assert.AreEqual(desc.TradeLineItems.Count, 6);
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
+
+            foreach(TradeAllowanceCharge charge in desc.TradeAllowanceCharges)
+            {
+                Assert.AreEqual(charge.Tax.TypeCode, TaxTypes.VAT);
+                Assert.AreEqual(charge.Tax.CategoryCode, TaxCategoryCodes.S);
+            }
+
+            Assert.AreEqual(desc.TradeAllowanceCharges.Count, 4);
+            Assert.AreEqual(desc.TradeAllowanceCharges[0].Tax.Percent, 19m);
+            Assert.AreEqual(desc.TradeAllowanceCharges[1].Tax.Percent, 7m);
+            Assert.AreEqual(desc.TradeAllowanceCharges[2].Tax.Percent, 19m);
+            Assert.AreEqual(desc.TradeAllowanceCharges[3].Tax.Percent, 7m);
         } // !TestReferenceExtendedInvoice()
 
 
