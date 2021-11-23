@@ -271,4 +271,3 @@ https://stackoverflow.com/a/37804285
 # Links
 You can find more information about ZUGFeRD here:
 http://www.ferd-net.de/
-
