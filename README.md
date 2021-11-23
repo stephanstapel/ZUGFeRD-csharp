@@ -14,7 +14,6 @@ Implementing and maintaining this library is a lot of hard work. I'm doing this 
 
 [:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
 
-
 # Relationship between the different standards
 Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
 
