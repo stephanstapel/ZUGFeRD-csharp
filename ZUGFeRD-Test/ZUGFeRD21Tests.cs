@@ -21,6 +21,7 @@ using s2industries.ZUGFeRD;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ZUGFeRD;
 
 namespace ZUGFeRD_Test
@@ -130,6 +131,11 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.TradeAllowanceCharges[1].Tax.Percent, 7m);
             Assert.AreEqual(desc.TradeAllowanceCharges[2].Tax.Percent, 19m);
             Assert.AreEqual(desc.TradeAllowanceCharges[3].Tax.Percent, 7m);
+
+            Assert.AreEqual(desc.ServiceCharges.Count, 1);
+            Assert.AreEqual(desc.ServiceCharges[0].Tax.TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.ServiceCharges[0].Tax.CategoryCode, TaxCategoryCodes.S);
+            Assert.AreEqual(desc.ServiceCharges[0].Tax.Percent, 19m);
         } // !TestReferenceExtendedInvoice()
 
 
