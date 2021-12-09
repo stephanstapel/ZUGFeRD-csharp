@@ -82,7 +82,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Steuertyp
         /// </summary>
-        public TaxTypes TaxType { get; set; }
+        public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
         /// <summary>
         /// Netto Einzelpreis
         /// </summary>

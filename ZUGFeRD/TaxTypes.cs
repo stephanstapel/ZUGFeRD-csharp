@@ -24,6 +24,9 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
+    /// Please note that all profiles support VAT.
+    /// 
+    /// Only EXTENDED profile supports tax types other than VAT.
     /// http://www.unece.org/trade/untdid/d00a/tred/tred5153.htm
     /// </summary>
     public enum TaxTypes

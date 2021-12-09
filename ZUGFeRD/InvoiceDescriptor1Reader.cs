@@ -291,6 +291,11 @@ namespace s2industries.ZUGFeRD
                 return null;
             }
 
+
+            string s = _nodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr);
+            TaxTypes t = default(TaxTypes).FromString(_nodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr));
+
+
             TradeLineItem item = new TradeLineItem()
             {
                 LineID = _nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr),

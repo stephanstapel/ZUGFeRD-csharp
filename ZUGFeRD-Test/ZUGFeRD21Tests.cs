@@ -120,7 +120,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.TradeLineItems.Count, 6);
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
 
-            foreach(TradeAllowanceCharge charge in desc.TradeAllowanceCharges)
+            foreach (TradeAllowanceCharge charge in desc.TradeAllowanceCharges)
             {
                 Assert.AreEqual(charge.Tax.TypeCode, TaxTypes.VAT);
                 Assert.AreEqual(charge.Tax.CategoryCode, TaxCategoryCodes.S);
@@ -626,5 +626,145 @@ namespace ZUGFeRD_Test
                 Assert.AreEqual("3", secondTradeLineItem.LineID);
             }
         }
+
+
+        [TestMethod]
+        public void TestValidTaxTypes()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();            
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.VAT);
+
+            MemoryStream ms = new MemoryStream();
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Basic);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.BasicWL);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Comfort);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Extended);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung1);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            // extended profile supports other tax types as well:
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Extended);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+        } // !TestValidTaxTypes()
+
+
+        [TestMethod]
+        public void TestInvalidTaxTypes()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
+
+            MemoryStream ms = new MemoryStream();
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Basic);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.BasicWL);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Comfort);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Comfort);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            // allowed in extended profile
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung1);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+        } // !TestInvalidTaxTypes()
     }
 }
