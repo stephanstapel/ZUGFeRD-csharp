@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -34,7 +34,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Petroleum tax
         ///
-        ///Self explanatory.
+        ///A tax levied on the volume of petroleum being
+        /// transacted.
         /// </summary>
         AAA,
         /// <summary>
@@ -52,6 +53,72 @@ namespace s2industries.ZUGFeRD
         ///subsidization by Customs.
         /// </summary>
         AAC,
+        /// <summary>
+        /// Tobacco tax
+        /// 
+        /// A tax levied on tobacco products.
+        /// </summary>
+        AAD,
+        /// <summary>
+        /// Energy fee
+        /// 
+        /// General fee or tax for the use of energy.
+        /// </summary>
+        AAE,
+        /// <summary>
+        /// Coffee tax
+        /// 
+        /// A tax levied specifically on coffee products.
+        /// </summary>
+        AAF,
+        /// <summary>
+        /// Harmonised sales tax, Canadian
+        /// 
+        /// A harmonized sales tax consisting of a goods and service
+        /// tax, a Canadian provincial sales tax and, as applicable,
+        /// a Quebec sales tax which is recoverable.
+        /// </summary>
+        AAG,
+        /// <summary>
+        /// Quebec sales tax
+        /// 
+        /// A sales tax charged within the Canadian province of
+        /// Quebec which is recoverable.
+        /// </summary>
+        AAH,
+        /// <summary>
+        /// Canadian provincial sales tax
+        /// 
+        /// A sales tax charged within Canadian provinces which is
+        /// non-recoverable.
+        /// </summary>
+        AAI,
+        /// <summary>
+        /// Tax on replacement part
+        /// 
+        /// A tax levied on a replacement part, where the original
+        /// part is returned.
+        /// </summary>
+        AAJ,
+        /// <summary>
+        /// Mineral oil tax
+        /// 
+        /// Tax that is levied specifically on products containing
+        /// mineral oil.
+        /// </summary>
+        AAK,
+        /// <summary>
+        /// Special tax
+        /// 
+        /// To indicate a special type of tax.
+        /// </summary>
+        AAL,
+        /// <summary>
+        /// Insurance tax
+        /// 
+        /// A tax levied specifically on insurances.
+        /// </summary>
+        AAM,
         /// <summary>
         /// Anti-dumping duty
         ///
@@ -79,13 +146,13 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         ///Car tax
         ///
-        ///Self explanatory.
+        ///A tax that is levied on the value of the automobile.
         /// </summary>
         CAR,
         /// <summary>
         ///Paper consortium tax (Italy)
         ///
-        ///Description to be provided.
+        ///Italian Paper consortium tax.
         /// </summary>
         COC,
         /// <summary>
@@ -143,7 +210,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
 		///Free
         ///
-        ///Self explanatory.
+        ///No tax levied.
         /// </summary>
         FRE,
         /// <summary>
@@ -171,10 +238,10 @@ namespace s2industries.ZUGFeRD
         ///Tax assessed on imports.
         /// </summary>
         IMP,
-                /// <summary>
+        /// <summary>
 		///Individual tax
         ///
-        ///Self explanatory.
+        ///A tax levied based on an individual's ability to pay.
         /// </summary>
         IND,
         /// <summary>
@@ -248,9 +315,12 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         PDC,
         /// <summary>
-		///Preference duty
+        ///Preference duty
         ///
-        ///Self explanatory.
+        ///Duties laid down in the Customs tariff, to which goods
+        ///are liable on entering or leaving the Customs territory
+        ///falling under a preferential regime such as Generalised
+        ///System of Preferences (GSP).
         /// </summary>
         PRF,
         /// <summary>
@@ -294,15 +364,16 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         SWT,
         /// <summary>
-		///Alcohol mark tax
+        ///Alcohol mark tax
         ///
-        ///Self explanatory.
+        ///A tax levied based on the type of alcohol being
+        ///obtained.
         /// </summary>
         TAC,
         /// <summary>
 		///Total
         ///
-        ///Self explanatory.
+        ///The summary amount of all taxes.
         /// </summary>
         TOT,
         /// <summary>
