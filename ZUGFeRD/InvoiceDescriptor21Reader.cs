@@ -182,9 +182,22 @@ namespace s2industries.ZUGFeRD
             {
                 TypeCode = default(PaymentMeansTypeCodes).FromString(_nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
                 Information = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:Information", nsmgr),
-                SEPACreditorIdentifier = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID", nsmgr),
-                SEPAMandateReference = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ID/@schemeAgencyID", nsmgr)
+                SEPACreditorIdentifier = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:CreditorReferenceID", nsmgr),
+                SEPAMandateReference = _nodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DirectDebitMandateID", nsmgr)
             };
+
+            var financialCardId = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:ID", nsmgr);
+            var financialCardCardholderName = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:CardholderName", nsmgr);
+
+            if (!string.IsNullOrEmpty(financialCardId) || !string.IsNullOrEmpty(financialCardCardholderName))
+            {
+                _tempPaymentMeans.FinancialCard = new FinancialCard()
+                {
+                    Id = financialCardId,
+                    CardholderName = financialCardCardholderName
+                };
+            }
+
             retval.PaymentMeans = _tempPaymentMeans;
 
             retval.BillingPeriodStart = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime", nsmgr);
@@ -211,24 +224,30 @@ namespace s2industries.ZUGFeRD
                 } // !for(i)
             }
 
-            XmlNodeList debitorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount", nsmgr);
-            XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+            var specifiedTradeSettlementPaymentMeansNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans", nsmgr);
 
-            if (debitorFinancialAccountNodes.Count == debitorFinancialInstitutions.Count)
+            foreach (var specifiedTradeSettlementPaymentMeansNode in specifiedTradeSettlementPaymentMeansNodes.OfType<XmlNode>())
             {
-                for (int i = 0; i < debitorFinancialAccountNodes.Count; i++)
+                var payerPartyDebtorFinancialAccountNode = specifiedTradeSettlementPaymentMeansNode.SelectSingleNode("ram:PayerPartyDebtorFinancialAccount", nsmgr);
+                
+                if (payerPartyDebtorFinancialAccountNode == null)
                 {
-                    BankAccount _account = new BankAccount()
-                    {
-                        ID = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
-                        IBAN = _nodeAsString(debitorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
-                        BIC = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
-                        Bankleitzahl = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(debitorFinancialInstitutions[0], ".//ram:Name", nsmgr),
-                    };
+                    continue;
+                }
+                
+                var _account = new BankAccount()
+                {
+                    ID = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:ProprietaryID", nsmgr),
+                    IBAN = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:IBANID", nsmgr),
+                    Bankleitzahl = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:GermanBankleitzahlID", nsmgr),
+                    BankName = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:Name", nsmgr),
+                };
 
-                    retval.DebitorBankAccounts.Add(_account);
-                } // !for(i)
+                var payerSpecifiedDebtorFinancialInstitutionNode = specifiedTradeSettlementPaymentMeansNode.SelectSingleNode("ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+                if (payerSpecifiedDebtorFinancialInstitutionNode != null)
+                    _account.BIC = _nodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:BICID", nsmgr);
+
+                retval.DebitorBankAccounts.Add(_account);
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax", nsmgr))
@@ -325,12 +344,15 @@ namespace s2industries.ZUGFeRD
         {
             List<string> validURIs = new List<string>()
                 {
-                    "urn:factur-x.eu:1p0:basicwl",
-                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",
-                    "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",
-                    "urn:factur-x.eu:1p0:minimum",
-                    "urn:cen.eu:en16931:2017",
-                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2"
+                    "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", // Factur-X 1.03 EXTENDED
+                    "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", // ZUGFeRD 2.0 EXTENDED
+                    "urn:cen.eu:en16931:2017", // ZUGFeRD 2.0 EN 16931 & Factur-X 1.03 EN 16931
+                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", // Factur-X 1.03 BASIC
+                    "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", // ZUGFeRD 2.0 BASIC
+                    "urn:factur-x.eu:1p0:basicwl", // Factur-X 1.03 BASIC WL
+                    "urn:zugferd.de:2p0:basicwl", // ZUGFeRD 2.0 BASIC
+                    "urn:factur-x.eu:1p0:minimum", // Factur-X 1.03 MINIMUM
+                    "urn:zugferd.de:2p0:minimum", // ZUGFeRD 2.0 MINIMUM
                 };
 
             long _oldStreamPosition = stream.Position;

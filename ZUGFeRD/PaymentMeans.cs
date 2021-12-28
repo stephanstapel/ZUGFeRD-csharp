@@ -48,5 +48,10 @@ namespace s2industries.ZUGFeRD
         /// https://de.wikipedia.org/wiki/Mandatsreferenz
         /// </summary>
         public string SEPAMandateReference { get; set; }
+
+        /// <summary>
+        /// Payment card information.
+        /// </summary>
+        public FinancialCard FinancialCard { get; set; }
     }
 }
