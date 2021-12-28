@@ -304,8 +304,7 @@ namespace s2industries.ZUGFeRD
         ///
         ///Anti-dumping duty paid by posting a bond during an
         ///investigation period prior to a formal decision on
-        ///dumping by Customs.
-        /// </summary>
+        ///dumping by Customs.        
         PDB,
         /// <summary>
 		///Provisional duty cash
@@ -405,6 +404,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         VAT,
         
+        /// <summary>
+        /// Invalid tax type
+        /// </summary>
         Unknown
     }
 

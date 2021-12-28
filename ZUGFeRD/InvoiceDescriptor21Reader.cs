@@ -131,7 +131,7 @@ namespace s2industries.ZUGFeRD
                     string _filename = _nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject/@filename", nsmgr);
                     byte[] data = Convert.FromBase64String(_nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject", nsmgr));
 
-                    retval.AddAdditionalReferencedDocument(issuerAssignedID: _issuerAssignedID,
+                    retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
                                                            issueDateTime: _date,
                                                            typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
                                                            referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
@@ -141,7 +141,7 @@ namespace s2industries.ZUGFeRD
                 }
                 else
                 {
-                    retval.AddAdditionalReferencedDocument(issuerAssignedID: _issuerAssignedID,
+                    retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
                                                            issueDateTime: _date,
                                                            typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
                                                            referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),

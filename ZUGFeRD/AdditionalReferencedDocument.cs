@@ -37,12 +37,6 @@ namespace s2industries.ZUGFeRD
         public ReferenceTypeCodes ReferenceTypeCode { get; set; }
 
         /// <summary>
-        /// The identifier of the tendering or batch the invoice refers to, or an identifier for an object 
-        /// given by the seller the invoice refers to, or an identifier of the documents substantiating the invoice.
-        /// </summary>
-        public string IssuerAssignedID { get; set; }
-
-        /// <summary>
         /// Description of document
         /// </summary>
         public string Name { get; set; }

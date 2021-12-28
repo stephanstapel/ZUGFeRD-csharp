@@ -247,9 +247,9 @@ namespace s2industries.ZUGFeRD
 
                             Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
 
-                            if (!String.IsNullOrEmpty(document.IssuerAssignedID))
+                            if (!String.IsNullOrEmpty(document.ID))
                             {
-                                Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
+                                Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
                             }
 
                             Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
@@ -496,8 +496,8 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
             #endregion
 
-            /// TODO: implement SellerTaxRepresentativeTradeParty
-            /// BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
+            // TODO: implement SellerTaxRepresentativeTradeParty
+            // BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
 
             #region BuyerOrderReferencedDocument
             if (!String.IsNullOrEmpty(this.Descriptor.OrderNo))
@@ -544,7 +544,7 @@ namespace s2industries.ZUGFeRD
                 foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
                 {
                     Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                    Writer.WriteElementString("ram:IssuerAssignedID", document.IssuerAssignedID);
+                    Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
                     Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());
 
                     if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)

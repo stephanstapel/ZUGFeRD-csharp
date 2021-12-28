@@ -485,19 +485,19 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Add an additional reference document
         /// </summary>
-        /// <param name="issuerAssignedID">Document number</param>
+        /// <param name="id">Document number such as delivery note no or credit memo no</param>
         /// <param name="issueDateTime">Document Date</param>
         /// <param name="typeCode"></param>
         /// <param name="name"></param>
         /// <param name="referenceTypeCode">Type of the referenced document</param>
         /// <param name="attachmentBinaryObject"></param>
         /// <param name="filename"></param>
-        public void AddAdditionalReferencedDocument(string issuerAssignedID, DateTime? issueDateTime = null, AdditionalReferencedDocumentTypeCode typeCode = AdditionalReferencedDocumentTypeCode.Unknown, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        public void AddAdditionalReferencedDocument(string id, DateTime? issueDateTime = null, AdditionalReferencedDocumentTypeCode typeCode = AdditionalReferencedDocumentTypeCode.Unknown, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
                 ReferenceTypeCode = referenceTypeCode,
-                IssuerAssignedID = issuerAssignedID,
+                ID = id,
                 IssueDateTime = issueDateTime,
                 Name = name,
                 AttachmentBinaryObject = attachmentBinaryObject,
