@@ -169,11 +169,6 @@ namespace s2industries.ZUGFeRD
         P1,
 
         /// <summary>
-        /// Stück
-        /// </summary>
-        PCE,
-
-        /// <summary>
         /// Set
         /// Abkürzung: Set(s)
         /// </summary>
