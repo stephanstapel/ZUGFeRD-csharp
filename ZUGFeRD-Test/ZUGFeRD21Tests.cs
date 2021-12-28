@@ -21,6 +21,7 @@ using s2industries.ZUGFeRD;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ZUGFeRD;
 
 namespace ZUGFeRD_Test
@@ -118,6 +119,23 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.InvoiceNo, "R87654321012345");
             Assert.AreEqual(desc.TradeLineItems.Count, 6);
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
+
+            foreach (TradeAllowanceCharge charge in desc.TradeAllowanceCharges)
+            {
+                Assert.AreEqual(charge.Tax.TypeCode, TaxTypes.VAT);
+                Assert.AreEqual(charge.Tax.CategoryCode, TaxCategoryCodes.S);
+            }
+
+            Assert.AreEqual(desc.TradeAllowanceCharges.Count, 4);
+            Assert.AreEqual(desc.TradeAllowanceCharges[0].Tax.Percent, 19m);
+            Assert.AreEqual(desc.TradeAllowanceCharges[1].Tax.Percent, 7m);
+            Assert.AreEqual(desc.TradeAllowanceCharges[2].Tax.Percent, 19m);
+            Assert.AreEqual(desc.TradeAllowanceCharges[3].Tax.Percent, 7m);
+
+            Assert.AreEqual(desc.ServiceCharges.Count, 1);
+            Assert.AreEqual(desc.ServiceCharges[0].Tax.TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.ServiceCharges[0].Tax.CategoryCode, TaxCategoryCodes.S);
+            Assert.AreEqual(desc.ServiceCharges[0].Tax.Percent, 19m);
         } // !TestReferenceExtendedInvoice()
 
 
@@ -615,6 +633,7 @@ namespace ZUGFeRD_Test
             }
         }
 
+        // BR-DE-13
         [TestMethod]
         public void TestSepaPreNotification_Load()
         {
@@ -788,5 +807,145 @@ namespace ZUGFeRD_Test
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
             }
         }
+=======
+
+        [TestMethod]
+        public void TestValidTaxTypes()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();            
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.VAT);
+
+            MemoryStream ms = new MemoryStream();
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Basic);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.BasicWL);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Comfort);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Extended);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung1);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            // extended profile supports other tax types as well:
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Extended);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+        } // !TestValidTaxTypes()
+
+
+        [TestMethod]
+        public void TestInvalidTaxTypes()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
+
+            MemoryStream ms = new MemoryStream();
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Basic);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.BasicWL);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Comfort);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.Comfort);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            // allowed in extended profile
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung1);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+
+            try
+            {
+                invoice.Save(ms, version: ZUGFeRDVersion.Version21, profile: Profile.XRechnung);
+            }
+            catch (UnsupportedException)
+            {
+                Assert.Fail();
+            }
+        } // !TestInvalidTaxTypes()
     }
 }

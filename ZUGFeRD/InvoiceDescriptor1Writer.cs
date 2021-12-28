@@ -648,6 +648,24 @@ namespace s2industries.ZUGFeRD
 
         internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
         {
+            if (descriptor.Profile == Profile.BasicWL)
+            {
+                if (throwExceptions)
+                {
+                    throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice.");
+                }
+                return false;
+            }
+
+            if (descriptor.Profile != Profile.Extended) // check tax types, only extended profile allows tax types other than vat
+            {
+                if (!descriptor.TradeLineItems.All(l => l.TaxType.Equals(TaxTypes.VAT) || l.TaxType.Equals(TaxTypes.Unknown)))
+                {
+                    if (throwExceptions) { throw new UnsupportedException("Tax types other than VAT only possible with extended profile."); }
+                    return false;
+                }
+            }
+
             return true;
         } // !Validate()
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -51,6 +51,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Piece: A unit of count defining the number of pieces (piece: a single item, article or exemplar).
         /// </summary>
+        /// <seealso cref="QuantityCodes.C62"/>
         H87,
 
         /// <summary>
@@ -72,6 +73,12 @@ namespace s2industries.ZUGFeRD
         KGM,
 
         /// <summary>
+        /// Zentimeter
+        /// Abkürzung: cm
+        /// </summary>
+        CMT,
+
+        /// <summary>
         /// Kilometer
         /// Abkürzung: km (Rec20r13) für XRechnung
         /// </summary>
@@ -88,6 +95,12 @@ namespace s2industries.ZUGFeRD
         /// Abkürzung: kWh
         /// </summary>
         KWH,
+
+        /// <summary>
+        /// Kilowatt
+        /// Abkürzung: kW
+        /// </summary>
+        KWT,
 
         /// <summary>
         /// Pauschale
@@ -158,6 +171,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Stück
         /// </summary>
+        [Obsolete("Does not conform to ZUGFeRD standard. Use H87 ('piece') or C62 ('one') instead")]
         PCE,
 
         /// <summary>
@@ -194,7 +208,76 @@ namespace s2industries.ZUGFeRD
         /// Sekunde
         /// Abkürzung: Sekunde(n) 
         /// </summary>
-        SEC
+        SEC,
+
+        /// <summary>
+        /// Bündel
+        /// Abkürzung: Bund
+        /// </summary>
+        XBE,
+
+        /// <summary>
+        /// Flasche
+        /// Abkürzung: Fl
+        /// </summary>
+        /// <remarks>
+        /// Bottle, non-protected, cylindrical
+        /// A narrow-necked cylindrical shaped vessel without external protective packing material
+        /// </remarks>
+        XBO,
+
+        /// <summary>
+        /// Karton
+        /// Abkürzung: Kt
+        /// </summary>
+        XCT,
+
+        /// <summary>
+        /// Paar
+        /// </summary>
+        /// <remarks>
+        /// A unit of count defining the number of pairs (pair: item described by two's).
+        /// </remarks>
+        PR,
+
+        /// <summary>
+        /// Palette
+        /// Abkürzung: Pal
+        /// </summary>
+        /// <remarks>
+        /// Platform or open-ended box, usually made of wood, on which goods are retained for ease of mechanical handling during transport and storage.
+        /// </remarks>
+        XPX,
+
+        /// <summary>
+        /// Stange
+        /// Abkürzung: Stg
+        /// </summary>
+        XRD,
+
+        /// <summary>
+        /// Tafel/Board
+        /// Abkürzung: Tf
+        /// </summary>
+        XBD,
+
+        /// <summary>
+        /// tausend Stück
+        /// Abkürzung: Tsd
+        /// </summary>
+        /// <remarks>
+        /// A unit of count defining the number of pieces in multiples of 1000 (piece: a single item, article or exemplar).
+        /// </remarks>
+        T3,
+
+        /// <summary>
+        /// Verpackung
+        /// </summary>
+        /// <remarks>
+        /// Standard packaging unit
+        /// </remarks>
+        XPK
+
     }
 
 
