@@ -158,6 +158,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Stück
         /// </summary>
+        [Obsolete("Does not conform to ZUGFeRD standard. Use H87 ('piece') or C62 ('one') instead")]
         PCE,
 
         /// <summary>
