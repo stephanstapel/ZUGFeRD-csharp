@@ -365,6 +365,14 @@ namespace s2industries.ZUGFeRD
         } // !Load()
 
 
+        /// <summary>
+        /// Initializes a new invoice object and returns it.
+        /// </summary>
+        /// <param name="invoiceNo">Invoice number</param>
+        /// <param name="invoiceDate">Invoice date</param>
+        /// <param name="currency">Currency</param>
+        /// <param name="invoiceNoAsReference">Remittance information</param>
+        /// <returns></returns>
         public static InvoiceDescriptor CreateInvoice(string invoiceNo, DateTime invoiceDate, CurrencyCodes currency, string invoiceNoAsReference = "")
         {
             InvoiceDescriptor retval = new InvoiceDescriptor
@@ -954,6 +962,15 @@ namespace s2industries.ZUGFeRD
         } // !SetPaymentMeans()
 
 
+        /// <summary>
+        /// Adds a group of business terms to specify credit transfer payments
+        /// </summary>
+        /// <param name="iban">IBAN</param>
+        /// <param name="bic">BIC</param>
+        /// <param name="id">Optional: old German bank account no</param>
+        /// <param name="bankleitzahl">Optional: old German Bankleitzahl</param>
+        /// <param name="bankName">Optional: old German bank name</param>
+        /// <param name="name">Optional: bank account name</param>
         public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {
             this.CreditorBankAccounts.Add(new BankAccount()

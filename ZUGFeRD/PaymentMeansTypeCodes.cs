@@ -23,6 +23,9 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum PaymentMeansTypeCodes
     {
+        /// <summary>
+        /// Unknown/ invalid value
+        /// </summary>
         Unknown = 0,
 
         /// <summary>

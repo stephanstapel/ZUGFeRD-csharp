@@ -189,6 +189,10 @@ namespace s2industries.ZUGFeRD
         /// Code specifying that the goods are at a zero rate.
         /// </summary>
         Z,
+
+        /// <summary>
+        /// Default value, not specified
+        /// </summary>
         Unknown
     }
 

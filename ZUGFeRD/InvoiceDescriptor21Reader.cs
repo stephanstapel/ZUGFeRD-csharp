@@ -114,9 +114,9 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            /// TODO: Read SellerOrderReferencedDocument
-            /// TODO: Read BuyerOrderReferencedDocument
-            /// TODO: Read ContractReferencedDocument
+            // TODO: Read SellerOrderReferencedDocument
+            // TODO: Read BuyerOrderReferencedDocument
+            // TODO: Read ContractReferencedDocument
 
             if (doc.SelectSingleNode("//ram:AdditionalReferencedDocument", nsmgr) != null)
             {

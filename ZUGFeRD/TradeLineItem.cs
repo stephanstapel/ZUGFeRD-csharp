@@ -103,11 +103,31 @@ namespace s2industries.ZUGFeRD
         /// 
         /// </summary>
         public DateTime? ActualDeliveryDate { get; set; }
+
+        /// <summary>
+        /// Details of the associated order
+        /// </summary>
         public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
+
+        /// <summary>
+        /// Detailed information about the corresponding delivery note
+        /// </summary>
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; }
+
+        /// <summary>
+        /// Details of the associated contract
+        /// </summary>
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
         public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
+
+        /// <summary>
+        /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
+        /// </summary>
         public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+
+        /// <summary>
+        /// Detailed information on the accounting reference
+        /// </summary>
         public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; }
 
         /// <summary>
@@ -180,6 +200,7 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = orderReferencedDate
             };
         } // !SetOrderReferencedDocument()
+
 
         public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
         {

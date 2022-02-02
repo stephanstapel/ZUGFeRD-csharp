@@ -42,15 +42,33 @@ namespace s2industries.ZUGFeRD
     public class TradeAllowanceCharge : Charge
     {
         /// <summary>
-        /// Schalter für Zu- und Abschlag
+        /// Switch for discount and surcharge
         /// 
-        /// false: Abschlag
-        /// true: Zuschlag
+        /// false: Discount
+        /// true: Surcharge
+        /// 
+        /// In case of a discount (BG-27) the value of the ChargeIndicators has to be "false". In case of a surcharge (BG-28) the value of the ChargeIndicators has to be "true".
         /// </summary>
         public bool ChargeIndicator { get; set; }
+
+        /// <summary>
+        /// The reason for the surcharge or discount in written form
+        /// </summary>
         public string Reason { get; set; }
+
+        /// <summary>
+        /// The base amount that may be used in conjunction with the percentage of the invoice line discount to calculate the amount of the invoice line discount
+        /// </summary>
         public decimal BasisAmount { get; set; }
+
+        /// <summary>
+        /// Currency that is used for representing BasisAmount and ActualAmount
+        /// </summary>
         public CurrencyCodes Currency { get; set; }
+
+        /// <summary>
+        /// The amount of the discount / surcharge or discount without VAT
+        /// </summary>
         public decimal ActualAmount { get; set; }
     }
 }

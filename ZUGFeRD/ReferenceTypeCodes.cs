@@ -29,6 +29,9 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum ReferenceTypeCodes
     {
+        /// <summary>
+        /// Unknown/ invalid value
+        /// </summary>
         Unknown = 0, 
 
         /// <summary>

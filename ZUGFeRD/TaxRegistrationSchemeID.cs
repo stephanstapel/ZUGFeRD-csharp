@@ -47,6 +47,10 @@ namespace s2industries.ZUGFeRD
         /// (VAT).
         /// </summary>
         VA,
+
+        /// <summary>
+        /// Unknown/ invalid value
+        /// </summary>
         Unknown
     }
 

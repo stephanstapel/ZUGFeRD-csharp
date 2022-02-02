@@ -23,15 +23,19 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+    /// <summary>
+    /// Condition that surrounds the payment part of an invoice, describing the specific details and the due date of the invoice.
+    /// </summary>
     public class PaymentTerms
     {
+        /// <summary>
+        /// A textual description of the payment terms that apply to the amount due for payment (including description of possible penalties).
+        /// </summary>
         public string Description { get; set; }
-        public DateTime? DueDate { get; set; }
 
-
-        public PaymentTerms()
-        {
-            this.DueDate = DateTime.MinValue;
-        }
+        /// <summary>
+        /// The date when the payment is due
+        /// </summary>
+        public DateTime? DueDate { get; set; } = null;
     }
 }
