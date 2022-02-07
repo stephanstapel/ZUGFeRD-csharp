@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net480</TargetFrameworks>
-    <Version>7.0.0</Version>
+    <Version>7.0.1</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>ZUGFeRD and it's successor Factur-X are initiatives from German (respectively European) government to foster electronic invoices.
@@ -18,10 +18,10 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
-    <Copyright>Stephan Stapel, s2 industries, 2021</Copyright>
-    <AssemblyVersion>7.0.0.0</AssemblyVersion>
+    <Copyright>Stephan Stapel, s2 industries, 2022</Copyright>
+    <AssemblyVersion>7.0.1.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>7.0.0.0</FileVersion>
+    <FileVersion>7.0.1.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
