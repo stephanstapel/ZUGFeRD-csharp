@@ -90,6 +90,6 @@ namespace s2industries.ZUGFeRD
         public static string EnumToString(this ContentCodes c)
         {
             return c.ToString("g");
-        } // !ToString()
+        } // !EnumToString()
     }
 }

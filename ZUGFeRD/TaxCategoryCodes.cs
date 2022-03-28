@@ -25,6 +25,8 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// http://www.unece.org/trade/untdid/d07a/tred/tred5305.htm
+    /// 
+    /// Used in BT-151
     /// </summary>
     public enum TaxCategoryCodes
     {

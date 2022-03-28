@@ -367,7 +367,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteElementString("ram:ExemptionReason", _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode), Profile.Extended);
                 }
-                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
+                Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString()); // BT-151
 
 
 
@@ -1156,6 +1156,8 @@ namespace s2industries.ZUGFeRD
 
                 if (taxRegistrations != null)
                 {
+                    // for seller: BT-31
+                    // for buyer : BT-48
                     foreach (TaxRegistration _reg in taxRegistrations)
                     {
                         if (!String.IsNullOrEmpty(_reg.No))
