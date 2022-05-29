@@ -98,7 +98,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// 
         /// </summary>
-        public AssociatedDocument AssociatedDocument { get; set; }
+        public AssociatedDocument AssociatedDocument { get; internal set; }
         /// <summary>
         /// 
         /// </summary>
