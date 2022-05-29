@@ -264,23 +264,7 @@ namespace s2industries.ZUGFeRD
                 "urn:ferd:CrossIndustryDocument:invoice:1p0:extended"
             };
 
-            long _oldStreamPosition = stream.Position;
-            stream.Position = 0;
-            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
-            {
-                string data = reader.ReadToEnd();
-                foreach (string validURI in validURIs)
-                {
-                    if (data.Contains(validURI))
-                    {
-                        stream.Position = _oldStreamPosition;
-                        return true;
-                    }
-                }
-            }
-
-            stream.Position = _oldStreamPosition;
-            return false;
+            return _IsReadableByThisReaderVersion(stream, validURIs);
         } // !IsReadableByThisReaderVersion()
 
 

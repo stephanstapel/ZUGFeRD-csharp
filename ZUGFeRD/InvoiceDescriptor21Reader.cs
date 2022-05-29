@@ -345,33 +345,16 @@ namespace s2industries.ZUGFeRD
             List<string> validURIs = new List<string>()
                 {
                     "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", // Factur-X 1.03 EXTENDED
-                    "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", // ZUGFeRD 2.0 EXTENDED
-                    "urn:cen.eu:en16931:2017", // ZUGFeRD 2.0 EN 16931 & Factur-X 1.03 EN 16931
-                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", // Factur-X 1.03 BASIC
-                    "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", // ZUGFeRD 2.0 BASIC
-                    "urn:factur-x.eu:1p0:basicwl", // Factur-X 1.03 BASIC WL
-                    "urn:zugferd.de:2p0:basicwl", // ZUGFeRD 2.0 BASIC
-                    "urn:factur-x.eu:1p0:minimum", // Factur-X 1.03 MINIMUM
-                    "urn:zugferd.de:2p0:minimum", // ZUGFeRD 2.0 MINIMUM
+                    "urn:cen.eu:en16931:2017",  // Profil EN 16931 (COMFORT)
+                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", // BASIC
+                    "urn:factur-x.eu:1p0:basicwl", // BASIC WL
+                    "urn:factur-x.eu:1p0:minimum", // MINIMUM
+                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2", // XRechnung 1.2
+                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1", // XRechnung 2.1
+                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2" // XRechnung 2.2
                 };
 
-            long _oldStreamPosition = stream.Position;
-            stream.Position = 0;
-            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
-            {
-                string data = reader.ReadToEnd();
-                foreach (string validURI in validURIs)
-                {
-                    if (data.Contains(validURI))
-                    {
-                        stream.Position = _oldStreamPosition;
-                        return true;
-                    }
-                }
-            }
-
-            stream.Position = _oldStreamPosition;
-            return false;
+            return _IsReadableByThisReaderVersion(stream, validURIs);
         } // !IsReadableByThisReaderVersion()
 
 

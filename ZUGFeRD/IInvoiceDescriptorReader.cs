@@ -17,7 +17,9 @@
  * under the License.
  */
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -303,5 +305,27 @@ namespace s2industries.ZUGFeRD
 
             return new DateTime(_year, _month, _day, _hour, _minute, _second);
         } // !_safeParseDateTime()
+
+
+        protected bool _IsReadableByThisReaderVersion(Stream stream, IList<string> validURIs)
+        {
+            long _oldStreamPosition = stream.Position;
+            stream.Position = 0;
+            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
+            {
+                string data = reader.ReadToEnd().Replace(" ", "").ToLower();
+                foreach (string validURI in validURIs)
+                {
+                    if (data.Contains(String.Format(">{0}<", validURI.ToLower())))
+                    {
+                        stream.Position = _oldStreamPosition;
+                        return true;
+                    }
+                }
+            }
+
+            stream.Position = _oldStreamPosition;
+            return false;
+        } // !_IsReadableByThisReaderVersion()
     }
 }

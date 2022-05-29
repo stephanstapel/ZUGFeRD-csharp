@@ -295,6 +295,68 @@ namespace s2industries.ZUGFeRD
         public DateTime? BillingPeriodEnd { get; set; }
 
 
+        /// <summary>
+        /// Gets the ZUGFeRD version of a ZUGFeRD invoice that is passed via filename
+        /// 
+        /// </summary>
+        /// <param name="filename">Stream where to read the ZUGFeRD invoice</param>
+        /// <returns>ZUGFeRD version of the invoice that was passed to the function</returns>
+        public static ZUGFeRDVersion GetVersion(string filename)
+        {
+            IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return ZUGFeRDVersion.Version1;
+            }
+
+            reader = new InvoiceDescriptor21Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return ZUGFeRDVersion.Version21;
+            }
+
+            reader = new InvoiceDescriptor20Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return ZUGFeRDVersion.Version20;
+            }
+
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this file '" + filename + "'!");
+
+            // return null;
+        } // !GetVersion()
+
+
+
+        /// <summary>
+        /// Gets the ZUGFeRD version of a ZUGFeRD invoice that is passed via stream
+        /// 
+        /// </summary>
+        /// <param name="stream">Stream where to read the ZUGFeRD invoice</param>
+        /// <returns>ZUGFeRD version of the invoice that was passed to the function</returns>
+        public static ZUGFeRDVersion GetVersion(Stream stream)
+        {
+            IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return ZUGFeRDVersion.Version1;
+            }
+
+            reader = new InvoiceDescriptor21Reader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return ZUGFeRDVersion.Version21;
+            }
+
+            reader = new InvoiceDescriptor20Reader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return ZUGFeRDVersion.Version20;
+            }
+
+            throw new UnsupportedException("No ZUGFeRD invoice reader was able to parse this stream!");            
+        } // !GetVersion()
+
 
         /// <summary>
         /// Loads a ZUGFeRD invoice from a stream.

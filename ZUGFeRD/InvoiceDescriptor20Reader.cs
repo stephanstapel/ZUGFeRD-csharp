@@ -307,41 +307,14 @@ namespace s2industries.ZUGFeRD
         {
             List<string> validURIs = new List<string>()
                 {
-                    "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", // Factur-X 1.03 EXTENDED
-                    "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", // ZUGFeRD 2.0 EXTENDED
-                    "urn:cen.eu:en16931:2017", // ZUGFeRD 2.0 EN 16931 & Factur-X 1.03 EN 16931
-                    "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", // Factur-X 1.03 BASIC
-                    "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", // ZUGFeRD 2.0 BASIC
-                    "urn:factur-x.eu:1p0:basicwl", // Factur-X 1.03 BASIC WL
-                    "urn:zugferd.de:2p0:basicwl", // ZUGFeRD 2.0 BASIC
-                    "urn:factur-x.eu:1p0:minimum", // Factur-X 1.03 MINIMUM
-                    "urn:zugferd.de:2p0:minimum", // ZUGFeRD 2.0 MINIMUM
-
-                    "urn:ferd:invoice:rc:basic",
-                    "urn:ferd:CrossIndustryDocument:invoice:1p0:basic",
-                    "urn:ferd:invoice:rc:comfort",
-                    "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort",
-                    "urn:ferd:CrossIndustryDocument:invoice:1p0:E",
-                    "urn:ferd:invoice:rc:extended"                    
+                    "urn:cen.eu:EN16931:2017#conformant#urn:zugferd.de:2p0:extended", // Profil EXTENDED
+                    "urn:cen.eu:EN16931:2017", // Profil EN 16931 (COMFORT)" +
+                    "urn:cen.eu:EN16931:2017#compliant#urn:zugferd.de:2p0:basic", // Profil BASIC
+                    "urn:zugferd.de:2p0:basicwl", // Profil BASIC WL
+                    "urn:zugferd.de:2p0:minimum" // Profil MINIMUM                    
                 };
 
-            long _oldStreamPosition = stream.Position;
-            stream.Position = 0;
-            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
-            {
-                string data = reader.ReadToEnd();               
-                foreach(string validURI in validURIs)
-                {
-                    if (data.Contains(validURI))
-                    {
-                        stream.Position = _oldStreamPosition;
-                        return true;
-                    }
-                }
-            }
-
-            stream.Position = _oldStreamPosition;
-            return false;
+            return _IsReadableByThisReaderVersion(stream, validURIs);
         } // !IsReadableByThisReaderVersion()
         
 

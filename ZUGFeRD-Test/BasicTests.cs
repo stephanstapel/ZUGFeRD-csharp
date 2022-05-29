@@ -86,8 +86,21 @@ namespace ZUGFeRD_Test
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
             Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes.Count, 1);
-            Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes[0].Content, COMMENT);            
-        }
+            Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes[0].Content, COMMENT);
+        } // !TestCommentLine()
 
+
+        [TestMethod]
+        public void TestGetVersion()
+        {
+            string path = @"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version1);
+
+            path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version20);
+
+            path = @"..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version21);
+        } // !TestGetVersion()
     }
 }

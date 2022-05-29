@@ -255,6 +255,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.Profile, Profile.XRechnung);
         } // !TestXRechnung2()
 
+
         [TestMethod]
         public void TestContractReferencedDocumentWithXRechnung()
         {
