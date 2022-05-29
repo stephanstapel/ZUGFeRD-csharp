@@ -148,7 +148,17 @@ namespace s2industries.ZUGFeRD
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended";
                         case Profile.XRechnung1: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2";
-                        case Profile.XRechnung: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1";
+                        case Profile.XRechnung:
+                            {
+                                if (DateTime.Now >= new DateTime(2022, 08, 01))
+                                {
+                                    return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2";
+                                }
+                                else
+                                {
+                                    return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1";
+                                }
+                            }
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    
                 default:
