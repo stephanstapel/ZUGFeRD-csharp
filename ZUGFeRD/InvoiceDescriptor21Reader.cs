@@ -24,6 +24,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.IO;
 using ZUGFeRD;
+using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD
 {
@@ -206,23 +207,26 @@ namespace s2industries.ZUGFeRD
             XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
             XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 
-            if (creditorFinancialAccountNodes.Count == creditorFinancialInstitutions.Count)
+            int numberOfAccounts = creditorFinancialAccountNodes.Count > creditorFinancialInstitutions.Count ? creditorFinancialAccountNodes.Count : creditorFinancialInstitutions.Count;
+            for (int i = 0; i < numberOfAccounts; i++)
             {
-                for (int i = 0; i < creditorFinancialAccountNodes.Count; i++)
-                {
-                    BankAccount _account = new BankAccount()
-                    {
-                        ID = _nodeAsString(creditorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
-                        IBAN = _nodeAsString(creditorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
-                        BIC = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
-                        Bankleitzahl = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:Name", nsmgr),
-                        Name = _nodeAsString(creditorFinancialInstitutions[0], ".//ram:AccountName", nsmgr),
-                    };
-
-                    retval.CreditorBankAccounts.Add(_account);
-                } // !for(i)
+                BankAccount _account = new BankAccount();
+                retval.CreditorBankAccounts.Add(_account);
             }
+
+            for (int i = 0; i < creditorFinancialAccountNodes.Count; i++)
+            {
+                retval.CreditorBankAccounts[i].ID = _nodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr);
+                retval.CreditorBankAccounts[i].IBAN = _nodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr);
+            }
+
+            for (int i = 0; i < creditorFinancialInstitutions.Count; i++)
+            {
+                retval.CreditorBankAccounts[i].BIC = _nodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr);
+                retval.CreditorBankAccounts[i].Bankleitzahl = _nodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr);
+                retval.CreditorBankAccounts[i].BankName = _nodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr);
+                retval.CreditorBankAccounts[i].Name = _nodeAsString(creditorFinancialInstitutions[i], ".//ram:AccountName", nsmgr);
+            }            
 
             var specifiedTradeSettlementPaymentMeansNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans", nsmgr);
 
