@@ -133,7 +133,7 @@ namespace s2industries.ZUGFeRD
         MMT,
 
         /// <summary>
-        /// Kubikmeter
+        /// Quadratmeter
         /// Abkürzung: m^2
         /// </summary>
         MTK,
