@@ -234,7 +234,7 @@ namespace s2industries.ZUGFeRD
                     {
                         foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                         {
-                            Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
+                            Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Comfort | Profile.Extended);
                             if (document.IssueDateTime.HasValue)
                             {
                                 Writer.WriteStartElement("ram:IssueDateTime");
