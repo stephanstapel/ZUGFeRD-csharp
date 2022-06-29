@@ -133,8 +133,8 @@ namespace s2industries.ZUGFeRD
                     byte[] data = Convert.FromBase64String(_nodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject", nsmgr));
 
                     retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
-                                                           issueDateTime: _date,
                                                            typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
+                                                           issueDateTime: _date,                                                           
                                                            referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
                                                            name: _name,
                                                            attachmentBinaryObject: data,
@@ -143,8 +143,8 @@ namespace s2industries.ZUGFeRD
                 else
                 {
                     retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
-                                                           issueDateTime: _date,
                                                            typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
+                                                           issueDateTime: _date,                                                           
                                                            referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
                                                            name: _name);
                 }
