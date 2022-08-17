@@ -365,7 +365,10 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("ram:TypeCode", tradeLineItem.TaxType.EnumToString());
                 if (!String.IsNullOrEmpty(_translateTaxCategoryCode(tradeLineItem.TaxCategoryCode)))
                 {
-                    Writer.WriteElementString("ram:ExemptionReason", _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode), Profile.Extended);
+                    Writer.WriteElementString("ram:ExemptionReason",
+                        _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode),
+                        _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode),
+                        Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
                 Writer.WriteElementString("ram:CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString()); // BT-151
 
@@ -596,8 +599,9 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeDelivery
-            Writer.WriteStartElement("ram:ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo, profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            Writer.WriteStartElement("ram:ApplicableHeaderTradeDelivery");
+            // Pflichteintrag
+            _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo, profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
             //ToDo: UltimateShipToTradeParty
             _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom, profile: Profile.Extended); // ShipFrom shall not be written in XRechnung profiles
 
@@ -698,8 +702,10 @@ namespace s2industries.ZUGFeRD
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            Writer.WriteStartElement("ram:ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended);
-                            _writeOptionalElementString(Writer, "ram:ID", Descriptor.PaymentMeans.FinancialCard.Id);
+                            //BR-51: The last 4 to 6 digits of the Payment card primary account number (BT-87) shall be present if Payment card information (BG-18) is provided in the Invoice.
+                            var last4Digits = Descriptor.PaymentMeans.FinancialCard.Id.Substring(Descriptor.PaymentMeans.FinancialCard.Id.Length - 4, 4);
+                            Writer.WriteStartElement("ram:ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                            _writeOptionalElementString(Writer, "ram:ID", last4Digits);
                             _writeOptionalElementString(Writer, "ram:CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName);
                             Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
                         }
@@ -720,8 +726,10 @@ namespace s2industries.ZUGFeRD
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            Writer.WriteStartElement("ram:ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended);
-                            _writeOptionalElementString(Writer, "ram:ID", Descriptor.PaymentMeans.FinancialCard.Id);
+                            //BR-51: The last 4 to 6 digits of the Payment card primary account number (BT-87) shall be present if Payment card information (BG-18) is provided in the Invoice.
+                            var last4Digits = Descriptor.PaymentMeans.FinancialCard.Id.Substring(Descriptor.PaymentMeans.FinancialCard.Id.Length - 4, 4);
+                            Writer.WriteStartElement("ram:ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                            _writeOptionalElementString(Writer, "ram:ID", last4Digits);
                             _writeOptionalElementString(Writer, "ram:CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName);
                             Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
                         }

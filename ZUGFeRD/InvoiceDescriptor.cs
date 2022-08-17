@@ -1030,6 +1030,20 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetPaymentMeans()
 
+        public void SetPaymentMeansForFinancialCard(PaymentMeansTypeCodes paymentMeansTypeCode,
+            string financialCardId = null, string financialCardCardholder = null, string paymentMeansInformation = "")
+        {
+            this.PaymentMeans = new PaymentMeans
+            {
+                TypeCode = paymentMeansTypeCode,
+                Information = paymentMeansInformation,
+                FinancialCard = new FinancialCard
+                {
+                    Id = financialCardId,
+                    CardholderName = financialCardCardholder
+                }
+            };
+        }
 
         /// <summary>
         /// Adds a group of business terms to specify credit transfer payments
