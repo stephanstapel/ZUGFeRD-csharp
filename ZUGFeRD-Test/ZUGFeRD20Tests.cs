@@ -30,7 +30,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestReferenceBasicInvoice()
         {
-            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -47,7 +47,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestReferenceExtendedInvoice()
         {
-            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -96,7 +96,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestMissingPropertiesAreNull()
         {
-            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
@@ -107,7 +107,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestMissingPropertListsEmpty()
         {
-            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.ApplicableProductCharacteristics.Count == 0));
@@ -117,7 +117,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestLoadingSepaPreNotification()
         {
-            string path = @"..\..\..\demodata\zugferd20\zugferd_2p0_EN16931_SEPA_Prenotification.xml";
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EN16931_SEPA_Prenotification.xml";
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
             Assert.AreEqual(Profile.Comfort, invoiceDescriptor.Profile);
 
