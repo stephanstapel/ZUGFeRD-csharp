@@ -1,0 +1,29 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies test
+      run: dotnet restore ZUGFeRD-Test/ZUGFeRD-Test.csproj
+    - name: Build test
+      run: dotnet build ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-restore
+    - name: Actual test
+      run: dotnet test ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-build --verbosity normal        
+    - name: Restore library dependencies 
+      run: dotnet restore ZUGFeRD-csharp/ZUGFeRD-csharp.csproj
+    - name: Build library
+      run: dotnet build ZUGFeRD-csharp/ZUGFeRD-csharp.csproj --no-restore
