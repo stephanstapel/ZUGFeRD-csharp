@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using ZUGFeRD;
 
 namespace ZUGFeRD_Test
@@ -191,7 +192,7 @@ namespace ZUGFeRD_Test
 
 
         [TestMethod]
-        public void TestInvoiceWithAttachment()
+        public void TestInvoiceWithAttachmentXRechnung()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             string filename = "myrandomdata.bin";
@@ -211,6 +212,8 @@ namespace ZUGFeRD_Test
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
 
             foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
             {
@@ -221,7 +224,105 @@ namespace ZUGFeRD_Test
                     break;
                 }
             }
-        } // !TestInvoiceWithAttachment()
+        } // !TestInvoiceWithAttachmentXRechnung()
+
+
+        [TestMethod]
+        public void TestInvoiceWithAttachmentExtended()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            string filename = "myrandomdata.bin";
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "Ausführbare Datei",
+                attachmentBinaryObject: data,
+                filename: filename);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
+
+            foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
+            {
+                if (document.ID == "My-File")
+                {
+                    CollectionAssert.AreEqual(document.AttachmentBinaryObject, data);
+                    Assert.AreEqual(document.Filename, filename);
+                    break;
+                }
+            }
+        } // !TestInvoiceWithAttachmentXRechnung()
+
+
+        [TestMethod]
+        public void TestInvoiceWithAttachmentComfort()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            string filename = "myrandomdata.bin";
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "Ausführbare Datei",
+                attachmentBinaryObject: data,
+                filename: filename);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
+
+            foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
+            {
+                if (document.ID == "My-File")
+                {
+                    CollectionAssert.AreEqual(document.AttachmentBinaryObject, data);
+                    Assert.AreEqual(document.Filename, filename);
+                    break;
+                }
+            }
+        } // !TestInvoiceWithAttachmentComfort()
+
+
+        [TestMethod]
+        public void TestInvoiceWithAttachmentBasic()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            string filename = "myrandomdata.bin";
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "Ausführbare Datei",
+                attachmentBinaryObject: data,
+                filename: filename);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Basic);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 0);
+        } // !TestInvoiceWithAttachmentBasic()
 
 
         [TestMethod]
