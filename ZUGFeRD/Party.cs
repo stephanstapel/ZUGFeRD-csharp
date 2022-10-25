@@ -63,5 +63,15 @@ namespace s2industries.ZUGFeRD
       /// </summary>
       public string Street { get; set; }
       public GlobalID GlobalID { get; set; }
-   }
+
+      /// <summary>
+      /// Address line 3
+      /// </summary>
+      public string AddressLine3 { get; set; }
+
+      /// <summary>
+      /// Country subdivision
+      /// </summary>
+      public string CountrySubdivisionName { get; set; }
+    }
 }

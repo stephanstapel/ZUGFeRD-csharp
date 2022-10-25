@@ -59,7 +59,8 @@ namespace s2industries.ZUGFeRD
                 Profile = default(Profile).FromString(_nodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
                 Type = default(InvoiceType).FromString(_nodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:TypeCode", nsmgr)),
                 InvoiceNo = _nodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:ID", nsmgr),
-                InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr)
+                InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr),
+                SpecificationId = _nodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)
             };
 
             foreach (XmlNode node in doc.SelectNodes("//rsm:ExchangedDocument/ram:IncludedNote", nsmgr))
@@ -70,10 +71,10 @@ namespace s2industries.ZUGFeRD
                 retval.AddNote(content, subjectCode);
             }
 
-            retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerReference", nsmgr);
+            retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerReference", nsmgr);
 
             retval.Seller = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty", nsmgr);
-            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableSupplyChainTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
             {
                 string id = _nodeAsString(node, ".//ram:ID", nsmgr);
                 string schemeID = _nodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
@@ -251,6 +252,7 @@ namespace s2industries.ZUGFeRD
                                                retval.Currency,
                                                _nodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
                                                _nodeAsString(node, ".//ram:Reason", nsmgr),
+                                               _nodeAsString(node, ".//ram:ReasonCode", nsmgr),
                                                default(TaxTypes).FromString(_nodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                                default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
                                                _nodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value);
@@ -287,18 +289,59 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
             };
 
-            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:FormattedIssueDateTime", nsmgr);
+            retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime/udt:FormattedIssueDateTime", nsmgr);
             if (!retval.OrderDate.HasValue)
             {
-                retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime", nsmgr);
+                retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssueDateTime", nsmgr);
             }
-            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr);
+            retval.OrderNo = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr);
 
 
             foreach (XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
             {
                 retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
             }
+
+            //SellerOrderReferencedDocument
+            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument", nsmgr) != null)
+            {
+                retval.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+                {
+                    ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/qdt:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                };
+            }
+
+            //ContractReferencedDocument
+            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument", nsmgr) != null)
+            {
+                retval.ContractReferencedDocument = new ContractReferencedDocument()
+                {
+                    ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/qdt:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                };
+            }
+
+            retval.ConversionRate = _nodeAsString(doc.DocumentElement, "//ram:TaxApplicableTradeCurrencyExchange/ram:ConversionRate", nsmgr);
+
+            //AdditionalReferencedDocument
+            XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
+            foreach (XmlNode referenceNode in referencedDocNodes)
+            {
+                string strBase64BinaryData = _nodeAsString(referenceNode, "ram:AttachmentBinaryObject", nsmgr);
+                retval.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument
+                {
+                    ID = _nodeAsString(referenceNode, "ram:IssuerAssignedID", nsmgr),
+                    TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(_nodeAsString(referenceNode, "ram:TypeCode", nsmgr)),
+                    Name = _nodeAsString(referenceNode, "ram:Name", nsmgr),
+                    IssueDateTime = _nodeAsDateTime(referenceNode, "ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr),
+                    AttachmentBinaryObject = !string.IsNullOrEmpty(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
+                    MimeCode = _nodeAsString(referenceNode, "ram:AttachmentBinaryObject/@mimeCode", nsmgr),
+                    Filename = _nodeAsString(referenceNode, "ram:AttachmentBinaryObject/@filename", nsmgr),
+                    ReferenceTypeCode = default(ReferenceTypeCodes).FromString(_nodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr))
+                });
+            }
+
             return retval;
         } // !Load()        
 
@@ -492,6 +535,9 @@ namespace s2industries.ZUGFeRD
                 retval.Street = lineOne;
                 retval.ContactName = null;
             }
+
+            retval.AddressLine3 = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineThree", nsmgr);
+            retval.CountrySubdivisionName = _nodeAsString(node, "ram:PostalTradeAddress/ram:CountrySubDivisionName", nsmgr);
 
             return retval;
         } // !_nodeAsParty()

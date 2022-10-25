@@ -296,6 +296,23 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
+        /// Spezification Identifier
+        /// </summary>
+        public string SpecificationId { get; set; }
+
+        /// <summary>
+        /// Details about the associated order confirmation
+        /// </summary>
+        public SellerOrderReferencedDocument SellerOrderReferencedDocument { get; set; } = new SellerOrderReferencedDocument();
+
+        /// <summary>
+        /// Exchange rate
+        /// </summary>
+        public string ConversionRate { get; set; } = "";
+
+
+
+        /// <summary>
         /// Gets the ZUGFeRD version of a ZUGFeRD invoice that is passed via filename
         /// 
         /// </summary>
@@ -630,15 +647,18 @@ namespace s2industries.ZUGFeRD
         /// <param name="currency">Curency of the allowance</param>
         /// <param name="actualAmount">Actual allowance charge amount</param>
         /// <param name="reason">Reason for the allowance</param>
+        /// <param name="reasonCode">Reason code for the allowance</param>
         /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, 
+            string reason, string reasonCode, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Reason = reason,
+                ReasonCode = reasonCode,
                 BasisAmount = basisAmount,
                 ActualAmount = actualAmount,
                 Currency = currency,

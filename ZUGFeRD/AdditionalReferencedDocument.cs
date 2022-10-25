@@ -55,5 +55,10 @@ namespace s2industries.ZUGFeRD
         /// Type of the reference document
         /// </summary>
         public AdditionalReferencedDocumentTypeCode TypeCode { get; set; }
+
+        /// <summary>
+        /// MIME code of the attached document
+        /// </summary>
+        public string MimeCode { get; set; }
     }
 }
