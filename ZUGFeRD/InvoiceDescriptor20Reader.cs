@@ -336,7 +336,6 @@ namespace s2industries.ZUGFeRD
                     Name = _nodeAsString(referenceNode, "ram:Name", nsmgr),
                     IssueDateTime = _nodeAsDateTime(referenceNode, "ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr),
                     AttachmentBinaryObject = !string.IsNullOrEmpty(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
-                    MimeCode = _nodeAsString(referenceNode, "ram:AttachmentBinaryObject/@mimeCode", nsmgr),
                     Filename = _nodeAsString(referenceNode, "ram:AttachmentBinaryObject/@filename", nsmgr),
                     ReferenceTypeCode = default(ReferenceTypeCodes).FromString(_nodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr))
                 });

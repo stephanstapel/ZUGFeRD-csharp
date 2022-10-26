@@ -167,7 +167,7 @@ namespace s2industries.ZUGFeRD
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referencedDocNodes)
             {
-                retval.AdditionalReferencedDocuments.Add(GetAdditionalReferencedDocument(referenceNode, nsmgr));
+                retval.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
             }
             //-------------------------------------------------
 
@@ -555,7 +555,7 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode referenceNode in referenceNodes)
             {
                 //Add referenced AND embedded documents
-                item.AdditionalReferencedDocuments.Add(GetAdditionalReferencedDocument(referenceNode, nsmgr));
+                item.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
             }
 
             return item;
@@ -606,7 +606,7 @@ namespace s2industries.ZUGFeRD
             return retval;
         } // !_nodeAsParty()
 
-        private static AdditionalReferencedDocument GetAdditionalReferencedDocument(XmlNode a_oXmlNode, XmlNamespaceManager a_nsmgr)
+        private static AdditionalReferencedDocument _getAdditionalReferencedDocument(XmlNode a_oXmlNode, XmlNamespaceManager a_nsmgr)
         {
             string strBase64BinaryData = _nodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject", a_nsmgr);
             return new AdditionalReferencedDocument
@@ -616,7 +616,6 @@ namespace s2industries.ZUGFeRD
                 Name = _nodeAsString(a_oXmlNode, "ram:Name", a_nsmgr),
                 IssueDateTime = _nodeAsDateTime(a_oXmlNode, "ram:FormattedIssueDateTime/udt:DateTimeString", a_nsmgr),
                 AttachmentBinaryObject = !string.IsNullOrEmpty(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
-                MimeCode = _nodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject/@mimeCode", a_nsmgr),
                 Filename = _nodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject/@filename", a_nsmgr),
                 ReferenceTypeCode = default(ReferenceTypeCodes).FromString(_nodeAsString(a_oXmlNode, "ram:ReferenceTypeCode", a_nsmgr))
             };

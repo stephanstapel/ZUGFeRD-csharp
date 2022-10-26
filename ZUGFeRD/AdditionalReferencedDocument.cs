@@ -59,6 +59,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// MIME code of the attached document
         /// </summary>
-        public string MimeCode { get; set; }
+        public string MimeCode => MimeTypeMapper.GetMimeType(Filename);
     }
 }
