@@ -49,6 +49,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Profile, Profile.Comfort);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
             Assert.AreEqual(desc.CreditorBankAccounts[0].BankName, "Hausbank München");
+            Assert.AreEqual(desc.SpecificationId, "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort");
         } // !TestReferenceComfortInvoiceRabattiert()
 
 

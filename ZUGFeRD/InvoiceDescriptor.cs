@@ -298,19 +298,14 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Spezification Identifier
         /// </summary>
-        public string SpecificationId { get; set; }
+        public string SpecificationId { get; internal set; }
 
         /// <summary>
-        /// Details about the associated order confirmation
+        /// Details about the associated order confirmation (BT-14), used in profile "Comfort" and "Extended".
+        /// If you add a SellerOrderReferencedDocument you must set the property "ID".
+        /// The property "IssueDateTime" is optional and only used in profile "Extended"
         /// </summary>
         public SellerOrderReferencedDocument SellerOrderReferencedDocument { get; set; } = new SellerOrderReferencedDocument();
-
-        /// <summary>
-        /// Exchange rate
-        /// </summary>
-        public string ConversionRate { get; set; } = "";
-
-
 
         /// <summary>
         /// Gets the ZUGFeRD version of a ZUGFeRD invoice that is passed via filename

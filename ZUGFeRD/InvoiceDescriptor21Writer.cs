@@ -77,7 +77,8 @@ namespace s2industries.ZUGFeRD
             }
             Writer.WriteStartElement("ram:GuidelineSpecifiedDocumentContextParameter");
             //Gruppierung der Anwendungsempfehlungsinformationen
-            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version21));
+            this.Descriptor.SpecificationId = this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version21);
+            Writer.WriteElementString("ram:ID", this.Descriptor.SpecificationId);
             Writer.WriteEndElement(); // !ram:GuidelineSpecifiedDocumentContextParameter
             Writer.WriteEndElement(); // !rsm:ExchangedDocumentContext
             #endregion
@@ -498,6 +499,26 @@ namespace s2industries.ZUGFeRD
 
             // TODO: implement SellerTaxRepresentativeTradeParty
             // BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
+
+
+            #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
+            if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrEmpty(Descriptor.SellerOrderReferencedDocument.ID))
+            {
+                Writer.WriteStartElement("ram:SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended);
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.SellerOrderReferencedDocument.ID);
+                if (this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime", Profile.Extended);
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.Value));
+                    Writer.WriteEndElement(); // !qdt:DateTimeString
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
+
+                Writer.WriteEndElement(); // !SellerOrderReferencedDocument
+            }
+            #endregion
 
             #region BuyerOrderReferencedDocument
             if (!String.IsNullOrEmpty(this.Descriptor.OrderNo))

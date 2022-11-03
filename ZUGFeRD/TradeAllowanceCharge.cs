@@ -57,9 +57,10 @@ namespace s2industries.ZUGFeRD
         public string Reason { get; set; }
 
         /// <summary>
-        /// Code for the reason for allowance or charge
+        /// Code for the reason for allowance or charge.
+        /// Currently it is only read for incoming invoices
         /// </summary>
-        public string ReasonCode { get; set; }
+        public string ReasonCode { get; internal set; }
 
         /// <summary>
         /// The base amount that may be used in conjunction with the percentage of the invoice line discount to calculate the amount of the invoice line discount

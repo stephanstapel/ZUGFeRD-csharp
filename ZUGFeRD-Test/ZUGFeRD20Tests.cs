@@ -27,6 +27,8 @@ namespace ZUGFeRD_Test
     [TestClass]
     public class ZUGFeRD20Tests
     {
+        InvoiceProvider InvoiceProvider = new InvoiceProvider();
+
         [TestMethod]
         public void TestReferenceBasicInvoice()
         {
@@ -229,5 +231,35 @@ namespace ZUGFeRD_Test
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
             }
         } // !TestStoringSepaPreNotification()
+
+
+        [TestMethod]
+        public void TestSellerOrderReferencedDocument()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(desc.Profile, Profile.Extended);
+            Assert.AreEqual(desc.SpecificationId, "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended");
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.SpecificationId, "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended");
+            Assert.AreEqual(loadedInvoice.SellerOrderReferencedDocument.ID, uuid);
+            Assert.AreEqual(loadedInvoice.SellerOrderReferencedDocument.IssueDateTime, issueDateTime);
+
+        } // !TestSellerOrderReferencedDocument()
+
+
     }
 }

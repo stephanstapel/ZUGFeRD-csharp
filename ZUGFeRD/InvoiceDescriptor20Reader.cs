@@ -47,7 +47,7 @@ namespace s2industries.ZUGFeRD
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:10");
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
             nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
             nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
             nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
@@ -308,7 +308,7 @@ namespace s2industries.ZUGFeRD
                 retval.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
                 {
                     ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/qdt:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
                 };
             }
 
@@ -321,8 +321,6 @@ namespace s2industries.ZUGFeRD
                     IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/qdt:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
                 };
             }
-
-            retval.ConversionRate = _nodeAsString(doc.DocumentElement, "//ram:TaxApplicableTradeCurrencyExchange/ram:ConversionRate", nsmgr);
 
             //AdditionalReferencedDocument
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);

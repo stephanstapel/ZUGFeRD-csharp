@@ -406,7 +406,39 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.ID, uuid);
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.IssueDateTime, issueDateTime); // explicitly not to be set in XRechnung
-        } // !TestContractReferencedDocumentWithExtended()        
+        } // !TestContractReferencedDocumentWithExtended()
+
+
+
+        [TestMethod]
+        public void TestSellerOrderReferencedDocument()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(desc.Profile, Profile.Extended);
+            Assert.AreEqual(desc.SpecificationId, "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended");
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.SpecificationId, "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended");
+            Assert.AreEqual(loadedInvoice.SellerOrderReferencedDocument.ID, uuid);
+            Assert.AreEqual(loadedInvoice.SellerOrderReferencedDocument.IssueDateTime, issueDateTime);
+
+        } // !TestSellerOrderReferencedDocument()
+
+
+
 
 
         [TestMethod]
