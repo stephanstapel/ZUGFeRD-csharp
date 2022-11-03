@@ -296,7 +296,7 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// Spezification Identifier
+        /// Spezification Identifier (BT-24)
         /// </summary>
         public string SpecificationId { get; internal set; }
 
