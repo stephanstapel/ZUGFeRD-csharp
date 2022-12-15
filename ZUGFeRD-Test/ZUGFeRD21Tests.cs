@@ -994,5 +994,27 @@ namespace ZUGFeRD_Test
                 Assert.Fail();
             }
         } // !TestInvalidTaxTypes()
+
+
+
+        [TestMethod]
+        public void TestAdditionalReferencedDocument()
+        {
+            string uuid = Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.AddAdditionalReferencedDocument(uuid, AdditionalReferencedDocumentTypeCode.Unknown, issueDateTime, "Additional Test Document");
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(1, loadedInvoice.AdditionalReferencedDocuments.Count);
+            Assert.AreEqual("Additional Test Document", loadedInvoice.AdditionalReferencedDocuments[0].Name);
+            Assert.AreEqual(issueDateTime, loadedInvoice.AdditionalReferencedDocuments[0].IssueDateTime);
+        }
+
     }
 }
