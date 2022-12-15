@@ -210,7 +210,9 @@ namespace s2industries.ZUGFeRD
                         if (document.IssueDateTime.HasValue)
                         {
                             Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("qdt:DateTimeString");
                             Writer.WriteValue(_formatDate(document.IssueDateTime.Value, false));
+                            Writer.WriteEndElement(); // !qdt:DateTimeString
                             Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
 

@@ -437,7 +437,7 @@ namespace s2industries.ZUGFeRD
 
                 item.AddAdditionalReferencedDocument(
                     id: _nodeAsString(referenceNode, "ram:IssuerAssignedID", nsmgr),
-                    date: _nodeAsDateTime(referenceNode, "ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr),
+                    date: _nodeAsDateTime(referenceNode, "ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr),
                     code: default(ReferenceTypeCodes).FromString(_code)
                 );
             }
