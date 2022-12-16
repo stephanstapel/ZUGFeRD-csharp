@@ -493,6 +493,9 @@ namespace s2industries.ZUGFeRD
                 retval.ContactName = null;
             }
 
+            retval.AddressLine3 = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineThree", nsmgr);
+            retval.CountrySubdivisionName = _nodeAsString(node, "ram:PostalTradeAddress/ram:CountrySubDivisionName", nsmgr);
+
             return retval;
         } // !_nodeAsParty()
     }
