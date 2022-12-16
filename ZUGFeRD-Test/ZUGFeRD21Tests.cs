@@ -996,7 +996,6 @@ namespace ZUGFeRD_Test
         } // !TestInvalidTaxTypes()
 
 
-
         [TestMethod]
         public void TestAdditionalReferencedDocument()
         {
@@ -1010,17 +1009,14 @@ namespace ZUGFeRD_Test
             desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
-
             StreamReader reader = new StreamReader(ms);
             string text = reader.ReadToEnd();
 
             ms.Seek(0, SeekOrigin.Begin);
-
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(1, loadedInvoice.AdditionalReferencedDocuments.Count);
             Assert.AreEqual("Additional Test Document", loadedInvoice.AdditionalReferencedDocuments[0].Name);
             Assert.AreEqual(issueDateTime, loadedInvoice.AdditionalReferencedDocuments[0].IssueDateTime);
-        }
-
+        } // !TestAdditionalReferencedDocument()
     }
 }
