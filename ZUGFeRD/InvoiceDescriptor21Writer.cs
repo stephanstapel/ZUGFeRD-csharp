@@ -237,8 +237,8 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
                             if (document.IssueDateTime.HasValue)
                             {
-                                Writer.WriteStartElement("ram:IssueDateTime");
-                                Writer.WriteStartElement("udt:DateTimeString");
+                                Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                                Writer.WriteStartElement("qdt:DateTimeString");
                                 Writer.WriteAttributeString("format", "102");
                                 Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
                                 Writer.WriteEndElement(); // !udt:DateTimeString
