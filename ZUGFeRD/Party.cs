@@ -66,11 +66,16 @@ namespace s2industries.ZUGFeRD
 
       /// <summary>
       /// Address line 3
+      /// It's an additional line to give more details to the address.
+      /// This field is purely optional.
+      /// e.g. used for BT-162, BT-164, BT-165
       /// </summary>
       public string AddressLine3 { get; set; }
 
       /// <summary>
-      /// Country subdivision
+      /// Country subdivision (e.g. Niedersachsen, Bayern)
+      /// This field is purely optional.
+      /// e.g. used for BT-39, BT-54, BT-68, BT-79
       /// </summary>
       public string CountrySubdivisionName { get; set; }
     }
