@@ -899,8 +899,12 @@ namespace s2industries.ZUGFeRD
                 writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(Party.ContactName) ? Party.Street : Party.ContactName);
                 if (!string.IsNullOrEmpty(Party.ContactName))
                     writer.WriteElementString("ram:LineTwo", Party.Street);
+                if (!string.IsNullOrEmpty(Party.AddressLine3))
+                    writer.WriteElementString("ram:LineThree", Party.AddressLine3); // BT-163
                 writer.WriteElementString("ram:CityName", Party.City);
                 writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+                if (!string.IsNullOrEmpty(Party.CountrySubdivisionName))
+                    writer.WriteElementString("ram:CountrySubDivisionName", Party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (TaxRegistrations != null)

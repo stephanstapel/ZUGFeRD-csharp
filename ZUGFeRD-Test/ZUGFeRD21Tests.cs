@@ -1022,6 +1022,38 @@ namespace ZUGFeRD_Test
         } // !TestAdditionalReferencedDocument()
 
         [TestMethod]
+        public void TestPartyExtensions()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.Invoicee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
+            {
+                Name = "Test",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual("Test", loadedInvoice.Invoicee.Name);
+            Assert.AreEqual("Max Mustermann", loadedInvoice.Invoicee.ContactName);
+            Assert.AreEqual("83022", loadedInvoice.Invoicee.Postcode);
+            Assert.AreEqual("Rosenheim", loadedInvoice.Invoicee.City);
+            Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Invoicee.Street);
+            Assert.AreEqual("EG links", loadedInvoice.Invoicee.AddressLine3);
+            Assert.AreEqual("Bayern", loadedInvoice.Invoicee.CountrySubdivisionName);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Invoicee.Country);
+        } // !TestMinimumInvoice()
+
+
+        [TestMethod]
         public void TestMimetypeOfEmbeddedAttachment()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
