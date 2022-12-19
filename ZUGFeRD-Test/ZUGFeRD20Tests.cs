@@ -266,5 +266,58 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(CountryCodes.DE, loadedInvoice.Invoicee.Country);
         } // !TestMinimumInvoice()
 
+
+        [TestMethod]
+        public void TestMimetypeOfEmbeddedAttachment()
+        {
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            string filename1 = "myrandomdata.pdf";
+            string filename2 = "myrandomdata.bin";
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-PDF",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename1);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-BIN",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename2);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
+
+            foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
+            {
+                if (document.ID == "My-File-PDF")
+                {
+                    Assert.AreEqual(document.Filename, filename1);
+                    Assert.AreEqual("application/pdf", document.MimeType);
+                }
+
+                if (document.ID == "My-File-BIN")
+                {
+                    Assert.AreEqual(document.Filename, filename2);
+                    Assert.AreEqual("application/octet-stream", document.MimeType);
+                }
+            }
+        } // !TestMimetypeOfEmbeddedAttachment()
+
     }
 }
