@@ -1101,5 +1101,35 @@ namespace ZUGFeRD_Test
             }
         } // !TestMimetypeOfEmbeddedAttachment()
 
+        [TestMethod]
+        public void TestSellerOrderReferencedDocument()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.AreEqual(uuid, loadedInvoice.SellerOrderReferencedDocument.ID);
+            Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
+        } // !TestSellerOrderReferencedDocument()
+
+
+
     }
 }

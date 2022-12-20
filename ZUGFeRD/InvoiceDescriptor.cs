@@ -294,6 +294,13 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
 
+        /// <summary>
+        /// Details about the associated order confirmation (BT-14).
+        /// This is optional and can be used in Profiles Comfort and Extended.
+        /// If you add a SellerOrderReferencedDocument you must set the property "ID".
+        /// The property "IssueDateTime" is optional an only used in profile "Extended"
+        /// </summary>
+        public SellerOrderReferencedDocument SellerOrderReferencedDocument { get; set; } = new SellerOrderReferencedDocument();
 
         /// <summary>
         /// Gets the ZUGFeRD version of a ZUGFeRD invoice that is passed via filename
