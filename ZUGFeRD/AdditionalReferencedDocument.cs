@@ -55,5 +55,10 @@ namespace s2industries.ZUGFeRD
         /// Type of the reference document
         /// </summary>
         public AdditionalReferencedDocumentTypeCode TypeCode { get; set; }
+
+        /// <summary>
+        /// MimeType of the attached document embedded as binary object.
+        /// </summary>
+        public string MimeType => MimeTypeMapper.GetMimeType(Filename);
     }
 }
