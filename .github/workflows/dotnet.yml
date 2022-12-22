@@ -24,6 +24,6 @@ jobs:
     - name: Actual test
       run: dotnet test ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-build --verbosity normal        
     - name: Restore library dependencies 
-      run: dotnet restore ZUGFeRD-csharp/ZUGFeRD-csharp.csproj
+      run: dotnet restore ZUGFeRD/ZUGFeRD-csharp.csproj
     - name: Build library
-      run: dotnet build ZUGFeRD-csharp/ZUGFeRD-csharp.csproj --no-restore
+      run: dotnet build ZUGFeRD/ZUGFeRD-csharp.csproj --no-restore
