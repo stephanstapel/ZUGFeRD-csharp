@@ -1129,7 +1129,7 @@ namespace ZUGFeRD_Test
         public void TestOrderInformation()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             DateTime timestamp = DateTime.Now.Date;
 
@@ -1181,6 +1181,17 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
         } // !TestSellerOrderReferencedDocument()
 
+
+
+        private string _makeSurePathIsCrossPlatformCompatible(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return path;
+            }
+
+            return path.Replace('\\', System.IO.Path.DirectorySeparatorChar);
+        } // !_makeSurePathIsCrossPlatformCompatible()
 
 
     }
