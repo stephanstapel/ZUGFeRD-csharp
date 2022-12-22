@@ -1101,5 +1101,31 @@ namespace ZUGFeRD_Test
             }
         } // !TestMimetypeOfEmbeddedAttachment()
 
+        [TestMethod]
+        public void TestOrderInformation()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            DateTime timestamp = DateTime.Now.Date;
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            desc.OrderDate = timestamp;
+            desc.OrderNo = "12345";
+            s.Close();
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
+            Assert.AreEqual("12345", loadedInvoice.OrderNo);
+
+        } // !TestOrderInformation()
+
     }
 }
