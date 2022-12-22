@@ -518,6 +518,26 @@ namespace s2industries.ZUGFeRD
             }
             #endregion            
 
+
+            #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
+            if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrEmpty(Descriptor.SellerOrderReferencedDocument.ID))
+            {
+                Writer.WriteStartElement("ram:SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended);
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.SellerOrderReferencedDocument.ID);
+                if (this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime", Profile.Extended);
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.Value));
+                    Writer.WriteEndElement(); // !qdt:DateTimeString
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
+
+                Writer.WriteEndElement(); // !SellerOrderReferencedDocument
+            }
+            #endregion
+
             #region ContractReferencedDocument
             // BT-12
             if (this.Descriptor.ContractReferencedDocument != null)
@@ -1149,9 +1169,12 @@ namespace s2industries.ZUGFeRD
                 writer.WriteElementString("ram:LineOne", string.IsNullOrEmpty(party.ContactName) ? party.Street : party.ContactName); // BT-50
                 if (!string.IsNullOrEmpty(party.ContactName))
                     writer.WriteElementString("ram:LineTwo", party.Street); // BT-51
-                // no implementation of BT-163 (ram:LineThree) so far
+                if (!string.IsNullOrEmpty(party.AddressLine3))
+                    writer.WriteElementString("ram:LineThree", party.AddressLine3); // BT-163
                 writer.WriteElementString("ram:CityName", party.City); // BT-52
                 writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // BT-55
+                if (!string.IsNullOrEmpty(party.CountrySubdivisionName))
+                    writer.WriteElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (taxRegistrations != null)

@@ -229,5 +229,156 @@ namespace ZUGFeRD_Test
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
             }
         } // !TestStoringSepaPreNotification()
+
+        [TestMethod]
+        public void TestPartyExtensions()
+        {
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.Invoicee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
+            {
+                Name = "Test",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual("Test", loadedInvoice.Invoicee.Name);
+            Assert.AreEqual("Max Mustermann", loadedInvoice.Invoicee.ContactName);
+            Assert.AreEqual("83022", loadedInvoice.Invoicee.Postcode);
+            Assert.AreEqual("Rosenheim", loadedInvoice.Invoicee.City);
+            Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Invoicee.Street);
+            Assert.AreEqual("EG links", loadedInvoice.Invoicee.AddressLine3);
+            Assert.AreEqual("Bayern", loadedInvoice.Invoicee.CountrySubdivisionName);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Invoicee.Country);
+        } // !TestMinimumInvoice()
+
+
+        [TestMethod]
+        public void TestMimetypeOfEmbeddedAttachment()
+        {
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            string filename1 = "myrandomdata.pdf";
+            string filename2 = "myrandomdata.bin";
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-PDF",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename1);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-BIN",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename2);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
+
+            foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
+            {
+                if (document.ID == "My-File-PDF")
+                {
+                    Assert.AreEqual(document.Filename, filename1);
+                    Assert.AreEqual("application/pdf", document.MimeType);
+                }
+
+                if (document.ID == "My-File-BIN")
+                {
+                    Assert.AreEqual(document.Filename, filename2);
+                    Assert.AreEqual("application/octet-stream", document.MimeType);
+                }
+            }
+        } // !TestMimetypeOfEmbeddedAttachment()
+
+
+        [TestMethod]
+        public void TestOrderInformation()
+        {
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+            DateTime timestamp = DateTime.Now.Date;
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            desc.OrderDate = timestamp;
+            desc.OrderNo = "12345";
+            s.Close();
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
+            Assert.AreEqual("12345", loadedInvoice.OrderNo);
+
+        } // !TestOrderInformation()
+
+
+        [TestMethod]
+        public void TestSellerOrderReferencedDocument()
+        {
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.AreEqual(uuid, loadedInvoice.SellerOrderReferencedDocument.ID);
+            Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
+        } // !TestSellerOrderReferencedDocument()
+
     }
 }
