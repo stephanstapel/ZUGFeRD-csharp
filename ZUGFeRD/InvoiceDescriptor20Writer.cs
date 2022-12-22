@@ -381,6 +381,27 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
             _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
+
+            #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
+            if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrEmpty(Descriptor.SellerOrderReferencedDocument.ID))
+            {
+                Writer.WriteStartElement("ram:SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended);
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.SellerOrderReferencedDocument.ID);
+                if (this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime", Profile.Extended);
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.Value));
+                    Writer.WriteEndElement(); // !qdt:DateTimeString
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
+
+                Writer.WriteEndElement(); // !SellerOrderReferencedDocument
+            }
+            #endregion
+
+
             if (!String.IsNullOrEmpty(this.Descriptor.OrderNo))
             {
                 Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");

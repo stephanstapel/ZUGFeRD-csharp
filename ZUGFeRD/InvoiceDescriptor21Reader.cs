@@ -115,10 +115,6 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            // TODO: Read SellerOrderReferencedDocument
-            // TODO: Read BuyerOrderReferencedDocument
-            // TODO: Read ContractReferencedDocument
-
 
             //Get all referenced and embedded documents (BG-24)
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
@@ -332,11 +328,25 @@ namespace s2industries.ZUGFeRD
             retval.OrderDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr);
             retval.OrderNo = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr);
 
-            retval.ContractReferencedDocument = new ContractReferencedDocument
+            // Read SellerOrderReferencedDocument
+            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument", nsmgr) != null)
             {
-                ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
-            };
+                retval.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+                {
+                    ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                };
+            }
+
+            // Read ContractReferencedDocument
+            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument", nsmgr) != null)
+            {
+                retval.ContractReferencedDocument = new ContractReferencedDocument
+                {
+                    ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
+                };
+            }
 
             retval.SpecifiedProcuringProject = new SpecifiedProcuringProject
             {
@@ -348,6 +358,7 @@ namespace s2industries.ZUGFeRD
             {
                 retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
             }
+
             return retval;
         } // !Load()        
 

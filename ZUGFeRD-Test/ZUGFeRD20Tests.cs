@@ -354,6 +354,40 @@ namespace ZUGFeRD_Test
         } // !TestOrderInformation()
 
 
+        [TestMethod]
+        public void TestSellerOrderReferencedDocument()
+        {
+            string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+            {
+                ID = uuid,
+                IssueDateTime = issueDateTime
+            };
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.AreEqual(uuid, loadedInvoice.SellerOrderReferencedDocument.ID);
+            Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
+        } // !TestSellerOrderReferencedDocument()
+
+
         /// <summary>
         /// This test ensure that Writer and Reader uses the same path and namespace for elements
         /// </summary>
