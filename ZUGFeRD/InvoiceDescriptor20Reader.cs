@@ -299,7 +299,21 @@ namespace s2industries.ZUGFeRD
             {
                 retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
             }
+
+            //SellerOrderReferencedDocument
+            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument", nsmgr) != null)
+            {
+                retval.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+                {
+                    ID = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                    IssueDateTime = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                };
+            }
+
+
+
             return retval;
+
         } // !Load()        
 
 
