@@ -38,6 +38,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceBasicFacturXInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -55,6 +56,7 @@ namespace ZUGFeRD_Test
         public void TestStoringReferenceBasicFacturXInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor originalDesc = InvoiceDescriptor.Load(s);
@@ -95,6 +97,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceBasicWLInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC-WL_Einfach-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -112,6 +115,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceExtendedInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -146,6 +150,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceMinimumInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_MINIMUM_Rechnung-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -164,6 +169,8 @@ namespace ZUGFeRD_Test
         public void TestReferenceXRechnung1CII()
         {
             string path = @"..\..\..\..\demodata\xRechnung\xRechnung CII.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Profile, Profile.XRechnung1);
@@ -476,6 +483,8 @@ namespace ZUGFeRD_Test
         public void TestMissingPropertiesAreNull()
         {
             var path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
@@ -486,6 +495,8 @@ namespace ZUGFeRD_Test
         public void TestMissingPropertiesAreEmpty()
         {
             var path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.ApplicableProductCharacteristics.Count == 0));
@@ -495,6 +506,8 @@ namespace ZUGFeRD_Test
         public void TestReadTradeLineBillingPeriod()
         {
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement data.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
@@ -506,6 +519,8 @@ namespace ZUGFeRD_Test
         public void TestReadTradeLineLineID()
         {
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement data.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
             var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
             Assert.AreEqual("2", tradeLineItem.LineID);
@@ -515,6 +530,8 @@ namespace ZUGFeRD_Test
         public void TestReadTradeLineProductCharacteristics()
         {
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement data.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
             var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
 
@@ -532,6 +549,7 @@ namespace ZUGFeRD_Test
         public void TestWriteTradeLineProductCharacteristics()
         {
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             var fileStream = File.Open(path, FileMode.Open);
             var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
@@ -603,6 +621,7 @@ namespace ZUGFeRD_Test
         {
             // Read XRechnung
             string path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor originalInvoiceDescriptor = InvoiceDescriptor.Load(s);
@@ -648,6 +667,7 @@ namespace ZUGFeRD_Test
         {
             // Read XRechnung
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             var fileStream = File.Open(path, FileMode.Open);
             var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
@@ -679,6 +699,7 @@ namespace ZUGFeRD_Test
         {
             // Read XRechnung
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             var fileStream = File.Open(path, FileMode.Open);
             var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
@@ -709,6 +730,7 @@ namespace ZUGFeRD_Test
         {
             // Read XRechnung
             var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            path = System.IO.Path.GetFullPath(path);
 
             var fileStream = File.Open(path, FileMode.Open);
             var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
@@ -742,6 +764,8 @@ namespace ZUGFeRD_Test
         public void TestLoadingSepaPreNotification()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EN16931_SEPA_Prenotification.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
             Assert.AreEqual(Profile.Comfort, invoiceDescriptor.Profile);
             Assert.AreEqual(InvoiceType.Invoice, invoiceDescriptor.Type);           
@@ -1105,6 +1129,8 @@ namespace ZUGFeRD_Test
         public void TestOrderInformation()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             DateTime timestamp = DateTime.Now.Date;
 
             Stream s = File.Open(path, FileMode.Open);

@@ -43,6 +43,8 @@ namespace ZUGFeRD_Test
         public void TestReferenceComfortInvoiceRabattiert()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             desc.Save("test.xml", ZUGFeRDVersion.Version1, Profile.Comfort);
@@ -97,6 +99,8 @@ namespace ZUGFeRD_Test
         public void TestMissingPropertiesAreNull()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
+            path = System.IO.Path.GetFullPath(path);
+
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
