@@ -25,6 +25,7 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
+using NuGet.Frameworks;
 using ZUGFeRD;
 
 namespace ZUGFeRD_Test
@@ -1059,12 +1060,14 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             string filename1 = "myrandomdata.pdf";
             string filename2 = "myrandomdata.bin";
+            DateTime timestamp = DateTime.Now.Date;
             byte[] data = new byte[32768];
             new Random().NextBytes(data);
 
             desc.AddAdditionalReferencedDocument(
                 id: "My-File-PDF",
                 typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                issueDateTime: timestamp,
                 name: "EmbeddedPdf",
                 attachmentBinaryObject: data,
                 filename: filename1);
@@ -1072,6 +1075,7 @@ namespace ZUGFeRD_Test
             desc.AddAdditionalReferencedDocument(
                 id: "My-File-BIN",
                 typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                issueDateTime: timestamp.AddDays(-2),
                 name: "EmbeddedPdf",
                 attachmentBinaryObject: data,
                 filename: filename2);
@@ -1083,7 +1087,7 @@ namespace ZUGFeRD_Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 2);
 
             foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
             {
@@ -1091,15 +1095,353 @@ namespace ZUGFeRD_Test
                 {
                     Assert.AreEqual(document.Filename, filename1);
                     Assert.AreEqual("application/pdf", document.MimeType);
+                    Assert.AreEqual(timestamp, document.IssueDateTime);
                 }
 
                 if (document.ID == "My-File-BIN")
                 {
                     Assert.AreEqual(document.Filename, filename2);
                     Assert.AreEqual("application/octet-stream", document.MimeType);
+                    Assert.AreEqual(timestamp.AddDays(-2), document.IssueDateTime);
                 }
             }
         } // !TestMimetypeOfEmbeddedAttachment()
+
+        /// <summary>
+        /// This test ensure that Writer and Reader uses the same path and namespace for elements
+        /// </summary>
+        [TestMethod]
+        public void TestWriteAndReadExtended()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            string filename2 = "myrandomdata.bin";
+            DateTime timestamp = DateTime.Now.Date;
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File-BIN",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                issueDateTime: timestamp.AddDays(-2),
+                name: "EmbeddedPdf",
+                attachmentBinaryObject: data,
+                filename: filename2);
+
+            desc.OrderNo = "12345";
+            desc.OrderDate = timestamp;
+
+            desc.SetContractReferencedDocument("12345", timestamp);
+
+            desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {ID = "123", Name = "Project 123"};
+
+            desc.ShipTo = new Party
+            {
+                ID = "123",
+                GlobalID = new GlobalID("456", "789"),
+                Name = "Ship To",
+                ContactName = "Max Mustermann",
+                Street = "Münchnerstr. 55",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Country = CountryCodes.DE
+            };
+
+            desc.ShipFrom = new Party
+            {
+                ID = "123",
+                GlobalID = new GlobalID("456", "789"),
+                Name = "Ship From",
+                ContactName = "Eva Musterfrau",
+                Street = "Alpenweg 5",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Country = CountryCodes.DE
+            };
+
+            desc.PaymentMeans.SEPACreditorIdentifier = "SepaID";
+            desc.PaymentMeans.SEPAMandateReference = "SepaMandat";
+            desc.PaymentMeans.FinancialCard = new FinancialCard {Id = "123", CardholderName = "Mustermann"};
+
+            desc.PaymentReference = "PaymentReference";
+
+            desc.Invoicee = new Party()
+            {
+                Name = "Test",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+
+            desc.Payee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
+            {
+                Name = "Test",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+
+            desc.AddDebitorFinancialAccount(iban: "DE02120300000000202052", bic: "BYLADEM1001", bankName: "Musterbank");
+            desc.BillingPeriodStart = timestamp;
+            desc.BillingPeriodEnd = timestamp.AddDays(14);
+
+            desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
+            desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
+
+            desc.PaymentTerms.DueDate = timestamp.AddDays(14);
+            desc.SetInvoiceReferencedDocument("RE-12345", timestamp);
+
+
+            //set additional LineItem data
+            var lineItem = desc.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
+            Assert.IsNotNull(lineItem);
+            lineItem.Description = "This is line item TB100A4";
+            lineItem.BuyerAssignedID = "0815";
+            lineItem.SetOrderReferencedDocument("12345", timestamp);
+            lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
+            lineItem.SetContractReferencedDocument("12345", timestamp);
+
+            lineItem.AddAdditionalReferencedDocument("xyz", timestamp, ReferenceTypeCodes.AAB);
+
+            lineItem.UnitQuantity = 3m;
+            lineItem.ActualDeliveryDate = timestamp;
+
+            lineItem.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic
+            {
+                Description = "Product characteristics",
+                Value = "Product value"
+            });
+
+            lineItem.BillingPeriodStart = timestamp;
+            lineItem.BillingPeriodEnd = timestamp.AddDays(10);
+
+            lineItem.AddReceivableSpecifiedTradeAccountingAccount("987654");
+            lineItem.AddTradeAllowanceCharge(false, CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest");
+
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual("471102", loadedInvoice.InvoiceNo);
+            Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.InvoiceDate);
+            Assert.AreEqual(CurrencyCodes.EUR, loadedInvoice.Currency);
+            Assert.IsTrue(loadedInvoice.Notes.Any(n => n.Content == "Rechnung gemäß Bestellung vom 01.03.2018."));
+            Assert.AreEqual("04011000-12345-34", loadedInvoice.ReferenceOrderNo);
+            Assert.AreEqual("Lieferant GmbH", loadedInvoice.Seller.Name);
+            Assert.AreEqual("80333", loadedInvoice.Seller.Postcode);
+            Assert.AreEqual("München", loadedInvoice.Seller.City);
+
+            Assert.AreEqual("Lieferantenstraße 20", loadedInvoice.Seller.Street);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Seller.Country);
+            Assert.AreEqual("0088", loadedInvoice.Seller.GlobalID.SchemeID);
+            Assert.AreEqual("4000001123452", loadedInvoice.Seller.GlobalID.ID);
+            Assert.AreEqual("Max Mustermann", loadedInvoice.SellerContact.Name);
+            Assert.AreEqual("Muster-Einkauf", loadedInvoice.SellerContact.OrgUnit);
+            Assert.AreEqual("Max@Mustermann.de", loadedInvoice.SellerContact.EmailAddress);
+            Assert.AreEqual("+49891234567", loadedInvoice.SellerContact.PhoneNo);
+
+            Assert.AreEqual("Kunden AG Mitte", loadedInvoice.Buyer.Name);
+            Assert.AreEqual("69876", loadedInvoice.Buyer.Postcode);
+            Assert.AreEqual("Frankfurt", loadedInvoice.Buyer.City);
+            Assert.AreEqual("Kundenstraße 15", loadedInvoice.Buyer.Street);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Buyer.Country);
+            Assert.AreEqual("GE2020211", loadedInvoice.Buyer.ID);
+
+            Assert.AreEqual("12345", loadedInvoice.OrderNo);
+            Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
+
+            Assert.AreEqual("12345", loadedInvoice.ContractReferencedDocument.ID);
+            Assert.AreEqual(timestamp, loadedInvoice.ContractReferencedDocument.IssueDateTime);
+
+            Assert.AreEqual("123", loadedInvoice.SpecifiedProcuringProject.ID);
+            Assert.AreEqual("Project 123", loadedInvoice.SpecifiedProcuringProject.Name);
+
+            Assert.AreEqual("123", loadedInvoice.ShipTo.ID);
+            Assert.AreEqual("456", loadedInvoice.ShipTo.GlobalID.SchemeID);
+            Assert.AreEqual("789", loadedInvoice.ShipTo.GlobalID.ID);
+            Assert.AreEqual("Ship To", loadedInvoice.ShipTo.Name);
+            Assert.AreEqual("Max Mustermann", loadedInvoice.ShipTo.ContactName);
+            Assert.AreEqual("Münchnerstr. 55", loadedInvoice.ShipTo.Street);
+            Assert.AreEqual("83022", loadedInvoice.ShipTo.Postcode);
+            Assert.AreEqual("Rosenheim", loadedInvoice.ShipTo.City);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.ShipTo.Country);
+
+            Assert.AreEqual("123", loadedInvoice.ShipFrom.ID);
+            Assert.AreEqual("456", loadedInvoice.ShipFrom.GlobalID.SchemeID);
+            Assert.AreEqual("789", loadedInvoice.ShipFrom.GlobalID.ID);
+            Assert.AreEqual("Ship From", loadedInvoice.ShipFrom.Name);
+            Assert.AreEqual("Eva Musterfrau", loadedInvoice.ShipFrom.ContactName);
+            Assert.AreEqual("Alpenweg 5", loadedInvoice.ShipFrom.Street);
+            Assert.AreEqual("83022", loadedInvoice.ShipFrom.Postcode);
+            Assert.AreEqual("Rosenheim", loadedInvoice.ShipFrom.City);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.ShipFrom.Country);
+
+
+            Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.ActualDeliveryDate);
+            Assert.AreEqual(PaymentMeansTypeCodes.SEPACreditTransfer, loadedInvoice.PaymentMeans.TypeCode);
+            Assert.AreEqual("Zahlung per SEPA Überweisung.", loadedInvoice.PaymentMeans.Information);
+
+            Assert.AreEqual("PaymentReference", loadedInvoice.PaymentReference);
+
+            Assert.AreEqual("SepaID", loadedInvoice.PaymentMeans.SEPACreditorIdentifier);
+            Assert.AreEqual("SepaMandat", loadedInvoice.PaymentMeans.SEPAMandateReference);
+            Assert.AreEqual("123", loadedInvoice.PaymentMeans.FinancialCard.Id);
+            Assert.AreEqual("Mustermann", loadedInvoice.PaymentMeans.FinancialCard.CardholderName);
+
+            var bankAccount = loadedInvoice.CreditorBankAccounts.FirstOrDefault(a => a.IBAN == "DE02120300000000202051");
+            Assert.IsNotNull(bankAccount);
+            Assert.AreEqual("Kunden AG", bankAccount.Name);
+            Assert.AreEqual("DE02120300000000202051", bankAccount.IBAN);
+            Assert.AreEqual("BYLADEM1001", bankAccount.BIC);
+
+            var debitorBankAccount = loadedInvoice.DebitorBankAccounts.FirstOrDefault(a => a.IBAN == "DE02120300000000202052");
+            Assert.IsNotNull(debitorBankAccount);
+            Assert.AreEqual("DE02120300000000202052", debitorBankAccount.IBAN);
+
+
+            Assert.AreEqual("Test", loadedInvoice.Invoicee.Name);
+            Assert.AreEqual("Max Mustermann", loadedInvoice.Invoicee.ContactName);
+            Assert.AreEqual("83022", loadedInvoice.Invoicee.Postcode);
+            Assert.AreEqual("Rosenheim", loadedInvoice.Invoicee.City);
+            Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Invoicee.Street);
+            Assert.AreEqual("EG links", loadedInvoice.Invoicee.AddressLine3);
+            Assert.AreEqual("Bayern", loadedInvoice.Invoicee.CountrySubdivisionName);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Invoicee.Country);
+
+            Assert.AreEqual("Test", loadedInvoice.Payee.Name);
+            Assert.AreEqual("Max Mustermann", loadedInvoice.Payee.ContactName);
+            Assert.AreEqual("83022", loadedInvoice.Payee.Postcode);
+            Assert.AreEqual("Rosenheim", loadedInvoice.Payee.City);
+            Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Payee.Street);
+            Assert.AreEqual("EG links", loadedInvoice.Payee.AddressLine3);
+            Assert.AreEqual("Bayern", loadedInvoice.Payee.CountrySubdivisionName);
+            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Payee.Country);
+
+
+            var tax = loadedInvoice.Taxes.FirstOrDefault(t => t.BasisAmount == 275m);
+            Assert.IsNotNull(tax);
+            Assert.AreEqual(275m, tax.BasisAmount);
+            Assert.AreEqual(7m, tax.Percent);
+            Assert.AreEqual(TaxTypes.VAT, tax.TypeCode);
+            Assert.AreEqual(TaxCategoryCodes.S, tax.CategoryCode);
+
+            Assert.AreEqual(timestamp, loadedInvoice.BillingPeriodStart);
+            Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.BillingPeriodEnd);
+
+            //TradeAllowanceCharges
+            var tradeAllowanceCharge = loadedInvoice.TradeAllowanceCharges.FirstOrDefault(i => i.Reason == "Reason for charge");
+            Assert.IsNotNull(tradeAllowanceCharge);
+            Assert.IsTrue(tradeAllowanceCharge.ChargeIndicator);
+            Assert.AreEqual("Reason for charge", tradeAllowanceCharge.Reason);
+            Assert.AreEqual(5m, tradeAllowanceCharge.BasisAmount);
+            Assert.AreEqual(15m, tradeAllowanceCharge.ActualAmount);
+            Assert.AreEqual(CurrencyCodes.EUR, tradeAllowanceCharge.Currency);
+            Assert.AreEqual(19m, tradeAllowanceCharge.Tax.Percent);
+            Assert.AreEqual(TaxTypes.AAB, tradeAllowanceCharge.Tax.TypeCode);
+            Assert.AreEqual(TaxCategoryCodes.AB, tradeAllowanceCharge.Tax.CategoryCode);
+
+            //ServiceCharges
+            var serviceCharge = desc.ServiceCharges.FirstOrDefault(i => i.Description == "Logistics service charge");
+            Assert.IsNotNull(serviceCharge);
+            Assert.AreEqual("Logistics service charge", serviceCharge.Description);
+            Assert.AreEqual(10m, serviceCharge.Amount);
+            Assert.AreEqual(7m, serviceCharge.Tax.Percent);
+            Assert.AreEqual(TaxTypes.AAC, serviceCharge.Tax.TypeCode);
+            Assert.AreEqual(TaxCategoryCodes.AC, serviceCharge.Tax.CategoryCode);
+
+            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018", loadedInvoice.PaymentTerms.Description);
+            Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.PaymentTerms.DueDate);
+
+
+            Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
+            Assert.AreEqual(0.0m, loadedInvoice.ChargeTotalAmount);
+            Assert.AreEqual(0.0m, loadedInvoice.AllowanceTotalAmount);
+            Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
+            Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
+            Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
+            Assert.AreEqual(0.0m, loadedInvoice.TotalPrepaidAmount);
+            Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
+
+            //InvoiceReferencedDocument
+            Assert.AreEqual("RE-12345", loadedInvoice.InvoiceReferencedDocument.ID);
+            Assert.AreEqual(timestamp, loadedInvoice.InvoiceReferencedDocument.IssueDateTime);
+
+
+            //Line items
+            var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
+            Assert.IsNotNull(loadedLineItem);
+            Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.LineID));
+            Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
+
+            Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);
+
+            Assert.AreEqual("TB100A4", loadedLineItem.SellerAssignedID);
+            Assert.AreEqual("0815", loadedLineItem.BuyerAssignedID);
+            Assert.AreEqual("0160", loadedLineItem.GlobalID.SchemeID);
+            Assert.AreEqual("4012345001235", loadedLineItem.GlobalID.ID);
+
+            //GrossPriceProductTradePrice
+            Assert.AreEqual(9.9m, loadedLineItem.GrossUnitPrice);
+            Assert.AreEqual(QuantityCodes.H87, loadedLineItem.UnitCode);
+            Assert.AreEqual(3m, loadedLineItem.UnitQuantity);
+
+            //NetPriceProductTradePrice
+            Assert.AreEqual(9.9m, loadedLineItem.NetUnitPrice);
+            Assert.AreEqual(20m, loadedLineItem.BilledQuantity);
+
+            Assert.AreEqual(TaxTypes.VAT, loadedLineItem.TaxType);
+            Assert.AreEqual(TaxCategoryCodes.S, loadedLineItem.TaxCategoryCode);
+            Assert.AreEqual(19m, loadedLineItem.TaxPercent);
+
+            Assert.AreEqual("12345", loadedLineItem.BuyerOrderReferencedDocument.ID);
+            Assert.AreEqual(timestamp, loadedLineItem.BuyerOrderReferencedDocument.IssueDateTime);
+            Assert.AreEqual("12345", loadedLineItem.DeliveryNoteReferencedDocument.ID);
+            Assert.AreEqual(timestamp, loadedLineItem.DeliveryNoteReferencedDocument.IssueDateTime);
+            Assert.AreEqual("12345", loadedLineItem.ContractReferencedDocument.ID);
+            Assert.AreEqual(timestamp, loadedLineItem.ContractReferencedDocument.IssueDateTime);
+
+            var lineItemReferencedDoc = loadedLineItem.AdditionalReferencedDocuments.FirstOrDefault();
+            Assert.IsNotNull(lineItemReferencedDoc);
+            Assert.AreEqual("xyz", lineItemReferencedDoc.ID);
+            Assert.AreEqual(timestamp, lineItemReferencedDoc.IssueDateTime);
+            Assert.AreEqual(ReferenceTypeCodes.AAB, lineItemReferencedDoc.ReferenceTypeCode);
+
+
+            var productCharacteristics = loadedLineItem.ApplicableProductCharacteristics.FirstOrDefault();
+            Assert.IsNotNull(productCharacteristics);
+            Assert.AreEqual("Product characteristics", productCharacteristics.Description);
+            Assert.AreEqual("Product value", productCharacteristics.Value);
+
+            Assert.AreEqual(timestamp, loadedLineItem.ActualDeliveryDate);
+            Assert.AreEqual(timestamp, loadedLineItem.BillingPeriodStart);
+            Assert.AreEqual(timestamp.AddDays(10), loadedLineItem.BillingPeriodEnd);
+
+            var accountingAccount = loadedLineItem.ReceivableSpecifiedTradeAccountingAccounts.FirstOrDefault();
+            Assert.IsNotNull(accountingAccount);
+            Assert.AreEqual("987654", accountingAccount.TradeAccountID);
+
+
+            var lineItemTradeAllowanceCharge = loadedLineItem.TradeAllowanceCharges.FirstOrDefault(i => i.Reason == "Reason: UnitTest");
+            Assert.IsNotNull(lineItemTradeAllowanceCharge);
+            Assert.IsTrue(lineItemTradeAllowanceCharge.ChargeIndicator);
+            Assert.AreEqual(10m, lineItemTradeAllowanceCharge.BasisAmount);
+            Assert.AreEqual(50m, lineItemTradeAllowanceCharge.ActualAmount);
+            Assert.AreEqual("Reason: UnitTest", lineItemTradeAllowanceCharge.Reason);
+        }
 
     }
 }

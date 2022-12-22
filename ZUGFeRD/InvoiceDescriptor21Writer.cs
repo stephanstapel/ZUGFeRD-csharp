@@ -211,8 +211,8 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteStartElement("ram:ContractReferencedDocument", Profile.Extended);
                         if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteStartElement("udt:DateTimeString");
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("qdt:DateTimeString");
                             Writer.WriteAttributeString("format", "102");
                             Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value));
                             Writer.WriteEndElement(); // !udt:DateTimeString
@@ -335,7 +335,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteStartElement("ram:FormattedIssueDateTime");
                         Writer.WriteStartElement("qdt:DateTimeString");
                         Writer.WriteAttributeString("format", "102");
-                        Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
+                        Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value));
                         Writer.WriteEndElement(); // "qdt:DateTimeString
                         Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                     }
@@ -881,7 +881,7 @@ namespace s2industries.ZUGFeRD
             //Gesamtsummen auf Dokumentenebene
             Writer.WriteStartElement("ram:SpecifiedTradeSettlementHeaderMonetarySummation");
             _writeOptionalAmount(Writer, "ram:LineTotalAmount", this.Descriptor.LineTotalAmount);                                  // Summe der Nettobeträge aller Rechnungspositionen
-            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);                              // S umme der Zuschläge auf Dokumentenebene
+            _writeOptionalAmount(Writer, "ram:ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);                              // Summe der Zuschläge auf Dokumentenebene
             _writeOptionalAmount(Writer, "ram:AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);                        // Summe der Abschläge auf Dokumentenebene
 
             if (this.Descriptor.Profile == Profile.Extended)
