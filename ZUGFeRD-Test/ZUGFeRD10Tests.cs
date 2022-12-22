@@ -23,7 +23,7 @@ using System.IO;
 namespace ZUGFeRD_Test
 {
     [TestClass]
-    public class ZUGFeRD10Tests
+    public class ZUGFeRD10Tests : TestBase
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
@@ -31,7 +31,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceComfortInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
@@ -43,7 +43,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceComfortInvoiceRabattiert()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Rabatte.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
@@ -99,7 +99,7 @@ namespace ZUGFeRD_Test
         public void TestMissingPropertiesAreNull()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 

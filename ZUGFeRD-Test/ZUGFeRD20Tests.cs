@@ -25,13 +25,13 @@ using System.Xml;
 namespace ZUGFeRD_Test
 {
     [TestClass]
-    public class ZUGFeRD20Tests
+    public class ZUGFeRD20Tests : TestBase
     {
         [TestMethod]
         public void TestReferenceBasicInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -49,7 +49,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceExtendedInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -99,7 +99,7 @@ namespace ZUGFeRD_Test
         public void TestMissingPropertiesAreNull()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
@@ -112,7 +112,7 @@ namespace ZUGFeRD_Test
         public void TestMissingPropertListsEmpty()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
 
@@ -124,7 +124,7 @@ namespace ZUGFeRD_Test
         public void TestLoadingSepaPreNotification()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EN16931_SEPA_Prenotification.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             var invoiceDescriptor = InvoiceDescriptor.Load(path);
             Assert.AreEqual(Profile.Comfort, invoiceDescriptor.Profile);
@@ -242,7 +242,7 @@ namespace ZUGFeRD_Test
         public void TestPartyExtensions()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -280,7 +280,7 @@ namespace ZUGFeRD_Test
         public void TestMimetypeOfEmbeddedAttachment()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
@@ -335,7 +335,7 @@ namespace ZUGFeRD_Test
         public void TestOrderInformation()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             DateTime timestamp = DateTime.Now.Date;
 
@@ -364,7 +364,7 @@ namespace ZUGFeRD_Test
         public void TestSellerOrderReferencedDocument()
         {
             string path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_EXTENDED_Warenrechnung.xml";
-            path = System.IO.Path.GetFullPath(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
