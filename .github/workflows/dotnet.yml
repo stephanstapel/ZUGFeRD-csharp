@@ -20,11 +20,7 @@ jobs:
     - name: Restore dependencies test
       run: dotnet restore ZUGFeRD-Test/ZUGFeRD-Test.csproj
     - name: Build test
-      run: dotnet build ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-restore    
-    - name: Check directories
-      run: |
-        ls demodata
-        ls /home/runner/work/ZUGFeRD-csharp/ZUGFeRD-csharp/ZUGFeRD-Test/bin/Debug/net6.0/..\..\..\..\demodata\zugferd20\
+      run: dotnet build ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-restore        
     - name: Actual test
       run: dotnet test ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-build --verbosity normal        
     - name: Restore library dependencies 
