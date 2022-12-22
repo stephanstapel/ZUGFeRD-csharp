@@ -31,6 +31,7 @@ namespace ZUGFeRD_Test
         public void TestReferenceComfortInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
+            path = System.IO.Path.GetFullPath(path);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
