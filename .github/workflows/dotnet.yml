@@ -17,12 +17,14 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Install Composer Dependencies
-      run: ls          
     - name: Restore dependencies test
       run: dotnet restore ZUGFeRD-Test/ZUGFeRD-Test.csproj
     - name: Build test
-      run: dotnet build ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-restore
+      run: dotnet build ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-restore    
+    - name: Check directories
+      run: |
+        ls demodata
+        ls /home/runner/work/ZUGFeRD-csharp/ZUGFeRD-csharp/ZUGFeRD-Test/bin/Debug/net6.0/..\..\..\..\demodata\zugferd20\
     - name: Actual test
       run: dotnet test ZUGFeRD-Test/ZUGFeRD-Test.csproj --no-build --verbosity normal        
     - name: Restore library dependencies 
