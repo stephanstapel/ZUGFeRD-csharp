@@ -17,6 +17,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+    - name: Install Composer Dependencies
+      run: ls          
     - name: Restore dependencies test
       run: dotnet restore ZUGFeRD-Test/ZUGFeRD-Test.csproj
     - name: Build test
