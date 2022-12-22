@@ -25,7 +25,7 @@ using System.Text;
 namespace ZUGFeRD_Test
 {
     [TestClass]
-    public class BasicTests
+    public class BasicTests : TestBase
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
@@ -94,12 +94,15 @@ namespace ZUGFeRD_Test
         public void TestGetVersion()
         {
             string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version1);
 
             path = @"..\..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version20);
 
             path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version21);
         } // !TestGetVersion()
     }
