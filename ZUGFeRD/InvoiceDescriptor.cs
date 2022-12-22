@@ -583,7 +583,6 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddAdditionalReferencedDocument()
 
-
         /// <summary>
         /// Sets details of the associated order
         /// </summary>
@@ -610,6 +609,19 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetDeliveryNoteReferenceDocument()
 
+        /// <summary>
+        /// Sets detailed information about the corresponding contract
+        /// </summary>
+        /// <param name="contractNo">Contract number</param>
+        /// <param name="contractDate">Date of the contract</param>
+        public void SetContractReferencedDocument(string contractNo, DateTime? contractDate)
+        {
+            this.ContractReferencedDocument = new ContractReferencedDocument()
+            {
+                ID = contractNo,
+                IssueDateTime = contractDate
+            };
+        } // !SetContractReferencedDocument()
 
         public void AddLogisticsServiceCharge(decimal amount, string description, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {

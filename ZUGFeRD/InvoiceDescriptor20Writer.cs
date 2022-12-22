@@ -187,19 +187,22 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.ContractReferencedDocument != null)
                 {
-                    Writer.WriteStartElement("ram:InvoiceReferencedDocument");
+                    Writer.WriteStartElement("ram:ContractReferencedDocument", Profile.Extended);
                     if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                     {
                         Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                        Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value, true));
-                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
+                        Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value));
+                        Writer.WriteEndElement(); // !udt:DateTimeString
+                        Writer.WriteEndElement(); // !ram:IssueDateTime
                     }
                     if (!String.IsNullOrEmpty(tradeLineItem.ContractReferencedDocument.ID))
                     {
                         Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
                     }
 
-                    Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
+                    Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
                 }
 
                 if (tradeLineItem.AdditionalReferencedDocuments != null)
@@ -211,7 +214,7 @@ namespace s2industries.ZUGFeRD
                         {
                             Writer.WriteStartElement("ram:FormattedIssueDateTime");
                             Writer.WriteStartElement("qdt:DateTimeString");
-                            Writer.WriteValue(_formatDate(document.IssueDateTime.Value, false));
+                            Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
                             Writer.WriteEndElement(); // !qdt:DateTimeString
                             Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
@@ -279,13 +282,22 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument");
                         if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:IssueDateTime");
-                            Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value, false));
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                            //Old path of Version 1.0
+                            //Writer.WriteStartElement("ram:IssueDateTime");
+                            //Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value));
+                            //Writer.WriteEndElement(); // !ram:IssueDateTime
+
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("qdt:DateTimeString");
+                            Writer.WriteAttributeString("format", "102");
+                            Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
+                            Writer.WriteEndElement(); // !qdt:DateTimeString
+                            Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
+
                         if (!String.IsNullOrEmpty(tradeLineItem.DeliveryNoteReferencedDocument.ID))
                         {
-                            Writer.WriteElementString("ram:ID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                            Writer.WriteElementString("ram:IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
                         }
 
                         Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
@@ -415,8 +427,8 @@ namespace s2industries.ZUGFeRD
                     if (document.IssueDateTime.HasValue)
                     {
                         Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                        Writer.WriteStartElement("udt:DateTimeString");
-                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value, false));
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
                         Writer.WriteEndElement(); // !udt:DateTimeString
                         Writer.WriteEndElement(); // !FormattedIssueDateTime
                     }
