@@ -19,9 +19,9 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2023</Copyright>
-    <AssemblyVersion>9.0.0.0</AssemblyVersion>
+    <AssemblyVersion>10.0.0.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>9.0.0.0</FileVersion>
+    <FileVersion>10.0.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
@@ -33,6 +33,9 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</RepositoryUrl>
     <UserSecretsId>ceeaa3c6-7c48-4061-b8f6-da26a9de5879</UserSecretsId>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Debug</OutputPath>
