@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net480</TargetFrameworks>
-    <Version>9.0.0</Version>
+    <Version>10.0.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>ZUGFeRD and it's successor Factur-X are initiatives from German (respectively European) government to foster electronic invoices.
