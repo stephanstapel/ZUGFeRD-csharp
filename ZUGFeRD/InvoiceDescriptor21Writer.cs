@@ -144,8 +144,11 @@ namespace s2industries.ZUGFeRD
 
                 _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 _writeOptionalElementString(Writer, "ram:BuyerAssignedID", tradeLineItem.BuyerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name, Profile.Basic | Profile.Comfort | Profile.Extended);
-                _writeOptionalElementString(Writer, "ram:Name", !isCommentItem ? tradeLineItem.Name : "TEXT", Profile.XRechnung1 | Profile.XRechnung); // XRechnung erfordert einen Item-Namen
+
+                // BT-153
+                _writeOptionalElementString(Writer, "ram:Name", tradeLineItem.Name, Profile.Basic | Profile.Comfort | Profile.Extended);                
+                _writeOptionalElementString(Writer, "ram:Name", isCommentItem ? "TEXT" : tradeLineItem.Name, Profile.XRechnung1 | Profile.XRechnung); // XRechnung erfordert einen Item-Namen (BR-25)
+
                 _writeOptionalElementString(Writer, "ram:Description", tradeLineItem.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                 if (tradeLineItem.ApplicableProductCharacteristics != null && tradeLineItem.ApplicableProductCharacteristics.Any())
@@ -260,11 +263,15 @@ namespace s2industries.ZUGFeRD
                     #endregion
 
                     #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)                 
-                    Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                    _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
-                    if (tradeLineItem.UnitQuantity.HasValue)
+                    // BT-148
+                    if (tradeLineItem.GrossUnitPrice.HasValue)
                     {
-                        _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                        Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
+                        if (tradeLineItem.UnitQuantity.HasValue)
+                        {
+                            _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                        }
                     }
 
                     #region AppliedTradeAllowanceCharge
