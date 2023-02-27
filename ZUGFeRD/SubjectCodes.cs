@@ -29,11 +29,22 @@ namespace s2industries.ZUGFeRD
     public enum SubjectCodes
     {
         /// <summary>
+        /// Generelle Informationen
+        /// </summary>
+        /// Generelle Informationen zu diesem Kauf
+        AAI,
+        /// <summary>
         /// Zusätzliche Konditionen zu diesem Kauf
         /// 
         /// Angaben zum Eigentumsvorbehalt
         /// </summary>
         AAJ,
+        
+        /// <summary>
+        /// Buchhaltungsinformationen
+        /// </summary>
+        /// Informationen für die Buchaltung zu diesem Kauf
+        ABN,
 
         /// <summary>
         /// Preiskonditionen
@@ -41,6 +52,12 @@ namespace s2industries.ZUGFeRD
         /// Angaben zu Entgeltminderungen
         /// </summary>
         AAK,
+        
+        /// <summary>
+        /// Zusätzliche Angaben
+        /// </summary>
+        /// Zusaätzliche Angaben zu diesem Kauf
+        ACB,
 
         /// <summary>
         /// Zahlungsinformation
