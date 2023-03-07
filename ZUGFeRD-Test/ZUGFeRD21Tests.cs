@@ -1187,6 +1187,19 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
         } // !TestSellerOrderReferencedDocument()
 
+        [TestMethod]
+        public void TestWriteAndReadBusinessProcess()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.BusinessProcess = "A1";
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual("A1", loadedInvoice.BusinessProcess);
+        } // !TestWriteAndReadBusinessProcess
 
         /// <summary>
         /// This test ensure that Writer and Reader uses the same path and namespace for elements
@@ -1207,8 +1220,6 @@ namespace ZUGFeRD_Test
                 name: "EmbeddedPdf",
                 attachmentBinaryObject: data,
                 filename: filename2);
-
-            desc.BusinessProcess = "A1";
 
             desc.OrderNo = "12345";
             desc.OrderDate = timestamp;
@@ -1319,7 +1330,6 @@ namespace ZUGFeRD_Test
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual("A1", loadedInvoice.BusinessProcess);
             Assert.AreEqual("471102", loadedInvoice.InvoiceNo);
             Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.InvoiceDate);
             Assert.AreEqual(CurrencyCodes.EUR, loadedInvoice.Currency);
