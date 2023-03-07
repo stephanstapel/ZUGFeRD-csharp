@@ -75,6 +75,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("udt:Indicator", "true");
                 Writer.WriteEndElement(); // !ram:TestIndicator
             }
+
+            if(!String.IsNullOrEmpty(this.Descriptor.BusinessProcess))
+            {
+                Writer.WriteStartElement("ram:BusinessProcessSpecifiedDocumentContextParameter");
+                Writer.WriteElementString("ram:ID", this.Descriptor.BusinessProcess);
+                Writer.WriteEndElement(); // !ram:BusinessProcessSpecifiedDocumentContextParameter
+            }
+
             Writer.WriteStartElement("ram:GuidelineSpecifiedDocumentContextParameter");
             //Gruppierung der Anwendungsempfehlungsinformationen
             Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version21));

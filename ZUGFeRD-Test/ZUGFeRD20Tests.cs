@@ -422,6 +422,8 @@ namespace ZUGFeRD_Test
                 attachmentBinaryObject: data,
                 filename: filename2);
 
+            desc.BusinessProcess = "A1";
+
             desc.OrderNo = "12345";
             desc.OrderDate = timestamp;
 
@@ -531,6 +533,7 @@ namespace ZUGFeRD_Test
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
+            Assert.AreEqual("A1", loadedInvoice.BusinessProcess);
             Assert.AreEqual("471102", loadedInvoice.InvoiceNo);
             Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.InvoiceDate);
             Assert.AreEqual(CurrencyCodes.EUR, loadedInvoice.Currency);

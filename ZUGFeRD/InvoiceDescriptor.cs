@@ -132,6 +132,17 @@ namespace s2industries.ZUGFeRD
         public List<Note> Notes { get; set; } = new List<Note>();
 
         /// <summary>
+        /// Description: Identifies the context of a business process where the transaction is taking place,
+        /// thus allowing the buyer to process the invoice in an appropriate manner.
+        ///
+        /// Note: These data make it possible to define the purpose of the settlement(invoice of the authorised person,
+        /// contractual partner, subcontractor, settlement document for a building contract etc.).
+        ///
+        /// BT-23
+        /// </summary>
+        public string BusinessProcess { get; set; }
+
+        /// <summary>
         /// The Indicator type may be used when implementing a new system in order to mark the invoice as „trial invoice“.
         /// </summary>
         public bool IsTest { get; set; } = false;
