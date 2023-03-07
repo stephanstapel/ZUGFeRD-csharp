@@ -400,7 +400,20 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(uuid, loadedInvoice.SellerOrderReferencedDocument.ID);
             Assert.AreEqual(issueDateTime, loadedInvoice.SellerOrderReferencedDocument.IssueDateTime);
         } // !TestSellerOrderReferencedDocument()
+        
+        [TestMethod]
+        public void TestWriteAndReadBusinessProcess()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.BusinessProcess = "A1";
 
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual("A1", loadedInvoice.BusinessProcess);
+        } // !TestWriteAndReadBusinessProcess
 
         /// <summary>
         /// This test ensure that Writer and Reader uses the same path and namespace for elements
@@ -740,6 +753,5 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(50m, lineItemTradeAllowanceCharge.ActualAmount);
             Assert.AreEqual("Reason: UnitTest", lineItemTradeAllowanceCharge.Reason);
         }
-
     }
 }
