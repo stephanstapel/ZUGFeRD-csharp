@@ -269,7 +269,7 @@ You find information about this here:
 
 https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-a-pdf-with-itextsharp
 
-(thanks flo2000ace)
+(thanks @floace2000ace)
 
 # Thanks
 * The solution is used in CKS.DMS and supported by CKSolution: 
