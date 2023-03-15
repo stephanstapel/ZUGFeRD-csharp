@@ -774,9 +774,12 @@ namespace s2industries.ZUGFeRD
                     }
                     Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
 
-                    Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
-                    Writer.WriteElementString("ram:BICID", account.BIC);
-                    Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                    if (!String.IsNullOrEmpty(account.BIC))
+                    { 
+                        Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
+                        Writer.WriteElementString("ram:BICID", account.BIC);
+                        Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                    }
 
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
@@ -803,9 +806,12 @@ namespace s2industries.ZUGFeRD
                     }
                     Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
 
-                    Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
-                    Writer.WriteElementString("ram:BICID", account.BIC);
-                    Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
+                    if (!String.IsNullOrEmpty(account.BIC))
+                    {
+                        Writer.WriteStartElement("ram:PayerSpecifiedDebtorFinancialInstitution");
+                        Writer.WriteElementString("ram:BICID", account.BIC);
+                        Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
+                    }
 
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
