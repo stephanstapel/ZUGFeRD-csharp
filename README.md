@@ -36,6 +36,7 @@ Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-chsarp'.
 You can find more information about the nuget package here:
 
 [![NuGet](https://img.shields.io/nuget/v/ZUGFeRD-csharp?color=blue)](https://www.nuget.org/packages/ZUGFeRD-csharp/)
+
 https://www.nuget.org/packages/ZUGFeRD-csharp/
 
 # Building on your own
