@@ -1354,7 +1354,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("Frankfurt", loadedInvoice.Buyer.City);
             Assert.AreEqual("Kundenstraße 15", loadedInvoice.Buyer.Street);
             Assert.AreEqual(CountryCodes.DE, loadedInvoice.Buyer.Country);
-            Assert.AreEqual("GE2020211", loadedInvoice.Buyer.ID);
+            Assert.AreEqual<string>("GE2020211", loadedInvoice.Buyer.ID);
 
             Assert.AreEqual("12345", loadedInvoice.OrderNo);
             Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
@@ -1365,7 +1365,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("123", loadedInvoice.SpecifiedProcuringProject.ID);
             Assert.AreEqual("Project 123", loadedInvoice.SpecifiedProcuringProject.Name);
 
-            Assert.AreEqual("123", loadedInvoice.ShipTo.ID);
+            Assert.AreEqual<string>("123", loadedInvoice.ShipTo.ID);
             Assert.AreEqual("456", loadedInvoice.ShipTo.GlobalID.SchemeID);
             Assert.AreEqual("789", loadedInvoice.ShipTo.GlobalID.ID);
             Assert.AreEqual("Ship To", loadedInvoice.ShipTo.Name);
@@ -1375,7 +1375,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("Rosenheim", loadedInvoice.ShipTo.City);
             Assert.AreEqual(CountryCodes.DE, loadedInvoice.ShipTo.Country);
 
-            Assert.AreEqual("123", loadedInvoice.ShipFrom.ID);
+            Assert.AreEqual<string>("123", loadedInvoice.ShipFrom.ID);
             Assert.AreEqual("456", loadedInvoice.ShipFrom.GlobalID.SchemeID);
             Assert.AreEqual("789", loadedInvoice.ShipFrom.GlobalID.ID);
             Assert.AreEqual("Ship From", loadedInvoice.ShipFrom.Name);
