@@ -51,6 +51,16 @@ namespace s2industries.ZUGFeRD
         public string SchemeID { get; set; }
 
         /// <summary>
+        /// SIRENE (System Information et Repertoire des Entreprise et des Etablissements)
+        /// </summary>
+        public const string SchemeID_SIRENE = "0002";
+
+        /// <summary>
+        /// SIRENE (System Information et Repertoire des Entreprise et des Etablissements)
+        /// </summary>
+        public const string SchemeID_SIRET_CODE = "0009";
+
+        /// <summary>
         /// SWIFT (BIC)
         /// </summary>
         public const string SchemeID_SWIFT = "0021";
@@ -76,6 +86,11 @@ namespace s2industries.ZUGFeRD
         public const string SchemeID_ODETTE = "0177";
 
         /// <summary>
+        /// Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
+        /// </summary>
+        public const string SchemeID_COMPANY_NUMBER = "0208";
+
+        /// <summary>
         /// Unknown means, we have a problem ...
         /// </summary>
         public const string SchemeID_Unknown = "0000";
@@ -95,5 +110,17 @@ namespace s2industries.ZUGFeRD
             this.ID = ID;
             this.SchemeID = schemeID;
         } // !GlobalID()
+        /// <summary>
+        /// Convert to string
+        /// </summary>
+        public override string ToString() => $"{ID}";
+        /// <summary>
+        /// String conversion
+        /// </summary>
+        public static implicit operator string(GlobalID id) => id.ID;
+        /// <summary>
+        /// String conversion
+        /// </summary>
+        public static implicit operator GlobalID(string id) => new GlobalID(GlobalID.SchemeID_Unknown, id);
     }
 }

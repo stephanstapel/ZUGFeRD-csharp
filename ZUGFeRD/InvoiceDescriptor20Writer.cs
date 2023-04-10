@@ -911,9 +911,16 @@ namespace s2industries.ZUGFeRD
             {
                 writer.WriteStartElement(PartyTag);
 
-                if (!String.IsNullOrEmpty(Party.ID))
-                {
-                    writer.WriteElementString("ram:ID", Party.ID);
+                if (Party.ID != null) {
+                    if (!String.IsNullOrEmpty(Party.ID.ID) && !String.IsNullOrEmpty(Party.ID.SchemeID)) {
+                        writer.WriteStartElement("ram:ID");
+                        writer.WriteAttributeString("schemeID", Party.ID.SchemeID);
+                        writer.WriteValue(Party.ID.ID);
+                        writer.WriteEndElement();
+                    }
+                    else {
+                        writer.WriteElementString("ram:ID", Party.ID.ID);
+                    }
                 }
 
                 if ((Party.GlobalID != null) && !String.IsNullOrEmpty(Party.GlobalID.ID) && !String.IsNullOrEmpty(Party.GlobalID.SchemeID))

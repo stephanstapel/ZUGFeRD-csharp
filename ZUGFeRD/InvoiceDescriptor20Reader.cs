@@ -473,7 +473,8 @@ namespace s2industries.ZUGFeRD
 
             Party retval = new Party()
             {
-                ID = _nodeAsString(node, "ram:ID", nsmgr),
+                ID = new GlobalID(_nodeAsString(node, "ram:ID/@schemeID", nsmgr),
+                                        _nodeAsString(node, "ram:ID", nsmgr)),
                 GlobalID = new GlobalID(_nodeAsString(node, "ram:GlobalID/@schemeID", nsmgr),
                                         _nodeAsString(node, "ram:GlobalID", nsmgr)),
                 Name = _nodeAsString(node, "ram:Name", nsmgr),

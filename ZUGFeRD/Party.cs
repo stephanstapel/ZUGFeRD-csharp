@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD
       /// <summary>
       /// Party identifier
       /// </summary>
-      public string ID { get; set; }
+      public GlobalID ID { get; set; }
 
       /// <summary>
       /// Party name, e.g. company name
@@ -62,6 +62,9 @@ namespace s2industries.ZUGFeRD
       /// Street name and number
       /// </summary>
       public string Street { get; set; }
+      /// <summary>
+      /// Global identifier
+      /// </summary>
       public GlobalID GlobalID { get; set; }
 
       /// <summary>
