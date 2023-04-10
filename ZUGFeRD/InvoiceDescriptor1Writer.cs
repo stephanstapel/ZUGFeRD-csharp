@@ -629,9 +629,9 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
 
                 Writer.WriteStartElement("ram:SpecifiedTradeProduct");
-                if ((tradeLineItem.GlobalID != null) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
                 {
-                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID);
+                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.EnumToString(), tradeLineItem.GlobalID.ID);
                 }
 
                 _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID);
@@ -764,9 +764,9 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement(PartyTag);
 
                 if (Party.ID != null) {
-                    if (!String.IsNullOrEmpty(Party.ID.ID) && !String.IsNullOrEmpty(Party.ID.SchemeID)) {
+                    if (!String.IsNullOrEmpty(Party.ID.ID) && (Party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)) {
                         writer.WriteStartElement("ram:ID");
-                        writer.WriteAttributeString("schemeID", Party.ID.SchemeID);
+                        writer.WriteAttributeString("schemeID", Party.ID.SchemeID.EnumToString());
                         writer.WriteValue(Party.ID.ID);
                         writer.WriteEndElement();
                     }
@@ -775,10 +775,10 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if ((Party.GlobalID != null) && !String.IsNullOrEmpty(Party.GlobalID.ID) && !String.IsNullOrEmpty(Party.GlobalID.SchemeID))
+                if ((Party.GlobalID != null) && !String.IsNullOrEmpty(Party.GlobalID.ID) && (Party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
                 {
                     writer.WriteStartElement("ram:GlobalID");
-                    writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID);
+                    writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID.EnumToString());
                     writer.WriteValue(Party.GlobalID.ID);
                     writer.WriteEndElement();
                 }

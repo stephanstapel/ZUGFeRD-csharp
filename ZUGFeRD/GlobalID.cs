@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
@@ -48,79 +49,20 @@ namespace s2industries.ZUGFeRD
         /// 
         /// The schema of identification must be composed of the entries of the list published by the ISO/IEC 6523 Maintenance Agency.
         /// </summary>
-        public string SchemeID { get; set; }
+        public GlobalIDSchemeIdentifiers SchemeID { get; set; }
 
-        /// <summary>
-        /// SIRENE (System Information et Repertoire des Entreprise et des Etablissements)
-        /// </summary>
-        public const string SchemeID_SIRENE = "0002";
 
-        /// <summary>
-        /// SIRENE (System Information et Repertoire des Entreprise et des Etablissements)
-        /// </summary>
-        public const string SchemeID_SIRET_CODE = "0009";
-
-        /// <summary>
-        /// SWIFT (BIC)
-        /// </summary>
-        public const string SchemeID_SWIFT = "0021";
-
-        /// <summary>
-        /// D-U-N-S Number
-        /// </summary>
-        public const string SchemeID_DUNS = "0060";
-
-        /// <summary>
-        /// GS1 Global Location Number (GLN)
-        /// </summary>
-        public const string SchemeID_GLN = "0088";
-
-        /// <summary>
-        /// GS1 Global Trade Item Number (GTIN, EAN)
-        /// </summary>
-        public const string SchemeID_EAN = "0160";
-
-        /// <summary>
-        /// OSCAR (Odette)
-        /// </summary>
-        public const string SchemeID_ODETTE = "0177";
-
-        /// <summary>
-        /// Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
-        /// </summary>
-        public const string SchemeID_COMPANY_NUMBER = "0208";
-
-        /// <summary>
-        /// Unknown means, we have a problem ...
-        /// </summary>
-        public const string SchemeID_Unknown = "0000";
-
-#pragma warning disable CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         public GlobalID()
-#pragma warning restore CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         {
             this.ID = "";
-            this.SchemeID = GlobalID.SchemeID_Unknown;
+            this.SchemeID = GlobalIDSchemeIdentifiers.Unknown;
         } // !GlobalID()
 
-#pragma warning disable CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
-        public GlobalID(string schemeID, string ID)
-#pragma warning restore CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
+
+        public GlobalID(GlobalIDSchemeIdentifiers schemeID, string ID)
         {
             this.ID = ID;
             this.SchemeID = schemeID;
         } // !GlobalID()
-        /// <summary>
-        /// Convert to string
-        /// </summary>
-        public override string ToString() => $"{ID}";
-        /// <summary>
-        /// String conversion
-        /// </summary>
-        public static implicit operator string(GlobalID id) => id.ID;
-        /// <summary>
-        /// String conversion
-        /// </summary>
-        public static implicit operator GlobalID(string id) => new GlobalID(GlobalID.SchemeID_Unknown, id);
     }
 }

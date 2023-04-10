@@ -482,7 +482,7 @@ namespace s2industries.ZUGFeRD
         {
             this.Buyer = new Party()
             {
-                ID = id,
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, id),
                 Name = name,
                 Postcode = postcode,
                 ContactName = receiver,
@@ -498,7 +498,7 @@ namespace s2industries.ZUGFeRD
         {
             this.Seller = new Party()
             {
-                ID = id,
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, id),
                 Name = name,
                 Postcode = postcode,
                 City = city,

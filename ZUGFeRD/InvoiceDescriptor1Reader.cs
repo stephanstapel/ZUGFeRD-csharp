@@ -284,7 +284,7 @@ namespace s2industries.ZUGFeRD
             TradeLineItem item = new TradeLineItem()
             {
                 LineID = _nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr),
-                GlobalID = new GlobalID(_nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr),
+                GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(_nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr)),
                                         _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID", nsmgr)),
                 SellerAssignedID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
                 BuyerAssignedID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BuyerAssignedID", nsmgr),
@@ -413,8 +413,8 @@ namespace s2industries.ZUGFeRD
 
             Party retval = new Party()
             {
-                ID = _nodeAsString(node, "ram:ID", nsmgr),
-                GlobalID = new GlobalID(_nodeAsString(node, "ram:GlobalID/@schemeID", nsmgr),
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, _nodeAsString(node, "ram:ID", nsmgr)),
+                GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(_nodeAsString(node, "ram:GlobalID/@schemeID", nsmgr)),
                                         _nodeAsString(node, "ram:GlobalID", nsmgr)),
                 Name = _nodeAsString(node, "ram:Name", nsmgr),
                 Postcode = _nodeAsString(node, "ram:PostalTradeAddress/ram:PostcodeCode", nsmgr),

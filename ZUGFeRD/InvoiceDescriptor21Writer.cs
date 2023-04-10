@@ -145,9 +145,9 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
                 Writer.WriteStartElement("ram:SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                if ((tradeLineItem.GlobalID != null) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.SchemeID) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrEmpty(tradeLineItem.GlobalID.ID))
                 {
-                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID, tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended);
+                    _writeElementWithAttribute(Writer, "ram:GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended);
                 }
 
                 _writeOptionalElementString(Writer, "ram:SellerAssignedID", tradeLineItem.SellerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
@@ -1163,9 +1163,9 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement(partyTag, profile);
 
                 if (party.ID != null) {
-                    if (!String.IsNullOrEmpty(party.ID.ID) && !String.IsNullOrEmpty(party.ID.SchemeID)) {
+                    if (!String.IsNullOrEmpty(party.ID.ID) && (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)) {
                         writer.WriteStartElement("ram:ID");
-                        writer.WriteAttributeString("schemeID", party.ID.SchemeID);
+                        writer.WriteAttributeString("schemeID", party.ID.SchemeID.EnumToString());
                         writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();
                     }
@@ -1174,10 +1174,10 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if ((party.GlobalID != null) && !String.IsNullOrEmpty(party.GlobalID.ID) && !String.IsNullOrEmpty(party.GlobalID.SchemeID))
+                if ((party.GlobalID != null) && !String.IsNullOrEmpty(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
                 {
                     writer.WriteStartElement("ram:GlobalID");
-                    writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID);
+                    writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.EnumToString());
                     writer.WriteValue(party.GlobalID.ID);
                     writer.WriteEndElement();
                 }

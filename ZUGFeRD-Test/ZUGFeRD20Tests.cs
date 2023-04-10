@@ -151,7 +151,7 @@ namespace ZUGFeRD_Test
             d.InvoiceDate = new DateTime(2018, 3, 5);
             d.AddTradeLineItem(
                 lineID: "1",
-                id: new GlobalID("0160", "4012345001235"),
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
                 sellerAssignedID: "TB100A4",
                 name: "Trennblätter A4",
                 billedQuantity: 20m,
@@ -163,7 +163,7 @@ namespace ZUGFeRD_Test
                 taxType: TaxTypes.VAT);
             d.AddTradeLineItem(
                 lineID: "2",
-                id: new GlobalID("0160", "4000050986428"),
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
                 sellerAssignedID: "ARNR2",
                 name: "Joghurt Banane",
                 billedQuantity: 50m,
@@ -175,7 +175,7 @@ namespace ZUGFeRD_Test
                 taxType: TaxTypes.VAT);
             d.SetSeller(
                 id: null,
-                globalID: new GlobalID("0088", "4000001123452"),
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
                 name: "Lieferant GmbH",
                 postcode: "80333",
                 city: "München",
@@ -183,7 +183,7 @@ namespace ZUGFeRD_Test
                 country: CountryCodes.DE);
             d.SetBuyer(
                 id: "GE2020211",
-                globalID: new GlobalID("0088", "4000001987658"),
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
                 name: "Kunden AG Mitte",
                 postcode: "69876",
                 city: "Frankfurt",
@@ -444,8 +444,8 @@ namespace ZUGFeRD_Test
 
             desc.ShipTo = new Party
             {
-                ID = "123",
-                GlobalID = new GlobalID("456", "789"),
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ship To",
                 ContactName = "Max Mustermann",
                 Street = "Münchnerstr. 55",
@@ -456,8 +456,8 @@ namespace ZUGFeRD_Test
 
             desc.ShipFrom = new Party
             {
-                ID = "123",
-                GlobalID = new GlobalID("456", "789"),
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ship From",
                 ContactName = "Eva Musterfrau",
                 Street = "Alpenweg 5",
@@ -555,7 +555,7 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual("Lieferantenstraße 20", loadedInvoice.Seller.Street);
             Assert.AreEqual(CountryCodes.DE, loadedInvoice.Seller.Country);
-            Assert.AreEqual("0088", loadedInvoice.Seller.GlobalID.SchemeID);
+            Assert.AreEqual(GlobalIDSchemeIdentifiers.GLN, loadedInvoice.Seller.GlobalID.SchemeID);
             Assert.AreEqual("4000001123452", loadedInvoice.Seller.GlobalID.ID);
             Assert.AreEqual("Max Mustermann", loadedInvoice.SellerContact.Name);
             Assert.AreEqual("Muster-Einkauf", loadedInvoice.SellerContact.OrgUnit);
@@ -567,7 +567,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("Frankfurt", loadedInvoice.Buyer.City);
             Assert.AreEqual("Kundenstraße 15", loadedInvoice.Buyer.Street);
             Assert.AreEqual(CountryCodes.DE, loadedInvoice.Buyer.Country);
-            Assert.AreEqual<string>("GE2020211", loadedInvoice.Buyer.ID);
+            Assert.AreEqual<string>("GE2020211", loadedInvoice.Buyer.ID.ID);
 
             Assert.AreEqual("12345", loadedInvoice.OrderNo);
             Assert.AreEqual(timestamp, loadedInvoice.OrderDate);
@@ -580,8 +580,8 @@ namespace ZUGFeRD_Test
             //Assert.AreEqual("123", loadedInvoice.SpecifiedProcuringProject.ID);
             //Assert.AreEqual("Project 123", loadedInvoice.SpecifiedProcuringProject.Name);
 
-            Assert.AreEqual<string>("123", loadedInvoice.ShipTo.ID);
-            Assert.AreEqual("456", loadedInvoice.ShipTo.GlobalID.SchemeID);
+            Assert.AreEqual<string>("123", loadedInvoice.ShipTo.ID.ID);
+            Assert.AreEqual(GlobalIDSchemeIdentifiers.DUNS, loadedInvoice.ShipTo.GlobalID.SchemeID);
             Assert.AreEqual("789", loadedInvoice.ShipTo.GlobalID.ID);
             Assert.AreEqual("Ship To", loadedInvoice.ShipTo.Name);
             Assert.AreEqual("Max Mustermann", loadedInvoice.ShipTo.ContactName);
@@ -590,8 +590,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("Rosenheim", loadedInvoice.ShipTo.City);
             Assert.AreEqual(CountryCodes.DE, loadedInvoice.ShipTo.Country);
 
-            Assert.AreEqual<string>("123", loadedInvoice.ShipFrom.ID);
-            Assert.AreEqual("456", loadedInvoice.ShipFrom.GlobalID.SchemeID);
+            Assert.AreEqual<string>("123", loadedInvoice.ShipFrom.ID.ID);
+            Assert.AreEqual(GlobalIDSchemeIdentifiers.DUNS, loadedInvoice.ShipFrom.GlobalID.SchemeID);
             Assert.AreEqual("789", loadedInvoice.ShipFrom.GlobalID.ID);
             Assert.AreEqual("Ship From", loadedInvoice.ShipFrom.Name);
             Assert.AreEqual("Eva Musterfrau", loadedInvoice.ShipFrom.ContactName);
@@ -701,7 +701,7 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual("TB100A4", loadedLineItem.SellerAssignedID);
             Assert.AreEqual("0815", loadedLineItem.BuyerAssignedID);
-            Assert.AreEqual("0160", loadedLineItem.GlobalID.SchemeID);
+            Assert.AreEqual(GlobalIDSchemeIdentifiers.EAN, loadedLineItem.GlobalID.SchemeID);
             Assert.AreEqual("4012345001235", loadedLineItem.GlobalID.ID);
 
             //GrossPriceProductTradePrice

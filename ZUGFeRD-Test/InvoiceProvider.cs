@@ -38,7 +38,7 @@ namespace ZUGFeRD_Test
             desc.AddTradeLineItem(name: "Trennblätter A4",
                                   unitCode: QuantityCodes.H87,
                                   sellerAssignedID: "TB100A4",
-                                  id: new GlobalID("0160", "4012345001235"),
+                                  id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
                                   grossUnitPrice: 9.9m,
                                   netUnitPrice: 9.9m,
                                   billedQuantity: 20m,
@@ -50,7 +50,7 @@ namespace ZUGFeRD_Test
             desc.AddTradeLineItem(name: "Joghurt Banane",
                 unitCode: QuantityCodes.H87,
                 sellerAssignedID: "ARNR2",
-                id: new GlobalID("0160", "4000050986428"),
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
                 grossUnitPrice: 5.5m,
                 netUnitPrice: 5.5m,
                 billedQuantity: 50,
@@ -66,7 +66,7 @@ namespace ZUGFeRD_Test
                            street: "Lieferantenstraße 20",
                            country: CountryCodes.DE,
                            id: "",
-                           globalID: new GlobalID("0088", "4000001123452")
+                           globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452")
                            );
             desc.SetSellerContact(name: "Max Mustermann",
                                   orgunit: "Muster-Einkauf",
