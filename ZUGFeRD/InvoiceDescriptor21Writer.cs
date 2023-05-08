@@ -1178,6 +1178,7 @@ namespace s2industries.ZUGFeRD
             writer.WriteElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName);
           }
         }
+        writer.WriteEndElement();
       }
     }
 
@@ -1217,8 +1218,9 @@ namespace s2industries.ZUGFeRD
 
         if (party.SpecifiedLegalOrganization != null)
         {
-          _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+          _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, Profile.Minimum | Profile.XRechnung1 | Profile.XRechnung);
         }
+
         if (contact != null)
         {
           _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);

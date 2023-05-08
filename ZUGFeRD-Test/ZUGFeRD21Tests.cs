@@ -821,7 +821,7 @@ namespace ZUGFeRD_Test
           city: "München",
           street: "Lieferantenstraße 20",
           country: CountryCodes.DE,
-          legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.Sirene, d.Seller.GlobalID.ID, "Lieferant GmbH"));
+          legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
       d.SetBuyer(
           id: "GE2020211",
           globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
