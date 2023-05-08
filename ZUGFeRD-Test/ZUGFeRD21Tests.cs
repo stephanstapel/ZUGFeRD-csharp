@@ -820,9 +820,8 @@ namespace ZUGFeRD_Test
           postcode: "80333",
           city: "München",
           street: "Lieferantenstraße 20",
-          country: CountryCodes.DE);
-      d.Seller.SpecifiedLegalOrganization.ID = new GlobalID(GlobalIDSchemeIdentifiers.Sirene, d.Seller.GlobalID.ID);
-      d.Seller.SpecifiedLegalOrganization.TradingBusinessName = "Lieferant GmbH";
+          country: CountryCodes.DE,
+          legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.Sirene, d.Seller.GlobalID.ID, "Lieferant GmbH"));
       d.SetBuyer(
           id: "GE2020211",
           globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),

@@ -24,6 +24,25 @@ namespace s2industries.ZUGFeRD
   public class LegalOrganization
   {
     /// <summary>
+    /// Create a new LegalOrganization instance
+    /// </summary>
+    public LegalOrganization()
+    {
+      ID = null;
+      TradingBusinessName = "";
+    }
+    /// <summary>
+    /// Create a new LegalOrganization instance
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="schemeID"></param>
+    /// <param name="tradingBusinessName"></param>
+    public LegalOrganization(GlobalIDSchemeIdentifiers schemeID = GlobalIDSchemeIdentifiers.Unknown, string id = "", string tradingBusinessName = "")
+    {
+      ID = new GlobalID(schemeID, id);
+      TradingBusinessName = tradingBusinessName;
+    }
+    /// <summary>
     /// Legal organization ID
     /// </summary>
     public GlobalID ID { get; set; }
