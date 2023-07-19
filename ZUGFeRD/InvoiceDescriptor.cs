@@ -102,9 +102,11 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public Contact BuyerContact { get; set; }
     public List<TaxRegistration> BuyerTaxRegistration { get; set; } = new List<TaxRegistration>();
+    public ElectronicAddress BuyerElectronicAddress { get; set; }
     public Party Seller { get; set; }
     public Contact SellerContact { get; set; }
     public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
+    public ElectronicAddress SellerElectronicAddress { get; set; }
 
     /// <summary>
     /// This party is optional and only relevant for Extended profile
@@ -572,6 +574,34 @@ namespace s2industries.ZUGFeRD
         SchemeID = schemeID
       });
     } // !AddSellerTaxRegistration()
+
+    /// <summary>
+    /// Sets the Buyer Electronic Address for Peppol
+    /// </summary>
+    /// <param name="address">Peppol Address</param>
+    /// <param name="electronicAddressSchemeID">ElectronicAddressSchemeIdentifier</param>
+    public void SetBuyerElectronicAddress(string address, ElectronicAddressSchemeIdentifiers electronicAddressSchemeID)
+    {
+       this.BuyerElectronicAddress = new ElectronicAddress()
+       {
+          Address = address,
+          ElectronicAddressSchemeID = electronicAddressSchemeID
+       };
+    } // !SetBuyerEndpointID()
+
+    /// <summary>
+    /// Sets the Seller Electronic Address for Peppol
+    /// </summary>
+    /// <param name="address">Peppol Address</param>
+    /// <param name="electronicAddressSchemeID">ElectronicAddressSchemeIdentifier</param>
+    public void SetSellerElectronicAddress(string address, ElectronicAddressSchemeIdentifiers electronicAddressSchemeID)
+    {
+       this.SellerElectronicAddress = new ElectronicAddress()
+       {
+          Address = address,
+          ElectronicAddressSchemeID = electronicAddressSchemeID
+       };
+    } // !SetSellerEndpointID()
 
 
     /// <summary>
