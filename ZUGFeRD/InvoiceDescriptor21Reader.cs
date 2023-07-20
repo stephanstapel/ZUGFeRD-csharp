@@ -75,6 +75,18 @@ namespace s2industries.ZUGFeRD
       retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerReference", nsmgr);
 
       retval.Seller = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty", nsmgr);
+
+      if (doc.SelectSingleNode("//ram:SellerTradeParty/ram:URIUniversalCommunication", nsmgr) != null)
+      {
+         string id = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:URIUniversalCommunication/ram:URIID", nsmgr);
+         string schemeID = _nodeAsString(doc.DocumentElement, "//ram:SellerTradeParty/ram:URIUniversalCommunication/ram:URIID/@schemeID", nsmgr);
+
+         var eas = default(ElectronicAddressSchemeIdentifiers).FromString(schemeID);
+
+         if (eas.HasValue)
+            retval.SetSellerElectronicAddress(id, eas.Value);
+      }
+
       foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
       {
         string id = _nodeAsString(node, ".//ram:ID", nsmgr);
@@ -96,6 +108,18 @@ namespace s2industries.ZUGFeRD
       }
 
       retval.Buyer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty", nsmgr);
+
+      if (doc.SelectSingleNode("//ram:BuyerTradeParty/ram:URIUniversalCommunication", nsmgr) != null)
+      {
+         string id = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:URIUniversalCommunication/ram:URIID", nsmgr);
+         string schemeID = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:URIUniversalCommunication/ram:URIID/@schemeID", nsmgr);
+
+         var eas = default(ElectronicAddressSchemeIdentifiers).FromString(schemeID);
+
+         if (eas.HasValue)
+            retval.SetBuyerElectronicAddress(id, eas.Value);
+      }
+
       foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
       {
         string id = _nodeAsString(node, ".//ram:ID", nsmgr);

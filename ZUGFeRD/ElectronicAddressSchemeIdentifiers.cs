@@ -207,6 +207,14 @@ namespace s2industries.ZUGFeRD
 
    internal static class ElectronicAddressSchemeIdentifiersExtensions
    {
+      public static ElectronicAddressSchemeIdentifiers? FromString(this ElectronicAddressSchemeIdentifiers _, string s)
+      {
+         if (Enum.TryParse(s, out ElectronicAddressSchemeIdentifiers eas))
+            return eas;
+         else
+            return null;
+      } // !FromString()
+
       public static string EnumToString(this ElectronicAddressSchemeIdentifiers eas)
       {
          return ((int)eas).ToString();

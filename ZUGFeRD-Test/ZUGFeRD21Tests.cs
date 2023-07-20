@@ -182,6 +182,28 @@ namespace ZUGFeRD_Test
       Assert.AreEqual(desc.LineTotalAmount, 1445.98m);
     } // !TestReferenceXRechnung1CII()
 
+    [TestMethod]
+    public void TestElectronicAddress()
+    {
+       InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+       desc.SetSellerElectronicAddress("DE123456789", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
+       desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
+
+       MemoryStream ms = new MemoryStream();
+
+       desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
+       ms.Seek(0, SeekOrigin.Begin);
+       Assert.AreEqual(desc.SellerElectronicAddress.Address, "DE123456789");
+       Assert.AreEqual(desc.SellerElectronicAddress.ElectronicAddressSchemeID, ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
+       Assert.AreEqual(desc.BuyerElectronicAddress.Address, "LU987654321");
+       Assert.AreEqual(desc.BuyerElectronicAddress.ElectronicAddressSchemeID, ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
+
+       InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+       Assert.AreEqual(loadedInvoice.SellerElectronicAddress.Address, "DE123456789");
+       Assert.AreEqual(loadedInvoice.SellerElectronicAddress.ElectronicAddressSchemeID, ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
+       Assert.AreEqual(loadedInvoice.BuyerElectronicAddress.Address, "LU987654321");
+       Assert.AreEqual(loadedInvoice.BuyerElectronicAddress.ElectronicAddressSchemeID, ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
+    } // !TestElectronicAddress()
 
     [TestMethod]
     public void TestMinimumInvoice()
