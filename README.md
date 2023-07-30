@@ -86,13 +86,17 @@ desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers
 
 The fields are only necessary if you want to send the x-rechnung via the Peppol network.
 A description of the fields can be found in the following documents:
+
 https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.1.0-2020-03-11.pdf
+
 https://www.ferd-net.de/upload/Dokumente/FACTUR-X_ZUGFeRD_2p0_Teil1_Profil_EN16931_1p03.pdf
 
 In Luxembourg it has been mandatory since this year to process all invoices via Peppol:
+
 https://gouvernement.lu/de/dossiers.gouv_digitalisation%2Bde%2Bdossiers%2B2021%2Bfacturation-electronique.html
 
 In Germany, this has so far only been necessary for invoices in the course of a public contract from the federal government:
+
 https://www.e-rechnung-bund.de/ubertragungskanale/peppol/
 
 ## Adding line items
