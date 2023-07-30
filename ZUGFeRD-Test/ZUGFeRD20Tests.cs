@@ -21,7 +21,7 @@ using System.IO;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
-using ZUGFeRD;
+
 
 namespace ZUGFeRD_Test
 {
@@ -695,7 +695,7 @@ namespace ZUGFeRD_Test
       //Line items
       var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
       Assert.IsNotNull(loadedLineItem);
-      Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.LineID));
+      Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
       Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
 
       Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);

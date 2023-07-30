@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-namespace ZUGFeRD
+namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Zusätzliche Produkteigenschaft

@@ -18,7 +18,8 @@
  */
 using System;
 using System.Collections.Generic;
-using ZUGFeRD;
+using System.Security.Cryptography;
+
 
 namespace s2industries.ZUGFeRD
 {
@@ -28,79 +29,103 @@ namespace s2industries.ZUGFeRD
     public class TradeLineItem
     {
         /// <summary>
-        /// Eindeutige Bezeichnung für die betreffende Rechnungsposition
-        /// </summary>
-        public string LineID;
-        /// <summary>
-        /// Identifier of an item according to a registered scheme
+        /// The identification of articles based on a registered scheme
+        /// 
+        /// The global identifier of the article is a globally unique identifier of the product being assigned to it by its
+        /// producer, bases on the rules of a global standardisation body.
         /// </summary>
         public GlobalID GlobalID { get; set; }
+
         /// <summary>
-        /// Artikelnummer des Verkäufers
+        /// An identification of the item assigned by the seller.
         /// </summary>
         public string SellerAssignedID { get; set; }
+
         /// <summary>
-        /// Artikelnummer des Käufers
+        /// An identification of the item assigned by the buyer.
         /// </summary>
         public string BuyerAssignedID { get; set; }
+
         /// <summary>
-        /// Artikelname
+        /// An article’s name
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// Artikel Beschreibung
+        /// The description of an item
+        /// 
+        /// The item’s description makes it possible to describe a product and its properties more comprehensively
+        /// than would be possible with just the article name.
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
-        /// Menge, enthalten
+        /// Included amount
         /// </summary>
         public decimal? UnitQuantity { get; set; }
+
         /// <summary>
-        /// Basismenge zum Artikelpreis
+        /// Invoiced quantity
         /// </summary>
         public decimal BilledQuantity { get; set; }
+
         /// <summary>
-        /// Nettobetrag der Rechnungsposition
+        /// Invoice line net amount 
+        /// BT-131
         /// </summary>
         public decimal? LineTotalAmount { get; set; }
+
         /// <summary>
-        /// Beginn des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
+        /// Detailed information about the invoicing period
+        /// 
+        /// Invoicing period start date
         /// </summary>
         public DateTime? BillingPeriodStart { get; set; }
+
         /// <summary>
-        /// Ende des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
+        /// Detailed information about the invoicing period
+        /// 
+        /// Invoicing period end date
         /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
+
         /// <summary>
-        /// 
+        /// he code valid for the invoiced goods sales tax category
         /// </summary>
         public TaxCategoryCodes TaxCategoryCode { get; set; }
+
         /// <summary>
-        /// Steuersatz
+        /// Tax rate
         /// </summary>
         public decimal TaxPercent { get; set; }
+
         /// <summary>
-        /// Steuertyp
+        /// Tax type
         /// </summary>
         public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
+
         /// <summary>
-        /// Netto Einzelpreis
+        /// net unit price of the item
         /// </summary>
         public decimal? NetUnitPrice { get; set; }
+
         /// <summary>
-        /// Brutto Einzelpreis
+        /// gross unit price of the item
         /// </summary>
         public decimal? GrossUnitPrice { get; set; }
+
         /// <summary>
-        /// Einheit der Preisbasismenge
+        /// Item Base Quantity Unit Code
         /// </summary>
         public QuantityCodes UnitCode { get; set; }
+
         /// <summary>
-        /// 
+        /// Identifier of the invoice line item
         /// </summary>
         public AssociatedDocument AssociatedDocument { get; internal set; }
+
         /// <summary>
-        /// 
+        /// Detailed information about the actual Delivery
         /// </summary>
         public DateTime? ActualDeliveryDate { get; set; }
 
@@ -118,6 +143,10 @@ namespace s2industries.ZUGFeRD
         /// Details of the associated contract
         /// </summary>
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
+
+        /// <summary>
+        /// Details of an additional document reference
+        /// </summary>
         public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
 
         /// <summary>
@@ -131,7 +160,7 @@ namespace s2industries.ZUGFeRD
         public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; }
 
         /// <summary>
-        /// Zusätzliche Produkteigenschaften
+        /// Additional product information
         /// </summary>
         public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; }
 

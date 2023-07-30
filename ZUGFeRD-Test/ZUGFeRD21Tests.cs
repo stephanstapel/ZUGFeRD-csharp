@@ -27,7 +27,7 @@ using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuGet.Frameworks;
 using s2industries.ZUGFeRD;
-using ZUGFeRD;
+
 
 namespace ZUGFeRD_Test
 {
@@ -525,7 +525,7 @@ namespace ZUGFeRD_Test
 
       var invoiceDescriptor = InvoiceDescriptor.Load(path);
       var tradeLineItem = invoiceDescriptor.TradeLineItems.Single();
-      Assert.AreEqual("2", tradeLineItem.LineID);
+      Assert.AreEqual("2", tradeLineItem.AssociatedDocument.LineID);
     }
 
     [TestMethod]
@@ -754,10 +754,10 @@ namespace ZUGFeRD_Test
         var invoiceDescriptor = InvoiceDescriptor.Load(@"xrechnung with trade line settlement filled.xml");
 
         var firstTradeLineItem = invoiceDescriptor.TradeLineItems[0];
-        Assert.AreEqual("2", firstTradeLineItem.LineID);
+        Assert.AreEqual("2", firstTradeLineItem.AssociatedDocument.LineID);
 
         var secondTradeLineItem = invoiceDescriptor.TradeLineItems[1];
-        Assert.AreEqual("3", secondTradeLineItem.LineID);
+        Assert.AreEqual("3", secondTradeLineItem.AssociatedDocument.LineID);
       }
     }
 
@@ -1483,7 +1483,7 @@ namespace ZUGFeRD_Test
       //Line items
       var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
       Assert.IsNotNull(loadedLineItem);
-      Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.LineID));
+      Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
       Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
 
       Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);
