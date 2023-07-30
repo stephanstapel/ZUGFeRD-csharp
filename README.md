@@ -95,11 +95,17 @@ https://gouvernement.lu/de/dossiers.gouv_digitalisation%2Bde%2Bdossiers%2B2021%2
 In Germany, this has so far only been necessary for invoices in the course of a public contract from the federal government:
 https://www.e-rechnung-bund.de/ubertragungskanale/peppol/
 
+## Adding line items
+
+## Adding reference documents
+
 ## Storing the invoice
+```csharp
 FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
 desc.Save(stream, ZUGFeRDVersion.Version2, Profile.XRechnung);
 stream.Flush();
 stream.Close();    
+```
 
 # Support for all versions of ZUGFeRD anx XRechnung - ZUGFeRD 1.x, ZUGFeRD 2.x, XRechnung
 In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
