@@ -503,12 +503,12 @@ namespace s2industries.ZUGFeRD
 
       #region SellerTradeParty
       // BT-31: this.Descriptor.SellerTaxRegistration
-      _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
+      _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
       #endregion
 
       #region BuyerTradeParty
       // BT-48: this.Descriptor.BuyerTaxRegistration
-      _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
+      _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
       #endregion
 
       // TODO: implement SellerTaxRepresentativeTradeParty
@@ -1182,7 +1182,7 @@ namespace s2industries.ZUGFeRD
       }
     }
 
-    private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string partyTag, Party party, Contact contact = null, List<TaxRegistration> taxRegistrations = null, Profile profile = Profile.Unknown)
+    private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string partyTag, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null, Profile profile = Profile.Unknown)
     {
       if (party != null)
       {
@@ -1238,6 +1238,19 @@ namespace s2industries.ZUGFeRD
         if (!string.IsNullOrEmpty(party.CountrySubdivisionName))
           writer.WriteElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
         writer.WriteEndElement(); // !PostalTradeAddress
+
+        if (ElectronicAddress != null)
+        {
+           if (!String.IsNullOrEmpty(ElectronicAddress.Address))
+           {
+              writer.WriteStartElement("ram:URIUniversalCommunication");
+              writer.WriteStartElement("ram:URIID");
+              writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.EnumToString());
+              writer.WriteValue(ElectronicAddress.Address);
+              writer.WriteEndElement();
+              writer.WriteEndElement();
+           }
+        }
 
         if (taxRegistrations != null)
         {
