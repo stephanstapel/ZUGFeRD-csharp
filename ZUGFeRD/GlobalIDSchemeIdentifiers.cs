@@ -88,7 +88,6 @@ namespace s2industries.ZUGFeRD
         case "0208": return GlobalIDSchemeIdentifiers.CompanyNumber;
         default: return GlobalIDSchemeIdentifiers.Unknown;
       }
-      return GlobalIDSchemeIdentifiers.Unknown;
     } // !FromString()
 
 
