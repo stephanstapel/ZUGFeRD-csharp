@@ -48,11 +48,13 @@ Open ZUGFeRD/ZUGFeRD.sln solution file. Choose Release or Debug mode and hit 'Bu
 
 For running the tests, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the unit tests. The tests show good cases on how to use the library.
 
-# Creating invoices
+# Step by step guide for creating invoices
 Central class for users is class InvoiceDescriptor.
 This class does not only allow to read and set all ZUGFeRD attributes and structures but also allows to load and save ZUGFeRD files.
 
-Using InvoiceDescriptor to create invoices is straight forward:
+However, the standard has become quite large during the recent years. So it is worthwhile to go through the creation process step by step.
+
+## Creating an invoice
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
@@ -73,10 +75,33 @@ desc.AddApplicableTradeTax(9.06m, 129.37m, 7m, "VAT", "S");
 desc.AddApplicableTradeTax(12.25m, 64.46m, 19m, "VAT", "S");
 desc.SetLogisticsServiceCharge(5.80m, "Versandkosten", "VAT", "S", 7m);
 desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2013, 3% Skonto innerhalb 10 Tagen bis 15.06.2013", new DateTime(2013, 07, 04));
-descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version1, Profile.Basic);
 ```
 
-# Using ZUGFeRD 1.x, ZUGFeRD 2.x
+Optionally, to support Peppol, an electronic address can be passed:
+
+```csharp
+desc.SetSellerElectronicAddress("DE123456789", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
+desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
+```
+
+The fields are only necessary if you want to send the x-rechnung via the Peppol network.
+A description of the fields can be found in the following documents:
+https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.1.0-2020-03-11.pdf
+https://www.ferd-net.de/upload/Dokumente/FACTUR-X_ZUGFeRD_2p0_Teil1_Profil_EN16931_1p03.pdf
+
+In Luxembourg it has been mandatory since this year to process all invoices via Peppol:
+https://gouvernement.lu/de/dossiers.gouv_digitalisation%2Bde%2Bdossiers%2B2021%2Bfacturation-electronique.html
+
+In Germany, this has so far only been necessary for invoices in the course of a public contract from the federal government:
+https://www.e-rechnung-bund.de/ubertragungskanale/peppol/
+
+## Storing the invoice
+FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
+desc.Save(stream, ZUGFeRDVersion.Version2, Profile.XRechnung);
+stream.Flush();
+stream.Close();    
+
+# Support for all versions of ZUGFeRD anx XRechnung - ZUGFeRD 1.x, ZUGFeRD 2.x, XRechnung
 In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
 
 ```csharp
@@ -90,7 +115,7 @@ Stream stream = new FileStream("zugferd.xml", FileMode.Open, FileAccess.Read);
 InvoiceDescriptor descriptor = InvoiceDescriptor.Load(stream);
 ```
 
-The library will automatically detect the ZUGFeRD version of the file and parse accordingly. As of today (2020-07-05), parsing ZUGFeRD 2.x is not yet finished.
+The library will automatically detect the ZUGFeRD version of the file and parse accordingly. It will automatically be chosen which XRechnung version to use depending on the current date.
 The lifecycle of the stream is not influenced by the ZUGFeRD library, i.e. the library expects an open stream and will not close if after reading from it.
 
 For saving ZUGFeRD files, use InvoiceDescriptor.Save(). Here, you can also pass a stream object:
