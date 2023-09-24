@@ -111,6 +111,7 @@ namespace s2industries.ZUGFeRD
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0": return Profile.XRechnung;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1": return Profile.XRechnung;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2": return Profile.XRechnung;
+                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3": return Profile.XRechnung;
             }
 
             return Profile.Unknown;
