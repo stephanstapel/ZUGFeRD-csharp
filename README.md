@@ -3,6 +3,16 @@
 Part of the ZUGFeRD community:
 https://github.com/zugferd
 
+# Sponsoring
+Implementing and maintaining this library is a lot of hard work. I'm doing this in my spare time, there is no company behind developing ZUGFeRD-chsarp. Support me in this work and help making this library better:
+
+[:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
+
+In particular, I am searching for sponsors for:
+
+* UBL format support (reading and writing)
+
+
 # Introduction
 The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor Factur-X. One special profile of Factur-X is the German XRechnung format.
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
@@ -10,11 +20,6 @@ The library is meant to be as simple as possible, however it is not straight for
 A description of the library can be found here:
 
 http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
-
-# Sponsoring
-Implementing and maintaining this library is a lot of hard work. I'm doing this in my spare time, there is no company behind developing ZUGFeRD-chsarp. Support me in this work and help making this library better:
-
-[:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
 
 # Relationship between the different standards
 Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
