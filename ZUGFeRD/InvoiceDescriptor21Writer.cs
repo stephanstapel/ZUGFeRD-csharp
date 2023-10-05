@@ -272,7 +272,7 @@ namespace s2industries.ZUGFeRD
 
                     #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)                 
                     // BT-148
-                    if (tradeLineItem.GrossUnitPrice.HasValue)
+                    if (tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.TradeAllowanceCharges.Count > 0))
                     {
                         Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
