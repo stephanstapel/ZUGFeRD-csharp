@@ -280,7 +280,9 @@ namespace s2industries.ZUGFeRD
             {
               _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
             }
+            Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
           }
+          #endregion // !GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
 
           #region AppliedTradeAllowanceCharge
           foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
@@ -309,11 +311,8 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
           }
-
-          Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
           #endregion
-          #endregion // !GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
-
+          
           #region NetPriceProductTradePrice                    
           //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
           Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
