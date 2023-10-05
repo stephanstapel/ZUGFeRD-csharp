@@ -279,39 +279,38 @@ namespace s2industries.ZUGFeRD
                         if (tradeLineItem.UnitQuantity.HasValue)
                         {
                             _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                        }                                          
+                        
+                        foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
+                        {
+                            Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
+
+                            #region ChargeIndicator
+                            Writer.WriteStartElement("ram:ChargeIndicator");
+                            Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                            Writer.WriteEndElement(); // !ram:ChargeIndicator
+                            #endregion
+
+                            #region BasisAmount
+                            Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
+                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
+                            Writer.WriteEndElement();
+                            #endregion
+
+                            #region ActualAmount
+                            Writer.WriteStartElement("ram:ActualAmount");
+                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
+                            Writer.WriteEndElement();
+                            #endregion
+
+                            _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
+
+                            Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                         }
+
                         Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
                     }
                     #endregion // !GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
-
-                    #region AppliedTradeAllowanceCharge
-                    foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
-                    {
-                        Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
-
-                        #region ChargeIndicator
-                        Writer.WriteStartElement("ram:ChargeIndicator");
-                        Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                        Writer.WriteEndElement(); // !ram:ChargeIndicator
-                        #endregion
-
-                        #region BasisAmount
-                        Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
-                        Writer.WriteEndElement();
-                        #endregion
-
-                        #region ActualAmount
-                        Writer.WriteStartElement("ram:ActualAmount");
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
-                        Writer.WriteEndElement();
-                        #endregion
-
-                        _writeOptionalElementString(Writer, "ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
-
-                        Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
-                    }
-                    #endregion
 
                     #region NetPriceProductTradePrice                    
                     //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
