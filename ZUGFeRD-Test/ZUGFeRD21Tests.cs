@@ -1654,9 +1654,6 @@ namespace ZUGFeRD_Test
                      duePayableAmount: 1804m
                     );
 
-            desc.Save("c:\\temp\\xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
-
-
             MemoryStream ms = new MemoryStream();
 
             desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
