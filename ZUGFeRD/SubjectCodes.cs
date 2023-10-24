@@ -60,6 +60,11 @@ namespace s2industries.ZUGFeRD
         ACB,
 
         /// <summary>
+        /// Text subject is note.
+        /// </summary>
+        ADU,
+
+        /// <summary>
         /// Zahlungsinformation
         /// 
         /// Bekanntgabe der Abtretung der

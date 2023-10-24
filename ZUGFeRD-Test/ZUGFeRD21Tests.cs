@@ -1563,6 +1563,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(50m, lineItemTradeAllowanceCharge.ActualAmount);
             Assert.AreEqual("Reason: UnitTest", lineItemTradeAllowanceCharge.Reason);
         }
+
         /// <summary>
         /// This test ensure that BIC won't be written if empty
         /// </summary>
@@ -1602,6 +1603,68 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(debitorFinancialInstitutions.Count, 0);
         } // !TestFinancialInstitutionBICEmpty()
 
+
+        /// <summary>
+        /// This test ensure that BIC won't be written if empty
+        /// </summary>
+        [TestMethod]
+        public void TestAltteilSteuer()
+        {
+            InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("112233", new DateTime(2021, 04, 23), CurrencyCodes.EUR);
+            desc.Notes.Clear();
+            desc.Notes.Add(new Note("Rechnung enthält 100 EUR (Umsatz)Steuer auf Altteile gem. Abschn. 10.5 Abs. 3 UStAE", SubjectCodes.ADU, ContentCodes.Unknown));
+
+            desc.TradeLineItems.Clear();
+            desc.AddTradeLineItem(name: "Neumotor",
+                                  unitCode: QuantityCodes.C62,
+                                  unitQuantity: 1,
+                                  billedQuantity: 1,
+                                  netUnitPrice: 1000,   
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
+                                  taxPercent: 19);
+
+            desc.AddTradeLineItem(name: "Bemessungsgrundlage und Umsatzsteuer auf Altteil",
+                                  unitCode: QuantityCodes.C62,
+                                  unitQuantity: 1,
+                                  billedQuantity: 1,
+                                  netUnitPrice: 100,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
+                                  taxPercent: 19);
+
+            desc.AddTradeLineItem(name: "Korrektur/Stornierung Bemessungsgrundlage der Umsatzsteuer auf Altteil",
+                                  unitCode: QuantityCodes.C62,
+                                  unitQuantity: 1,
+                                  billedQuantity: 1,
+                                  netUnitPrice: -100,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.Z,
+                                  taxPercent: 0);
+
+            desc.AddApplicableTradeTax(basisAmount: 1000,
+                                       percent: 19,
+                                       TaxTypes.VAT,
+                                       TaxCategoryCodes.S);                                      
+
+            desc.SetTotals(lineTotalAmount: 1500m,
+                     taxBasisAmount: 1500m,
+                     taxTotalAmount: 304m,
+                     grandTotalAmount: 1804m,
+                     duePayableAmount: 1804m
+                    );
+
+            desc.Save("c:\\temp\\xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
+
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+            
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Invoicee, null);
+        } // !TestAltteilSteuer()
 
     }
 }
