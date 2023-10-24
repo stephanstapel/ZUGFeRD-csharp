@@ -1489,12 +1489,12 @@ namespace ZUGFeRD_Test
 
 
             Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-            Assert.AreEqual(0.0m, loadedInvoice.ChargeTotalAmount);
-            Assert.AreEqual(0.0m, loadedInvoice.AllowanceTotalAmount);
+            Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount); // optional
+            Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
             Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
             Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
             Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
-            Assert.AreEqual(0.0m, loadedInvoice.TotalPrepaidAmount);
+            Assert.AreEqual(null, loadedInvoice.TotalPrepaidAmount); // optional
             Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
 
             //InvoiceReferencedDocument
