@@ -1043,17 +1043,17 @@ namespace s2industries.ZUGFeRD
                     {
                         if (String.IsNullOrEmpty(descriptor.SellerContact.EmailAddress))
                         {
-                            if (throwExceptions) { throw new MissingDataException("Seller contact email address is required (BT-43)."); }
+                            if (throwExceptions) { throw new MissingDataException("Seller contact email address (BT-43) is required (BR-DE-7)."); }
                             return false;
                         }
                         if (String.IsNullOrEmpty(descriptor.SellerContact.PhoneNo))
                         {
-                            if (throwExceptions) { throw new MissingDataException("Seller contact phone no is required (BT-42)."); }
+                            if (throwExceptions) { throw new MissingDataException("Seller contact phone no (BT-42) is required (BR-DE-6)."); }
                             return false;
                         }
                         if (String.IsNullOrEmpty(descriptor.SellerContact.Name) && String.IsNullOrEmpty(descriptor.SellerContact.OrgUnit))
                         {
-                            if (throwExceptions) { throw new MissingDataException("Seller contact point (name or org unit) no is required (BT-41)."); }
+                            if (throwExceptions) { throw new MissingDataException("Seller contact point (name or org unit) no (BT-41) is required (BR-DE-5)."); }
                             return false;
                         }
                     }
@@ -1061,7 +1061,8 @@ namespace s2industries.ZUGFeRD
 
 
                 // BR-DE-17
-                if ((descriptor.Type != InvoiceType.PartialInvoice) && (descriptor.Type != InvoiceType.Invoice) && (descriptor.Type != InvoiceType.Correction) && (descriptor.Type != InvoiceType.CreditNote))
+                if (!new[] { InvoiceType.PartialInvoice, InvoiceType.Invoice, InvoiceType.Correction, InvoiceType.SelfBilledInvoice, InvoiceType.CreditNote,
+                             InvoiceType.PartialConstructionInvoice, InvoiceType.PartialFinalConstructionInvoice, InvoiceType.FinalConstructionInvoice}.Contains(descriptor.Type))
                 {
                     throw new UnsupportedException("Invoice type (BT-3) does not match requirements of BR-DE-17");
                 }
