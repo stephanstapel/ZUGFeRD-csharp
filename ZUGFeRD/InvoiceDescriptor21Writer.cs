@@ -1058,6 +1058,13 @@ namespace s2industries.ZUGFeRD
                         }
                     }
                 }
+
+
+                // BR-DE-17
+                if ((descriptor.Type != InvoiceType.PartialInvoice) && (descriptor.Type != InvoiceType.Invoice) && (descriptor.Type != InvoiceType.Correction) && (descriptor.Type != InvoiceType.CreditNote))
+                {
+                    throw new UnsupportedException("Invoice type (BT-3) does not match requirements of BR-DE-17");
+                }
             }
 
             return true;
@@ -1115,7 +1122,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
-
+                 
                 if (tax.CategoryCode.HasValue)
                 {
                     writer.WriteElementString("ram:CategoryCode", tax.CategoryCode?.EnumToString());
