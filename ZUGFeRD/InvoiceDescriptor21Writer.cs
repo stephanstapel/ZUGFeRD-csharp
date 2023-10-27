@@ -1036,7 +1036,7 @@ namespace s2industries.ZUGFeRD
                 {
                     if (descriptor.SellerContact == null)
                     {
-                        if (throwExceptions) { throw new MissingDataException("Seller contact required when seller is set."); }
+                        if (throwExceptions) { throw new MissingDataException("Seller contact (BG-6) required when seller is set (BR-DE-2)."); }
                         return false;
                     }
                     else
