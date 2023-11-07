@@ -279,8 +279,8 @@ namespace s2industries.ZUGFeRD
                         if (tradeLineItem.UnitQuantity.HasValue)
                         {
                             _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
-                        }                                          
-                        
+                        }
+
                         foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
                         {
                             Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
@@ -1123,7 +1123,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
-                 
+
                 if (tax.CategoryCode.HasValue)
                 {
                     writer.WriteElementString("ram:CategoryCode", tax.CategoryCode?.EnumToString());
@@ -1181,7 +1181,7 @@ namespace s2industries.ZUGFeRD
                     }
                     if (!String.IsNullOrEmpty(legalOrganization.TradingBusinessName))
                     {
-                        writer.WriteElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName);
+                        writer.WriteElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, ALL_PROFILES ^ Profile.Minimum);
                     }
                 }
                 writer.WriteEndElement();
@@ -1224,7 +1224,7 @@ namespace s2industries.ZUGFeRD
 
                 if (party.SpecifiedLegalOrganization != null)
                 {
-                    _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, Profile.Minimum | Profile.XRechnung1 | Profile.XRechnung);
+                    _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, ALL_PROFILES);
                 }
 
                 if (contact != null)
