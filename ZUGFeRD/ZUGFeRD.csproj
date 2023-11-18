@@ -13,6 +13,9 @@ This library allows to create these xml descriptors in an easy way.
 To help developing the library, please become a sponsor:
 https://github.com/sponsors/stephanstapel
 
+You find the release notes here:
+https://github.com/stephanstapel/ZUGFeRD-csharp/releases
+
 Find more about the library here:
 https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
