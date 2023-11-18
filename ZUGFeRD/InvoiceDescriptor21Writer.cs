@@ -501,12 +501,12 @@ namespace s2industries.ZUGFeRD
 
             #region SellerTradeParty
             // BT-31: this.Descriptor.SellerTaxRegistration
-            _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration, descriptor.Profile);
+            _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration, descriptor.Profile, ALL_PROFILES);
             #endregion
 
             #region BuyerTradeParty
             // BT-48: this.Descriptor.BuyerTaxRegistration
-            _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration, descriptor.Profile);
+            _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration, descriptor.Profile, ALL_PROFILES);
             #endregion
 
             // TODO: implement SellerTaxRepresentativeTradeParty
@@ -630,9 +630,9 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram:ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo, profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo, profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, legalOrganizationProfile: Profile.Extended);
             //ToDo: UltimateShipToTradeParty
-            _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom, profile: Profile.Extended); // ShipFrom shall not be written in XRechnung profiles
+            _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom, profile: Profile.Extended, legalOrganizationProfile: Profile.Extended); // ShipFrom shall not be written in XRechnung profiles
 
             #region ActualDeliverySupplyChainEvent
             if (this.Descriptor.ActualDeliveryDate.HasValue)
@@ -710,10 +710,10 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
             //   7. InvoiceeTradeParty (optional)
-            _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee, profile: Profile.Extended);
+            _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee, profile: Profile.Extended, legalOrganizationProfile: Profile.Extended);
 
             //   8. PayeeTradeParty (optional)
-            _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee, profile: ALL_PROFILES ^ Profile.Minimum);
+            _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee, profile: ALL_PROFILES ^ Profile.Minimum, legalOrganizationProfile: ALL_PROFILES);
 
             #region SpecifiedTradeSettlementPaymentMeans
             //  10. SpecifiedTradeSettlementPaymentMeans (optional)
@@ -1188,7 +1188,7 @@ namespace s2industries.ZUGFeRD
             }
         }
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string partyTag, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null, Profile profile = Profile.Unknown)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string partyTag, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null, Profile profile = Profile.Unknown, Profile legalOrganizationProfile = Profile.Unknown)
         {
             if (party != null)
             {
@@ -1222,7 +1222,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("ram:Name", party.Name);
                 }
 
-                if (party.SpecifiedLegalOrganization != null)
+                if ((party.SpecifiedLegalOrganization != null) && ((profile & legalOrganizationProfile) == profile))
                 {
                     _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, ALL_PROFILES);
                 }
