@@ -501,12 +501,12 @@ namespace s2industries.ZUGFeRD
 
             #region SellerTradeParty
             // BT-31: this.Descriptor.SellerTaxRegistration
-            _writeOptionalParty(Writer, "ram:SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration, descriptor.Profile, ALL_PROFILES, Profile.Extended);
+            _writeOptionalParty(Writer, PartyTypes.SellerTradeParty, this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration);
             #endregion
 
             #region BuyerTradeParty
             // BT-48: this.Descriptor.BuyerTaxRegistration
-            _writeOptionalParty(Writer, "ram:BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration, descriptor.Profile, ALL_PROFILES, Profile.Comfort | Profile.Extended);
+            _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
             #endregion
 
             // TODO: implement SellerTaxRepresentativeTradeParty
@@ -630,9 +630,9 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram:ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, "ram:ShipToTradeParty", this.Descriptor.ShipTo, profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, legalOrganizationProfile: Profile.Extended, tradingBusinessNameProfile: Profile.Extended);
+            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo);
             //ToDo: UltimateShipToTradeParty
-            _writeOptionalParty(Writer, "ram:ShipFromTradeParty", this.Descriptor.ShipFrom, profile: Profile.Extended, legalOrganizationProfile: Profile.Extended, tradingBusinessNameProfile: Profile.Extended); // ShipFrom shall not be written in XRechnung profiles
+            _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom); // ShipFrom shall not be written in XRechnung profiles
 
             #region ActualDeliverySupplyChainEvent
             if (this.Descriptor.ActualDeliveryDate.HasValue)
@@ -710,12 +710,10 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
             //   7. InvoiceeTradeParty (optional)
-            _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee, profile: Profile.Extended,
-                legalOrganizationProfile: Profile.Extended, tradingBusinessNameProfile: Profile.Extended);
+            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee);
 
             //   8. PayeeTradeParty (optional)
-            _writeOptionalParty(Writer, "ram:PayeeTradeParty", this.Descriptor.Payee, profile: ALL_PROFILES ^ Profile.Minimum,
-                legalOrganizationProfile: ALL_PROFILES, tradingBusinessNameProfile: Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended);
+            _writeOptionalParty(Writer, PartyTypes.PayeeTradeParty, this.Descriptor.Payee);
 
             #region SpecifiedTradeSettlementPaymentMeans
             //  10. SpecifiedTradeSettlementPaymentMeans (optional)
@@ -1163,12 +1161,11 @@ namespace s2industries.ZUGFeRD
             }
         } // !_writeNotes()
 
-        private void _writeOptionalLegalOrganization(ProfileAwareXmlTextWriter writer, string legalOrganizationTag, LegalOrganization legalOrganization,
-            Profile profile = Profile.Unknown, Profile tradingBusinessNameProfile = Profile.Unknown)
+        private void _writeOptionalLegalOrganization(ProfileAwareXmlTextWriter writer, string legalOrganizationTag, LegalOrganization legalOrganization, PartyTypes partyType = PartyTypes.Unknown)
         {
             if (legalOrganization != null)
             {
-                writer.WriteStartElement(legalOrganizationTag, profile);
+                writer.WriteStartElement(legalOrganizationTag, this.Descriptor.Profile);
                 if (legalOrganization.ID != null)
                 {
                     if (!String.IsNullOrEmpty(legalOrganization.ID.ID) && !String.IsNullOrEmpty(legalOrganization.ID.SchemeID.EnumToString()))
@@ -1184,19 +1181,65 @@ namespace s2industries.ZUGFeRD
                     }
                     if (!String.IsNullOrEmpty(legalOrganization.TradingBusinessName))
                     {
-                        writer.WriteElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, tradingBusinessNameProfile);
+                        // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
+                        if (((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
+                             ((partyType == PartyTypes.PayeeTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
+                             ((partyType == PartyTypes.BuyerTradeParty) && (this.Descriptor.Profile == Profile.Comfort)) ||
+                             ((partyType == PartyTypes.BuyerTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                             (this.Descriptor.Profile == Profile.Extended) /* remaining party types */
+                             )
+                        {
+                            writer.WriteElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
+                        }
                     }
                 }
                 writer.WriteEndElement();
             }
         }
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string partyTag, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null,
-            Profile profile = Profile.Unknown, Profile legalOrganizationProfile = Profile.Unknown, Profile tradingBusinessNameProfile = Profile.Unknown)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null)
         {
+            // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
+            if ( ((partyType == PartyTypes.UltimateShipToTradeParty) && (this.Descriptor.Profile != Profile.Extended)) ||
+                 ((partyType == PartyTypes.ShipToTradeParty) && (this.Descriptor.Profile != Profile.Extended)) ||
+                 ((partyType == PartyTypes.ShipFromTradeParty) && (this.Descriptor.Profile != Profile.Extended)) ||
+                 ((partyType == PartyTypes.InvoiceeTradeParty) && (this.Descriptor.Profile != Profile.Extended)) ||
+                 ((partyType == PartyTypes.PayeeTradeParty) && (this.Descriptor.Profile == Profile.Minimum)) ||
+                 ((partyType == PartyTypes.PayerTradeParty) && (this.Descriptor.Profile != Profile.Extended))
+                )
+            {
+                return;
+            }
+
             if (party != null)
             {
-                writer.WriteStartElement(partyTag, profile);
+                switch (partyType)
+                {
+                    case PartyTypes.SellerTradeParty:
+                        writer.WriteStartElement("ram:SellerTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.BuyerTradeParty:
+                        writer.WriteStartElement("ram:BuyerTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.ShipToTradeParty:
+                        writer.WriteStartElement("ram:ShipToTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.UltimateShipToTradeParty:
+                        writer.WriteStartElement("ram:UltimateShipToTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.ShipFromTradeParty:
+                        writer.WriteStartElement("ram:ShipFromTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.InvoiceeTradeParty:
+                        writer.WriteStartElement("ram:InvoiceeTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.PayeeTradeParty:
+                        writer.WriteStartElement("ram:PayeeTradeParty", this.Descriptor.Profile);
+                        break;
+                    case PartyTypes.PayerTradeParty:
+                        writer.WriteStartElement("ram:PayerTradeParty", this.Descriptor.Profile);
+                        break;
+                }
 
                 if (party.ID != null)
                 {
@@ -1226,9 +1269,26 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("ram:Name", party.Name);
                 }
 
-                if ((party.SpecifiedLegalOrganization != null) && ((profile & legalOrganizationProfile) == profile))
+                if (party.SpecifiedLegalOrganization != null)
                 {
-                    _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, tradingBusinessNameProfile);
+                    // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
+                    if (((partyType == PartyTypes.ShipToTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.ShipFromTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.SalesAgentTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.UltimateShipToTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.BuyerTaxRepresentativeTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.ProductEndUserTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.BuyerAgentTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.InvoicerTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.InvoiceeTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.PayerTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
+                         ((partyType == PartyTypes.SellerTradeParty) /* all profiles */ ) ||
+                         ((partyType == PartyTypes.BuyerTradeParty) /* all profiles */ ) ||
+                         ((partyType == PartyTypes.PayeeTradeParty) /* all profiles */ )
+                         )
+                    {
+                        _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
+                    }
                 }
 
                 if (contact != null)

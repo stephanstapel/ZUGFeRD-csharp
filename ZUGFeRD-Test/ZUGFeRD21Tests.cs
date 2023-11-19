@@ -205,13 +205,22 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.BuyerElectronicAddress.ElectronicAddressSchemeID, ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
         } // !TestElectronicAddress()
 
+
         [TestMethod]
         public void TestMinimumInvoice()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             desc.Invoicee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
             {
-                Name = "Test"
+                Name = "Invoicee"
+            };
+            desc.Seller = new Party()
+            {
+                Name = "Seller",
+                SpecifiedLegalOrganization = new LegalOrganization()
+                {
+                    TradingBusinessName = "Trading business name for seller party"
+                }
             };
             desc.TaxBasisAmount = 73; // this information will not be stored in the output file since it is available in Extended profile only
             MemoryStream ms = new MemoryStream();
@@ -221,6 +230,9 @@ namespace ZUGFeRD_Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.Invoicee, null);
+            Assert.AreNotEqual(loadedInvoice.Seller, null);
+            Assert.AreNotEqual(loadedInvoice.Seller.SpecifiedLegalOrganization, null);
+            Assert.AreEqual(loadedInvoice.Seller.SpecifiedLegalOrganization.TradingBusinessName, "");
         } // !TestMinimumInvoice()
 
 

@@ -6,6 +6,19 @@ namespace s2industries.ZUGFeRD
 {
     internal enum PartyTypes
     {
-        SellerTradeParty
+        Unknown,
+        SellerTradeParty,
+        BuyerTradeParty,
+        ShipToTradeParty,
+        UltimateShipToTradeParty,
+        ShipFromTradeParty,
+        InvoiceeTradeParty,
+        PayeeTradeParty,
+        SalesAgentTradeParty,
+        BuyerTaxRepresentativeTradeParty,
+        ProductEndUserTradeParty,
+        BuyerAgentTradeParty,
+        InvoicerTradeParty,
+        PayerTradeParty
     }
 }
