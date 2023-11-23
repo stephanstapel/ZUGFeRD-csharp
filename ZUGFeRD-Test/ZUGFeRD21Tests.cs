@@ -1085,6 +1085,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(issueDateTime, loadedInvoice.AdditionalReferencedDocuments[0].IssueDateTime);
         } // !TestAdditionalReferencedDocument()
 
+
         [TestMethod]
         public void TestPartyExtensions()
         {
