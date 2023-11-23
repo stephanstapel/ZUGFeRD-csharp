@@ -1178,37 +1178,37 @@ namespace s2industries.ZUGFeRD
                     // all profiles
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.ShipFromTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.InvoiceeTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.PayeeTradeParty:
                     // all profiles
                     break;
                 case PartyTypes.SalesAgentTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.BuyerTaxRepresentativeTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.ProductEndUserTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.BuyerAgentTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.InvoicerTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.PayerTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; } // extended profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 default:
                     return;
@@ -1258,37 +1258,37 @@ namespace s2industries.ZUGFeRD
                 case PartyTypes.BuyerTradeParty:
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.ShipFromTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.InvoiceeTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.PayeeTradeParty:
                     if (this.Descriptor.Profile == Profile.Minimum) { return; } // party is written for all profiles but minimum
                     break;
                 case PartyTypes.SalesAgentTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.BuyerTaxRepresentativeTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.ProductEndUserTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.BuyerAgentTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.InvoicerTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.PayerTradeParty:
-                    if (this.Descriptor.Profile != Profile.Extended) { return; }
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 default:
                     return;
@@ -1368,11 +1368,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
-
-                if (contact != null)
-                {
-                    _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                }
+                _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
                 writer.WriteElementString("ram:PostcodeCode", party.Postcode); // BT-53
@@ -1424,43 +1420,46 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalContact(ProfileAwareXmlTextWriter writer, string contactTag, Contact contact, Profile profile = Profile.Unknown)
         {
-            if (contact != null)
+            if (contact == null)
             {
-                writer.WriteStartElement(contactTag, profile);
+                return;
+            }
 
-                if (!String.IsNullOrEmpty(contact.Name))
-                {
-                    writer.WriteElementString("ram:PersonName", contact.Name);
-                }
 
-                if (!String.IsNullOrEmpty(contact.OrgUnit))
-                {
-                    writer.WriteElementString("ram:DepartmentName", contact.OrgUnit);
-                }
+            writer.WriteStartElement(contactTag, profile);
 
-                if (!String.IsNullOrEmpty(contact.PhoneNo))
-                {
-                    writer.WriteStartElement("ram:TelephoneUniversalCommunication");
-                    writer.WriteElementString("ram:CompleteNumber", contact.PhoneNo);
-                    writer.WriteEndElement();
-                }
+            if (!String.IsNullOrEmpty(contact.Name))
+            {
+                writer.WriteElementString("ram:PersonName", contact.Name);
+            }
 
-                if (!String.IsNullOrEmpty(contact.FaxNo))
-                {
-                    writer.WriteStartElement("ram:FaxUniversalCommunication", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
-                    writer.WriteElementString("ram:CompleteNumber", contact.FaxNo);
-                    writer.WriteEndElement();
-                }
+            if (!String.IsNullOrEmpty(contact.OrgUnit))
+            {
+                writer.WriteElementString("ram:DepartmentName", contact.OrgUnit);
+            }
 
-                if (!String.IsNullOrEmpty(contact.EmailAddress))
-                {
-                    writer.WriteStartElement("ram:EmailURIUniversalCommunication");
-                    writer.WriteElementString("ram:URIID", contact.EmailAddress);
-                    writer.WriteEndElement();
-                }
-
+            if (!String.IsNullOrEmpty(contact.PhoneNo))
+            {
+                writer.WriteStartElement("ram:TelephoneUniversalCommunication");
+                writer.WriteElementString("ram:CompleteNumber", contact.PhoneNo);
                 writer.WriteEndElement();
             }
+
+            if (!String.IsNullOrEmpty(contact.FaxNo))
+            {
+                writer.WriteStartElement("ram:FaxUniversalCommunication", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                writer.WriteElementString("ram:CompleteNumber", contact.FaxNo);
+                writer.WriteEndElement();
+            }
+
+            if (!String.IsNullOrEmpty(contact.EmailAddress))
+            {
+                writer.WriteStartElement("ram:EmailURIUniversalCommunication");
+                writer.WriteElementString("ram:URIID", contact.EmailAddress);
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
         } // !_writeOptionalContact()
 
 
