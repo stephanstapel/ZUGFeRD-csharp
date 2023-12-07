@@ -29,6 +29,17 @@ namespace s2industries.ZUGFeRD
    /// </summary>
    public enum ElectronicAddressSchemeIdentifiers
    {
+
+    /// <summary>
+    /// EAN Location Code
+    /// </summary>
+    EanLocationCode = 0088,
+
+    /// <summary>
+    /// German Leitweg-ID
+    /// </summary>
+    LeitwegID = 0204,
+
     /// <summary>
     /// Hungary VAT number
     /// </summary>      
