@@ -228,7 +228,7 @@ namespace s2industries.ZUGFeRD
 
       public static string EnumToString(this ElectronicAddressSchemeIdentifiers eas)
       {
-         return ((int)eas).ToString();
+         return ((int)eas).ToString("D4");
       } // !ToString()
    }
 }
