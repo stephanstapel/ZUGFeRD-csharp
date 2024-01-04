@@ -493,7 +493,7 @@ namespace s2industries.ZUGFeRD
             #region ApplicableHeaderTradeAgreement
             Writer.WriteStartElement("ram:ApplicableHeaderTradeAgreement");
 
-            // BT-12
+            // BT-10
             if (!String.IsNullOrEmpty(this.Descriptor.ReferenceOrderNo))
             {
                 Writer.WriteElementString("ram:BuyerReference", this.Descriptor.ReferenceOrderNo);
