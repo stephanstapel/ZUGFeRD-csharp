@@ -480,7 +480,7 @@ namespace s2industries.ZUGFeRD
         } // !AddNote()        
 
 
-        public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country, string id,
+        public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country, string id = null,
             GlobalID globalID = null, string receiver = "", LegalOrganization legalOrganization = null)
         {
             this.Buyer = new Party()
@@ -498,7 +498,7 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void SetSeller(string name, string postcode, string city, string street, CountryCodes country, string id,
+        public void SetSeller(string name, string postcode, string city, string street, CountryCodes country, string id = null,
             GlobalID globalID = null, LegalOrganization legalOrganization = null)
         {
             this.Seller = new Party()
