@@ -232,9 +232,16 @@ In general, creating XRechnung files is straight forward and just like creating 
 descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as XRechnung 2.0
 ```
 
-This will save the invoice as XRechnung 2.3 as valid from 2023/08/01.
+This will save the invoice as XRechnung 3.0.1 as valid from 2024/02/01.
 
-If you want to store invoices which are validated successfully by the KoSIT validator before 2021/01/01, you can still write invoices in the old format:
+Make sure to also add a business process which is required starting with XRechnung 3.0.1:
+
+```csharp
+desc.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
+```
+
+
+If you want to store invoices which are validated successfully by the KoSIT validator before 2024/02/01, you can still write invoices in the old format:
 
 ```csharp
 descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung1); // save as XRechnung 1.2
