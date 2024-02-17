@@ -1348,7 +1348,7 @@ namespace s2industries.ZUGFeRD
                         writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();
                     }
-                    else
+                    else if (!String.IsNullOrEmpty(party.ID.ID))
                     {
                         writer.WriteElementString("ram:ID", party.ID.ID);
                     }
