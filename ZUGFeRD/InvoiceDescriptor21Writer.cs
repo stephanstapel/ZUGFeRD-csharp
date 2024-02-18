@@ -1302,7 +1302,7 @@ namespace s2industries.ZUGFeRD
                         writer.WriteEndElement();
                     }
 
-                    writer.WriteElementString("ram:ID", party.ID.ID);
+                    writer.WriteOptionalElementString("ram:ID", party.ID.ID);
                 }
 
                 if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))

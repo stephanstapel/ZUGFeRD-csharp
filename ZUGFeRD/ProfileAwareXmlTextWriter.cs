@@ -143,11 +143,6 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
-            if (String.IsNullOrWhiteSpace(value))
-            {
-                return;
-            }
-
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
             {
