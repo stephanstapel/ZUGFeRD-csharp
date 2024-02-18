@@ -41,16 +41,7 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);
-
-
-        internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value, Profile profile = Profile.Unknown)
-        {
-            if (!String.IsNullOrWhiteSpace(value))
-            {
-                writer.WriteElementString(tagName, value, profile);
-            }
-        } // !_writeOptionalElementString()
+        internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);        
 
 
         protected string _formatDecimal(decimal value, int numDecimals = 2)

@@ -121,6 +121,15 @@ namespace s2industries.ZUGFeRD
         }
 
 
+        public void WriteOptionalElementString(string tagName, string value, Profile profile = Profile.Unknown)
+        {
+            if (!String.IsNullOrWhiteSpace(value))
+            {
+                WriteElementString(tagName, value, profile);
+            }
+        } // !WriteOptionalElementString()
+
+
         public void WriteElementString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
         {
             Profile _profile = profile;
