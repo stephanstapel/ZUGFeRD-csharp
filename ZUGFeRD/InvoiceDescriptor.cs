@@ -877,7 +877,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.ToLower() == lineID.ToLower()))
+                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new ArgumentException("LineID must be unique");
                 }
@@ -1018,7 +1018,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.ToLower() == lineID.ToLower()))
+                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new ArgumentException("LineID must be unique");
                 }

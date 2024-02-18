@@ -73,7 +73,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                if ((value.Trim().ToLower() == "true") || (value.Trim() == "1"))
+                if (value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase) || (value.Trim() == "1"))
                 {
                     return true;
                 }
