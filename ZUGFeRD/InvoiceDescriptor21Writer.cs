@@ -1348,10 +1348,8 @@ namespace s2industries.ZUGFeRD
                         writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();
                     }
-                    else if (!String.IsNullOrWhiteSpace(party.ID.ID))
-                    {
-                        writer.WriteElementString("ram:ID", party.ID.ID);
-                    }
+
+                    writer.WriteElementString("ram:ID", party.ID.ID);
                 }
 
                 if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
