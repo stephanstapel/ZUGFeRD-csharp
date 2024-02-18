@@ -871,7 +871,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="comment"></param>
         public void AddTradeLineCommentItem(string lineID, string comment)
         {
-            if (String.IsNullOrEmpty(lineID))
+            if (String.IsNullOrWhiteSpace(lineID))
             {
                 throw new ArgumentException("LineID cannot be Null or Empty");
             }
@@ -1012,7 +1012,7 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodEnd = billingPeriodEnd
             };
 
-            if (String.IsNullOrEmpty(lineID))
+            if (String.IsNullOrWhiteSpace(lineID))
             {
                 throw new ArgumentException("LineID cannot be Null or Empty");
             }
@@ -1025,17 +1025,17 @@ namespace s2industries.ZUGFeRD
             }
 
             newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID);
-            if (!String.IsNullOrEmpty(comment))
+            if (!String.IsNullOrWhiteSpace(comment))
             {
                 newItem.AssociatedDocument.Notes.Add(new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown));
             }
 
-            if (!String.IsNullOrEmpty(deliveryNoteID) || deliveryNoteDate.HasValue)
+            if (!String.IsNullOrWhiteSpace(deliveryNoteID) || deliveryNoteDate.HasValue)
             {
                 newItem.SetDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
             }
 
-            if (!String.IsNullOrEmpty(buyerOrderID) || buyerOrderDate.HasValue)
+            if (!String.IsNullOrWhiteSpace(buyerOrderID) || buyerOrderDate.HasValue)
             {
                 newItem.SetOrderReferencedDocument(buyerOrderID, buyerOrderDate);
             }

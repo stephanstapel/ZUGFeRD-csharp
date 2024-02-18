@@ -46,7 +46,7 @@ namespace s2industries.ZUGFeRD
 
         internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value, Profile profile = Profile.Unknown)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!String.IsNullOrWhiteSpace(value))
             {
                 writer.WriteElementString(tagName, value, profile);
             }

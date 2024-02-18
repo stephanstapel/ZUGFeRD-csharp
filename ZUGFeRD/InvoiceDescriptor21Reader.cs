@@ -196,7 +196,7 @@ namespace s2industries.ZUGFeRD
         _deliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr);
       }
 
-      if (_deliveryNoteDate.HasValue || !String.IsNullOrEmpty(_deliveryNoteNo))
+      if (_deliveryNoteDate.HasValue || !String.IsNullOrWhiteSpace(_deliveryNoteNo))
       {
         retval.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
         {
@@ -223,7 +223,7 @@ namespace s2industries.ZUGFeRD
       var financialCardId = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:ID", nsmgr);
       var financialCardCardholderName = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:CardholderName", nsmgr);
 
-      if (!string.IsNullOrEmpty(financialCardId) || !string.IsNullOrEmpty(financialCardCardholderName))
+      if (!string.IsNullOrWhiteSpace(financialCardId) || !string.IsNullOrWhiteSpace(financialCardCardholderName))
       {
         _tempPaymentMeans.FinancialCard = new FinancialCard()
         {
@@ -616,7 +616,7 @@ namespace s2industries.ZUGFeRD
       string lineOne = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineOne", nsmgr);
       string lineTwo = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineTwo", nsmgr);
 
-      if (!String.IsNullOrEmpty(lineTwo))
+      if (!String.IsNullOrWhiteSpace(lineTwo))
       {
         retval.ContactName = lineOne;
         retval.Street = lineTwo;
@@ -642,7 +642,7 @@ namespace s2industries.ZUGFeRD
         TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(_nodeAsString(a_oXmlNode, "ram:TypeCode", a_nsmgr)),
         Name = _nodeAsString(a_oXmlNode, "ram:Name", a_nsmgr),
         IssueDateTime = _nodeAsDateTime(a_oXmlNode, "ram:FormattedIssueDateTime/qdt:DateTimeString", a_nsmgr),
-        AttachmentBinaryObject = !string.IsNullOrEmpty(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
+        AttachmentBinaryObject = !string.IsNullOrWhiteSpace(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
         Filename = _nodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject/@filename", a_nsmgr),
         ReferenceTypeCode = default(ReferenceTypeCodes).FromString(_nodeAsString(a_oXmlNode, "ram:ReferenceTypeCode", a_nsmgr))
       };

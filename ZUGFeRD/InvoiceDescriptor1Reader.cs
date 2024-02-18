@@ -124,7 +124,7 @@ namespace s2industries.ZUGFeRD
                 _deliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableSupplyChainTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr);
             }
 
-            if (_deliveryNoteDate.HasValue || !String.IsNullOrEmpty(_deliveryNoteNo))
+            if (_deliveryNoteDate.HasValue || !String.IsNullOrWhiteSpace(_deliveryNoteNo))
             {
                 retval.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
                 {
@@ -424,7 +424,7 @@ namespace s2industries.ZUGFeRD
             string lineOne = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineOne", nsmgr);
             string lineTwo = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineTwo", nsmgr);
 
-            if (!String.IsNullOrEmpty(lineTwo))
+            if (!String.IsNullOrWhiteSpace(lineTwo))
             {
                 retval.ContactName = lineOne;
                 retval.Street = lineOne;

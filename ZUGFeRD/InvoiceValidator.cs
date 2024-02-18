@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD
         {
             List<string> output = Validate(descriptor);
 
-            if (!String.IsNullOrEmpty(filename))
+            if (!String.IsNullOrWhiteSpace(filename))
             {
                 System.IO.File.WriteAllText(filename, string.Join("\n", output));
             }

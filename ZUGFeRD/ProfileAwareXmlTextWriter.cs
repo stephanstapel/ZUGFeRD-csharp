@@ -96,11 +96,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // write value
-            if (!String.IsNullOrEmpty(prefix))
+            if (!String.IsNullOrWhiteSpace(prefix))
             {
                 this.TextWriter?.WriteStartElement(prefix, localName, ns);
             }
-            else if (!String.IsNullOrEmpty(ns))
+            else if (!String.IsNullOrWhiteSpace(ns))
             {
                 this.TextWriter?.WriteStartElement(localName, ns);
             }
@@ -135,11 +135,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // write value
-            if (!String.IsNullOrEmpty(prefix))
+            if (!String.IsNullOrWhiteSpace(prefix))
             {
                 this.TextWriter?.WriteElementString(prefix, localName, ns, value);
             }
-            else if (!String.IsNullOrEmpty(ns))
+            else if (!String.IsNullOrWhiteSpace(ns))
             {
                 this.TextWriter?.WriteElementString(localName, ns, value);
             }
@@ -185,11 +185,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // write value
-            if (!String.IsNullOrEmpty(prefix))
+            if (!String.IsNullOrWhiteSpace(prefix))
             {
                 this.TextWriter?.WriteAttributeString(prefix, localName, ns, value);
             }
-            else if (!String.IsNullOrEmpty(ns))
+            else if (!String.IsNullOrWhiteSpace(ns))
             {
                 this.TextWriter?.WriteAttributeString(localName, ns, value);
             }
