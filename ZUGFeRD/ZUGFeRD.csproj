@@ -30,7 +30,8 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>12.5.0: various bugfixes
+    <PackageReleaseNotes>12.6.0: XRechnung 3 enthancements, refactoring
+12.5.0: various bugfixes
 12.4.0: additional ElectronicAddressSchemeIdentifiers
 12.3.1: bug fix for all party types
 12.3.0: enhanced standard conformance for all party types</PackageReleaseNotes>
