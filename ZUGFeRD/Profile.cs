@@ -73,7 +73,12 @@ namespace s2industries.ZUGFeRD
         /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770).
         /// Important note: using this profile will generate a version 1 XRechnung (as valid until 31/12/2020)
         /// </summary>
-        XRechnung1 = 64
+        XRechnung1 = 64,
+
+        /// <summary>
+        /// The e-reporting 
+        /// </summary>
+        EReporting = 128,
     }
 
 
@@ -113,6 +118,7 @@ namespace s2industries.ZUGFeRD
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2": return Profile.XRechnung;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3": return Profile.XRechnung;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0": return Profile.XRechnung;
+                case "urn.cpro.gouv.fr:1p0:ereporting" : return Profile.EReporting;
             }
 
             return Profile.Unknown;
@@ -161,6 +167,7 @@ namespace s2industries.ZUGFeRD
                                     return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3";
                                 }
                             }
+                        case Profile.EReporting: return "urn.cpro.gouv.fr:1p0:ereporting";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    
                 default:
