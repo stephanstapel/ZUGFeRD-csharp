@@ -76,7 +76,10 @@ namespace s2industries.ZUGFeRD
         XRechnung1 = 64,
 
         /// <summary>
-        /// The e-reporting 
+        /// The e-reporting (https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration)
+        /// concern companies subject to VAT in France and trading with private individuals and, more generally, non-taxable persons 
+        /// (business to consumer or BtoC), with companies not established on French territory (i.e. taxable persons who do not have 
+        /// an establishment, domicile or habitual residence in France).
         /// </summary>
         EReporting = 128,
     }
