@@ -37,6 +37,24 @@ namespace ZUGFeRD_Test
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
         [TestMethod]
+        public void TestReferenceEReportingFacturXInvoice()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EREPORTING-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Assert.AreEqual(desc.Profile, Profile.EReporting);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+            Assert.AreEqual(desc.InvoiceNo, "471102");
+            Assert.AreEqual(desc.TradeLineItems.Count, 0);
+            Assert.AreEqual(desc.LineTotalAmount, 0.0m); // not present in file
+            Assert.AreEqual(desc.TaxBasisAmount, 198.0m);
+        } 
+        
+        [TestMethod]
         public void TestReferenceBasicFacturXInvoice()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
@@ -53,7 +71,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.LineTotalAmount, 198.0m);
         } // !TestReferenceBasicFacturXInvoice()
 
-
+        
         [TestMethod]
         public void TestStoringReferenceBasicFacturXInvoice()
         {
@@ -401,6 +419,21 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.Profile, Profile.XRechnung);
         } // !TestXRechnung2()
 
+
+        [TestMethod]
+        public void TestCreateInvoice_WithProfileEReporting()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.EReporting);
+            Assert.AreEqual(desc.Profile, Profile.EReporting);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Profile, Profile.EReporting);
+        } // !TestCreateInvoice_WithProfileEReporting()
 
         [TestMethod]
         public void TestContractReferencedDocumentWithXRechnung()
