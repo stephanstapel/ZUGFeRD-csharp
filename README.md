@@ -229,7 +229,7 @@ For reading and writing XRechnung invoices, please see below.
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
 
 ```csharp
-descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as XRechnung 2.0
+descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
 ```
 
 This will save the invoice as XRechnung 3.0.1 as valid from 2024/02/01.
@@ -274,6 +274,21 @@ Please note that there are only few mime types supported by the XRechnung standa
 - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 - application/vnd.oasis.opendocument.spreadsheet
 - application/xml
+
+# Support for E-Reporting
+For french companies, a dedicated profile exists called E-Reporting. This profile is implemented on top of XRechnung/ Factur-X. It is used when transactions are done to customers who don't make use of VAT. One example are private customers (in B2C scenarios). The other example is when selling to entities beyond France.
+More information can be found here: https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration (french)
+And here: https://www.roedl.de/themen/frankreich-e-invoice-reporting-umsatzsteuer-digital (german)
+
+Thanks to @Athilla, this profile is also supported by ZUGFeRD-csharp.
+
+The information that is written into the invoice descriptor is identical to standard XRechnung/ Factur-X invoices, you just need to adjust the profile:
+
+```csharp
+descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.EReporting);
+```
+
+This information needs to be sent to the tax authorities. Different due dates apply for implementation for different sizes of companies.
 
 # Support for profiles
 The library contains support for all profiles that are supported by the ZUGFeRD formats:
