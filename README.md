@@ -280,7 +280,7 @@ For french companies, a dedicated profile exists called E-Reporting. This profil
 More information can be found here: https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration (french)
 And here: https://www.roedl.de/themen/frankreich-e-invoice-reporting-umsatzsteuer-digital (german)
 
-Thanks to @Athilla, this profile is also supported by ZUGFeRD-csharp.
+Thanks to [@Athilla](https://github.com/Athilla), this profile is also supported by ZUGFeRD-csharp.
 
 The information that is written into the invoice descriptor is identical to standard XRechnung/ Factur-X invoices, you just need to adjust the profile:
 
@@ -328,10 +328,8 @@ https://stackoverflow.com/a/37804285
 # Writing xml attachments to pdf files
 It is also possible to add the xml ZUGFeRD or XRechnung attachment to pdf files using itextsharp.
 You find information about this here:
-
 https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-a-pdf-with-itextsharp
 
-(thanks @floace2000ace)
 
 # Thanks
 * The solution is used in CKS.DMS and supported by CKSolution: 
