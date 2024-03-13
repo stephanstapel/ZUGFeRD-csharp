@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net480</TargetFrameworks>
-    <Version>12.7.0</Version>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
+    <Version>12.8.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
@@ -22,7 +22,7 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2023</Copyright>
-    <AssemblyVersion>12.7.0</AssemblyVersion>
+    <AssemblyVersion>12.8.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
     <FileVersion>12.7.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -30,7 +30,8 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>12.7.0: Support for EReporting, bugfixes
+    <PackageReleaseNotes>12.8.0: Added more targets
+12.7.0: Support for EReporting, bugfixes
 12.6.0: XRechnung 3 enthancements, refactoring
 12.5.0: various bugfixes
 12.4.0: additional ElectronicAddressSchemeIdentifiers
