@@ -24,7 +24,7 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <Copyright>Stephan Stapel, s2 industries, 2023</Copyright>
     <AssemblyVersion>12.8.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>12.7.0</FileVersion>
+    <FileVersion>12.8.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
