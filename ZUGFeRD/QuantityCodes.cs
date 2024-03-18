@@ -26,7 +26,11 @@ namespace s2industries.ZUGFeRD
     /// <summary>
     /// ISO Quantity Codes
     /// 
-    /// for web reference, see e.g.
+    /// Official reference:
+    /// https://unece.org/trade/uncefact/cl-recommendations
+    /// (Rec 20)
+    /// 
+    /// See ee also
     /// http://www.robert-kuhlemann.de/iso_masseinheiten.htm
     /// </summary>
     public enum QuantityCodes
@@ -57,7 +61,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Hektar
         /// Abkürzung: ha
-        /// </summary>
+        /// </summary>        
         HAR,
 
         /// <summary>
@@ -160,6 +164,7 @@ namespace s2industries.ZUGFeRD
         /// Anzahl Paare
         /// Abkürzung: Pr.
         /// </summary>
+        [Obsolete("This enum will be removed in the next major version. Please use PR instead")]
         NPR,
 
         /// <summary>
@@ -173,6 +178,15 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         [Obsolete("Does not conform to ZUGFeRD standard. Use H87 ('piece') or C62 ('one') instead")]
         PCE,
+
+        /// <summary>
+        /// Paar
+        /// Pair
+        /// </summary>
+        /// <remarks>
+        /// A unit of count defining the number of pairs (pair: item described by two's).
+        /// </remarks>
+        PR,
 
         /// <summary>
         /// Set
@@ -230,15 +244,7 @@ namespace s2industries.ZUGFeRD
         /// Karton
         /// Abkürzung: Kt
         /// </summary>
-        XCT,
-
-        /// <summary>
-        /// Paar
-        /// </summary>
-        /// <remarks>
-        /// A unit of count defining the number of pairs (pair: item described by two's).
-        /// </remarks>
-        PR,
+        XCT,        
 
         /// <summary>
         /// Palette
@@ -285,8 +291,62 @@ namespace s2industries.ZUGFeRD
         /// <remarks>
         /// 100 m^2
         /// </remarks>
-        FF
+        FF,
 
+        /// <summary>
+        /// Rolle
+        /// </summary>
+        XRO,
+
+        /// <summary>
+        /// Dose
+        /// </summary>
+        XTN,
+
+        /// <summary>
+        /// Kanister
+        /// </summary>
+        XCI,
+
+        /// <summary>
+        /// Tube
+        /// </summary>
+        XTU,
+
+        /// <summary>
+        /// Beutel
+        /// </summary>
+        XBG,
+
+        /// <summary>
+        /// (Papier) Bogen
+        /// </summary>
+        XST,
+
+        /// <summary>
+        /// Sack
+        /// </summary>
+        XSA,
+
+        /// <summary>
+        /// Fass
+        /// </summary>
+        XBA,
+
+        /// <summary>
+        /// Eimer
+        /// </summary>
+        XBJ,
+
+        /// <summary>
+        /// Gramm
+        /// </summary>
+        GRM,
+
+        /// <summary>
+        /// Kit
+        /// </summary>
+        KT
     }
 
 
