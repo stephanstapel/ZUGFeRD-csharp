@@ -574,6 +574,10 @@ namespace s2industries.ZUGFeRD
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
                     _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
+                    if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
+                    {
+                        _total /= tradeLineItem.UnitQuantity.Value;
+                    }
                 }
 
                 _writeElementWithAttribute(Writer, "ram:LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));

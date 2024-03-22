@@ -1760,9 +1760,9 @@ namespace ZUGFeRD_Test
                                                       billedQuantity: 50,
                                                       taxType: TaxTypes.VAT,
                                                       categoryCode: TaxCategoryCodes.S,
-                                                      taxPercent: 7
+                                                      taxPercent: 7,
+                                                      unitQuantity: 10
                                                       );
-            tli.UnitQuantity = 10;
             MemoryStream ms = new MemoryStream();
 
             desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);

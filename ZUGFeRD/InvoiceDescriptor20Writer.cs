@@ -351,6 +351,10 @@ namespace s2industries.ZUGFeRD
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
                     _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
+                    if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
+                    {
+                        _total /= tradeLineItem.UnitQuantity.Value;
+                    }
                 }
 
                 Writer.WriteElementString("ram:LineTotalAmount", _formatDecimal(_total));
