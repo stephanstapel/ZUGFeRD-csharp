@@ -1709,5 +1709,76 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.Invoicee, null);
         } // !TestAltteilSteuer()
 
+        [TestMethod]
+        public void TestBasisQuantityStandard()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems.Clear();
+            desc.AddTradeLineItem(name: "Joghurt Banane",
+                                  unitCode: QuantityCodes.H87,
+                                  sellerAssignedID: "ARNR2",
+                                  id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
+                                  grossUnitPrice: 5.5m,
+                                  netUnitPrice: 5.5m,
+                                  billedQuantity: 50,
+                                  taxType: TaxTypes.VAT,
+                                  categoryCode: TaxCategoryCodes.S,
+                                  taxPercent: 7
+                                  );
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(ms);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+
+            XmlNode node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
+            Assert.AreEqual("275.00", node.InnerText);
+        } // !TestBasisQuantityStandard()
+
+
+        [TestMethod]
+        public void TestBasisQuantityMultiple()
+        {
+            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems.Clear();
+            TradeLineItem tli = desc.AddTradeLineItem(name: "Joghurt Banane",
+                                                      unitCode: QuantityCodes.H87,
+                                                      sellerAssignedID: "ARNR2",
+                                                      id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4000050986428"),
+                                                      grossUnitPrice: 5.5m,
+                                                      netUnitPrice: 5.5m,
+                                                      billedQuantity: 50,
+                                                      taxType: TaxTypes.VAT,
+                                                      categoryCode: TaxCategoryCodes.S,
+                                                      taxPercent: 7
+                                                      );
+            tli.UnitQuantity = 10;
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(ms);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+
+            XmlNode node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
+            Assert.AreEqual("27.50", node.InnerText);
+        } // !TestBasisQuantityMultiple()
     }
 }
