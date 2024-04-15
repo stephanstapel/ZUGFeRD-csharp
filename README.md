@@ -92,7 +92,7 @@ desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers
 The fields are only necessary if you want to send the x-rechnung via the Peppol network.
 A description of the fields can be found in the following documents:
 
-https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.1.0-2020-03-11.pdf
+[https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.1.0-2020-03-11.pdf](https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.2.0-2023-06-19.pdf)
 
 https://www.ferd-net.de/upload/Dokumente/FACTUR-X_ZUGFeRD_2p0_Teil1_Profil_EN16931_1p03.pdf
 
