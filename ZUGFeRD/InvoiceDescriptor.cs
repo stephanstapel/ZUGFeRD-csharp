@@ -745,7 +745,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="lineTotalAmount">Gesamtbetrag der Positionen</param>
         /// <param name="chargeTotalAmount">Gesamtbetrag der Zuschläge</param>
-        /// <param name="allowanceTotalAmount">Gesamtbetrag der Abschläge</param>
+        /// <param name="allowanceTotalAmount">Gesamtbetrag der Gutschriften</param>
         /// <param name="taxBasisAmount">Basisbetrag der Steuerberechnung</param>
         /// <param name="taxTotalAmount">Steuergesamtbetrag</param>
         /// <param name="grandTotalAmount">Bruttosumme</param>
