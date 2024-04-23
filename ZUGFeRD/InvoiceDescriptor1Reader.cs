@@ -384,15 +384,6 @@ namespace s2industries.ZUGFeRD
                 );
             }
 
-            if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedSupplyChainTradeAgreement/ram:ContractReferencedDocument/ram:ID", nsmgr) != null)
-            {
-                item.ContractReferencedDocument = new ContractReferencedDocument()
-                {
-                    ID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeAgreement/ram:ContractReferencedDocument/ram:ID", nsmgr),
-                    IssueDateTime = _nodeAsDateTime(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeAgreement/ram:ContractReferencedDocument/ram:IssueDateTime", nsmgr),
-                };
-            }
-
             return item;
         } // !_parseTradeLineItem()
 
