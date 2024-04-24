@@ -147,17 +147,18 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.TradeLineItems.Count, 6);
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
 
-            foreach (TradeAllowanceCharge charge in desc.TradeAllowanceCharges)
+            IList<TradeAllowanceCharge> _tradeAllowanceCharges = desc.GetTradeAllowanceCharges();
+            foreach (TradeAllowanceCharge charge in _tradeAllowanceCharges)
             {
                 Assert.AreEqual(charge.Tax.TypeCode, TaxTypes.VAT);
                 Assert.AreEqual(charge.Tax.CategoryCode, TaxCategoryCodes.S);
             }
 
-            Assert.AreEqual(desc.TradeAllowanceCharges.Count, 4);
-            Assert.AreEqual(desc.TradeAllowanceCharges[0].Tax.Percent, 19m);
-            Assert.AreEqual(desc.TradeAllowanceCharges[1].Tax.Percent, 7m);
-            Assert.AreEqual(desc.TradeAllowanceCharges[2].Tax.Percent, 19m);
-            Assert.AreEqual(desc.TradeAllowanceCharges[3].Tax.Percent, 7m);
+            Assert.AreEqual(_tradeAllowanceCharges.Count, 4);
+            Assert.AreEqual(_tradeAllowanceCharges[0].Tax.Percent, 19m);
+            Assert.AreEqual(_tradeAllowanceCharges[1].Tax.Percent, 7m);
+            Assert.AreEqual(_tradeAllowanceCharges[2].Tax.Percent, 19m);
+            Assert.AreEqual(_tradeAllowanceCharges[3].Tax.Percent, 7m);
 
             Assert.AreEqual(desc.ServiceCharges.Count, 1);
             Assert.AreEqual(desc.ServiceCharges[0].Tax.TypeCode, TaxTypes.VAT);
@@ -1510,7 +1511,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.BillingPeriodEnd);
 
             //TradeAllowanceCharges
-            var tradeAllowanceCharge = loadedInvoice.TradeAllowanceCharges.FirstOrDefault(i => i.Reason == "Reason for charge");
+            var tradeAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
             Assert.IsNotNull(tradeAllowanceCharge);
             Assert.IsTrue(tradeAllowanceCharge.ChargeIndicator);
             Assert.AreEqual("Reason for charge", tradeAllowanceCharge.Reason);
@@ -1602,7 +1603,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("987654", accountingAccount.TradeAccountID);
 
 
-            var lineItemTradeAllowanceCharge = loadedLineItem.TradeAllowanceCharges.FirstOrDefault(i => i.Reason == "Reason: UnitTest");
+            var lineItemTradeAllowanceCharge = loadedLineItem.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason: UnitTest");
             Assert.IsNotNull(lineItemTradeAllowanceCharge);
             Assert.IsTrue(lineItemTradeAllowanceCharge.ChargeIndicator);
             Assert.AreEqual(10m, lineItemTradeAllowanceCharge.BasisAmount);

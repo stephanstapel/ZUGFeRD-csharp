@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
         /// The global identifier of the article is a globally unique identifier of the product being assigned to it by its
         /// producer, bases on the rules of a global standardisation body.
         /// </summary>
-        public GlobalID GlobalID { get; set; }
+        public GlobalID GlobalID { get; set; } = new GlobalID();
 
         /// <summary>
         /// An identification of the item assigned by the seller.
@@ -147,36 +147,24 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Details of an additional document reference
         /// </summary>
-        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; } = new List<AdditionalReferencedDocument>();
 
-        /// <summary>
+        /// <summary>       
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
+        /// 
+        /// Now private. Please use GetTradeAllowanceCharges() instead
         /// </summary>
-        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+        private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information on the accounting reference
         /// </summary>
-        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; }
+        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
 
         /// <summary>
         /// Additional product information
         /// </summary>
-        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; }
-
-        /// <summary>
-        /// Initializes a new/ empty trade line item
-        /// </summary>
-        public TradeLineItem()
-        {
-            this.NetUnitPrice = decimal.MinValue;
-            this.GrossUnitPrice = decimal.MinValue;
-            this.GlobalID = new GlobalID();
-            this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
-            this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
-            this.ReceivableSpecifiedTradeAccountingAccounts = new List<ReceivableSpecifiedTradeAccountingAccount>();
-            this.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>();
-        }
+        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; } = new List<ApplicableProductCharacteristic>();
 
 
         /// <summary>
@@ -189,7 +177,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="reason">Reason for the allowance or surcharge</param>
         public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
         {
-            this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Currency = currency,
@@ -198,6 +186,16 @@ namespace s2industries.ZUGFeRD
                 Reason = reason
             });
         } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// Returns all trade allowance charges for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<TradeAllowanceCharge> GetTradeAllowanceCharges()
+        {
+            return this._TradeAllowanceCharges;
+        } // !GetTradeAllowanceCharges()
 
 
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)

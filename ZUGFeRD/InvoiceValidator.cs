@@ -98,7 +98,7 @@ namespace s2industries.ZUGFeRD
             retval.Add("Adding tax amounts from invoice allowance charge...");
 
             decimal allowanceTotal = 0.0m;
-            foreach (TradeAllowanceCharge charge in descriptor.TradeAllowanceCharges)
+            foreach (TradeAllowanceCharge charge in descriptor.GetTradeAllowanceCharges())
             {
                 retval.Add(String.Format("==> added {0:0.00} to {1:0.00}%", -charge.Amount, charge.Tax.Percent));
 
@@ -149,7 +149,7 @@ namespace s2industries.ZUGFeRD
             }
 
             decimal _allowanceTotal = 0m;
-            foreach(TradeAllowanceCharge allowance in descriptor.TradeAllowanceCharges)
+            foreach(TradeAllowanceCharge allowance in descriptor.GetTradeAllowanceCharges())
             {
                 _allowanceTotal += allowance.ActualAmount;
             }
