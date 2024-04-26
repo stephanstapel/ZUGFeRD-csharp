@@ -640,9 +640,6 @@ namespace s2industries.ZUGFeRD
         retval.Street = "";
       }
 
-      // TODO: Find value //retval.AddressLine3 = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineThree", nsmgr);
-      // TODO: Find value //retval.CountrySubdivisionName = _nodeAsString(node, "ram:PostalTradeAddress/ram:CountrySubDivisionName", nsmgr);
-
       return retval;
     } // !_nodeAsParty()
     private static Party _nodeAsAddressParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
