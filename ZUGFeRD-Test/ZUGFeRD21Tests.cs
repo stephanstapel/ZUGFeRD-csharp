@@ -1781,5 +1781,48 @@ namespace ZUGFeRD_Test
             XmlNode node = doc.SelectSingleNode("//ram:SpecifiedTradeSettlementLineMonetarySummation//ram:LineTotalAmount", nsmgr);
             Assert.AreEqual("27.50", node.InnerText);
         } // !TestBasisQuantityMultiple()
+
+
+        [TestMethod]
+        public void TestTradeAllowanceChargeWithoutExplicitPercentage()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            // fake values, does not matter for our test case
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, "", TaxTypes.VAT, TaxCategoryCodes.S, 19);
+
+            MemoryStream ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Position = 0;
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
+
+            Assert.IsTrue(allowanceCharges.Count == 1);
+            Assert.AreEqual(allowanceCharges[0].BasisAmount, 100m);
+            Assert.AreEqual(allowanceCharges[0].Amount, 10m);
+            Assert.AreEqual(allowanceCharges[0].ChargePercentage, null);
+        } // !TestTradeAllowanceChargeWithoutExplicitPercentage()
+
+
+        [TestMethod]
+        public void TestTradeAllowanceChargeWithExplicitPercentage()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            // fake values, does not matter for our test case
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, "", TaxTypes.VAT, TaxCategoryCodes.S, 19);
+
+            MemoryStream ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version21, Profile.Extended);
+            ms.Position = 0;
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
+
+            Assert.IsTrue(allowanceCharges.Count == 1);
+            Assert.AreEqual(allowanceCharges[0].BasisAmount, 100m);
+            Assert.AreEqual(allowanceCharges[0].Amount, 10m);
+            Assert.AreEqual(allowanceCharges[0].ChargePercentage, 12);
+        } // !TestTradeAllowanceChargeWithExplicitPercentage()
     }
 }
