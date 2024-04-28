@@ -728,12 +728,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Base amount (basis of allowance)</param>
         /// <param name="currency">Curency of the allowance</param>
         /// <param name="actualAmount">Actual allowance charge amount</param>
-        /// <param name="chargePercentage">Actual allowance charge amount</param>
+        /// <param name="chargePercentage">Actual allowance charge percentage</param>
         /// <param name="reason">Reason for the allowance</param>
         /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {

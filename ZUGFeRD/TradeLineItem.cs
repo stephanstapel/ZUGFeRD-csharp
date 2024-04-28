@@ -175,7 +175,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, string reason)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -183,6 +183,29 @@ namespace s2industries.ZUGFeRD
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
+                Reason = reason
+            });
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// As an allowance or charge on item level, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, decimal? chargePercentage, string reason)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = !isDiscount,
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                ChargePercentage = chargePercentage,
                 Reason = reason
             });
         } // !AddTradeAllowanceCharge()

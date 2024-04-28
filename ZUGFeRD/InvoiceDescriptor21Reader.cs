@@ -301,10 +301,10 @@ namespace s2industries.ZUGFeRD
       foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))
       {
         retval.AddTradeAllowanceCharge(!_nodeAsBool(node, ".//ram:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
-                                       _nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, null).Value,
+                                       _nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
                                        retval.Currency,
                                        _nodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
-                                       _nodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr, null).Value,
+                                       _nodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr),
                                        _nodeAsString(node, ".//ram:Reason", nsmgr),
                                        default(TaxTypes).FromString(_nodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                        default(TaxCategoryCodes).FromString(_nodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
@@ -521,17 +521,18 @@ namespace s2industries.ZUGFeRD
       foreach (XmlNode appliedTradeAllowanceChargeNode in appliedTradeAllowanceChargeNodes)
       {
         bool chargeIndicator = _nodeAsBool(appliedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
-        decimal basisAmount = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, null).Value;
+        decimal? basisAmount = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, null);
         string basisAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
         decimal actualAmount = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;
         string actualAmountCurrency = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
         string reason = _nodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
-        decimal chargePercentage = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:CalculationPercent", nsmgr, null).Value;
+        decimal? chargePercentage = _nodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:CalculationPercent", nsmgr, null);
 
         item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                     default(CurrencyCodes).FromString(basisAmountCurrency),
                                     basisAmount,
                                     actualAmount,
+                                    chargePercentage,
                                     reason);
       }
 
