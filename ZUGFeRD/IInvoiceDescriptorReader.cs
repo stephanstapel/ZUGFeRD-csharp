@@ -137,7 +137,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         ///  reads the value from given xpath and interprets the value as decimal
         /// </summary>
-        protected static decimal? _nodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal? defaultValue = null)
+        protected static decimal? _nodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal? defaultValue = default(decimal?))
         {
             if (node == null)
             {
