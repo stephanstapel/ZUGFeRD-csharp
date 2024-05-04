@@ -32,6 +32,10 @@ namespace s2industries.ZUGFeRD
     /// 
     /// See ee also
     /// http://www.robert-kuhlemann.de/iso_masseinheiten.htm
+    /// 
+    /// Rec 21 source:
+    /// https://docs.peppol.eu/poacc/billing/3.0/codelist/UNECERec20/
+    /// (starting with X, length of 3)
     /// </summary>
     public enum QuantityCodes
     {
@@ -244,7 +248,7 @@ namespace s2industries.ZUGFeRD
         /// Karton
         /// Abkürzung: Kt
         /// </summary>
-        XCT,        
+        XCT,
 
         /// <summary>
         /// Palette
@@ -346,7 +350,13 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Kit
         /// </summary>
-        KT
+        KT,
+
+        /// <summary>
+        /// Piece
+        /// A loose or unpacked article.
+        /// </summary>
+        XPP
     }
 
 

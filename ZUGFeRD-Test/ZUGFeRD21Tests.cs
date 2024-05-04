@@ -52,8 +52,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.TradeLineItems.Count, 0);
             Assert.AreEqual(desc.LineTotalAmount, 0.0m); // not present in file
             Assert.AreEqual(desc.TaxBasisAmount, 198.0m);
-        } 
-        
+        }
+
         [TestMethod]
         public void TestReferenceBasicFacturXInvoice()
         {
@@ -71,7 +71,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.LineTotalAmount, 198.0m);
         } // !TestReferenceBasicFacturXInvoice()
 
-        
+
         [TestMethod]
         public void TestStoringReferenceBasicFacturXInvoice()
         {
@@ -1666,7 +1666,7 @@ namespace ZUGFeRD_Test
                                   unitCode: QuantityCodes.C62,
                                   unitQuantity: 1,
                                   billedQuantity: 1,
-                                  netUnitPrice: 1000,   
+                                  netUnitPrice: 1000,
                                   taxType: TaxTypes.VAT,
                                   categoryCode: TaxCategoryCodes.S,
                                   taxPercent: 19);
@@ -1692,7 +1692,7 @@ namespace ZUGFeRD_Test
             desc.AddApplicableTradeTax(basisAmount: 1000,
                                        percent: 19,
                                        TaxTypes.VAT,
-                                       TaxCategoryCodes.S);                                      
+                                       TaxCategoryCodes.S);
 
             desc.SetTotals(lineTotalAmount: 1500m,
                      taxBasisAmount: 1500m,
@@ -1705,7 +1705,7 @@ namespace ZUGFeRD_Test
 
             desc.Save(ms, ZUGFeRDVersion.Version21, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
-            
+
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.Invoicee, null);
         } // !TestAltteilSteuer()
@@ -1824,5 +1824,87 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(allowanceCharges[0].Amount, 10m);
             Assert.AreEqual(allowanceCharges[0].ChargePercentage, 12);
         } // !TestTradeAllowanceChargeWithExplicitPercentage()
+
+
+        [TestMethod]
+        public void TestReferenceXRechnung21UBL()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+
+            Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
+            Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 6, 21));
+            Assert.AreEqual(desc.PaymentReference, "0815-99-1-a");
+            Assert.AreEqual(desc.OrderNo, "0815-99-1");
+            Assert.AreEqual(desc.Currency, CurrencyCodes.EUR);
+
+            Assert.AreEqual(desc.Buyer.Name, "Rechnungs Roulette GmbH & Co KG");
+            Assert.AreEqual(desc.Buyer.City, "Klein Schlappstadt a.d. Lusche");
+            Assert.AreEqual(desc.Buyer.Postcode, "12345");
+            Assert.AreEqual(desc.Buyer.Country, (CountryCodes)276);
+            Assert.AreEqual(desc.Buyer.Street, "Beispielgasse 17b");
+            Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette GmbH & Co KG");
+
+            Assert.AreEqual(desc.BuyerContact.Name, "Manfred Mustermann");
+            Assert.AreEqual(desc.BuyerContact.EmailAddress, "manfred.mustermann@rr.de");
+            Assert.AreEqual(desc.BuyerContact.PhoneNo, "012345 98 765 - 44");
+
+            Assert.AreEqual(desc.Seller.Name, "Harry Hirsch Holz- und Trockenbau");
+            Assert.AreEqual(desc.Seller.City, "Klein Schlappstadt a.d. Lusche");
+            Assert.AreEqual(desc.Seller.Postcode, "12345");
+            Assert.AreEqual(desc.Seller.Country, (CountryCodes)276);
+            Assert.AreEqual(desc.Seller.Street, "Beispielgasse 17a");
+            Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch Holz- und Trockenbau");
+
+            Assert.AreEqual(desc.SellerContact.Name, "Harry Hirsch");
+            Assert.AreEqual(desc.SellerContact.EmailAddress, "harry.hirsch@hhhtb.de");
+            Assert.AreEqual(desc.SellerContact.PhoneNo, "012345 78 657 - 8");
+
+            Assert.AreEqual(desc.TradeLineItems.Count, 2);
+
+            Assert.AreEqual(desc.TradeLineItems[0].SellerAssignedID, "0815");
+            Assert.AreEqual(desc.TradeLineItems[0].Name, "Leimbinder");
+            Assert.AreEqual(desc.TradeLineItems[0].Description, "Leimbinder 2x18m; Birke");
+            Assert.AreEqual(desc.TradeLineItems[0].BilledQuantity, 1);
+            Assert.AreEqual(desc.TradeLineItems[0].LineTotalAmount, 1245.98m);
+            Assert.AreEqual(desc.TradeLineItems[0].TaxPercent, 19);
+
+            Assert.AreEqual(desc.TradeLineItems[1].SellerAssignedID, "MON");
+            Assert.AreEqual(desc.TradeLineItems[1].Name, "Montage");
+            Assert.AreEqual(desc.TradeLineItems[1].Description, "Montage durch Fachpersonal");
+            Assert.AreEqual(desc.TradeLineItems[1].BilledQuantity, 1);
+            Assert.AreEqual(desc.TradeLineItems[1].LineTotalAmount, 200.00m);
+            Assert.AreEqual(desc.TradeLineItems[1].TaxPercent, 7);
+
+            Assert.AreEqual(desc.LineTotalAmount, 1445.98m);
+            Assert.AreEqual(desc.TaxTotalAmount, 250.74m);
+            Assert.AreEqual(desc.GrandTotalAmount, 1696.72m);
+            Assert.AreEqual(desc.DuePayableAmount, 1696.72m);
+
+            Assert.AreEqual(desc.Taxes[0].TaxAmount, 236.7362m);
+            Assert.AreEqual(desc.Taxes[0].BasisAmount, 1245.98m);
+            Assert.AreEqual(desc.Taxes[0].Percent, 19);
+            Assert.AreEqual(desc.Taxes[0].TypeCode, (TaxTypes)53);
+            Assert.AreEqual(desc.Taxes[0].CategoryCode, (TaxCategoryCodes)19);
+
+            Assert.AreEqual(desc.Taxes[1].TaxAmount, 14.0000m);
+            Assert.AreEqual(desc.Taxes[1].BasisAmount, 200.00m);
+            Assert.AreEqual(desc.Taxes[1].Percent, 7);
+            Assert.AreEqual(desc.Taxes[1].TypeCode, (TaxTypes)53);
+            Assert.AreEqual(desc.Taxes[1].CategoryCode, (TaxCategoryCodes)19);
+
+            Assert.AreEqual(desc.PaymentTerms.DueDate, new DateTime(2020, 6, 21));
+
+            Assert.AreEqual(desc.CreditorBankAccounts[0].IBAN, "DE12500105170648489890");
+            Assert.AreEqual(desc.CreditorBankAccounts[0].BIC, "INGDDEFFXXX");
+            Assert.AreEqual(desc.CreditorBankAccounts[0].Name, "Harry Hirsch");
+
+            Assert.AreEqual(desc.PaymentMeans.TypeCode, (PaymentMeansTypeCodes)30);
+        } // !TestReferenceXRechnung21UBL()
     }
 }
