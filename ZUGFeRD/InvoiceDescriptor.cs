@@ -329,6 +329,12 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
+            reader = new InvoiceDescriptor21UblReader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return ZUGFeRDVersion.Version21;
+            }
+
             reader = new InvoiceDescriptor21Reader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
@@ -360,6 +366,12 @@ namespace s2industries.ZUGFeRD
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return ZUGFeRDVersion.Version1;
+            }
+
+            reader = new InvoiceDescriptor21UblReader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return ZUGFeRDVersion.Version21;
             }
 
             reader = new InvoiceDescriptor21Reader();
@@ -396,6 +408,12 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
+            reader = new InvoiceDescriptor21UblReader();
+            if (reader.IsReadableByThisReaderVersion(stream))
+            {
+                return reader.Load(stream);
+            }
+
             reader = new InvoiceDescriptor21Reader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
@@ -424,6 +442,12 @@ namespace s2industries.ZUGFeRD
         public static InvoiceDescriptor Load(string filename)
         {
             IInvoiceDescriptorReader reader = new InvoiceDescriptor1Reader();
+            if (reader.IsReadableByThisReaderVersion(filename))
+            {
+                return reader.Load(filename);
+            }
+
+            reader = new InvoiceDescriptor21UblReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
