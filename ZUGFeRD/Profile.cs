@@ -151,6 +151,7 @@ namespace s2industries.ZUGFeRD
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 20");
                     }
                 case ZUGFeRDVersion.Version21:
+                case ZUGFeRDVersion.Version22:
                     switch (profile)
                     {
                         case Profile.Minimum: return "urn:factur-x.eu:1p0:minimum";

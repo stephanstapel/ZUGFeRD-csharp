@@ -330,16 +330,16 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
-            reader = new InvoiceDescriptor21UblReader();
+            reader = new InvoiceDescriptor22UblReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
-                return ZUGFeRDVersion.Version21;
+                return ZUGFeRDVersion.Version22;
             }
 
-            reader = new InvoiceDescriptor21Reader();
+            reader = new InvoiceDescriptor22Reader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
-                return ZUGFeRDVersion.Version21;
+                return ZUGFeRDVersion.Version22;
             }
 
             reader = new InvoiceDescriptor20Reader();
@@ -369,16 +369,16 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
-            reader = new InvoiceDescriptor21UblReader();
+            reader = new InvoiceDescriptor22UblReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
-                return ZUGFeRDVersion.Version21;
+                return ZUGFeRDVersion.Version22;
             }
 
-            reader = new InvoiceDescriptor21Reader();
+            reader = new InvoiceDescriptor22Reader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
-                return ZUGFeRDVersion.Version21;
+                return ZUGFeRDVersion.Version22;
             }
 
             reader = new InvoiceDescriptor20Reader();
@@ -409,13 +409,13 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            reader = new InvoiceDescriptor21UblReader();
+            reader = new InvoiceDescriptor22UblReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return reader.Load(stream);
             }
 
-            reader = new InvoiceDescriptor21Reader();
+            reader = new InvoiceDescriptor22Reader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return reader.Load(stream);
@@ -448,13 +448,13 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            reader = new InvoiceDescriptor21UblReader();
+            reader = new InvoiceDescriptor22UblReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
             }
 
-            reader = new InvoiceDescriptor21Reader();
+            reader = new InvoiceDescriptor22Reader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
@@ -882,8 +882,8 @@ namespace s2industries.ZUGFeRD
                     return new InvoiceDescriptor1Writer();
                 case ZUGFeRDVersion.Version20:
                     return new InvoiceDescriptor20Writer();
-                case ZUGFeRDVersion.Version21:
-                    return new InvoiceDescriptor21Writer();
+                case ZUGFeRDVersion.Version22:
+                    return new InvoiceDescriptor22Writer();
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
