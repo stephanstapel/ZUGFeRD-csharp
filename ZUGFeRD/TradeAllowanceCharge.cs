@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD
 {
@@ -49,26 +50,33 @@ namespace s2industries.ZUGFeRD
         /// 
         /// In case of a discount (BG-27) the value of the ChargeIndicators has to be "false". In case of a surcharge (BG-28) the value of the ChargeIndicators has to be "true".
         /// </summary>
-        public bool ChargeIndicator { get; set; }
+        public bool ChargeIndicator { get; internal set; }
 
         /// <summary>
         /// The reason for the surcharge or discount in written form
         /// </summary>
-        public string Reason { get; set; }
+        public string Reason { get; internal set; }
 
         /// <summary>
         /// The base amount that may be used in conjunction with the percentage of the invoice line discount to calculate the amount of the invoice line discount
         /// </summary>
-        public decimal BasisAmount { get; set; }
+        public decimal? BasisAmount { get; internal set; }
 
         /// <summary>
         /// Currency that is used for representing BasisAmount and ActualAmount
         /// </summary>
-        public CurrencyCodes Currency { get; set; }
+        public CurrencyCodes Currency { get; internal set; }
 
         /// <summary>
         /// The amount of the discount / surcharge or discount without VAT
         /// </summary>
-        public decimal ActualAmount { get; set; }
+        public decimal ActualAmount { get; internal set; }
+
+        /// <summary>
+        /// The percentage that may be used in conjunction with the document level discount base amount, to calculate the
+        /// document level discount amount.
+        /// BT-101
+        /// </summary>
+        public decimal? ChargePercentage { get; internal set; }
     }
 }

@@ -251,9 +251,10 @@ namespace s2industries.ZUGFeRD
         public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
 
         /// <summary>
-        /// Detailed information on discounts and charges
+        /// Detailed information on discounts and charges.
+        /// This field is marked as private now, please use GetTradeAllowanceCharges() to retrieve all trade allowance charges
         /// </summary>
-        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
+        private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information about payment terms               
@@ -721,9 +722,9 @@ namespace s2industries.ZUGFeRD
         /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
-            this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Reason = reason,
@@ -731,6 +732,7 @@ namespace s2industries.ZUGFeRD
                 ActualAmount = actualAmount,
                 Currency = currency,
                 Amount = actualAmount,
+                ChargePercentage = null,
                 Tax = new Tax()
                 {
                     CategoryCode = taxCategoryCode,
@@ -739,6 +741,51 @@ namespace s2industries.ZUGFeRD
                 }
             });
         } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// Adds an allowance or charge on document level.
+        /// 
+        /// Allowance represents a discount whereas charge represents a surcharge.
+        /// </summary>
+        /// <param name="isDiscount">Marks if the allowance charge is a discount. Please note that in contrary to this function, the xml file indicated a surcharge, not a discount (value will be inverted)</param>
+        /// <param name="basisAmount">Base amount (basis of allowance)</param>
+        /// <param name="currency">Curency of the allowance</param>
+        /// <param name="actualAmount">Actual allowance charge amount</param>
+        /// <param name="chargePercentage">Actual allowance charge percentage</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxPercent">VAT rate for the allowance</param>
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = !isDiscount,
+                Reason = reason,
+                BasisAmount = basisAmount,
+                ActualAmount = actualAmount,
+                Currency = currency,
+                Amount = actualAmount,
+                ChargePercentage = chargePercentage,
+                Tax = new Tax()
+                {
+                    CategoryCode = taxCategoryCode,
+                    TypeCode = taxTypeCode,
+                    Percent = taxPercent
+                }
+            });
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// Returns all existing trade allowance charges
+        /// </summary>
+        /// <returns></returns>
+        public IList<TradeAllowanceCharge> GetTradeAllowanceCharges()
+        {
+            return this._TradeAllowanceCharges;
+        } // !GetTradeAllowanceCharges()
 
 
         public void SetTradePaymentTerms(string description, DateTime? dueDate = null)

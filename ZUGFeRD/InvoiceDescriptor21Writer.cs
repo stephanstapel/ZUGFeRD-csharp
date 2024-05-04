@@ -260,7 +260,7 @@ namespace s2industries.ZUGFeRD
 
                     #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)                 
                     // BT-148
-                    if (tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.TradeAllowanceCharges.Count > 0))
+                    if (tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.GetTradeAllowanceCharges().Count > 0))
                     {
                         Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
@@ -269,7 +269,7 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                         }
 
-                        foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.TradeAllowanceCharges)
+                        foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.GetTradeAllowanceCharges())
                         {
                             Writer.WriteStartElement("ram:AppliedTradeAllowanceCharge");
 
@@ -279,16 +279,37 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement(); // !ram:ChargeIndicator
                             #endregion
 
+                            #region ChargePercentage
+                            if (tradeAllowanceCharge.ChargePercentage.HasValue)
+                            {
+                                Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung); 
+                                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
+                                Writer.WriteEndElement();
+                            }
+                            #endregion
+
                             #region BasisAmount
-                            Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
-                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount, 2));
-                            Writer.WriteEndElement();
+                            if (tradeAllowanceCharge.BasisAmount.HasValue)
+                            {
+                                Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
+                                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 2));
+                                Writer.WriteEndElement();
+                            }
                             #endregion
 
                             #region ActualAmount
                             Writer.WriteStartElement("ram:ActualAmount");
                             Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                             Writer.WriteEndElement();
+                            #endregion
+
+                            #region ChargePercentage
+                            if (tradeAllowanceCharge.ChargePercentage.HasValue)
+                            {
+                                Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung);
+                                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
+                                Writer.WriteEndElement();
+                            }
                             #endregion
 
                             Writer.WriteOptionalElementString("ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
@@ -809,18 +830,29 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             //  13. SpecifiedTradeAllowanceCharge (optional)
-            if ((this.Descriptor.TradeAllowanceCharges != null) && (this.Descriptor.TradeAllowanceCharges.Count > 0))
+            IList<TradeAllowanceCharge> _allowanceCharges = this.Descriptor.GetTradeAllowanceCharges();
+            if (_allowanceCharges?.Count > 0)
             {
-                foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.TradeAllowanceCharges)
+                foreach (TradeAllowanceCharge tradeAllowanceCharge in _allowanceCharges)
                 {
                     Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
                     Writer.WriteStartElement("ram:ChargeIndicator");
                     Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                     Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-                    Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
-                    Writer.WriteEndElement();
+                    if (tradeAllowanceCharge.ChargePercentage.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value));
+                        Writer.WriteEndElement();
+                    }
+
+                    if (tradeAllowanceCharge.BasisAmount.HasValue)
+                    {
+                        Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value));
+                        Writer.WriteEndElement();
+                    }
 
                     Writer.WriteStartElement("ram:ActualAmount");
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
@@ -1036,7 +1068,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
-            if (value.HasValue && (value.Value != decimal.MinValue))
+            if (value.HasValue)
             {
                 writer.WriteStartElement(tagName, profile);
                 if (forceCurrency)
