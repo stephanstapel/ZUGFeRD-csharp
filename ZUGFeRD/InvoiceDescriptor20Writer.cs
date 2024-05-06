@@ -203,27 +203,24 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
                 }
 
-                if (tradeLineItem.AdditionalReferencedDocuments != null)
+                foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                 {
-                    foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
+                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                    if (document.IssueDateTime.HasValue)
                     {
-                        Writer.WriteStartElement("ram:AdditionalReferencedDocument");
-                        if (document.IssueDateTime.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                            Writer.WriteStartElement("qdt:DateTimeString");
-                            Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
-                            Writer.WriteEndElement(); // !qdt:DateTimeString
-                            Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
-                        }
+                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                        Writer.WriteStartElement("qdt:DateTimeString");
+                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
+                        Writer.WriteEndElement(); // !qdt:DateTimeString
+                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                    }
 
-                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
-                        Writer.WriteOptionalElementString("ram:IssuerAssignedID", document.ID);
-                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+                    Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
+                    Writer.WriteOptionalElementString("ram:IssuerAssignedID", document.ID);
+                    Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
 
-                        Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                    } // !foreach(document)
-                }
+                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                } // !foreach(document)
 
                 Writer.WriteStartElement("ram:GrossPriceProductTradePrice");
                 _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, numDecimals: 4, forceCurrency: false);
@@ -651,64 +648,58 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             //  13. SpecifiedTradeAllowanceCharge (optional)
-            if ((this.Descriptor.GetTradeAllowanceCharges() != null) && (this.Descriptor.GetTradeAllowanceCharges().Count > 0))
+            foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.GetTradeAllowanceCharges())
             {
-                foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.GetTradeAllowanceCharges())
+                Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
+                Writer.WriteStartElement("ram:ChargeIndicator");
+                Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+                if (tradeAllowanceCharge.BasisAmount.HasValue)
                 {
-                    Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
-                    Writer.WriteStartElement("ram:ChargeIndicator");
-                    Writer.WriteElementString("udt:Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                    Writer.WriteEndElement(); // !ram:ChargeIndicator
-
-                    if (tradeAllowanceCharge.BasisAmount.HasValue)
-                    {
-                        Writer.WriteStartElement("ram:BasisAmount");
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value));
-                        Writer.WriteEndElement();
-                    }
-
-                    Writer.WriteStartElement("ram:ActualAmount");
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
-                    Writer.WriteEndElement();
-
-
-                    Writer.WriteOptionalElementString("ram:Reason", tradeAllowanceCharge.Reason);
-
-                    if (tradeAllowanceCharge.Tax != null)
-                    {
-                        Writer.WriteStartElement("ram:CategoryTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
-                        if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
-                        Writer.WriteEndElement();
-                    }
+                    Writer.WriteStartElement("ram:BasisAmount");
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value));
                     Writer.WriteEndElement();
                 }
+
+                Writer.WriteStartElement("ram:ActualAmount");
+                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
+                Writer.WriteEndElement();
+
+
+                Writer.WriteOptionalElementString("ram:Reason", tradeAllowanceCharge.Reason);
+
+                if (tradeAllowanceCharge.Tax != null)
+                {
+                    Writer.WriteStartElement("ram:CategoryTradeTax");
+                    Writer.WriteElementString("ram:TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
+                    if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
+                        Writer.WriteElementString("ram:CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString());
+                    Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
+                    Writer.WriteEndElement();
+                }
+                Writer.WriteEndElement();
             }
 
             //  14. SpecifiedLogisticsServiceCharge (optional)
-            if ((this.Descriptor.ServiceCharges != null) && (this.Descriptor.ServiceCharges.Count > 0))
+            foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
             {
-                foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
+                Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge");
+                if (!String.IsNullOrWhiteSpace(serviceCharge.Description))
                 {
-                    Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge");
-                    if (!String.IsNullOrWhiteSpace(serviceCharge.Description))
-                    {
-                        Writer.WriteElementString("ram:Description", serviceCharge.Description);
-                    }
-                    Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
-                    if (serviceCharge.Tax != null)
-                    {
-                        Writer.WriteStartElement("ram:AppliedTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
-                        if (serviceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
-                        Writer.WriteEndElement();
-                    }
+                    Writer.WriteElementString("ram:Description", serviceCharge.Description);
+                }
+                Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
+                if (serviceCharge.Tax != null)
+                {
+                    Writer.WriteStartElement("ram:AppliedTradeTax");
+                    Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
+                    if (serviceCharge.Tax.CategoryCode.HasValue)
+                        Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
+                    Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
                     Writer.WriteEndElement();
                 }
+                Writer.WriteEndElement();
             }
 
             //  15. SpecifiedTradePaymentTerms (optional)

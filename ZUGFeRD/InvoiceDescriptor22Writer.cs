@@ -234,28 +234,25 @@ namespace s2industries.ZUGFeRD
                     #region AdditionalReferencedDocument (Extended)
 
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz                        
-                    if (tradeLineItem.AdditionalReferencedDocuments != null)
+                    foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                     {
-                        foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
+                        Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
+                        if (document.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
-                            if (document.IssueDateTime.HasValue)
-                            {
-                                Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                                Writer.WriteStartElement("qdt:DateTimeString");
-                                Writer.WriteAttributeString("format", "102");
-                                Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
-                                Writer.WriteEndElement(); // !udt:DateTimeString
-                                Writer.WriteEndElement(); // !ram:IssueDateTime
-                            }
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("qdt:DateTimeString");
+                            Writer.WriteAttributeString("format", "102");
+                            Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
+                            Writer.WriteEndElement(); // !udt:DateTimeString
+                            Writer.WriteEndElement(); // !ram:IssueDateTime
+                        }
 
-                            Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
-                            Writer.WriteOptionalElementString("ram:IssuerAssignedID", document.ID);
-                            Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
+                        Writer.WriteOptionalElementString("ram:IssuerAssignedID", document.ID);
+                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
 
-                            Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                        } // !foreach(document)
-                    }
+                        Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                    } // !foreach(document)
                     #endregion
 
                     #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)                 
@@ -875,24 +872,21 @@ namespace s2industries.ZUGFeRD
             }
 
             //  14. SpecifiedLogisticsServiceCharge (optional)
-            if ((this.Descriptor.ServiceCharges != null) && (this.Descriptor.ServiceCharges.Count > 0))
+            foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
             {
-                foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
+                Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                Writer.WriteOptionalElementString("ram:Description", serviceCharge.Description);
+                Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
+                if (serviceCharge.Tax != null)
                 {
-                    Writer.WriteStartElement("ram:SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
-                    Writer.WriteOptionalElementString("ram:Description", serviceCharge.Description);
-                    Writer.WriteElementString("ram:AppliedAmount", _formatDecimal(serviceCharge.Amount));
-                    if (serviceCharge.Tax != null)
-                    {
-                        Writer.WriteStartElement("ram:AppliedTradeTax");
-                        Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
-                        if (serviceCharge.Tax.CategoryCode.HasValue)
-                            Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
-                        Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
-                        Writer.WriteEndElement();
-                    }
+                    Writer.WriteStartElement("ram:AppliedTradeTax");
+                    Writer.WriteElementString("ram:TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
+                    if (serviceCharge.Tax.CategoryCode.HasValue)
+                        Writer.WriteElementString("ram:CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
+                    Writer.WriteElementString("ram:RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
                     Writer.WriteEndElement();
                 }
+                Writer.WriteEndElement();
             }
 
             //  15. SpecifiedTradePaymentTerms (optional)

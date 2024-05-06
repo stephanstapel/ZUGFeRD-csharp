@@ -248,7 +248,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Transport and packaging costs
         /// </summary>
-        public List<ServiceCharge> ServiceCharges { get; set; } = new List<ServiceCharge>();
+        public List<ServiceCharge> ServiceCharges { get; internal set; } = new List<ServiceCharge>();
 
         /// <summary>
         /// Detailed information on discounts and charges.
