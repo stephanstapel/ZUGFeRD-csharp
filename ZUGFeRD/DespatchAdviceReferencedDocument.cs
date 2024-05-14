@@ -24,7 +24,7 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
-    /// Structure containing detailed information about the corresponding delivery note
+    /// Structure containing detailed information about the corresponding despatch advice
     /// </summary>
     public class DespatchAdviceReferencedDocument : BaseReferencedDocument
     {
