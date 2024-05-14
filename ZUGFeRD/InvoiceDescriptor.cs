@@ -65,7 +65,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Detailed information about the corresponding despatch advice
         /// </summary>
-        public DespatchAdviceReferencedDocument DespatchAdviceReferencedDocument { get; set; } = null;
+        public DespatchAdviceReferencedDocument DespatchAdviceReferencedDocument { get; internal set; } = null;
 
         /// <summary>
         /// Detailed information about the corresponding delivery note
