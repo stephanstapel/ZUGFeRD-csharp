@@ -1889,7 +1889,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.GrandTotalAmount, 1696.72m);
             Assert.AreEqual(desc.DuePayableAmount, 1696.72m);
 
-            Assert.AreEqual(desc.Taxes[0].TaxAmount, 236.7362m);
+            Assert.AreEqual(desc.Taxes[0].TaxAmount, 236.74m);
             Assert.AreEqual(desc.Taxes[0].BasisAmount, 1245.98m);
             Assert.AreEqual(desc.Taxes[0].Percent, 19);
             Assert.AreEqual(desc.Taxes[0].TypeCode, (TaxTypes)53);
