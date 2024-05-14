@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD
         {
             get
             {
-                return 0.01m * this.Percent * this.BasisAmount;
+                return System.Math.Round(0.01m * this.Percent * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
             }
         }
 
