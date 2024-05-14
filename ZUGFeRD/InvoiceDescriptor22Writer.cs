@@ -646,6 +646,26 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
+            #region DespatchAdviceReferencedDocument
+            if(this.Descriptor.DespatchAdviceReferencedDocument != null)
+            {
+                Writer.WriteStartElement("ram:DespatchAdviceReferencedDocument");
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.DespatchAdviceReferencedDocument.ID);
+
+                if (this.Descriptor.DespatchAdviceReferencedDocument.IssueDateTime.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.DespatchAdviceReferencedDocument.IssueDateTime.Value));
+                    Writer.WriteEndElement(); // "qdt:DateTimeString
+                    Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                }
+
+                Writer.WriteEndElement(); // !DespatchAdviceReferencedDocument
+            }
+            #endregion
+
             #region DeliveryNoteReferencedDocument
             if (this.Descriptor.DeliveryNoteReferencedDocument != null)
             {

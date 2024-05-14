@@ -1909,5 +1909,22 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual(desc.PaymentMeans.TypeCode, (PaymentMeansTypeCodes)30);
         } // !TestReferenceXRechnung21UBL()
+
+        [TestMethod]
+        public void TestWriteAndReadDespatchAdviceDocumentReferenceXRechnung()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            string despatchAdviceNo = "421567982";
+            DateTime despatchAdviceDate = new DateTime(2024, 5, 14);
+            desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(despatchAdviceNo, loadedInvoice.DespatchAdviceReferencedDocument.ID);
+            Assert.AreEqual(despatchAdviceDate, loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime);
+        } //!TestWriteAndReadDespatchAdviceDocumentReference
     }
 }

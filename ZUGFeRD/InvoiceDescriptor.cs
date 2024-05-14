@@ -63,6 +63,11 @@ namespace s2industries.ZUGFeRD
         public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; internal set; } = new List<AdditionalReferencedDocument>();
 
         /// <summary>
+        /// Detailed information about the corresponding despatch advice
+        /// </summary>
+        public DespatchAdviceReferencedDocument DespatchAdviceReferencedDocument { get; internal set; } = null;
+
+        /// <summary>
         /// Detailed information about the corresponding delivery note
         /// </summary>
         public DeliveryNoteReferencedDocument DeliveryNoteReferencedDocument { get; set; } = null;
@@ -664,6 +669,19 @@ namespace s2industries.ZUGFeRD
             this.OrderDate = orderDate;
         } // !SetBuyerOrderReferenceDocument()
 
+        /// <summary>
+        /// Sets detailed information about the corresponding despatch advice
+        /// </summary>
+        /// <param name="deliveryNoteNo"></param>
+        /// <param name="deliveryNoteDate"></param>
+        public void SetDespatchAdviceReferencedDocument(string despatchAdviceNo, DateTime? despatchAdviceDate = null)
+        {
+            this.DespatchAdviceReferencedDocument = new DespatchAdviceReferencedDocument()
+            {
+                ID = despatchAdviceNo,
+                IssueDateTime = despatchAdviceDate
+            };
+        } // !SetDespatchAdviceReferencedDocument()
 
         /// <summary>
         /// Sets detailed information about the corresponding delivery note
