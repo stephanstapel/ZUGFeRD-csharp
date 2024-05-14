@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -46,13 +47,7 @@ namespace s2industries.ZUGFeRD
 
         protected string _formatDecimal(decimal value, int numDecimals = 2)
         {
-            string formatString = "0.";
-            for (int i = 0; i < numDecimals; i++)
-            {
-                formatString += "0";
-            }
-
-            return value.ToString(formatString).Replace(",", ".");
+            return Math.Round(value, numDecimals).ToString(CultureInfo.InvariantCulture);
         } // !_formatDecimal()
 
 
