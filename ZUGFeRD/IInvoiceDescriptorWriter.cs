@@ -47,7 +47,7 @@ namespace s2industries.ZUGFeRD
 
         protected string _formatDecimal(decimal value, int numDecimals = 2)
         {
-            return Math.Round(value, numDecimals).ToString($"N{numDecimals}", CultureInfo.InvariantCulture);
+            return Math.Round(value, numDecimals).ToString($"F{numDecimals}", CultureInfo.InvariantCulture);
         } // !_formatDecimal()
 
 
