@@ -279,7 +279,7 @@ namespace s2industries.ZUGFeRD
                             #region ChargePercentage
                             if (tradeAllowanceCharge.ChargePercentage.HasValue)
                             {
-                                Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung); 
+                                Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung);
                                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
                                 Writer.WriteEndElement();
                             }
@@ -428,11 +428,11 @@ namespace s2industries.ZUGFeRD
                 }
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
-                    _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;                    
+                    _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
                     if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
                     {
                         _total /= tradeLineItem.UnitQuantity.Value;
-                    }       
+                    }
                 }
 
                 Writer.WriteStartElement("ram:LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
@@ -647,7 +647,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region DespatchAdviceReferencedDocument
-            if(this.Descriptor.DespatchAdviceReferencedDocument != null)
+            if (this.Descriptor.DespatchAdviceReferencedDocument != null)
             {
                 Writer.WriteStartElement("ram:DespatchAdviceReferencedDocument");
                 Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.DespatchAdviceReferencedDocument.ID);
@@ -1366,15 +1366,12 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
-                writer.WriteElementString("ram:PostcodeCode", party.Postcode); // BT-53
-                writer.WriteElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // BT-50
-                if (!string.IsNullOrWhiteSpace(party.ContactName))
-                {
-                    writer.WriteElementString("ram:LineTwo", party.Street); // BT-51
-                }
-                
+                writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // BT-53
+                writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // BT-50
+                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // BT-51
+
                 writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // BT-163                
-                writer.WriteElementString("ram:CityName", party.City); // BT-52
+                writer.WriteOptionalElementString("ram:CityName", party.City); // BT-52
                 writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // BT-55
                 writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
@@ -1425,7 +1422,7 @@ namespace s2industries.ZUGFeRD
             writer.WriteStartElement(contactTag, profile);
 
             writer.WriteOptionalElementString("ram:PersonName", contact.Name);
-            writer.WriteOptionalElementString("ram:DepartmentName", contact.OrgUnit);            
+            writer.WriteOptionalElementString("ram:DepartmentName", contact.OrgUnit);
 
             if (!String.IsNullOrWhiteSpace(contact.PhoneNo))
             {
