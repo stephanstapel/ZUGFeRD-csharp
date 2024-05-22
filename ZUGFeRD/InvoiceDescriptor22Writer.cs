@@ -847,8 +847,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             //  13. SpecifiedTradeAllowanceCharge (optional)
-            IList<TradeAllowanceCharge> _allowanceCharges = this.Descriptor.GetTradeAllowanceCharges();
-            foreach (TradeAllowanceCharge tradeAllowanceCharge in _allowanceCharges)
+            foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.GetTradeAllowanceCharges())
             {
                 Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge");
                 Writer.WriteStartElement("ram:ChargeIndicator");
