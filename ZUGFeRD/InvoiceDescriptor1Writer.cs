@@ -74,7 +74,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("udt:Indicator", this.Descriptor.IsTest ? "true" : "false");
             Writer.WriteEndElement(); // !ram:TestIndicator
 
-            if (!String.IsNullOrWhiteSpace(this.Descriptor.BusinessProcess)) 
+            if (!String.IsNullOrWhiteSpace(this.Descriptor.BusinessProcess))
             {
                 Writer.WriteStartElement("ram:BusinessProcessSpecifiedDocumentContextParameter", Profile.Extended);
                 Writer.WriteElementString("ram:ID", this.Descriptor.BusinessProcess, Profile.Extended);
@@ -132,9 +132,9 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
             }
 
-            
-            foreach(AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
-            {                 
+
+            foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
+            {
                 Writer.WriteStartElement("ram:AdditionalReferencedDocument");
                 if (document.IssueDateTime.HasValue)
                 {
@@ -717,14 +717,17 @@ namespace s2industries.ZUGFeRD
             {
                 writer.WriteStartElement(PartyTag);
 
-                if (Party.ID != null) {
-                    if (!String.IsNullOrWhiteSpace(Party.ID.ID) && (Party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)) {
+                if (Party.ID != null)
+                {
+                    if (!String.IsNullOrWhiteSpace(Party.ID.ID) && (Party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+                    {
                         writer.WriteStartElement("ram:ID");
                         writer.WriteAttributeString("schemeID", Party.ID.SchemeID.EnumToString());
                         writer.WriteValue(Party.ID.ID);
                         writer.WriteEndElement();
                     }
-                    else {
+                    else
+                    {
                         writer.WriteElementString("ram:ID", Party.ID.ID);
                     }
                 }
@@ -740,13 +743,10 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("ram:Name", Party.Name);
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", Contact);
                 writer.WriteStartElement("ram:PostalTradeAddress");
-                writer.WriteElementString("ram:PostcodeCode", Party.Postcode);
-                writer.WriteElementString("ram:LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
-                if (!string.IsNullOrWhiteSpace(Party.ContactName))
-                {
-                    writer.WriteElementString("ram:LineTwo", Party.Street);
-                }
-                writer.WriteElementString("ram:CityName", Party.City);
+                writer.WriteOptionalElementString("ram:PostcodeCode", Party.Postcode);
+                writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
+                if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", Party.Street); }
+                writer.WriteOptionalElementString("ram:CityName", Party.City);
                 writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
                 writer.WriteEndElement(); // !PostalTradeAddress
 
