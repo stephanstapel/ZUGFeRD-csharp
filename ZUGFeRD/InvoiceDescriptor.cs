@@ -1004,6 +1004,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="grossUnitPrice"></param>
         /// <param name="netUnitPrice"></param>
         /// <param name="billedQuantity"></param>
+        /// <param name="lineTotalAmount">net total including discounts and surcharges. This parameter is optional. If it is not filled, the line total amount is automatically calculated based on netUnitPrice and billedQuantity</param>
         /// <param name="taxType"></param>
         /// <param name="categoryCode"></param>
         /// <param name="taxPercent"></param>
@@ -1025,6 +1026,7 @@ namespace s2industries.ZUGFeRD
                                      decimal? grossUnitPrice = null,
                                      decimal? netUnitPrice = null,
                                      decimal billedQuantity = 0,
+                                     decimal? lineTotalAmount = null,
                                      TaxTypes taxType = TaxTypes.Unknown,
                                      TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
                                      decimal taxPercent = 0,
@@ -1043,6 +1045,7 @@ namespace s2industries.ZUGFeRD
                              grossUnitPrice: grossUnitPrice,
                              netUnitPrice: netUnitPrice,
                              billedQuantity: billedQuantity,
+                             lineTotalAmount: lineTotalAmount,
                              taxType: taxType,
                              categoryCode: categoryCode,
                              taxPercent: taxPercent,
@@ -1072,6 +1075,7 @@ namespace s2industries.ZUGFeRD
                                      decimal? grossUnitPrice = null,
                                      decimal? netUnitPrice = null,
                                      decimal billedQuantity = 0,
+                                     decimal? lineTotalAmount = null,
                                      TaxTypes taxType = TaxTypes.Unknown,
                                      TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
                                      decimal taxPercent = 0,
@@ -1094,6 +1098,7 @@ namespace s2industries.ZUGFeRD
                 GrossUnitPrice = grossUnitPrice,
                 NetUnitPrice = netUnitPrice,
                 BilledQuantity = billedQuantity,
+                LineTotalAmount = lineTotalAmount,
                 TaxType = taxType,
                 TaxCategoryCode = categoryCode,
                 TaxPercent = taxPercent,

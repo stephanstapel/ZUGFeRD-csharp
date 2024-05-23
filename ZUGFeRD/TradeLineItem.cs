@@ -70,7 +70,7 @@ namespace s2industries.ZUGFeRD
         public decimal BilledQuantity { get; set; }
 
         /// <summary>
-        /// Invoice line net amount 
+        /// Invoice line net amount including (!) trade allowance charges for the line item
         /// BT-131
         /// </summary>
         public decimal? LineTotalAmount { get; set; }
