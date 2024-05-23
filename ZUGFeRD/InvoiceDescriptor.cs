@@ -248,7 +248,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// A group of business terms providing information about VAT breakdown by different categories, rates and exemption reasons
         /// </summary>
-        public List<Tax> Taxes { get; set; } = new List<Tax>();
+        public List<Tax> Taxes { get; internal set; } = new List<Tax>();
 
         /// <summary>
         /// Transport and packaging costs
