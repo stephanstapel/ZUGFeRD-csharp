@@ -1369,13 +1369,13 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
-                writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // BT-53
-                writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // BT-50
-                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // BT-51
+                writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
+                writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // buyer: BT-50
+                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
 
-                writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // BT-163                
-                writer.WriteOptionalElementString("ram:CityName", party.City); // BT-52
-                writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // BT-55
+                writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
+                writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
+                writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
                 writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
 
