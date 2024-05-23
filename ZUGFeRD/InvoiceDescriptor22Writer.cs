@@ -255,8 +255,22 @@ namespace s2industries.ZUGFeRD
                     } // !foreach(document)
                     #endregion
 
-                    #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)                    
-                    if (tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.GetTradeAllowanceCharges().Count > 0))
+                    #region GrossPriceProductTradePrice (Comfort, Extended, XRechnung)
+                    bool needToWriteGrossUnitPrice = false;
+
+                    // the PEPPOL business rule for XRechnung is very specific
+                    // PEPPOL-EN16931-R046
+                    if ((descriptor.Profile == Profile.XRechnung) && tradeLineItem.GrossUnitPrice.HasValue && (tradeLineItem.GetTradeAllowanceCharges().Count > 0))
+                    {
+                        needToWriteGrossUnitPrice = true;
+                    }
+                    else if ((descriptor.Profile != Profile.XRechnung) && ((tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.GetTradeAllowanceCharges().Count > 0))))
+                    {
+                        needToWriteGrossUnitPrice = true;
+                    }
+
+
+                    if (needToWriteGrossUnitPrice)
                     {
                         Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); 
                         _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 2);   // BT-148
