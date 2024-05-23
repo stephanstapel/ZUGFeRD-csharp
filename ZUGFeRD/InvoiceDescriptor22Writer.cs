@@ -300,15 +300,6 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement();
                             #endregion
 
-                            #region ChargePercentage
-                            if (tradeAllowanceCharge.ChargePercentage.HasValue)
-                            {
-                                Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung);
-                                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
-                                Writer.WriteEndElement();
-                            }
-                            #endregion
-
                             Writer.WriteOptionalElementString("ram:Reason", tradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
 
                             Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
