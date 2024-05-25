@@ -236,15 +236,6 @@ Make sure to also add a business process which is required starting with XRechnu
 desc.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
 ```
 
-
-If you want to store invoices which are validated successfully by the KoSIT validator before 2024/02/01, you can still write invoices in the old format:
-
-```csharp
-descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung1); // save as XRechnung 1.2
-```
-
-The content is 100% identical to XRechnung 2.3, just the headers will be different.
-
 Furthermore, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the xrechnung.xml document:
 
 ```csharp
