@@ -17,10 +17,6 @@ In particular, I am searching for sponsors for:
 The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor Factur-X. One special profile of Factur-X is the German XRechnung format.
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
-A description of the library can be found here:
-
-http://www.s2-industries.com/wordpress/2013/11/creating-zugferd-descriptors-with-c/
-
 # Relationship between the different standards
 Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
 
@@ -239,15 +235,6 @@ Make sure to also add a business process which is required starting with XRechnu
 ```csharp
 desc.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
 ```
-
-
-If you want to store invoices which are validated successfully by the KoSIT validator before 2024/02/01, you can still write invoices in the old format:
-
-```csharp
-descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung1); // save as XRechnung 1.2
-```
-
-The content is 100% identical to XRechnung 2.3, just the headers will be different.
 
 Furthermore, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the xrechnung.xml document:
 
