@@ -453,7 +453,7 @@ namespace s2industries.ZUGFeRD
 
         public static string EnumToString(this TaxExemptionReasonCodes codes)
         {
-            return codes.ToString("g").Replace("_","-");
+            return codes.ToString("g").ToUpperInvariant().Replace("_","-");
         } // !ToString()
     }
 }
