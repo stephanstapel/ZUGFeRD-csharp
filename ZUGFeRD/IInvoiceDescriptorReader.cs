@@ -187,6 +187,11 @@ namespace s2industries.ZUGFeRD
 
             string rawValue = dateNode.InnerText;
 
+            if (String.IsNullOrWhiteSpace(rawValue)) // we have to deal with real-life ZUGFeRD files :(
+            {
+                return null;
+            }
+
             switch (format)
             {
                 case "102":
