@@ -85,7 +85,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("ram:GuidelineSpecifiedDocumentContextParameter");
             //Gruppierung der Anwendungsempfehlungsinformationen
-            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version21));
+            Writer.WriteElementString("ram:ID", this.Descriptor.Profile.EnumToString(ZUGFeRDVersion.Version22));
             Writer.WriteEndElement(); // !ram:GuidelineSpecifiedDocumentContextParameter
             Writer.WriteEndElement(); // !rsm:ExchangedDocumentContext
             #endregion
@@ -356,7 +356,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteStartElement("qdt:DateTimeString");
                         Writer.WriteAttributeString("format", "102");
                         Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value));
-                        Writer.WriteEndElement(); // "qdt:DateTimeString
+                        Writer.WriteEndElement(); // !qdt:DateTimeString
                         Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                     }
 
@@ -797,7 +797,7 @@ namespace s2industries.ZUGFeRD
 
                 foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
                 {
-                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans");
+                    Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans"); // BG-16
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
