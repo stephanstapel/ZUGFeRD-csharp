@@ -347,7 +347,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
-                    Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                    Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-175 for XRechnung 3
                     Writer.WriteOptionalElementString("ram:IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
 
                     if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
@@ -365,12 +365,12 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.ActualDeliveryDate.HasValue)
                 {
-                    Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent");
+                    Writer.WriteStartElement("ram:ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung1)); // this violates CII-SR-170 for XRechnung 3
                     Writer.WriteStartElement("ram:OccurrenceDateTime");
                     Writer.WriteStartElement("udt:DateTimeString");
                     Writer.WriteAttributeString("format", "102");
                     Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
-                    Writer.WriteEndElement(); // "udt:DateTimeString
+                    Writer.WriteEndElement(); // !udt:DateTimeString
                     Writer.WriteEndElement(); // !OccurrenceDateTime()
                     Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
                 }
