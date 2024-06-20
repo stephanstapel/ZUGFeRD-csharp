@@ -746,7 +746,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+                        Writer.WriteOptionalElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
@@ -768,7 +768,7 @@ namespace s2industries.ZUGFeRD
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+                        Writer.WriteOptionalElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
@@ -802,7 +802,7 @@ namespace s2industries.ZUGFeRD
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
                         Writer.WriteElementString("ram:TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                        Writer.WriteElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
+                        Writer.WriteOptionalElementString("ram:Information", this.Descriptor.PaymentMeans.Information);
                     }
 
                     Writer.WriteStartElement("ram:PayerPartyDebtorFinancialAccount");
