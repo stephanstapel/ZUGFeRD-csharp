@@ -252,7 +252,7 @@ namespace s2industries.ZUGFeRD
                                              _nodeAsString(node, ".//ram:ExemptionReason", nsmgr));
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
             {
                 retval.AddTradeAllowanceCharge(!_nodeAsBool(node, ".//ram:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
                                                _nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
