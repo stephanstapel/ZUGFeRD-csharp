@@ -70,7 +70,7 @@ namespace s2industries.ZUGFeRD
         string _subjectCode = _nodeAsString(node, ".//ram:SubjectCode", nsmgr);
         SubjectCodes subjectCode = default(SubjectCodes).FromString(_subjectCode);
         string _contentCode = _nodeAsString(node, ".//ram:ContentCode", nsmgr);
-        SubjectCodes contentCode = default(ContentCodes).FromString(_contentCode);
+        ContentCodes contentCode = default(ContentCodes).FromString(_contentCode);
         retval.AddNote(content, subjectCode, contentCode);
       }
 
