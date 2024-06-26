@@ -68,7 +68,9 @@ namespace s2industries.ZUGFeRD
                 string content = _nodeAsString(node, ".//ram:Content", nsmgr);
                 string _subjectCode = _nodeAsString(node, ".//ram:SubjectCode", nsmgr);
                 SubjectCodes subjectCode = default(SubjectCodes).FromString(_subjectCode);
-                retval.AddNote(content, subjectCode);
+                string _contentCode = _nodeAsString(node, ".//ram:ContentCode", nsmgr);
+                SubjectCodes contentCode = default(ContentCodes).FromString(_contentCode);
+                retval.AddNote(content, subjectCode, contentCode);
             }
 
             retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerReference", nsmgr);
