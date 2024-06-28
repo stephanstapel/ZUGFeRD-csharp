@@ -531,7 +531,7 @@ namespace s2industries.ZUGFeRD
           item.AssociatedDocument.Notes.Add(new Note(
                       content: _nodeAsString(noteNode, ".//ram:Content", nsmgr),
                       subjectCode: default(SubjectCodes).FromString(_nodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
-                      contentCode: ContentCodes.Unknown
+                      contentCode: default(ContentCodes).FromString(_nodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
           ));
         }
       }
