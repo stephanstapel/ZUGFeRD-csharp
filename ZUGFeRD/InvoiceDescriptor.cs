@@ -716,6 +716,8 @@ namespace s2industries.ZUGFeRD
         /// The logistics service charge (ram:SpecifiedLogisticsServiceCharge) is part of the ZUGFeRD specification.
         /// Please note that it is not part of the XRechnung specification, thus, everything passed to this function will not
         /// be written when writing XRechnung format.
+        /// 
+        /// You might use AddTradeAllowanceCharge() instead.
         /// </summary>        
         public void AddLogisticsServiceCharge(decimal amount, string description, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
