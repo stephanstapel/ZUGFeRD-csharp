@@ -1231,18 +1231,16 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram:ID", legalOrganization.ID.ID);
                 }
-                if (!String.IsNullOrWhiteSpace(legalOrganization.TradingBusinessName))
+                
+
+                // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
+                if (((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
+                        ((partyType == PartyTypes.PayeeTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
+                        ((partyType == PartyTypes.BuyerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
+                        (this.Descriptor.Profile == Profile.Extended) /* remaining party types */
+                        )
                 {
-                    // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
-                    if (((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
-                            ((partyType == PartyTypes.PayeeTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
-                            ((partyType == PartyTypes.BuyerTradeParty) && (this.Descriptor.Profile == Profile.Comfort)) ||
-                            ((partyType == PartyTypes.BuyerTradeParty) && (this.Descriptor.Profile == Profile.Extended)) ||
-                            (this.Descriptor.Profile == Profile.Extended) /* remaining party types */
-                            )
-                    {
-                        writer.WriteElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
-                    }
+                    writer.WriteOptionalElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
                 }
             }
             writer.WriteEndElement();

@@ -186,7 +186,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason
             });
         } // !AddTradeAllowanceCharge()
-
+        
 
         /// <summary>
         /// As an allowance or charge on item level, attaching it to the corresponding item.
