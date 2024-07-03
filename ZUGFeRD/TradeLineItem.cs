@@ -242,7 +242,12 @@ namespace s2industries.ZUGFeRD
         } // !AddAdditionalReferencedDocument()
 
 
-        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
+
+		/// <summary>
+		/// Sets a purchase order line reference. BT-132
+		/// Please note that XRechnung/ FacturX allows a maximum of one such reference
+		/// </summary>
+		public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
@@ -265,7 +270,13 @@ namespace s2industries.ZUGFeRD
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
         }
-        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+
+
+		/// <summary>
+		/// Adds an invoice line Buyer accounting reference. BT-133
+        /// Please note that XRechnung/ FacturX allows a maximum of one such reference
+		/// </summary>
+		public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
