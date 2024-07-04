@@ -59,6 +59,25 @@ namespace s2industries.ZUGFeRD
         } // !IsReadableByThisReaderVersion()
 
 
+        protected XmlNamespaceManager _GenerateNamespaceManagerFromNode(XmlNode node)
+        {
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(node.OwnerDocument.NameTable);   
+            foreach (XmlAttribute attr in node.Attributes)
+            {
+                if (attr.Prefix == "xmlns")
+                {
+                    nsmgr.AddNamespace(attr.LocalName, attr.Value);
+                }
+                else if (attr.Name == "xmlns")
+                {
+                    nsmgr.AddNamespace(string.Empty, attr.Value);
+                }
+            }
+
+            return nsmgr;
+        } // !_GenerateNamespaceManagerFromNode()
+
+
         protected static bool _nodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
         {
             if (node == null)
