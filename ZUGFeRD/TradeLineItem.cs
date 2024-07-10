@@ -25,6 +25,9 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     ///  Structure holding item information
+    ///  
+    /// Please note that you might use the object that is returned from InvoiceDescriptor.AddTradeLineItem(...) and use it
+    /// to e.g. add an allowance charge using lineItem.AddTradeAllowanceCharge(...)
     /// </summary>
     public class TradeLineItem
     {
