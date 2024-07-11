@@ -498,7 +498,20 @@ namespace s2industries.ZUGFeRD
                             //TODO
                             break;
                         case "ram:SpecifiedTradeAllowanceCharge":
-                            //TODO
+                            bool chargeIndicator = _nodeAsBool(LineTradeSettlementNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
+                            decimal? basisAmount = _nodeAsDecimal(LineTradeSettlementNode, "./ram:BasisAmount", nsmgr, null);
+                            string basisAmountCurrency = _nodeAsString(LineTradeSettlementNode, "./ram:BasisAmount/@currencyID", nsmgr);
+                            decimal actualAmount = _nodeAsDecimal(LineTradeSettlementNode, "./ram:ActualAmount", nsmgr, 0).Value;
+                            string actualAmountCurrency = _nodeAsString(LineTradeSettlementNode, "./ram:ActualAmount/@currencyID", nsmgr);
+                            string reason = _nodeAsString(LineTradeSettlementNode, "./ram:Reason", nsmgr);
+                            decimal? chargePercentage = _nodeAsDecimal(LineTradeSettlementNode, "./ram:CalculationPercent", nsmgr, null);
+
+                            item.AddSpecifiedTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
+                                                        default(CurrencyCodes).FromString(basisAmountCurrency),
+                                                        basisAmount,
+                                                        actualAmount,
+                                                        chargePercentage,
+                                                        reason);
                             break;
                         case "ram:SpecifiedTradeSettlementLineMonetarySummation":
                             //TODO

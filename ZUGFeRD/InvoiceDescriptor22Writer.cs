@@ -439,9 +439,51 @@ namespace s2industries.ZUGFeRD
                 }
                 #endregion
 
-                #region SpecifiedTradeAllowanceCharge
-                //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended)               
-                //ToDo: SpecifiedTradeAllowanceCharge für Basic, Comfort und Extended
+                #region SpecifiedTradeAllowanceCharge (Basic, Comfort, Extended)
+                //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended)
+                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended }.Contains(descriptor.Profile))
+                {
+                    if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended);
+
+                        foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BT-147
+                        {
+                            #region ChargeIndicator
+                            Writer.WriteStartElement("ram:ChargeIndicator");
+                            Writer.WriteElementString("udt:Indicator", specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                            Writer.WriteEndElement(); // !ram:ChargeIndicator
+                            #endregion
+
+                            #region ChargePercentage
+                            if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
+                            {
+                                Writer.WriteStartElement("ram:CalculationPercent", profile: Profile.Extended | Profile.XRechnung);
+                                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage.Value, 2));
+                                Writer.WriteEndElement();
+                            }
+                            #endregion
+
+                            #region BasisAmount
+                            if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
+                            {
+                                Writer.WriteStartElement("ram:BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
+                                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount.Value, 2));
+                                Writer.WriteEndElement();
+                            }
+                            #endregion
+
+                            #region ActualAmount
+                            Writer.WriteStartElement("ram:ActualAmount");
+                            Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ActualAmount, 2));
+                            Writer.WriteEndElement();
+                            #endregion
+
+                            Writer.WriteOptionalElementString("ram:Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
+                        }
+                        Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
+                    }
+                }
                 #endregion
 
                 #region SpecifiedTradeSettlementLineMonetarySummation (Basic, Comfort, Extended)
