@@ -18,7 +18,9 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Cryptography;
+using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD
@@ -169,6 +171,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; } = new List<ApplicableProductCharacteristic>();
 
+        private List<DesignatedProductClassification> DesignedProductClassifications { get; set; } = new List<DesignatedProductClassification>();
+
 
         /// <summary>
         /// As an allowance or charge on item level, attaching it to the corresponding item.
@@ -287,5 +291,34 @@ namespace s2industries.ZUGFeRD
                 TradeAccountTypeCode = AccountTypeCode
             });
         }
+
+
+        /// <summary>
+        /// Adds a product classification
+        /// </summary>
+        /// <param name="classCode">Identifier of the item classification</param>
+        /// <param name="className">Classification name</param>
+        /// <param name="listID">Product classification name</param>
+        /// <param name="listVersionID">Version of product classification</param>
+        public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes classCode, string className, string listID = null, string listVersionID = null)
+        {
+            this.DesignedProductClassifications.Add(new DesignatedProductClassification()
+            {
+                ClassCode = classCode,
+                ClassName = className,
+                ListID = listID,
+                ListVersionID = listVersionID
+            });
+        } // !AddDesignatedProductClassification()
+
+
+        /// <summary>
+        /// Returns all existing designated product classifications
+        /// </summary>
+        /// <returns></returns>
+        public List<DesignatedProductClassification> GetDesignatedProductClassifications()
+        {
+            return this.DesignedProductClassifications;
+        } // !GetDesignatedProductClassifications()
     }
 }

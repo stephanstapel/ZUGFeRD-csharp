@@ -170,6 +170,28 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
+                if (tradeLineItem.GetDesignatedProductClassifications().Any())
+                {
+                    foreach(var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
+                    {
+                        Writer.WriteStartElement("ram:DesignatedProductClassification");
+                        Writer.WriteOptionalElementString("ram:ClassName", designatedProductClassification.ClassName);
+
+                        if (designatedProductClassification.ClassCode.HasValue)
+                        {
+                            Writer.WriteStartElement("ram::ClassCode");
+                            if (!String.IsNullOrWhiteSpace(designatedProductClassification.ListID))
+                            {
+                                Writer.WriteAttributeString("listID", designatedProductClassification.ListID);
+                                Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
+                            }
+                            Writer.WriteValue(designatedProductClassification.ClassCode.Value.ToString());
+                            Writer.WriteEndElement(); // !ram::ClassCode                                
+                        }
+                        Writer.WriteEndElement(); // !ram:DesignatedProductClassification
+                    }
+                }
+
                 Writer.WriteEndElement(); // !ram:SpecifiedTradeProduct(Basic|Comfort|Extended|XRechnung)
                 #endregion
 

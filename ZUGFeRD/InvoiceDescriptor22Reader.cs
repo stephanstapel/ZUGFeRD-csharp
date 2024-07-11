@@ -24,6 +24,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD
@@ -585,6 +586,16 @@ namespace s2industries.ZUGFeRD
             {
                 item.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
             }
+
+            foreach(XmlNode designatedProductClassificationNode in tradeLineItem.SelectNodes(".//ram:DesignatedProductClassification", nsmgr))
+            {
+                string className = _nodeAsString(designatedProductClassificationNode, ".//ram:ClassName", nsmgr);
+                DesignatedProductClassificationClassCodes classCode = default(DesignatedProductClassificationClassCodes).FromString(_nodeAsString(designatedProductClassificationNode, ".//ram:ClassCode", nsmgr));
+                string listID = _nodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listID", nsmgr);
+                string listVersionID = _nodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listVersionID", nsmgr);
+
+                item.AddDesignatedProductClassification(classCode, className, listID, listVersionID);
+            } // !foreach(designatedProductClassificationNode))
 
             return item;
         } // !_parseTradeLineItem()        
