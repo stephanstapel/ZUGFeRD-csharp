@@ -138,18 +138,20 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMea
                     }
 
-                    Writer.WriteStartElement("ram:PayeePartyCreditorFinancialAccount");
-                    Writer.WriteElementString("ram:IBANID", account.IBAN);
-                    Writer.WriteOptionalElementString("ram:AccountName", account.Name);
-                    Writer.WriteOptionalElementString("ram:ProprietaryID", account.ID);
-                    Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
+                    //TODO Add Bank details data
 
-                    if (!String.IsNullOrWhiteSpace(account.BIC))
-                    {
-                        Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
-                        Writer.WriteElementString("ram:BICID", account.BIC);
-                        Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
-                    }
+                    //Writer.WriteStartElement("ram:PayeePartyCreditorFinancialAccount");
+                    //Writer.WriteElementString("ram:IBANID", account.IBAN);
+                    //Writer.WriteOptionalElementString("ram:AccountName", account.Name);
+                    //Writer.WriteOptionalElementString("ram:ProprietaryID", account.ID);
+                    //Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
+
+                    //if (!String.IsNullOrWhiteSpace(account.BIC))
+                    //{
+                    //    Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
+                    //    Writer.WriteElementString("ram:BICID", account.BIC);
+                    //    Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                    //}
 
                 }
             }
