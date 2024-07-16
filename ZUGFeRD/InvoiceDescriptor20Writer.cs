@@ -24,6 +24,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD
@@ -38,13 +39,19 @@ namespace s2industries.ZUGFeRD
         /// Saves the given invoice to the given stream.
         /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
         /// </summary>
-        /// <param name="descriptor"></param>
-        /// <param name="stream"></param>
-        public override void Save(InvoiceDescriptor descriptor, Stream stream)
+        /// <param name="descriptor">The invoice object that should be saved</param>
+        /// <param name="stream">The target stream for saving the invoice</param>
+        /// <param name="format">Format of the target file</param>
+        public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             if (!stream.CanWrite || !stream.CanSeek)
             {
                 throw new IllegalStreamException("Cannot write to stream");
+            }
+
+            if (format == ZUGFeRDFormats.UBL)
+            {
+                throw new UnsupportedException("UBL format is not supported for ZUGFeRD 2.0");
             }
 
             // write data

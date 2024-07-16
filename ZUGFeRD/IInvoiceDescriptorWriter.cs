@@ -22,20 +22,21 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
+using ZUGFeRD;
 
 namespace s2industries.ZUGFeRD
 {
     internal abstract class IInvoiceDescriptorWriter
     {
-        public abstract void Save(InvoiceDescriptor descriptor, Stream stream);
+        public abstract void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII);
 
 
-        public void Save(InvoiceDescriptor descriptor, string filename)
+        public void Save(InvoiceDescriptor descriptor, string filename, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             if (Validate(descriptor, true))
             {
                 FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-                Save(descriptor, fs);
+                Save(descriptor, fs, format);
                 fs.Flush();
                 fs.Close();
             }
