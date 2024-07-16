@@ -709,6 +709,7 @@ namespace s2industries.ZUGFeRD
                 Name = _nodeAsString(node, "cbc:Name", nsmgr),
                 IBAN = _nodeAsString(node, "cbc:ID", nsmgr),
                 BIC = _nodeAsString(node, "cac:FinancialInstitutionBranch/cbc:ID", nsmgr, null),
+                BankName = _nodeAsString(node, "cac:FinancialInstitutionBranch/cbc:Name", nsmgr, null),
                 ID = ""
             };
 
