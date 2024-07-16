@@ -46,11 +46,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Version 2.2 - unified with french factur-x 1.0, supports XRechnung
         /// </summary>
-        Version22 = 220,
-
-        /// <summary>
-        /// UBL XML Version for XRechnung
-        /// </summary>
-        Version22UBL = 221
+        Version22 = 220
     }
 }

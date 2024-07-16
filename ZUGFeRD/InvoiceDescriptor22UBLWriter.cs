@@ -18,7 +18,7 @@ namespace s2industries.ZUGFeRD
 
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
-        public override void Save(InvoiceDescriptor descriptor, Stream stream)
+        public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.UBL)
         {
             if (!stream.CanWrite || !stream.CanSeek)
             {
@@ -33,11 +33,20 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartDocument();
 
             if (this.Descriptor.Type != InvoiceType.Invoice && this.Descriptor.Type != InvoiceType.CreditNote)
-                throw new NotImplementedException("");
+                throw new NotImplementedException("Not implemented yet.");
 
             #region Kopfbereich
-            Writer.WriteStartElement("Invoice");
-            Writer.WriteAttributeString("xmlns", null, null, "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            // UBL has different namespace for different types
+            if (this.Descriptor.Type == InvoiceType.Invoice)
+            {
+                Writer.WriteStartElement("Invoice");
+                Writer.WriteAttributeString("xmlns", null, null, "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            }
+            else if(this.Descriptor.Type == InvoiceType.CreditNote)
+            {
+                Writer.WriteStartElement("CreditNote");
+                Writer.WriteAttributeString("xmlns", null, null, "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
+            }
             Writer.WriteAttributeString("xmlns", "cac", null, "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
             Writer.WriteAttributeString("xmlns", "cbc", null, "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
             Writer.WriteAttributeString("xmlns", "ext", null, "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
@@ -94,7 +103,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
             #endregion
 
-            // PaymentMeans Not fully implemented
+            // TODO PaymentMeans Not fully implemented 
             if (Descriptor.CreditorBankAccounts.Count == 0)
             {
                 if (this.Descriptor.PaymentMeans != null)
@@ -314,10 +323,12 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteStartElement("cac:Party", this.Descriptor.Profile);
 
-                if (party.GlobalID != null)
+                if (ElectronicAddress != null)
                 {
-                    writer.WriteOptionalElementString("cbc:EndpointID", party.GlobalID.ID);
-                    writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.ToString());
+                    writer.WriteStartElement("cbc:EndpointID");
+                    writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.ToString());
+                    writer.WriteValue(ElectronicAddress.Address);
+                    writer.WriteEndElement();
                 }
 
                 writer.WriteStartElement("cac:PostalAddress");

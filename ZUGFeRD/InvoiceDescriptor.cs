@@ -910,8 +910,6 @@ namespace s2industries.ZUGFeRD
                     return new InvoiceDescriptor20Writer();
                 case ZUGFeRDVersion.Version22:
                     return new InvoiceDescriptor22Writer();
-                case ZUGFeRDVersion.Version22UBL:
-                    return new InvoiceDescriptor22UBLWriter();
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
@@ -927,11 +925,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="stream">The stream where the data should be saved to.</param>
         /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
         /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
-        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
+        /// <param name="format">The format of the target file that may be CII or UBL</param>
+        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
             IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
-            writer.Save(this, stream);
+            writer.Save(this, stream,format);
         } // !Save()
 
 
