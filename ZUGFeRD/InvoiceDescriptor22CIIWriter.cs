@@ -1371,7 +1371,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram:Name", party.Name);
 
                 _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
-                _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
                 writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53

@@ -52,7 +52,7 @@ namespace s2industries.ZUGFeRD
         } // !_formatDecimal()
 
 
-        protected string _formatDate(DateTime date, bool formatAs102 = true)
+        protected string _formatDate(DateTime date, bool formatAs102 = true, bool toUBLDate = false)
         {
             if (formatAs102)
             {
@@ -60,6 +60,9 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
+                if (toUBLDate)
+                    return date.ToString("yyyy-MM-dd");
+
                 return date.ToString("yyyy-MM-ddTHH:mm:ss");
             }
         } // !_formatDate()

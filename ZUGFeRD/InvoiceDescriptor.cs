@@ -340,7 +340,7 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return ZUGFeRDVersion.Version22;
@@ -379,7 +379,7 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return ZUGFeRDVersion.Version22;
@@ -419,7 +419,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return reader.Load(stream);
@@ -458,7 +458,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
@@ -930,11 +930,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="stream">The stream where the data should be saved to.</param>
         /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
         /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
-        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
+        /// <param name="format">The format of the target file that may be CII or UBL</param>
+        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
             IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
-            writer.Save(this, stream);
+            writer.Save(this, stream,format);
         } // !Save()
 
 
