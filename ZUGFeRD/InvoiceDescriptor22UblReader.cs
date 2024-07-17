@@ -442,17 +442,18 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodEnd = _nodeAsDateTime(tradeLineItem, ".//cac:InvoicePeriod/cbc:EndDate", nsmgr),
             };
 
-            // TODO: Find value //if (tradeLineItem.SelectNodes(".//cac:Item/ram:ApplicableProductCharacteristic", nsmgr) != null)
-            //{
-            //  foreach (XmlNode applicableProductCharacteristic in tradeLineItem.SelectNodes(".//cac:Item/ram:ApplicableProductCharacteristic", nsmgr))
-            //  {
-            //    item.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic()
-            //    {
-            //      Description = _nodeAsString(applicableProductCharacteristic, ".//ram:Description", nsmgr),
-            //      Value = _nodeAsString(applicableProductCharacteristic, ".//ram:Value", nsmgr),
-            //    });
-            //  }
-            //}
+            // Read ApplicableProductCharacteristic 
+            if (tradeLineItem.SelectNodes(".//cac:Item/cac:AdditionalItemProperty", nsmgr) != null)
+            {
+                foreach (XmlNode applicableProductCharacteristic in tradeLineItem.SelectNodes(".//cac:Item/cac:AdditionalItemProperty", nsmgr))
+                {
+                    item.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic()
+                    {
+                        Description = _nodeAsString(applicableProductCharacteristic, ".//cbc:Name", nsmgr),
+                        Value = _nodeAsString(applicableProductCharacteristic, ".//cbc:Value", nsmgr),
+                    });
+                }
+            }
 
             // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument", nsmgr) != null)
             //{
