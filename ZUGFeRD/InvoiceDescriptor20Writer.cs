@@ -96,7 +96,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("rsm:ExchangedDocument");
             Writer.WriteElementString("ram:ID", this.Descriptor.InvoiceNo);
-            Writer.WriteElementString("ram:Name", _translateInvoiceType(this.Descriptor.Type), Profile.Extended);
+            Writer.WriteElementString("ram:Name", this.Descriptor.Name, Profile.Extended);
             Writer.WriteElementString("ram:TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
 
             if (this.Descriptor.InvoiceDate.HasValue)
