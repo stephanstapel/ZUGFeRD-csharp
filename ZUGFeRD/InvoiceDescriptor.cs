@@ -335,7 +335,7 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return ZUGFeRDVersion.Version22;
@@ -374,7 +374,7 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version1;
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return ZUGFeRDVersion.Version22;
@@ -414,7 +414,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return reader.Load(stream);
@@ -453,7 +453,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            reader = new InvoiceDescriptor22UblReader();
+            reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
