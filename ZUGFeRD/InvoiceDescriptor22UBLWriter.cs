@@ -21,10 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Globalization;
-using System.Linq;
 using System.Xml;
-using System.Diagnostics;
 
 namespace s2industries.ZUGFeRD
 {
@@ -273,6 +270,9 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("cac:BuyersItemIdentification");
                 Writer.WriteElementString("cbc:ID", tradeLineItem.BuyerAssignedID);
                 Writer.WriteEndElement(); //!BuyersItemIdentification
+
+
+                _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
 
                 Writer.WriteEndElement(); //!Item
 
@@ -541,6 +541,20 @@ namespace s2industries.ZUGFeRD
             }
         } // !_writeOptionalParty()
 
+        private void _writeApplicableProductCharacteristics(ProfileAwareXmlTextWriter writer, List<ApplicableProductCharacteristic> productCharacteristics)
+        {
+
+            if (productCharacteristics.Count > 0)
+            {
+                foreach (var characteristic in productCharacteristics)
+                {
+                    writer.WriteStartElement("cac:AdditionalItemProperty");
+                    writer.WriteElementString("cbc:Name", characteristic.Description);
+                    writer.WriteElementString("cbc:Value", characteristic.Value);
+                    writer.WriteEndElement();
+                }
+            }
+        } // !_writeApplicableProductCharacteristics()
 
         private void _writeNotes(ProfileAwareXmlTextWriter writer, List<Note> notes)
         {
