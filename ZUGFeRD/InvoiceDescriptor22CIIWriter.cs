@@ -1266,7 +1266,7 @@ namespace s2industries.ZUGFeRD
                 case PartyTypes.BuyerTradeParty:
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.Comfort) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
                     if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
