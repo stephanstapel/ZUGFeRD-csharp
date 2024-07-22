@@ -650,6 +650,7 @@ namespace s2industries.ZUGFeRD
                 GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(_nodeAsString(node, "ram:GlobalID/@schemeID", nsmgr)),
                                         _nodeAsString(node, "ram:GlobalID", nsmgr)),
                 Name = _nodeAsString(node, "ram:Name", nsmgr),
+                Description = _nodeAsString(node, "ram:Description", nsmgr), // BT-33 Seller only
                 Postcode = _nodeAsString(node, "ram:PostalTradeAddress/ram:PostcodeCode", nsmgr),
                 City = _nodeAsString(node, "ram:PostalTradeAddress/ram:CityName", nsmgr),
                 Country = default(CountryCodes).FromString(_nodeAsString(node, "ram:PostalTradeAddress/ram:CountryID", nsmgr)),

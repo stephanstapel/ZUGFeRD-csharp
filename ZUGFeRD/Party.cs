@@ -39,6 +39,11 @@ namespace s2industries.ZUGFeRD
     public string Name { get; set; }
 
     /// <summary>
+    /// other legal information (Seller only)
+    /// </summary>      
+    public string Description { get; set; }
+
+    /// <summary>
     /// Name of the contact at the party
     /// </summary>
     public string ContactName { get; set; }

@@ -1369,6 +1369,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 writer.WriteOptionalElementString("ram:Name", party.Name);
+                writer.WriteOptionalElementString("ram:Description", party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                 _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);

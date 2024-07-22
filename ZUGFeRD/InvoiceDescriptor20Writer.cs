@@ -885,7 +885,8 @@ namespace s2industries.ZUGFeRD
                     writer.WriteValue(Party.GlobalID.ID);
                     writer.WriteEndElement();
                 }
-                Writer.WriteOptionalElementString("ram:Name", Party.Name);
+                writer.WriteOptionalElementString("ram:Name", Party.Name);
+                writer.WriteOptionalElementString("ram:Description", Party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", Contact);
 
                 writer.WriteStartElement("ram:PostalTradeAddress");
