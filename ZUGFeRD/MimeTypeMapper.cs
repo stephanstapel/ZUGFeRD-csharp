@@ -45,10 +45,10 @@ namespace s2industries.ZUGFeRD
 
         internal static string GetMimeType(string filename)
         {
-            if (!String.IsNullOrEmpty(filename))
+            if (!String.IsNullOrWhiteSpace(filename))
             {
                 string extension = System.IO.Path.GetExtension(filename);                
-                if (!String.IsNullOrEmpty(extension) && _MimeTypes.TryGetValue(extension.ToLower(), out string mimeType))
+                if (!String.IsNullOrWhiteSpace(extension) && _MimeTypes.TryGetValue(extension.ToLower(), out string mimeType))
                 {
                     return mimeType;
                 }                    

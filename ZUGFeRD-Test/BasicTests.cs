@@ -81,9 +81,9 @@ namespace ZUGFeRD_Test
             numberOfTradeLineItems = desc.TradeLineItems.Count;
             desc.AddTradeLineCommentItem(CUSTOM_LINE_ID, COMMENT);
 
-            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);
-            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].LineID, CUSTOM_LINE_ID);
+            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);            
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
+            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.LineID, CUSTOM_LINE_ID);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
             Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes.Count, 1);
             Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes[0].Content, COMMENT);
@@ -103,7 +103,7 @@ namespace ZUGFeRD_Test
 
             path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
-            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version21);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version22);
         } // !TestGetVersion()
     }
 }

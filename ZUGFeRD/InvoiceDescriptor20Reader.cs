@@ -23,7 +23,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.IO;
-using ZUGFeRD;
+
 
 namespace s2industries.ZUGFeRD
 {
@@ -46,18 +46,14 @@ namespace s2industries.ZUGFeRD
 
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
-            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
-            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
-            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+            XmlNamespaceManager nsmgr = _GenerateNamespaceManagerFromNode(doc.DocumentElement);
 
             InvoiceDescriptor retval = new InvoiceDescriptor
             {
                 IsTest = _nodeAsBool(doc.DocumentElement, "//rsm:ExchangedDocumentContext/ram:TestIndicator/udt:Indicator", nsmgr),
                 BusinessProcess = _nodeAsString(doc.DocumentElement, "//ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID", nsmgr),
                 Profile = default(Profile).FromString(_nodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
+                Name = _nodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:Name", nsmgr),
                 Type = default(InvoiceType).FromString(_nodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:TypeCode", nsmgr)),
                 InvoiceNo = _nodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:ID", nsmgr),
                 InvoiceDate = _nodeAsDateTime(doc.DocumentElement, "//rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr)
@@ -68,7 +64,9 @@ namespace s2industries.ZUGFeRD
                 string content = _nodeAsString(node, ".//ram:Content", nsmgr);
                 string _subjectCode = _nodeAsString(node, ".//ram:SubjectCode", nsmgr);
                 SubjectCodes subjectCode = default(SubjectCodes).FromString(_subjectCode);
-                retval.AddNote(content, subjectCode);
+                string _contentCode = _nodeAsString(node, ".//ram:ContentCode", nsmgr);
+                ContentCodes contentCode = default(ContentCodes).FromString(_contentCode);
+                retval.AddNote(content, subjectCode, contentCode);
             }
 
             retval.ReferenceOrderNo = _nodeAsString(doc, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerReference", nsmgr);
@@ -108,7 +106,7 @@ namespace s2industries.ZUGFeRD
                 retval.BuyerContact = new Contact()
                 {
                     Name = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:PersonName", nsmgr),
-                    OrgUnit = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    OrgUnit = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
                     PhoneNo = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
                     FaxNo = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
                     EmailAddress = _nodeAsString(doc.DocumentElement, "//ram:BuyerTradeParty/ram:DefinedTradeContact/ram:EmailURIUniversalCommunication/ram:URIID", nsmgr)
@@ -134,7 +132,7 @@ namespace s2industries.ZUGFeRD
                 _deliveryNoteDate = _nodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr);
             }
 
-            if (_deliveryNoteDate.HasValue || !String.IsNullOrEmpty(_deliveryNoteNo))
+            if (_deliveryNoteDate.HasValue || !String.IsNullOrWhiteSpace(_deliveryNoteNo))
             {
                 retval.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
                 {
@@ -160,7 +158,7 @@ namespace s2industries.ZUGFeRD
             var financialCardId = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:ID", nsmgr);
             var financialCardCardholderName = _nodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:ApplicableTradeSettlementFinancialCard/ram:CardholderName", nsmgr);
             
-            if (!string.IsNullOrEmpty(financialCardId) || !string.IsNullOrEmpty(financialCardCardholderName))
+            if (!string.IsNullOrWhiteSpace(financialCardId) || !string.IsNullOrWhiteSpace(financialCardCardholderName))
             {
                 _tempPaymentMeans.FinancialCard = new FinancialCard()
                 {
@@ -252,7 +250,7 @@ namespace s2industries.ZUGFeRD
                                              _nodeAsString(node, ".//ram:ExemptionReason", nsmgr));
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
             {
                 retval.AddTradeAllowanceCharge(!_nodeAsBool(node, ".//ram:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
                                                _nodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
@@ -343,8 +341,7 @@ namespace s2industries.ZUGFeRD
             }
 
             TradeLineItem item = new TradeLineItem()
-            {
-                LineID = _nodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr),
+            {                
                 GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(_nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr)),
                                         _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID", nsmgr)),
                 SellerAssignedID = _nodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
@@ -386,7 +383,7 @@ namespace s2industries.ZUGFeRD
                     item.AssociatedDocument.Notes.Add(new Note(
                                 content: _nodeAsString(noteNode, ".//ram:Content", nsmgr),
                                 subjectCode: default(SubjectCodes).FromString(_nodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
-                                contentCode: ContentCodes.Unknown
+                                contentCode: default(ContentCodes).FromString(_nodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
                     ));
                 }
 
@@ -478,6 +475,7 @@ namespace s2industries.ZUGFeRD
                 GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(_nodeAsString(node, "ram:GlobalID/@schemeID", nsmgr)),
                                         _nodeAsString(node, "ram:GlobalID", nsmgr)),
                 Name = _nodeAsString(node, "ram:Name", nsmgr),
+                Description = _nodeAsString(node, "ram:Description", nsmgr), // BT-33 Seller only
                 Postcode = _nodeAsString(node, "ram:PostalTradeAddress/ram:PostcodeCode", nsmgr),
                 City = _nodeAsString(node, "ram:PostalTradeAddress/ram:CityName", nsmgr),
                 Country = default(CountryCodes).FromString(_nodeAsString(node, "ram:PostalTradeAddress/ram:CountryID", nsmgr))
@@ -486,7 +484,7 @@ namespace s2industries.ZUGFeRD
             string lineOne = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineOne", nsmgr);
             string lineTwo = _nodeAsString(node, "ram:PostalTradeAddress/ram:LineTwo", nsmgr);
 
-            if (!String.IsNullOrEmpty(lineTwo))
+            if (!String.IsNullOrWhiteSpace(lineTwo))
             {
                 retval.ContactName = lineOne;
                 retval.Street = lineTwo;
@@ -512,7 +510,7 @@ namespace s2industries.ZUGFeRD
                 TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(_nodeAsString(a_oXmlNode, "ram:TypeCode", a_nsmgr)),
                 Name = _nodeAsString(a_oXmlNode, "ram:Name", a_nsmgr),
                 IssueDateTime = _nodeAsDateTime(a_oXmlNode, "ram:FormattedIssueDateTime/qdt:DateTimeString", a_nsmgr),
-                AttachmentBinaryObject = !string.IsNullOrEmpty(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
+                AttachmentBinaryObject = !string.IsNullOrWhiteSpace(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
                 Filename = _nodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject/@filename", a_nsmgr),
                 ReferenceTypeCode = default(ReferenceTypeCodes).FromString(_nodeAsString(a_oXmlNode, "ram:ReferenceTypeCode", a_nsmgr))
             };

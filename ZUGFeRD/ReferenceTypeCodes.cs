@@ -25,7 +25,10 @@ using System.Threading.Tasks;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
+    /// Sources:
     /// http://www.unece.org/trade/untdid/d13b/tred/tred1153.htm
+    /// and
+    /// https://www.xrepository.de/details/urn:xoev-de:kosit:codeliste:untdid.1153_3#version
     /// </summary>
     public enum ReferenceTypeCodes
     {
@@ -78,6 +81,13 @@ namespace s2industries.ZUGFeRD
         ABT,
 
         /// <summary>
+        /// Vehicle licence number
+        /// 
+        /// Number of the licence issued for a vehicle by an agency of government.
+        /// </summary>
+        ABZ,
+
+        /// <summary>
         /// Projektspezifikationsnummer
         /// </summary>
         AER,
@@ -91,6 +101,13 @@ namespace s2industries.ZUGFeRD
         /// Vereinbarungs-Nummer
         /// </summary>
         AJS,
+
+        /// <summary>
+        /// Vehicle Identification Number (VIN)
+        ///
+        /// The identification number which uniquely distinguishes one vehicle from another through the lifespan of the vehicle.
+        /// </summary>
+        AKG,
 
         /// <summary>
         /// Nummer einer Rücksendungsanzeige

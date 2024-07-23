@@ -88,8 +88,8 @@ namespace ZUGFeRD_Test
       desc.ActualDeliveryDate = new DateTime(2018, 03, 05);
       desc.SetPaymentMeans(PaymentMeansTypeCodes.SEPACreditTransfer, "Zahlung per SEPA Überweisung.");
       desc.AddCreditorFinancialAccount(iban: "DE02120300000000202051", bic: "BYLADEM1001", name: "Kunden AG");
-
-      desc.AddApplicableTradeTax(basisAmount: 275.0m,
+      //desc.AddDebitorFinancialAccount(iban: "DB02120300000000202051", bic: "DBBYLADEM1001", bankName: "KundenDB AG");
+            desc.AddApplicableTradeTax(basisAmount: 275.0m,
                                  percent: 7m,
                                  typeCode: TaxTypes.VAT,
                                  categoryCode: TaxCategoryCodes.S
@@ -103,12 +103,9 @@ namespace ZUGFeRD_Test
 
       desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018");
       desc.SetTotals(lineTotalAmount: 473.0m,
-                     chargeTotalAmount: 0.0m,
-                     allowanceTotalAmount: 0.0m,
                      taxBasisAmount: 473.0m,
                      taxTotalAmount: 56.87m,
                      grandTotalAmount: 529.87m,
-                     totalPrepaidAmount: 0.0m,
                      duePayableAmount: 529.87m
                     );
 

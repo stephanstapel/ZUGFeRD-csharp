@@ -96,11 +96,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // write value
-            if (!String.IsNullOrEmpty(prefix))
+            if (!String.IsNullOrWhiteSpace(prefix))
             {
                 this.TextWriter?.WriteStartElement(prefix, localName, ns);
             }
-            else if (!String.IsNullOrEmpty(ns))
+            else if (!String.IsNullOrWhiteSpace(ns))
             {
                 this.TextWriter?.WriteStartElement(localName, ns);
             }
@@ -121,6 +121,15 @@ namespace s2industries.ZUGFeRD
         }
 
 
+        public void WriteOptionalElementString(string tagName, string value, Profile profile = Profile.Unknown)
+        {
+            if (!String.IsNullOrWhiteSpace(value))
+            {
+                WriteElementString(tagName, value, profile);
+            }
+        } // !WriteOptionalElementString()
+
+
         public void WriteElementString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
         {
             Profile _profile = profile;
@@ -135,11 +144,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // write value
-            if (!String.IsNullOrEmpty(prefix))
+            if (!String.IsNullOrWhiteSpace(prefix))
             {
                 this.TextWriter?.WriteElementString(prefix, localName, ns, value);
             }
-            else if (!String.IsNullOrEmpty(ns))
+            else if (!String.IsNullOrWhiteSpace(ns))
             {
                 this.TextWriter?.WriteElementString(localName, ns, value);
             }
@@ -185,11 +194,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // write value
-            if (!String.IsNullOrEmpty(prefix))
+            if (!String.IsNullOrWhiteSpace(prefix))
             {
                 this.TextWriter?.WriteAttributeString(prefix, localName, ns, value);
             }
-            else if (!String.IsNullOrEmpty(ns))
+            else if (!String.IsNullOrWhiteSpace(ns))
             {
                 this.TextWriter?.WriteAttributeString(localName, ns, value);
             }

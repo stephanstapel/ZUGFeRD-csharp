@@ -18,54 +18,41 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
+using ZUGFeRD;
 
 namespace s2industries.ZUGFeRD
 {
     internal abstract class IInvoiceDescriptorWriter
     {
-        public abstract void Save(InvoiceDescriptor descriptor, Stream stream);
+        public abstract void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII);
 
 
-        public void Save(InvoiceDescriptor descriptor, string filename)
+        public void Save(InvoiceDescriptor descriptor, string filename, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             if (Validate(descriptor, true))
             {
                 FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-                Save(descriptor, fs);
+                Save(descriptor, fs, format);
                 fs.Flush();
                 fs.Close();
             }
         } // !Save()
 
 
-        internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);
-
-
-        internal void _writeOptionalElementString(ProfileAwareXmlTextWriter writer, string tagName, string value, Profile profile = Profile.Unknown)
-        {
-            if (!String.IsNullOrEmpty(value))
-            {
-                writer.WriteElementString(tagName, value, profile);
-            }
-        } // !_writeOptionalElementString()
+        internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);        
 
 
         protected string _formatDecimal(decimal value, int numDecimals = 2)
         {
-            string formatString = "0.";
-            for (int i = 0; i < numDecimals; i++)
-            {
-                formatString += "0";
-            }
-
-            return value.ToString(formatString).Replace(",", ".");
+            return Math.Round(value, numDecimals).ToString($"F{numDecimals}", CultureInfo.InvariantCulture);
         } // !_formatDecimal()
 
 
-        protected string _formatDate(DateTime date, bool formatAs102 = true)
+        protected string _formatDate(DateTime date, bool formatAs102 = true, bool toUBLDate = false)
         {
             if (formatAs102)
             {
@@ -73,6 +60,9 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
+                if (toUBLDate)
+                    return date.ToString("yyyy-MM-dd");
+
                 return date.ToString("yyyy-MM-ddTHH:mm:ss");
             }
         } // !_formatDate()

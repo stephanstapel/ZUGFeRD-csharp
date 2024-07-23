@@ -18,89 +18,119 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Security.Cryptography;
 using ZUGFeRD;
+
 
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
     ///  Structure holding item information
+    ///  
+    /// Please note that you might use the object that is returned from InvoiceDescriptor.AddTradeLineItem(...) and use it
+    /// to e.g. add an allowance charge using lineItem.AddTradeAllowanceCharge(...)
     /// </summary>
     public class TradeLineItem
     {
         /// <summary>
-        /// Eindeutige Bezeichnung für die betreffende Rechnungsposition
+        /// The identification of articles based on a registered scheme
+        /// 
+        /// The global identifier of the article is a globally unique identifier of the product being assigned to it by its
+        /// producer, bases on the rules of a global standardisation body.
         /// </summary>
-        public string LineID;
+        public GlobalID GlobalID { get; set; } = new GlobalID();
+
         /// <summary>
-        /// Identifier of an item according to a registered scheme
-        /// </summary>
-        public GlobalID GlobalID { get; set; }
-        /// <summary>
-        /// Artikelnummer des Verkäufers
+        /// An identification of the item assigned by the seller.
         /// </summary>
         public string SellerAssignedID { get; set; }
+
         /// <summary>
-        /// Artikelnummer des Käufers
+        /// An identification of the item assigned by the buyer.
         /// </summary>
         public string BuyerAssignedID { get; set; }
+
         /// <summary>
-        /// Artikelname
+        /// An article’s name
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// Artikel Beschreibung
+        /// The description of an item
+        /// 
+        /// The item’s description makes it possible to describe a product and its properties more comprehensively
+        /// than would be possible with just the article name.
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
-        /// Menge, enthalten
+        /// Included amount
         /// </summary>
         public decimal? UnitQuantity { get; set; }
+
         /// <summary>
-        /// Basismenge zum Artikelpreis
+        /// Invoiced quantity
         /// </summary>
         public decimal BilledQuantity { get; set; }
+
         /// <summary>
-        /// Nettobetrag der Rechnungsposition
+        /// Invoice line net amount including (!) trade allowance charges for the line item
+        /// BT-131
         /// </summary>
         public decimal? LineTotalAmount { get; set; }
+
         /// <summary>
-        /// Beginn des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
+        /// Detailed information about the invoicing period
+        /// 
+        /// Invoicing period start date
         /// </summary>
         public DateTime? BillingPeriodStart { get; set; }
+
         /// <summary>
-        /// Ende des für die Rechnungsposition maßgeblichen Abrechnungszeitraumes
+        /// Detailed information about the invoicing period
+        /// 
+        /// Invoicing period end date
         /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
+
         /// <summary>
-        /// 
+        /// he code valid for the invoiced goods sales tax category
         /// </summary>
         public TaxCategoryCodes TaxCategoryCode { get; set; }
+
         /// <summary>
-        /// Steuersatz
+        /// Tax rate
         /// </summary>
         public decimal TaxPercent { get; set; }
+
         /// <summary>
-        /// Steuertyp
+        /// Tax type
         /// </summary>
         public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
+
         /// <summary>
-        /// Netto Einzelpreis
+        /// net unit price of the item
         /// </summary>
         public decimal? NetUnitPrice { get; set; }
+
         /// <summary>
-        /// Brutto Einzelpreis
+        /// gross unit price of the item
         /// </summary>
         public decimal? GrossUnitPrice { get; set; }
+
         /// <summary>
-        /// Einheit der Preisbasismenge
+        /// Item Base Quantity Unit Code
         /// </summary>
         public QuantityCodes UnitCode { get; set; }
+
         /// <summary>
-        /// 
+        /// Identifier of the invoice line item
         /// </summary>
         public AssociatedDocument AssociatedDocument { get; internal set; }
+
         /// <summary>
-        /// 
+        /// Detailed information about the actual Delivery
         /// </summary>
         public DateTime? ActualDeliveryDate { get; set; }
 
@@ -118,36 +148,37 @@ namespace s2industries.ZUGFeRD
         /// Details of the associated contract
         /// </summary>
         public ContractReferencedDocument ContractReferencedDocument { get; set; }
-        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; }
 
         /// <summary>
-        /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
+        /// Details of an additional document reference
         /// </summary>
-        public List<TradeAllowanceCharge> TradeAllowanceCharges { get; set; }
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; } = new List<AdditionalReferencedDocument>();
+
+        /// <summary>       
+        /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
+        /// 
+        /// Now private. Please use GetTradeAllowanceCharges() instead
+        /// </summary>
+        private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
+
+        /// <summary>       
+        /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice item
+        /// 
+        /// Now private. Please use GetSpecifiedTradeAllowanceCharges() instead
+        /// </summary>
+        private List<TradeAllowanceCharge> SpecifiedTradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information on the accounting reference
         /// </summary>
-        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; }
+        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
 
         /// <summary>
-        /// Zusätzliche Produkteigenschaften
+        /// Additional product information
         /// </summary>
-        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; }
+        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; } = new List<ApplicableProductCharacteristic>();
 
-        /// <summary>
-        /// Initializes a new/ empty trade line item
-        /// </summary>
-        public TradeLineItem()
-        {
-            this.NetUnitPrice = decimal.MinValue;
-            this.GrossUnitPrice = decimal.MinValue;
-            this.GlobalID = new GlobalID();
-            this.TradeAllowanceCharges = new List<TradeAllowanceCharge>();
-            this.AdditionalReferencedDocuments = new List<AdditionalReferencedDocument>();
-            this.ReceivableSpecifiedTradeAccountingAccounts = new List<ReceivableSpecifiedTradeAccountingAccount>();
-            this.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>();
-        }
+        private List<DesignatedProductClassification> DesignedProductClassifications { get; set; } = new List<DesignatedProductClassification>();
 
 
         /// <summary>
@@ -158,9 +189,9 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal basisAmount, decimal actualAmount, string reason)
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, string reason)
         {
-            this.TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Currency = currency,
@@ -169,6 +200,91 @@ namespace s2industries.ZUGFeRD
                 Reason = reason
             });
         } // !AddTradeAllowanceCharge()
+        
+
+        /// <summary>
+        /// As an allowance or charge on item level, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, decimal? chargePercentage, string reason)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = !isDiscount,
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                ChargePercentage = chargePercentage,
+                Reason = reason
+            });
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// Returns all trade allowance charges for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<TradeAllowanceCharge> GetTradeAllowanceCharges()
+        {
+            return this._TradeAllowanceCharges;
+        } // !GetTradeAllowanceCharges()
+
+        /// <summary>
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, string reason)
+        {
+            this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = !isDiscount,
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                Reason = reason
+            });
+        } // !AddSpecifiedTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, decimal? chargePercentage, string reason)
+        {
+            this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            {
+                ChargeIndicator = !isDiscount,
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                ChargePercentage = chargePercentage,
+                Reason = reason
+            });
+        } // !AddSpecifiedTradeAllowanceCharge()
+
+        /// <summary>
+        /// Returns all specified trade allowance charges for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<TradeAllowanceCharge> GetSpecifiedTradeAllowanceCharges()
+        {
+            return this.SpecifiedTradeAllowanceCharges;
+        } // !GetSpecifiedTradeAllowanceCharges()
 
 
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
@@ -192,7 +308,12 @@ namespace s2industries.ZUGFeRD
         } // !AddAdditionalReferencedDocument()
 
 
-        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
+
+		/// <summary>
+		/// Sets a purchase order line reference. BT-132
+		/// Please note that XRechnung/ FacturX allows a maximum of one such reference
+		/// </summary>
+		public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
@@ -215,7 +336,13 @@ namespace s2industries.ZUGFeRD
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
         }
-        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+
+
+		/// <summary>
+		/// Adds an invoice line Buyer accounting reference. BT-133
+        /// Please note that XRechnung/ FacturX allows a maximum of one such reference
+		/// </summary>
+		public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
@@ -223,5 +350,34 @@ namespace s2industries.ZUGFeRD
                 TradeAccountTypeCode = AccountTypeCode
             });
         }
+
+
+        /// <summary>
+        /// Adds a product classification
+        /// </summary>
+        /// <param name="classCode">Identifier of the item classification</param>
+        /// <param name="className">Classification name</param>
+        /// <param name="listID">Product classification name</param>
+        /// <param name="listVersionID">Version of product classification</param>
+        public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes classCode, string className, string listID = null, string listVersionID = null)
+        {
+            this.DesignedProductClassifications.Add(new DesignatedProductClassification()
+            {
+                ClassCode = classCode,
+                ClassName = className,
+                ListID = listID,
+                ListVersionID = listVersionID
+            });
+        } // !AddDesignatedProductClassification()
+
+
+        /// <summary>
+        /// Returns all existing designated product classifications
+        /// </summary>
+        /// <returns></returns>
+        public List<DesignatedProductClassification> GetDesignatedProductClassifications()
+        {
+            return this.DesignedProductClassifications;
+        } // !GetDesignatedProductClassifications()
     }
 }

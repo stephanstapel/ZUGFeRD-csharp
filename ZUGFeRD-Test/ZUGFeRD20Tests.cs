@@ -21,7 +21,7 @@ using System.IO;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
-using ZUGFeRD;
+
 
 namespace ZUGFeRD_Test
 {
@@ -654,7 +654,7 @@ namespace ZUGFeRD_Test
       Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.BillingPeriodEnd);
 
       //TradeAllowanceCharges
-      var tradeAllowanceCharge = loadedInvoice.TradeAllowanceCharges.FirstOrDefault(i => i.Reason == "Reason for charge");
+      var tradeAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
       Assert.IsNotNull(tradeAllowanceCharge);
       Assert.IsTrue(tradeAllowanceCharge.ChargeIndicator);
       Assert.AreEqual("Reason for charge", tradeAllowanceCharge.Reason);
@@ -679,12 +679,12 @@ namespace ZUGFeRD_Test
 
 
       Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-      Assert.AreEqual(0.0m, loadedInvoice.ChargeTotalAmount);
-      Assert.AreEqual(0.0m, loadedInvoice.AllowanceTotalAmount);
+      Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount); // optional
+      Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
       Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
       Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
       Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
-      Assert.AreEqual(0.0m, loadedInvoice.TotalPrepaidAmount);
+      Assert.AreEqual(null, loadedInvoice.TotalPrepaidAmount); // optional
       Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
 
       //InvoiceReferencedDocument
@@ -695,7 +695,7 @@ namespace ZUGFeRD_Test
       //Line items
       var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
       Assert.IsNotNull(loadedLineItem);
-      Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.LineID));
+      Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
       Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
 
       Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);
@@ -747,7 +747,7 @@ namespace ZUGFeRD_Test
       //Assert.AreEqual("987654", accountingAccount.TradeAccountID);
 
 
-      var lineItemTradeAllowanceCharge = loadedLineItem.TradeAllowanceCharges.FirstOrDefault(i => i.Reason == "Reason: UnitTest");
+      var lineItemTradeAllowanceCharge = loadedLineItem.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason: UnitTest");
       Assert.IsNotNull(lineItemTradeAllowanceCharge);
       Assert.IsTrue(lineItemTradeAllowanceCharge.ChargeIndicator);
       Assert.AreEqual(10m, lineItemTradeAllowanceCharge.BasisAmount);

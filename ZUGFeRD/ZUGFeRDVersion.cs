@@ -31,13 +31,21 @@ namespace s2industries.ZUGFeRD
         /// Version 1.x - first public ZUGFeRD version
         /// </summary>
         Version1 = 100,
+        
         /// <summary>
         /// Version 2.0 - second major ZUGFeRD version 
         /// </summary>
         Version20 = 200,
+
         /// <summary>
         /// Version 2.1 - unified with french factur-x 1.0, supports XRechnung
         /// </summary>
-        Version21 = 210
+        [Obsolete("Will be removed in the next version")]
+        Version21 = 210,
+
+        /// <summary>
+        /// Version 2.2 - unified with french factur-x 1.0, supports XRechnung
+        /// </summary>
+        Version22 = 220
     }
 }

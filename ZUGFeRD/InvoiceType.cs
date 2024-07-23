@@ -135,6 +135,21 @@ namespace s2industries.ZUGFeRD
         Cancellation = 457,
 
         /// <summary>
+        /// Appears to be only valid in Germany for XRechnung (BR-DE-17)
+        /// </summary>
+        PartialConstructionInvoice = 875,
+
+        /// <summary>
+        /// Appears to be only valid in Germany for XRechnung (BR-DE-17)
+        /// </summary>
+        PartialFinalConstructionInvoice = 876,
+
+        /// <summary>
+        /// Appears to be only valid in Germany for XRechnung (BR-DE-17)
+        /// </summary>
+        FinalConstructionInvoice = 877,
+
+        /// <summary>
         /// Unknown (0)
         /// is a fall back for all other cases
         /// (not all UNTDID 1001 codes are allowed, but there are several more)

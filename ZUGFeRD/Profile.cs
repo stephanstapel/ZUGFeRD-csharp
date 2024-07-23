@@ -73,7 +73,15 @@ namespace s2industries.ZUGFeRD
         /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770).
         /// Important note: using this profile will generate a version 1 XRechnung (as valid until 31/12/2020)
         /// </summary>
-        XRechnung1 = 64
+        XRechnung1 = 64,
+
+        /// <summary>
+        /// The e-reporting (https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration)
+        /// concern companies subject to VAT in France and trading with private individuals and, more generally, non-taxable persons 
+        /// (business to consumer or BtoC), with companies not established on French territory (i.e. taxable persons who do not have 
+        /// an establishment, domicile or habitual residence in France).
+        /// </summary>
+        EReporting = 128,
     }
 
 
@@ -111,6 +119,9 @@ namespace s2industries.ZUGFeRD
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0": return Profile.XRechnung;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1": return Profile.XRechnung;
                 case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2": return Profile.XRechnung;
+                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3": return Profile.XRechnung;
+                case "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0": return Profile.XRechnung;
+                case "urn.cpro.gouv.fr:1p0:ereporting" : return Profile.EReporting;
             }
 
             return Profile.Unknown;
@@ -140,6 +151,7 @@ namespace s2industries.ZUGFeRD
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 20");
                     }
                 case ZUGFeRDVersion.Version21:
+                case ZUGFeRDVersion.Version22:
                     switch (profile)
                     {
                         case Profile.Minimum: return "urn:factur-x.eu:1p0:minimum";
@@ -150,15 +162,16 @@ namespace s2industries.ZUGFeRD
                         case Profile.XRechnung1: return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2";
                         case Profile.XRechnung:
                             {
-                                if (DateTime.Now >= new DateTime(2022, 08, 01))
+                                if (DateTime.Now >= new DateTime(2024, 02, 01))
                                 {
-                                    return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2";
+                                    return "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0";
                                 }
                                 else
                                 {
-                                    return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1";
+                                    return "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3";
                                 }
                             }
+                        case Profile.EReporting: return "urn.cpro.gouv.fr:1p0:ereporting";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }                    
                 default:
