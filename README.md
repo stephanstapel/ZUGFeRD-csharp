@@ -59,6 +59,7 @@ However, the standard has become quite large during the recent years. So it is w
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
+desc.Name = "WARENRECHNUNG";
 desc.ReferenceOrderNo = "AB-312";
 desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
 desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", "AAK");
