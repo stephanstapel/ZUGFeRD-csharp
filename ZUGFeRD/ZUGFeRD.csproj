@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net480</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net480</TargetFrameworks>
     <Version>11.1.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
