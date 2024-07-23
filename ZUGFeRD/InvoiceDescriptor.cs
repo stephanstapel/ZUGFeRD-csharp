@@ -132,10 +132,15 @@ namespace s2industries.ZUGFeRD
         public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
         public ElectronicAddress SellerElectronicAddress { get; set; }
 
-        /// <summary>
-        /// This party is optional and only relevant for Extended profile
-        /// </summary>
-        public Party Invoicee { get; set; }
+		/// <summary>
+		/// Given seller reference number for routing purposes after biliteral agreement
+		/// </summary>
+		public string SellerReferebceNo { get; set; } = "";
+
+		/// <summary>
+		/// This party is optional and only relevant for Extended profile
+		/// </summary>
+		public Party Invoicee { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile

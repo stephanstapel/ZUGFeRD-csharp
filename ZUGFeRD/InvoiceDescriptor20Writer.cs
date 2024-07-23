@@ -513,14 +513,17 @@ namespace s2industries.ZUGFeRD
 			//   BT-6
 			if (this.Descriptor.TaxCurrency.HasValue)
 			{
-				Writer.WriteElementString("ram:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString());
+				Writer.WriteElementString("ram:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended);
 			}
 
 			//   4. InvoiceCurrencyCode (optional)
 			Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
-            //   7. InvoiceeTradeParty (optional)
-            if (Descriptor.Profile == Profile.Extended)
+			//   5. InvoiceIssuerReference (optional)
+			Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferebceNo, profile: Profile.Extended);
+
+			//   7. InvoiceeTradeParty (optional)
+			if (Descriptor.Profile == Profile.Extended)
             {
                 _writeOptionalParty(Writer, "ram:InvoiceeTradeParty", this.Descriptor.Invoicee);
             }
