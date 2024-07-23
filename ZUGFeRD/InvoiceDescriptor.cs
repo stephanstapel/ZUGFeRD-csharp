@@ -144,10 +144,17 @@ namespace s2industries.ZUGFeRD
 		/// </summary>
 		public Party Invoicee { get; set; }
 
-        /// <summary>
-        /// This party is optional and only relevant for Extended profile
-        /// </summary>
-        public Party ShipTo { get; set; }
+		/// <summary>
+		/// This party is optional and only relevant for Extended profile.
+        /// 
+        /// It seems to be used under rate condition only.
+		/// </summary>
+		public Party Invoicer { get; set; }
+
+		/// <summary>
+		/// This party is optional and only relevant for Extended profile
+		/// </summary>
+		public Party ShipTo { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile

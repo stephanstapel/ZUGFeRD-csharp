@@ -513,7 +513,7 @@ namespace s2industries.ZUGFeRD
 			//   BT-6
 			if (this.Descriptor.TaxCurrency.HasValue)
 			{
-				Writer.WriteElementString("ram:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended);
+				Writer.WriteElementString("ram:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 			}
 
 			//   4. InvoiceCurrencyCode (optional)
@@ -521,6 +521,9 @@ namespace s2industries.ZUGFeRD
 
 			//   5. InvoiceIssuerReference (optional)
 			Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferebceNo, profile: Profile.Extended);
+
+			//   6. InvoicerTradeParty (optional)
+			_writeOptionalParty(Writer, "ram:InvoicerTradeParty", this.Descriptor.Invoicer);
 
 			//   7. InvoiceeTradeParty (optional)
 			if (Descriptor.Profile == Profile.Extended)
