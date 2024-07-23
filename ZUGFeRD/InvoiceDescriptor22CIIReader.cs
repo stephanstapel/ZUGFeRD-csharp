@@ -29,7 +29,7 @@ using ZUGFeRD;
 
 namespace s2industries.ZUGFeRD
 {
-    internal class InvoiceDescriptor22Reader : IInvoiceDescriptorReader
+    internal class InvoiceDescriptor22CIIReader : IInvoiceDescriptorReader
     {
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
