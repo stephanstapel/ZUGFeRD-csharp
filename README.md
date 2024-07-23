@@ -10,7 +10,9 @@ Implementing and maintaining this library is a lot of hard work. I'm doing this 
 
 In particular, I am searching for sponsors for:
 
-* UBL format support (reading and writing)
+* Complete UBL format support (reading and writing)
+* Validation using the standard XSL
+* Invoice visualization
 
 
 # Introduction
