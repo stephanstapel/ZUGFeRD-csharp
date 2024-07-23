@@ -96,7 +96,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("rsm:ExchangedDocument");
             Writer.WriteElementString("ram:ID", this.Descriptor.InvoiceNo);
-            Writer.WriteElementString("ram:Name", _translateInvoiceType(this.Descriptor.Type), Profile.Extended);
+            Writer.WriteElementString("ram:Name", this.Descriptor.Name, Profile.Extended);
             Writer.WriteElementString("ram:TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
 
             if (this.Descriptor.InvoiceDate.HasValue)
@@ -885,7 +885,8 @@ namespace s2industries.ZUGFeRD
                     writer.WriteValue(Party.GlobalID.ID);
                     writer.WriteEndElement();
                 }
-                Writer.WriteOptionalElementString("ram:Name", Party.Name);
+                writer.WriteOptionalElementString("ram:Name", Party.Name);
+                writer.WriteOptionalElementString("ram:Description", Party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", Contact);
 
                 writer.WriteStartElement("ram:PostalTradeAddress");

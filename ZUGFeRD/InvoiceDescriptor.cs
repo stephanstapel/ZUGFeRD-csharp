@@ -164,6 +164,10 @@ namespace s2industries.ZUGFeRD
         public Profile Profile { get; internal set; } = Profile.Basic;
 
         /// <summary>
+        /// Document name (free text)
+        /// </summary>
+        public string Name { get; set; }
+        
         /// Indicates the type of the document, if it represents an invoice, a credit note or one of the available 'sub types'
         /// </summary>
         public InvoiceType Type { get; set; } = InvoiceType.Invoice;
