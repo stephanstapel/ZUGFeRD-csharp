@@ -134,6 +134,8 @@ namespace s2industries.ZUGFeRD
 
 		/// <summary>
 		/// Given seller reference number for routing purposes after biliteral agreement
+        /// 
+        /// This field seems not to be used in common scenarios.
 		/// </summary>
 		public string SellerReferebceNo { get; set; } = "";
 
