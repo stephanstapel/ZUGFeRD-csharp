@@ -509,8 +509,15 @@ namespace s2industries.ZUGFeRD
             //   2. PaymentReference (optional)
             Writer.WriteOptionalElementString("ram:PaymentReference", this.Descriptor.PaymentReference);
 
-            //   4. InvoiceCurrencyCode (optional)
-            Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
+			//   3. TaxCurrencyCode (optional)
+			//   BT-6
+			if (this.Descriptor.TaxCurrency.HasValue)
+			{
+				Writer.WriteElementString("ram:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString());
+			}
+
+			//   4. InvoiceCurrencyCode (optional)
+			Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
             //   7. InvoiceeTradeParty (optional)
             if (Descriptor.Profile == Profile.Extended)
