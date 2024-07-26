@@ -567,7 +567,7 @@ namespace s2industries.ZUGFeRD
 
 
         public void SetSeller(string name, string postcode, string city, string street, CountryCodes country, string id = null,
-            GlobalID globalID = null, LegalOrganization legalOrganization = null)
+            GlobalID globalID = null, LegalOrganization legalOrganization = null, string description = null)
         {
             this.Seller = new Party()
             {
@@ -579,6 +579,7 @@ namespace s2industries.ZUGFeRD
                 Country = country,
                 GlobalID = globalID,
                 SpecifiedLegalOrganization = legalOrganization,
+                Description = description
             };
         } // !SetSeller()
 
