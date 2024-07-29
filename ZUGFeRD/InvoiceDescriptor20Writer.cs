@@ -876,9 +876,9 @@ namespace s2industries.ZUGFeRD
             {
                 writer.WriteStartElement(PartyTag);
 
-                if (Party.ID != null)
+                if ((Party.ID != null) && !String.IsNullOrWhiteSpace(Party.ID.ID))
                 {
-                    if (!String.IsNullOrWhiteSpace(Party.ID.ID) && (Party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+                    if (Party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)
                     {
                         writer.WriteStartElement("ram:ID");
                         writer.WriteAttributeString("schemeID", Party.ID.SchemeID.EnumToString());
