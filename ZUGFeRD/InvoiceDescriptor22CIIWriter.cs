@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -39,7 +39,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Saves the given invoice to the given stream.
-        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.        
+        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
         /// </summary>
         /// <param name="descriptor">The invoice object that should be saved</param>
         /// <param name="stream">The target stream for saving the invoice</param>
@@ -188,7 +188,7 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
                             }
                             Writer.WriteValue(designatedProductClassification.ClassCode.Value.ToString());
-                            Writer.WriteEndElement(); // !ram::ClassCode                                
+                            Writer.WriteEndElement(); // !ram::ClassCode
                         }
                         Writer.WriteEndElement(); // !ram:DesignatedProductClassification
                     }
@@ -205,7 +205,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("ram:SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                     #region BuyerOrderReferencedDocument (Comfort, Extended, XRechnung)
-                    //Detailangaben zur zugehörigen Bestellung                   
+                    //Detailangaben zur zugehörigen Bestellung
                     if (tradeLineItem.BuyerOrderReferencedDocument != null)
                     {
                         Writer.WriteStartElement("ram:BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
@@ -257,7 +257,7 @@ namespace s2industries.ZUGFeRD
 
                     #region AdditionalReferencedDocument (Extended)
 
-                    //Detailangaben zu einer zusätzlichen Dokumentenreferenz                        
+                    //Detailangaben zu einer zusätzlichen Dokumentenreferenz
                     foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                     {
                         Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
@@ -296,7 +296,7 @@ namespace s2industries.ZUGFeRD
 
                     if (needToWriteGrossUnitPrice)
                     {
-                        Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); 
+                        Writer.WriteStartElement("ram:GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.GrossUnitPrice, 2);   // BT-148
                         if (tradeLineItem.UnitQuantity.HasValue)
                         {
@@ -346,7 +346,7 @@ namespace s2industries.ZUGFeRD
                     }
                     #endregion // !GrossPriceProductTradePrice(Comfort|Extended|XRechnung)
 
-                    #region NetPriceProductTradePrice                    
+                    #region NetPriceProductTradePrice
                     //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
                     Writer.WriteStartElement("ram:NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                     _writeOptionalAmount(Writer, "ram:ChargeAmount", tradeLineItem.NetUnitPrice, 2); // BT-146
@@ -355,13 +355,13 @@ namespace s2industries.ZUGFeRD
                     {
                         _writeElementWithAttribute(Writer, "ram:BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                     }
-                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)                    
+                    Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
                     #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
 
                     #region UltimateCustomerOrderReferencedDocument
                     //ToDo: UltimateCustomerOrderReferencedDocument
                     #endregion
-                    Writer.WriteEndElement(); // ram:SpecifiedLineTradeAgreement                       
+                    Writer.WriteEndElement(); // ram:SpecifiedLineTradeAgreement
                 }
                 #endregion
 
@@ -402,7 +402,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
                 #endregion
 
-                #region SpecifiedLineTradeSettlement                
+                #region SpecifiedLineTradeSettlement
                 Writer.WriteStartElement("ram:SpecifiedLineTradeSettlement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 #region ApplicableTradeTax
                 Writer.WriteStartElement("ram:ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
@@ -635,7 +635,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteAttributeString("format", "102");
                     Writer.WriteValue(_formatDate(this.Descriptor.ContractReferencedDocument.IssueDateTime.Value));
                     Writer.WriteEndElement(); // !qdt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()                    
+                    Writer.WriteEndElement(); // !IssueDateTime()
                 }
 
                 Writer.WriteEndElement(); // !ram:ContractReferencedDocument
@@ -1251,7 +1251,7 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram:ID", legalOrganization.ID.ID);
                 }
-                
+
 
                 // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
                 if (((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
@@ -1360,17 +1360,19 @@ namespace s2industries.ZUGFeRD
                         break;
                 }
 
-                if (party.ID != null)
+                if (party.ID != null && !string.IsNullOrWhiteSpace(party.ID.ID))
                 {
-                    if (!String.IsNullOrWhiteSpace(party.ID.ID) && (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+                    if (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)
                     {
                         writer.WriteStartElement("ram:ID");
                         writer.WriteAttributeString("schemeID", party.ID.SchemeID.EnumToString());
                         writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();
                     }
-
-                    writer.WriteOptionalElementString("ram:ID", party.ID.ID);
+                    else
+                    {
+                        writer.WriteOptionalElementString("ram:ID", party.ID.ID);
+                    }
                 }
 
                 if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
