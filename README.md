@@ -279,7 +279,7 @@ This information needs to be sent to the tax authorities. Different due dates ap
 # Support for profiles
 The library contains support for all profiles that are supported by the ZUGFeRD formats:
 
-| Profile         	 | Version1 	 | Version2 	 | Version21 	 |
+| Profile         	 | Version1 	 | Version20	 | Version22 	 |
 |-------------------|------------|------------|-------------|
 | MINIMUM         	 | 	          | X        	 | X         	 |
 | BASIC WL        	 | 	          | X        	 | X         	 |
@@ -294,9 +294,9 @@ If you want to write the invoice xml with a certain ZUGFeRD version and a certai
 
 ```csharp
 descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x, profile Basic
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0, profile Basic
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1, profile Basic
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as version 2.1, profile XRechnung
+descriptor.Save("zugferd-v20.xml", ZUGFeRDVersion.Version20, Profile.Basic); // save as version 2.0, profile Basic
+descriptor.Save("zugferd-v22.xml", ZUGFeRDVersion.Version22, Profile.Basic); // save as version 2.1, profile Basic
+descriptor.Save("zugferd-v22-xrechnung.xml", ZUGFeRDVersion.Version22, Profile.XRechnung); // save as version 2.1, profile XRechnung
 ```
 
 # Extracting xml attachments from pdf files
@@ -319,8 +319,6 @@ https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-
 # Thanks
 
 * The solution is used in CKS.DMS and supported by CKSolution: 
-  http://www.cksolution.de
-* ZUGFeRD 2.1 implementation was done by www.netco-solution.de and used in netCo.Butler
   https://www.cksolution.de
 * ZUGFeRD 2.1 implementation was done by https://netco-solution.de and used in netCo.Butler
 
