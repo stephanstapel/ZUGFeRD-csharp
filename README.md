@@ -321,8 +321,10 @@ https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-
 * The solution is used in CKS.DMS and supported by CKSolution: 
   http://www.cksolution.de
 * ZUGFeRD 2.1 implementation was done by www.netco-solution.de and used in netCo.Butler
+  https://www.cksolution.de
+* ZUGFeRD 2.1 implementation was done by https://netco-solution.de and used in netCo.Butler
 
 # Links
 
 You can find more information about ZUGFeRD here:
-http://www.ferd-net.de/
+https://www.ferd-net.de/
