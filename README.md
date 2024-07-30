@@ -6,7 +6,7 @@ https://github.com/zugferd
 # Sponsoring
 Implementing and maintaining this library is a lot of hard work. I'm doing this in my spare time, there is no company behind developing ZUGFeRD-csharp. Support me in this work and help making this library better:
 
-[:heart: Sponsor me on github](https://github.com/sponsors/stephanstapel)
+[:heart: Sponsor me on GitHub](https://github.com/sponsors/stephanstapel)
 
 In particular, I am searching for sponsors for:
 
@@ -14,16 +14,15 @@ In particular, I am searching for sponsors for:
 * Validation using the standard XSL
 * Invoice visualization
 
-
 # Introduction
 The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor Factur-X. One special profile of Factur-X is the German XRechnung format.
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
 # Relationship between the different standards
-Since there are a lot terms and standards around electronic invoices, I'd like to layout my understanding:
+Since there are a lot of terms and standards around electronic invoices, I'd like to lay out my understanding:
 
 - ZUGFeRD was developed by a German initiative as a standard for electronic invoices (https://www.ferd-net.de/).
-- ZUGFeRD 2.1 is identical to the German/ French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0) (https://www.ferd-net.de/standards/what-is-factur-x/index.html).
+- ZUGFeRD 2.1 is identical to the German/French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0) (https://www.ferd-net.de/standards/what-is-factur-x/index.html).
 - The standard Factur-X 1.0 (respectively ZUGFeRD 2.1) is conform with the European norm EN 16931.
 - EN 16931 in turn is based on worldwide UN/CEFACT standard 'Cross Industry Invoice' (CII).
 - XRechnung as another German standard is a subset of EN 16931. It is defined by another party called KoSIT (https://www.xoev.de/). It comes with its own validation rules (https://www.ferd-net.de/standards/what-is-xrechnung/index.html).
@@ -34,7 +33,7 @@ Since there are a lot terms and standards around electronic invoices, I'd like t
 Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
 
 # Installation
-Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-chsarp'.
+Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-csharp'.
 
 You can find more information about the nuget package here:
 
@@ -51,7 +50,7 @@ Open ZUGFeRD/ZUGFeRD.sln solution file. Choose Release or Debug mode and hit 'Bu
 
 For running the tests, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the unit tests. The tests show good cases on how to use the library.
 
-# Step by step guide for creating invoices
+# Step-by-step guide for creating invoices
 Central class for users is class InvoiceDescriptor.
 This class does not only allow to read and set all ZUGFeRD attributes and structures but also allows to load and save ZUGFeRD files.
 
@@ -88,14 +87,14 @@ desc.SetSellerElectronicAddress("DE123456789", ElectronicAddressSchemeIdentifier
 desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
 ```
 
-The fields are only necessary if you want to send the x-rechnung via the Peppol network.
+The fields are only necessary if you want to send the XRechnung via the Peppol network.
 A description of the fields can be found in the following documents:
 
 [https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.1.0-2020-03-11.pdf](https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.2.0-2023-06-19.pdf)
 
 https://www.ferd-net.de/upload/Dokumente/FACTUR-X_ZUGFeRD_2p0_Teil1_Profil_EN16931_1p03.pdf
 
-In Luxembourg it has been mandatory since this year to process all invoices via Peppol:
+In Luxembourg, it has been mandatory since this year to process all invoices via Peppol:
 
 https://gouvernement.lu/de/dossiers.gouv_digitalisation%2Bde%2Bdossiers%2B2021%2Bfacturation-electronique.html
 
@@ -145,7 +144,6 @@ One trade product can have one or more product characteristics, which can contai
 });
 ```
 
-
 ## Document references
 The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
 
@@ -156,7 +154,6 @@ desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt 
 // you can optionally reference a contract:
 desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
 ```
-
 
 ## Storing the invoice
 ```csharp
@@ -196,7 +193,7 @@ stream.Flush();
 stream.Close();            
 ```
 
-As you see, the libary does not influence the lifecycle of the stream, i.e. it is not automatically closed by the library. Just as opening the stream, flushing and closing is the duty of the calling function.
+As you see, the library does not influence the lifecycle of the stream, i.e. it is not automatically closed by the library. Just as opening the stream, flushing and closing is the duty of the calling function.
 
 Alternatively, you can pass a file path:
 
@@ -223,7 +220,6 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // s
 
 For reading and writing XRechnung invoices, please see below.
 
-
 # Support for XRechnung
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
 
@@ -239,7 +235,7 @@ Make sure to also add a business process which is required starting with XRechnu
 desc.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
 ```
 
-Furthermore, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the xrechnung.xml document:
+Furthermore, XRechnung comes with some special features. One of these features is the ability to embed binary files as attachments to the `xrechnung.xml` document:
 
 ```csharp
 InvoiceDescriptor desc = _createInvoice();
@@ -254,8 +250,8 @@ desc.AddAdditionalReferencedDocument(
 desc.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);            
 ```
 
-The resulting xrechnung.xml file will then contain the calculation file content. As this is not standardized, the decision was to encode the attachments in base64.
-Please note that there are only few mime types supported by the XRechnung standard. The supported mime types are defined in BG-24 and BT-125. At the time of writing this tutorial, those are also listed in the discussion you find over here: https://projekte.kosit.org/xrechnung/xrechnung/-/issues/59
+The resulting `xrechnung.xml` file will then contain the calculation file content. As this is not standardized, the decision was to encode the attachments in base64.
+Please note that there are only few mime-types supported by the XRechnung standard. The supported mime-types are defined in BG-24 and BT-125. At the time of writing this tutorial, those are also listed in the discussion you find over here: https://projekte.kosit.org/xrechnung/xrechnung/-/issues/59
 
 - application/pdf
 - image/png
@@ -267,7 +263,7 @@ Please note that there are only few mime types supported by the XRechnung standa
 
 # Support for E-Reporting
 For french companies, a dedicated profile exists called E-Reporting. This profile is implemented on top of XRechnung/ Factur-X. It is used when transactions are done to customers who don't make use of VAT. One example are private customers (in B2C scenarios). The other example is when selling to entities beyond France.
-More information can be found here: https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration (french)
+More information can be found here: https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration (French)
 And here: https://www.roedl.de/themen/frankreich-e-invoice-reporting-umsatzsteuer-digital (german)
 
 Thanks to [@Athilla](https://github.com/Athilla), this profile is also supported by ZUGFeRD-csharp.
@@ -283,15 +279,14 @@ This information needs to be sent to the tax authorities. Different due dates ap
 # Support for profiles
 The library contains support for all profiles that are supported by the ZUGFeRD formats:
 
-| Profile         	| Version1 	| Version2 	| Version21 	|
-|-----------------	|----------	|----------	|-----------	|
-| MINIMUM         	|          	| X        	| X         	|
-| BASIC WL        	|          	| X        	| X         	|
-| BASIC           	| X        	| X        	| X         	|
-| COMFORT/EN16391 	| X        	| X        	| X         	|
-| XRECHNUNG       	|          	|          	| X         	|
-| EXTENDED        	| X        	| X        	| X         	|
-
+| Profile         	 | Version1 	 | Version20	 | Version22 	 |
+|-------------------|------------|------------|-------------|
+| MINIMUM         	 | 	          | X        	 | X         	 |
+| BASIC WL        	 | 	          | X        	 | X         	 |
+| BASIC           	 | X        	 | X        	 | X         	 |
+| COMFORT/EN16391 	 | X        	 | X        	 | X         	 |
+| XRECHNUNG       	 | 	          | 	          | X         	 |
+| EXTENDED        	 | X        	 | X        	 | X         	 |
 
 Please note that version 1 implementation of the library is not strict, i.e. it will output all information available into the invoice xml, regardless of the profiles that is used. Reading various files with different profiles will generate the correct output.
 
@@ -299,9 +294,9 @@ If you want to write the invoice xml with a certain ZUGFeRD version and a certai
 
 ```csharp
 descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x, profile Basic
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0, profile Basic
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1, profile Basic
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.XRechnung); // save as version 2.1, profile XRechnung
+descriptor.Save("zugferd-v20.xml", ZUGFeRDVersion.Version20, Profile.Basic); // save as version 2.0, profile Basic
+descriptor.Save("zugferd-v22.xml", ZUGFeRDVersion.Version22, Profile.Basic); // save as version 2.1, profile Basic
+descriptor.Save("zugferd-v22-xrechnung.xml", ZUGFeRDVersion.Version22, Profile.XRechnung); // save as version 2.1, profile XRechnung
 ```
 
 # Extracting xml attachments from pdf files
@@ -321,12 +316,13 @@ You find information about this here:
 
 https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-a-pdf-with-itextsharp
 
-
 # Thanks
+
 * The solution is used in CKS.DMS and supported by CKSolution: 
-  http://www.cksolution.de
-* ZUGFeRD 2.1 implementation was done by www.netco-solution.de and used in netCo.Butler
+  https://www.cksolution.de
+* ZUGFeRD 2.1 implementation was done by https://netco-solution.de and used in netCo.Butler
 
 # Links
+
 You can find more information about ZUGFeRD here:
-http://www.ferd-net.de/
+https://www.ferd-net.de/
