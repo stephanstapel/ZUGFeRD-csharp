@@ -17,9 +17,6 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -28,17 +25,15 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class Tax
     {
+        private decimal? _taxAmount;
+
         /// <summary>
-        /// Returns the amount of the tax (Percent * BasisAmount)
-        /// 
-        /// This information is calculated live.
+        /// Total tax amount, if the value is not provided, it will be automatically calculated (Percent * BasisAmount).
         /// </summary>
         public decimal TaxAmount
         {
-            get
-            {
-                return System.Math.Round(0.01m * this.Percent * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
-            }
+            get => _taxAmount ?? Math.Round(0.01m * Percent * BasisAmount, 2, MidpointRounding.AwayFromZero);
+            set => _taxAmount = value;
         }
 
         /// <summary>
