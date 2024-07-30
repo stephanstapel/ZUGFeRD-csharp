@@ -144,7 +144,6 @@ One trade product can have one or more product characteristics, which can contai
 });
 ```
 
-
 ## Document references
 The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
 
@@ -155,7 +154,6 @@ desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt 
 // you can optionally reference a contract:
 desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
 ```
-
 
 ## Storing the invoice
 ```csharp
@@ -221,7 +219,6 @@ descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // s
 ```
 
 For reading and writing XRechnung invoices, please see below.
-
 
 # Support for XRechnung
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
@@ -291,7 +288,6 @@ The library contains support for all profiles that are supported by the ZUGFeRD 
 | XRECHNUNG       	 | 	          | 	          | X         	 |
 | EXTENDED        	 | X        	 | X        	 | X         	 |
 
-
 Please note that version 1 implementation of the library is not strict, i.e. it will output all information available into the invoice xml, regardless of the profiles that is used. Reading various files with different profiles will generate the correct output.
 
 If you want to write the invoice xml with a certain ZUGFeRD version and a certain profile, make sure to use the parameters of the Save method:
@@ -320,12 +316,13 @@ You find information about this here:
 
 https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-a-pdf-with-itextsharp
 
-
 # Thanks
+
 * The solution is used in CKS.DMS and supported by CKSolution: 
   http://www.cksolution.de
 * ZUGFeRD 2.1 implementation was done by www.netco-solution.de and used in netCo.Butler
 
 # Links
+
 You can find more information about ZUGFeRD here:
 http://www.ferd-net.de/
