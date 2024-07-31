@@ -1140,7 +1140,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                if (tax.AllowanceChargeBasisAmount != 0)
+                if (tax.AllowanceChargeBasisAmount != 0 && (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung))
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
@@ -1285,7 +1285,7 @@ namespace s2industries.ZUGFeRD
                     if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.ShipFromTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    if ((this.Descriptor.Profile != Profile.Extended)) { return; } // extended, XRechnung1, XRechnung profile only
                     break;
                 case PartyTypes.InvoiceeTradeParty:
                     if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
