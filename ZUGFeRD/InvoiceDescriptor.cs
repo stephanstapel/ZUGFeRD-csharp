@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -918,10 +916,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="allowanceChargeBasisAmount"></param>
         /// <param name="exemptionReasonCode"></param>
         /// <param name="exemptionReason"></param>
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal allowanceChargeBasisAmount = 0, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
+        /// <param name="taxAmount"></param>
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal allowanceChargeBasisAmount = 0, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null, decimal? taxAmount = null)
         {
             Tax tax = new Tax()
             {
+                TaxAmount = taxAmount ?? Math.Round(0.01m * percent * basisAmount, 2, MidpointRounding.AwayFromZero),
                 BasisAmount = basisAmount,
                 Percent = percent,
                 TypeCode = typeCode,
