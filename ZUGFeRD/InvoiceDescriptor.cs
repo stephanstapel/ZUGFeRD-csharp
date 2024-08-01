@@ -137,7 +137,7 @@ namespace s2industries.ZUGFeRD
         /// 
         /// This field seems not to be used in common scenarios.
 		/// </summary>
-		public string SellerReferebceNo { get; set; } = "";
+		public string SellerReferenceNo { get; set; } = "";
 
 		/// <summary>
 		/// This party is optional and only relevant for Extended profile

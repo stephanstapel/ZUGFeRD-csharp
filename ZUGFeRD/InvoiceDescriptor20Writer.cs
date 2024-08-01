@@ -520,7 +520,7 @@ namespace s2industries.ZUGFeRD
 			Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
 			//   5. InvoiceIssuerReference (optional)
-			Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferebceNo, profile: Profile.Extended);
+			Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, profile: Profile.Extended);
 
 			//   6. InvoicerTradeParty (optional)
 			_writeOptionalParty(Writer, "ram:InvoicerTradeParty", this.Descriptor.Invoicer);
