@@ -49,6 +49,7 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	<RootNamespace>s2industries.ZUGFeRD</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Debug</OutputPath>

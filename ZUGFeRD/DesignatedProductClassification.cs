@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZUGFeRD
+namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Detailed information on the item classification
