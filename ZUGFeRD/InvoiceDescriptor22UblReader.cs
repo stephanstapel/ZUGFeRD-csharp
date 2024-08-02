@@ -443,6 +443,20 @@ namespace s2industries.ZUGFeRD
             };
 
             // Read ApplicableProductCharacteristic 
+            if (tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification", nsmgr) != null)
+            {
+                foreach (XmlNode commodityClassification in tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification/cac:ItemClassificationCode", nsmgr))
+                {
+                    DesignatedProductClassificationClassCodes code = default(DesignatedProductClassificationClassCodes).FromString(commodityClassification.InnerText);
+                    item.AddDesignatedProductClassification(
+                        code,
+                        _nodeAsString(commodityClassification, "./@name", nsmgr),
+                        _nodeAsString(commodityClassification, "./@listID", nsmgr),
+                        _nodeAsString(commodityClassification, "./@istVersionID", nsmgr));
+                }
+            }
+
+            // Read ApplicableProductCharacteristic 
             if (tradeLineItem.SelectNodes(".//cac:Item/cac:AdditionalItemProperty", nsmgr) != null)
             {
                 foreach (XmlNode applicableProductCharacteristic in tradeLineItem.SelectNodes(".//cac:Item/cac:AdditionalItemProperty", nsmgr))
