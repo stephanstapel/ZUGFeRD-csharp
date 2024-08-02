@@ -317,6 +317,8 @@ namespace s2industries.ZUGFeRD
                     break;
                 case PartyTypes.BuyerTradeParty:
                     break;
+                case PartyTypes.ShipFromTradeParty:
+                    return;
                 //case PartyTypes.ShipToTradeParty:
                 //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
                 //    break;
