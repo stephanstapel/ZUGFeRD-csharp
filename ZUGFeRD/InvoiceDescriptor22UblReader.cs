@@ -241,6 +241,12 @@ namespace s2industries.ZUGFeRD
             retval.PaymentReference = _nodeAsString(doc.DocumentElement, "//cac:PaymentMeans/cbc:PaymentID", nsmgr);
             retval.Currency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//cbc:DocumentCurrencyCode", nsmgr));
 
+            CurrencyCodes optionalTaxCurrency = default(CurrencyCodes).FromString(_nodeAsString(doc.DocumentElement, "//cbc:TaxCurrencyCode", nsmgr)); // BT-6
+            if (optionalTaxCurrency != CurrencyCodes.Unknown)
+            {
+                retval.TaxCurrency = optionalTaxCurrency;
+            }
+
             // TODO: Multiple SpecifiedTradeSettlementPaymentMeans can exist for each account/institution (with different SEPA?)
             PaymentMeans _tempPaymentMeans = new PaymentMeans()
             {

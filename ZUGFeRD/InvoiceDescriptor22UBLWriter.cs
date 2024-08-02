@@ -83,6 +83,12 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteElementString("cbc:DocumentCurrencyCode", this.Descriptor.Currency.EnumToString());
 
+            //   BT-6
+            if (this.Descriptor.TaxCurrency.HasValue)
+            {
+                Writer.WriteElementString("cbc:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString());
+            }
+
             Writer.WriteOptionalElementString("cbc:BuyerReference", this.Descriptor.ReferenceOrderNo);
 
             // OrderReference
