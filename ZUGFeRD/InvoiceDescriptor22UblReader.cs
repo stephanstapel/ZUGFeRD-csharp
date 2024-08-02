@@ -450,7 +450,7 @@ namespace s2industries.ZUGFeRD
                     DesignatedProductClassificationClassCodes code = default(DesignatedProductClassificationClassCodes).FromString(commodityClassification.InnerText);
                     item.AddDesignatedProductClassification(
                         code,
-                        _nodeAsString(commodityClassification, "./@name", nsmgr),
+                        "", // no name in Peppol Billing!
                         _nodeAsString(commodityClassification, "./@listID", nsmgr),
                         _nodeAsString(commodityClassification, "./@istVersionID", nsmgr));
                 }

@@ -273,6 +273,7 @@ namespace s2industries.ZUGFeRD
 
 
                 _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
+                _WriteCommodityClassification(Writer, tradeLineItem.GetDesignatedProductClassifications());
 
                 Writer.WriteEndElement(); //!Item
 
@@ -305,6 +306,44 @@ namespace s2industries.ZUGFeRD
             stream.Seek(streamPosition, SeekOrigin.Begin);
 
         }
+
+        private void _WriteCommodityClassification(ProfileAwareXmlTextWriter writer, List<DesignatedProductClassification> designatedProductClassifications)
+        {
+            if ((designatedProductClassifications == null) || (designatedProductClassifications.Count == 0))
+            {
+                return;
+            }
+
+            writer.WriteStartElement("cac:CommodityClassification");
+
+            foreach (DesignatedProductClassification classification in designatedProductClassifications)
+            {
+                if (!classification.ClassCode.HasValue)
+                {
+                    continue;
+                }
+
+                writer.WriteStartElement("cbc:ItemClassificationCode"); // BT-158
+                writer.WriteValue(classification.ClassCode.Value.EnumToString(), profile : ALL_PROFILES);
+
+                if (!String.IsNullOrWhiteSpace(classification.ListID))
+                {
+                    Writer.WriteAttributeString("listID", classification.ListID); // BT-158-1
+                }
+
+                if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
+                {
+                    Writer.WriteAttributeString("listVersionID", classification.ListVersionID); // BT-158-2
+                }
+
+                // no name attribute in Peppol Billing!
+
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
+        } // !_WriteCommodityClassification()
+
 
         private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null)
         {
