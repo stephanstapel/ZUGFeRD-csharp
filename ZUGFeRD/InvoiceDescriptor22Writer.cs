@@ -23,7 +23,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD

@@ -24,7 +24,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD

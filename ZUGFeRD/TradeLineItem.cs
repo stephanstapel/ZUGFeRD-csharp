@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
-using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD

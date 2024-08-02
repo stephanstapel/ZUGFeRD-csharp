@@ -24,7 +24,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
-using ZUGFeRD;
 
 
 namespace s2industries.ZUGFeRD
