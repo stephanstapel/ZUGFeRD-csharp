@@ -918,7 +918,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="allowanceChargeBasisAmount"></param>
         /// <param name="exemptionReasonCode"></param>
         /// <param name="exemptionReason"></param>
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal allowanceChargeBasisAmount = 0, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal? allowanceChargeBasisAmount = null, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
         {
             Tax tax = new Tax()
             {

@@ -291,7 +291,7 @@ namespace s2industries.ZUGFeRD
                                              _nodeAsDecimal(node, "cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
                                              default(TaxTypes).FromString(_nodeAsString(node, "cac:TaxCategory/cac:TaxScheme/cbc:ID", nsmgr)),
                                              default(TaxCategoryCodes).FromString(_nodeAsString(node, "cac:TaxCategory/cbc:ID", nsmgr)),
-                                             0,
+                                             null,
                                              default(TaxExemptionReasonCodes).FromString(_nodeAsString(node, "cac:TaxCategory/cbc:TaxExemptionReasonCode", nsmgr)),
                                              _nodeAsString(node, "cac:TaxCategory/cbc:TaxExemptionReason", nsmgr)
                                              );

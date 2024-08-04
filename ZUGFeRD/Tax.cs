@@ -66,7 +66,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Total amount of charges / allowances on document level
         /// </summary>
-        public decimal AllowanceChargeBasisAmount { get; set; }
+        public decimal? AllowanceChargeBasisAmount { get; set; }
 
 
         /// <summary>

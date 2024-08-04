@@ -45,9 +45,14 @@ namespace s2industries.ZUGFeRD
         internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);        
 
 
-        protected string _formatDecimal(decimal value, int numDecimals = 2)
+        protected string _formatDecimal(decimal? value, int numDecimals = 2)
         {
-            return Math.Round(value, numDecimals).ToString($"F{numDecimals}", CultureInfo.InvariantCulture);
+            if (value == null)
+            {
+                return String.Empty;
+            }
+
+            return Math.Round(value.Value, numDecimals).ToString($"F{numDecimals}", CultureInfo.InvariantCulture);
         } // !_formatDecimal()
 
 
