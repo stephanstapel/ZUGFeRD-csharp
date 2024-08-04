@@ -64,5 +64,33 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].ApplicableProductCharacteristics[0].Description, "Test Description");
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].ApplicableProductCharacteristics[1].Value, "3 kg");
         } // !TestTradelineitemProductCharacterstics()
+
+
+        /// <summary>
+        /// https://github.com/stephanstapel/ZUGFeRD-csharp/issues/319
+        /// </summary>
+        [TestMethod]
+        public void TestSkippingOfAllowanceChargeBasisAmount()
+        {
+            // actual values do not matter
+            decimal basisAmount = 123.0m;
+            decimal percent = 11.0m;
+            decimal allowanceChargeBasisAmount = 121.0m;
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.AddApplicableTradeTax(basisAmount, percent, TaxTypes.LOC, TaxCategoryCodes.K, allowanceChargeBasisAmount);
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Tax tax = loadedInvoice.Taxes.FirstOrDefault(t => t.TypeCode == TaxTypes.LOC);
+            Assert.IsNotNull(tax);
+            Assert.AreEqual(basisAmount, tax.BasisAmount);
+            Assert.AreEqual(percent, tax.Percent);
+            Assert.AreEqual(null, tax.AllowanceChargeBasisAmount);
+        } // !TestInvoiceCreation()
     }
 }
