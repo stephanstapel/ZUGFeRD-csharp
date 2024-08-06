@@ -29,10 +29,6 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor22Writer : IInvoiceDescriptorWriter
     {
-        private ProfileAwareXmlTextWriter Writer;
-        private InvoiceDescriptor Descriptor;
-
-
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
 

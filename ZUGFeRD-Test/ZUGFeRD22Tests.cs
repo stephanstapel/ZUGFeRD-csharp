@@ -1950,6 +1950,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(allowanceCharge.Reason, "Discount 10%");
         } // !SpecifiedTradeAllowanceCharge()
 
+
         [TestMethod]
         public void TestSellerDescription()
         {
@@ -1976,5 +1977,42 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual(loadedInvoice.Seller.Description, description);
         } // !TestSellerDescription()
+
+
+        [TestMethod]
+        public void TestSellerContact()
+        {
+            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+
+            string description = "Test description";
+
+            invoice.SetSeller(name: "Lieferant GmbH",
+                              postcode: "80333",
+                              city: "München",
+                              street: "Lieferantenstraße 20",
+                              country: CountryCodes.DE,
+                              id: "",
+                              globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                              legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
+                              description: description
+                              );
+
+            string SELLER_CONTACT = "1-123";
+            string ORG_UNIT = "2-123";
+            string EMAIL_ADDRESS = "3-123";
+            string PHONE_NO = "4-123";
+            string FAX_NO = "5-123";
+            invoice.SetSellerContact(SELLER_CONTACT, ORG_UNIT, EMAIL_ADDRESS, PHONE_NO, FAX_NO);
+
+            MemoryStream ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            ms.Position = 0;
+
+            invoice.Save("c:\\temp\\output.xml", ZUGFeRDVersion.Version22, Profile.Comfort);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.Seller.Description, description);
+        } // !TestSellerContact()
     }
 }
