@@ -2008,9 +2008,13 @@ namespace ZUGFeRD_Test
             invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
             ms.Position = 0;
 
-            invoice.Save("c:\\temp\\output.xml", ZUGFeRDVersion.Version22, Profile.Comfort);
-
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(SELLER_CONTACT, loadedInvoice.SellerContact.Name);
+            Assert.AreEqual(ORG_UNIT, loadedInvoice.SellerContact.OrgUnit);
+            Assert.AreEqual(EMAIL_ADDRESS, loadedInvoice.SellerContact.EmailAddress);
+            Assert.AreEqual(PHONE_NO, loadedInvoice.SellerContact.PhoneNo);
+            Assert.AreEqual(FAX_NO, loadedInvoice.SellerContact.FaxNo);
 
             Assert.AreEqual(loadedInvoice.Seller.Description, description);
         } // !TestSellerContact()
