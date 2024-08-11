@@ -211,7 +211,7 @@ namespace s2industries.ZUGFeRD
 
                         #region IssuerAssignedID
                         //Bestellnummer
-                        Writer.WriteOptionalElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID);
+                        Writer.WriteOptionalElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID, Profile.Extended);
                         #endregion
 
                         #region LineID
@@ -222,7 +222,7 @@ namespace s2industries.ZUGFeRD
                         #region IssueDateTime
                         if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
                         {
-                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                            Writer.WriteStartElement("ram:FormattedIssueDateTime", Profile.Extended);
                             Writer.WriteStartElement("qdt:DateTimeString");
                             Writer.WriteAttributeString("format", "102");
                             Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value));
