@@ -8,7 +8,7 @@ namespace s2industries.ZUGFeRD
 {
     internal class XmlUtils
     {
-        public static bool NodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
+        internal static bool NodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
         {
             if (node == null)
             {
@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
         } // !NodeAsBool()
 
 
-        public static string NodeAsString(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, string defaultValue = "")
+        internal static string NodeAsString(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, string defaultValue = "")
         {
             if (node == null)
             {
@@ -64,7 +64,7 @@ namespace s2industries.ZUGFeRD
         } // NodeAsString()
 
 
-        public static int NodeAsInt(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, int defaultValue = 0)
+        internal static int NodeAsInt(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, int defaultValue = 0)
         {
             if (node == null)
             {
@@ -86,7 +86,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         ///  reads the value from given xpath and interprets the value as decimal
         /// </summary>
-        public static decimal? NodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal? defaultValue = default(decimal?))
+        internal static decimal? NodeAsDecimal(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, decimal? defaultValue = default(decimal?))
         {
             if (node == null)
             {
@@ -108,7 +108,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         ///  reads the value from given xpath and interprets the value as date time
         /// </summary>
-        public static DateTime? NodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
+        internal static DateTime? NodeAsDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, DateTime? defaultValue = null)
         {
             if (node == null)
             {
@@ -225,7 +225,7 @@ namespace s2industries.ZUGFeRD
         } // !NodeAsDateTime()
 
 
-        public static T NodeAsEnum<T>(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, T defaultValue = default(T)) where T : Enum
+        internal static T NodeAsEnum<T>(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, T defaultValue = default(T)) where T : Enum
         {
             int value = NodeAsInt(node, xpath, nsmgr);
             if (Enum.IsDefined(typeof(T), value))
