@@ -52,6 +52,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.TradeLineItems.Count, 0);
             Assert.AreEqual(desc.LineTotalAmount, 0.0m); // not present in file
             Assert.AreEqual(desc.TaxBasisAmount, 198.0m);
+            Assert.AreEqual(desc.IsTest, false); // not present in file
         }
 
         [TestMethod]

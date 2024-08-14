@@ -45,6 +45,7 @@ namespace ZUGFeRD_Test
       Assert.AreEqual(desc.InvoiceNo, "471102");
       Assert.AreEqual(desc.TradeLineItems.Count, 1);
       Assert.AreEqual(desc.LineTotalAmount, 198.0m);
+      Assert.IsFalse(desc.IsTest);
     } // !TestReferenceBasicInvoice()
 
 
@@ -63,7 +64,8 @@ namespace ZUGFeRD_Test
       Assert.AreEqual(desc.InvoiceNo, "R87654321012345");
       Assert.AreEqual(desc.TradeLineItems.Count, 6);
       Assert.AreEqual(desc.LineTotalAmount, 457.20m);
-    } // !TestReferenceExtendedInvoice()
+      Assert.IsTrue(desc.IsTest);
+        } // !TestReferenceExtendedInvoice()
 
 
     [TestMethod]

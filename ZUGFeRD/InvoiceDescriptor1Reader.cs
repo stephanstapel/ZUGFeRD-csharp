@@ -49,7 +49,7 @@ namespace s2industries.ZUGFeRD
 
             InvoiceDescriptor retval = new InvoiceDescriptor
             {
-                IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//rsm:SpecifiedExchangedDocumentContext/ram:TestIndicator", nsmgr),
+                IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//rsm:SpecifiedExchangedDocumentContext/ram:TestIndicator", nsmgr, false),
                 BusinessProcess = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID", nsmgr),
                 Profile = default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
                 Name = XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:HeaderExchangedDocument/ram:Name", nsmgr),
