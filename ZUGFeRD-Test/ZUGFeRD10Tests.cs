@@ -36,6 +36,7 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual(desc.Profile, Profile.Comfort);
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+            Assert.IsTrue(desc.IsTest);
         } // !TestReferenceComfortInvoice()
 
 
