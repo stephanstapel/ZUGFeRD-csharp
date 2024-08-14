@@ -298,6 +298,7 @@ namespace ZUGFeRD_Test
 
       desc.AddAdditionalReferencedDocument(
           id: "My-File-PDF",
+          issueDateTime: timestamp,
           typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
           name: "EmbeddedPdf",
           attachmentBinaryObject: data,
@@ -305,6 +306,7 @@ namespace ZUGFeRD_Test
 
       desc.AddAdditionalReferencedDocument(
           id: "My-File-BIN",
+          issueDateTime: timestamp,
           typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
           name: "EmbeddedPdf",
           attachmentBinaryObject: data,

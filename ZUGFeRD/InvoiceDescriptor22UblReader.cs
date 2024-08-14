@@ -737,18 +737,18 @@ namespace s2industries.ZUGFeRD
             return retval;
         } // !_nodeAsAddressParty()
 
-        private static AdditionalReferencedDocument _getAdditionalReferencedDocument(XmlNode a_oXmlNode, XmlNamespaceManager a_nsmgr)
+        private static AdditionalReferencedDocument _getAdditionalReferencedDocument(XmlNode node, XmlNamespaceManager nsmgr)
         {
-            string strBase64BinaryData = XmlUtils.NodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject", a_nsmgr);
+            string strBase64BinaryData = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject", nsmgr);
             return new AdditionalReferencedDocument
             {
-                ID = XmlUtils.NodeAsString(a_oXmlNode, "ram:IssuerAssignedID", a_nsmgr),
-                TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(XmlUtils.NodeAsString(a_oXmlNode, "ram:TypeCode", a_nsmgr)),
-                Name = XmlUtils.NodeAsString(a_oXmlNode, "ram:Name", a_nsmgr),
-                IssueDateTime = XmlUtils.NodeAsDateTime(a_oXmlNode, "ram:FormattedIssueDateTime/qdt:DateTimeString", a_nsmgr),
+                ID = XmlUtils.NodeAsString(node, "ram:IssuerAssignedID", nsmgr),
+                TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(XmlUtils.NodeAsString(node, "ram:TypeCode", nsmgr)),
+                Name = XmlUtils.NodeAsString(node, "ram:Name", nsmgr),
+                IssueDateTime = XmlUtils.NodeAsDateTime(node, "ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr),
                 AttachmentBinaryObject = !string.IsNullOrWhiteSpace(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
-                Filename = XmlUtils.NodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject/@filename", a_nsmgr),
-                ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(a_oXmlNode, "ram:ReferenceTypeCode", a_nsmgr))
+                Filename = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject/@filename", nsmgr),
+                ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr))
             };
         }
         private static TaxRegistrationSchemeID _getUncefactTaxSchemeID(string schemeID)

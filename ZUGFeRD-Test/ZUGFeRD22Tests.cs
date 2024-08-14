@@ -1222,6 +1222,8 @@ namespace ZUGFeRD_Test
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
 
+            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version22, Profile.Extended);
+
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
             string text = reader.ReadToEnd();

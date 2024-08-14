@@ -374,7 +374,7 @@ namespace s2industries.ZUGFeRD
                 });
             }
 
-            retval.OrderDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr);
+            retval.OrderDate = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr);                
             retval.OrderNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr);
 
             // Read SellerOrderReferencedDocument
@@ -383,7 +383,7 @@ namespace s2industries.ZUGFeRD
                 retval.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
                 };
             }
 
@@ -479,7 +479,7 @@ namespace s2industries.ZUGFeRD
                 item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, "//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
                 };
             }
 
@@ -488,7 +488,7 @@ namespace s2industries.ZUGFeRD
                 item.ContractReferencedDocument = new ContractReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, "//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
                 };
             }
 
@@ -583,13 +583,13 @@ namespace s2industries.ZUGFeRD
                 item.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr),
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
                 };
             }
 
             if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime", nsmgr) != null)
             {
-                item.ActualDeliveryDate = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString", nsmgr);
+                item.ActualDeliveryDate = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime", nsmgr);
             }
 
             //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr) != null)
@@ -684,20 +684,21 @@ namespace s2industries.ZUGFeRD
             return retval;
         } // !_nodeAsParty()
 
-        private static AdditionalReferencedDocument _getAdditionalReferencedDocument(XmlNode a_oXmlNode, XmlNamespaceManager a_nsmgr)
+
+        private static AdditionalReferencedDocument _getAdditionalReferencedDocument(XmlNode node, XmlNamespaceManager nsmgr)
         {
-            string strBase64BinaryData = XmlUtils.NodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject", a_nsmgr);
+            string strBase64BinaryData = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject", nsmgr);
             return new AdditionalReferencedDocument
             {
-                ID = XmlUtils.NodeAsString(a_oXmlNode, "ram:IssuerAssignedID", a_nsmgr),
-                TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(XmlUtils.NodeAsString(a_oXmlNode, "ram:TypeCode", a_nsmgr)),
-                Name = XmlUtils.NodeAsString(a_oXmlNode, "ram:Name", a_nsmgr),
-                IssueDateTime = XmlUtils.NodeAsDateTime(a_oXmlNode, "ram:FormattedIssueDateTime/qdt:DateTimeString", a_nsmgr),
+                ID = XmlUtils.NodeAsString(node, "ram:IssuerAssignedID", nsmgr),
+                TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(XmlUtils.NodeAsString(node, "ram:TypeCode", nsmgr)),
+                Name = XmlUtils.NodeAsString(node, "ram:Name", nsmgr),
+                IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(node, "ram:FormattedIssueDateTime", nsmgr),                
                 AttachmentBinaryObject = !string.IsNullOrWhiteSpace(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
-                Filename = XmlUtils.NodeAsString(a_oXmlNode, "ram:AttachmentBinaryObject/@filename", a_nsmgr),
-                ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(a_oXmlNode, "ram:ReferenceTypeCode", a_nsmgr))
+                Filename = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject/@filename", nsmgr),
+                ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr))
             };
-        }
+        } // !_getAdditionalReferencedDocument()
 
     }
 }
