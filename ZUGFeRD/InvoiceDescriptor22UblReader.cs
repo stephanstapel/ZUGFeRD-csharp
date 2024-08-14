@@ -54,7 +54,7 @@ namespace s2industries.ZUGFeRD
 
             InvoiceDescriptor retval = new InvoiceDescriptor
             {
-                IsTest = _nodeAsBool(doc.DocumentElement, "//cbc:TestIndicator", nsmgr, false),
+                IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//cbc:TestIndicator", nsmgr, false),
                 BusinessProcess = XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:ProfileID", nsmgr),
                 Profile = Profile.XRechnung, //default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
                 Type = default(InvoiceType).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:InvoiceTypeCode", nsmgr)),
