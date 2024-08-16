@@ -25,7 +25,6 @@ using System.Text;
 using System.Xml;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NuGet.Frameworks;
 using s2industries.ZUGFeRD;
 
 
@@ -2021,5 +2020,20 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual(loadedInvoice.Seller.Description, description);
         } // !TestSellerContact()
+
+        [TestMethod]
+        public void ShouldLoadCiiWithoutQdtNamespace()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung CII - without qdt.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+            Assert.AreEqual(desc.InvoiceNo, "123456XX");
+            Assert.AreEqual(desc.TradeLineItems.Count, 2);
+            Assert.AreEqual(desc.LineTotalAmount, 314.86m);
+        } // !ShouldLoadCIIWithoutQdtNamespace()
     }
 }
