@@ -1139,7 +1139,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                if (tax.AllowanceChargeBasisAmount != 0 && (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung))
+                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0 && (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung))
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));

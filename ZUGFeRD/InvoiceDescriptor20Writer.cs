@@ -824,7 +824,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                if (tax.AllowanceChargeBasisAmount != 0)
+                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
                 {
                     writer.WriteStartElement("ram:AllowanceChargeBasisAmount");
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
