@@ -110,5 +110,41 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(percent, tax.Percent);
             Assert.AreEqual(null, tax.AllowanceChargeBasisAmount);
         } // !TestInvoiceCreation()
+
+
+        [TestMethod]
+        public void TestInvoiceWithAttachment()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            string filename = "myrandomdata.bin";
+            byte[] data = new byte[32768];
+            new Random().NextBytes(data);
+
+            desc.AddAdditionalReferencedDocument(
+                id: "My-File",
+                typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
+                name: "Ausführbare Datei",
+                attachmentBinaryObject: data,
+                filename: filename);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.AdditionalReferencedDocuments.Count, 1);
+
+            foreach (AdditionalReferencedDocument document in loadedInvoice.AdditionalReferencedDocuments)
+            {
+                if (document.ID == "My-File")
+                {
+                    CollectionAssert.AreEqual(document.AttachmentBinaryObject, data);
+                    Assert.AreEqual(document.Filename, filename);
+                    break;
+                }
+            }
+        } // !TestInvoiceWithAttachment()
     }
 }

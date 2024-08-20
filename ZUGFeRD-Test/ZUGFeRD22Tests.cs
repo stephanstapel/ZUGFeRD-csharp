@@ -324,7 +324,7 @@ namespace ZUGFeRD_Test
                     break;
                 }
             }
-        } // !TestInvoiceWithAttachmentXRechnung()
+        } // !TestInvoiceWithAttachmentExtended()
 
 
         [TestMethod]

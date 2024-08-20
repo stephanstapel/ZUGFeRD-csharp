@@ -372,6 +372,27 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
+            // Read AdditionalReferencedDocument
+            foreach (XmlNode node in doc.SelectNodes("//cac:AdditionalDocumentReference", nsmgr))
+            {
+                AdditionalReferencedDocument document = new AdditionalReferencedDocument()
+                {
+                    ID = XmlUtils.NodeAsString(node, ".//cbc:ID", nsmgr),
+                    ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, ".//cbc:ID/@schemeID", nsmgr)),
+                    TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(XmlUtils.NodeAsString(node, ".//cbc:DocumentTypeCode", nsmgr)),
+                    Name = XmlUtils.NodeAsString(node, ".//cbc:DocumentType", nsmgr)
+                };
+
+                XmlNode binaryObjectNode = node.SelectSingleNode(".//cac:Attachment/cbc:EmbeddedDocumentBinaryObject", nsmgr);
+                if (binaryObjectNode != null)
+                {                    
+                    document.Filename = binaryObjectNode.Attributes["filename"]?.InnerText;
+                    document.AttachmentBinaryObject = Convert.FromBase64String(binaryObjectNode.InnerText);
+                }
+
+                retval.AdditionalReferencedDocuments.Add(document);
+            }
+
             retval.SpecifiedProcuringProject = new SpecifiedProcuringProject
             {
                 ID = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:ProjectReference/cbc:ID", nsmgr),

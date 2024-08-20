@@ -659,9 +659,9 @@ namespace s2industries.ZUGFeRD
 
                     if (document.AttachmentBinaryObject != null)
                     {
-                        Writer.WriteStartElement("ram:AttachmentBinaryObject");
-                        Writer.WriteAttributeString("filename", document.Filename);
-                        Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                        Writer.WriteStartElement("ram:AttachmentBinaryObject"); // BT-125
+                        Writer.WriteAttributeString("filename", document.Filename); // BT-125-2
+                        Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename)); // BT-125-1
                         Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
                         Writer.WriteEndElement(); // !AttachmentBinaryObject()
                     }

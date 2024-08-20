@@ -106,6 +106,43 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ContractDocumentReference
             }
 
+            if (this.Descriptor.AdditionalReferencedDocuments.Count > 0)
+            {
+                foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
+                {
+                    Writer.WriteStartElement("cac:AdditionalDocumentReference");
+                    Writer.WriteStartElement("cbc:ID"); // BT-18, BT-22
+                    Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.EnumToString()); // BT-18-1
+                    Writer.WriteValue(document.ID);
+                    Writer.WriteEndElement(); // !cbc:ID
+                    if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                    {
+                        Writer.WriteElementString("cbc:DocumentTypeCode", document.TypeCode.EnumToString());
+                    }
+                    Writer.WriteOptionalElementString("cbc:DocumentType", document.Name); // BT-123
+
+                    Writer.WriteStartElement("cac:Attachment");
+                    
+                    Writer.WriteStartElement("cbc:EmbeddedDocumentBinaryObject"); // BT-125
+                    Writer.WriteAttributeString("filename", document.Filename);
+                    Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                    Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+                    Writer.WriteEndElement(); // !cbc:EmbeddedDocumentBinaryObject
+
+                    /*
+                     // not supported yet
+                    Writer.WriteStartElement("cac:ExternalReference");
+                    Writer.WriteStartElement("cbc:URI"); // BT-124
+                    Writer.WriteValue("");
+                    Writer.WriteEndElement(); // !cbc:URI
+                    Writer.WriteEndElement(); // !cac:ExternalReference
+                    */
+
+                    Writer.WriteEndElement(); // !cac:Attachment
+                    Writer.WriteEndElement(); // !AdditionalDocumentReference
+                }
+            }
+
             // ProjectReference
             if (this.Descriptor.SpecifiedProcuringProject != null)
             {
