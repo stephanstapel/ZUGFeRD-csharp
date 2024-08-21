@@ -554,8 +554,11 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteElementString("cbc:RegistrationName", party.Name);
 
-                //Party legal registration identifier (BT-30)
-                Writer.WriteElementString("cbc:CompanyID", party.GlobalID.ID.ToString());
+                if (party.GlobalID != null)
+                {
+                    //Party legal registration identifier (BT-30)
+                    Writer.WriteElementString("cbc:CompanyID", party.GlobalID.ID.ToString());
+                }
 
                 writer.WriteEndElement(); //!PartyLegalEntity
 
