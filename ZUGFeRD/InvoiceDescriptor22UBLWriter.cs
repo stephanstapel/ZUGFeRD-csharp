@@ -324,11 +324,11 @@ namespace s2industries.ZUGFeRD
 
                 //[UBL-SR-48] - Invoice lines shall have one and only one classified tax category.
                 Writer.WriteStartElement("cac:ClassifiedTaxCategory");
-                Writer.WriteElementString("cbc:ID", descriptor.Taxes[0].CategoryCode.ToString());
-                Writer.WriteElementString("cbc:Percent", _formatDecimal(descriptor.Taxes[0].Percent));
+                Writer.WriteElementString("cbc:ID", tradeLineItem.TaxCategoryCode.EnumToString());
+                Writer.WriteElementString("cbc:Percent", _formatDecimal(tradeLineItem.TaxPercent));
 
                 Writer.WriteStartElement("cac:TaxScheme");
-                Writer.WriteElementString("cbc:ID", descriptor.Taxes[0].TypeCode.EnumToString());
+                Writer.WriteElementString("cbc:ID", tradeLineItem.TaxType.EnumToString());
                 Writer.WriteEndElement();// !TaxScheme
 
                 Writer.WriteEndElement();// !ClassifiedTaxCategory
@@ -557,7 +557,7 @@ namespace s2industries.ZUGFeRD
                 if (party.GlobalID != null)
                 {
                     //Party legal registration identifier (BT-30)
-                    Writer.WriteElementString("cbc:CompanyID", party.GlobalID.ID.ToString());
+                    Writer.WriteElementString("cbc:CompanyID", party.GlobalID.ID);
                 }
 
                 writer.WriteEndElement(); //!PartyLegalEntity
