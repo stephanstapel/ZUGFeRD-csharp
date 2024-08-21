@@ -346,7 +346,25 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
                 Writer.WriteEndElement();
 
-                
+                IList<TradeAllowanceCharge> charges = tradeLineItem.GetTradeAllowanceCharges();
+                if (charges.Count > 0) // only one charge possible in UBL
+                {
+                    Writer.WriteStartElement("cbc:AllowanceCharge");
+                    
+                    Writer.WriteElementString("cbc:ChargeIndicator", charges[0].ChargeIndicator ? "true" : "false");
+
+                    Writer.WriteStartElement("cbc:Amount"); // BT-147
+                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(charges[0].ActualAmount));
+                    Writer.WriteEndElement();
+
+                    Writer.WriteStartElement("cbc:BaseAmount"); // BT-148
+                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(charges[0].BasisAmount));
+                    Writer.WriteEndElement();
+
+                    Writer.WriteEndElement(); // !AllowanceCharge()
+                }
 
                 Writer.WriteEndElement(); //!Price
 
