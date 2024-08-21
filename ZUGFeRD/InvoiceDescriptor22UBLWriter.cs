@@ -191,16 +191,17 @@ namespace s2industries.ZUGFeRD
 
                             Writer.WriteElementString("cbc:ID", account.IBAN);
                             Writer.WriteElementString("cbc:Name", account.Name);
-                            
+
                             Writer.WriteStartElement("cac:FinancialInstitutionBranch");
                             Writer.WriteElementString("cbc:ID", account.BIC);
 
-                            Writer.WriteStartElement("cac:FinancialInstitution");
-                            Writer.WriteElementString("cbc:Name", account.BankName);
+                            //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
+                            //Writer.WriteStartElement("cac:FinancialInstitution");
+                            //Writer.WriteElementString("cbc:Name", account.BankName);
 
-                            Writer.WriteEndElement(); // !FinancialInstitution
+                            //Writer.WriteEndElement(); // !FinancialInstitution
                             Writer.WriteEndElement(); // !FinancialInstitutionBranch
-                            
+
                             Writer.WriteEndElement(); // !PayeeFinancialAccount
                         }
                     }
@@ -211,19 +212,20 @@ namespace s2industries.ZUGFeRD
                         foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
                         {
                             Writer.WriteStartElement("cac:PaymentMandate");
-                            
+
                             Writer.WriteStartElement("cac:PayerFinancialAccount");
-                            
+
                             Writer.WriteElementString("cbc:ID", account.IBAN);
                             Writer.WriteElementString("cbc:Name", account.Name);
 
                             Writer.WriteStartElement("cac:FinancialInstitutionBranch");
                             Writer.WriteElementString("cbc:ID", account.BIC);
 
-                            Writer.WriteStartElement("cac:FinancialInstitution");
-                            Writer.WriteElementString("cbc:Name", account.BankName);
+                            //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
+                            //Writer.WriteStartElement("cac:FinancialInstitution");
+                            //Writer.WriteElementString("cbc:Name", account.BankName);
 
-                            Writer.WriteEndElement(); // !FinancialInstitution
+                            //Writer.WriteEndElement(); // !FinancialInstitution
                             Writer.WriteEndElement(); // !FinancialInstitutionBranch
 
                             Writer.WriteEndElement(); // !PayerFinancialAccount
@@ -297,7 +299,7 @@ namespace s2industries.ZUGFeRD
                 //Writer.WriteElementString("cbc:LineExtensionAmount", tradeLineItem.LineTotalAmount.ToString());
                 Writer.WriteStartElement("cbc:LineExtensionAmount");
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                Writer.WriteValue(tradeLineItem.LineTotalAmount.ToString());
+                Writer.WriteValue(_formatDecimal(tradeLineItem.LineTotalAmount));
                 Writer.WriteEndElement();
 
 
@@ -310,13 +312,26 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("cbc:ID", tradeLineItem.SellerAssignedID);
                 Writer.WriteEndElement(); //!SellersItemIdentification
 
-                Writer.WriteStartElement("cac:BuyersItemIdentification");
-                Writer.WriteElementString("cbc:ID", tradeLineItem.BuyerAssignedID);
-                Writer.WriteEndElement(); //!BuyersItemIdentification
-
+                if (tradeLineItem.BuyerAssignedID != null && !string.IsNullOrWhiteSpace(tradeLineItem.BuyerAssignedID))
+                {
+                    Writer.WriteStartElement("cac:BuyersItemIdentification");
+                    Writer.WriteElementString("cbc:ID", tradeLineItem.BuyerAssignedID);
+                    Writer.WriteEndElement(); //!BuyersItemIdentification
+                }
 
                 _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
                 _WriteCommodityClassification(Writer, tradeLineItem.GetDesignatedProductClassifications());
+
+                //[UBL-SR-48] - Invoice lines shall have one and only one classified tax category.
+                Writer.WriteStartElement("cac:ClassifiedTaxCategory");
+                Writer.WriteElementString("cbc:ID", descriptor.Taxes[0].CategoryCode.ToString());
+                Writer.WriteElementString("cbc:Percent", _formatDecimal(descriptor.Taxes[0].Percent));
+
+                Writer.WriteStartElement("cac:TaxScheme");
+                Writer.WriteElementString("cbc:ID", descriptor.Taxes[0].TypeCode.EnumToString());
+                Writer.WriteEndElement();// !TaxScheme
+
+                Writer.WriteEndElement();// !ClassifiedTaxCategory
 
                 Writer.WriteEndElement(); //!Item
 
@@ -488,21 +503,22 @@ namespace s2industries.ZUGFeRD
                 if (ElectronicAddress != null)
                 {
                     writer.WriteStartElement("cbc:EndpointID");
-                    writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.ToString());
+                    writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.EnumToString());
                     writer.WriteValue(ElectronicAddress.Address);
                     writer.WriteEndElement();
                 }
 
-                writer.WriteStartElement("cac:PartyIdentification");
                 if (this.Descriptor.PaymentMeans.SEPAMandateReference != null)
                 {
+                    writer.WriteStartElement("cac:PartyIdentification");
                     writer.WriteStartElement("cbc:ID");
                     writer.WriteAttributeString("schemeID", "SEPA");
                     writer.WriteValue(this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
                     writer.WriteEndElement();//!ID
-                }
 
-                writer.WriteEndElement();//!PartyIdentification
+
+                    writer.WriteEndElement();//!PartyIdentification
+                }
 
                 writer.WriteStartElement("cac:PostalAddress");
 
@@ -537,6 +553,9 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("cac:PartyLegalEntity");
 
                 writer.WriteElementString("cbc:RegistrationName", party.Name);
+
+                //Party legal registration identifier (BT-30)
+                Writer.WriteElementString("cbc:CompanyID", party.GlobalID.ID.ToString());
 
                 writer.WriteEndElement(); //!PartyLegalEntity
 
