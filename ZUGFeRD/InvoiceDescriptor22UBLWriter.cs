@@ -335,20 +335,18 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteEndElement(); //!Item
 
-
-                Writer.WriteStartElement("cac:Price");
-
-                //Writer.WriteElementString("cbc:BaseQuantity", tradeLineItem.UnitQuantity.ToString());
-                //Writer.WriteStartElement("cbc:BaseQuantity");
-                //Writer.WriteAttributeString("unitCode", this.Descriptor.Currency.EnumToString());
-                //Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
-                //Writer.WriteEndElement();
-
-                //Writer.WriteElementString("cbc:PriceAmount", tradeLineItem.NetUnitPrice.ToString());
+                Writer.WriteStartElement("cac:Price");  // BG-29
+                Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
+                Writer.WriteAttributeString("unitCode", this.Descriptor.Currency.EnumToString()); // BT-150
+                Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
+                Writer.WriteEndElement();
+                
                 Writer.WriteStartElement("cbc:PriceAmount");
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
                 Writer.WriteEndElement();
+
+                
 
                 Writer.WriteEndElement(); //!Price
 
@@ -572,8 +570,6 @@ namespace s2industries.ZUGFeRD
 
                     writer.WriteEndElement();
                 }
-
-
 
                 writer.WriteEndElement(); //!Party
 
