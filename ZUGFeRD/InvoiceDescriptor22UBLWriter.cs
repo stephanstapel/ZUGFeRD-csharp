@@ -122,7 +122,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteOptionalElementString("cbc:DocumentType", document.Name); // BT-123
 
                     Writer.WriteStartElement("cac:Attachment");
-                    
+
                     Writer.WriteStartElement("cbc:EmbeddedDocumentBinaryObject"); // BT-125
                     Writer.WriteAttributeString("filename", document.Filename);
                     Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
@@ -291,7 +291,7 @@ namespace s2industries.ZUGFeRD
 
                 //Writer.WriteElementString("cbc:InvoicedQuantity", tradeLineItem.BilledQuantity.ToString());
                 Writer.WriteStartElement("cbc:InvoicedQuantity");
-                Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.ToString());
+                Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
                 Writer.WriteValue(tradeLineItem.BilledQuantity.ToString());
                 Writer.WriteEndElement();
 
@@ -336,21 +336,22 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); //!Item
 
                 Writer.WriteStartElement("cac:Price");  // BG-29
-                Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
-                Writer.WriteAttributeString("unitCode", this.Descriptor.Currency.EnumToString()); // BT-150
-                Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
-                Writer.WriteEndElement();
-                
+
                 Writer.WriteStartElement("cbc:PriceAmount");
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
                 Writer.WriteEndElement();
 
+                Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
+                Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
+                Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
+                Writer.WriteEndElement();
+
                 IList<TradeAllowanceCharge> charges = tradeLineItem.GetTradeAllowanceCharges();
                 if (charges.Count > 0) // only one charge possible in UBL
                 {
-                    Writer.WriteStartElement("cbc:AllowanceCharge");
-                    
+                    Writer.WriteStartElement("cac:AllowanceCharge");
+
                     Writer.WriteElementString("cbc:ChargeIndicator", charges[0].ChargeIndicator ? "true" : "false");
 
                     Writer.WriteStartElement("cbc:Amount"); // BT-147
