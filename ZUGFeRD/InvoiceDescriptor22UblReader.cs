@@ -153,7 +153,7 @@ namespace s2industries.ZUGFeRD
             // TODO //XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             //foreach (XmlNode referenceNode in referencedDocNodes)
             //{
-            //  retval.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
+            //  retval.AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             //}
 
             //-------------------------------------------------
@@ -609,7 +609,7 @@ namespace s2industries.ZUGFeRD
             // TODO: Find value //XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             //foreach (XmlNode referenceNode in referenceNodes)
             //{
-            //  item.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
+            //  item.AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             //}
 
             return item;

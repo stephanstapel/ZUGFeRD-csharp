@@ -143,7 +143,7 @@ namespace s2industries.ZUGFeRD
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referencedDocNodes)
             {
-                retval.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
+                retval.AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             }
 
             //-------------------------------------------------
@@ -605,7 +605,7 @@ namespace s2industries.ZUGFeRD
             XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referenceNodes)
             {
-                item.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
+                item.AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             }
 
             foreach(XmlNode designatedProductClassificationNode in tradeLineItem.SelectNodes(".//ram:DesignatedProductClassification", nsmgr))
@@ -685,7 +685,7 @@ namespace s2industries.ZUGFeRD
         } // !_nodeAsParty()
 
 
-        private static AdditionalReferencedDocument _getAdditionalReferencedDocument(XmlNode node, XmlNamespaceManager nsmgr)
+        private static AdditionalReferencedDocument _readAdditionalReferencedDocument(XmlNode node, XmlNamespaceManager nsmgr)
         {
             string strBase64BinaryData = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject", nsmgr);
             return new AdditionalReferencedDocument
@@ -698,7 +698,7 @@ namespace s2industries.ZUGFeRD
                 Filename = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject/@filename", nsmgr),
                 ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr))
             };
-        } // !_getAdditionalReferencedDocument()
+        } // !_readAdditionalReferencedDocument()
 
     }
 }

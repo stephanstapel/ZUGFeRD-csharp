@@ -259,22 +259,7 @@ namespace s2industries.ZUGFeRD
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz
                     foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                     {
-                        Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Extended);
-                        if (document.IssueDateTime.HasValue)
-                        {
-                            Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                            Writer.WriteStartElement("qdt:DateTimeString");
-                            Writer.WriteAttributeString("format", "102");
-                            Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
-                            Writer.WriteEndElement(); // !udt:DateTimeString
-                            Writer.WriteEndElement(); // !ram:IssueDateTime
-                        }
-
-                        Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
-                        Writer.WriteOptionalElementString("ram:IssuerAssignedID", document.ID);
-                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
-
-                        Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+                        _writeAdditionalReferencedDocument(document, Profile.Extended);
                     } // !foreach(document)
                     #endregion
 
@@ -646,38 +631,8 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
                 {
-                    Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                    Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
-                    Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());
-
-                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-                    {
-                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
-                    }
-
-                    Writer.WriteOptionalElementString("ram:Name", document.Name);
-
-                    if (document.AttachmentBinaryObject != null)
-                    {
-                        Writer.WriteStartElement("ram:AttachmentBinaryObject"); // BT-125
-                        Writer.WriteAttributeString("filename", document.Filename); // BT-125-2
-                        Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename)); // BT-125-1
-                        Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
-                        Writer.WriteEndElement(); // !AttachmentBinaryObject()
-                    }
-
-                    if (document.IssueDateTime.HasValue)
-                    {
-                        Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                        Writer.WriteStartElement("qdt:DateTimeString");
-                        Writer.WriteAttributeString("format", "102");
-                        Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
-                        Writer.WriteEndElement(); // !qdt:DateTimeString
-                        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
-                    }
-
-                    Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-                }
+                    _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung); // BG-24         
+				}
             }
             #endregion
 
@@ -1098,8 +1053,43 @@ namespace s2industries.ZUGFeRD
             stream.Seek(streamPosition, SeekOrigin.Begin);
         } // !Save()
 
+		private void _writeAdditionalReferencedDocument(AdditionalReferencedDocument document, Profile profile)
+		{
+			Writer.WriteStartElement("ram:AdditionalReferencedDocument", profile);
+			Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
+			Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());
 
-        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
+			if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+			{
+				Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+			}
+
+			Writer.WriteOptionalElementString("ram:Name", document.Name);
+
+			if (document.AttachmentBinaryObject != null)
+			{
+				Writer.WriteStartElement("ram:AttachmentBinaryObject");
+				Writer.WriteAttributeString("filename", document.Filename); 
+				Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename)); 
+				Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+				Writer.WriteEndElement(); // !AttachmentBinaryObject()
+			}
+
+			if (document.IssueDateTime.HasValue)
+			{
+				Writer.WriteStartElement("ram:FormattedIssueDateTime");
+				Writer.WriteStartElement("qdt:DateTimeString");
+				Writer.WriteAttributeString("format", "102");
+				Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
+				Writer.WriteEndElement(); // !qdt:DateTimeString
+				Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+			}
+
+			Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+		} // !_writeAdditionalReferencedDocument()
+
+
+		private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
             if (value.HasValue)
             {
