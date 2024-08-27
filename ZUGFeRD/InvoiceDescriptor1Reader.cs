@@ -379,9 +379,9 @@ namespace s2industries.ZUGFeRD
 
                 item.AddAdditionalReferencedDocument(
                     id: XmlUtils.NodeAsString(referenceNode, "ram:ID", nsmgr),
-                    date: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTim", nsmgr),
-                    code: default(ReferenceTypeCodes).FromString(_code)
-                );
+                    code: default(ReferenceTypeCodes).FromString(_code),
+					issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTim", nsmgr)
+				);
             }
 
             return item;

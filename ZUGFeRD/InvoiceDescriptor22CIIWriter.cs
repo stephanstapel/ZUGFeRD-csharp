@@ -257,7 +257,7 @@ namespace s2industries.ZUGFeRD
                     #region AdditionalReferencedDocument (Extended)
 
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz
-                    foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
+                    foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
                     {
                         _writeAdditionalReferencedDocument(document, Profile.Extended);
                     } // !foreach(document)

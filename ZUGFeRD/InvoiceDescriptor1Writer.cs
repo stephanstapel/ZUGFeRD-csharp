@@ -436,9 +436,9 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ContractReferencedDocument
                     }
 
-                    if (tradeLineItem.AdditionalReferencedDocuments != null)
+                    if (tradeLineItem._AdditionalReferencedDocuments != null)
                     {
-                        foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
+                        foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
                         {
                             Writer.WriteStartElement("ram:AdditionalReferencedDocument");
                             if (document.IssueDateTime.HasValue)

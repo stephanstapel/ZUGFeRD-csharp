@@ -150,8 +150,10 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Details of an additional document reference
+        /// 
+        /// Marked as internal so it can be accessed by the readers and writers
         /// </summary>
-        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; set; } = new List<AdditionalReferencedDocument>();
+        internal List<AdditionalReferencedDocument> _AdditionalReferencedDocuments { get; set; } = new List<AdditionalReferencedDocument>();
 
         /// <summary>       
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
@@ -296,15 +298,50 @@ namespace s2industries.ZUGFeRD
         } // !SetDeliveryNoteReferencedDocument()
 
 
-        public void AddAdditionalReferencedDocument(string id, DateTime? date = null, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown)
+        public void AddAdditionalReferencedDocument(string id, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
         {
-            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
                 ID = id,
-                IssueDateTime = date,
+                IssueDateTime = issueDateTime,
                 ReferenceTypeCode = code
             });
         } // !AddAdditionalReferencedDocument()
+
+
+		/// <summary>
+		/// Add an additional reference document
+		/// </summary>
+		/// <param name="id">Document number such as delivery note no or credit memo no</param>
+		/// <param name="typeCode"></param>
+		/// <param name="issueDateTime">Document Date</param>        
+		/// <param name="name"></param>
+		/// <param name="referenceTypeCode">Type of the referenced document</param>
+		/// <param name="attachmentBinaryObject"></param>
+		/// <param name="filename"></param>
+		public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+		{
+			this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+			{
+				ReferenceTypeCode = referenceTypeCode,
+				ID = id,
+				IssueDateTime = issueDateTime,
+				Name = name,
+				AttachmentBinaryObject = attachmentBinaryObject,
+				Filename = filename,
+				TypeCode = typeCode
+			});
+		} // !AddAdditionalReferencedDocument()
+
+
+		/// <summary>
+		/// Returns all additional referenced documents for the trade line item
+		/// </summary>
+		/// <returns></returns>
+		public IList<AdditionalReferencedDocument> GetAdditionalReferencedDocuments()
+		{
+			return this._AdditionalReferencedDocuments;
+		} // !GetAdditionalReferencedDocuments()
 
 
 

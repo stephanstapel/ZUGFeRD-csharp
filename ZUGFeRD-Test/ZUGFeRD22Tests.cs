@@ -1378,7 +1378,7 @@ namespace ZUGFeRD_Test
             lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
             lineItem.SetContractReferencedDocument("12345", timestamp);
 
-            lineItem.AddAdditionalReferencedDocument("xyz", timestamp, ReferenceTypeCodes.AAB);
+            lineItem.AddAdditionalReferencedDocument("xyz", ReferenceTypeCodes.AAB, timestamp);
 
             lineItem.UnitQuantity = 3m;
             lineItem.ActualDeliveryDate = timestamp;
@@ -1587,7 +1587,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("12345", loadedLineItem.ContractReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.ContractReferencedDocument.IssueDateTime);
 
-            var lineItemReferencedDoc = loadedLineItem.AdditionalReferencedDocuments.FirstOrDefault();
+            var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
             Assert.IsNotNull(lineItemReferencedDoc);
             Assert.AreEqual("xyz", lineItemReferencedDoc.ID);
             Assert.AreEqual(timestamp, lineItemReferencedDoc.IssueDateTime);
