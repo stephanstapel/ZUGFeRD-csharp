@@ -865,7 +865,7 @@ namespace s2industries.ZUGFeRD
 
                     if (!String.IsNullOrWhiteSpace(account.BIC))
                     {
-                        Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution");
+                        Writer.WriteStartElement("ram:PayeeSpecifiedCreditorFinancialInstitution", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteElementString("ram:BICID", account.BIC);
                         Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
                     }
