@@ -175,12 +175,11 @@ namespace s2industries.ZUGFeRD
                 {
                     foreach(var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
                     {
-                        Writer.WriteStartElement("ram:DesignatedProductClassification");
-                        Writer.WriteOptionalElementString("ram:ClassName", designatedProductClassification.ClassName);
+                        Writer.WriteStartElement("ram:DesignatedProductClassification");                        
 
                         if (designatedProductClassification.ClassCode.HasValue)
                         {
-                            Writer.WriteStartElement("ram::ClassCode");
+                            Writer.WriteStartElement("ram:ClassCode");
                             if (!String.IsNullOrWhiteSpace(designatedProductClassification.ListID))
                             {
                                 Writer.WriteAttributeString("listID", designatedProductClassification.ListID);
@@ -189,7 +188,8 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteValue(designatedProductClassification.ClassCode.Value.ToString());
                             Writer.WriteEndElement(); // !ram::ClassCode
                         }
-                        Writer.WriteEndElement(); // !ram:DesignatedProductClassification
+						Writer.WriteOptionalElementString("ram:ClassName", designatedProductClassification.ClassName);
+						Writer.WriteEndElement(); // !ram:DesignatedProductClassification
                     }
                 }
 

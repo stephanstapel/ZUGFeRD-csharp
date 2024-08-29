@@ -388,14 +388,14 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        /// <summary>
-        /// Adds a product classification
-        /// </summary>
-        /// <param name="classCode">Identifier of the item classification</param>
-        /// <param name="className">Classification name. If you leave className empty, it will be omitted in the output</param>
-        /// <param name="listID">Product classification name (optional)</param>
-        /// <param name="listVersionID">Version of product classification (optional)</param>
-        public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes classCode, string className, string listID = null, string listVersionID = null)
+		/// <summary>
+		/// Adds a product classification
+		/// </summary>
+		/// <param name="className">Classification name. If you leave className empty, it will be omitted in the output</param>
+		/// <param name="classCode">Identifier of the item classification (optional)</param>
+		/// <param name="listID">Product classification name (optional)</param>
+		/// <param name="listVersionID">Version of product classification (optional)</param>		
+		public void AddDesignatedProductClassification(string className, DesignatedProductClassificationClassCodes classCode = default(DesignatedProductClassificationClassCodes), string listID = null, string listVersionID = null)
         {
             this.DesignedProductClassifications.Add(new DesignatedProductClassification()
             {

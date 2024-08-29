@@ -615,7 +615,7 @@ namespace s2industries.ZUGFeRD
                 string listID = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listID", nsmgr);
                 string listVersionID = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listVersionID", nsmgr);
 
-                item.AddDesignatedProductClassification(classCode, className, listID, listVersionID);
+                item.AddDesignatedProductClassification(className, classCode, listID, listVersionID);
             } // !foreach(designatedProductClassificationNode))
 
             return item;
