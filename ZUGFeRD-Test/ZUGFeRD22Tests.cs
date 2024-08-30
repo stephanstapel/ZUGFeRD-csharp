@@ -2060,9 +2060,6 @@ namespace ZUGFeRD_Test
 			Assert.IsTrue(content.Contains("<ram:ClassName>Test Value</ram:ClassName>"));
 
 			// structure comparison
-			ms.Seek(0, SeekOrigin.Begin);
-            File.WriteAllBytes("e:\\output.xml", ms.ToArray());
-
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
