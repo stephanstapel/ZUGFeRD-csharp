@@ -347,7 +347,66 @@ namespace s2industries.ZUGFeRD
         /// Piece
         /// A loose or unpacked article.
         /// </summary>
-        XPP
+        XPP,
+
+        /// <summary>
+        /// Box
+        /// </summary>
+        XBX,
+
+        /// <summary>
+        /// Trommel
+        /// Drum
+        /// </summary>
+        XDR,
+
+        /// <summary>
+        /// Kiste
+        /// Crate
+        /// </summary>
+        XCR,
+
+        /// <summary>
+        /// Becher
+        /// Cup
+        /// </summary>
+        XCU,
+
+        /// <summary>
+        /// Block
+        /// </summary>
+        D64,
+
+        /// <summary>
+        ///  Tray
+        /// </summary>
+        XPU,
+
+        /// <summary>
+        /// Container
+        /// Chest
+        /// </summary>
+        XCH,
+
+        /// <summary>
+        /// Korb
+        /// Basket
+        /// </summary>
+        XBK,
+
+        /// <summary>
+        /// Zentner
+        /// decitonne
+        /// </summary>
+        DTN,
+
+        /// <summary>
+        /// Portion
+        /// </summary>
+        /// <remarks>
+        /// A quantity of allowance of food allotted to, or enough for, one person.
+        /// </remarks>
+        PTN
     }
 
 
