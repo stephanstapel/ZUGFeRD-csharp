@@ -29,5 +29,10 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class BuyerOrderReferencedDocument : BaseReferencedDocument
     {
+
+        /// <summary>
+        /// Referenz zur Bestellposition BT-132
+        /// </summary>
+        public string LineID { get; set; }
     }
 }

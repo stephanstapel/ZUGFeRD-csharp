@@ -419,6 +419,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteValue(_formatDate(tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.Value, false));
                             Writer.WriteEndElement(); // !ram:IssueDateTime
                         }
+                        Writer.WriteOptionalElementString("ram:LineID", tradeLineItem.BuyerOrderReferencedDocument.LineID);
                         Writer.WriteOptionalElementString("ram:ID", tradeLineItem.BuyerOrderReferencedDocument.ID);
                         Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
                     }
