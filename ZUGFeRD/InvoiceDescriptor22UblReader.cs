@@ -625,12 +625,15 @@ namespace s2industries.ZUGFeRD
                 return null;
             var retval = new LegalOrganization()
             {
-                ID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(XmlUtils.NodeAsString(node, "cbc:CompanyID/@schemeID", nsmgr)),
-                                        XmlUtils.NodeAsString(node, "cbc:CompanyID", nsmgr)),
-                TradingBusinessName = XmlUtils.NodeAsString(node, "cbc:RegistrationName", nsmgr),
+                ID = new GlobalID(
+                    default(GlobalIDSchemeIdentifiers).FromString(XmlUtils.NodeAsString(node, "cbc:CompanyID/@schemeID",
+                        nsmgr)),
+                    XmlUtils.NodeAsString(node, "cbc:CompanyID", nsmgr)),
+                TradingBusinessName = XmlUtils.NodeAsString(baseNode, "cac:PartyName/cbc:Name", nsmgr),
             };
             return retval;
         }
+
         private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
             if (baseNode == null)
@@ -656,13 +659,9 @@ namespace s2industries.ZUGFeRD
                 retval.ID = id;
                 retval.GlobalID = new GlobalID();
             }
-            retval.Name = XmlUtils.NodeAsString(node, "cac:PartyName/cbc:Name", nsmgr);
-            retval.SpecifiedLegalOrganization = _nodeAsLegalOrganization(node, "cac:PartyLegalEntity", nsmgr);
 
-            if (string.IsNullOrWhiteSpace(retval.Name))
-            {
-                retval.Name = XmlUtils.NodeAsString(node, "cac:PartyLegalEntity/cbc:RegistrationName", nsmgr);
-            }
+            retval.Name = XmlUtils.NodeAsString(node, "cac:PartyLegalEntity/cbc:RegistrationName", nsmgr);
+            retval.SpecifiedLegalOrganization = _nodeAsLegalOrganization(node, "cac:PartyLegalEntity", nsmgr);
 
             if (string.IsNullOrWhiteSpace(retval.ContactName))
             {

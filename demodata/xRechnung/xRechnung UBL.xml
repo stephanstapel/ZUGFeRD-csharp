@@ -46,6 +46,9 @@
          <cac:PartyLegalEntity>
             <cbc:RegistrationName>Harry Hirsch Holz- und Trockenbau</cbc:RegistrationName>
          </cac:PartyLegalEntity>
+		 <cac:PartyName>
+			<cbc:Name>Harry Hirsch</cbc:Name>
+		 </cac:PartyName>
          <cac:Contact>
             <cbc:Name>Harry Hirsch</cbc:Name>
             <cbc:Telephone>012345 78 657 - 8</cbc:Telephone>
@@ -55,6 +58,9 @@
    </cac:AccountingSupplierParty>
    <cac:AccountingCustomerParty>
       <cac:Party>
+	     <cac:PartyName>
+		    <cbc:Name>Rechnungs Roulette</cbc:Name>
+		 </cac:PartyName>
          <cac:PostalAddress>
             <cbc:StreetName>Beispielgasse 17b</cbc:StreetName>
             <cbc:AdditionalStreetName/>

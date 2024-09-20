@@ -1853,7 +1853,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Buyer.Postcode, "12345");
             Assert.AreEqual(desc.Buyer.Country, (CountryCodes)276);
             Assert.AreEqual(desc.Buyer.Street, "Beispielgasse 17b");
-            Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette GmbH & Co KG");
+            Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette");
 
             Assert.AreEqual(desc.BuyerContact.Name, "Manfred Mustermann");
             Assert.AreEqual(desc.BuyerContact.EmailAddress, "manfred.mustermann@rr.de");
@@ -1864,7 +1864,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Seller.Postcode, "12345");
             Assert.AreEqual(desc.Seller.Country, (CountryCodes)276);
             Assert.AreEqual(desc.Seller.Street, "Beispielgasse 17a");
-            Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch Holz- und Trockenbau");
+            Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch");
 
             Assert.AreEqual(desc.SellerContact.Name, "Harry Hirsch");
             Assert.AreEqual(desc.SellerContact.EmailAddress, "harry.hirsch@hhhtb.de");
