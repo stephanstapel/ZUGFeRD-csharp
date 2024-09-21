@@ -312,7 +312,7 @@ namespace s2industries.ZUGFeRD
         /// — preceding partial invoices are referred to from a final invoice; 
         /// — preceding pre-payment invoices are referred to from a final invoice.
         /// </summary>
-        public InvoiceReferencedDocument InvoiceReferencedDocument { get; set; }
+        private List<InvoiceReferencedDocument> _InvoiceReferencedDocuments { get; set; } = new List<InvoiceReferencedDocument>();
 
         /// <summary>
         /// Detailed information about the accounting reference
@@ -379,7 +379,7 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version22;
             }
 
-            reader = new InvoiceDescriptor22CIIReader();
+            reader = new InvoiceDescriptor23CIIReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return ZUGFeRDVersion.Version22;
@@ -418,7 +418,7 @@ namespace s2industries.ZUGFeRD
                 return ZUGFeRDVersion.Version22;
             }
 
-            reader = new InvoiceDescriptor22CIIReader();
+            reader = new InvoiceDescriptor23CIIReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return ZUGFeRDVersion.Version22;
@@ -458,7 +458,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(stream);
             }
 
-            reader = new InvoiceDescriptor22CIIReader();
+            reader = new InvoiceDescriptor23CIIReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
                 return reader.Load(stream);
@@ -497,7 +497,7 @@ namespace s2industries.ZUGFeRD
                 return reader.Load(filename);
             }
 
-            reader = new InvoiceDescriptor22CIIReader();
+            reader = new InvoiceDescriptor23CIIReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
                 return reader.Load(filename);
@@ -867,14 +867,25 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="id">Preceding InvoiceNo</param>
         /// <param name="IssueDateTime">Preceding Invoice Date</param>
-        public void SetInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null)
+        public void AddInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null)
         {
-            this.InvoiceReferencedDocument = new InvoiceReferencedDocument()
+            this._InvoiceReferencedDocuments.Add(new InvoiceReferencedDocument()
             {
                 ID = id,
                 IssueDateTime = IssueDateTime
-            };
+            });
         }
+
+
+        /// <summary>
+        /// Retrieves all preceding invoice references
+        /// </summary>
+        /// <returns></returns>
+        public List<InvoiceReferencedDocument> GetInvoiceReferencedDocuments()
+        {
+            return this._InvoiceReferencedDocuments;
+        } // !GetInvoiceReferencedDocuments()
+
 
         /// <summary>
         /// Detailinformationen zu Belegsummen
