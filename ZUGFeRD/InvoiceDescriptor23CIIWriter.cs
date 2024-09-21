@@ -27,7 +27,7 @@ using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
-    internal class InvoiceDescriptor22CIIWriter : IInvoiceDescriptorWriter
+    internal class InvoiceDescriptor23CIIWriter : IInvoiceDescriptorWriter
     {
         private ProfileAwareXmlTextWriter Writer;
         private InvoiceDescriptor Descriptor;

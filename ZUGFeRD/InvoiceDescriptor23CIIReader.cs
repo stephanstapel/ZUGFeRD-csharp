@@ -28,7 +28,7 @@ using System.Xml.XPath;
 
 namespace s2industries.ZUGFeRD
 {
-    internal class InvoiceDescriptor22CIIReader : IInvoiceDescriptorReader
+    internal class InvoiceDescriptor23CIIReader : IInvoiceDescriptorReader
     {
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.

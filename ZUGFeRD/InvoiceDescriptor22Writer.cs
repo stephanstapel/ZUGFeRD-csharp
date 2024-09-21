@@ -45,7 +45,7 @@ namespace s2industries.ZUGFeRD
             switch (format)
             {
                 case ZUGFeRDFormats.UBL: _writer = new InvoiceDescriptor22UBLWriter(); break;
-                default: _writer = new InvoiceDescriptor22CIIWriter(); break;
+                default: _writer = new InvoiceDescriptor23CIIWriter(); break;
             }
 
             _writer.Save(descriptor, stream, format);
