@@ -103,7 +103,7 @@ namespace ZUGFeRD_Test
 
             path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
-            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version22);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version23);
         } // !TestGetVersion()
     }
 }

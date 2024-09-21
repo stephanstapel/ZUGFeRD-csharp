@@ -38,7 +38,7 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -72,7 +72,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -99,7 +99,7 @@ namespace ZUGFeRD_Test
             desc.AddApplicableTradeTax(basisAmount, percent, TaxTypes.LOC, TaxCategoryCodes.K, allowanceChargeBasisAmount);
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -129,7 +129,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended, ZUGFeRDFormats.UBL);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);

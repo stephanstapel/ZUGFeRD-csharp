@@ -150,7 +150,7 @@ namespace s2industries.ZUGFeRD
                         case Profile.Extended: return "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 20");
                     }
-                case ZUGFeRDVersion.Version22:
+                case ZUGFeRDVersion.Version23:
                     switch (profile)
                     {
                         case Profile.Minimum: return "urn:factur-x.eu:1p0:minimum";

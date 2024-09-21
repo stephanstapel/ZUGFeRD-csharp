@@ -376,13 +376,13 @@ namespace s2industries.ZUGFeRD
             reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
-                return ZUGFeRDVersion.Version22;
+                return ZUGFeRDVersion.Version23;
             }
 
             reader = new InvoiceDescriptor23CIIReader();
             if (reader.IsReadableByThisReaderVersion(filename))
             {
-                return ZUGFeRDVersion.Version22;
+                return ZUGFeRDVersion.Version23;
             }
 
             reader = new InvoiceDescriptor20Reader();
@@ -415,13 +415,13 @@ namespace s2industries.ZUGFeRD
             reader = new InvoiceDescriptor22UBLReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
-                return ZUGFeRDVersion.Version22;
+                return ZUGFeRDVersion.Version23;
             }
 
             reader = new InvoiceDescriptor23CIIReader();
             if (reader.IsReadableByThisReaderVersion(stream))
             {
-                return ZUGFeRDVersion.Version22;
+                return ZUGFeRDVersion.Version23;
             }
 
             reader = new InvoiceDescriptor20Reader();
@@ -959,7 +959,7 @@ namespace s2industries.ZUGFeRD
                     return new InvoiceDescriptor1Writer();
                 case ZUGFeRDVersion.Version20:
                     return new InvoiceDescriptor20Writer();
-                case ZUGFeRDVersion.Version22:
+                case ZUGFeRDVersion.Version23:
                     return new InvoiceDescriptor23Writer();
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");

@@ -38,8 +38,8 @@ namespace s2industries.ZUGFeRD
         Version20 = 200,
 
         /// <summary>
-        /// Version 2.2 - unified with french factur-x 1.0, supports XRechnung
+        /// Version 2.3 - unified with french factur-x 1.0, supports XRechnung
         /// </summary>
-        Version22 = 220
+        Version23 = 230
     }
 }

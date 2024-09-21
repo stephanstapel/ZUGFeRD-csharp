@@ -95,8 +95,8 @@ namespace ZUGFeRD_Test
             originalDesc.IsTest = false;
 
             Stream ms = new MemoryStream();
-            originalDesc.Save(ms, ZUGFeRDVersion.Version22, Profile.Basic);
-            originalDesc.Save(@"zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version22);
+            originalDesc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
+            originalDesc.Save(@"zugferd_2p1_BASIC_Einfach-factur-x_Result.xml", ZUGFeRDVersion.Version23);
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(ms);
 
@@ -210,7 +210,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
             Assert.AreEqual(desc.SellerElectronicAddress.Address, "DE123456789");
             Assert.AreEqual(desc.SellerElectronicAddress.ElectronicAddressSchemeID, ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
@@ -244,7 +244,7 @@ namespace ZUGFeRD_Test
             desc.TaxBasisAmount = 73; // this information will not be stored in the output file since it is available in Extended profile only
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Minimum);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -272,7 +272,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -308,7 +308,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -344,7 +344,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Comfort);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -380,7 +380,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Basic);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -396,7 +396,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung1);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung1);
             ms.Seek(0, SeekOrigin.Begin);
             Assert.AreEqual(desc.Profile, Profile.XRechnung1);
 
@@ -412,7 +412,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             Assert.AreEqual(desc.Profile, Profile.XRechnung);
 
             ms.Seek(0, SeekOrigin.Begin);
@@ -428,7 +428,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.EReporting);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.EReporting);
             Assert.AreEqual(desc.Profile, Profile.EReporting);
 
             ms.Seek(0, SeekOrigin.Begin);
@@ -452,7 +452,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
             Assert.AreEqual(desc.Profile, Profile.XRechnung);
 
@@ -478,7 +478,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
             Assert.AreEqual(desc.Profile, Profile.Extended);
 
@@ -503,14 +503,14 @@ namespace ZUGFeRD_Test
             desc.SetTotals(1.99m, 0m, 0m, 0m, 0m, 2m, 0m, 2m, 0.01m);
 
             var msExtended = new MemoryStream();
-            desc.Save(msExtended, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(msExtended, ZUGFeRDVersion.Version23, Profile.Extended);
             msExtended.Seek(0, SeekOrigin.Begin);
 
             var loadedInvoice = InvoiceDescriptor.Load(msExtended);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0.01m);
 
             var msBasic = new MemoryStream();
-            desc.Save(msBasic, ZUGFeRDVersion.Version22);
+            desc.Save(msBasic, ZUGFeRDVersion.Version23);
             msBasic.Seek(0, SeekOrigin.Begin);
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
@@ -533,14 +533,14 @@ namespace ZUGFeRD_Test
             desc.SetTotals(1.99m, 0m, 0m, 0m, 0m, 2m, 0m, 2m, 0.01m);
 
             var msExtended = new MemoryStream();
-            desc.Save(msExtended, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(msExtended, ZUGFeRDVersion.Version23, Profile.XRechnung);
             msExtended.Seek(0, SeekOrigin.Begin);
 
             var loadedInvoice = InvoiceDescriptor.Load(msExtended);
             Assert.AreEqual(loadedInvoice.RoundingAmount, 0.01m);
 
             var msBasic = new MemoryStream();
-            desc.Save(msBasic, ZUGFeRDVersion.Version22);
+            desc.Save(msBasic, ZUGFeRDVersion.Version23);
             msBasic.Seek(0, SeekOrigin.Begin);
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
@@ -666,8 +666,8 @@ namespace ZUGFeRD_Test
 
             using (var memoryStream = new MemoryStream())
             {
-                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version22, Profile.Basic);
-                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version22);
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version23, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version23);
 
                 // Load Invoice and compare to expected
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
@@ -716,8 +716,8 @@ namespace ZUGFeRD_Test
 
             using (var memoryStream = new MemoryStream())
             {
-                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version22, Profile.Basic);
-                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version22);
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version23, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version23);
 
                 // Load Invoice and compare to expected
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
@@ -755,8 +755,8 @@ namespace ZUGFeRD_Test
 
             using (var memoryStream = new MemoryStream())
             {
-                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version22, Profile.Basic);
-                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version22);
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version23, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version23);
 
                 // Load Invoice and compare to expected
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
@@ -786,8 +786,8 @@ namespace ZUGFeRD_Test
 
             using (var memoryStream = new MemoryStream())
             {
-                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version22, Profile.Basic);
-                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version22);
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version23, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version23);
 
                 // Load Invoice and compare to expected
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
@@ -815,8 +815,8 @@ namespace ZUGFeRD_Test
 
             using (var memoryStream = new MemoryStream())
             {
-                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version22, Profile.Basic);
-                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version22);
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version23, Profile.Basic);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version23);
 
                 // Load Invoice and compare to expected
                 var invoiceDescriptor = InvoiceDescriptor.Load(@"xrechnung with trade line settlement filled.xml");
@@ -940,7 +940,7 @@ namespace ZUGFeRD_Test
 
             using (var stream = new MemoryStream())
             {
-                d.Save(stream, ZUGFeRDVersion.Version22, Profile.Comfort);
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.Comfort);
 
                 stream.Seek(0, SeekOrigin.Begin);
 
@@ -965,7 +965,7 @@ namespace ZUGFeRD_Test
             MemoryStream ms = new MemoryStream();
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Basic);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Basic);
             }
             catch (UnsupportedException)
             {
@@ -974,7 +974,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.BasicWL);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.BasicWL);
             }
             catch (UnsupportedException)
             {
@@ -983,7 +983,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Comfort);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Comfort);
             }
             catch (UnsupportedException)
             {
@@ -992,7 +992,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Extended);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Extended);
             }
             catch (UnsupportedException)
             {
@@ -1001,7 +1001,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.XRechnung1);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.XRechnung1);
             }
             catch (UnsupportedException)
             {
@@ -1011,7 +1011,7 @@ namespace ZUGFeRD_Test
             invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.XRechnung);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.XRechnung);
             }
             catch (UnsupportedException)
             {
@@ -1022,7 +1022,7 @@ namespace ZUGFeRD_Test
             invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Extended);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Extended);
             }
             catch (UnsupportedException)
             {
@@ -1040,7 +1040,7 @@ namespace ZUGFeRD_Test
             MemoryStream ms = new MemoryStream();
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Basic);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Basic);
             }
             catch (UnsupportedException)
             {
@@ -1049,7 +1049,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.BasicWL);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.BasicWL);
             }
             catch (UnsupportedException)
             {
@@ -1058,7 +1058,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Comfort);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Comfort);
             }
             catch (UnsupportedException)
             {
@@ -1067,7 +1067,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.Comfort);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.Comfort);
             }
             catch (UnsupportedException)
             {
@@ -1078,7 +1078,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.XRechnung1);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.XRechnung1);
             }
             catch (UnsupportedException)
             {
@@ -1087,7 +1087,7 @@ namespace ZUGFeRD_Test
 
             try
             {
-                invoice.Save(ms, version: ZUGFeRDVersion.Version22, profile: Profile.XRechnung);
+                invoice.Save(ms, version: ZUGFeRDVersion.Version23, profile: Profile.XRechnung);
             }
             catch (UnsupportedException)
             {
@@ -1106,7 +1106,7 @@ namespace ZUGFeRD_Test
             desc.AddAdditionalReferencedDocument(uuid, AdditionalReferencedDocumentTypeCode.Unknown, issueDateTime, "Additional Test Document");
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
@@ -1137,7 +1137,7 @@ namespace ZUGFeRD_Test
             };
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -1180,7 +1180,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -1220,9 +1220,9 @@ namespace ZUGFeRD_Test
             s.Close();
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
-            desc.Save("..\\output.xml", ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save("..\\output.xml", ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
@@ -1249,7 +1249,7 @@ namespace ZUGFeRD_Test
             };
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
@@ -1270,7 +1270,7 @@ namespace ZUGFeRD_Test
             desc.BusinessProcess = "A1";
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
@@ -1397,14 +1397,14 @@ namespace ZUGFeRD_Test
 
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
             string text = reader.ReadToEnd();
 
             ms.Seek(0, SeekOrigin.Begin);
-            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version22);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
 
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);            
@@ -1632,7 +1632,7 @@ namespace ZUGFeRD_Test
             desc.AddDebitorFinancialAccount("DE02120300000000202051", "");
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.Comfort);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
@@ -1708,7 +1708,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -1734,7 +1734,7 @@ namespace ZUGFeRD_Test
                                   );
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
 
             XmlDocument doc = new XmlDocument();
@@ -1771,7 +1771,7 @@ namespace ZUGFeRD_Test
                                                       );
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
 
             XmlDocument doc = new XmlDocument();
@@ -1797,7 +1797,7 @@ namespace ZUGFeRD_Test
             invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, "", TaxTypes.VAT, TaxCategoryCodes.S, 19);
 
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -1819,7 +1819,7 @@ namespace ZUGFeRD_Test
             invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, "", TaxTypes.VAT, TaxCategoryCodes.S, 19);
 
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
@@ -1921,7 +1921,7 @@ namespace ZUGFeRD_Test
             desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
@@ -1937,7 +1937,7 @@ namespace ZUGFeRD_Test
             invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
           
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -1972,7 +1972,7 @@ namespace ZUGFeRD_Test
                               );
 
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -2007,7 +2007,7 @@ namespace ZUGFeRD_Test
             invoice.SetSellerContact(SELLER_CONTACT, ORG_UNIT, EMAIL_ADDRESS, PHONE_NO, FAX_NO);
 
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version22, Profile.Extended);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -2049,7 +2049,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
 
 			// string comparison
 			ms.Seek(0, SeekOrigin.Begin);
@@ -2083,7 +2083,7 @@ namespace ZUGFeRD_Test
 
 			MemoryStream ms = new MemoryStream();
 
-			desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+			desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
 
             ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -2107,7 +2107,7 @@ namespace ZUGFeRD_Test
 
 			MemoryStream ms = new MemoryStream();
 
-			desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+			desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
 
 			ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -2128,7 +2128,7 @@ namespace ZUGFeRD_Test
 
 			MemoryStream ms = new MemoryStream();
 
-			desc.Save(ms, ZUGFeRDVersion.Version22, Profile.XRechnung);
+			desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
 
 			ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
