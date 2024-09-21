@@ -1163,7 +1163,7 @@ namespace s2industries.ZUGFeRD
                     {
                         writer.WriteElementString("ram:ContentCode", note.ContentCode.EnumToString());
                     }
-                    writer.WriteElementString("ram:Content", note.Content);
+                    writer.WriteOptionalElementString("ram:Content", note.Content);
                     if (note.SubjectCode != SubjectCodes.Unknown)
                     {
                         writer.WriteElementString("ram:SubjectCode", note.SubjectCode.EnumToString());

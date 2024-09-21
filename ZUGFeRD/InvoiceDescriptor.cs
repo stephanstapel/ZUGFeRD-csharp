@@ -960,7 +960,7 @@ namespace s2industries.ZUGFeRD
                 case ZUGFeRDVersion.Version20:
                     return new InvoiceDescriptor20Writer();
                 case ZUGFeRDVersion.Version22:
-                    return new InvoiceDescriptor22Writer();
+                    return new InvoiceDescriptor23Writer();
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
