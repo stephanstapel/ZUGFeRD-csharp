@@ -362,7 +362,9 @@ namespace s2industries.ZUGFeRD
                 retval.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:OrderReference/cbc:SalesOrderID", nsmgr),
-                    // TODO: Find value //IssueDateTime = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+                    // unclear how to map
+                    //    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr),
+                    //    LineID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedSupplyChainTradeAgreement/ram:BuyerOrderReferencedDocument/ram:LineID", nsmgr),
                 };
             }
 

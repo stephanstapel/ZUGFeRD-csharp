@@ -166,18 +166,13 @@ namespace s2industries.ZUGFeRD
                 if (tradeLineItem.BuyerOrderReferencedDocument != null)
                 {
                     Writer.WriteStartElement("ram:BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-
-                    #region IssuerAssignedID
-                    //Bestellnummer
+                    // order number
                     Writer.WriteOptionalElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID);
+
+                    // reference to the order position
+                    Writer.WriteOptionalElementString("ram:LineID", tradeLineItem.BuyerOrderReferencedDocument.LineID);
                     #endregion
 
-                    #region LineID
-                    //Referenz zur Bestellposition
-                    //ToDo: fehlt ganz
-                    #endregion
-
-                    #region IssueDateTime
                     if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
                     {
                         Writer.WriteStartElement("ram:FormattedIssueDateTime");
@@ -187,7 +182,6 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !qdt:DateTimeString
                         Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                     }
-                    #endregion
 
                     Writer.WriteEndElement(); // !ram:BuyerOrderReferencedDocument
                 }
@@ -775,7 +769,6 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
 
             Writer.WriteEndElement(); // !ram:SupplyChainTradeTransaction
-            #endregion
 
             Writer.WriteEndElement(); // !ram:Invoice
             Writer.WriteEndDocument();
