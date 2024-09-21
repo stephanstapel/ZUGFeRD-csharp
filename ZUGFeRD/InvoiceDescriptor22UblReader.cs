@@ -316,13 +316,17 @@ namespace s2industries.ZUGFeRD
             //                                   default(TaxTypes).FromString(XmlUtils.NodeAsString(node, ".//ram:AppliedTradeTax/ram:TypeCode", nsmgr)),
             //                                   default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:AppliedTradeTax/ram:CategoryCode", nsmgr)),
             //                                   XmlUtils.NodeAsDecimal(node, ".//ram:AppliedTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value);
-            //}
+            //
 
-            retval.InvoiceReferencedDocument = new InvoiceReferencedDocument()
+            foreach (XmlNode invoiceReferencedDocumentNodes in doc.DocumentElement.SelectNodes("//cac:BillingReference/cac:InvoiceDocumentReference", nsmgr))
             {
-                ID = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:BillingReference/cac:InvoiceDocumentReference/cbc:ID", nsmgr),
-                IssueDateTime = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cac:BillingReference/cac:InvoiceDocumentReference/cbc:IssueDate", nsmgr)
-            };
+                retval.AddInvoiceReferencedDocument(
+                    XmlUtils.NodeAsString(invoiceReferencedDocumentNodes, "./cbc:ID", nsmgr),
+                    XmlUtils.NodeAsDateTime(invoiceReferencedDocumentNodes, "./cbc:IssueDate", nsmgr)
+                );
+                break; // only one occurrence allowed in UBL
+            }
+
 
             retval.PaymentTerms = new PaymentTerms()
             {

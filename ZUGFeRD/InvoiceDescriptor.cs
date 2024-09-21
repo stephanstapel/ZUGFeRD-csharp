@@ -863,7 +863,8 @@ namespace s2industries.ZUGFeRD
         }
 
         /// <summary>
-        /// Set Information about Preceding Invoice
+        /// Set Information about Preceding Invoice. Please note that all versions prior ZUGFeRD 2.3 and UBL only
+        /// allow one of such reference.
         /// </summary>
         /// <param name="id">Preceding InvoiceNo</param>
         /// <param name="IssueDateTime">Preceding Invoice Date</param>

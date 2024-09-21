@@ -96,7 +96,23 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("cbc:ID", this.Descriptor.OrderNo);
             Writer.WriteEndElement(); // !OrderReference
 
-
+            // BillingReference
+            if (this.Descriptor.GetInvoiceReferencedDocuments().Count > 0)
+            {
+                Writer.WriteStartElement("cac:BillingReference");
+                foreach (InvoiceReferencedDocument invoiceReferencedDocument in this.Descriptor.GetInvoiceReferencedDocuments())
+                {
+                    Writer.WriteStartElement("cac:InvoiceDocumentReference", Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteOptionalElementString("cbc:ID", invoiceReferencedDocument.ID);
+                    if (invoiceReferencedDocument.IssueDateTime.HasValue)
+                    {
+                        Writer.WriteElementString("cbc:IssueDate", _formatDate(invoiceReferencedDocument.IssueDateTime.Value, false, true));
+                    }
+                    Writer.WriteEndElement(); // !ram:InvoiceDocumentReference
+                    break; // only one reference allowed in UBL
+                }
+                Writer.WriteEndElement(); // !cac:BillingReference
+            }
 
             // ContractDocumentReference
             if (this.Descriptor.ContractReferencedDocument != null)

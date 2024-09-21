@@ -509,7 +509,7 @@ namespace ZUGFeRD_Test
       desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
       desc.PaymentTerms.DueDate = timestamp.AddDays(14);
-      desc.SetInvoiceReferencedDocument("RE-12345", timestamp);
+      desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
 
 
       //set additional LineItem data
@@ -541,6 +541,8 @@ namespace ZUGFeRD_Test
 
       MemoryStream ms = new MemoryStream();
       desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
+
+    desc.Save("e:\\output.xml", ZUGFeRDVersion.Version20, Profile.Extended);
 
       ms.Seek(0, SeekOrigin.Begin);
       StreamReader reader = new StreamReader(ms);
@@ -692,8 +694,8 @@ namespace ZUGFeRD_Test
       Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
 
       //InvoiceReferencedDocument
-      Assert.AreEqual("RE-12345", loadedInvoice.InvoiceReferencedDocument.ID);
-      Assert.AreEqual(timestamp, loadedInvoice.InvoiceReferencedDocument.IssueDateTime);
+      Assert.AreEqual("RE-12345", loadedInvoice.GetInvoiceReferencedDocuments().First().ID);
+      Assert.AreEqual(timestamp, loadedInvoice.GetInvoiceReferencedDocuments().First().IssueDateTime);
 
 
       //Line items

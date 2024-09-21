@@ -756,17 +756,18 @@ namespace s2industries.ZUGFeRD
 
             #region InvoiceReferencedDocument
             //  17. InvoiceReferencedDocument (optional)
-            if (this.Descriptor.InvoiceReferencedDocument != null)
+            foreach(InvoiceReferencedDocument invoiceReferencedDocument in this.Descriptor.GetInvoiceReferencedDocuments())
             {
-                Writer.WriteStartElement("ram:InvoiceReferencedDocument");
-                Writer.WriteOptionalElementString("ram:IssuerAssignedID", this.Descriptor.InvoiceReferencedDocument.ID);
-                if (this.Descriptor.InvoiceReferencedDocument.IssueDateTime.HasValue)
+                Writer.WriteStartElement("ram:InvoiceReferencedDocument", Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteOptionalElementString("ram:IssuerAssignedID", invoiceReferencedDocument.ID);
+                if (invoiceReferencedDocument.IssueDateTime.HasValue)
                 {
                     Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(this.Descriptor.InvoiceReferencedDocument.IssueDateTime.Value));
+                    _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(invoiceReferencedDocument.IssueDateTime.Value));
                     Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                 }
                 Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
+                break; // only one occurrence allowed in this version!
             }
             #endregion
 
