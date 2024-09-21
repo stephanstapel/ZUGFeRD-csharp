@@ -292,7 +292,7 @@ namespace s2industries.ZUGFeRD
                 //Writer.WriteElementString("cbc:InvoicedQuantity", tradeLineItem.BilledQuantity.ToString());
                 Writer.WriteStartElement("cbc:InvoicedQuantity");
                 Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
-                Writer.WriteValue(tradeLineItem.BilledQuantity.ToString());
+                Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
                 Writer.WriteEndElement();
 
 

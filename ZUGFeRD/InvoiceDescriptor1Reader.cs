@@ -380,7 +380,7 @@ namespace s2industries.ZUGFeRD
                 item.AddAdditionalReferencedDocument(
                     id: XmlUtils.NodeAsString(referenceNode, "ram:ID", nsmgr),
                     code: default(ReferenceTypeCodes).FromString(_code),
-					issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTim", nsmgr)
+					issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTime", nsmgr)
 				);
             }
 

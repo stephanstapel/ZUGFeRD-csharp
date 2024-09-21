@@ -152,6 +152,9 @@ namespace s2industries.ZUGFeRD
                 return null;
             }
 
+            // to protect from space and /r /n characters
+            rawValue = rawValue.Trim();
+
             switch (format)
             {
                 case "102":
