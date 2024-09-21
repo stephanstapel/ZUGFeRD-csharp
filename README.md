@@ -63,7 +63,7 @@ InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(
 desc.Name = "WARENRECHNUNG";
 desc.ReferenceOrderNo = "AB-312";
 desc.AddNote("Rechnung gemäß Bestellung Nr. 2013-471331 vom 01.03.2013.");
-desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", "AAK");
+desc.AddNote("Es bestehen Rabatt- und Bonusvereinbarungen.", SubjectCodes.AAK);
 desc.SetBuyer("Kunden Mitte AG", "69876", "Frankfurt", "Kundenstraße 15", CountryCodes.DE, "88", new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"));
 desc.AddBuyerTaxRegistration("DE234567890", TaxRegistrationSchemeID.VA);
 desc.SetBuyerContact("Hans Muster");
