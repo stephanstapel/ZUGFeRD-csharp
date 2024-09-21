@@ -48,7 +48,7 @@ namespace s2industries.ZUGFeRD
     public GlobalID ID { get; set; }
 
     /// <summary>
-    /// Trading business name
+    /// A name by which the party is known, other than party name (also known as Business name). 
     /// </summary>
     public string TradingBusinessName { get; set; }
   }

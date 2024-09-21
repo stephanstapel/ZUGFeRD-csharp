@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
     public GlobalID ID { get; set; }
 
     /// <summary>
-    /// Party name, e.g. company name
+    /// The full formal name by which the party is registered in the national registry of legal entities or as a Taxable person or otherwise trades as a person or persons. 
     /// </summary>      
     public string Name { get; set; }
 
