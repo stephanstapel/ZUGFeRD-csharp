@@ -758,7 +758,7 @@ namespace s2industries.ZUGFeRD
             //  17. InvoiceReferencedDocument (optional)
             foreach(InvoiceReferencedDocument invoiceReferencedDocument in this.Descriptor.GetInvoiceReferencedDocuments())
             {
-                Writer.WriteStartElement("ram:InvoiceReferencedDocument", Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteStartElement("ram:InvoiceReferencedDocument", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 Writer.WriteOptionalElementString("ram:IssuerAssignedID", invoiceReferencedDocument.ID);
                 if (invoiceReferencedDocument.IssueDateTime.HasValue)
                 {
