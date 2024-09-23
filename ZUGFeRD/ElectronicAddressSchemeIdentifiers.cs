@@ -46,6 +46,11 @@ namespace s2industries.ZUGFeRD
         HungaryVatNumber = 9910,
 
         /// <summary>
+        /// Austria VAT number
+        /// </summary>      
+        AustriaVatNumber = 9914,
+
+        /// <summary>
         /// Andorra VAT number
         /// </summary>      
         AndorraVatNumber = 9922,
