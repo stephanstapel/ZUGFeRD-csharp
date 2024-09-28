@@ -852,8 +852,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;130&quot;]/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -877,15 +877,15 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;130&quot;]/ram:ReferenceTypeCode">
-      <let name="codeValue13" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=13]/enumeration[@value=$codeValue13]">
+      <let name="codeValue15" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=15]/enumeration[@value=$codeValue15]">
 	Value of 'ram:ReferenceTypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;130&quot;]/ram:TypeCode">
-      <let name="codeValue30" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=30]/enumeration[@value=$codeValue30]">
+      <let name="codeValue33" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=33]/enumeration[@value=$codeValue33]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -917,8 +917,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;50&quot;]/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -948,8 +948,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;50&quot;]/ram:TypeCode">
-      <let name="codeValue29" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=29]/enumeration[@value=$codeValue29]">
+      <let name="codeValue32" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=32]/enumeration[@value=$codeValue32]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -981,8 +981,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;916&quot;]/ram:AttachmentBinaryObject[@mimeCode]">
-      <let name="codeValue12" value="@mimeCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
+      <let name="codeValue14" value="@mimeCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=14]/enumeration[@value=$codeValue14]">
 	Value of '@mimeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -994,8 +994,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;916&quot;]/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1019,8 +1019,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:TypeCode=&quot;916&quot;]/ram:TypeCode">
-      <let name="codeValue28" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=28]/enumeration[@value=$codeValue28]">
+      <let name="codeValue31" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=31]/enumeration[@value=$codeValue31]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1034,6 +1034,13 @@
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms">
       <assert test="count(ram:DeliveryTypeCode)=1">
 	Element 'ram:DeliveryTypeCode' must occur exactly 1 times.</assert>
+    </rule>
+  </pattern>
+  <pattern>
+    <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode">
+      <let name="codeValue30" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=30]/enumeration[@value=$codeValue30]">
+	Value of 'ram:DeliveryTypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
@@ -1106,8 +1113,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerAgentTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1127,8 +1134,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerAgentTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1146,8 +1153,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerAgentTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1161,8 +1168,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerAgentTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1210,8 +1217,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerAgentTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1235,8 +1242,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1346,8 +1353,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTaxRepresentativeTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1367,8 +1374,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTaxRepresentativeTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1386,8 +1393,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1401,8 +1408,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1450,8 +1457,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTaxRepresentativeTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1523,8 +1530,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1544,8 +1551,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1563,8 +1570,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1578,8 +1585,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1609,8 +1616,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration/ram:ID[@schemeID]">
-      <let name="codeValue26" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=26]/enumeration[@value=$codeValue26]">
+      <let name="codeValue28" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=28]/enumeration[@value=$codeValue28]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1634,8 +1641,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1659,8 +1666,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1684,8 +1691,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:ReferenceTypeCode">
-      <let name="codeValue13" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=13]/enumeration[@value=$codeValue13]">
+      <let name="codeValue15" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=15]/enumeration[@value=$codeValue15]">
 	Value of 'ram:ReferenceTypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1771,8 +1778,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ProductEndUserTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1792,8 +1799,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ProductEndUserTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1811,8 +1818,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ProductEndUserTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1826,8 +1833,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ProductEndUserTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1875,8 +1882,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ProductEndUserTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -1900,8 +1907,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:QuotationReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2011,8 +2018,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SalesAgentTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2032,8 +2039,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SalesAgentTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2051,8 +2058,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SalesAgentTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2066,8 +2073,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SalesAgentTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2115,8 +2122,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SalesAgentTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2140,8 +2147,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2253,8 +2260,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2274,8 +2281,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2293,8 +2300,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2308,8 +2315,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2339,8 +2346,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration/ram:ID[@schemeID]">
-      <let name="codeValue27" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=27]/enumeration[@value=$codeValue27]">
+      <let name="codeValue29" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=29]/enumeration[@value=$codeValue29]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2364,8 +2371,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2437,8 +2444,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2458,8 +2465,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2477,8 +2484,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2492,8 +2499,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2559,8 +2566,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2590,8 +2597,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:UltimateCustomerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2676,8 +2683,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2737,8 +2744,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2798,8 +2805,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ReceivingAdviceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2913,8 +2920,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2934,8 +2941,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2953,8 +2960,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -2968,8 +2975,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3017,8 +3024,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3090,8 +3097,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3111,8 +3118,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3130,8 +3137,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3145,8 +3152,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3194,8 +3201,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3267,8 +3274,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3288,8 +3295,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3307,8 +3314,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3322,8 +3329,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3371,8 +3378,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3424,22 +3431,22 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:DueDateTypeCode">
-      <let name="codeValue34" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=34]/enumeration[@value=$codeValue34]">
+      <let name="codeValue37" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=37]/enumeration[@value=$codeValue37]">
 	Value of 'ram:DueDateTypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode">
-      <let name="codeValue18" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=18]/enumeration[@value=$codeValue18]">
+      <let name="codeValue20" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
 	Value of 'ram:ExemptionReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3469,15 +3476,15 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:TaxPointDate/udt:DateString[@format]">
-      <let name="codeValue33" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=33]/enumeration[@value=$codeValue33]">
+      <let name="codeValue36" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=36]/enumeration[@value=$codeValue36]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:TypeCode">
-      <let name="codeValue22" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
+      <let name="codeValue24" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3527,8 +3534,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode">
-      <let name="codeValue31" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=31]/enumeration[@value=$codeValue31]">
+      <let name="codeValue34" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=34]/enumeration[@value=$codeValue34]">
 	Value of 'ram:InvoiceCurrencyCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3554,8 +3561,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3585,8 +3592,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:TypeCode">
-      <let name="codeValue39" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=39]/enumeration[@value=$codeValue39]">
+      <let name="codeValue42" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=42]/enumeration[@value=$codeValue42]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3666,8 +3673,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3687,8 +3694,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3706,8 +3713,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3721,8 +3728,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3770,8 +3777,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3845,8 +3852,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3866,8 +3873,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3885,8 +3892,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3900,8 +3907,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -3949,8 +3956,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4024,8 +4031,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4045,8 +4052,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4064,8 +4071,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4079,8 +4086,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4128,8 +4135,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4203,8 +4210,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayerTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4224,8 +4231,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayerTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4243,8 +4250,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayerTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4258,8 +4265,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayerTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4307,8 +4314,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayerTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4320,8 +4327,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount/ram:TypeCode">
-      <let name="codeValue40" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=40]/enumeration[@value=$codeValue40]">
+      <let name="codeValue43" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=43]/enumeration[@value=$codeValue43]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4341,8 +4348,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedAdvancePayment/ram:FormattedReceivedDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4376,8 +4383,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedAdvancePayment/ram:IncludedTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4389,8 +4396,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedAdvancePayment/ram:IncludedTradeTax/ram:ExemptionReasonCode">
-      <let name="codeValue18" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=18]/enumeration[@value=$codeValue18]">
+      <let name="codeValue20" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
 	Value of 'ram:ExemptionReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4420,8 +4427,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedAdvancePayment/ram:IncludedTradeTax/ram:TypeCode">
-      <let name="codeValue22" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
+      <let name="codeValue24" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4445,8 +4452,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedAdvancePayment/ram:InvoiceSpecifiedReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4476,8 +4483,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedAdvancePayment/ram:InvoiceSpecifiedReferencedDocument/ram:TypeCode">
-      <let name="codeValue41" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=41]/enumeration[@value=$codeValue41]">
+      <let name="codeValue44" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=44]/enumeration[@value=$codeValue44]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4539,8 +4546,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4576,8 +4583,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedTradeTax/ram:TypeCode">
-      <let name="codeValue22" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
+      <let name="codeValue24" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4611,8 +4618,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:BasisQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4644,8 +4651,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4681,15 +4688,15 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:TypeCode">
-      <let name="codeValue22" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
+      <let name="codeValue24" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ReasonCode">
-      <let name="codeValue35" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=35]/enumeration[@value=$codeValue35]">
+      <let name="codeValue38" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=38]/enumeration[@value=$codeValue38]">
 	Value of 'ram:ReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4717,8 +4724,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:BasisQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4750,8 +4757,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4787,15 +4794,15 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:TypeCode">
-      <let name="codeValue22" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
+      <let name="codeValue24" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode">
-      <let name="codeValue36" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=36]/enumeration[@value=$codeValue36]">
+      <let name="codeValue39" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=39]/enumeration[@value=$codeValue39]">
 	Value of 'ram:ReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4962,8 +4969,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:PayeeTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -4983,8 +4990,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:PayeeTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5002,8 +5009,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5017,8 +5024,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5066,8 +5073,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:PayeeTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5145,8 +5152,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:InvoiceCurrencyCode and @currencyID]">
-      <let name="codeValue37" value="@currencyID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=37]/enumeration[@value=$codeValue37]">
+      <let name="codeValue40" value="@currencyID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=40]/enumeration[@value=$codeValue40]">
 	Value of '@currencyID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5158,8 +5165,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:TaxCurrencyCode and @currencyID]">
-      <let name="codeValue38" value="@currencyID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=38]/enumeration[@value=$codeValue38]">
+      <let name="codeValue41" value="@currencyID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=41]/enumeration[@value=$codeValue41]">
 	Value of '@currencyID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5235,8 +5242,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode">
-      <let name="codeValue32" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=32]/enumeration[@value=$codeValue32]">
+      <let name="codeValue35" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=35]/enumeration[@value=$codeValue35]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5255,22 +5262,22 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:TaxApplicableTradeCurrencyExchange/ram:SourceCurrencyCode">
-      <let name="codeValue31" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=31]/enumeration[@value=$codeValue31]">
+      <let name="codeValue34" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=34]/enumeration[@value=$codeValue34]">
 	Value of 'ram:SourceCurrencyCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:TaxApplicableTradeCurrencyExchange/ram:TargetCurrencyCode">
-      <let name="codeValue31" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=31]/enumeration[@value=$codeValue31]">
+      <let name="codeValue34" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=34]/enumeration[@value=$codeValue34]">
 	Value of 'ram:TargetCurrencyCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:TaxCurrencyCode">
-      <let name="codeValue31" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=31]/enumeration[@value=$codeValue31]">
+      <let name="codeValue34" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=34]/enumeration[@value=$codeValue34]">
 	Value of 'ram:TaxCurrencyCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5338,6 +5345,20 @@
     </rule>
   </pattern>
   <pattern>
+    <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:AssociatedDocumentLineDocument/ram:LineStatusCode">
+      <let name="codeValue5" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=5]/enumeration[@value=$codeValue5]">
+	Value of 'ram:LineStatusCode' is not allowed.</assert>
+    </rule>
+  </pattern>
+  <pattern>
+    <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode">
+      <let name="codeValue6" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=6]/enumeration[@value=$codeValue6]">
+	Value of 'ram:LineStatusReasonCode' is not allowed.</assert>
+    </rule>
+  </pattern>
+  <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode[@listID]">
       <report test="true()">
 	Attribute @listID' marked as not used in the given context.</report>
@@ -5383,8 +5404,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject[@mimeCode]">
-      <let name="codeValue12" value="@mimeCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
+      <let name="codeValue14" value="@mimeCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=14]/enumeration[@value=$codeValue14]">
 	Value of '@mimeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5396,8 +5417,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5415,15 +5436,15 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument/ram:ReferenceTypeCode">
-      <let name="codeValue13" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=13]/enumeration[@value=$codeValue13]">
+      <let name="codeValue15" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=15]/enumeration[@value=$codeValue15]">
 	Value of 'ram:ReferenceTypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument/ram:TypeCode">
-      <let name="codeValue11" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
+      <let name="codeValue13" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=13]/enumeration[@value=$codeValue13]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5447,8 +5468,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5502,8 +5523,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5589,8 +5610,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ReasonCode">
-      <let name="codeValue14" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=14]/enumeration[@value=$codeValue14]">
+      <let name="codeValue16" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=16]/enumeration[@value=$codeValue16]">
 	Value of 'ram:ReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5634,8 +5655,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode">
-      <let name="codeValue15" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=15]/enumeration[@value=$codeValue15]">
+      <let name="codeValue17" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
 	Value of 'ram:ReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5647,8 +5668,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:BasisQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5680,8 +5701,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5723,8 +5744,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:IncludedTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5736,8 +5757,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:IncludedTradeTax/ram:ExemptionReasonCode">
-      <let name="codeValue18" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=18]/enumeration[@value=$codeValue18]">
+      <let name="codeValue20" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
 	Value of 'ram:ExemptionReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5767,8 +5788,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:IncludedTradeTax/ram:TypeCode">
-      <let name="codeValue16" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=16]/enumeration[@value=$codeValue16]">
+      <let name="codeValue18" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=18]/enumeration[@value=$codeValue18]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5786,8 +5807,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:QuotationReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5841,8 +5862,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5896,8 +5917,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeAgreement/ram:UltimateCustomerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5970,8 +5991,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:BilledQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -5983,8 +6004,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:ChargeFreeQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6002,8 +6023,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6057,8 +6078,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6106,8 +6127,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:PackageQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6125,8 +6146,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:ReceivingAdviceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6234,8 +6255,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6255,8 +6276,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6280,8 +6301,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6323,8 +6344,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6396,8 +6417,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty/ram:GlobalID[@schemeID]">
-      <let name="codeValue19" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
+      <let name="codeValue21" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6417,8 +6438,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty/ram:PostalTradeAddress/ram:CountryID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:CountryID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6436,8 +6457,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty/ram:SpecifiedLegalOrganization/ram:ID[@schemeID]">
-      <let name="codeValue20" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
+      <let name="codeValue22" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6479,8 +6500,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty/ram:URIUniversalCommunication/ram:URIID[@schemeID]">
-      <let name="codeValue21" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=21]/enumeration[@value=$codeValue21]">
+      <let name="codeValue23" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6536,15 +6557,15 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:AdditionalReferencedDocument/ram:ReferenceTypeCode">
-      <let name="codeValue13" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=13]/enumeration[@value=$codeValue13]">
+      <let name="codeValue15" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=15]/enumeration[@value=$codeValue15]">
 	Value of 'ram:ReferenceTypeCode' is not allowed.</assert>
     </rule>
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:AdditionalReferencedDocument/ram:TypeCode">
-      <let name="codeValue11" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
+      <let name="codeValue13" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=13]/enumeration[@value=$codeValue13]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6584,8 +6605,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode">
-      <let name="codeValue17" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=17]/enumeration[@value=$codeValue17]">
+      <let name="codeValue19" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=19]/enumeration[@value=$codeValue19]">
 	Value of 'ram:CategoryCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6597,8 +6618,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode">
-      <let name="codeValue18" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=18]/enumeration[@value=$codeValue18]">
+      <let name="codeValue20" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=20]/enumeration[@value=$codeValue20]">
 	Value of 'ram:ExemptionReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6628,8 +6649,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:TypeCode">
-      <let name="codeValue22" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=22]/enumeration[@value=$codeValue22]">
+      <let name="codeValue24" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6685,8 +6706,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString[@format]">
-      <let name="codeValue10" value="@format"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
+      <let name="codeValue12" value="@format"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=12]/enumeration[@value=$codeValue12]">
 	Value of '@format' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6716,8 +6737,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:InvoiceReferencedDocument/ram:TypeCode">
-      <let name="codeValue25" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=25]/enumeration[@value=$codeValue25]">
+      <let name="codeValue27" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=27]/enumeration[@value=$codeValue27]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6773,8 +6794,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ReasonCode">
-      <let name="codeValue23" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=23]/enumeration[@value=$codeValue23]">
+      <let name="codeValue25" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=25]/enumeration[@value=$codeValue25]">
 	Value of 'ram:ReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6818,8 +6839,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode">
-      <let name="codeValue24" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=24]/enumeration[@value=$codeValue24]">
+      <let name="codeValue26" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=26]/enumeration[@value=$codeValue26]">
 	Value of 'ram:ReasonCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6899,8 +6920,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic/ram:TypeCode">
-      <let name="codeValue6" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=6]/enumeration[@value=$codeValue6]">
+      <let name="codeValue8" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
 	Value of 'ram:TypeCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6942,8 +6963,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:DesignatedProductClassification/ram:ClassCode[@listID]">
-      <let name="codeValue7" value="@listID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=7]/enumeration[@value=$codeValue7]">
+      <let name="codeValue9" value="@listID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
 	Value of '@listID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -6955,8 +6976,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:GlobalID[@schemeID]">
-      <let name="codeValue5" value="@schemeID"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=5]/enumeration[@value=$codeValue5]">
+      <let name="codeValue7" value="@schemeID"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=7]/enumeration[@value=$codeValue7]">
 	Value of '@schemeID' is not allowed.</assert>
     </rule>
   </pattern>
@@ -7018,8 +7039,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:IncludedReferencedProduct/ram:UnitQuantity[@unitCode]">
-      <let name="codeValue9" value="@unitCode"/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=9]/enumeration[@value=$codeValue9]">
+      <let name="codeValue11" value="@unitCode"/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=11]/enumeration[@value=$codeValue11]">
 	Value of '@unitCode' is not allowed.</assert>
     </rule>
   </pattern>
@@ -7055,8 +7076,8 @@
   </pattern>
   <pattern>
     <rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:OriginTradeCountry/ram:ID">
-      <let name="codeValue8" value="."/>
-      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=8]/enumeration[@value=$codeValue8]">
+      <let name="codeValue10" value="."/>
+      <assert test="document(&apos;Factur-X_1.0.07_EXTENDED_codedb.xml&apos;)//cl[@id=10]/enumeration[@value=$codeValue10]">
 	Value of 'ram:ID' is not allowed.</assert>
     </rule>
   </pattern>
