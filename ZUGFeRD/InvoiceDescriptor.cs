@@ -1032,9 +1032,8 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            TradeLineItem item = new TradeLineItem()
-            {
-                AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID),
+            TradeLineItem item = new TradeLineItem(lineID)
+            {                
                 GrossUnitPrice = 0m,
                 NetUnitPrice = 0m,
                 BilledQuantity = 0m,
@@ -1149,7 +1148,19 @@ namespace s2industries.ZUGFeRD
                                      string buyerOrderID = "", DateTime? buyerOrderDate = null,
                                      DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
         {
-            TradeLineItem newItem = new TradeLineItem()
+            if (String.IsNullOrWhiteSpace(lineID))
+            {
+                throw new ArgumentException("LineID cannot be Null or Empty");
+            }
+            else
+            {
+                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new ArgumentException("LineID must be unique");
+                }
+            }
+
+            TradeLineItem newItem = new TradeLineItem(lineID)
             {
                 GlobalID = id,
                 SellerAssignedID = sellerAssignedID,
@@ -1169,19 +1180,6 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodEnd = billingPeriodEnd
             };
 
-            if (String.IsNullOrWhiteSpace(lineID))
-            {
-                throw new ArgumentException("LineID cannot be Null or Empty");
-            }
-            else
-            {
-                if (this.TradeLineItems.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)))
-                {
-                    throw new ArgumentException("LineID must be unique");
-                }
-            }
-
-            newItem.AssociatedDocument = new ZUGFeRD.AssociatedDocument(lineID);
             if (!String.IsNullOrWhiteSpace(comment))
             {
                 newItem.AssociatedDocument.Notes.Add(new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown));

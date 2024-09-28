@@ -669,41 +669,35 @@ namespace ZUGFeRD_Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.TradeLineItems.Add(
-                new TradeLineItem()
+            TradeLineItem item0 = originalInvoiceDescriptor.AddTradeLineItem(name: "");
+            item0.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
+            {
+                new ApplicableProductCharacteristic()
                 {
-                    ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
-                    {
-                        new ApplicableProductCharacteristic()
-                        {
-                            Description = "Description_1_1",
-                            Value = "Value_1_1"
-                        },
-                        new ApplicableProductCharacteristic()
-                        {
-                            Description = "Description_1_2",
-                            Value = "Value_1_2"
-                        },
-                    }.ToList(),
-                });
+                    Description = "Description_1_1",
+                    Value = "Value_1_1"
+                },
+                new ApplicableProductCharacteristic()
+                {
+                    Description = "Description_1_2",
+                    Value = "Value_1_2"
+                }
+            };
 
-            originalInvoiceDescriptor.TradeLineItems.Add(
-                new TradeLineItem()
+            TradeLineItem item1 = originalInvoiceDescriptor.AddTradeLineItem(name: "");
+            item1.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
+            {
+                new ApplicableProductCharacteristic()
                 {
-                    ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
-                    {
-                        new ApplicableProductCharacteristic()
-                        {
-                            Description = "Description_2_1",
-                            Value = "Value_2_1"
-                        },
-                        new ApplicableProductCharacteristic()
-                        {
-                            Description = "Description_2_2",
-                            Value = "Value_2_2"
-                        },
-                    }.ToList()
-                });
+                    Description = "Description_2_1",
+                    Value = "Value_2_1"
+                },
+                new ApplicableProductCharacteristic()
+                {
+                    Description = "Description_2_2",
+                    Value = "Value_2_2"
+                }
+            };
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -741,19 +735,15 @@ namespace ZUGFeRD_Test
             s.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.TradeLineItems.Add(
-                new TradeLineItem()
-                {
-                    BillingPeriodStart = new DateTime(2020, 1, 1),
-                    BillingPeriodEnd = new DateTime(2021, 1, 1),
-                });
+            originalInvoiceDescriptor.AddTradeLineItem(
+                name: "",
+                billingPeriodStart: new DateTime(2020, 1, 1),
+                billingPeriodEnd: new DateTime(2021, 1, 1));
 
-            originalInvoiceDescriptor.TradeLineItems.Add(
-                new TradeLineItem()
-                {
-                    BillingPeriodStart = new DateTime(2021, 1, 1),
-                    BillingPeriodEnd = new DateTime(2022, 1, 1)
-                });
+            originalInvoiceDescriptor.AddTradeLineItem(
+                name: "",
+                billingPeriodStart: new DateTime(2021, 1, 1),
+                billingPeriodEnd: new DateTime(2022, 1, 1));
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -787,12 +777,10 @@ namespace ZUGFeRD_Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.TradeLineItems.Add(
-                new TradeLineItem()
-                {
-                    BilledQuantity = 10,
-                    NetUnitPrice = 1
-                });
+            originalInvoiceDescriptor.AddTradeLineItem(
+                name: "",
+                billedQuantity: 10,
+                netUnitPrice: 1);
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -819,11 +807,7 @@ namespace ZUGFeRD_Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.TradeLineItems.Add(
-                new TradeLineItem()
-                {
-                    NetUnitPrice = 25
-                });
+            originalInvoiceDescriptor.AddTradeLineItem(name: "", netUnitPrice: 25);
 
             originalInvoiceDescriptor.IsTest = false;
 
