@@ -17,9 +17,6 @@
  * under the License.
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Xml;
 
@@ -176,6 +173,27 @@ namespace s2industries.ZUGFeRD
             #region BuyerTradeParty
             //AccountingCustomerParty
             _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
+            #endregion
+            
+            #region AllowanceCharge
+            foreach (var tradeAllowanceCharge in descriptor.GetTradeAllowanceCharges())
+            {
+                Writer.WriteStartElement("cac:AllowanceCharge");
+
+                Writer.WriteElementString("cbc:ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+
+                Writer.WriteStartElement("cbc:Amount"); // BT-147
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
+                Writer.WriteEndElement();
+
+                Writer.WriteStartElement("cbc:BaseAmount"); // BT-148
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
+                Writer.WriteEndElement();
+
+                Writer.WriteEndElement(); // !AllowanceCharge()
+            }
             #endregion
 
             // PaymentMeans
