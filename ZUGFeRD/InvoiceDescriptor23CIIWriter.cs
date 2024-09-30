@@ -1237,11 +1237,8 @@ namespace s2industries.ZUGFeRD
 
 
                 // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
-                if (((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
-                        ((partyType == PartyTypes.PayeeTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
-                        ((partyType == PartyTypes.BuyerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
-                        (this.Descriptor.Profile == Profile.Extended) /* remaining party types */
-                        )
+                if ((this.Descriptor.Profile == Profile.Minimum && partyType.In(PartyTypes.SellerTradeParty, PartyTypes.PayeeTradeParty,  PartyTypes.BuyerTradeParty)) ||
+                    (this.Descriptor.Profile == Profile.Extended)) /* remaining party types */                    
                 {
                     writer.WriteOptionalElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
                 }
@@ -1372,10 +1369,13 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
-                writer.WriteStartElement("ram:PostalTradeAddress");
-                writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
-                writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // buyer: BT-50
-                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
+                if (partyType.In(PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
+                {
+                    writer.WriteStartElement("ram:PostalTradeAddress");
+                    writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
+                    writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // buyer: BT-50
+                    if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
+                }
 
                 writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
                 writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
