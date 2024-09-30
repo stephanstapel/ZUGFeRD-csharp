@@ -443,7 +443,8 @@ namespace s2industries.ZUGFeRD
                 return null;
             }
 
-            TradeLineItem item = new TradeLineItem()
+            string _lineId = _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, String.Empty);
+            TradeLineItem item = new TradeLineItem(_lineId)
             {
                 GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr)),
                                         XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID", nsmgr)),
@@ -543,8 +544,6 @@ namespace s2industries.ZUGFeRD
 
             if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument", nsmgr) != null)
             {
-                item.AssociatedDocument = new AssociatedDocument(XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr));
-
                 XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//ram:AssociatedDocumentLineDocument/ram:IncludedNote", nsmgr);
                 foreach (XmlNode noteNode in noteNodes)
                 {

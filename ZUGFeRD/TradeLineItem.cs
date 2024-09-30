@@ -182,6 +182,13 @@ namespace s2industries.ZUGFeRD
         private List<DesignatedProductClassification> DesignedProductClassifications { get; set; } = new List<DesignatedProductClassification>();
 
 
+
+        public TradeLineItem(string lineId)
+        {
+            this.AssociatedDocument = new AssociatedDocument(lineId);
+        } // !TradeLineItem()
+
+
         /// <summary>
         /// As an allowance or charge on item level, attaching it to the corresponding item.
         /// </summary>
