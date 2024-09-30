@@ -351,11 +351,7 @@ namespace s2industries.ZUGFeRD
                 return null;
             }
 
-            string _lineId = string.Empty;
-            if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument", nsmgr) != null)
-            {
-                _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr);
-            }
+            string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, String.Empty);            
 
             TradeLineItem item = new TradeLineItem(_lineId)
             {                
