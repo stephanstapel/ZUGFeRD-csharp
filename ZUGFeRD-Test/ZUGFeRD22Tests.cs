@@ -1167,9 +1167,9 @@ namespace ZUGFeRD_Test
         public void TestPartyExtensions()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
-            desc.Invoicee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
+            desc.Invoicee = new Party() // most of this information will NOT be stored in the output file
             {
-                Name = "Test",
+                Name = "Invoicee",
                 ContactName = "Max Mustermann",
                 Postcode = "83022",
                 City = "Rosenheim",
@@ -1178,20 +1178,30 @@ namespace ZUGFeRD_Test
                 CountrySubdivisionName = "Bayern",
                 Country = CountryCodes.DE
             };
+            desc.Seller.Street = "Buyerstraße 1";
+            desc.Seller.City = "Buyercity";
+            desc.Seller.Postcode = "12345";
+
             MemoryStream ms = new MemoryStream();
 
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual("Test", loadedInvoice.Invoicee.Name);
-            Assert.AreEqual("Max Mustermann", loadedInvoice.Invoicee.ContactName);
-            Assert.AreEqual("83022", loadedInvoice.Invoicee.Postcode);
-            Assert.AreEqual("Rosenheim", loadedInvoice.Invoicee.City);
-            Assert.AreEqual("Münchnerstraße 123", loadedInvoice.Invoicee.Street);
-            Assert.AreEqual("EG links", loadedInvoice.Invoicee.AddressLine3);
-            Assert.AreEqual("Bayern", loadedInvoice.Invoicee.CountrySubdivisionName);
-            Assert.AreEqual(CountryCodes.DE, loadedInvoice.Invoicee.Country);
+            Assert.AreEqual("Invoicee", loadedInvoice.Invoicee.Name);
+            Assert.IsNull(loadedInvoice.Invoicee.ContactName);
+            Assert.AreEqual(loadedInvoice.Invoicee.Postcode, "");
+            Assert.AreEqual(loadedInvoice.Invoicee.City, "");
+            Assert.AreEqual(loadedInvoice.Invoicee.Street, "");
+            Assert.AreEqual(loadedInvoice.Invoicee.AddressLine3, "");
+            Assert.AreEqual(loadedInvoice.Invoicee.CountrySubdivisionName, "");
+            Assert.AreEqual(CountryCodes.Unknown, loadedInvoice.Invoicee.Country);
+
+
+            Assert.AreEqual(loadedInvoice.Seller.Name, "Kunden AG Mitte");
+            Assert.AreEqual(loadedInvoice.Seller.Street, "Buyerstraße 1");
+            Assert.AreEqual(loadedInvoice.Seller.City, "Buyercity");
+            Assert.AreEqual(loadedInvoice.Seller.Postcode, "12345");
         } // !TestMinimumInvoice()
 
 

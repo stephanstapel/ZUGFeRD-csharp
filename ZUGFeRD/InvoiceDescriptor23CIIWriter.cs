@@ -1184,7 +1184,7 @@ namespace s2industries.ZUGFeRD
                     // all profiles
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if (this.Descriptor.Profile == Profile.Minimum) { return;  } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!                    
+                    if (this.Descriptor.Profile == Profile.Minimum) { return;  } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
                     if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
@@ -1259,7 +1259,7 @@ namespace s2industries.ZUGFeRD
                 case PartyTypes.BuyerTradeParty:
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    if (this.Descriptor.Profile == Profile.Minimum) { return; } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
                     if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
@@ -1375,13 +1375,12 @@ namespace s2industries.ZUGFeRD
                     writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
                     writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // buyer: BT-50
                     if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
-                }
-
-                writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
-                writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
-                writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
-                writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
-                writer.WriteEndElement(); // !PostalTradeAddress
+                    writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
+                    writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
+                    writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
+                    writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
+                    writer.WriteEndElement(); // !PostalTradeAddress
+                }                
 
                 if (ElectronicAddress != null)
                 {
