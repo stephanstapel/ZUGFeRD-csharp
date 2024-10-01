@@ -947,7 +947,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         var sbPaymentNotes = new StringBuilder();
-                        var setDueDate = true;
+                        DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
@@ -962,15 +962,15 @@ namespace s2industries.ZUGFeRD
                             {
                                 sbPaymentNotes.AppendLine(paymentTerms.Description);
                             }
-                            if (paymentTerms.DueDate.HasValue && setDueDate)
-                            {
-                                Writer.WriteStartElement("ram:DueDateDateTime");
-                                _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
-                                Writer.WriteEndElement(); // !ram:DueDateDateTime
-                                setDueDate = false;
-                            }
+                            dueDate = dueDate ?? paymentTerms.DueDate;
                         }
                         Writer.WriteOptionalElementString("ram:Description", sbPaymentNotes.ToString().TrimEnd());
+                        if (dueDate.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:DueDateDateTime");
+                            _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(dueDate.Value));
+                            Writer.WriteEndElement(); // !ram:DueDateDateTime
+                        }
                         Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         Writer.WriteEndElement();
                     }
@@ -1018,7 +1018,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         var sbPaymentNotes = new StringBuilder();
-                        var setDueDate = true;
+                        DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
@@ -1042,15 +1042,15 @@ namespace s2industries.ZUGFeRD
                             {
                                 sbPaymentNotes.AppendLine(paymentTerms.Description);
                             }
-                            if (paymentTerms.DueDate.HasValue && setDueDate)
-                            {
-                                Writer.WriteStartElement("ram:DueDateDateTime");
-                                _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
-                                Writer.WriteEndElement(); // !ram:DueDateDateTime
-                                setDueDate = false;
-                            }
+                            dueDate = dueDate ?? paymentTerms.DueDate;
                         }
                         Writer.WriteOptionalElementString("ram:Description", sbPaymentNotes.ToString().TrimEnd());
+                        if (dueDate.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:DueDateDateTime");
+                            _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(dueDate.Value));
+                            Writer.WriteEndElement(); // !ram:DueDateDateTime
+                        }
                         Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         Writer.WriteEndElement();
                     }
