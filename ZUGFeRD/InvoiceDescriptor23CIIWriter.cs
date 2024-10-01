@@ -964,7 +964,7 @@ namespace s2industries.ZUGFeRD
                             }
                             dueDate = dueDate ?? paymentTerms.DueDate;
                         }
-                        Writer.WriteOptionalElementString("ram:Description", sbPaymentNotes.ToString().TrimEnd());
+                        Writer.WriteOptionalElementString("ram:Description", sbPaymentNotes.ToString());
                         if (dueDate.HasValue)
                         {
                             Writer.WriteStartElement("ram:DueDateDateTime");
