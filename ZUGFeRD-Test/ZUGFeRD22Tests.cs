@@ -2222,7 +2222,7 @@ namespace ZUGFeRD_Test
 		} // !TestDesignatedProductClassificationWithoutClassCode()
 
         [TestMethod]
-        public void TestTradePaymentTermsMultiCardinality()
+        public void TestPaymentTermsMultiCardinality()
         {
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
