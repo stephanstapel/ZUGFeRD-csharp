@@ -2293,7 +2293,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(1, paymentTerms.Count);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(paymentTerm);
-            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018\r\n3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
+            Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018{Environment.NewLine}3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
         }
 
@@ -2329,7 +2329,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(1, paymentTerms.Count);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(paymentTerm);
-            Assert.AreEqual("#SKONTO#TAGE=14#PROZENT=2.25#\r\n#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
+            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{Environment.NewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
             //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
             //Assert.AreEqual(10, paymentTerm.DueDays);
