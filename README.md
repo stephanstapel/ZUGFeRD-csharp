@@ -51,7 +51,7 @@ Open ZUGFeRD/ZUGFeRD.sln solution file. Choose Release or Debug mode and hit 'Bu
 For running the tests, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the unit tests. The tests show good cases on how to use the library.
 
 # Step-by-step guide for creating invoices
-Central class for users is class InvoiceDescriptor.
+Central class for users is class `InvoiceDescriptor`.
 This class does not only allow to read and set all ZUGFeRD attributes and structures but also allows to load and save ZUGFeRD files.
 
 However, the standard has become quite large during the recent years. So it is worthwhile to go through the creation process step by step.
@@ -110,7 +110,7 @@ To let the library create line ids, you can use:
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem("Item name", "Detail description", QuantityCodes.PCE, ....);
+desc.AddTradeLineItem("Item name", "Detail description", QuantityCodes.C62, ....);
 ```
 
 This will generate an invoice with trade line item numbered as '1'.
@@ -119,8 +119,8 @@ To pass pre-defined line ids, this is the way to go:
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem(lineId: "0001", "Item name", "Detail description", QuantityCodes.PCE, ....);
-desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", QuantityCodes.PCE, ....);
+desc.AddTradeLineItem(lineId: "0001", "Item name", "Detail description", QuantityCodes.C62, ....);
+desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", QuantityCodes.C62, ....);
 ```
 
 which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
@@ -158,13 +158,13 @@ desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1
 ## Storing the invoice
 ```csharp
 FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
-desc.Save(stream, ZUGFeRDVersion.Version2, Profile.XRechnung);
+desc.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
 stream.Flush();
 stream.Close();    
 ```
 
 # Support for ZUGFeRD 1.x, ZUGFeRD 2.x
-In order to load ZUGFeRD files, you call InvoiceDescriptor.Load(), passing a file path like this:
+In order to load ZUGFeRD files, you call `InvoiceDescriptor.Load()`, passing a file path like this:
 
 ```csharp
 InvoiceDescriptor descriptor = InvoiceDescriptor.Load("zugferd.xml");
@@ -180,7 +180,7 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.Load(stream);
 The library will automatically detect the ZUGFeRD version of the file and parse accordingly. It will automatically be chosen which XRechnung version to use depending on the current date.
 The lifecycle of the stream is not influenced by the ZUGFeRD library, i.e. the library expects an open stream and will not close if after reading from it.
 
-For saving ZUGFeRD files, use InvoiceDescriptor.Save(). Here, you can also pass a stream object:
+For saving ZUGFeRD files, use `InvoiceDescriptor.Save()`. Here, you can also pass a stream object:
 
 ```csharp
 InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
@@ -205,7 +205,7 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 descriptor.Save("zugferd.xml", ZUGFeRDVersion.Version1, Profile.Basic);          
 ```
 
-Optionally, you can pass the ZUGFeRD version to use, default currently is version 1.x, e.g.:
+Optionally, you can pass the ZUGFeRD version to use. Currently, the default version is 1.x, e.g.:
 
 ```csharp
 InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
@@ -214,8 +214,8 @@ InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice(......);
 
 
 descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version2, Profile.Basic); // save as version 2.0
-descriptor.Save("zugferd-v2.xml", ZUGFeRDVersion.Version21, Profile.Basic); // save as version 2.1
+descriptor.Save("zugferd-v20.xml", ZUGFeRDVersion.Version20, Profile.Basic); // save as version 2.0
+descriptor.Save("zugferd-v23.xml", ZUGFeRDVersion.Version23, Profile.Basic); // save as version 2.3
 ```
 
 For reading and writing XRechnung invoices, please see below.
@@ -224,7 +224,7 @@ For reading and writing XRechnung invoices, please see below.
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
 
 ```csharp
-descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);
+descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
 ```
 
 This will save the invoice as XRechnung 3.0.1 as valid from 2024/02/01.
@@ -247,7 +247,7 @@ desc.AddAdditionalReferencedDocument(
     attachmentBinaryObject: data,
     filename: "my-calculation.xlsx");
 
-desc.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.XRechnung);            
+desc.Save("xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);            
 ```
 
 The resulting `xrechnung.xml` file will then contain the calculation file content. As this is not standardized, the decision was to encode the attachments in base64.
@@ -271,7 +271,7 @@ Thanks to [@Athilla](https://github.com/Athilla), this profile is also supported
 The information that is written into the invoice descriptor is identical to standard XRechnung/ Factur-X invoices, you just need to adjust the profile:
 
 ```csharp
-descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version21, Profile.EReporting);
+descriptor.Save("factur-x.xml", ZUGFeRDVersion.Version23, Profile.EReporting);
 ```
 
 This information needs to be sent to the tax authorities. Different due dates apply for implementation for different sizes of companies.
@@ -295,23 +295,23 @@ If you want to write the invoice xml with a certain ZUGFeRD version and a certai
 ```csharp
 descriptor.Save("zugferd-v1.xml", ZUGFeRDVersion.Version1, Profile.Basic); // save as version 1.x, profile Basic
 descriptor.Save("zugferd-v20.xml", ZUGFeRDVersion.Version20, Profile.Basic); // save as version 2.0, profile Basic
-descriptor.Save("zugferd-v23.xml", ZUGFeRDVersion.Version23, Profile.Basic); // save as version 2.1, profile Basic
-descriptor.Save("zugferd-v23-xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung); // save as version 2.1, profile XRechnung
+descriptor.Save("zugferd-v23.xml", ZUGFeRDVersion.Version23, Profile.Basic); // save as version 2.3, profile Basic
+descriptor.Save("zugferd-v23-xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung); // save as version 2.3, profile XRechnung
 ```
 
-# Extracting xml attachments from pdf files
-I am  frequently asked how to extract the ZUGFeRD/ Factur-X/ XRechnung attachment from existing PDF files.
+# Extracting XML attachments from PDF files
+I am frequently asked how to extract the ZUGFeRD / Factur-X / XRechnung attachment from existing PDF files.
 
-There is a nice article on stackoverflow on how this can be achieved using itextsharp:
+There is a nice article on Stack Overflow on how this can be achieved using itextsharp:
 
 https://stackoverflow.com/a/6334252
 
-and this one covers the same with itext7 which is the successor of itextsharp:
+and this one covers the same with `itext7` which is the successor of `itextsharp`:
 
 https://stackoverflow.com/a/37804285
 
-# Writing xml attachments to pdf files
-It is also possible to add the xml ZUGFeRD or XRechnung attachment to pdf files using itextsharp.
+# Writing XML attachments to PDF files
+It is also possible to add the XML ZUGFeRD or XRechnung attachment to PDF files using `itextsharp`.
 You find information about this here:
 
 https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-a-pdf-with-itextsharp
