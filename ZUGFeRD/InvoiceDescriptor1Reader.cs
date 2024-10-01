@@ -18,11 +18,8 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Xml.XPath;
 using System.IO;
+using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
@@ -222,11 +219,11 @@ namespace s2industries.ZUGFeRD
                                                  XmlUtils.NodeAsDecimal(node, ".//ram:AppliedTradeTax/ram:ApplicablePercent", nsmgr, 0).Value);
             }
 
-            retval.PaymentTerms = new PaymentTerms()
+            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradePaymentTerms", nsmgr))
             {
-                Description = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:Description", nsmgr),
-                DueDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime", nsmgr)
-            };
+                retval.AddTradePaymentTerms(XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
+                                            XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime", nsmgr));
+            }
 
             retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:LineTotalAmount", nsmgr, 0).Value;
             retval.ChargeTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementMonetarySummation/ram:ChargeTotalAmount", nsmgr, null);
@@ -305,7 +302,7 @@ namespace s2industries.ZUGFeRD
             if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument", nsmgr) != null)
             {
                 XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//ram:AssociatedDocumentLineDocument/ram:IncludedNote", nsmgr);
-                foreach(XmlNode noteNode in noteNodes)
+                foreach (XmlNode noteNode in noteNodes)
                 {
                     item.AssociatedDocument.Notes.Add(new Note(
                                 content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
@@ -379,8 +376,8 @@ namespace s2industries.ZUGFeRD
                 item.AddAdditionalReferencedDocument(
                     id: XmlUtils.NodeAsString(referenceNode, "ram:ID", nsmgr),
                     code: default(ReferenceTypeCodes).FromString(_code),
-					issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTime", nsmgr)
-				);
+                    issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTime", nsmgr)
+                );
             }
 
             return item;

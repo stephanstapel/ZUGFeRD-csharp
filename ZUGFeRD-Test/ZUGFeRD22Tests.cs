@@ -872,7 +872,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
-            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", invoiceDescriptor.PaymentTerms.Description.Trim());
+            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", invoiceDescriptor.PaymentTerms.FirstOrDefault().Description.Trim());
         } // !TestLoadingSepaPreNotification()
 
 
@@ -1445,7 +1445,7 @@ namespace ZUGFeRD_Test
             desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
             desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
-            desc.PaymentTerms.DueDate = timestamp.AddDays(14);
+            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
             desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
 
 
@@ -1616,9 +1616,11 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(TaxTypes.AAC, serviceCharge.Tax.TypeCode);
             Assert.AreEqual(TaxCategoryCodes.AC, serviceCharge.Tax.CategoryCode);
 
-            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018", loadedInvoice.PaymentTerms.Description);
-            Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.PaymentTerms.DueDate);
-
+            //PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerms.Description);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
 
             Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
             Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount); // optional
@@ -1983,7 +1985,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Taxes[1].TypeCode, (TaxTypes)53);
             Assert.AreEqual(desc.Taxes[1].CategoryCode, (TaxCategoryCodes)19);
 
-            Assert.AreEqual(desc.PaymentTerms.DueDate, new DateTime(2020, 6, 21));
+            Assert.AreEqual(desc.PaymentTerms.FirstOrDefault().DueDate, new DateTime(2020, 6, 21));
 
             Assert.AreEqual(desc.CreditorBankAccounts[0].IBAN, "DE12500105170648489890");
             Assert.AreEqual(desc.CreditorBankAccounts[0].BIC, "INGDDEFFXXX");
@@ -2218,5 +2220,120 @@ namespace ZUGFeRD_Test
 			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
 			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
 		} // !TestDesignatedProductClassificationWithoutClassCode()
-	}
+
+        [TestMethod]
+        public void TestTradePaymentTermsMultiCardinality()
+        {
+            // Arrange
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
+            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(2, paymentTerms.Count);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
+            Assert.IsNotNull(paymentTerm);
+            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
+
+            paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
+            Assert.IsNotNull(paymentTerm);
+            Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
+            // Assert.AreEqual(10, paymentTerm.DueDays);
+            Assert.AreEqual(3m, paymentTerm.Percentage);
+        }
+
+        [TestMethod]
+        public void TestPaymentTermsSingleCardinality()
+        {
+            // Arrange
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
+            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(1, paymentTerms.Count);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(paymentTerm);
+            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018\r\n3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
+        }
+
+        [TestMethod]
+        public void TestPaymentTermsSingleCardinalityStructured()
+        {
+            // Arrange
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = InvoiceProvider.CreateInvoice();
+            desc.PaymentTerms.Clear();
+            desc.AddTradePaymentTerms("", null, PaymentTermsType.Skonto, 14, 2.25m);
+            desc.AddTradePaymentTerms("", null, PaymentTermsType.Skonto, 28, 1m);
+            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(1, paymentTerms.Count);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(paymentTerm);
+            Assert.AreEqual("#SKONTO#TAGE=14#PROZENT=2.25#\r\n#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
+            //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
+            //Assert.AreEqual(10, paymentTerm.DueDays);
+            //Assert.AreEqual(3m, paymentTerm.Percentage);
+        }
+    }
 }

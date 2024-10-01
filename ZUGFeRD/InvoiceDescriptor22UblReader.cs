@@ -327,12 +327,11 @@ namespace s2industries.ZUGFeRD
                 break; // only one occurrence allowed in UBL
             }
 
-
-            retval.PaymentTerms = new PaymentTerms()
+            retval.PaymentTerms.Add(new PaymentTerms()
             {
                 Description = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:PaymentTerms/cbc:Note", nsmgr),
                 DueDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cbc:DueDate", nsmgr)
-            };
+            });
 
             retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:LineExtensionAmount", nsmgr, 0).Value;
             retval.ChargeTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:ChargeTotalAmount", nsmgr, null);
