@@ -136,7 +136,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
-            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", invoiceDescriptor.PaymentTerms.FirstOrDefault().Description.Trim());
+            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", 
+                invoiceDescriptor.GetTradePaymentTerms().FirstOrDefault().Description.Trim());
         } // !TestLoadingSepaPreNotification()
 
 
@@ -505,7 +506,7 @@ namespace ZUGFeRD_Test
             desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
             desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
-            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
             desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
 
 

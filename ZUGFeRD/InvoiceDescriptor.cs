@@ -300,7 +300,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Detailed information about payment terms               
         /// </summary>
-        public List<PaymentTerms> PaymentTerms { get; set; } = new List<PaymentTerms>();
+        internal List<PaymentTerms> PaymentTerms { get; set; } = new List<PaymentTerms>();
 
         /// <summary>
         /// A group of business terms providing information about a preceding invoices.

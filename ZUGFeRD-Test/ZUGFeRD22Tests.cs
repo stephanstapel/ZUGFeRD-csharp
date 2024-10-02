@@ -872,7 +872,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
-            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", invoiceDescriptor.PaymentTerms.FirstOrDefault().Description.Trim());
+            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", 
+                invoiceDescriptor.GetTradePaymentTerms().FirstOrDefault().Description.Trim());
         } // !TestLoadingSepaPreNotification()
 
 
@@ -1445,7 +1446,7 @@ namespace ZUGFeRD_Test
             desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
             desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
-            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
             desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
 
 
@@ -1985,7 +1986,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Taxes[1].TypeCode, (TaxTypes)53);
             Assert.AreEqual(desc.Taxes[1].CategoryCode, (TaxCategoryCodes)19);
 
-            Assert.AreEqual(desc.PaymentTerms.FirstOrDefault().DueDate, new DateTime(2020, 6, 21));
+            Assert.AreEqual(desc.GetTradePaymentTerms().FirstOrDefault().DueDate, new DateTime(2020, 6, 21));
 
             Assert.AreEqual(desc.CreditorBankAccounts[0].IBAN, "DE12500105170648489890");
             Assert.AreEqual(desc.CreditorBankAccounts[0].BIC, "INGDDEFFXXX");
@@ -2229,7 +2230,7 @@ namespace ZUGFeRD_Test
             var desc = InvoiceProvider.CreateInvoice();
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
-            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2270,7 +2271,7 @@ namespace ZUGFeRD_Test
             var desc = InvoiceProvider.CreateInvoice();
             desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
-            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
@@ -2303,10 +2304,10 @@ namespace ZUGFeRD_Test
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
             var desc = InvoiceProvider.CreateInvoice();
-            desc.PaymentTerms.Clear();
+            desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms("", null, PaymentTermsType.Skonto, 14, 2.25m);
             desc.AddTradePaymentTerms("", null, PaymentTermsType.Skonto, 28, 1m);
-            desc.PaymentTerms.FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
