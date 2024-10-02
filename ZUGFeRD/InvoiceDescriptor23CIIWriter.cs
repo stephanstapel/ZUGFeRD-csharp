@@ -1369,7 +1369,8 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
                 _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
-                if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
+                // spec 2.3 says: Minimum/BuyerTradeParty does not include PostalTradeAddress
+                if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.BuyerTradeParty, PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
                 {
                     writer.WriteStartElement("ram:PostalTradeAddress");
                     writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
