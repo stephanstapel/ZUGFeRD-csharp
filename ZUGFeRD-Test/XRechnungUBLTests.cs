@@ -18,11 +18,6 @@
  */
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZUGFeRD_Test
 {
@@ -30,6 +25,7 @@ namespace ZUGFeRD_Test
     public class XRechnungUBLTests : TestBase
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
+        ZUGFeRDVersion version = ZUGFeRDVersion.Version23;
 
 
         [TestMethod]
@@ -72,7 +68,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -99,7 +95,7 @@ namespace ZUGFeRD_Test
             desc.AddApplicableTradeTax(basisAmount, percent, TaxTypes.LOC, TaxCategoryCodes.K, allowanceChargeBasisAmount);
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -111,6 +107,45 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(null, tax.AllowanceChargeBasisAmount);
         } // !TestInvoiceCreation()
 
+        [TestMethod]
+        public void TestAllowanceChargeOnDocumentLevel()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            // Test Values
+            bool isDiscount = true;
+            decimal? basisAmount = 123.45m;
+            CurrencyCodes currency = CurrencyCodes.EUR;
+            decimal actualAmount = 12.34m;
+            string reason = "Gutschrift";
+            TaxTypes taxTypeCode = TaxTypes.VAT;
+            TaxCategoryCodes taxCategoryCode = TaxCategoryCodes.AA;
+            decimal taxPercent = 19.0m;
+
+            desc.AddTradeAllowanceCharge(isDiscount, basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent);
+
+            TradeAllowanceCharge? testAllowanceCharge = desc.GetTradeAllowanceCharges().FirstOrDefault();
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.Extended, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            TradeAllowanceCharge loadedAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges()[0];
+
+            Assert.AreEqual(loadedInvoice.GetTradeAllowanceCharges().Count(), 1);
+            Assert.AreEqual(loadedAllowanceCharge.ChargeIndicator, !isDiscount, message: "isDiscount");
+            Assert.AreEqual(loadedAllowanceCharge.BasisAmount, basisAmount, message: "basisAmount");
+            Assert.AreEqual(loadedAllowanceCharge.Currency, currency, message: "currency");
+            Assert.AreEqual(loadedAllowanceCharge.Amount, actualAmount, message: "actualAmount");
+            Assert.AreEqual(loadedAllowanceCharge.Reason, reason, message: "reason");
+            Assert.AreEqual(loadedAllowanceCharge.Tax.TypeCode, taxTypeCode, message: "taxTypeCode");
+            Assert.AreEqual(loadedAllowanceCharge.Tax.CategoryCode, taxCategoryCode, message: "taxCategoryCode");
+            Assert.AreEqual(loadedAllowanceCharge.Tax.Percent, taxPercent, message: "taxPercent");
+
+        } // !TestAllowanceChargeOnDocumentLevel
 
         [TestMethod]
         public void TestInvoiceWithAttachment()
@@ -129,7 +164,7 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended, ZUGFeRDFormats.UBL);
+            desc.Save(ms, version, Profile.Extended, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
