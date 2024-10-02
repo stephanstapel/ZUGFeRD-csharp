@@ -932,7 +932,7 @@ namespace ZUGFeRD_Test
             d.AddDebitorFinancialAccount(
                 "DE21860000000086001055",
                 null);
-            d.SetTradePaymentTerms(
+            d.AddTradePaymentTerms(
                 "Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
             d.SetTotals(
                 473.00m,
@@ -2228,7 +2228,8 @@ namespace ZUGFeRD_Test
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
             var desc = InvoiceProvider.CreateInvoice();
-            desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
@@ -2269,7 +2270,8 @@ namespace ZUGFeRD_Test
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
             var desc = InvoiceProvider.CreateInvoice();
-            desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 

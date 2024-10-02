@@ -856,6 +856,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="description"></param>
         /// <param name="dueDate"></param>
+        [Obsolete("The method has been made redundant and will be removed in a future release. Please use 'AddTradePaymentTerms' instead.", false)]
         public void SetTradePaymentTerms(string description, DateTime? dueDate = null)
         {
             this._PaymentTerms.Clear();

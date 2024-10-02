@@ -102,7 +102,7 @@ namespace ZUGFeRD_Test
 									   categoryCode: TaxCategoryCodes.S
 									   );
 
-			desc.SetTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018");
+			desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018");
 			desc.SetTotals(lineTotalAmount: 473.0m,
 						   taxBasisAmount: 473.0m,
 						   taxTotalAmount: 56.87m,

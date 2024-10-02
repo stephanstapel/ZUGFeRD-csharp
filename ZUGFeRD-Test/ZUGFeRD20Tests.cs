@@ -196,7 +196,7 @@ namespace ZUGFeRD_Test
             d.AddDebitorFinancialAccount(
                 "DE21860000000086001055",
                 null);
-            d.SetTradePaymentTerms(
+            d.AddTradePaymentTerms(
                 "Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
             d.SetTotals(
                 473.00m,
