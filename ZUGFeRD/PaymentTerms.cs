@@ -40,21 +40,21 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Type whether it's a discount or a surcharge / interest
         /// </summary>
-        public virtual PaymentTermsType? PaymentTermsType { get; set; }
+        public PaymentTermsType? PaymentTermsType { get; set; }
 
         /// <summary>
         /// Number of days within terms are valid
         /// </summary>
-        public virtual int? DueDays { get; set; }
+        public int? DueDays { get; set; }
 
         /// <summary>
         /// Percentage of discount or surcharge
         /// </summary>
-        public virtual decimal? Percentage { get; set; }
+        public decimal? Percentage { get; set; }
 
         /// <summary>
         /// Base amount applied to percentage of discount or surcharge
         /// </summary>
-        public virtual decimal? BaseAmount { get; set; }
+        public decimal? BaseAmount { get; set; }
     }
 }
