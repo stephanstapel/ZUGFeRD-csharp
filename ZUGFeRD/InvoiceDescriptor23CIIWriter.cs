@@ -943,12 +943,12 @@ namespace s2industries.ZUGFeRD
                 case Profile.Minimum:
                     break;
                 case Profile.XRechnung:
-                    if (Descriptor.PaymentTerms.Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    if (Descriptor.GetTradePaymentTerms().Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         var sbPaymentNotes = new StringBuilder();
                         DateTime? dueDate = null;
-                        foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
+                        foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
@@ -976,7 +976,7 @@ namespace s2industries.ZUGFeRD
                     }
                     break;
                 case Profile.Extended:
-                    foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
+                    foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         Writer.WriteOptionalElementString("ram:Description", paymentTerms.Description);
@@ -1006,7 +1006,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         Writer.WriteEndElement();
                     }
-                    if (this.Descriptor.PaymentTerms.Count == 0 && !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    if (this.Descriptor.GetTradePaymentTerms().Count == 0 && !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
@@ -1014,12 +1014,12 @@ namespace s2industries.ZUGFeRD
                     }
                     break;
                 default:
-                    if (Descriptor.PaymentTerms.Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    if (Descriptor.GetTradePaymentTerms().Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         var sbPaymentNotes = new StringBuilder();
                         DateTime? dueDate = null;
-                        foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
+                        foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {

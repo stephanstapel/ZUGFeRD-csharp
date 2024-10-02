@@ -300,7 +300,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Detailed information about payment terms               
         /// </summary>
-        internal List<PaymentTerms> PaymentTerms { get; set; } = new List<PaymentTerms>();
+        /// <remarks>BT-20</remarks>
+        private List<PaymentTerms> _PaymentTerms { get; set; } = new List<PaymentTerms>();
 
         /// <summary>
         /// A group of business terms providing information about a preceding invoices.
@@ -857,7 +858,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="dueDate"></param>
         public void SetTradePaymentTerms(string description, DateTime? dueDate = null)
         {
-            this.PaymentTerms.Clear();
+            this._PaymentTerms.Clear();
             AddTradePaymentTerms(description, dueDate);
         }
 
@@ -874,7 +875,7 @@ namespace s2industries.ZUGFeRD
             PaymentTermsType? paymentTermsType = null, int? dueDays = null, 
             decimal? percentage = null, decimal? baseAmount = null)
         {
-            PaymentTerms.Add(new PaymentTerms()
+            _PaymentTerms.Add(new PaymentTerms()
             {
                 Description = description,
                 DueDate = dueDate,
@@ -891,7 +892,7 @@ namespace s2industries.ZUGFeRD
         /// <returns></returns>
         public IList<PaymentTerms> GetTradePaymentTerms()
         {
-            return PaymentTerms;
+            return _PaymentTerms;
         }
 
         /// <summary>

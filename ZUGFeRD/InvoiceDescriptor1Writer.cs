@@ -365,7 +365,7 @@ namespace s2industries.ZUGFeRD
                 case Profile.Minimum:
                     break;
                 case Profile.Extended:
-                    foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
+                    foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         Writer.WriteOptionalElementString("ram:Description", paymentTerms.Description);
@@ -379,12 +379,12 @@ namespace s2industries.ZUGFeRD
                     }
                     break;
                 default:
-                    if (Descriptor.PaymentTerms.Count > 0)
+                    if (Descriptor.GetTradePaymentTerms().Count > 0)
                     {
                         Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
                         var sbPaymentNotes = new StringBuilder();
                         DateTime? dueDate = null;
-                        foreach (PaymentTerms paymentTerms in this.Descriptor.PaymentTerms)
+                        foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                         {
                             sbPaymentNotes.AppendLine(paymentTerms.Description);
                             dueDate = dueDate ?? paymentTerms.DueDate;
