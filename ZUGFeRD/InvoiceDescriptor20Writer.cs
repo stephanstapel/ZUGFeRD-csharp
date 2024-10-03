@@ -217,7 +217,11 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteElementString("ram:LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
                     Writer.WriteOptionalElementString("ram:IssuerAssignedID", document.ID);
-                    Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+
+                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+                    }
 
                     Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                 } // !foreach(document)
@@ -425,6 +429,11 @@ namespace s2industries.ZUGFeRD
                     if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
                     {
                         Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumToString());
+                    }   
+
+                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
                     }                    
 
                     Writer.WriteElementString("ram:ID", document.ID);

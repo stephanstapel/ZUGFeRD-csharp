@@ -151,9 +151,14 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !IssueDateTime()
                 }
 
+                if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                {
+                    Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumToString());
+                }
+
                 if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
                 {
-                    Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
+                    Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
                 }
 
                 Writer.WriteElementString("ram:ID", document.ID);
