@@ -17,15 +17,14 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Condition that surrounds the payment part of an invoice, describing the specific details and the due date of the invoice.
     /// </summary>
+    [DebuggerDisplay("{Description} - {DueDate,nq}")]
     public class PaymentTerms
     {
         /// <summary>
@@ -37,5 +36,25 @@ namespace s2industries.ZUGFeRD
         /// The date when the payment is due
         /// </summary>
         public DateTime? DueDate { get; set; } = null;
+
+        /// <summary>
+        /// Type whether it's a discount or a surcharge / interest
+        /// </summary>
+        public PaymentTermsType? PaymentTermsType { get; set; }
+
+        /// <summary>
+        /// Number of days within terms are valid
+        /// </summary>
+        public int? DueDays { get; set; }
+
+        /// <summary>
+        /// Percentage of discount or surcharge
+        /// </summary>
+        public decimal? Percentage { get; set; }
+
+        /// <summary>
+        /// Base amount applied to percentage of discount or surcharge
+        /// </summary>
+        public decimal? BaseAmount { get; set; }
     }
 }

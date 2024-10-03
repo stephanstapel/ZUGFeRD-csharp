@@ -18,7 +18,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -173,9 +172,9 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.GetDesignatedProductClassifications().Any())
                 {
-                    foreach(var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
+                    foreach (var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
                     {
-                        Writer.WriteStartElement("ram:DesignatedProductClassification");                        
+                        Writer.WriteStartElement("ram:DesignatedProductClassification");
 
                         if (designatedProductClassification.ClassCode.HasValue)
                         {
@@ -188,8 +187,8 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteValue(designatedProductClassification.ClassCode.Value.ToString());
                             Writer.WriteEndElement(); // !ram::ClassCode
                         }
-						Writer.WriteOptionalElementString("ram:ClassName", designatedProductClassification.ClassName);
-						Writer.WriteEndElement(); // !ram:DesignatedProductClassification
+                        Writer.WriteOptionalElementString("ram:ClassName", designatedProductClassification.ClassName);
+                        Writer.WriteEndElement(); // !ram:DesignatedProductClassification
                     }
                 }
 
@@ -211,7 +210,7 @@ namespace s2industries.ZUGFeRD
 
                         //Bestellnummer
                         Writer.WriteOptionalElementString("ram:IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID, Profile.Extended);
-                        
+
                         // reference to the order position
                         Writer.WriteOptionalElementString("ram:LineID", tradeLineItem.BuyerOrderReferencedDocument.LineID);
 
@@ -626,7 +625,7 @@ namespace s2industries.ZUGFeRD
                 foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
                 {
                     _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung); // BG-24         
-				}
+                }
             }
             #endregion
 
@@ -746,17 +745,17 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("ram:TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
             }
 
-			//   4. InvoiceCurrencyCode (optional)
-			Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
+            //   4. InvoiceCurrencyCode (optional)
+            Writer.WriteElementString("ram:InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
-			//   5. InvoiceIssuerReference (optional)
-			Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, profile: Profile.Extended);
+            //   5. InvoiceIssuerReference (optional)
+            Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, profile: Profile.Extended);
 
-			//   6. InvoicerTradeParty (optional)
-			_writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer);
+            //   6. InvoicerTradeParty (optional)
+            _writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer);
 
-			//   7. InvoiceeTradeParty (optional)
-			_writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee);
+            //   7. InvoiceeTradeParty (optional)
+            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee);
 
             //   8. PayeeTradeParty (optional)
             _writeOptionalParty(Writer, PartyTypes.PayeeTradeParty, this.Descriptor.Payee);
@@ -937,18 +936,125 @@ namespace s2industries.ZUGFeRD
             }
 
             //  15. SpecifiedTradePaymentTerms (optional)
-            if (this.Descriptor.PaymentTerms != null || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+            //  The cardinality depends on the profile.
+            switch (Descriptor.Profile)
             {
-                Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
-                Writer.WriteOptionalElementString("ram:Description", this.Descriptor.PaymentTerms?.Description);
-                if (this.Descriptor.PaymentTerms?.DueDate.HasValue ?? false)
-                {
-                    Writer.WriteStartElement("ram:DueDateDateTime");
-                    _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(this.Descriptor.PaymentTerms.DueDate.Value));
-                    Writer.WriteEndElement(); // !ram:DueDateDateTime
-                }
-                Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
-                Writer.WriteEndElement();
+                case Profile.Unknown:
+                case Profile.Minimum:
+                    break;
+                case Profile.XRechnung:
+                    if (Descriptor.GetTradePaymentTerms().Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
+                        var sbPaymentNotes = new StringBuilder();
+                        DateTime? dueDate = null;
+                        foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
+                        {
+                            if (paymentTerms.PaymentTermsType.HasValue)
+                            {
+                                sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).AsString<PaymentTermsType>().ToUpper()}");
+                                sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
+                                sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
+                                sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
+                                sbPaymentNotes.AppendLine("#");
+                            }
+                            else
+                            {
+                                sbPaymentNotes.AppendLine(paymentTerms.Description);
+                            }
+                            dueDate = dueDate ?? paymentTerms.DueDate;
+                        }
+                        Writer.WriteOptionalElementString("ram:Description", sbPaymentNotes.ToString());
+                        if (dueDate.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:DueDateDateTime");
+                            _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(dueDate.Value));
+                            Writer.WriteEndElement(); // !ram:DueDateDateTime
+                        }
+                        Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        Writer.WriteEndElement();
+                    }
+                    break;
+                case Profile.Extended:
+                    foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
+                        Writer.WriteOptionalElementString("ram:Description", paymentTerms.Description);
+                        if (paymentTerms.DueDate.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:DueDateDateTime");
+                            _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
+                            Writer.WriteEndElement(); // !ram:DueDateDateTime
+                        }
+                        if (paymentTerms.PaymentTermsType.HasValue)
+                        {
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                            {
+                                Writer.WriteStartElement("ram:ApplicableTradePaymentDiscountTerms");
+                                _writeOptionalAmount(Writer, "ram:BasisAmount", paymentTerms.BaseAmount, forceCurrency: true);
+                                Writer.WriteOptionalElementString("ram:CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
+                            }
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                            {
+                                Writer.WriteStartElement("ram:ApplicableTradePaymentPenaltyTerms");
+                                _writeOptionalAmount(Writer, "ram:BasisAmount", paymentTerms.BaseAmount, forceCurrency: true);
+                                Writer.WriteOptionalElementString("ram:CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
+                            }
+                        }
+                        Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        Writer.WriteEndElement();
+                    }
+                    if (this.Descriptor.GetTradePaymentTerms().Count == 0 && !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
+                        Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        Writer.WriteEndElement();
+                    }
+                    break;
+                default:
+                    if (Descriptor.GetTradePaymentTerms().Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    {
+                        Writer.WriteStartElement("ram:SpecifiedTradePaymentTerms");
+                        var sbPaymentNotes = new StringBuilder();
+                        DateTime? dueDate = null;
+                        foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
+                        {
+                            if (paymentTerms.PaymentTermsType.HasValue)
+                            {
+                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                                {
+                                    Writer.WriteStartElement("ram:ApplicableTradePaymentDiscountTerms");
+                                    _writeOptionalAmount(Writer, "ram:BasisAmount", paymentTerms.BaseAmount, forceCurrency: true);
+                                    Writer.WriteOptionalElementString("ram:CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                    Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
+                                }
+                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                                {
+                                    Writer.WriteStartElement("ram:ApplicableTradePaymentPenaltyTerms");
+                                    _writeOptionalAmount(Writer, "ram:BasisAmount", paymentTerms.BaseAmount, forceCurrency: true);
+                                    Writer.WriteOptionalElementString("ram:CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                    Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
+                                }
+                            }
+                            else
+                            {
+                                sbPaymentNotes.AppendLine(paymentTerms.Description);
+                            }
+                            dueDate = dueDate ?? paymentTerms.DueDate;
+                        }
+                        Writer.WriteOptionalElementString("ram:Description", sbPaymentNotes.ToString().TrimEnd());
+                        if (dueDate.HasValue)
+                        {
+                            Writer.WriteStartElement("ram:DueDateDateTime");
+                            _writeElementWithAttribute(Writer, "udt:DateTimeString", "format", "102", _formatDate(dueDate.Value));
+                            Writer.WriteEndElement(); // !ram:DueDateDateTime
+                        }
+                        Writer.WriteOptionalElementString("ram:DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        Writer.WriteEndElement();
+                    }
+                    break;
             }
 
             #region SpecifiedTradeSettlementHeaderMonetarySummation
@@ -1047,43 +1153,43 @@ namespace s2industries.ZUGFeRD
             stream.Seek(streamPosition, SeekOrigin.Begin);
         } // !Save()
 
-		private void _writeAdditionalReferencedDocument(AdditionalReferencedDocument document, Profile profile)
-		{
-			Writer.WriteStartElement("ram:AdditionalReferencedDocument", profile);
-			Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
-			Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());
+        private void _writeAdditionalReferencedDocument(AdditionalReferencedDocument document, Profile profile)
+        {
+            Writer.WriteStartElement("ram:AdditionalReferencedDocument", profile);
+            Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
+            Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());
 
-			if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
-			{
-				Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
-			}
+            if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+            {
+                Writer.WriteElementString("ram:ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+            }
 
-			Writer.WriteOptionalElementString("ram:Name", document.Name);
+            Writer.WriteOptionalElementString("ram:Name", document.Name);
 
-			if (document.AttachmentBinaryObject != null)
-			{
-				Writer.WriteStartElement("ram:AttachmentBinaryObject");
-				Writer.WriteAttributeString("filename", document.Filename); 
-				Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename)); 
-				Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
-				Writer.WriteEndElement(); // !AttachmentBinaryObject()
-			}
+            if (document.AttachmentBinaryObject != null)
+            {
+                Writer.WriteStartElement("ram:AttachmentBinaryObject");
+                Writer.WriteAttributeString("filename", document.Filename);
+                Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+                Writer.WriteEndElement(); // !AttachmentBinaryObject()
+            }
 
-			if (document.IssueDateTime.HasValue)
-			{
-				Writer.WriteStartElement("ram:FormattedIssueDateTime");
-				Writer.WriteStartElement("qdt:DateTimeString");
-				Writer.WriteAttributeString("format", "102");
-				Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
-				Writer.WriteEndElement(); // !qdt:DateTimeString
-				Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
-			}
+            if (document.IssueDateTime.HasValue)
+            {
+                Writer.WriteStartElement("ram:FormattedIssueDateTime");
+                Writer.WriteStartElement("qdt:DateTimeString");
+                Writer.WriteAttributeString("format", "102");
+                Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
+                Writer.WriteEndElement(); // !qdt:DateTimeString
+                Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+            }
 
-			Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
-		} // !_writeAdditionalReferencedDocument()
+            Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
+        } // !_writeAdditionalReferencedDocument()
 
 
-		private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
+        private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
             if (value.HasValue)
             {
@@ -1184,7 +1290,7 @@ namespace s2industries.ZUGFeRD
                     // all profiles
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if (this.Descriptor.Profile == Profile.Minimum) { return;  } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!
+                    if (this.Descriptor.Profile == Profile.Minimum) { return; } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
                     if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
@@ -1237,8 +1343,8 @@ namespace s2industries.ZUGFeRD
 
 
                 // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
-                if ((this.Descriptor.Profile == Profile.Minimum && partyType.In(PartyTypes.SellerTradeParty, PartyTypes.PayeeTradeParty,  PartyTypes.BuyerTradeParty)) ||
-                    (this.Descriptor.Profile == Profile.Extended)) /* remaining party types */                    
+                if ((this.Descriptor.Profile == Profile.Minimum && partyType.In(PartyTypes.SellerTradeParty, PartyTypes.PayeeTradeParty, PartyTypes.BuyerTradeParty)) ||
+                    (this.Descriptor.Profile == Profile.Extended)) /* remaining party types */
                 {
                     writer.WriteOptionalElementString("ram:TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
                 }
@@ -1381,7 +1487,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
                     writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
                     writer.WriteEndElement(); // !PostalTradeAddress
-                }                
+                }
 
                 if (ElectronicAddress != null)
                 {

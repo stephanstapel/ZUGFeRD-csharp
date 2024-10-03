@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -94,8 +92,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public CurrencyCodes Currency { get; set; }
 
-		/// <summary>
-		/// The VAT total amount expressed in the accounting currency accepted or 
+        /// <summary>
+        /// The VAT total amount expressed in the accounting currency accepted or 
         /// required in the country of the seller. 
         /// 
         /// Note: Shall be used in combination with the invoice total VAT amount 
@@ -110,14 +108,14 @@ namespace s2industries.ZUGFeRD
         /// of the Council Directive 2006/112/EC [2] for further information.
         /// 
         /// BT-6
-		/// </summary>
-		public CurrencyCodes? TaxCurrency { get; set; }
+        /// </summary>
+        public CurrencyCodes? TaxCurrency { get; set; }
 
 
-		/// <summary>
-		/// Information about the buyer
-		/// </summary>
-		public Party Buyer { get; set; }
+        /// <summary>
+        /// Information about the buyer
+        /// </summary>
+        public Party Buyer { get; set; }
 
         /// <summary>
         /// Buyer contact information
@@ -132,29 +130,29 @@ namespace s2industries.ZUGFeRD
         public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
         public ElectronicAddress SellerElectronicAddress { get; set; }
 
-		/// <summary>
-		/// Given seller reference number for routing purposes after biliteral agreement
+        /// <summary>
+        /// Given seller reference number for routing purposes after biliteral agreement
         /// 
         /// This field seems not to be used in common scenarios.
-		/// </summary>
-		public string SellerReferenceNo { get; set; } = "";
+        /// </summary>
+        public string SellerReferenceNo { get; set; } = "";
 
-		/// <summary>
-		/// This party is optional and only relevant for Extended profile
-		/// </summary>
-		public Party Invoicee { get; set; }
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
+        public Party Invoicee { get; set; }
 
-		/// <summary>
-		/// This party is optional and only relevant for Extended profile.
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile.
         /// 
         /// It seems to be used under rate condition only.
-		/// </summary>
-		public Party Invoicer { get; set; }
+        /// </summary>
+        public Party Invoicer { get; set; }
 
-		/// <summary>
-		/// This party is optional and only relevant for Extended profile
-		/// </summary>
-		public Party ShipTo { get; set; }
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
+        public Party ShipTo { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
@@ -201,10 +199,10 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public string Name { get; set; }
 
-		/// <summary>
-		/// Indicates the type of the document, if it represents an invoice, a credit note or one of the available 'sub types'
-		/// </summary>
-		public InvoiceType Type { get; set; } = InvoiceType.Invoice;
+        /// <summary>
+        /// Indicates the type of the document, if it represents an invoice, a credit note or one of the available 'sub types'
+        /// </summary>
+        public InvoiceType Type { get; set; } = InvoiceType.Invoice;
 
         /// <summary>
         /// The identifier is defined by the buyer (e.g. contact ID, department, office ID, project code), but provided by the seller in the invoice. 
@@ -302,7 +300,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Detailed information about payment terms               
         /// </summary>
-        public PaymentTerms PaymentTerms { get; set; }
+        /// <remarks>BT-20</remarks>
+        private List<PaymentTerms> _PaymentTerms { get; set; } = new List<PaymentTerms>();
 
         /// <summary>
         /// A group of business terms providing information about a preceding invoices.
@@ -852,14 +851,49 @@ namespace s2industries.ZUGFeRD
             return this._TradeAllowanceCharges;
         } // !GetTradeAllowanceCharges()
 
-
+        /// <summary>
+        /// Clears the current trade payment terms and sets the initial payment terms
+        /// </summary>
+        /// <param name="description"></param>
+        /// <param name="dueDate"></param>
+        [Obsolete("The method has been made redundant and will be removed in a future release. Please use 'AddTradePaymentTerms' instead.", false)]
         public void SetTradePaymentTerms(string description, DateTime? dueDate = null)
         {
-            this.PaymentTerms = new PaymentTerms()
+            this._PaymentTerms.Clear();
+            AddTradePaymentTerms(description, dueDate);
+        }
+
+        /// <summary>
+        /// Adds a trade payment term.
+        /// </summary>
+        /// <param name="description"></param>
+        /// <param name="dueDate"></param>
+        /// <param name="paymentTermsType"></param>
+        /// <param name="dueDays"></param>
+        /// <param name="percentage"></param>
+        /// <param name="baseAmount"></param>
+        public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
+            PaymentTermsType? paymentTermsType = null, int? dueDays = null, 
+            decimal? percentage = null, decimal? baseAmount = null)
+        {
+            _PaymentTerms.Add(new PaymentTerms()
             {
                 Description = description,
-                DueDate = dueDate
-            };
+                DueDate = dueDate,
+                PaymentTermsType = paymentTermsType,
+                DueDays = dueDays,
+                Percentage = percentage,
+                BaseAmount = baseAmount
+            });
+        }
+
+        /// <summary>
+        /// Returns all existing trade payment terms.
+        /// </summary>
+        /// <returns></returns>
+        public IList<PaymentTerms> GetTradePaymentTerms()
+        {
+            return _PaymentTerms;
         }
 
         /// <summary>
@@ -981,7 +1015,7 @@ namespace s2industries.ZUGFeRD
         {
             this.Profile = profile;
             IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
-            writer.Save(this, stream,format);
+            writer.Save(this, stream, format);
         } // !Save()
 
 
@@ -1033,7 +1067,7 @@ namespace s2industries.ZUGFeRD
             }
 
             TradeLineItem item = new TradeLineItem(lineID)
-            {                
+            {
                 GrossUnitPrice = 0m,
                 NetUnitPrice = 0m,
                 BilledQuantity = 0m,

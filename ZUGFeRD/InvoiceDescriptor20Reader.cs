@@ -272,11 +272,25 @@ namespace s2industries.ZUGFeRD
                                                  XmlUtils.NodeAsDecimal(node, ".//ram:AppliedTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value);
             }
 
-            retval.PaymentTerms = new PaymentTerms()
+            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradePaymentTerms", nsmgr))
             {
-                Description = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:Description", nsmgr),
-                DueDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime", nsmgr)
-            };
+                decimal? discountPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:CalculationPercent", nsmgr, null);
+                int? discountDueDays = null; // XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure", nsmgr);
+                decimal? discountAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisAmount", nsmgr, null);
+                decimal? penaltyPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:CalculationPercent", nsmgr, null);
+                int? penaltyDueDays = null; // XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
+                decimal? penaltyAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisAmount", nsmgr, null);
+                PaymentTermsType? paymentTermsType = discountPercent.HasValue ? PaymentTermsType.Skonto :
+                    penaltyPercent.HasValue ? PaymentTermsType.Verzug :
+                    (PaymentTermsType?)null;
+
+                retval.AddTradePaymentTerms(XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
+                                            XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime", nsmgr),
+                                            paymentTermsType,
+                                            discountDueDays ?? penaltyDueDays,
+                                            discountPercent ?? penaltyPercent,
+                                            discountAmount ?? penaltyAmount);
+            }
 
             retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount", nsmgr, 0).Value;
             retval.ChargeTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:ChargeTotalAmount", nsmgr, null);

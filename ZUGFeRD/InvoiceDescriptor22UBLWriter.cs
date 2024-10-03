@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -296,13 +297,17 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentTerms (optional)
-            if (this.Descriptor.PaymentTerms != null)
+            if (this.Descriptor.GetTradePaymentTerms().Count > 0)
             {
                 Writer.WriteStartElement("cac:PaymentTerms");
-                Writer.WriteOptionalElementString("cbc:Note", this.Descriptor.PaymentTerms?.Description);
+                var sbPaymentNotes = new StringBuilder();
+                foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
+                {
+                    sbPaymentNotes.AppendLine(paymentTerms.Description);
+                }
+                Writer.WriteOptionalElementString("cbc:Note", sbPaymentNotes.ToString().TrimEnd());
                 Writer.WriteEndElement();
             }
-
 
             // Tax Total
             Writer.WriteStartElement("cac:TaxTotal");
