@@ -617,7 +617,7 @@ namespace s2industries.ZUGFeRD
 
                     writer.WriteStartElement("cac:TaxScheme");
 
-                    Writer.WriteElementString("cbc:ID", tax.SchemeID.ToString());
+                    Writer.WriteElementString("cbc:ID", UBLTaxRegistrationSchemeIDMapper.Map(tax.SchemeID));
 
                     writer.WriteEndElement(); //!TaxScheme
 

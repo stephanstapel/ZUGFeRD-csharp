@@ -97,7 +97,7 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode node in doc.SelectNodes("//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme", nsmgr))
             {
                 string id = XmlUtils.NodeAsString(node, ".//cbc:CompanyID", nsmgr);
-                TaxRegistrationSchemeID schemeID = _getUncefactTaxSchemeID(XmlUtils.NodeAsString(node, ".//cac:TaxScheme/cbc:ID", nsmgr));
+                TaxRegistrationSchemeID schemeID = UBLTaxRegistrationSchemeIDMapper.Map(XmlUtils.NodeAsString(node, ".//cac:TaxScheme/cbc:ID", nsmgr));
 
                 retval.AddSellerTaxRegistration(id, schemeID);
             }
@@ -132,7 +132,7 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode node in doc.SelectNodes("//cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme", nsmgr))
             {
                 string id = XmlUtils.NodeAsString(node, ".//cbc:CompanyID", nsmgr);
-                TaxRegistrationSchemeID schemeID = _getUncefactTaxSchemeID(XmlUtils.NodeAsString(node, ".//cac:TaxScheme/cbc:ID", nsmgr));
+                TaxRegistrationSchemeID schemeID = UBLTaxRegistrationSchemeIDMapper.Map(XmlUtils.NodeAsString(node, ".//cac:TaxScheme/cbc:ID", nsmgr));
 
                 retval.AddBuyerTaxRegistration(id, schemeID);
             }
@@ -776,18 +776,6 @@ namespace s2industries.ZUGFeRD
                 Filename = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject/@filename", nsmgr),
                 ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr))
             };
-        }
-        private static TaxRegistrationSchemeID _getUncefactTaxSchemeID(string schemeID)
-        {
-            if (string.IsNullOrWhiteSpace(schemeID)) return TaxRegistrationSchemeID.Unknown;
-            switch (schemeID.ToUpper())
-            {
-                case "ID":
-                    return TaxRegistrationSchemeID.FC;
-                case "VAT":
-                    return TaxRegistrationSchemeID.VA;
-            }
-            return default(TaxRegistrationSchemeID).FromString(schemeID);
         }
     }
 }

@@ -18,6 +18,7 @@
  */
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
+using System.Text;
 
 namespace ZUGFeRD_Test
 {
@@ -181,5 +182,30 @@ namespace ZUGFeRD_Test
                 }
             }
         } // !TestInvoiceWithAttachment()
+
+
+        [TestMethod]
+        public void TestTaxTypes()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            
+            // test writing and parsing
+            Assert.AreEqual(loadedInvoice.Taxes.Count, 2);
+            Assert.IsTrue(loadedInvoice.Taxes.All(t => t.TypeCode == TaxTypes.VAT));
+
+            // test the raw xml file
+            string content = Encoding.UTF8.GetString(ms.ToArray());
+            Assert.IsFalse(content.Contains("<cbc:ID>VA</cbc:ID>", StringComparison.OrdinalIgnoreCase));
+            Assert.IsTrue(content.Contains("<cbc:ID>VAT</cbc:ID>", StringComparison.OrdinalIgnoreCase));
+
+            Assert.IsFalse(content.Contains("<cbc:ID>FC</cbc:ID>", StringComparison.OrdinalIgnoreCase));
+            Assert.IsTrue(content.Contains("<cbc:ID>ID</cbc:ID>", StringComparison.OrdinalIgnoreCase));
+        } // !TestInvoiceCreation()
     }
 }
