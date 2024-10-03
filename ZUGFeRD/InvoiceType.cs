@@ -164,20 +164,13 @@ namespace s2industries.ZUGFeRD
 
         public static InvoiceType FromString(this InvoiceType _, string s)
         {
-            try
-            {
-                return (InvoiceType) Enum.Parse(typeof(InvoiceType), s);
-            }
-            catch
-            {
-                return InvoiceType.Unknown;
-            }
+            return EnumExtensions.StringToEnum<InvoiceType>(s);
         } // !FromString()
 
 
         public static string EnumToString(this InvoiceType i)
         {
-            return i.ToString("g");
+            return EnumExtensions.EnumToString<InvoiceType>(i);
         } // !ToString()
     }
 }

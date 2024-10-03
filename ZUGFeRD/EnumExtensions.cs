@@ -21,14 +21,15 @@ using System;
 
 namespace s2industries.ZUGFeRD
 {
-    internal static class EnumerationExtensions
+    internal static class EnumExtensions
     {
-        internal static string AsString<T>(this T value) where T : Enum
+        internal static string EnumToString<T>(this T value) where T : Enum
         {
-            return Enum.GetName(typeof(T), value);
-        }
+            return value.ToString("g");
+        } // !EnumToString()
 
-        internal static T AsEnum<T>(this int value) where T : Enum
+
+        internal static T IntToEnum<T>(this int value) where T : Enum
         {
             if (Enum.IsDefined(typeof(T), value))
             {
@@ -36,13 +37,27 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                throw new ArgumentException($"{value} is not a valid value for enum {typeof(T).Name}");
+                return default(T);
             }
-        }
+        } // !IntToEnum()
 
-        internal static int AsInt<T>(this T value) where T : Enum
+
+        internal static T StringToEnum<T>(this string value) where T : Enum
+        {
+            try
+            {
+                return (T)Enum.Parse(typeof(T), value);
+            }
+            catch
+            {
+                return default(T);
+            }
+        } // !IntToEnum()
+
+
+        internal static int EnumToInt<T>(this T value) where T : Enum
         {
             return (int)(object)value;
-        }
+        } // !EnumToInt()
     }
 }

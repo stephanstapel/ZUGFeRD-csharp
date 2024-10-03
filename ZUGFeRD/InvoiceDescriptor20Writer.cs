@@ -422,10 +422,10 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !FormattedIssueDateTime
                     }
 
-                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
                     {
-                        Writer.WriteElementString("ram:TypeCode", document.ReferenceTypeCode.EnumToString());
-                    }
+                        Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumToString());
+                    }                    
 
                     Writer.WriteElementString("ram:ID", document.ID);
                     Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
@@ -732,7 +732,7 @@ namespace s2industries.ZUGFeRD
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
-                                sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).AsString<PaymentTermsType>().ToUpper()}");
+                                sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
                                 sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
                                 sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");

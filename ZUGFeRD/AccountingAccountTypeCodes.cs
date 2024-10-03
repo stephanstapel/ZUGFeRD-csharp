@@ -67,20 +67,13 @@ namespace s2industries.ZUGFeRD
     {
         public static AccountingAccountTypeCodes FromString(this AccountingAccountTypeCodes _, string s)
         {
-            try
-            {
-                return (AccountingAccountTypeCodes)Enum.Parse(typeof(AccountingAccountTypeCodes), s);
-            }
-            catch
-            {
-                return AccountingAccountTypeCodes.Unknown;
-            }
+            return EnumExtensions.StringToEnum<AccountingAccountTypeCodes>(s);
         } // !FromString()
 
 
         public static string EnumToString(this AccountingAccountTypeCodes c)
         {
-            return c.ToString("g");
+            return EnumExtensions.EnumToString(c);
         } // !ToString()
     }
 }

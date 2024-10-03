@@ -28,6 +28,12 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum AdditionalReferencedDocumentTypeCode
     {
+        // this entry needs to be the first in the list (default value)
+        /// <summary>
+        /// Unknown reference document type
+        /// </summary>        
+        Unknown = 65536,
+
         /// <summary>
         /// simple reference document
         /// </summary>
@@ -41,12 +47,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// price and sales catalog
         /// </summary>
-        PriceSalesCatalogueResponse = 50,
-
-        /// <summary>
-        /// Unknown reference document type
-        /// </summary>
-        Unknown = 65536
+        PriceSalesCatalogueResponse = 50,        
     }
 
 
@@ -54,24 +55,19 @@ namespace s2industries.ZUGFeRD
     {
         public static AdditionalReferencedDocumentTypeCode FromString(this AdditionalReferencedDocumentTypeCode _, string s)
         {
-            try
-            {
-                return (AdditionalReferencedDocumentTypeCode)Enum.Parse(typeof(AdditionalReferencedDocumentTypeCode), s);
-            }
-            catch
-            {
-                return AdditionalReferencedDocumentTypeCode.ReferenceDocument;
-            }
+            return EnumExtensions.StringToEnum<AdditionalReferencedDocumentTypeCode>(s);        
         } // !FromString()
+
 
         public static string EnumValueToString(this AdditionalReferencedDocumentTypeCode t)
         {
-            return ((int)t).ToString();
+            return EnumExtensions.EnumToInt(t).ToString();
         } // !ToString()
+
 
         public static string EnumToString(this AdditionalReferencedDocumentTypeCode t)
         {
-            return t.ToString();
+            return EnumExtensions.EnumToString<AdditionalReferencedDocumentTypeCode>(t);
         } // !ToString()
     }
 }

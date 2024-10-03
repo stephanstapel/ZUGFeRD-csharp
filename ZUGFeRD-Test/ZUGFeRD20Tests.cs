@@ -18,6 +18,7 @@
  */
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
+using System.Text;
 
 
 namespace ZUGFeRD_Test

@@ -952,7 +952,7 @@ namespace s2industries.ZUGFeRD
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
-                                sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).AsString<PaymentTermsType>().ToUpper()}");
+                                sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
                                 sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
                                 sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
@@ -1649,7 +1649,7 @@ namespace s2industries.ZUGFeRD
                 return (int)InvoiceType.Correction;
             }
 
-            return (int)type;
+            return EnumExtensions.EnumToInt<InvoiceType>(type);
         } // !_translateInvoiceType()
 
 
