@@ -583,7 +583,7 @@ namespace s2industries.ZUGFeRD
             #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
             if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
             {
-                Writer.WriteStartElement("ram:SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended);
+                Writer.WriteStartElement("ram:SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung);
                 Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.SellerOrderReferencedDocument.ID);
                 if (this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.HasValue)
                 {
