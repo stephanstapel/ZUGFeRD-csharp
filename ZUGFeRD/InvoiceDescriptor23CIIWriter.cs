@@ -560,27 +560,7 @@ namespace s2industries.ZUGFeRD
             // TODO: implement SellerTaxRepresentativeTradeParty
             // BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
 
-            #region BuyerOrderReferencedDocument
-            if (!String.IsNullOrWhiteSpace(this.Descriptor.OrderNo))
-            {
-                Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
-                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
-                if (this.Descriptor.OrderDate.HasValue)
-                {
-                    Writer.WriteStartElement("ram:FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
-                    Writer.WriteStartElement("qdt:DateTimeString");
-                    Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
-                    Writer.WriteEndElement(); // !qdt:DateTimeString
-                    Writer.WriteEndElement(); // !IssueDateTime()
-                }
-
-                Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
-            }
-            #endregion
-
-
-            #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
+            #region 1. SellerOrderReferencedDocument (BT-14: Comfort, Extended)
             if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
             {
                 Writer.WriteStartElement("ram:SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung);
@@ -599,7 +579,26 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
-            #region ContractReferencedDocument
+            #region 2. BuyerOrderReferencedDocument
+            if (!String.IsNullOrWhiteSpace(this.Descriptor.OrderNo))
+            {
+                Writer.WriteStartElement("ram:BuyerOrderReferencedDocument");
+                Writer.WriteElementString("ram:IssuerAssignedID", this.Descriptor.OrderNo);
+                if (this.Descriptor.OrderDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram:FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                    Writer.WriteStartElement("qdt:DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
+                    Writer.WriteEndElement(); // !qdt:DateTimeString
+                    Writer.WriteEndElement(); // !IssueDateTime()
+                }
+
+                Writer.WriteEndElement(); // !BuyerOrderReferencedDocument
+            }
+            #endregion
+
+            #region 3. ContractReferencedDocument
             // BT-12
             if (this.Descriptor.ContractReferencedDocument != null)
             {
@@ -619,7 +618,7 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
-            #region AdditionalReferencedDocument
+            #region 4. AdditionalReferencedDocument
             if (this.Descriptor.AdditionalReferencedDocuments != null)
             {
                 foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
