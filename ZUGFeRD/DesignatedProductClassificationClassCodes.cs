@@ -47,8 +47,15 @@ namespace s2industries.ZUGFeRD
 		/// Harmonised system
 		/// The item number is part of, or is generated in the context of the Harmonised Commodity Description and Coding System (Harmonised System), as developed and maintained by the World Customs Organization (WCO).
 		/// </summary>
-		HS
-	}
+		HS,
+
+
+        /// <summary>
+        /// Mutually defined
+        /// Item type identification mutually agreed between interchanging parties.
+        /// </summary>
+        ZZZ
+    }
 
     internal static class DesignatedProductClassificationClassCodesExtensions
     {
