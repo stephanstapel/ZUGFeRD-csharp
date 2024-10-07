@@ -73,7 +73,7 @@ namespace s2industries.ZUGFeRD
 
         public static string EnumToString(this AccountingAccountTypeCodes c)
         {
-            return EnumExtensions.EnumToString(c);
+            return EnumExtensions.EnumToString< AccountingAccountTypeCodes>(c);
         } // !ToString()
     }
 }

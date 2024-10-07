@@ -32,6 +32,11 @@ namespace s2industries.ZUGFeRD
     public enum TaxTypes
     {
         /// <summary>
+        /// Invalid tax type
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Petroleum tax
         ///
         ///A tax levied on the volume of petroleum being
@@ -402,12 +407,7 @@ namespace s2industries.ZUGFeRD
         /// added at each stage in the production/distribution
         /// cycle.
         /// </summary>
-        VAT,
-        
-        /// <summary>
-        /// Invalid tax type
-        /// </summary>
-        Unknown
+        VAT        
     }
 
 
@@ -415,20 +415,13 @@ namespace s2industries.ZUGFeRD
     {
         public static TaxTypes FromString(this TaxTypes _, string s)
         {
-            try
-            {
-                return (TaxTypes)Enum.Parse(typeof(TaxTypes), s);
-            }
-            catch
-            {
-                return TaxTypes.Unknown;
-            }
+            return EnumExtensions.StringToEnum<TaxTypes>(s);
         } // !FromString()
 
 
-        public static string EnumToString(this TaxTypes t)
+        public static string EnumToString(this TaxTypes c)
         {
-            return t.ToString("g");
+            return EnumExtensions.EnumToString<TaxTypes>(c);
         } // !ToString()
     }
 }

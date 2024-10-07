@@ -2106,14 +2106,14 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.Taxes[0].TaxAmount, 236.74m);
             Assert.AreEqual(desc.Taxes[0].BasisAmount, 1245.98m);
             Assert.AreEqual(desc.Taxes[0].Percent, 19);
-            Assert.AreEqual(desc.Taxes[0].TypeCode, (TaxTypes)53);
-            Assert.AreEqual(desc.Taxes[0].CategoryCode, (TaxCategoryCodes)19);
+            Assert.AreEqual(desc.Taxes[0].TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.Taxes[0].CategoryCode, TaxCategoryCodes.S);
 
             Assert.AreEqual(desc.Taxes[1].TaxAmount, 14.0000m);
             Assert.AreEqual(desc.Taxes[1].BasisAmount, 200.00m);
             Assert.AreEqual(desc.Taxes[1].Percent, 7);
-            Assert.AreEqual(desc.Taxes[1].TypeCode, (TaxTypes)53);
-            Assert.AreEqual(desc.Taxes[1].CategoryCode, (TaxCategoryCodes)19);
+            Assert.AreEqual(desc.Taxes[1].TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.Taxes[1].CategoryCode, TaxCategoryCodes.S);
 
             Assert.AreEqual(desc.GetTradePaymentTerms().FirstOrDefault().DueDate, new DateTime(2020, 6, 21));
 

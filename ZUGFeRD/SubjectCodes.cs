@@ -29,10 +29,16 @@ namespace s2industries.ZUGFeRD
     public enum SubjectCodes
     {
         /// <summary>
+        /// Unknon/ invalid subject code
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Generelle Informationen
         /// </summary>
         /// Generelle Informationen zu diesem Kauf
         AAI,
+
         /// <summary>
         /// Zusätzliche Konditionen zu diesem Kauf
         /// 
@@ -94,12 +100,7 @@ namespace s2industries.ZUGFeRD
         /// Supplier remarks
         /// Remarks from or for a supplier of goods or services.
         /// </summary>
-        SUR,
-
-        /// <summary>
-        /// Unknon/ invalid subject code
-        /// </summary>
-        Unknown
+        SUR        
     }
 
 
@@ -108,20 +109,13 @@ namespace s2industries.ZUGFeRD
     {
         public static SubjectCodes FromString(this SubjectCodes _, string s)
         {
-            try
-            {
-                return (SubjectCodes)Enum.Parse(typeof(SubjectCodes), s);
-            }
-            catch
-            {
-                return SubjectCodes.Unknown;
-            }
+            return EnumExtensions.StringToEnum<SubjectCodes>(s);
         } // !FromString()
 
 
-        public static string EnumToString(this SubjectCodes codes)
+        public static string EnumToString(this SubjectCodes c)
         {
-            return codes.ToString("g");
+            return EnumExtensions.EnumToString<SubjectCodes>(c);
         } // !ToString()
     }
 }

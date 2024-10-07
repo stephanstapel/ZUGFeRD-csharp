@@ -29,6 +29,13 @@ namespace s2industries.ZUGFeRD
     public enum InvoiceType
     {
         /// <summary>
+        /// Unknown (0)
+        /// is a fall back for all other cases
+        /// (not all UNTDID 1001 codes are allowed, but there are several more)
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
         /// Document/message for providing debit information related to financial adjustments to the relevant party.
         /// </summary>
         DebitnoteRelatedToFinancialAdjustments = 84,
@@ -147,15 +154,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Appears to be only valid in Germany for XRechnung (BR-DE-17)
         /// </summary>
-        FinalConstructionInvoice = 877,
-
-        /// <summary>
-        /// Unknown (0)
-        /// is a fall back for all other cases
-        /// (not all UNTDID 1001 codes are allowed, but there are several more)
-        /// </summary>
-        Unknown = 0
-
+        FinalConstructionInvoice = 877       
     }
 
 

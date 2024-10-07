@@ -61,20 +61,13 @@ namespace s2industries.ZUGFeRD
     {
         public static DesignatedProductClassificationClassCodes FromString(this DesignatedProductClassificationClassCodes _, string s)
         {
-            try
-            {
-                return (DesignatedProductClassificationClassCodes)Enum.Parse(typeof(DesignatedProductClassificationClassCodes), s);
-            }
-            catch
-            {
-                return DesignatedProductClassificationClassCodes.Unknown;
-            }
+            return EnumExtensions.StringToEnum<DesignatedProductClassificationClassCodes>(s);
         } // !FromString()
 
 
         public static string EnumToString(this DesignatedProductClassificationClassCodes c)
         {
-            return c.ToString("g");
+            return EnumExtensions.EnumToString<DesignatedProductClassificationClassCodes>(c);
         } // !EnumToString()
     }
 }

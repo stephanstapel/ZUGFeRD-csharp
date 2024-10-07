@@ -31,6 +31,11 @@ namespace s2industries.ZUGFeRD
     public enum TaxCategoryCodes
     {
         /// <summary>
+        /// Default value, not specified
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Mixed tax rate
         /// 
         /// Code specifying that the rate is based on mixed tax.
@@ -190,12 +195,7 @@ namespace s2industries.ZUGFeRD
         /// 
         /// Code specifying that the goods are at a zero rate.
         /// </summary>
-        Z,
-
-        /// <summary>
-        /// Default value, not specified
-        /// </summary>
-        Unknown
+        Z        
     }
 
 
@@ -203,20 +203,13 @@ namespace s2industries.ZUGFeRD
     {
         public static TaxCategoryCodes FromString(this TaxCategoryCodes _, string s)
         {
-            try
-            {
-                return (TaxCategoryCodes)Enum.Parse(typeof(TaxCategoryCodes), s);
-            }
-            catch
-            {
-                return TaxCategoryCodes.Unknown;
-            }
+            return EnumExtensions.StringToEnum<TaxCategoryCodes>(s);
         } // !FromString()
 
 
-        public static string EnumToString(this TaxCategoryCodes codes)
+        public static string EnumToString(this TaxCategoryCodes c)
         {
-            return codes.ToString("g");
+            return EnumExtensions.EnumToString<TaxCategoryCodes>(c);
         } // !ToString()
     }
 }

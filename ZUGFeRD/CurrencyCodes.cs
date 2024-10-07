@@ -81,6 +81,11 @@ namespace s2industries.ZUGFeRD
     public enum CurrencyCodes
     {
         /// <summary>
+        /// Fallback value
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
         /// Country: AFGHANISTAN
         /// Currency: Afghani
         /// </summary>
@@ -1596,12 +1601,7 @@ namespace s2industries.ZUGFeRD
         /// Country: ZIMBABWE
         /// Currency: Zimbabwe Dollar
         /// </summary>
-        ZWR = 935,
-
-        /// <summary>
-        /// Fallback value
-        /// </summary>
-        Unknown = 0
+        ZWR = 935        
     }
 
 
@@ -1609,20 +1609,13 @@ namespace s2industries.ZUGFeRD
     {
         public static CurrencyCodes FromString(this CurrencyCodes _, string s)
         {
-            try
-            {
-                return (CurrencyCodes)Enum.Parse(typeof(CurrencyCodes), s);
-            }
-            catch
-            {
-                return CurrencyCodes.Unknown;
-            }
+            return EnumExtensions.StringToEnum<CurrencyCodes>(s);
         } // !FromString()
 
 
         public static string EnumToString(this CurrencyCodes c)
         {
-            return c.ToString("g");
+            return EnumExtensions.EnumToString<CurrencyCodes>(c);
         } // !ToString()
     }
 }
