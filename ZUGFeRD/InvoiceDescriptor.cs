@@ -150,9 +150,14 @@ namespace s2industries.ZUGFeRD
         public Party Invoicer { get; set; }
 
         /// <summary>
-        /// This party is optional and only relevant for Extended profile
+        /// This party is optional and is written in most profiles except Minimum profile
         /// </summary>
         public Party ShipTo { get; set; }
+
+        /// <summary>
+        /// This party is optional and only relevant for Extended profile
+        /// </summary>
+        public Party UltimateShipTo { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile

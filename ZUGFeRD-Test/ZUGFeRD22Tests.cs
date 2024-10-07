@@ -1397,6 +1397,18 @@ namespace ZUGFeRD_Test
                 Country = CountryCodes.DE
             };
 
+            desc.UltimateShipTo = new Party
+            {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
+                Name = "Ultimate Ship To",
+                ContactName = "Max Mustermann",
+                Street = "Münchnerstr. 55",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Country = CountryCodes.DE
+            };
+
             desc.ShipFrom = new Party
             {
                 ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
@@ -1523,6 +1535,11 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual("123", loadedInvoice.SpecifiedProcuringProject.ID);
             Assert.AreEqual("Project 123", loadedInvoice.SpecifiedProcuringProject.Name);
+
+            Assert.AreEqual("Ultimate Ship To", loadedInvoice.UltimateShipTo.Name);
+            /** 
+             * @todo we can add further asserts for the remainder of properties 
+             */
 
             Assert.AreEqual<string>("123", loadedInvoice.ShipTo.ID.ID);
             Assert.AreEqual(GlobalIDSchemeIdentifiers.DUNS, loadedInvoice.ShipTo.GlobalID.SchemeID);
