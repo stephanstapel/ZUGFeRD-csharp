@@ -182,6 +182,17 @@ namespace s2industries.ZUGFeRD
         private List<DesignatedProductClassification> DesignedProductClassifications { get; set; } = new List<DesignatedProductClassification>();
 
 
+        /// <summary>
+        /// Recipient of the delivered goods. This party is optional and is written in Extended profile only
+        /// </summary>
+        public Party ShipTo { get; set; }
+
+        /// <summary>
+        /// Detailed information on the deviating final recipient. This party is optional and only relevant for Extended profile
+        /// </summary>
+        public Party UltimateShipTo { get; set; }
+
+
 
         public TradeLineItem(string lineId)
         {

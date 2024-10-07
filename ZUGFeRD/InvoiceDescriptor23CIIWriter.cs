@@ -346,6 +346,16 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram:SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 _writeElementWithAttribute(Writer, "ram:BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
 
+                if (tradeLineItem.ShipTo != null)
+                {
+                    _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, tradeLineItem.ShipTo, Profile.Extended);
+                }
+
+                if (tradeLineItem.UltimateShipTo != null)
+                {
+                    _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, tradeLineItem.UltimateShipTo, Profile.Extended);
+                }
+
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
                     Writer.WriteStartElement("ram:DeliveryNoteReferencedDocument", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-175 for XRechnung 3
@@ -375,6 +385,9 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !OccurrenceDateTime()
                     Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
                 }
+
+                /// TODO: Add ShipToTradeParty
+                /// TODO: Add UltimateShipToTradeParty
 
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
                 #endregion
@@ -549,12 +562,12 @@ namespace s2industries.ZUGFeRD
 
             #region SellerTradeParty
             // BT-31: this.Descriptor.SellerTaxRegistration
-            _writeOptionalParty(Writer, PartyTypes.SellerTradeParty, this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration);
+            _writeOptionalParty(Writer, PartyTypes.SellerTradeParty, this.Descriptor.Seller, ALL_PROFILES, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration);
             #endregion
 
             #region BuyerTradeParty
             // BT-48: this.Descriptor.BuyerTaxRegistration
-            _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
+            _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, ALL_PROFILES, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
             #endregion
 
             // TODO: implement SellerTaxRepresentativeTradeParty
@@ -644,9 +657,9 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram:ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo);
-            _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo);
-            _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom); // ShipFrom shall not be written in XRechnung profiles
+            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum);
+            _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom, Profile.Extended);
 
             #region ActualDeliverySupplyChainEvent
             if (this.Descriptor.ActualDeliveryDate.HasValue)
@@ -751,13 +764,13 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ram:InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, profile: Profile.Extended);
 
             //   6. InvoicerTradeParty (optional)
-            _writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer);
+            _writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
             //   7. InvoiceeTradeParty (optional)
-            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee);
+            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
             //   8. PayeeTradeParty (optional)
-            _writeOptionalParty(Writer, PartyTypes.PayeeTradeParty, this.Descriptor.Payee);
+            _writeOptionalParty(Writer, PartyTypes.PayeeTradeParty, this.Descriptor.Payee, ALL_PROFILES ^ Profile.Minimum);
 
             #region SpecifiedTradeSettlementPaymentMeans
             //  10. SpecifiedTradeSettlementPaymentMeans (optional)
@@ -1352,174 +1365,130 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalLegalOrganization()
 
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Profile profile, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null)
         {
-            // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
+            if (party == null)
+            {
+                return;
+            }
+             
             switch (partyType)
             {
-                case PartyTypes.Unknown:
-                    return;
                 case PartyTypes.SellerTradeParty:
+                    writer.WriteStartElement("ram:SellerTradeParty", profile);
                     break;
                 case PartyTypes.BuyerTradeParty:
+                    writer.WriteStartElement("ram:BuyerTradeParty", profile);
                     break;
                 case PartyTypes.ShipToTradeParty:
-                    if (this.Descriptor.Profile == Profile.Minimum) { return; } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!
+                    writer.WriteStartElement("ram:ShipToTradeParty", profile);
                     break;
                 case PartyTypes.UltimateShipToTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    writer.WriteStartElement("ram:UltimateShipToTradeParty", profile);
                     break;
                 case PartyTypes.ShipFromTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended)) { return; } // extended profile only
+                    writer.WriteStartElement("ram:ShipFromTradeParty", profile);
                     break;
                 case PartyTypes.InvoiceeTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    writer.WriteStartElement("ram:InvoiceeTradeParty", profile);
                     break;
                 case PartyTypes.PayeeTradeParty:
-                    if (this.Descriptor.Profile == Profile.Minimum) { return; } // party is written for all profiles but minimum
-                    break;
-                case PartyTypes.SalesAgentTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.BuyerTaxRepresentativeTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.ProductEndUserTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.BuyerAgentTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.InvoicerTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    writer.WriteStartElement("ram:PayeeTradeParty", profile);
                     break;
                 case PartyTypes.PayerTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    writer.WriteStartElement("ram:PayerTradeParty", profile);
                     break;
-                default:
-                    return;
+                case PartyTypes.SalesAgentTradeParty:
+                    writer.WriteStartElement("ram:SalesAgentTradeParty", profile);
+                    break;
+                case PartyTypes.BuyerTaxRepresentativeTradeParty:
+                    writer.WriteStartElement("ram:BuyerTaxRepresentativeTradeParty", profile);
+                    break;
+                case PartyTypes.ProductEndUserTradeParty:
+                    writer.WriteStartElement("ram:ProductEndUserTradeParty", profile);
+                    break;
+                case PartyTypes.BuyerAgentTradeParty:
+                    writer.WriteStartElement("ram:BuyerAgentTradeParty", profile);
+                    break;
+                case PartyTypes.InvoicerTradeParty:
+                    writer.WriteStartElement("ram:InvoicerTradeParty", profile);
+                    break;
             }
 
-            if (party != null)
+            if (party.ID != null && !string.IsNullOrWhiteSpace(party.ID.ID))
             {
-                switch (partyType)
+                if (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)
                 {
-                    case PartyTypes.SellerTradeParty:
-                        writer.WriteStartElement("ram:SellerTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.BuyerTradeParty:
-                        writer.WriteStartElement("ram:BuyerTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.ShipToTradeParty:
-                        writer.WriteStartElement("ram:ShipToTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.UltimateShipToTradeParty:
-                        writer.WriteStartElement("ram:UltimateShipToTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.ShipFromTradeParty:
-                        writer.WriteStartElement("ram:ShipFromTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.InvoiceeTradeParty:
-                        writer.WriteStartElement("ram:InvoiceeTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.PayeeTradeParty:
-                        writer.WriteStartElement("ram:PayeeTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.PayerTradeParty:
-                        writer.WriteStartElement("ram:PayerTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.SalesAgentTradeParty:
-                        writer.WriteStartElement("ram:SalesAgentTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.BuyerTaxRepresentativeTradeParty:
-                        writer.WriteStartElement("ram:BuyerTaxRepresentativeTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.ProductEndUserTradeParty:
-                        writer.WriteStartElement("ram:ProductEndUserTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.BuyerAgentTradeParty:
-                        writer.WriteStartElement("ram:BuyerAgentTradeParty", this.Descriptor.Profile);
-                        break;
-                    case PartyTypes.InvoicerTradeParty:
-                        writer.WriteStartElement("ram:InvoicerTradeParty", this.Descriptor.Profile);
-                        break;
-                }
-
-                if (party.ID != null && !string.IsNullOrWhiteSpace(party.ID.ID))
-                {
-                    if (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)
-                    {
-                        writer.WriteStartElement("ram:ID");
-                        writer.WriteAttributeString("schemeID", party.ID.SchemeID.EnumToString());
-                        writer.WriteValue(party.ID.ID);
-                        writer.WriteEndElement();
-                    }
-                    else
-                    {
-                        writer.WriteOptionalElementString("ram:ID", party.ID.ID);
-                    }
-                }
-
-                if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
-                {
-                    writer.WriteStartElement("ram:GlobalID");
-                    writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.EnumToString());
-                    writer.WriteValue(party.GlobalID.ID);
+                    writer.WriteStartElement("ram:ID");
+                    writer.WriteAttributeString("schemeID", party.ID.SchemeID.EnumToString());
+                    writer.WriteValue(party.ID.ID);
                     writer.WriteEndElement();
                 }
-
-                writer.WriteOptionalElementString("ram:Name", party.Name);
-                writer.WriteOptionalElementString("ram:Description", party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-
-                _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
-                _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-
-                // spec 2.3 says: Minimum/BuyerTradeParty does not include PostalTradeAddress
-                if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.BuyerTradeParty, PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
+                else
                 {
-                    writer.WriteStartElement("ram:PostalTradeAddress");
-                    writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
-                    writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // buyer: BT-50
-                    if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
-                    writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
-                    writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
-                    writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
-                    writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
-                    writer.WriteEndElement(); // !PostalTradeAddress
+                    writer.WriteOptionalElementString("ram:ID", party.ID.ID);
                 }
-
-                if (ElectronicAddress != null)
-                {
-                    if (!String.IsNullOrWhiteSpace(ElectronicAddress.Address))
-                    {
-                        writer.WriteStartElement("ram:URIUniversalCommunication");
-                        writer.WriteStartElement("ram:URIID");
-                        writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.EnumToString());
-                        writer.WriteValue(ElectronicAddress.Address);
-                        writer.WriteEndElement();
-                        writer.WriteEndElement();
-                    }
-                }
-
-                if (taxRegistrations != null)
-                {
-                    // for seller: BT-31
-                    // for buyer : BT-48
-                    foreach (TaxRegistration _reg in taxRegistrations)
-                    {
-                        if (!String.IsNullOrWhiteSpace(_reg.No))
-                        {
-                            writer.WriteStartElement("ram:SpecifiedTaxRegistration");
-                            writer.WriteStartElement("ram:ID");
-                            writer.WriteAttributeString("schemeID", _reg.SchemeID.EnumToString());
-                            writer.WriteValue(_reg.No);
-                            writer.WriteEndElement();
-                            writer.WriteEndElement();
-                        }
-                    }
-                }
-                writer.WriteEndElement(); // !*TradeParty
             }
+
+            if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+            {
+                writer.WriteStartElement("ram:GlobalID");
+                writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.EnumToString());
+                writer.WriteValue(party.GlobalID.ID);
+                writer.WriteEndElement();
+            }
+
+            writer.WriteOptionalElementString("ram:Name", party.Name);
+            writer.WriteOptionalElementString("ram:Description", party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+
+            _writeOptionalLegalOrganization(writer, "ram:SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
+            _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+
+            // spec 2.3 says: Minimum/BuyerTradeParty does not include PostalTradeAddress
+            if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.BuyerTradeParty, PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
+            {
+                writer.WriteStartElement("ram:PostalTradeAddress");
+                writer.WriteOptionalElementString("ram:PostcodeCode", party.Postcode); // buyer: BT-53
+                writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName); // buyer: BT-50
+                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
+                writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
+                writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
+                writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
+                writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
+                writer.WriteEndElement(); // !PostalTradeAddress
+            }
+
+            if (ElectronicAddress != null)
+            {
+                if (!String.IsNullOrWhiteSpace(ElectronicAddress.Address))
+                {
+                    writer.WriteStartElement("ram:URIUniversalCommunication");
+                    writer.WriteStartElement("ram:URIID");
+                    writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.EnumToString());
+                    writer.WriteValue(ElectronicAddress.Address);
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
+                }
+            }
+
+            if (taxRegistrations != null)
+            {
+                // for seller: BT-31
+                // for buyer : BT-48
+                foreach (TaxRegistration _reg in taxRegistrations)
+                {
+                    if (!String.IsNullOrWhiteSpace(_reg.No))
+                    {
+                        writer.WriteStartElement("ram:SpecifiedTaxRegistration");
+                        writer.WriteStartElement("ram:ID");
+                        writer.WriteAttributeString("schemeID", _reg.SchemeID.EnumToString());
+                        writer.WriteValue(_reg.No);
+                        writer.WriteEndElement();
+                        writer.WriteEndElement();
+                    }
+                }
+            }
+            writer.WriteEndElement(); // !*Party
         } // !_writeOptionalParty()
 
 

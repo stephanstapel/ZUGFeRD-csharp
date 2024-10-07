@@ -466,6 +466,8 @@ namespace s2industries.ZUGFeRD
                 Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),
                 UnitQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BasisQuantity", nsmgr, 1),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
+                ShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty", nsmgr),
+                UltimateShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty", nsmgr),
                 LineTotalAmount = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:LineTotalAmount", nsmgr, 0),
                 TaxCategoryCode = default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
                 TaxType = default(TaxTypes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),

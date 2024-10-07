@@ -25,6 +25,7 @@ using System.Text;
 using System.Xml;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NuGet.Frameworks;
 using s2industries.ZUGFeRD;
 
 
@@ -1231,6 +1232,117 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.Payee.CountrySubdivisionName, "Bayern");
             Assert.AreEqual(loadedInvoice.Payee.Country, CountryCodes.DE);
         } // !TestMinimumInvoice()
+
+
+
+        [TestMethod]
+        public void TestShipToTradePartyOnItemLevel()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().ShipTo = new Party()
+            {
+                Name = "ShipTo",
+                City = "ShipToCity"
+            };
+
+            // test minimum
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            // test basic
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            // test comfort
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            // test extended
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNotNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            Assert.AreEqual(loadedInvoice.TradeLineItems.First().ShipTo.Name, "ShipTo");
+            Assert.AreEqual(loadedInvoice.TradeLineItems.First().ShipTo.City, "ShipToCity");
+        } // !TestShipToTradePartyOnItemLevel()
+
+
+        [TestMethod]
+        public void TestUltimateShipToTradePartyOnItemLevel()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().UltimateShipTo = new Party()
+            {
+                Name = "ShipTo",
+                City = "ShipToCity"
+            };
+
+            // test minimum
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            // test basic
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            // test comfort
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            // test extended
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+            Assert.IsNotNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+            Assert.AreEqual(loadedInvoice.TradeLineItems.First().UltimateShipTo.Name, "ShipTo");
+            Assert.AreEqual(loadedInvoice.TradeLineItems.First().UltimateShipTo.City, "ShipToCity");
+        } // !TestUltimateShipToTradePartyOnItemLevel()
 
 
         [TestMethod]
