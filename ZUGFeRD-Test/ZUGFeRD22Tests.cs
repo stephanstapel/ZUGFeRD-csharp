@@ -2253,11 +2253,11 @@ namespace ZUGFeRD_Test
         public void TestDesignatedProductClassificationWithFullClassification()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
-            desc.TradeLineItems.First().AddDesignatedProductClassification(                
-                "Test Value",
-				DesignatedProductClassificationClassCodes.HS,
-				"List ID Value",
-                "List Version ID Value");
+            desc.TradeLineItems.First().AddDesignatedProductClassification(
+                DesignatedProductClassificationClassCodes.HS,
+                "List Version ID Value",
+                "Class Code",
+                "Class Name");
 
             MemoryStream ms = new MemoryStream();
 
@@ -2268,18 +2268,18 @@ namespace ZUGFeRD_Test
 			StreamReader reader = new StreamReader(ms);
 			string content = reader.ReadToEnd();
 			Assert.IsTrue(content.Contains("<ram:DesignatedProductClassification>"));
-			Assert.IsTrue(content.Contains("<ram:ClassCode listID=\"List ID Value\" listVersionID=\"List Version ID Value\">HS</ram:ClassCode>"));
-			Assert.IsTrue(content.Contains("<ram:ClassName>Test Value</ram:ClassName>"));
+			Assert.IsTrue(content.Contains("<ram:ClassCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</ram:ClassCode>"));
+			Assert.IsTrue(content.Contains("<ram:ClassName>Class Name</ram:ClassName>"));
 
 			// structure comparison
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-            Assert.AreEqual("Test Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-            Assert.AreEqual("List ID Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
+            Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
             Assert.AreEqual("List Version ID Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-		} // !TestDesignatedProductClassificationWithFullClassification()
+            Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
+            Assert.AreEqual("Class Name", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);            
+	    } // !TestDesignatedProductClassificationWithFullClassification()
 
 
 		[TestMethod]
@@ -2288,9 +2288,10 @@ namespace ZUGFeRD_Test
 			// test with empty version id value
 			InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
 			desc.TradeLineItems.First().AddDesignatedProductClassification(
-				"Test Value",
-				DesignatedProductClassificationClassCodes.HS,
-				"List ID Value"
+                DesignatedProductClassificationClassCodes.HS,
+                null,
+                "Class Code",
+                "Class Name"							
 				);
 
 			MemoryStream ms = new MemoryStream();
@@ -2300,10 +2301,10 @@ namespace ZUGFeRD_Test
             ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-			Assert.AreEqual("Test Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-			Assert.AreEqual("List ID Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
+            Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+            Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
+            Assert.AreEqual("Class Name", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);					
 		} // !TestDesignatedProductClassificationWithEmptyVersionId()
 
 
@@ -2313,9 +2314,11 @@ namespace ZUGFeRD_Test
 		{
 			// test with empty version id value
 			InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
-			desc.TradeLineItems.First().AddDesignatedProductClassification(				
-                "Test Value",
-				DesignatedProductClassificationClassCodes.HS);
+			desc.TradeLineItems.First().AddDesignatedProductClassification(
+                DesignatedProductClassificationClassCodes.HS,
+                null,
+                "Class Code"
+				);
 
 			MemoryStream ms = new MemoryStream();
 
@@ -2324,19 +2327,19 @@ namespace ZUGFeRD_Test
 			ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-			Assert.AreEqual("Test Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
+            Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+            Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);			
+			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
 		} // !TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
 
 
 		[TestMethod]
-		public void TestDesignatedProductClassificationWithoutClassCode()
+		public void TestDesignatedProductClassificationWithoutAnyOptionalInformation()
 		{
 			// test with empty version id value
 			InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
-			desc.TradeLineItems.First().AddDesignatedProductClassification("Test Value");
+			desc.TradeLineItems.First().AddDesignatedProductClassification(DesignatedProductClassificationClassCodes.HS);
 
 			MemoryStream ms = new MemoryStream();
 
@@ -2345,11 +2348,12 @@ namespace ZUGFeRD_Test
 			ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-			Assert.AreEqual(default(DesignatedProductClassificationClassCodes), desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-			Assert.AreEqual("Test Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-		} // !TestDesignatedProductClassificationWithoutClassCode()
+			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
+            Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+            Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
+			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);			
+        } // !TestDesignatedProductClassificationWithoutAnyOptionalInformation()
+
 
         [TestMethod]
         public void TestPaymentTermsMultiCardinality()

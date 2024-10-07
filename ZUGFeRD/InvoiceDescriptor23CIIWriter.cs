@@ -174,19 +174,17 @@ namespace s2industries.ZUGFeRD
                 {
                     foreach (var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
                     {
-                        Writer.WriteStartElement("ram:DesignatedProductClassification");
-
-                        if (designatedProductClassification.ClassCode.HasValue)
+                        if (designatedProductClassification.ListID == default(DesignatedProductClassificationClassCodes))
                         {
-                            Writer.WriteStartElement("ram:ClassCode");
-                            if (!String.IsNullOrWhiteSpace(designatedProductClassification.ListID))
-                            {
-                                Writer.WriteAttributeString("listID", designatedProductClassification.ListID);
-                                Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
-                            }
-                            Writer.WriteValue(designatedProductClassification.ClassCode.Value.ToString());
-                            Writer.WriteEndElement(); // !ram::ClassCode
+                            continue;
                         }
+
+                        Writer.WriteStartElement("ram:DesignatedProductClassification", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram:ClassCode");
+                        Writer.WriteAttributeString("listID", designatedProductClassification.ListID.EnumToString());
+                        Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
+                        Writer.WriteValue(designatedProductClassification.ClassCode);
+                        Writer.WriteEndElement(); // !ram::ClassCode
                         Writer.WriteOptionalElementString("ram:ClassName", designatedProductClassification.ClassName);
                         Writer.WriteEndElement(); // !ram:DesignatedProductClassification
                     }

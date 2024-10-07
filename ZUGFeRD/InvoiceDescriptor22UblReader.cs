@@ -479,12 +479,13 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (XmlNode commodityClassification in tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification/cac:ItemClassificationCode", nsmgr))
                 {
-                    DesignatedProductClassificationClassCodes code = default(DesignatedProductClassificationClassCodes).FromString(commodityClassification.InnerText);
+                    DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(commodityClassification, "./@listID", nsmgr));
                     item.AddDesignatedProductClassification(
-						"", // no name in Peppol Billing!
-						code,                        
-                        XmlUtils.NodeAsString(commodityClassification, "./@listID", nsmgr),
-                        XmlUtils.NodeAsString(commodityClassification, "./@istVersionID", nsmgr));
+                        listID,
+                        XmlUtils.NodeAsString(commodityClassification, "./@istVersionID", nsmgr),
+                        commodityClassification.InnerText,
+                        "" // no name in Peppol Billing!
+                        );
                 }
             }
 

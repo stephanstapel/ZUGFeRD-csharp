@@ -414,7 +414,7 @@ namespace s2industries.ZUGFeRD
 		/// <param name="classCode">Identifier of the item classification (optional)</param>
 		/// <param name="listID">Product classification name (optional)</param>
 		/// <param name="listVersionID">Version of product classification (optional)</param>		
-		public void AddDesignatedProductClassification(string className, DesignatedProductClassificationClassCodes classCode = default(DesignatedProductClassificationClassCodes), string listID = null, string listVersionID = null)
+		public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes listID, string listVersionID = null, string classCode = null, string className = null)
         {
             this.DesignedProductClassifications.Add(new DesignatedProductClassification()
             {

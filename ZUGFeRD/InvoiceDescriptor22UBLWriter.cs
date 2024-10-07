@@ -456,18 +456,14 @@ namespace s2industries.ZUGFeRD
 
             foreach (DesignatedProductClassification classification in designatedProductClassifications)
             {
-                if (!classification.ClassCode.HasValue)
+                if (classification.ListID == default(DesignatedProductClassificationClassCodes))
                 {
                     continue;
                 }
 
                 writer.WriteStartElement("cbc:ItemClassificationCode"); // BT-158
-                writer.WriteValue(classification.ClassCode.Value.EnumToString(), profile : ALL_PROFILES);
-
-                if (!String.IsNullOrWhiteSpace(classification.ListID))
-                {
-                    Writer.WriteAttributeString("listID", classification.ListID); // BT-158-1
-                }
+                writer.WriteValue(classification.ClassCode, profile : ALL_PROFILES);
+                Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
                 {

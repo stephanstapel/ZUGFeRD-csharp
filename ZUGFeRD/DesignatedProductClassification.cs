@@ -34,12 +34,12 @@ namespace s2industries.ZUGFeRD
         /// purposes, for instance like public procurement, in accordance with the Common Vocabulary for Public Procurement
         /// [CPV]), e-Commerce(UNSPSC) etc.
         /// </summary>
-        public DesignatedProductClassificationClassCodes? ClassCode { get; set; }
+        public string ClassCode { get; set; }
 
         /// <summary>
         /// Product classification name
         /// </summary>
-        public string ListID { get; set; }
+        public DesignatedProductClassificationClassCodes ListID { get; set; }
 
         /// <summary>
         /// Version of product classification

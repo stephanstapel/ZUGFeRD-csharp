@@ -627,11 +627,11 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode designatedProductClassificationNode in tradeLineItem.SelectNodes(".//ram:DesignatedProductClassification", nsmgr))
             {
                 string className = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassName", nsmgr);
-                DesignatedProductClassificationClassCodes classCode = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode", nsmgr));
-                string listID = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listID", nsmgr);
-                string listVersionID = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listVersionID", nsmgr);
+                string classCode = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode", nsmgr);
+                DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode(@listID", nsmgr));                
+                string listVersionID = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listVersionID", nsmgr);                
 
-                item.AddDesignatedProductClassification(className, classCode, listID, listVersionID);
+                item.AddDesignatedProductClassification(listID, listVersionID, classCode, className);
             } // !foreach(designatedProductClassificationNode))
 
             return item;
