@@ -199,7 +199,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
-                if (!string.IsNullOrEmpty(tradeAllowanceCharge.Reason))
+                if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
                 {
                     Writer.WriteStartElement("cbc:AllowanceChargeReason"); // BT-97 / BT-104
                     Writer.WriteValue(tradeAllowanceCharge.Reason);

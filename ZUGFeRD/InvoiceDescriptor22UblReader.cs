@@ -673,27 +673,27 @@ namespace s2industries.ZUGFeRD
                 retval.ContactName = null;
             }
 
-            if (string.IsNullOrEmpty(retval.AddressLine3))
+            if (string.IsNullOrWhiteSpace(retval.AddressLine3))
             {
                 retval.AddressLine3 = String.Empty;
             }
 
-            if (string.IsNullOrEmpty(retval.CountrySubdivisionName))
+            if (string.IsNullOrWhiteSpace(retval.CountrySubdivisionName))
             {
                 retval.CountrySubdivisionName = String.Empty;
             }
 
-            if (string.IsNullOrEmpty(retval.City))
+            if (string.IsNullOrWhiteSpace(retval.City))
             {
                 retval.City = String.Empty;
             }
 
-            if (string.IsNullOrEmpty(retval.Postcode))
+            if (string.IsNullOrWhiteSpace(retval.Postcode))
             {
                 retval.Postcode = String.Empty;
             }
 
-            if (string.IsNullOrEmpty(retval.Street))
+            if (string.IsNullOrWhiteSpace(retval.Street))
             {
                 retval.Street = String.Empty;
             }
