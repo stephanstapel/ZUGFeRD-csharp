@@ -17,12 +17,14 @@
  * under the License.
  */
 using System;
+using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuGet.Frameworks;
@@ -1231,8 +1233,88 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.Payee.AddressLine3, "EG links");
             Assert.AreEqual(loadedInvoice.Payee.CountrySubdivisionName, "Bayern");
             Assert.AreEqual(loadedInvoice.Payee.Country, CountryCodes.DE);
+
+            // 
+            // Check the output in the XML for Comfort.
+            // REM: In Comfort only ID, GlobalID, Name, and SpecifiedLegalOrganization are allowed.
+
+            desc.Payee = new Party() {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
+                Name = "Max Mustermann"
+                // Country is not set and should not be written into the XML
+            };
+
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            XDocument xDocu = XDocument.Load(ms);
+            XNamespace rsm = "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100";
+            XNamespace ram = "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100";
+
+            Assert.AreEqual(xDocu.Root
+                ?.Element(rsm + "SupplyChainTradeTransaction")
+                ?.Element(ram + "ApplicableHeaderTradeSettlement")
+                ?.Element(ram + "PayeeTradeParty")
+                ?.Element(ram + "ID")?.Value, "SL1001");
+            Assert.AreEqual(xDocu.Root
+                ?.Element(rsm + "SupplyChainTradeTransaction")
+                ?.Element(ram + "ApplicableHeaderTradeSettlement")
+                ?.Element(ram + "PayeeTradeParty")
+                ?.Element(ram + "Name")?.Value, "Max Mustermann");
+            Assert.AreEqual(xDocu.Root
+                ?.Element(rsm + "SupplyChainTradeTransaction")
+                ?.Element(ram + "ApplicableHeaderTradeSettlement")
+                ?.Element(ram + "PayeeTradeParty")
+                ?.Element(ram + "PostalTradeAddress"), null); // !!!
+
         } // !TestMinimumInvoice()
 
+
+        [TestMethod]
+        public void TestShipTo() {
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            desc.ShipTo = new Party() {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.GLN, "MusterGLN"),
+                Name = "AbKunden AG Mitte",
+                Postcode = "12345",
+                ContactName = "Einheit: 5.OG rechts",
+                Street = "Verwaltung Straße 40",
+                City = "Musterstadt",
+                Country = CountryCodes.DE,
+                CountrySubdivisionName = "Hessen"
+            };
+
+            // test minimum
+            // .. todo
+
+            // test basic
+            // .. todo
+
+            // test extended
+            // .. todo
+
+            // test comfort
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, "SL1001");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.ID, "MusterGLN");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.SchemeID, GlobalIDSchemeIdentifiers.GLN);
+            Assert.AreEqual(loadedInvoice.ShipTo.Name, "AbKunden AG Mitte");
+            Assert.AreEqual(loadedInvoice.ShipTo.Postcode, "12345");
+            Assert.AreEqual(loadedInvoice.ShipTo.ContactName, "Einheit: 5.OG rechts");
+            Assert.AreEqual(loadedInvoice.ShipTo.Street, "Verwaltung Straße 40");
+            Assert.AreEqual(loadedInvoice.ShipTo.City, "Musterstadt");
+            Assert.AreEqual(loadedInvoice.ShipTo.Country, CountryCodes.DE);
+            Assert.AreEqual(loadedInvoice.ShipTo.CountrySubdivisionName, "Hessen");
+        }
 
 
         [TestMethod]
