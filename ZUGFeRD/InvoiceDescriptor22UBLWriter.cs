@@ -379,14 +379,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("cbc:Description", tradeLineItem.Description);
                 Writer.WriteElementString("cbc:Name", tradeLineItem.Name);
 
-                if (tradeLineItem.SellerAssignedID != null && !string.IsNullOrWhiteSpace(tradeLineItem.SellerAssignedID))
+                if (!string.IsNullOrWhiteSpace(tradeLineItem.SellerAssignedID))
                 {
                     Writer.WriteStartElement("cac:SellersItemIdentification");
                     Writer.WriteElementString("cbc:ID", tradeLineItem.SellerAssignedID);
                     Writer.WriteEndElement(); //!SellersItemIdentification
                 }
 
-                if (tradeLineItem.BuyerAssignedID != null && !string.IsNullOrWhiteSpace(tradeLineItem.BuyerAssignedID))
+                if (!string.IsNullOrWhiteSpace(tradeLineItem.BuyerAssignedID))
                 {
                     Writer.WriteStartElement("cac:BuyersItemIdentification");
                     Writer.WriteElementString("cbc:ID", tradeLineItem.BuyerAssignedID);
