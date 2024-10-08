@@ -41,12 +41,12 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// A textual value used to establish a link between the payment and the invoice, issued by the seller.
         /// </summary>
-        public string PaymentReference { get; set; } = "";
+        public string PaymentReference { get; set; } = String.Empty;
 
         /// <summary>
         /// Order Id
         /// </summary>
-        public string OrderNo { get; set; } = "";
+        public string OrderNo { get; set; } = string.Empty;
 
         /// <summary>
         /// Order date 
@@ -135,7 +135,7 @@ namespace s2industries.ZUGFeRD
         /// 
         /// This field seems not to be used in common scenarios.
         /// </summary>
-        public string SellerReferenceNo { get; set; } = "";
+        public string SellerReferenceNo { get; set; } = String.Empty;
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile

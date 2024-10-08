@@ -28,7 +28,7 @@ namespace ZUGFeRD_Test
     {
         protected string _makeSurePathIsCrossPlatformCompatible(string path)
         {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
                 return path;
             }

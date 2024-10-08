@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+using System;
+
 namespace s2industries.ZUGFeRD
 {
   /// <summary>
@@ -29,7 +31,7 @@ namespace s2industries.ZUGFeRD
     public LegalOrganization()
     {
       ID = null;
-      TradingBusinessName = "";
+      TradingBusinessName = String.Empty;
     }
     /// <summary>
     /// Create a new LegalOrganization instance

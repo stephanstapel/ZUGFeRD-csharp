@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
             }
 
             string value = NodeAsString(node, xpath, nsmgr);
-            if (value == "")
+            if (value == String.Empty)
             {
                 return defaultValue;
             }
@@ -133,7 +133,7 @@ namespace s2industries.ZUGFeRD
                 return defaultValue;
             }
 
-            string format = "";
+            string format = String.Empty;
             XmlNode dateNode = node.SelectSingleNode(xpath, nsmgr);
             if (dateNode == null)
             {

@@ -744,7 +744,7 @@ namespace s2industries.ZUGFeRD
                                 sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
                                 sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
-                                sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
+                                sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : String.Empty);
                                 sbPaymentNotes.AppendLine("#");
                             }
                             else
@@ -1019,7 +1019,12 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram:LineThree", Party.AddressLine3); // BT-163
 
                 writer.WriteOptionalElementString("ram:CityName", Party.City);
-                writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+
+                if (Party.Country != CountryCodes.Unknown)
+                {
+                    writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+                }
+
                 writer.WriteOptionalElementString("ram:CountrySubDivisionName", Party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
 
@@ -1093,8 +1098,8 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
                 case InvoiceType.Correction:
                 case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
-                case InvoiceType.Unknown: return "";
-                default: return "";
+                case InvoiceType.Unknown: return String.Empty;
+                default: return String.Empty;
             }
         } // !_translateInvoiceType()
 
