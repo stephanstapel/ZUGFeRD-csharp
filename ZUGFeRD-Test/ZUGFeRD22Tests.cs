@@ -1248,25 +1248,25 @@ namespace ZUGFeRD_Test
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
             ms.Seek(0, SeekOrigin.Begin);
 
-            XDocument xDocu = XDocument.Load(ms);
+            XDocument doc = XDocument.Load(ms);
             XNamespace rsm = "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100";
             XNamespace ram = "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100";
 
-            Assert.AreEqual(xDocu.Root
+            Assert.AreEqual(doc.Root
                 ?.Element(rsm + "SupplyChainTradeTransaction")
                 ?.Element(ram + "ApplicableHeaderTradeSettlement")
                 ?.Element(ram + "PayeeTradeParty")
                 ?.Element(ram + "ID")?.Value, "SL1001");
-            Assert.AreEqual(xDocu.Root
+            Assert.AreEqual(doc.Root
                 ?.Element(rsm + "SupplyChainTradeTransaction")
                 ?.Element(ram + "ApplicableHeaderTradeSettlement")
                 ?.Element(ram + "PayeeTradeParty")
                 ?.Element(ram + "Name")?.Value, "Max Mustermann");
-            Assert.AreEqual(xDocu.Root
+            Assert.IsNull(doc.Root
                 ?.Element(rsm + "SupplyChainTradeTransaction")
                 ?.Element(ram + "ApplicableHeaderTradeSettlement")
                 ?.Element(ram + "PayeeTradeParty")
-                ?.Element(ram + "PostalTradeAddress"), null); // !!!
+                ?.Element(ram + "PostalTradeAddress")); // !!!
 
         } // !TestMinimumInvoice()
 
@@ -1289,19 +1289,72 @@ namespace ZUGFeRD_Test
             };
 
             // test minimum
-            // .. todo
-
-            // test basic
-            // .. todo
-
-            // test extended
-            // .. todo
-
-            // test comfort
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNull(loadedInvoice.ShipTo);
+
+            // test basic
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, "SL1001");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.ID, "MusterGLN");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.SchemeID, GlobalIDSchemeIdentifiers.GLN);
+            Assert.AreEqual(loadedInvoice.ShipTo.Name, "AbKunden AG Mitte");
+            Assert.AreEqual(loadedInvoice.ShipTo.Postcode, "12345");
+            Assert.AreEqual(loadedInvoice.ShipTo.ContactName, "Einheit: 5.OG rechts");
+            Assert.AreEqual(loadedInvoice.ShipTo.Street, "Verwaltung Straße 40");
+            Assert.AreEqual(loadedInvoice.ShipTo.City, "Musterstadt");
+            Assert.AreEqual(loadedInvoice.ShipTo.Country, CountryCodes.DE);
+            Assert.AreEqual(loadedInvoice.ShipTo.CountrySubdivisionName, "Hessen");
+
+            // test basic wl
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.BasicWL);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, "SL1001");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.ID, "MusterGLN");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.SchemeID, GlobalIDSchemeIdentifiers.GLN);
+            Assert.AreEqual(loadedInvoice.ShipTo.Name, "AbKunden AG Mitte");
+            Assert.AreEqual(loadedInvoice.ShipTo.Postcode, "12345");
+            Assert.AreEqual(loadedInvoice.ShipTo.ContactName, "Einheit: 5.OG rechts");
+            Assert.AreEqual(loadedInvoice.ShipTo.Street, "Verwaltung Straße 40");
+            Assert.AreEqual(loadedInvoice.ShipTo.City, "Musterstadt");
+            Assert.AreEqual(loadedInvoice.ShipTo.Country, CountryCodes.DE);
+            Assert.AreEqual(loadedInvoice.ShipTo.CountrySubdivisionName, "Hessen");
+
+            // test comfort
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, "SL1001");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.ID, "MusterGLN");
+            Assert.AreEqual(loadedInvoice.ShipTo.GlobalID.SchemeID, GlobalIDSchemeIdentifiers.GLN);
+            Assert.AreEqual(loadedInvoice.ShipTo.Name, "AbKunden AG Mitte");
+            Assert.AreEqual(loadedInvoice.ShipTo.Postcode, "12345");
+            Assert.AreEqual(loadedInvoice.ShipTo.ContactName, "Einheit: 5.OG rechts");
+            Assert.AreEqual(loadedInvoice.ShipTo.Street, "Verwaltung Straße 40");
+            Assert.AreEqual(loadedInvoice.ShipTo.City, "Musterstadt");
+            Assert.AreEqual(loadedInvoice.ShipTo.Country, CountryCodes.DE);
+            Assert.AreEqual(loadedInvoice.ShipTo.CountrySubdivisionName, "Hessen");
+
+            // test extended
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.IsNotNull(loadedInvoice.ShipTo);
             Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, "SL1001");
