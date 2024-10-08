@@ -615,7 +615,12 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("cbc:PostalZone", party.Postcode);
 
                 writer.WriteStartElement("cac:Country");
-                Writer.WriteElementString("cbc:IdentificationCode", party.Country.ToString());
+
+                if (party.Country != CountryCodes.Unknown)
+                {
+                    Writer.WriteElementString("cbc:IdentificationCode", party.Country.ToString());
+                }
+
                 writer.WriteEndElement(); //!Country
 
                 writer.WriteEndElement(); //!PostalTradeAddress

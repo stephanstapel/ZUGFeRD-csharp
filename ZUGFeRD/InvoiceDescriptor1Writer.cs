@@ -789,7 +789,12 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
                 if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", Party.Street); }
                 writer.WriteOptionalElementString("ram:CityName", Party.City);
-                writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+
+                if (Party.Country != CountryCodes.Unknown)
+                {
+                    writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+                }
+
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (TaxRegistrations != null)

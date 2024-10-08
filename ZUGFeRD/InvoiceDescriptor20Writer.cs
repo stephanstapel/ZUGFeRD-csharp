@@ -1019,7 +1019,12 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram:LineThree", Party.AddressLine3); // BT-163
 
                 writer.WriteOptionalElementString("ram:CityName", Party.City);
-                writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+
+                if (Party.Country != CountryCodes.Unknown)
+                {
+                    writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+                }
+
                 writer.WriteOptionalElementString("ram:CountrySubDivisionName", Party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
 

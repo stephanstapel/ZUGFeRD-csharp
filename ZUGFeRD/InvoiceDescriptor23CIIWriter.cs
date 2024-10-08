@@ -1451,7 +1451,12 @@ namespace s2industries.ZUGFeRD
                 if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", party.Street); } // buyer: BT-51
                 writer.WriteOptionalElementString("ram:LineThree", party.AddressLine3); // buyer: BT-163
                 writer.WriteOptionalElementString("ram:CityName", party.City); // buyer: BT-52
-                writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
+
+                if (party.Country != CountryCodes.Unknown)
+                {
+                    writer.WriteElementString("ram:CountryID", party.Country.EnumToString()); // buyer: BT-55
+                }
+
                 writer.WriteOptionalElementString("ram:CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
             }
