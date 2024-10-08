@@ -311,7 +311,7 @@ namespace s2industries.ZUGFeRD
 
             // DueDate (BT-9) 
             // has cardinality 0..1
-            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null).DueDate;
+            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
             if (dueDate != null) 
             {
                 Writer.WriteElementString("cbc:DueDate", _formatDate(dueDate.Value, false, true));
