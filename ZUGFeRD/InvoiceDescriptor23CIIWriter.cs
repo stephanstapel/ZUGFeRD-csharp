@@ -1602,8 +1602,8 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
                 case InvoiceType.Correction:
                 case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
-                case InvoiceType.Unknown: return "";
-                default: return "";
+                case InvoiceType.Unknown: return String.Empty;
+                default: return String.Empty;
             }
         } // !_translateInvoiceType()
 

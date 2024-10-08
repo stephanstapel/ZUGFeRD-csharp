@@ -860,9 +860,9 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.Correction: return "KORREKTURRECHNUNG";
                 case InvoiceType.CreditNote: return "GUTSCHRIFT";
                 case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";
-                case InvoiceType.DebitNote: return "";
-                case InvoiceType.SelfBilledInvoice: return "";
-                default: return "";
+                case InvoiceType.DebitNote: return String.Empty;
+                case InvoiceType.SelfBilledInvoice: return String.Empty;
+                default: return String.Empty;
             }
         } // !_translateInvoiceType()
 

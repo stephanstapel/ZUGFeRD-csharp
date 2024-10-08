@@ -67,7 +67,7 @@ namespace s2industries.ZUGFeRD
                 string content = XmlUtils.NodeAsString(node, ".", nsmgr);
                 if (string.IsNullOrWhiteSpace(content)) continue;
                 var contentParts = content.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
-                string _subjectCode = "";
+                string _subjectCode = String.Empty;
                 if (contentParts.Length > 1 && contentParts[0].Length == 3)
                 {
                     _subjectCode = contentParts[0];
@@ -107,9 +107,9 @@ namespace s2industries.ZUGFeRD
                 retval.SellerContact = new Contact()
                 {
                     Name = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:Name", nsmgr),
-                    OrgUnit = "", // TODO: Find value //OrgUnit = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    OrgUnit = String.Empty, // TODO: Find value //OrgUnit = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
                     PhoneNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:Telephone", nsmgr),
-                    FaxNo = "", // TODO: Find value //FaxNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/cac:Contact/", nsmgr),
+                    FaxNo = String.Empty, // TODO: Find value //FaxNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/cac:Contact/", nsmgr),
                     EmailAddress = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:ElectronicMail", nsmgr)
                 };
             }
@@ -142,9 +142,9 @@ namespace s2industries.ZUGFeRD
                 retval.BuyerContact = new Contact()
                 {
                     Name = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:Name", nsmgr),
-                    OrgUnit = "", // TODO: Find value //OrgUnit = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    OrgUnit = String.Empty, // TODO: Find value //OrgUnit = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
                     PhoneNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:Telephone", nsmgr),
-                    FaxNo = "", // TODO: Find value //FaxNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/", nsmgr),
+                    FaxNo = String.Empty, // TODO: Find value //FaxNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/", nsmgr),
                     EmailAddress = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:ElectronicMail", nsmgr)
                 };
             }
@@ -400,7 +400,7 @@ namespace s2industries.ZUGFeRD
             retval.SpecifiedProcuringProject = new SpecifiedProcuringProject
             {
                 ID = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:ProjectReference/cbc:ID", nsmgr),
-                Name = "" // TODO: Find value //Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
+                Name = String.Empty // TODO: Find value //Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
             };
 
             foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine", nsmgr))
@@ -430,7 +430,7 @@ namespace s2industries.ZUGFeRD
             stream.Position = 0;
             using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
             {
-                string data = reader.ReadToEnd().Replace(" ", "").ToLower();
+                string data = reader.ReadToEnd().Replace(" ", String.Empty).ToLower();
                 foreach (string validURI in validURIs)
                 {
                     if (data.Contains(string.Format("=\"{0}\"", validURI.ToLower())))
@@ -484,7 +484,7 @@ namespace s2industries.ZUGFeRD
                         listID,
                         XmlUtils.NodeAsString(commodityClassification, "./@istVersionID", nsmgr),
                         commodityClassification.InnerText,
-                        "" // no name in Peppol Billing!
+                        String.Empty // no name in Peppol Billing!
                         );
                 }
             }
@@ -675,27 +675,27 @@ namespace s2industries.ZUGFeRD
 
             if (string.IsNullOrEmpty(retval.AddressLine3))
             {
-                retval.AddressLine3 = "";
+                retval.AddressLine3 = String.Empty;
             }
 
             if (string.IsNullOrEmpty(retval.CountrySubdivisionName))
             {
-                retval.CountrySubdivisionName = "";
+                retval.CountrySubdivisionName = String.Empty;
             }
 
             if (string.IsNullOrEmpty(retval.City))
             {
-                retval.City = "";
+                retval.City = String.Empty;
             }
 
             if (string.IsNullOrEmpty(retval.Postcode))
             {
-                retval.Postcode = "";
+                retval.Postcode = String.Empty;
             }
 
             if (string.IsNullOrEmpty(retval.Street))
             {
-                retval.Street = "";
+                retval.Street = String.Empty;
             }
 
             return retval;
@@ -756,7 +756,7 @@ namespace s2industries.ZUGFeRD
                 IBAN = XmlUtils.NodeAsString(node, "cbc:ID", nsmgr),
                 BIC = XmlUtils.NodeAsString(node, "cac:FinancialInstitutionBranch/cbc:ID", nsmgr, null),
                 BankName = XmlUtils.NodeAsString(node, "cac:FinancialInstitutionBranch/cbc:Name", nsmgr, null),
-                ID = ""
+                ID = String.Empty
             };
 
             return retval;

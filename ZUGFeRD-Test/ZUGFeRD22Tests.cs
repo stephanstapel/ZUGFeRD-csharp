@@ -252,7 +252,7 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(loadedInvoice.Invoicee, null);
             Assert.AreNotEqual(loadedInvoice.Seller, null);
             Assert.AreNotEqual(loadedInvoice.Seller.SpecifiedLegalOrganization, null);
-            Assert.AreEqual(loadedInvoice.Seller.SpecifiedLegalOrganization.TradingBusinessName, "");
+            Assert.AreEqual(loadedInvoice.Seller.SpecifiedLegalOrganization.TradingBusinessName, String.Empty);
         } // !TestMinimumInvoice()
 
 
@@ -670,7 +670,7 @@ namespace ZUGFeRD_Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            TradeLineItem item0 = originalInvoiceDescriptor.AddTradeLineItem(name: "");
+            TradeLineItem item0 = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
             item0.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
             {
                 new ApplicableProductCharacteristic()
@@ -685,7 +685,7 @@ namespace ZUGFeRD_Test
                 }
             };
 
-            TradeLineItem item1 = originalInvoiceDescriptor.AddTradeLineItem(name: "");
+            TradeLineItem item1 = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
             item1.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
             {
                 new ApplicableProductCharacteristic()
@@ -737,12 +737,12 @@ namespace ZUGFeRD_Test
 
             // Modifiy trade line settlement data
             originalInvoiceDescriptor.AddTradeLineItem(
-                name: "",
+                name: String.Empty,
                 billingPeriodStart: new DateTime(2020, 1, 1),
                 billingPeriodEnd: new DateTime(2021, 1, 1));
 
             originalInvoiceDescriptor.AddTradeLineItem(
-                name: "",
+                name: String.Empty,
                 billingPeriodStart: new DateTime(2021, 1, 1),
                 billingPeriodEnd: new DateTime(2022, 1, 1));
 
@@ -779,7 +779,7 @@ namespace ZUGFeRD_Test
 
             // Modifiy trade line settlement data
             originalInvoiceDescriptor.AddTradeLineItem(
-                name: "",
+                name: String.Empty,
                 billedQuantity: 10,
                 netUnitPrice: 1);
 
@@ -808,7 +808,7 @@ namespace ZUGFeRD_Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.AddTradeLineItem(name: "", netUnitPrice: 25);
+            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty, netUnitPrice: 25);
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -1195,11 +1195,11 @@ namespace ZUGFeRD_Test
 
             Assert.AreEqual(loadedInvoice.Payee.Name, "Payee");
             Assert.IsNull(loadedInvoice.Payee.ContactName);
-            Assert.AreEqual(loadedInvoice.Payee.Postcode, "");
-            Assert.AreEqual(loadedInvoice.Payee.City, "");
-            Assert.AreEqual(loadedInvoice.Payee.Street, "");
-            Assert.AreEqual(loadedInvoice.Payee.AddressLine3, "");
-            Assert.AreEqual(loadedInvoice.Payee.CountrySubdivisionName, "");
+            Assert.AreEqual(loadedInvoice.Payee.Postcode, String.Empty);
+            Assert.AreEqual(loadedInvoice.Payee.City, String.Empty);
+            Assert.AreEqual(loadedInvoice.Payee.Street, String.Empty);
+            Assert.AreEqual(loadedInvoice.Payee.AddressLine3, String.Empty);
+            Assert.AreEqual(loadedInvoice.Payee.CountrySubdivisionName, String.Empty);
             Assert.AreEqual(loadedInvoice.Payee.Country, CountryCodes.Unknown);
 
 
@@ -1839,9 +1839,9 @@ namespace ZUGFeRD_Test
 
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             //PayeeSpecifiedCreditorFinancialInstitution
-            desc.CreditorBankAccounts[0].BIC = "";
+            desc.CreditorBankAccounts[0].BIC = String.Empty;
             //PayerSpecifiedDebtorFinancialInstitution
-            desc.AddDebitorFinancialAccount("DE02120300000000202051", "");
+            desc.AddDebitorFinancialAccount("DE02120300000000202051", String.Empty);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
@@ -2006,7 +2006,7 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
-            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, "", TaxTypes.VAT, TaxCategoryCodes.S, 19);
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2028,7 +2028,7 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
-            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, "", TaxTypes.VAT, TaxCategoryCodes.S, 19);
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2177,7 +2177,7 @@ namespace ZUGFeRD_Test
                               city: "München",
                               street: "Lieferantenstraße 20",
                               country: CountryCodes.DE,
-                              id: "",
+                              id: String.Empty,
                               globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
                               legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
                               description: description
@@ -2205,7 +2205,7 @@ namespace ZUGFeRD_Test
                               city: "München",
                               street: "Lieferantenstraße 20",
                               country: CountryCodes.DE,
-                              id: "",
+                              id: String.Empty,
                               globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
                               legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"),
                               description: description
@@ -2440,8 +2440,8 @@ namespace ZUGFeRD_Test
             DateTime timestamp = DateTime.Now.Date;
             var desc = InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
-            desc.AddTradePaymentTerms("", null, PaymentTermsType.Skonto, 14, 2.25m);
-            desc.AddTradePaymentTerms("", null, PaymentTermsType.Skonto, 28, 1m);
+            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
+            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 28, 1m);
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
