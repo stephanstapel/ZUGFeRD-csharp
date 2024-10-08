@@ -417,10 +417,13 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
-                Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
-                Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
-                Writer.WriteEndElement();
+                if (tradeLineItem.UnitQuantity != null)
+                {
+                    Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
+                    Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
+                    Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
+                    Writer.WriteEndElement();
+                }
 
                 IList<TradeAllowanceCharge> charges = tradeLineItem.GetTradeAllowanceCharges();
                 if (charges.Count > 0) // only one charge possible in UBL
