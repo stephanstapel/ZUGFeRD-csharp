@@ -66,7 +66,7 @@ namespace ZUGFeRD_Test
 						   city: "München",
 						   street: "Lieferantenstraße 20",
 						   country: CountryCodes.DE,
-						   id: "",
+						   id: String.Empty,
 						   globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
 						   legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH")
 						   );

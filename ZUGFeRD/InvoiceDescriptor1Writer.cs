@@ -789,7 +789,12 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram:LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
                 if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram:LineTwo", Party.Street); }
                 writer.WriteOptionalElementString("ram:CityName", Party.City);
-                writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+
+                if (Party.Country != CountryCodes.Unknown)
+                {
+                    writer.WriteElementString("ram:CountryID", Party.Country.EnumToString());
+                }
+
                 writer.WriteEndElement(); // !PostalTradeAddress
 
                 if (TaxRegistrations != null)
@@ -855,9 +860,9 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.Correction: return "KORREKTURRECHNUNG";
                 case InvoiceType.CreditNote: return "GUTSCHRIFT";
                 case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return "WERTBELASTUNG";
-                case InvoiceType.DebitNote: return "";
-                case InvoiceType.SelfBilledInvoice: return "";
-                default: return "";
+                case InvoiceType.DebitNote: return String.Empty;
+                case InvoiceType.SelfBilledInvoice: return String.Empty;
+                default: return String.Empty;
             }
         } // !_translateInvoiceType()
 

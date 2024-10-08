@@ -95,6 +95,7 @@ namespace s2industries.ZUGFeRD
             // OrderReference
             Writer.WriteStartElement("cac:OrderReference");
             Writer.WriteElementString("cbc:ID", this.Descriptor.OrderNo);
+            Writer.WriteOptionalElementString("cbc:SalesOrderID", this.Descriptor.SellerOrderReferencedDocument?.ID);
             Writer.WriteEndElement(); // !OrderReference
 
             // BillingReference
@@ -199,7 +200,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
-                if (!string.IsNullOrEmpty(tradeAllowanceCharge.Reason))
+                if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
                 {
                     Writer.WriteStartElement("cbc:AllowanceChargeReason"); // BT-97 / BT-104
                     Writer.WriteValue(tradeAllowanceCharge.Reason);
@@ -416,10 +417,13 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
-                Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
-                Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
-                Writer.WriteEndElement();
+                if (tradeLineItem.UnitQuantity != null)
+                {
+                    Writer.WriteStartElement("cbc:BaseQuantity"); // BT-149
+                    Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
+                    Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
+                    Writer.WriteEndElement();
+                }
 
                 IList<TradeAllowanceCharge> charges = tradeLineItem.GetTradeAllowanceCharges();
                 if (charges.Count > 0) // only one charge possible in UBL
@@ -615,7 +619,12 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("cbc:PostalZone", party.Postcode);
 
                 writer.WriteStartElement("cac:Country");
-                Writer.WriteElementString("cbc:IdentificationCode", party.Country.ToString());
+
+                if (party.Country != CountryCodes.Unknown)
+                {
+                    Writer.WriteElementString("cbc:IdentificationCode", party.Country.ToString());
+                }
+
                 writer.WriteEndElement(); //!Country
 
                 writer.WriteEndElement(); //!PostalTradeAddress

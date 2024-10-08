@@ -177,6 +177,18 @@ namespace s2industries.ZUGFeRD
                     // return "";
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
-        } // !ToString()
+        } // !EnumToString()
+
+
+        public static string GetXMPName(this Profile profile)
+        {
+            switch (profile)
+            {
+                case Profile.BasicWL: return "BASIC WL";
+                case Profile.XRechnung1:
+                case Profile.XRechnung: return "EN 16931";
+                default: return profile.ToString();
+            }
+        } // !GetXMPName()
     }
 }

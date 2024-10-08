@@ -700,7 +700,7 @@ namespace ZUGFeRD_Test
             //Line items
             var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
             Assert.IsNotNull(loadedLineItem);
-            Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(loadedLineItem.AssociatedDocument.LineID));
             Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
 
             Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);
