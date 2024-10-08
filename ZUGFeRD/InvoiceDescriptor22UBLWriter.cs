@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -95,6 +94,7 @@ namespace s2industries.ZUGFeRD
             // OrderReference
             Writer.WriteStartElement("cac:OrderReference");
             Writer.WriteElementString("cbc:ID", this.Descriptor.OrderNo);
+            Writer.WriteOptionalElementString("cbc:SalesOrderID", this.Descriptor.SellerOrderReferencedDocument?.ID);
             Writer.WriteEndElement(); // !OrderReference
 
             // BillingReference
