@@ -309,6 +309,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement();
             }
 
+            // DueDate (BT-9) 
+            // has cardinality 0..1
+            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null).DueDate;
+            if (dueDate != null) 
+            {
+                Writer.WriteElementString("cbc:DueDate", _formatDate(dueDate.Value, false, true));
+            }
+
             // Tax Total
             Writer.WriteStartElement("cac:TaxTotal");
             _writeOptionalAmount(Writer, "cbc:TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
