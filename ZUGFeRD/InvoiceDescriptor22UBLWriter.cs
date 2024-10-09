@@ -319,28 +319,31 @@ namespace s2industries.ZUGFeRD
             }
 
             // Tax Total
-            Writer.WriteStartElement("cac:TaxTotal");
-            _writeOptionalAmount(Writer, "cbc:TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
-
-            foreach (Tax tax in this.Descriptor.Taxes)
+            if (this.Descriptor.Taxes.Any() && this.Descriptor.TaxTotalAmount != null)
             {
-                Writer.WriteStartElement("cac:TaxSubtotal");
-                _writeOptionalAmount(Writer, "cbc:TaxableAmount", tax.BasisAmount, forceCurrency: true);
-                _writeOptionalAmount(Writer, "cbc:TaxAmount", tax.TaxAmount, forceCurrency: true);
+                Writer.WriteStartElement("cac:TaxTotal");
+                _writeOptionalAmount(Writer, "cbc:TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
 
-                Writer.WriteStartElement("cac:TaxCategory");
-                Writer.WriteElementString("cbc:ID", tax.CategoryCode.ToString());
-                Writer.WriteElementString("cbc:Percent", _formatDecimal(tax.Percent));
+                foreach (Tax tax in this.Descriptor.Taxes)
+                {
+                    Writer.WriteStartElement("cac:TaxSubtotal");
+                    _writeOptionalAmount(Writer, "cbc:TaxableAmount", tax.BasisAmount, forceCurrency: true);
+                    _writeOptionalAmount(Writer, "cbc:TaxAmount", tax.TaxAmount, forceCurrency: true);
 
-                Writer.WriteStartElement("cac:TaxScheme");
-                Writer.WriteElementString("cbc:ID", tax.TypeCode.EnumToString());
-                Writer.WriteEndElement();// !TaxScheme
+                    Writer.WriteStartElement("cac:TaxCategory");
+                    Writer.WriteElementString("cbc:ID", tax.CategoryCode.ToString());
+                    Writer.WriteElementString("cbc:Percent", _formatDecimal(tax.Percent));
 
-                Writer.WriteEndElement();// !TaxCategory
-                Writer.WriteEndElement();// !TaxSubtotal
+                    Writer.WriteStartElement("cac:TaxScheme");
+                    Writer.WriteElementString("cbc:ID", tax.TypeCode.EnumToString());
+                    Writer.WriteEndElement();// !TaxScheme
+
+                    Writer.WriteEndElement();// !TaxCategory
+                    Writer.WriteEndElement();// !TaxSubtotal
+                }
+
+                Writer.WriteEndElement();// !TaxTotal
             }
-
-            Writer.WriteEndElement();// !TaxTotal
 
             Writer.WriteStartElement("cac:LegalMonetaryTotal");
             _writeOptionalAmount(Writer, "cbc:LineExtensionAmount", this.Descriptor.LineTotalAmount, forceCurrency: true);
