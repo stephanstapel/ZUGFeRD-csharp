@@ -429,13 +429,13 @@ namespace s2industries.ZUGFeRD
                 }
                 #endregion
 
-                #region SpecifiedTradeAllowanceCharge (Basic, Comfort, Extended)
-                //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended)
-                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung }.Contains(descriptor.Profile))
+                #region SpecifiedTradeAllowanceCharge (Basic, Comfort, Extended, XRechnung)
+                //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended, XRechnung)
+                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung1, Profile.XRechnung }.Contains(descriptor.Profile))
                 {
                     if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
                     {
-                        Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                        Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                         foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BT-147
                         {
