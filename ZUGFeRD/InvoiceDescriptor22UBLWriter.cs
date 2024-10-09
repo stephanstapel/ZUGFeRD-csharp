@@ -616,7 +616,7 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteStartElement("cac:PostalAddress");
 
-                Writer.WriteElementString("cbc:StreetName", party.Street);
+                Writer.WriteOptionalElementString("cbc:StreetName", party.Street);
                 Writer.WriteOptionalElementString("cbc:AdditionalStreetName", party.AddressLine3);
                 Writer.WriteElementString("cbc:CityName", party.City);
                 Writer.WriteElementString("cbc:PostalZone", party.Postcode);
