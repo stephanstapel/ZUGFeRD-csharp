@@ -250,17 +250,20 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteStartElement("cac:PayeeFinancialAccount");
 
                             Writer.WriteElementString("cbc:ID", account.IBAN);
-                            Writer.WriteElementString("cbc:Name", account.Name);
+                            Writer.WriteOptionalElementString("cbc:Name", account.Name);
 
-                            Writer.WriteStartElement("cac:FinancialInstitutionBranch");
-                            Writer.WriteElementString("cbc:ID", account.BIC);
+                            if (!string.IsNullOrWhiteSpace(account.BIC))
+                            {
+                                Writer.WriteStartElement("cac:FinancialInstitutionBranch");
+                                Writer.WriteElementString("cbc:ID", account.BIC);
 
-                            //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
-                            //Writer.WriteStartElement("cac:FinancialInstitution");
-                            //Writer.WriteElementString("cbc:Name", account.BankName);
+                                //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
+                                //Writer.WriteStartElement("cac:FinancialInstitution");
+                                //Writer.WriteElementString("cbc:Name", account.BankName);
 
-                            //Writer.WriteEndElement(); // !FinancialInstitution
-                            Writer.WriteEndElement(); // !FinancialInstitutionBranch
+                                //Writer.WriteEndElement(); // !FinancialInstitution
+                                Writer.WriteEndElement(); // !FinancialInstitutionBranch
+                            }
 
                             Writer.WriteEndElement(); // !PayeeFinancialAccount
                         }
