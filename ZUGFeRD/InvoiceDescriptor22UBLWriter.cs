@@ -319,7 +319,7 @@ namespace s2industries.ZUGFeRD
             }
 
             // Tax Total
-            if (this.Descriptor.Taxes.Any())
+            if (this.Descriptor.Taxes.Any() && this.Descriptor.TaxTotalAmount != null)
             {
                 Writer.WriteStartElement("cac:TaxTotal");
                 _writeOptionalAmount(Writer, "cbc:TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
