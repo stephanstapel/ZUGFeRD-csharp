@@ -602,7 +602,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteEndElement();
                 }
 
-                if (this.Descriptor.PaymentMeans.SEPAMandateReference != null)
+                if (this.Descriptor.PaymentMeans?.SEPAMandateReference != null)
                 {
                     writer.WriteStartElement("cac:PartyIdentification");
                     writer.WriteStartElement("cbc:ID");

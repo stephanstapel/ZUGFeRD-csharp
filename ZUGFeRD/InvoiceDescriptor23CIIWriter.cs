@@ -431,11 +431,11 @@ namespace s2industries.ZUGFeRD
 
                 #region SpecifiedTradeAllowanceCharge (Basic, Comfort, Extended)
                 //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended)
-                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended }.Contains(descriptor.Profile))
+                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung }.Contains(descriptor.Profile))
                 {
                     if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
                     {
-                        Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended);
+                        Writer.WriteStartElement("ram:SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung);
 
                         foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BT-147
                         {
