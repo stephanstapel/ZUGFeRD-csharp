@@ -623,6 +623,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("cbc:AdditionalStreetName", party.AddressLine3);
                 Writer.WriteElementString("cbc:CityName", party.City);
                 Writer.WriteElementString("cbc:PostalZone", party.Postcode);
+                Writer.WriteOptionalElementString("cbc:CountrySubentity", party.CountrySubdivisionName);
 
                 writer.WriteStartElement("cac:Country");
 

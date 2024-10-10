@@ -16,17 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace s2industries.ZUGFeRD
 {
-  /// <summary>
-  /// Detailed information about a party that has a certain role within an invoice
-  /// </summary>
-  public class Party
+    /// <summary>
+    /// Detailed information about a party that has a certain role within an invoice
+    /// </summary>
+    public class Party
   {
     /// <summary>
     /// Party identifier
@@ -65,6 +60,7 @@ namespace s2industries.ZUGFeRD
 
     /// <summary>
     /// Street name and number
+    /// e.g. used for BT-35
     /// </summary>
     public string Street { get; set; }
     /// <summary>
