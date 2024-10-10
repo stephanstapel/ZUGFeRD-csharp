@@ -202,11 +202,11 @@ namespace s2industries.ZUGFeRD
             }
 
             string _deliveryNoteNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID", nsmgr);
-            DateTime? _deliveryNoteDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr);
+            DateTime? _deliveryNoteDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr);
 
             if (!_deliveryNoteDate.HasValue)
             {
-                _deliveryNoteDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssueDateTime", nsmgr);
+                _deliveryNoteDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime", nsmgr);
             }
 
             if (_deliveryNoteDate.HasValue || !String.IsNullOrWhiteSpace(_deliveryNoteNo))
@@ -626,10 +626,10 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode designatedProductClassificationNode in tradeLineItem.SelectNodes(".//ram:DesignatedProductClassification", nsmgr))
             {
-                string className = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassName", nsmgr);
-                string classCode = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode", nsmgr);
-                DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode(@listID", nsmgr));                
-                string listVersionID = XmlUtils.NodeAsString(designatedProductClassificationNode, ".//ram:ClassCode/@listVersionID", nsmgr);                
+                string className = XmlUtils.NodeAsString(designatedProductClassificationNode, "./ram:ClassName", nsmgr);
+                string classCode = XmlUtils.NodeAsString(designatedProductClassificationNode, "./ram:ClassCode", nsmgr);
+                DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(designatedProductClassificationNode, "./ram:ClassCode/@listID", nsmgr));                
+                string listVersionID = XmlUtils.NodeAsString(designatedProductClassificationNode, "./ram:ClassCode/@listVersionID", nsmgr);                
 
                 item.AddDesignatedProductClassification(listID, listVersionID, classCode, className);
             } // !foreach(designatedProductClassificationNode))
