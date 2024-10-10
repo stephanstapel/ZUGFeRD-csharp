@@ -1030,11 +1030,11 @@ namespace s2industries.ZUGFeRD
         /// <param name="filename">The filename where the data should be saved to.</param>
         /// <param name="version">The ZUGFeRD version you want to use. Defaults to version 1.</param>
         /// <param name="profile">The ZUGFeRD profile you want to use. Defaults to Basic.</param>
-        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic)
+        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
             IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
-            writer.Save(this, filename);
+            writer.Save(this, filename, format);
         } // !Save()
 
 

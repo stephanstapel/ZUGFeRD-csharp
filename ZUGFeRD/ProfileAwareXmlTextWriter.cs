@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Xml;
 
@@ -33,34 +34,31 @@ namespace s2industries.ZUGFeRD
 
     internal class ProfileAwareXmlTextWriter
     {
-        private XmlTextWriter TextWriter;
+        private XmlWriter TextWriter;
         private Stack<StackInfo> XmlStack = new Stack<StackInfo>();
         private Profile CurrentProfile = Profile.Unknown;
+        private Dictionary<string, string> Namespaces = new Dictionary<string, string>();
 
-
-        public System.Xml.Formatting Formatting
-        {
-            get
-            {
-                return this.TextWriter.Formatting;
-            }
-            set
-            {
-                this.TextWriter.Formatting = value;
-            }
-        }
 
 
         public ProfileAwareXmlTextWriter(string filename, System.Text.Encoding encoding, Profile profile)
         {
-            this.TextWriter = new XmlTextWriter(filename, encoding);
+            this.TextWriter = XmlWriter.Create(filename, new XmlWriterSettings()
+            {
+                Encoding = encoding,
+                Indent = true
+            });
             this.CurrentProfile = profile;
         }
 
 
         public ProfileAwareXmlTextWriter(System.IO.Stream w, System.Text.Encoding encoding, Profile profile)
         {
-            this.TextWriter = new XmlTextWriter(w, encoding);
+            this.TextWriter = XmlWriter.Create(w, new XmlWriterSettings()
+            {
+                Encoding = encoding,
+                Indent = true
+            });
             this.CurrentProfile = profile;
         }
 
@@ -77,7 +75,7 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void WriteStartElement(string prefix, string localName, string ns, Profile profile = Profile.Unknown)
+        public void WriteStartElement(string prefix, string localName, Profile profile = Profile.Unknown)
         {
             Profile _profile = profile;
             if (profile == Profile.Unknown)
@@ -94,6 +92,9 @@ namespace s2industries.ZUGFeRD
             {
                 this.XmlStack.Push(new StackInfo() { Profile = _profile, IsVisible = true });
             }
+
+
+            string ns = Namespaces.ContainsKey(prefix) ? Namespaces[prefix] : null; 
 
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
@@ -121,11 +122,11 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void WriteOptionalElementString(string tagName, string value, Profile profile = Profile.Unknown)
+        public void WriteOptionalElementString(string prefix, string tagName, string value, Profile profile = Profile.Unknown)
         {
             if (!String.IsNullOrWhiteSpace(value))
             {
-                WriteElementString(tagName, value, profile);
+                WriteElementString(prefix, tagName, value, profile);
             }
         } // !WriteOptionalElementString()
 
@@ -176,7 +177,7 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void WriteAttributeString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
+        public void WriteAttributeString(string prefix, string localName, string value, Profile profile = Profile.Unknown)
         {
             StackInfo infoForCurrentNode = this.XmlStack.First();
             if (!infoForCurrentNode.IsVisible)
@@ -196,11 +197,7 @@ namespace s2industries.ZUGFeRD
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
             {
-                this.TextWriter?.WriteAttributeString(prefix, localName, ns, value);
-            }
-            else if (!String.IsNullOrWhiteSpace(ns))
-            {
-                this.TextWriter?.WriteAttributeString(localName, ns, value);
+                this.TextWriter?.WriteAttributeString(prefix, localName, null, value);
             }
             else
             {
@@ -253,41 +250,23 @@ namespace s2industries.ZUGFeRD
         #endregion // !Stack Management
 
 
-        #region Convience functions
-        public void WriteElementString(string localName, string ns, string value, Profile profile = Profile.Unknown)
+        #region Convience functions        
+        public void WriteElementString(string prefix, string localName, string value, Profile profile = Profile.Unknown)
         {
-            this.WriteElementString(null, localName, ns, value, profile);
-        } // !WriteElementString()
-
-
-        public void WriteElementString(string localName, string value, Profile profile = Profile.Unknown)
-        {
-            this.WriteElementString(null, localName, null, value, profile);
+            this.WriteElementString(prefix, localName, null, value, profile);
         } // !WriteElementString()
 
 
         public void WriteAttributeString(string localName, string value, Profile profile = Profile.Unknown)
         {
-            this.WriteAttributeString(null, localName, null, value, profile);
-        } // !WriteAttributeString()
+            this.WriteAttributeString(null, localName, value, profile);
+        } // !WriteAttributeString(
 
 
-        public void WriteAttributeString(string localName, string ns, string value, Profile profile = Profile.Unknown)
+        internal void SetNamespaces(Dictionary<string, string> namespaces)
         {
-            this.WriteAttributeString(null, localName, ns, value, profile);
-        } // !WriteAttributeString()
-
-
-        public void WriteStartElement(string localName, Profile profile = Profile.Unknown)
-        {
-            this.WriteStartElement(null, localName, null, profile);
-        } // !WriteStartElement()
-
-
-        public void WriteStartElement(string localName, string ns, Profile profile = Profile.Unknown)
-        {
-            this.WriteStartElement(null, localName, ns, profile);
-        } // !WriteStartElement()
+            this.Namespaces = namespaces;
+        }
         #endregion // !Convenience functions
     }
 }
