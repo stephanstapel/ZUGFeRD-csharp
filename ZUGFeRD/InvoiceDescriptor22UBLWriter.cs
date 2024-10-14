@@ -332,7 +332,14 @@ namespace s2industries.ZUGFeRD
                 {
                     sbPaymentNotes.AppendLine(paymentTerms.Description);
                 }
-                Writer.WriteOptionalElementString("cbc", "Note", sbPaymentNotes.ToString().TrimEnd());
+
+                if (!String.IsNullOrWhiteSpace(sbPaymentNotes.ToString()))
+                {
+                    Writer.WriteStartElement("cbc", "Note");                    
+                    Writer.WriteValue(sbPaymentNotes.ToString());
+                    Writer.WriteEndElement(); // !Note()
+                }
+                //Writer.WriteOptionalElementString("cbc", "Note", sbPaymentNotes.ToString().TrimEnd());
                 Writer.WriteEndElement();
             }
 
