@@ -398,7 +398,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("cac", "Item");
 
-                Writer.WriteElementString("cbc", "Description", tradeLineItem.Description);
+                Writer.WriteOptionalElementString("cbc", "Description", tradeLineItem.Description);
                 Writer.WriteElementString("cbc", "Name", tradeLineItem.Name);
 
                 if (!string.IsNullOrWhiteSpace(tradeLineItem.SellerAssignedID))
