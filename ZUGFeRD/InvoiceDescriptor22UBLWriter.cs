@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
@@ -88,11 +87,19 @@ namespace s2industries.ZUGFeRD
             #endregion
 
 
-            Writer.WriteElementString("cbc", "CustomizationID", "cbc:CustomizationID\", \"urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0");
+            Writer.WriteElementString("cbc", "CustomizationID", "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0");
             Writer.WriteElementString("cbc", "ProfileID", "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0");
 
             Writer.WriteElementString("cbc", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
             Writer.WriteElementString("cbc", "IssueDate", _formatDate(this.Descriptor.InvoiceDate.Value, false, true));
+
+            // DueDate (BT-9) 
+            // has cardinality 0..1
+            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
+            if (dueDate != null)
+            {
+                Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
+            }
 
             Writer.WriteElementString("cbc", "InvoiceTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
 
@@ -317,24 +324,16 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentTerms (optional)
-            if (this.Descriptor.GetTradePaymentTerms().Count > 0)
+            if (this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)).ToList().Count > 0)
             {
                 Writer.WriteStartElement("cac", "PaymentTerms");                
                 var sbPaymentNotes = new StringBuilder();
-                foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
+                foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)))
                 {
                     sbPaymentNotes.AppendLine(paymentTerms.Description);
                 }
                 Writer.WriteOptionalElementString("cbc", "Note", sbPaymentNotes.ToString().TrimEnd());
                 Writer.WriteEndElement();
-            }
-
-            // DueDate (BT-9) 
-            // has cardinality 0..1
-            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
-            if (dueDate != null) 
-            {
-                Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
             }
 
             // Tax Total
@@ -399,7 +398,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("cac", "Item");
 
-                Writer.WriteElementString("cbc", "Description", tradeLineItem.Description);
+                Writer.WriteOptionalElementString("cbc", "Description", tradeLineItem.Description);
                 Writer.WriteElementString("cbc", "Name", tradeLineItem.Name);
 
                 if (!string.IsNullOrWhiteSpace(tradeLineItem.SellerAssignedID))
@@ -684,9 +683,9 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteStartElement("cac", "Contact");
 
-                    writer.WriteElementString("cbc", "Name", contact.Name);
-                    writer.WriteElementString("cbc", "Telephone", contact.PhoneNo);
-                    writer.WriteElementString("cbc", "ElectronicMail", contact.EmailAddress);
+                    writer.WriteOptionalElementString("cbc", "Name", contact.Name);
+                    writer.WriteOptionalElementString("cbc", "Telephone", contact.PhoneNo);
+                    writer.WriteOptionalElementString("cbc", "ElectronicMail", contact.EmailAddress);
 
                     writer.WriteEndElement();
                 }
