@@ -324,11 +324,11 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentTerms (optional)
-            if (this.Descriptor.GetTradePaymentTerms().Count > 0)
+            if (this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)).ToList().Count > 0)
             {
                 Writer.WriteStartElement("cac", "PaymentTerms");                
                 var sbPaymentNotes = new StringBuilder();
-                foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
+                foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)))
                 {
                     sbPaymentNotes.AppendLine(paymentTerms.Description);
                 }
