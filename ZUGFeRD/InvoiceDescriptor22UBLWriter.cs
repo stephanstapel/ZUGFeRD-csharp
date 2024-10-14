@@ -93,6 +93,14 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("cbc", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
             Writer.WriteElementString("cbc", "IssueDate", _formatDate(this.Descriptor.InvoiceDate.Value, false, true));
 
+            // DueDate (BT-9) 
+            // has cardinality 0..1
+            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
+            if (dueDate != null)
+            {
+                Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
+            }
+
             Writer.WriteElementString("cbc", "InvoiceTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
 
 
@@ -326,14 +334,6 @@ namespace s2industries.ZUGFeRD
                 }
                 Writer.WriteOptionalElementString("cbc", "Note", sbPaymentNotes.ToString().TrimEnd());
                 Writer.WriteEndElement();
-            }
-
-            // DueDate (BT-9) 
-            // has cardinality 0..1
-            DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
-            if (dueDate != null) 
-            {
-                Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
             }
 
             // Tax Total
