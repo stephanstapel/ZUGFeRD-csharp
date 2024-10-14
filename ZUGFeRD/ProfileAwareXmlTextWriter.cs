@@ -219,8 +219,21 @@ namespace s2industries.ZUGFeRD
         } // !WriteAttributeString()
 
 
-        #region Stack Management
-        private bool _DoesProfileFitToCurrentProfile(Profile profile)
+        public void WriteRawString(string value, Profile profile = Profile.Unknown)
+        {
+			StackInfo infoForCurrentNode = this.XmlStack.First();
+			if (!infoForCurrentNode.IsVisible)
+			{
+				return;
+			}
+
+            // write value
+            this.TextWriter?.WriteString(value);
+		} // !WriteRawString()
+
+
+		#region Stack Management
+		private bool _DoesProfileFitToCurrentProfile(Profile profile)
         {
             if (profile != Profile.Unknown)
             {
