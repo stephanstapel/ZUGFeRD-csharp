@@ -683,9 +683,9 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteStartElement("cac", "Contact");
 
-                    writer.WriteElementString("cbc", "Name", contact.Name);
-                    writer.WriteElementString("cbc", "Telephone", contact.PhoneNo);
-                    writer.WriteElementString("cbc", "ElectronicMail", contact.EmailAddress);
+                    writer.WriteOptionalElementString("cbc", "Name", contact.Name);
+                    writer.WriteOptionalElementString("cbc", "Telephone", contact.PhoneNo);
+                    writer.WriteOptionalElementString("cbc", "ElectronicMail", contact.EmailAddress);
 
                     writer.WriteEndElement();
                 }
