@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
@@ -88,7 +87,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
 
-            Writer.WriteElementString("cbc", "CustomizationID", "cbc:CustomizationID\", \"urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0");
+            Writer.WriteElementString("cbc", "CustomizationID", "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0");
             Writer.WriteElementString("cbc", "ProfileID", "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0");
 
             Writer.WriteElementString("cbc", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
