@@ -48,6 +48,7 @@ namespace s2industries.ZUGFeRD
                 Encoding = encoding,
                 Indent = true
             });
+            
             this.CurrentProfile = profile;
         }
 
@@ -232,8 +233,31 @@ namespace s2industries.ZUGFeRD
 		} // !WriteRawString()
 
 
-		#region Stack Management
-		private bool _DoesProfileFitToCurrentProfile(Profile profile)
+        public void WriteRawIndention(Profile profile = Profile.Unknown)
+        {
+            if (this.TextWriter == null)
+            {
+                return;
+            }
+
+            StackInfo infoForCurrentNode = this.XmlStack.First();
+            if (!infoForCurrentNode.IsVisible)
+            {
+                return;
+            }
+
+            // write value
+            string indention = String.Empty;
+            for (int i = 0; i < this.XmlStack.Count; i++)
+            {
+                indention += this.TextWriter.Settings.IndentChars;
+            }            
+            this.TextWriter?.WriteString(indention);
+        } // !WriteRawIndention()
+
+
+        #region Stack Management
+        private bool _DoesProfileFitToCurrentProfile(Profile profile)
         {
             if (profile != Profile.Unknown)
             {
