@@ -54,7 +54,7 @@ namespace s2industries.ZUGFeRD
                 Name = XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:Name", nsmgr),
                 Type = default(InvoiceType).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:TypeCode", nsmgr)),
                 InvoiceNo = XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:ID", nsmgr),
-                InvoiceDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString", nsmgr)
+                InvoiceDate = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "//rsm:ExchangedDocument/ram:IssueDateTime", nsmgr)
             };
 
             foreach (XmlNode node in doc.SelectNodes("//rsm:ExchangedDocument/ram:IncludedNote", nsmgr))

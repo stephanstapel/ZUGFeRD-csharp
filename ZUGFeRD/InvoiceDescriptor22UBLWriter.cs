@@ -335,7 +335,9 @@ namespace s2industries.ZUGFeRD
 
                 if (!String.IsNullOrWhiteSpace(sbPaymentNotes.ToString()))
                 {
-                    Writer.WriteStartElement("cbc", "Note");                    
+                    Writer.WriteStartElement("cbc", "Note");
+                    Writer.WriteRawString(Environment.NewLine);
+                    Writer.WriteRawIndention();
                     Writer.WriteValue(sbPaymentNotes.ToString());
                     Writer.WriteEndElement(); // !Note()
                 }
