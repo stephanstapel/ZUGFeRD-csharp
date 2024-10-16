@@ -39,6 +39,11 @@ namespace s2industries.ZUGFeRD
         private Profile CurrentProfile = Profile.Unknown;
         private Dictionary<string, string> Namespaces = new Dictionary<string, string>();
 
+        /// <summary>
+        /// In case we are writing raw values, the automatic indention of end elements might get broken.
+        /// In order to heal that, we need to manually add indention.
+        /// </summary>
+        private bool _NeedToIndentEndElement = false;
 
 
         public ProfileAwareXmlTextWriter(string filename, System.Text.Encoding encoding, Profile profile)
@@ -118,6 +123,12 @@ namespace s2industries.ZUGFeRD
             StackInfo infoForCurrentXmlLevel = this.XmlStack.Pop();
             if (_DoesProfileFitToCurrentProfile(infoForCurrentXmlLevel.Profile) && _IsNodeVisible())
             {
+                if (_NeedToIndentEndElement)
+                {
+                    WriteRawIndention();
+                    _NeedToIndentEndElement = false;
+                }
+
                 this.TextWriter?.WriteEndElement();
             }
         }
@@ -228,6 +239,8 @@ namespace s2industries.ZUGFeRD
 				return;
 			}
 
+            _NeedToIndentEndElement = true;
+
             // write value
             this.TextWriter?.WriteString(value);
 		} // !WriteRawString()
@@ -246,13 +259,13 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
+            _NeedToIndentEndElement = true;
+
             // write value
-            string indention = String.Empty;
             for (int i = 0; i < this.XmlStack.Count; i++)
             {
-                indention += this.TextWriter.Settings.IndentChars;
-            }            
-            this.TextWriter?.WriteString(indention);
+                this.TextWriter?.WriteString(this.TextWriter.Settings.IndentChars);
+            }
         } // !WriteRawIndention()
 
 
