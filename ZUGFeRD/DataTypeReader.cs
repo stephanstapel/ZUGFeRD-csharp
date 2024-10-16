@@ -30,19 +30,25 @@ namespace s2industries.ZUGFeRD
     {
         internal static DateTime? ReadFormattedIssueDateTime(XmlNode node, string xpath, XmlNamespaceManager nsmgr, DateTime? defaultValue = null)
         {
-            XmlNode selectedNode = node.SelectSingleNode(xpath, nsmgr);
-            if (selectedNode == null)
+            try
             {
-                return defaultValue;
-            }
+                XmlNode selectedNode = node.SelectSingleNode(xpath, nsmgr);
+                if (selectedNode == null)
+                {
+                    return defaultValue;
+                }
 
-            if (selectedNode.InnerXml.Contains("<qdt:"))
-            {
-                return XmlUtils.NodeAsDateTime(selectedNode, "./qdt:DateTimeString", nsmgr);
+                if (selectedNode.InnerXml.Contains("<qdt:"))
+                {
+                    return XmlUtils.NodeAsDateTime(selectedNode, "./qdt:DateTimeString", nsmgr);
+                }
+                else if (selectedNode.InnerXml.Contains("<udt:"))
+                {
+                    return XmlUtils.NodeAsDateTime(selectedNode, "./udt:DateTimeString", nsmgr);
+                }
             }
-            else if (selectedNode.InnerXml.Contains("<udt:"))
+            catch
             {
-                return XmlUtils.NodeAsDateTime(selectedNode, "./udt:DateTimeString", nsmgr);
             }
 
             return defaultValue;
