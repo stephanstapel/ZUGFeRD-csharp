@@ -30,11 +30,15 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// Invoice Number
+        /// 
+        /// BT-1
         /// </summary>
         public string InvoiceNo { get; set; }
 
         /// <summary>
         /// Invoice date
+        /// 
+        /// BT-2
         /// </summary>
         public DateTime? InvoiceDate { get; set; } = null;
 
@@ -206,6 +210,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Indicates the type of the document, if it represents an invoice, a credit note or one of the available 'sub types'
+        /// 
+        /// BT-3
         /// </summary>
         public InvoiceType Type { get; set; } = InvoiceType.Invoice;
 

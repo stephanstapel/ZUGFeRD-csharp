@@ -38,6 +38,41 @@ namespace ZUGFeRD_Test
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
+
+        [TestMethod]
+        public void TestExtendedInvoiceWithIncludedItems()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+            
+            if(desc.TradeLineItems.Any())
+            {
+                desc.TradeLineItems[0].IncludedItems.Add(new IncludedItem
+                {
+                    Name = "Test",
+                    UnitQuantity = 1,
+                    UnitCode = QuantityCodes.C62
+                });
+            }
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 6);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems.Count, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].Name, "Test");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].UnitQuantity, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].UnitCode, QuantityCodes.C62);
+        }
+
         [TestMethod]
         public void TestReferenceEReportingFacturXInvoice()
         {
