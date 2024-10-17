@@ -52,6 +52,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// An article’s name
+        /// 
+        /// BT-153
         /// </summary>
         public string Name { get; set; }
 
@@ -60,6 +62,8 @@ namespace s2industries.ZUGFeRD
         /// 
         /// The item’s description makes it possible to describe a product and its properties more comprehensively
         /// than would be possible with just the article name.
+        /// 
+        /// BT-154
         /// </summary>
         public string Description { get; set; }
 
@@ -95,6 +99,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// he code valid for the invoiced goods sales tax category
+        /// 
+        /// BT-151
         /// </summary>
         public TaxCategoryCodes TaxCategoryCode { get; set; }
 
@@ -105,6 +111,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Tax type
+        /// 
+        /// BT-151-0
         /// </summary>
         public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
 
@@ -120,11 +128,15 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Item Base Quantity Unit Code
+        /// 
+        /// BT-130
         /// </summary>
         public QuantityCodes UnitCode { get; set; }
 
         /// <summary>
         /// Identifier of the invoice line item
+        /// 
+        /// BT-126
         /// </summary>
         public AssociatedDocument AssociatedDocument { get; internal set; }
 
@@ -175,7 +187,16 @@ namespace s2industries.ZUGFeRD
         public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
 
         /// <summary>
+        /// Included Items referenced from this trade product.
+        /// 
+        /// BG-X-1
+        /// </summary>
+        public List<IncludedItem> IncludedItems { get; set; } = new List<IncludedItem>();
+
+        /// <summary>
         /// Additional product information
+        /// 
+        /// BG-32
         /// </summary>
         public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; } = new List<ApplicableProductCharacteristic>();
 
