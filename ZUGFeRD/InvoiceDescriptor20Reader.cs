@@ -400,6 +400,19 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
+            if (tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:IncludedReferencedProduct", nsmgr) != null)
+            {
+                foreach (XmlNode includedItem in tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:IncludedReferencedProduct", nsmgr))
+                {
+                    item.IncludedItems.Add(new IncludedItem()
+                    {
+                        Name = XmlUtils.NodeAsString(includedItem, ".//ram:Name", nsmgr),
+                        UnitQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:UnitQuantity", nsmgr, 1),
+                        UnitCode = default(QuantityCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:UnitQuantity/@unitCode", nsmgr)),
+                    });
+                }
+            }
+
             if (tradeLineItem.SelectSingleNode(".//ram:AssociatedDocumentLineDocument", nsmgr) != null)
             {                
                 XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//ram:AssociatedDocumentLineDocument/ram:IncludedNote", nsmgr);

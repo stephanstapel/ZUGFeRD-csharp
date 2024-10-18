@@ -179,6 +179,21 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
+                if (tradeLineItem.IncludedItems != null && tradeLineItem.IncludedItems.Any())
+                {
+                    foreach (var includedItem in tradeLineItem.IncludedItems)
+                    {
+                        Writer.WriteStartElement("ram", "IncludedReferencedProduct");
+                        Writer.WriteOptionalElementString("ram", "Name", includedItem.Name);
+
+                        if(includedItem.UnitQuantity.HasValue)
+                        {
+                            _writeElementWithAttributeWithPrefix(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
+                        }
+                        Writer.WriteEndElement(); // !ram:IncludedReferencedProduct
+                    }
+                }
+
                 if (tradeLineItem.GetDesignatedProductClassifications().Any())
                 {
                     foreach (var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
