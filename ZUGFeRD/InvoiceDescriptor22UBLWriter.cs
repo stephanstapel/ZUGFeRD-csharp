@@ -19,9 +19,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace s2industries.ZUGFeRD
 {
@@ -87,7 +89,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
 
-            Writer.WriteElementString("cbc", "CustomizationID", "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0");
+            Writer.WriteElementString("cbc", "CustomizationID", "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_3.0");
             Writer.WriteElementString("cbc", "ProfileID", "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0");
 
             Writer.WriteElementString("cbc", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
@@ -117,10 +119,13 @@ namespace s2industries.ZUGFeRD
             Writer.WriteOptionalElementString("cbc", "BuyerReference", this.Descriptor.ReferenceOrderNo);
 
             // OrderReference
-            Writer.WriteStartElement("cac", "OrderReference");
-            Writer.WriteElementString("cbc", "ID", this.Descriptor.OrderNo);
-            Writer.WriteOptionalElementString("cbc", "SalesOrderID", this.Descriptor.SellerOrderReferencedDocument?.ID);
-            Writer.WriteEndElement(); // !OrderReference
+            if (!string.IsNullOrEmpty(this.Descriptor.OrderNo) || !string.IsNullOrEmpty(this.Descriptor.SellerOrderReferencedDocument?.ID))
+            {
+                Writer.WriteStartElement("cac", "OrderReference");
+                Writer.WriteElementString("cbc", "ID", this.Descriptor.OrderNo);
+                Writer.WriteOptionalElementString("cbc", "SalesOrderID", this.Descriptor.SellerOrderReferencedDocument?.ID);
+                Writer.WriteEndElement(); // !OrderReference
+            }
 
             // BillingReference
             if (this.Descriptor.GetInvoiceReferencedDocuments().Count > 0)
@@ -326,7 +331,7 @@ namespace s2industries.ZUGFeRD
             // PaymentTerms (optional)
             if (this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)).ToList().Count > 0)
             {
-                Writer.WriteStartElement("cac", "PaymentTerms");                
+                Writer.WriteStartElement("cac", "PaymentTerms");
                 var sbPaymentNotes = new StringBuilder();
                 foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)))
                 {
@@ -451,7 +456,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("cbc", "BaseQuantity"); // BT-149
                     Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
-                    Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
+                    Writer.WriteValue(_formatDecimal(tradeLineItem.UnitQuantity));
                     Writer.WriteEndElement();
                 }
 
@@ -628,6 +633,9 @@ namespace s2industries.ZUGFeRD
                     writer.WriteValue(ElectronicAddress.Address);
                     writer.WriteEndElement();
                 }
+                writer.WriteStartElement("cac", "PartyName");
+                writer.WriteElementString("cbc", "Name", party.Name);
+                writer.WriteEndElement();
 
                 if (this.Descriptor.PaymentMeans?.SEPAMandateReference != null)
                 {

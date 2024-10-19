@@ -28,6 +28,7 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class Tax
     {
+        private decimal taxAmount;
         /// <summary>
         /// Returns the amount of the tax (Percent * BasisAmount)
         /// 
@@ -37,8 +38,9 @@ namespace s2industries.ZUGFeRD
         {
             get
             {
-                return System.Math.Round(0.01m * this.Percent * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
+                return taxAmount == 0 ? System.Math.Round(0.01m * this.Percent * this.BasisAmount, 2, MidpointRounding.AwayFromZero) : taxAmount;
             }
+            set { taxAmount = value; }
         }
 
         /// <summary>
