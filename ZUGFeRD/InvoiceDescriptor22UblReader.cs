@@ -502,6 +502,9 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
+            //Read IncludedReferencedProducts
+            //TODO:
+
             // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument", nsmgr) != null)
             //{
             //  item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
