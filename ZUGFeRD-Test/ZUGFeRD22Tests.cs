@@ -48,16 +48,19 @@ namespace ZUGFeRD_Test
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
             s.Close();
-            
-            if(desc.TradeLineItems.Any())
+
+            desc.TradeLineItems.Clear();
+
+            TradeLineItem tradeLineItem = new TradeLineItem("line-001")
             {
-                desc.TradeLineItems[0].IncludedItems.Add(new IncludedItem
-                {
-                    Name = "Test",
-                    UnitQuantity = 1,
-                    UnitCode = QuantityCodes.C62
-                });
-            }
+                BilledQuantity = 10.0m, 
+                TaxPercent = 19.0m,
+                UnitCode = QuantityCodes.C62
+            };
+            desc.TradeLineItems.Add(tradeLineItem);
+
+            desc.TradeLineItems[0].AddIncludedItem("Test", 1, QuantityCodes.C62);
+            desc.TradeLineItems[0].AddIncludedItem("Test2");
 
             MemoryStream ms = new MemoryStream();
 
@@ -66,11 +69,14 @@ namespace ZUGFeRD_Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 6);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems.Count, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems.Count, 2);
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].Name, "Test");
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].UnitQuantity, 1);
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].UnitCode, QuantityCodes.C62);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[1].Name, "Test2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[1].UnitQuantity.HasValue, false);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[1].UnitCode, null);
         }
 
         [TestMethod]

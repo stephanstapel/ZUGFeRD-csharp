@@ -425,7 +425,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
-                _writeIncludedItems(Writer, tradeLineItem.IncludedItems);
+                _writeIncludedReferencedProducts(Writer, tradeLineItem.IncludedReferencedProducts);
                 _WriteCommodityClassification(Writer, tradeLineItem.GetDesignatedProductClassifications());
 
                 //[UBL-SR-48] - Invoice lines shall have one and only one classified tax category.
@@ -772,11 +772,11 @@ namespace s2industries.ZUGFeRD
             }
         } // !_writeOptionalParty()
 
-        private void _writeIncludedItems(ProfileAwareXmlTextWriter writer, List<IncludedItem> includedItems)
+        private void _writeIncludedReferencedProducts(ProfileAwareXmlTextWriter writer, List<IncludedReferencedProduct> includedReferencedProducts)
         {
-            if(includedItems.Count > 0)
+            if(includedReferencedProducts.Count > 0)
             {
-                foreach(var item in includedItems)
+                foreach(var item in includedReferencedProducts)
                 {
                     //TODO: 
                 }

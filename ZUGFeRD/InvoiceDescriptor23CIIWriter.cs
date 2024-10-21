@@ -106,7 +106,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext)
             Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
                                                                                                                        //ToDo: LanguageID      //Sprachkennzeichen
-                                                                                                                       //ToDo: IncludedNote    //Freitext zur Rechnung
+                                                                                                                       //ToDo: ItemNote    //Freitext zur Rechnung
             if (this.Descriptor.InvoiceDate.HasValue)
             {
                 Writer.WriteStartElement("ram", "IssueDateTime");
@@ -179,16 +179,16 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if (tradeLineItem.IncludedItems != null && tradeLineItem.IncludedItems.Any())
+                if (tradeLineItem.IncludedReferencedProducts != null && tradeLineItem.IncludedReferencedProducts.Any())
                 {
-                    foreach (var includedItem in tradeLineItem.IncludedItems)
+                    foreach (var includedItem in tradeLineItem.IncludedReferencedProducts)
                     {
                         Writer.WriteStartElement("ram", "IncludedReferencedProduct");
                         Writer.WriteOptionalElementString("ram", "Name", includedItem.Name);
 
                         if(includedItem.UnitQuantity.HasValue)
                         {
-                            _writeElementWithAttributeWithPrefix(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
+                            _writeElementWithAttributeWithPrefix(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.Value.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
                         }
                         Writer.WriteEndElement(); // !ram:IncludedReferencedProduct
                     }

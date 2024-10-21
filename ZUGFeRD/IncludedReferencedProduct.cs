@@ -25,7 +25,7 @@ namespace s2industries.ZUGFeRD
     /// <summary>
     /// An included Item referenced from this trade product.
     /// </summary>
-    public class IncludedItem
+    public class IncludedReferencedProduct
     {
         /// <summary>
         /// Name of Included Item
@@ -46,6 +46,6 @@ namespace s2industries.ZUGFeRD
         /// 
         /// BT-X-20-1
         /// </summary>
-        public QuantityCodes UnitCode { get; set; }
+        public QuantityCodes? UnitCode { get; set; }
     }
 }

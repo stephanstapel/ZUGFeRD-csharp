@@ -69,11 +69,15 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Included amount
+        /// 
+        /// BT-149
         /// </summary>
         public decimal? UnitQuantity { get; set; }
 
         /// <summary>
         /// Invoiced quantity
+        /// 
+        /// BT-129
         /// </summary>
         public decimal BilledQuantity { get; set; }
 
@@ -118,11 +122,15 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// net unit price of the item
+        /// 
+        /// BT-146
         /// </summary>
         public decimal? NetUnitPrice { get; set; }
 
         /// <summary>
         /// gross unit price of the item
+        /// 
+        /// BT-148
         /// </summary>
         public decimal? GrossUnitPrice { get; set; }
 
@@ -191,7 +199,7 @@ namespace s2industries.ZUGFeRD
         /// 
         /// BG-X-1
         /// </summary>
-        public List<IncludedItem> IncludedItems { get; set; } = new List<IncludedItem>();
+        public List<IncludedReferencedProduct> IncludedReferencedProducts { get; internal set; } = new List<IncludedReferencedProduct>();
 
         /// <summary>
         /// Additional product information
@@ -347,18 +355,27 @@ namespace s2industries.ZUGFeRD
             });
         } // !AddAdditionalReferencedDocument()
 
+        public void AddIncludedReferencedProduct(string name, decimal? unitQuantity = null, QuantityCodes? quantityCodes = null)
+        {
+            this.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
+            {
+                Name = name,
+                UnitQuantity = unitQuantity,
+                UnitCode = quantityCodes
+            });
+        }
 
-		/// <summary>
-		/// Add an additional reference document
-		/// </summary>
-		/// <param name="id">Document number such as delivery note no or credit memo no</param>
-		/// <param name="typeCode"></param>
-		/// <param name="issueDateTime">Document Date</param>        
-		/// <param name="name"></param>
-		/// <param name="referenceTypeCode">Type of the referenced document</param>
-		/// <param name="attachmentBinaryObject"></param>
-		/// <param name="filename"></param>
-		public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        /// <summary>
+        /// Add an additional reference document
+        /// </summary>
+        /// <param name="id">Document number such as delivery note no or credit memo no</param>
+        /// <param name="typeCode"></param>
+        /// <param name="issueDateTime">Document Date</param>        
+        /// <param name="name"></param>
+        /// <param name="referenceTypeCode">Type of the referenced document</param>
+        /// <param name="attachmentBinaryObject"></param>
+        /// <param name="filename"></param>
+        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
 		{
 			this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
 			{

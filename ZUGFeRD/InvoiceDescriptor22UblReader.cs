@@ -502,7 +502,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            //Read IncludedItems
+            //Read IncludedReferencedProducts
             //TODO:
 
             // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument", nsmgr) != null)

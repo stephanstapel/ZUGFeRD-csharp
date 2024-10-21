@@ -168,16 +168,16 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if (tradeLineItem.IncludedItems != null && tradeLineItem.IncludedItems.Any())
+                if (tradeLineItem.IncludedReferencedProducts != null && tradeLineItem.IncludedReferencedProducts.Any())
                 {
-                    foreach (var includedItem in tradeLineItem.IncludedItems)
+                    foreach (var includedItem in tradeLineItem.IncludedReferencedProducts)
                     {
                         Writer.WriteStartElement("ram", "IncludedReferencedProduct");
                         Writer.WriteOptionalElementString("ram", "Name", includedItem.Name);
 
                         if (includedItem.UnitQuantity.HasValue)
                         {
-                            _writeElementWithAttribute(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
+                            _writeElementWithAttribute(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.Value.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
                         }
                         Writer.WriteEndElement(); // !ram:IncludedReferencedProduct
                     }
