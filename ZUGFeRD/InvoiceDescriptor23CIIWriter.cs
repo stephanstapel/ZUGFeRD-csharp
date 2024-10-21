@@ -106,7 +106,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext)
             Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
                                                                                                                        //ToDo: LanguageID      //Sprachkennzeichen
-                                                                                                                       //ToDo: ItemNote    //Freitext zur Rechnung
+                                                                                                                       //ToDo: IncludedNote    //Freitext zur Rechnung
             if (this.Descriptor.InvoiceDate.HasValue)
             {
                 Writer.WriteStartElement("ram", "IssueDateTime");

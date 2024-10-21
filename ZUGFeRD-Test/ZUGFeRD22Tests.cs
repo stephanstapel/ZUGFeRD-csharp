@@ -51,16 +51,19 @@ namespace ZUGFeRD_Test
 
             desc.TradeLineItems.Clear();
 
-            TradeLineItem tradeLineItem = new TradeLineItem("line-001")
-            {
-                BilledQuantity = 10.0m, 
-                TaxPercent = 19.0m,
-                UnitCode = QuantityCodes.C62
-            };
-            desc.TradeLineItems.Add(tradeLineItem);
+            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+                lineID: "1",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
 
-            desc.TradeLineItems[0].AddIncludedItem("Test", 1, QuantityCodes.C62);
-            desc.TradeLineItems[0].AddIncludedItem("Test2");
+            tradeLineItem.AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62);
+            tradeLineItem.AddIncludedReferencedProduct("Test2");
 
             MemoryStream ms = new MemoryStream();
 
@@ -70,13 +73,13 @@ namespace ZUGFeRD_Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 1);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems.Count, 2);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].Name, "Test");
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].UnitQuantity, 1);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[0].UnitCode, QuantityCodes.C62);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[1].Name, "Test2");
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[1].UnitQuantity.HasValue, false);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedItems[1].UnitCode, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts.Count, 2);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].Name, "Test");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].UnitQuantity, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].UnitCode, QuantityCodes.C62);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].Name, "Test2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitQuantity.HasValue, false);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitCode, null);
         }
 
         [TestMethod]
