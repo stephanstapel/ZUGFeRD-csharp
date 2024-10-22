@@ -113,7 +113,7 @@ namespace s2industries.ZUGFeRD
                 { "urn:factur-x.eu:1p0:minimum", Profile.Minimum },
                 { "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", Profile.Basic },
                 { "urn:factur-x.eu:1p0:basicwl", Profile.BasicWL },
-                { "urn:cen.eu:en16931:2017", Profile.Comfort },
+                // { "urn:cen.eu:en16931:2017", Profile.Comfort }, already inserted for v2. In case we remove v2, this line should be uncommented
                 { "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", Profile.Extended },
                 { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2", Profile.XRechnung1 },
                 { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0", Profile.XRechnung },
