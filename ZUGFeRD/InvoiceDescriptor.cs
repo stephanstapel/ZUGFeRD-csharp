@@ -898,6 +898,16 @@ namespace s2industries.ZUGFeRD
             });
         }
 
+
+        /// <summary>
+        /// Removes all existing trade payment terms
+        /// </summary>
+        public void ClearTradePaymentTerms()
+        {
+            _PaymentTerms.Clear();
+        } // !ClearTradePaymentTerms()
+
+
         /// <summary>
         /// Returns all existing trade payment terms.
         /// </summary>
