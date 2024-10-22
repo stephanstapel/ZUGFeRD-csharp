@@ -38,6 +38,50 @@ namespace ZUGFeRD_Test
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
+
+        [TestMethod]
+        public void TestExtendedInvoiceWithIncludedItems()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+
+            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+                lineID: "1",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            tradeLineItem.AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62);
+            tradeLineItem.AddIncludedReferencedProduct("Test2");
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts.Count, 2);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].Name, "Test");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].UnitQuantity, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].UnitCode, QuantityCodes.C62);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].Name, "Test2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitQuantity.HasValue, false);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitCode, null);
+        }
+
         [TestMethod]
         public void TestReferenceEReportingFacturXInvoice()
         {
