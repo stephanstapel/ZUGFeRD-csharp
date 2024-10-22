@@ -326,23 +326,24 @@ namespace s2industries.ZUGFeRD
             // PaymentTerms (optional)
             if (this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)).ToList().Count > 0)
             {
-                Writer.WriteStartElement("cac", "PaymentTerms");                
-                var sbPaymentNotes = new StringBuilder();
-                foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)))
-                {
-                    sbPaymentNotes.AppendLine(paymentTerms.Description);
-                }
+                Writer.WriteStartElement("cac", "PaymentTerms");
 
-                if (!String.IsNullOrWhiteSpace(sbPaymentNotes.ToString()))
+                if (this.Descriptor.GetTradePaymentTerms().Any(x => !string.IsNullOrWhiteSpace(x.Description)))
                 {
                     Writer.WriteStartElement("cbc", "Note");
+
+                    foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms().Where(x => !string.IsNullOrEmpty(x.Description)))
+                    {
+                        Writer.WriteRawString(Environment.NewLine);
+                        Writer.WriteRawIndention();
+                        Writer.WriteValue(paymentTerms.Description);                                             
+                    }
+
                     Writer.WriteRawString(Environment.NewLine);
-                    Writer.WriteRawIndention();
-                    Writer.WriteValue(sbPaymentNotes.ToString());
                     Writer.WriteEndElement(); // !Note()
                 }
-                //Writer.WriteOptionalElementString("cbc", "Note", sbPaymentNotes.ToString().TrimEnd());
-                Writer.WriteEndElement();
+                
+                Writer.WriteEndElement(); // !PaymentTerms
             }
 
             // Tax Total

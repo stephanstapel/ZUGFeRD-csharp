@@ -2574,7 +2574,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             // Assert.AreEqual(10, paymentTerm.DueDays);
             Assert.AreEqual(3m, paymentTerm.Percentage);
-        }
+        } // !TestPaymentTermsMultiCardinality()
+
 
         [TestMethod]
         public void TestPaymentTermsSingleCardinality()
@@ -2610,7 +2611,8 @@ namespace ZUGFeRD_Test
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018{Environment.NewLine}3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-        }
+        } // !TestPaymentTermsSingleCardinality()
+
 
         [TestMethod]
         public void TestPaymentTermsSingleCardinalityStructured()
@@ -2649,6 +2651,6 @@ namespace ZUGFeRD_Test
             //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
             //Assert.AreEqual(10, paymentTerm.DueDays);
             //Assert.AreEqual(3m, paymentTerm.Percentage);
-        }
+        } // !TestPaymentTermsSingleCardinalityStructured()
     }
 }

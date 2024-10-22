@@ -18,6 +18,7 @@
  */
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
+using System.IO;
 using System.Text;
 
 namespace ZUGFeRD_Test
@@ -207,5 +208,153 @@ namespace ZUGFeRD_Test
             Assert.IsFalse(content.Contains("<cbc:ID>FC</cbc:ID>", StringComparison.OrdinalIgnoreCase));
             Assert.IsTrue(content.Contains("<cbc:ID>ID</cbc:ID>", StringComparison.OrdinalIgnoreCase));
         } // !TestInvoiceCreation()
+
+
+        /// <summary>
+        /// We expect this format:
+        ///   <cac:PaymentTerms>
+        ///     <cbc:Note>
+        ///       #SKONTO#TAGE#14#PROZENT=0.00#BASISBETRAG=123.45#
+        ///     </cbc:Note>
+        ///   </cac:PaymentTerms>
+        /// </summary>
+        [TestMethod]
+        public void TestSingleSkontoForCorrectIndention()
+        {
+            var desc = InvoiceProvider.CreateInvoice();
+
+            desc.ClearTradePaymentTerms();
+            desc.AddTradePaymentTerms("#SKONTO#TAGE#14#PROZENT=0.00#BASISBETRAG=123.45#");
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            var lines = new StreamReader(ms).ReadToEnd().Split(new[] { System.Environment.NewLine }, StringSplitOptions.None).ToList();
+
+            bool insidePaymentTerms = false;
+            bool insideCbcNote = false;
+            int noteIndentation = -1;
+
+            foreach (var line in lines)
+            {
+                // Trim the line to remove leading/trailing whitespace
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.StartsWith("<cac:PaymentTerms>", StringComparison.OrdinalIgnoreCase))
+                {
+                    insidePaymentTerms = true;
+                    continue;
+                }
+                else if (!insidePaymentTerms)
+                {
+                    continue;
+                }
+
+                // Check if we found the opening <cbc:Note>
+                if (!insideCbcNote && trimmedLine.StartsWith("<cbc:Note>", StringComparison.OrdinalIgnoreCase))
+                {
+                    insideCbcNote = true;
+                    noteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.IsTrue(noteIndentation >= 0, "Indentation for <cbc:Note> should be non-negative.");
+                    continue;
+                }
+
+                // Check if we found the closing </cbc:Note>
+                if (insideCbcNote && trimmedLine.StartsWith("</cbc:Note>", StringComparison.OrdinalIgnoreCase))
+                {
+                    int endNoteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.AreEqual(noteIndentation, endNoteIndentation); // Ensure closing tag matches indentation
+                    insideCbcNote = false;
+                    break;
+                }
+
+                // After finding <cbc:Note>, check for indentation of the next line
+                if (insideCbcNote)
+                {
+                    int indention = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.AreEqual(noteIndentation + 2, indention); // Ensure next line is indented one more
+                    continue;
+                }                
+            }
+
+            // Assert that we entered and exited the <cbc:Note> block
+            Assert.IsFalse(insideCbcNote, "We should have exited the <cbc:Note> block.");
+        } // !TestSingleSkontoForCorrectIndention()
+
+
+        /// <summary>
+        /// We expect this format:
+        ///   <cac:PaymentTerms>
+        ///     <cbc:Note>
+        ///       #SKONTO#TAGE#14#PROZENT=5.00#BASISBETRAG=123.45#
+        ///       #SKONTO#TAGE#21#PROZENT=1.00#BASISBETRAG=123.45#
+        ///     </cbc:Note>
+        ///   </cac:PaymentTerms>
+        /// </summary>
+        [TestMethod]
+        public void TestMultiSkontoForCorrectIndention()
+        {
+            var desc = InvoiceProvider.CreateInvoice();
+
+            desc.ClearTradePaymentTerms();
+            desc.AddTradePaymentTerms("#SKONTO#TAGE#14#PROZENT=5.00#BASISBETRAG=123.45#");
+            desc.AddTradePaymentTerms("#SKONTO#TAGE#21#PROZENT=1.00#BASISBETRAG=123.45#");
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            var lines = new StreamReader(ms).ReadToEnd().Split(new[] { System.Environment.NewLine }, StringSplitOptions.None).ToList();
+
+            bool insidePaymentTerms = false;
+            bool insideCbcNote = false;
+            int noteIndentation = -1;
+
+            foreach (var line in lines)
+            {
+                // Trim the line to remove leading/trailing whitespace
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.StartsWith("<cac:PaymentTerms>", StringComparison.OrdinalIgnoreCase))
+                {
+                    insidePaymentTerms = true;
+                    continue;
+                }
+                else if (!insidePaymentTerms)
+                {
+                    continue;
+                }
+
+                // Check if we found the opening <cbc:Note>
+                if (!insideCbcNote && trimmedLine.StartsWith("<cbc:Note>", StringComparison.OrdinalIgnoreCase))
+                {
+                    insideCbcNote = true;
+                    noteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.IsTrue(noteIndentation >= 0, "Indentation for <cbc:Note> should be non-negative.");
+                    continue;
+                }
+
+                // Check if we found the closing </cbc:Note>
+                if (insideCbcNote && trimmedLine.StartsWith("</cbc:Note>", StringComparison.OrdinalIgnoreCase))
+                {
+                    int endNoteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.AreEqual(noteIndentation, endNoteIndentation); // Ensure closing tag matches indentation
+                    insideCbcNote = false;
+                    break;
+                }
+
+                // After finding <cbc:Note>, check for indentation of the next line
+                if (insideCbcNote)
+                {
+                    int indention = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.AreEqual(noteIndentation + 2, indention); // Ensure next line is indented one more
+                    continue;
+                }                
+            }
+
+            // Assert that we entered and exited the <cbc:Note> block
+            Assert.IsFalse(insideCbcNote, "We should have exited the <cbc:Note> block.");
+        } // !TestMultiSkontoForCorrectIndention()
     }
 }

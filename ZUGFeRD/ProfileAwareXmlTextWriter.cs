@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Xml;
@@ -246,6 +247,9 @@ namespace s2industries.ZUGFeRD
 		} // !WriteRawString()
 
 
+        /// <summary>
+        /// Writes the raw indention using IndentChars according to the current xml tree position.
+        /// </summary>
         public void WriteRawIndention(Profile profile = Profile.Unknown)
         {
             if (this.TextWriter == null)
