@@ -1932,8 +1932,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
 
             Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-            Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount); // optional
-            Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
+            Assert.AreEqual(0m, loadedInvoice.ChargeTotalAmount); // mandatory, even if 0!
+            Assert.AreEqual(0m, loadedInvoice.AllowanceTotalAmount); // mandatory, even if 0!
             Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
             Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
             Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
