@@ -30,7 +30,8 @@ namespace ZUGFeRD_Test
 		internal InvoiceDescriptor CreateInvoice()
 		{
 			InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2018, 03, 05), CurrencyCodes.EUR);
-			desc.Name = "WARENRECHNUNG";
+			desc.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
+            desc.Name = "WARENRECHNUNG";
 			desc.AddNote("Rechnung gemäß Bestellung vom 01.03.2018.");
 			desc.AddNote(note: "Lieferant GmbH\r\nLieferantenstraße 20\r\n80333 München\r\nDeutschland\r\nGeschäftsführer: Hans Muster\r\nHandelsregisternummer: H A 123\r\n",
 						 subjectCode: SubjectCodes.REG
