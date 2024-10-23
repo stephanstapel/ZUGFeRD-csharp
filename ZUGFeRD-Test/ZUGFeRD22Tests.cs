@@ -38,6 +38,50 @@ namespace ZUGFeRD_Test
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
+
+        [TestMethod]
+        public void TestExtendedInvoiceWithIncludedItems()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+
+            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+                lineID: "1",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            tradeLineItem.AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62);
+            tradeLineItem.AddIncludedReferencedProduct("Test2");
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts.Count, 2);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].Name, "Test");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].UnitQuantity, 1);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[0].UnitCode, QuantityCodes.C62);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].Name, "Test2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitQuantity.HasValue, false);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitCode, null);
+        }
+
         [TestMethod]
         public void TestReferenceEReportingFacturXInvoice()
         {
@@ -1888,8 +1932,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
 
             Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-            Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount); // optional
-            Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
+            Assert.AreEqual(0m, loadedInvoice.ChargeTotalAmount); // mandatory, even if 0!
+            Assert.AreEqual(0m, loadedInvoice.AllowanceTotalAmount); // mandatory, even if 0!
             Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
             Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
             Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
@@ -2530,7 +2574,8 @@ namespace ZUGFeRD_Test
             Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             // Assert.AreEqual(10, paymentTerm.DueDays);
             Assert.AreEqual(3m, paymentTerm.Percentage);
-        }
+        } // !TestPaymentTermsMultiCardinality()
+
 
         [TestMethod]
         public void TestPaymentTermsSingleCardinality()
@@ -2566,7 +2611,8 @@ namespace ZUGFeRD_Test
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018{Environment.NewLine}3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-        }
+        } // !TestPaymentTermsSingleCardinality()
+
 
         [TestMethod]
         public void TestPaymentTermsSingleCardinalityStructured()
@@ -2605,6 +2651,6 @@ namespace ZUGFeRD_Test
             //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
             //Assert.AreEqual(10, paymentTerm.DueDays);
             //Assert.AreEqual(3m, paymentTerm.Percentage);
-        }
+        } // !TestPaymentTermsSingleCardinalityStructured()
     }
 }

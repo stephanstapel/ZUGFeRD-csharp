@@ -52,7 +52,7 @@ namespace s2industries.ZUGFeRD
                 return String.Empty;
             }
 
-            return Math.Round(value.Value, numDecimals).ToString($"F{numDecimals}", CultureInfo.InvariantCulture);
+            return Math.Round(value.Value, numDecimals, MidpointRounding.AwayFromZero).ToString($"F{numDecimals}", CultureInfo.InvariantCulture);
         } // !_formatDecimal()
 
 

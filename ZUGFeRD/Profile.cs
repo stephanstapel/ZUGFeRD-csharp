@@ -89,42 +89,49 @@ namespace s2industries.ZUGFeRD
     {
         public static Profile FromString(this Profile _, string s)
         {
-            switch (s)
+            var profileMap = new Dictionary<string, Profile>(StringComparer.OrdinalIgnoreCase)
             {
                 // v1
-                case "urn:ferd:invoice:1.0:basic": return Profile.Basic;
-                case "urn:ferd:invoice:rc:basic": return Profile.Basic;
-                case "urn:ferd:CrossIndustryDocument:invoice:1p0:basic": return Profile.Basic;
-                case "urn:ferd:invoice:1.0:comfort": return Profile.Comfort;
-                case "urn:ferd:invoice:rc:comfort": return Profile.Comfort;
-                case "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort": return Profile.Comfort;
-                case "urn:ferd:CrossIndustryDocument:invoice:1p0:E": return Profile.Comfort;
-                case "urn:ferd:invoice:1.0:extended": return Profile.Extended;
-                case "urn:ferd:invoice:rc:extended": return Profile.Extended;
-                case "urn:ferd:CrossIndustryDocument:invoice:1p0:extended": return Profile.Extended;
+                { "urn:ferd:invoice:1.0:basic", Profile.Basic },
+                { "urn:ferd:invoice:rc:basic", Profile.Basic },
+                { "urn:ferd:CrossIndustryDocument:invoice:1p0:basic", Profile.Basic },
+                { "urn:ferd:invoice:1.0:comfort", Profile.Comfort },
+                { "urn:ferd:invoice:rc:comfort", Profile.Comfort },
+                { "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort", Profile.Comfort },
+                { "urn:ferd:CrossIndustryDocument:invoice:1p0:E", Profile.Comfort },
+                { "urn:ferd:invoice:1.0:extended", Profile.Extended },
+                { "urn:ferd:invoice:rc:extended", Profile.Extended },
+                { "urn:ferd:CrossIndustryDocument:invoice:1p0:extended", Profile.Extended },
 
                 // v2
-                case "urn:zugferd.de:2p0:minimum": return Profile.Minimum;
-                case "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic": return Profile.Basic;
-                case "urn: cen.eu:en16931: 2017": return Profile.Comfort; // Spaces inserted to prevent clash with v2.1
-                case "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended": return Profile.Extended;
+                { "urn:zugferd.de:2p0:minimum", Profile.Minimum },
+                { "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", Profile.Basic },
+                { "urn:cen.eu:en16931:2017", Profile.Comfort },
+                { "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", Profile.Extended },
 
                 // v2.1
-                case "urn:factur-x.eu:1p0:minimum": return Profile.Minimum;
-                case "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic": return Profile.Basic;
-                case "urn:factur-x.eu:1p0:basicwl": return Profile.BasicWL;
-                case "urn:cen.eu:en16931:2017": return Profile.Comfort;
-                case "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended": return Profile.Extended;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2": return Profile.XRechnung1;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0": return Profile.XRechnung;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1": return Profile.XRechnung;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2": return Profile.XRechnung;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3": return Profile.XRechnung;
-                case "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0": return Profile.XRechnung;
-                case "urn.cpro.gouv.fr:1p0:ereporting" : return Profile.EReporting;
-            }
+                { "urn:factur-x.eu:1p0:minimum", Profile.Minimum },
+                { "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", Profile.Basic },
+                { "urn:factur-x.eu:1p0:basicwl", Profile.BasicWL },
+                // { "urn:cen.eu:en16931:2017", Profile.Comfort }, already inserted for v2. In case we remove v2, this line should be uncommented
+                { "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", Profile.Extended },
+                { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2", Profile.XRechnung1 },
+                { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0", Profile.XRechnung },
+                { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1", Profile.XRechnung },
+                { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2", Profile.XRechnung },
+                { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3", Profile.XRechnung },
+                { "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0", Profile.XRechnung },
+                { "urn.cpro.gouv.fr:1p0:ereporting", Profile.EReporting }
+            };
 
-            return Profile.Unknown;
+            if (profileMap.TryGetValue(s, out Profile profile))
+            {
+                return profile;
+            }
+            else
+            {
+                return Profile.Unknown;
+            }
         } // !FromString()
 
 
