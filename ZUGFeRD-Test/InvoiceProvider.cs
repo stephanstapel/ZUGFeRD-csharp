@@ -71,6 +71,7 @@ namespace ZUGFeRD_Test
 						   globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
 						   legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH")
 						   );
+			desc.SetSellerElectronicAddress("DE123456789", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
 			desc.SetSellerContact(name: "Max Mustermann",
 								  orgunit: "Muster-Einkauf",
 								  emailAddress: "Max@Mustermann.de",
@@ -86,6 +87,7 @@ namespace ZUGFeRD_Test
 						  country: CountryCodes.DE,
 						  id: "GE2020211"
 						  );
+			desc.SetBuyerElectronicAddress("DE2020211", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
 
 			desc.ActualDeliveryDate = new DateTime(2018, 03, 05);
 			desc.SetPaymentMeans(PaymentMeansTypeCodes.SEPACreditTransfer, "Zahlung per SEPA Überweisung.");
