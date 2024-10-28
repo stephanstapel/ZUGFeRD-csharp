@@ -2079,8 +2079,8 @@ namespace ZUGFeRD_Test
             desc.AddTradeLineItem(name: "Korrektur/Stornierung Bemessungsgrundlage der Umsatzsteuer auf Altteil",
                                   unitCode: QuantityCodes.C62,
                                   unitQuantity: 1,
-                                  billedQuantity: 1,
-                                  netUnitPrice: -100,
+                                  billedQuantity: -1,
+                                  netUnitPrice: 100,
                                   taxType: TaxTypes.VAT,
                                   categoryCode: TaxCategoryCodes.Z,
                                   taxPercent: 0);
