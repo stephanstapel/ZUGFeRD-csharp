@@ -30,16 +30,21 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>14.1.0: Correct reading of test indicator, allow to work with both qdt and udt data types. Full overview: https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/14.1.0
-14.0.0: Lots of changes, for breaking changes see https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/14.0.0
-13.0.0: Breaking changes on item level, various fixes
-12.8.0: Added more targets
-12.7.0: Support for EReporting, bugfixes
-12.6.0: XRechnung 3 enthancements, refactoring
-12.5.0: various bugfixes
-12.4.0: additional ElectronicAddressSchemeIdentifiers
-12.3.1: bug fix for all party types
-12.3.0: enhanced standard conformance for all party types</PackageReleaseNotes>
+    <PackageReleaseNotes>15.0.0
+** General **
+This is the biggest release of the component since supporting multiple ZUGFeRD/ XRechnung versions. Big progress on UBL handling, enhanced validator conformance. Thanks to all who contributed.
+ZUGFeRD-csharp is largely based on spare-time work. 
+Please sponsor the development of ZUGFeRD-csharp: https://github.com/sponsors/stephanstapel
+
+** Breaking Changes **
+* Support for ZUGFeRD 2.3, dropping ZUGFeRD 2.2
+* Better support for DesignatedProductClassification
+* Support for multiple invoice referenced documents
+* Parameter reordering of AdditionalReferencedDocuments
+* AllowanceChargeBasisAmount is optional
+
+Many more changes:
+https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/15.0.0</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>ZUGFeRD-csharp</PackageId>
     <PackageReadmeFile>README.md</PackageReadmeFile>
