@@ -638,10 +638,10 @@ namespace s2industries.ZUGFeRD
                     writer.WriteAttributeString("schemeID", "SEPA");
                     writer.WriteValue(this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
                     writer.WriteEndElement();//!ID
-
-
                     writer.WriteEndElement();//!PartyIdentification
                 }
+
+                writer.WriteOptionalElementString("cac", "PartyName", party.Name);
 
                 writer.WriteStartElement("cac", "PostalAddress");
                 Writer.WriteOptionalElementString("cbc", "StreetName", party.Street);
@@ -651,12 +651,10 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("cbc", "CountrySubentity", party.CountrySubdivisionName);
 
                 writer.WriteStartElement("cac", "Country");
-
                 if (party.Country != CountryCodes.Unknown)
                 {
                     Writer.WriteElementString("cbc", "IdentificationCode", party.Country.ToString());
                 }
-
                 writer.WriteEndElement(); //!Country
 
                 writer.WriteEndElement(); //!PostalTradeAddress
@@ -664,22 +662,16 @@ namespace s2industries.ZUGFeRD
 
                 foreach (var tax in taxRegistrations)
                 {
-                    writer.WriteStartElement("cac", "PartyTaxScheme");
-
+                    Writer.WriteStartElement("cac", "PartyTaxScheme");
                     Writer.WriteElementString("cbc", "CompanyID", tax.No);
-
-                    writer.WriteStartElement("cac", "TaxScheme");
-
+                    Writer.WriteStartElement("cac", "TaxScheme");
                     Writer.WriteElementString("cbc", "ID", UBLTaxRegistrationSchemeIDMapper.Map(tax.SchemeID));
-
-                    writer.WriteEndElement(); //!TaxScheme
-
-                    writer.WriteEndElement(); //!PartyTaxScheme
+                    Writer.WriteEndElement(); //!TaxScheme
+                    Writer.WriteEndElement(); //!PartyTaxScheme
                 }
 
 
                 writer.WriteStartElement("cac", "PartyLegalEntity");
-
                 writer.WriteElementString("cbc", "RegistrationName", party.Name);
 
                 if (party.GlobalID != null)
@@ -693,12 +685,10 @@ namespace s2industries.ZUGFeRD
                 if (contact != null)
                 {
                     writer.WriteStartElement("cac", "Contact");
-
                     writer.WriteOptionalElementString("cbc", "Name", contact.Name);
                     writer.WriteOptionalElementString("cbc", "Telephone", contact.PhoneNo);
                     writer.WriteOptionalElementString("cbc", "ElectronicMail", contact.EmailAddress);
-
-                    writer.WriteEndElement();
+                    writer.WriteEndElement(); // !Contact
                 }
 
                 writer.WriteEndElement(); //!Party
