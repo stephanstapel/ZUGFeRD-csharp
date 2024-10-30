@@ -63,7 +63,7 @@ namespace s2industries.ZUGFeRD
         {
             this.TextWriter = XmlWriter.Create(w, new XmlWriterSettings()
             {
-                Encoding = new UTF8Encoding(false),
+                Encoding = new UTF8Encoding(false, true),
                 Indent = true
             });
             this.CurrentProfile = profile;
