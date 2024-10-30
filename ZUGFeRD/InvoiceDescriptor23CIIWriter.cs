@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
-
 
 namespace s2industries.ZUGFeRD
 {
@@ -52,7 +50,7 @@ namespace s2industries.ZUGFeRD
             long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;
-            this.Writer = new ProfileAwareXmlTextWriter(stream, Encoding.UTF8, descriptor.Profile);
+            this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
             this.Writer.SetNamespaces(new Dictionary<string, string>()
             {
                 { "a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
