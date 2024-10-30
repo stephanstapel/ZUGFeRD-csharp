@@ -131,7 +131,8 @@ namespace s2industries.ZUGFeRD
         /// is an Invoice
         /// Old ZUGFeRD variant, use
         /// Corrected Invoice (384) instead
-        /// </summary>
+        /// </summary>        
+        [Obsolete("Use 'Correction' instead")]
         CorrectionOld = 1380,
         
         /// <summary>
