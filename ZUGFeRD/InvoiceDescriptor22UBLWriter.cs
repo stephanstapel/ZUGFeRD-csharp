@@ -246,8 +246,16 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
-            // PaymentMeans
+            if (this.Descriptor.ActualDeliveryDate.HasValue)
+            {
+                Writer.WriteStartElement("cac", "Delivery");
+                Writer.WriteStartElement("cbc", "ActualDeliveryDate");
+                Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate.Value, false, true));
+                Writer.WriteEndElement(); // !ActualDeliveryDate
+                Writer.WriteEndElement(); // !Delivery
+            }
 
+            // PaymentMeans
             if (this.Descriptor.PaymentMeans != null)
             {
 
@@ -641,7 +649,14 @@ namespace s2industries.ZUGFeRD
                     writer.WriteEndElement();//!PartyIdentification
                 }
 
-                writer.WriteOptionalElementString("cac", "PartyName", party.Name);
+                if (!string.IsNullOrWhiteSpace(party.Name))
+                {
+                    writer.WriteStartElement("cac", "PartyName");
+                    writer.WriteStartElement("cbc", "Name");
+                    writer.WriteValue(party.Name);
+                    writer.WriteEndElement();//!Name
+                    writer.WriteEndElement();//!PartyName
+                }
 
                 writer.WriteStartElement("cac", "PostalAddress");
                 Writer.WriteOptionalElementString("cbc", "StreetName", party.Street);
