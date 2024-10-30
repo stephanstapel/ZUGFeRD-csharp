@@ -184,6 +184,23 @@ namespace ZUGFeRD_Test
             }
         } // !TestInvoiceWithAttachment()
 
+        [TestMethod]
+        public void TestActualDeliveryDate()
+        {
+            DateTime timestamp = new DateTime(2024,08,11);
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            desc.ActualDeliveryDate = timestamp;
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the ActualDeliveryDate
+            Assert.AreEqual(timestamp, loadedInvoice.ActualDeliveryDate);
+        } // !TestActualDeliveryDate()
 
         [TestMethod]
         public void TestTaxTypes()
