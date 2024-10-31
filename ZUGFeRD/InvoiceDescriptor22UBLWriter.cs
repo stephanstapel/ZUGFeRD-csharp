@@ -195,15 +195,62 @@ namespace s2industries.ZUGFeRD
 
 
             #region SellerTradeParty
-            //AccountingSupplierParty
+
+            // AccountingSupplierParty = PartyTypes.SellerTradeParty
             _writeOptionalParty(Writer, PartyTypes.SellerTradeParty, this.Descriptor.Seller, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration);
             #endregion
 
             #region BuyerTradeParty
-            //AccountingCustomerParty
+            //AccountingCustomerParty = PartyTypes.BuyerTradeParty
             _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
             #endregion
-            
+
+
+            // Deliery = ShipToTradeParty
+            if ((this.Descriptor.ShipTo != null) || (this.Descriptor.ActualDeliveryDate.HasValue))
+            {
+                Writer.WriteStartElement("cac", "Delivery");
+
+                if (this.Descriptor.ActualDeliveryDate.HasValue)
+                {                 
+                    Writer.WriteStartElement("cbc", "ActualDeliveryDate");
+                    Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate.Value, false, true));
+                    Writer.WriteEndElement(); // !ActualDeliveryDate                 
+                }
+
+                if (this.Descriptor.ShipTo != null)
+                {
+                    Writer.WriteStartElement("cac", "DeliveryLocation");
+                    Writer.WriteOptionalElementString("cbc", "ID", this.Descriptor.ShipTo.ID.ID);
+                    Writer.WriteStartElement("cac", "Address");
+                    Writer.WriteOptionalElementString("cbc", "StreetName", this.Descriptor.ShipTo.Street);
+                    Writer.WriteOptionalElementString("cbc", "AdditionalStreetName", this.Descriptor.ShipTo.AddressLine3);
+                    Writer.WriteOptionalElementString("cbc", "CityName", this.Descriptor.ShipTo.City);
+                    Writer.WriteOptionalElementString("cbc", "PostalZone", this.Descriptor.ShipTo.Postcode);
+                    Writer.WriteOptionalElementString("cbc", "CountrySubentity", this.Descriptor.ShipTo.CountrySubdivisionName);
+                    Writer.WriteStartElement("cac", "Country");
+                    if (this.Descriptor.ShipTo.Country != CountryCodes.Unknown)
+                    {
+                        Writer.WriteElementString("cbc", "IdentificationCode", this.Descriptor.ShipTo.Country.ToString());
+                    }
+                    Writer.WriteEndElement(); //!Country
+                    Writer.WriteEndElement(); // !Address
+                    Writer.WriteEndElement(); // !DeliveryLocation
+
+                    if (!string.IsNullOrWhiteSpace(this.Descriptor.ShipTo.Name))
+                    {
+                        Writer.WriteStartElement("cac", "DeliveryParty");
+                        Writer.WriteStartElement("cac", "PartyName");
+                        Writer.WriteStartElement("cbc", "Name");
+                        Writer.WriteValue(this.Descriptor.ShipTo.Name);
+                        Writer.WriteEndElement(); // !Name
+                        Writer.WriteEndElement(); // !PartyName
+                        Writer.WriteEndElement(); // !DeliveryParty
+                    }
+                }
+            }
+
+
             #region AllowanceCharge
             foreach (TradeAllowanceCharge tradeAllowanceCharge in descriptor.GetTradeAllowanceCharges())
             {
@@ -244,16 +291,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteEndElement(); // !AllowanceCharge()
             }
-            #endregion
-
-            if (this.Descriptor.ActualDeliveryDate.HasValue)
-            {
-                Writer.WriteStartElement("cac", "Delivery");
-                Writer.WriteStartElement("cbc", "ActualDeliveryDate");
-                Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate.Value, false, true));
-                Writer.WriteEndElement(); // !ActualDeliveryDate
-                Writer.WriteEndElement(); // !Delivery
-            }
+            #endregion            
 
             // PaymentMeans
             if (this.Descriptor.PaymentMeans != null)
@@ -547,39 +585,8 @@ namespace s2industries.ZUGFeRD
                     break;
                 case PartyTypes.ShipFromTradeParty:
                     return;
-                //case PartyTypes.ShipToTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.UltimateShipToTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.ShipFromTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.InvoiceeTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.PayeeTradeParty:
-                //    if (this.Descriptor.Profile == Profile.Minimum) { return; } // party is written for all profiles but minimum
-                //    break;
-                //case PartyTypes.SalesAgentTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.BuyerTaxRepresentativeTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.ProductEndUserTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.BuyerAgentTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.InvoicerTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
-                //case PartyTypes.PayerTradeParty:
-                //    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                //    break;
+                case PartyTypes.ShipToTradeParty: // ship to trade party/ cac:Delivery has very minimized information, thus generic _writeOptionalParty() cannot be used
+                    return;
                 default:
                     return;
             }
