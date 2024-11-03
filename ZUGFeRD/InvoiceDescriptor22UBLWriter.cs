@@ -221,7 +221,11 @@ namespace s2industries.ZUGFeRD
                 if (this.Descriptor.ShipTo != null)
                 {
                     Writer.WriteStartElement("cac", "DeliveryLocation");
-                    Writer.WriteOptionalElementString("cbc", "ID", this.Descriptor.ShipTo.ID.ID);
+
+                    if (this.Descriptor.ShipTo.ID != null) // despite this is a mandatory field, the component should not throw an exception if this is not the case
+                    {
+                        Writer.WriteOptionalElementString("cbc", "ID", this.Descriptor.ShipTo.ID.ID);
+                    }
                     Writer.WriteStartElement("cac", "Address");
                     Writer.WriteOptionalElementString("cbc", "StreetName", this.Descriptor.ShipTo.Street);
                     Writer.WriteOptionalElementString("cbc", "AdditionalStreetName", this.Descriptor.ShipTo.AddressLine3);
