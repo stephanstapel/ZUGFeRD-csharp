@@ -61,7 +61,7 @@ namespace s2industries.ZUGFeRD
             long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;
-            this.Writer = new ProfileAwareXmlTextWriter(stream, Encoding.UTF8, descriptor.Profile);
+            this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
             this.Writer.SetNamespaces(new Dictionary<string, string>()
             {
                 { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
