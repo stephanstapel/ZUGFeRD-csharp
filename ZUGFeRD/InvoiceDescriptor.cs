@@ -118,6 +118,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Information about the buyer
+        /// BG-7
         /// </summary>
         public Party Buyer { get; set; }
 
@@ -128,10 +129,24 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Contact BuyerContact { get; set; }
         public List<TaxRegistration> BuyerTaxRegistration { get; set; } = new List<TaxRegistration>();
+
+        /// <summary>
+        /// Buyer electronic address
+        /// BT-49
+        /// </summary>
         public ElectronicAddress BuyerElectronicAddress { get; set; }
+
+        /// <summary>
+        /// BG-4
+        /// </summary>
         public Party Seller { get; set; }
         public Contact SellerContact { get; set; }
         public List<TaxRegistration> SellerTaxRegistration { get; set; } = new List<TaxRegistration>();
+
+        /// <summary>
+        /// Seller electronic address
+        /// BT-34
+        /// </summary>
         public ElectronicAddress SellerElectronicAddress { get; set; }
 
         /// <summary>

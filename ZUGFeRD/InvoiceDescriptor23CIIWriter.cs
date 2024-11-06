@@ -1414,7 +1414,7 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalLegalOrganization()
 
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Profile profile, Contact contact = null, ElectronicAddress ElectronicAddress = null, List<TaxRegistration> taxRegistrations = null)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Profile profile, Contact contact = null, ElectronicAddress electronicAddress = null, List<TaxRegistration> taxRegistrations = null)
         {
             if (party == null)
             {
@@ -1512,14 +1512,14 @@ namespace s2industries.ZUGFeRD
                 writer.WriteEndElement(); // !PostalTradeAddress
             }
 
-            if (ElectronicAddress != null)
+            if (electronicAddress != null)
             {
-                if (!String.IsNullOrWhiteSpace(ElectronicAddress.Address))
+                if (!String.IsNullOrWhiteSpace(electronicAddress.Address))
                 {
                     writer.WriteStartElement("ram", "URIUniversalCommunication");
                     writer.WriteStartElement("ram", "URIID");
-                    writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.EnumToString());
-                    writer.WriteValue(ElectronicAddress.Address);
+                    writer.WriteAttributeString("schemeID", electronicAddress.ElectronicAddressSchemeID.EnumToString());
+                    writer.WriteValue(electronicAddress.Address);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                 }

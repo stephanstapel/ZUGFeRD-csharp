@@ -184,8 +184,10 @@ namespace ZUGFeRD_Test
             }
         } // !TestInvoiceWithAttachment()
 
+        
+        
         [TestMethod]
-        public void TestActualDeliveryDate()
+        public void TestActualDeliveryDateWithoutDeliveryAddress()
         {
             DateTime timestamp = new DateTime(2024,08,11);
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
@@ -200,7 +202,87 @@ namespace ZUGFeRD_Test
 
             // test the ActualDeliveryDate
             Assert.AreEqual(timestamp, loadedInvoice.ActualDeliveryDate);
-        } // !TestActualDeliveryDate()
+            Assert.IsNull(loadedInvoice.ShipTo);
+        } // !TestActualDeliveryDateWithoutDeliveryAddress()
+
+
+
+        [TestMethod]
+        public void TestActualDeliveryDateWithDeliveryAddress()
+        {
+            DateTime timestamp = new DateTime(2024, 08, 11);
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            desc.ActualDeliveryDate = timestamp;
+
+            string shipToID = "1234";
+            string shipToName = "Test ShipTo Name";
+            CountryCodes shipToCountry = CountryCodes.DE;
+
+            desc.ShipTo = new Party()
+            {
+                ID = new GlobalID()
+                {
+                    ID = shipToID
+                },
+                Name = shipToName,
+                Country = shipToCountry
+            };
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the ActualDeliveryDate
+            Assert.AreEqual(timestamp, loadedInvoice.ActualDeliveryDate);
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.IsNotNull(loadedInvoice.ShipTo.ID);
+            Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, shipToID);
+            Assert.AreEqual(loadedInvoice.ShipTo.Name, shipToName);
+            Assert.AreEqual(loadedInvoice.ShipTo.Country, shipToCountry);
+        } // !TestActualDeliveryDateWithDeliveryAddress()
+
+
+
+        [TestMethod]
+        public void TestActualDeliveryAddressWithoutDeliveryDate()
+        {            
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            // ActualDeliveryDate is set by the InvoiceProvider, we are resetting it to the default value
+            desc.ActualDeliveryDate = null;
+
+            string shipToID = "1234";
+            string shipToName = "Test ShipTo Name";
+            CountryCodes shipToCountry = CountryCodes.DE;
+
+            desc.ShipTo = new Party()
+            {
+                ID = new GlobalID()
+                {
+                    ID = shipToID
+                },
+                Name = shipToName,
+                Country = shipToCountry
+            };
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the ActualDeliveryDate
+            Assert.IsNull(loadedInvoice.ActualDeliveryDate);
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.IsNotNull(loadedInvoice.ShipTo.ID);
+            Assert.AreEqual(loadedInvoice.ShipTo.ID.ID, shipToID);
+            Assert.AreEqual(loadedInvoice.ShipTo.Name, shipToName);
+            Assert.AreEqual(loadedInvoice.ShipTo.Country, shipToCountry);
+        } // !TestActualDeliveryAddressWithoutDeliveryDate()
+
 
         [TestMethod]
         public void TestTaxTypes()
