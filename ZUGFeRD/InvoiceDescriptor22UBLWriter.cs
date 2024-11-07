@@ -117,10 +117,13 @@ namespace s2industries.ZUGFeRD
             Writer.WriteOptionalElementString("cbc", "BuyerReference", this.Descriptor.ReferenceOrderNo);
 
             // OrderReference
-            Writer.WriteStartElement("cac", "OrderReference");
-            Writer.WriteElementString("cbc", "ID", this.Descriptor.OrderNo);
-            Writer.WriteOptionalElementString("cbc", "SalesOrderID", this.Descriptor.SellerOrderReferencedDocument?.ID);
-            Writer.WriteEndElement(); // !OrderReference
+            if (!string.IsNullOrWhiteSpace(this.Descriptor.OrderNo) || !string.IsNullOrWhiteSpace(this.Descriptor.SellerOrderReferencedDocument?.ID))
+            {
+                Writer.WriteStartElement("cac", "OrderReference");
+                Writer.WriteOptionalElementString("cbc", "ID", this.Descriptor.OrderNo);
+                Writer.WriteOptionalElementString("cbc", "SalesOrderID", this.Descriptor.SellerOrderReferencedDocument?.ID);
+                Writer.WriteEndElement(); // !OrderReference
+            }
 
             // BillingReference
             if (this.Descriptor.GetInvoiceReferencedDocuments().Count > 0)
