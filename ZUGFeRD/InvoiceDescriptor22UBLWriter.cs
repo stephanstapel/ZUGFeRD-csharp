@@ -427,8 +427,8 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "cbc", "LineExtensionAmount", this.Descriptor.LineTotalAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "TaxExclusiveAmount", this.Descriptor.TaxBasisAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "TaxInclusiveAmount", this.Descriptor.GrandTotalAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "cbc", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount, forceCurrency: true);
+            _writeOptionalAmount(Writer, "cbc", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, forceCurrency: true);
             //_writeOptionalAmount(Writer, "cbc", "TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "PrepaidAmount", this.Descriptor.TotalPrepaidAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "PayableAmount", this.Descriptor.DuePayableAmount, forceCurrency: true);
