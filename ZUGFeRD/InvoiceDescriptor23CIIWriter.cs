@@ -493,7 +493,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement();
                             #endregion
 
-                            Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
+                            Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         }
                         Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                     }
