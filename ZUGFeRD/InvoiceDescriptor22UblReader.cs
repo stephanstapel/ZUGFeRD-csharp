@@ -384,7 +384,7 @@ namespace s2industries.ZUGFeRD
                     ID = XmlUtils.NodeAsString(node, ".//cbc:ID", nsmgr),
                     ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, ".//cbc:ID/@schemeID", nsmgr)),
                     TypeCode = default(AdditionalReferencedDocumentTypeCode).FromString(XmlUtils.NodeAsString(node, ".//cbc:DocumentTypeCode", nsmgr)),
-                    Name = XmlUtils.NodeAsString(node, ".//cbc:DocumentType", nsmgr)
+                    Name = XmlUtils.NodeAsString(node, ".//cbc:DocumentDescription", nsmgr)
                 };
 
                 XmlNode binaryObjectNode = node.SelectSingleNode(".//cac:Attachment/cbc:EmbeddedDocumentBinaryObject", nsmgr);

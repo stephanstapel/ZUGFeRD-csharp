@@ -157,14 +157,17 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("cac", "AdditionalDocumentReference");
                     Writer.WriteStartElement("cbc", "ID"); // BT-18, BT-22
-                    Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.EnumToString()); // BT-18-1
+                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.EnumToString()); // BT-18-1
+                    }                        
                     Writer.WriteValue(document.ID);
                     Writer.WriteEndElement(); // !cbc:ID
                     if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
                     {
                         Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumToString());
                     }
-                    Writer.WriteOptionalElementString("cbc", "DocumentType", document.Name); // BT-123
+                    Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
 
                     Writer.WriteStartElement("cac", "Attachment");
 
