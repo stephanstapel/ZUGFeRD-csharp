@@ -237,7 +237,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("cbc", "IdentificationCode", this.Descriptor.ShipTo.Country.ToString());
                     }
-                    Writer.WriteEndElement(); //!Country
+                    Writer.WriteEndElement(); // !Country
                     Writer.WriteEndElement(); // !Address
                     Writer.WriteEndElement(); // !DeliveryLocation
 
@@ -252,6 +252,9 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !DeliveryParty
                     }
                 }
+
+                Writer.WriteEndElement(); // !Delivery
+
             }
 
 
