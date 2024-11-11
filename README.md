@@ -157,7 +157,7 @@ desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1
 ```
 
 ## Invoice Line Status
-The library supports setting a status code and an reason for each line item. This feature helps clarify whether a line item contributes to the invoice total or is informational only. It can be useful for marking items as informational, subtotal lines, or fully processed items, adding context to each invoiced item.
+The library supports setting a status code and a reason for each line item. This feature helps clarifying whether a line item contributes to the invoice total or is for information only. It can be useful for marking items as informational, subtotal lines, or fully processed items, adding context to each invoiced item.
 ```csharp
 // Example: Adding a trade line item with a specific status and reason
 TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
