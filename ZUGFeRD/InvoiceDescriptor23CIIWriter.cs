@@ -154,9 +154,9 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
                 Writer.WriteStartElement("ram", "SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && (tradeLineItem.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
-                    _writeElementWithAttributeWithPrefix(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _writeElementWithAttributeWithPrefix(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
 
                 Writer.WriteOptionalElementString("ram", "SellerAssignedID", tradeLineItem.SellerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
@@ -1392,10 +1392,10 @@ namespace s2industries.ZUGFeRD
             writer.WriteStartElement(prefix, legalOrganizationTag, this.Descriptor.Profile);
             if (legalOrganization.ID != null)
             {
-                if (!String.IsNullOrWhiteSpace(legalOrganization.ID.ID) && !String.IsNullOrWhiteSpace(legalOrganization.ID.SchemeID.EnumToString()))
+                if (!String.IsNullOrWhiteSpace(legalOrganization.ID.ID) && legalOrganization.ID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(legalOrganization.ID.SchemeID.Value.EnumToString()))
                 {
                     writer.WriteStartElement("ram", "ID");
-                    writer.WriteAttributeString("schemeID", legalOrganization.ID.SchemeID.EnumToString());
+                    writer.WriteAttributeString("schemeID", legalOrganization.ID.SchemeID.Value.EnumToString());
                     writer.WriteValue(legalOrganization.ID.ID);
                     writer.WriteEndElement();
                 }
@@ -1468,10 +1468,10 @@ namespace s2industries.ZUGFeRD
 
             if (party.ID != null && !string.IsNullOrWhiteSpace(party.ID.ID))
             {
-                if (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)
+                if (party.ID.SchemeID.HasValue && (party.ID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
                 {
                     writer.WriteStartElement("ram", "ID");
-                    writer.WriteAttributeString("schemeID", party.ID.SchemeID.EnumToString());
+                    writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
                     writer.WriteValue(party.ID.ID);
                     writer.WriteEndElement();
                 }
@@ -1481,10 +1481,10 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+            if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && party.GlobalID.SchemeID.HasValue && (party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
             {
                 writer.WriteStartElement("ram", "GlobalID");
-                writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.EnumToString());
+                writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
                 writer.WriteValue(party.GlobalID.ID);
                 writer.WriteEndElement();
             }

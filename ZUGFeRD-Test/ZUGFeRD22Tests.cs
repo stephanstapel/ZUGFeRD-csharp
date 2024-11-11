@@ -1024,7 +1024,8 @@ namespace ZUGFeRD_Test
                 Assert.AreEqual("REF A-123", d2.PaymentMeans.SEPAMandateReference);
                 Assert.AreEqual(1, d2.DebitorBankAccounts.Count);
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
-                Assert.AreEqual("0088", d.Seller.SpecifiedLegalOrganization.ID.SchemeID.EnumToString());
+                Assert.IsTrue(d.Seller.SpecifiedLegalOrganization.ID.SchemeID.HasValue);
+                Assert.AreEqual("0088", d.Seller.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
                 Assert.AreEqual("4000001123452", d.Seller.SpecifiedLegalOrganization.ID.ID);
                 Assert.AreEqual("Lieferant GmbH", d.Seller.SpecifiedLegalOrganization.TradingBusinessName);
             }
