@@ -50,9 +50,7 @@ namespace ZUGFeRD_Test
 
             desc.TradeLineItems.Clear();
 
-            desc.AddTradeLineItem(
-                lineStatusCode: LineStatusCodes.New,
-                lineStatusReasonCode: LineStatusReasonCodes.DETAIL,
+            TradeLineItem tradeLineItem1 = desc.AddTradeLineItem(
                 name: "Trennblätter A4",
                 billedQuantity: 20m,
                 unitCode: QuantityCodes.H87,
@@ -61,6 +59,8 @@ namespace ZUGFeRD_Test
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
                 taxType: TaxTypes.VAT);
+            tradeLineItem1.SetLineStatus(LineStatusCodes.New, LineStatusReasonCodes.DETAIL);
+
             desc.AddTradeLineItem(
                 name: "Joghurt Banane",
                 billedQuantity: 50m,
@@ -70,9 +70,8 @@ namespace ZUGFeRD_Test
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 7.0m,
                 taxType: TaxTypes.VAT);
-            desc.AddTradeLineItem(
-                lineStatusCode: LineStatusCodes.DocumentationClaim,
-                lineStatusReasonCode: LineStatusReasonCodes.INFORMATION,
+
+            TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
                 name: "Abschlagsrechnung vom 01.01.2024",
                 billedQuantity: -1m,
                 unitCode: QuantityCodes.C62,
@@ -80,6 +79,7 @@ namespace ZUGFeRD_Test
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
                 taxType: TaxTypes.VAT);
+            tradeLineItem3.SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
 
             MemoryStream ms = new MemoryStream();
 

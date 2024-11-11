@@ -221,9 +221,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party UltimateShipTo { get; set; }
 
-        public TradeLineItem(string lineId, LineStatusCodes? lineStatusCode = null, LineStatusReasonCodes? lineStatusReasonCode = null)
+        public TradeLineItem(string lineId)
         {
-            this.AssociatedDocument = new AssociatedDocument(lineId, lineStatusCode, lineStatusReasonCode);
+            this.AssociatedDocument = new AssociatedDocument(lineId);
         } // !TradeLineItem()
 
 
@@ -332,6 +332,12 @@ namespace s2industries.ZUGFeRD
             return this.SpecifiedTradeAllowanceCharges;
         } // !GetSpecifiedTradeAllowanceCharges()
 
+
+        public void SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
+        {
+            this.AssociatedDocument.LineStatusCode = lineStatusCode;
+            this.AssociatedDocument.LineStatusReasonCode = lineStatusReasonCode;
+        }
 
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
         {

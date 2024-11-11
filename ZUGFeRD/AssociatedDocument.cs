@@ -50,19 +50,6 @@ namespace s2industries.ZUGFeRD
         }
 
         /// <summary>
-        /// Initializes a new associated document object, optionally passing a certain lineID or a line status code with line status reason code
-        /// </summary>
-        /// <param name="lineID"></param>
-        /// <param name="lineStatusCode"></param>
-        /// <param name="lineStatusReasonCode"></param>
-        internal AssociatedDocument(string lineID, LineStatusCodes? lineStatusCode, LineStatusReasonCodes? lineStatusReasonCode)
-        {
-            this.LineID = lineID;
-            this.LineStatusCode = lineStatusCode;
-            this.LineStatusReasonCode = lineStatusReasonCode;
-        }
-
-        /// <summary>
         /// Type of the invoice line item
         /// 
         /// If the LineStatusCode element is used, the LineStatusReasonCode must be filled.
