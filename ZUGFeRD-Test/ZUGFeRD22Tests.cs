@@ -38,6 +38,63 @@ namespace ZUGFeRD_Test
     {
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
+        [TestMethod]
+        public void TestLineStatusCode()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+
+            desc.AddTradeLineItem(
+                lineStatusCode: LineStatusCodes.New,
+                lineStatusReasonCode: LineStatusReasonCodes.DETAIL,
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            desc.AddTradeLineItem(
+                name: "Joghurt Banane",
+                billedQuantity: 50m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 5.5m,
+                grossUnitPrice: 5.5m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 7.0m,
+                taxType: TaxTypes.VAT);
+            desc.AddTradeLineItem(
+                lineStatusCode: LineStatusCodes.DocumentationClaim,
+                lineStatusReasonCode: LineStatusReasonCodes.INFORMATION,
+                name: "Abschlagsrechnung vom 01.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 500,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 3);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.LineStatusCode, LineStatusCodes.New);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.LineStatusReasonCode, LineStatusReasonCodes.DETAIL);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.LineStatusCode, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.LineStatusReasonCode, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.LineStatusCode, LineStatusCodes.DocumentationClaim);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.LineStatusReasonCode, LineStatusReasonCodes.INFORMATION);
+        }
 
         [TestMethod]
         public void TestExtendedInvoiceWithIncludedItems()

@@ -221,11 +221,9 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party UltimateShipTo { get; set; }
 
-
-
-        public TradeLineItem(string lineId)
+        public TradeLineItem(string lineId, LineStatusCodes? lineStatusCode = null, LineStatusReasonCodes? lineStatusReasonCode = null)
         {
-            this.AssociatedDocument = new AssociatedDocument(lineId);
+            this.AssociatedDocument = new AssociatedDocument(lineId, lineStatusCode, lineStatusReasonCode);
         } // !TradeLineItem()
 
 

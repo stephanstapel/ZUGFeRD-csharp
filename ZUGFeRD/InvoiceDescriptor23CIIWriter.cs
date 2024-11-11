@@ -139,6 +139,14 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("ram", "LineID", tradeLineItem.AssociatedDocument.LineID);
                     }
+                    if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
+                    {
+                        Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumToString());
+                    }
+                    if (tradeLineItem.AssociatedDocument.LineStatusReasonCode.HasValue)
+                    {
+                        Writer.WriteElementString("ram", "LineStatusReasonCode", tradeLineItem.AssociatedDocument.LineStatusReasonCode.Value.EnumValueToString());
+                    }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes, ALL_PROFILES ^ Profile.Minimum ^ Profile.BasicWL);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended|XRechnung)
                 }
