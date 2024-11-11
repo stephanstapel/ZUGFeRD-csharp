@@ -762,6 +762,11 @@ namespace s2industries.ZUGFeRD
             return EnumExtensions.StringToEnum<LineStatusCodes>(s);
         } // !FromString()
 
+        public static string EnumValueToString(this LineStatusCodes t)
+        {
+            return EnumExtensions.EnumToInt(t).ToString();
+        } // !ToString()
+
         public static string EnumToString(this LineStatusCodes c)
         {
             return EnumExtensions.EnumToString<LineStatusCodes>(c);
