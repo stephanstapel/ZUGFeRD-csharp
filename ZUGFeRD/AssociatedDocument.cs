@@ -39,6 +39,13 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public string LineID { get; internal set; }
 
+        /// <summary>
+        /// refers to a the superior line
+        /// 
+        /// BT-X-304
+        /// </summary>
+        public string ParentLineID { get; internal set; }
+
 
         /// <summary>
         /// Initializes a new associated document object, optionally passing a certain lineID

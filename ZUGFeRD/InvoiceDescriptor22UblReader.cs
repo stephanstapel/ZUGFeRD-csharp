@@ -403,9 +403,28 @@ namespace s2industries.ZUGFeRD
                 Name = String.Empty // TODO: Find value //Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
             };
 
-            foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine | //cac:SubInvoiceLine", nsmgr))
             {
-                retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
+                if(node.Name == "cac:InvoiceLine")
+                {
+                    retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
+                }
+                else if (node.Name == "cac:SubInvoiceLine")
+                {
+                    TradeLineItem subTradeLineItem = _parseTradeLineItem(node, nsmgr);
+                    // Search for the last InvoiceLine in TradeLineItems
+                    for (int i = retval.TradeLineItems.Count - 1; i >= 0; i--)
+                    {
+                        var previousItem = retval.TradeLineItems[i];
+                        if (previousItem.AssociatedDocument.ParentLineID == null)
+                        {
+                            // Set the ParentLineID of the SubInvoiceLine
+                            subTradeLineItem.SetParentLineId(previousItem.AssociatedDocument.LineID);
+                            break;
+                        }
+                    }
+                    retval.TradeLineItems.Add(subTradeLineItem);
+                }
             }
 
             return retval;

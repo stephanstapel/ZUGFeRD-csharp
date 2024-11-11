@@ -135,6 +135,10 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "AssociatedDocumentLineDocument");
                     Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.AssociatedDocument.LineID);
+                    if (!String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
+                    {
+                        Writer.WriteElementString("ram", "ParentLineID", tradeLineItem.AssociatedDocument.ParentLineID);
+                    }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument
                 }

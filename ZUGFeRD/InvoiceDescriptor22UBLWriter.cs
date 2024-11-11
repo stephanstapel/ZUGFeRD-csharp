@@ -439,7 +439,14 @@ namespace s2industries.ZUGFeRD
 
             foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
             {
-                Writer.WriteStartElement("cac", "InvoiceLine");
+                if(String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
+                {
+                    Writer.WriteStartElement("cac", "InvoiceLine");
+                }
+                else
+                {
+                    Writer.WriteStartElement("cac", "SubInvoiceLine");
+                }
                 Writer.WriteElementString("cbc", "ID", tradeLineItem.AssociatedDocument.LineID);
 
                 //Writer.WriteElementString("cbc", "InvoicedQuantity", tradeLineItem.BilledQuantity.ToString());
