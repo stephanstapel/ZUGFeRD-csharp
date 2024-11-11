@@ -41,7 +41,7 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// Initializes a new associated document object, optionally passing a certain lineID or a line status code
+        /// Initializes a new associated document object, optionally passing a certain lineID
         /// </summary>
         /// <param name="lineID"></param>
         internal AssociatedDocument(string lineID)
