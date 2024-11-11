@@ -1151,6 +1151,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart"></param>
         /// <param name="billingPeriodEnd"></param>
         /// <param name="lineStatusCode"></param>
+        /// <param name="lineStatusReasonCode"></param>
         /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
         public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
