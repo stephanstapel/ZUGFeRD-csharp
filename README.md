@@ -156,6 +156,24 @@ desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt 
 desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
 ```
 
+## Invoice Line Status
+The library supports setting a status code and an reason for each line item. This feature helps clarify whether a line item contributes to the invoice total or is informational only. It can be useful for marking items as informational, subtotal lines, or fully processed items, adding context to each invoiced item.
+```csharp
+// Example: Adding a trade line item with a specific status and reason
+TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
+    name: "Abschlagsrechnung vom 01.01.2024",
+    billedQuantity: -1m,
+    unitCode: QuantityCodes.C62,
+    netUnitPrice: 500,
+    categoryCode: TaxCategoryCodes.S,
+    taxPercent: 19.0m,
+    taxType: TaxTypes.VAT
+);
+
+// Set a line status code and reason code to indicate that this line is for documentation only
+tradeLineItem3.SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
+```
+
 ## Storing the invoice
 ```csharp
 FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
