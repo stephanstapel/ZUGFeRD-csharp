@@ -63,7 +63,7 @@ namespace ZUGFeRD_Test
                 taxPercent: 0m,
                 taxType: TaxTypes.VAT);
 
-            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+            TradeLineItem subTradeLineItem1 = desc.AddTradeLineItem(
                 lineID: "2.1",
                 name: "Abschlagsrechnung vom 01.01.2024",
                 billedQuantity: -1m,
@@ -72,7 +72,29 @@ namespace ZUGFeRD_Test
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
                 taxType: TaxTypes.VAT);
-            tradeLineItem.SetParentLineId("2");
+            subTradeLineItem1.SetParentLineId("2");
+
+            TradeLineItem subTradeLineItem2 = desc.AddTradeLineItem(
+                lineID: "2.2",
+                name: "Abschlagsrechnung vom 20.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 500,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem2.SetParentLineId("2");
+
+            TradeLineItem subTradeLineItem3 = desc.AddTradeLineItem(
+                lineID: "2.2.1",
+                name: "Abschlagsrechnung vom 10.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 100,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem3.SetParentLineId("2.2");
 
             desc.AddTradeLineItem(
                 lineID: "3",
@@ -91,11 +113,13 @@ namespace ZUGFeRD_Test
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 4);
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 6);
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.ParentLineID, null);
             Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.ParentLineID, null);
             Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.ParentLineID, "2");
-            Assert.AreEqual(loadedInvoice.TradeLineItems[3].AssociatedDocument.ParentLineID, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[3].AssociatedDocument.ParentLineID, "2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[4].AssociatedDocument.ParentLineID, "2.2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[5].AssociatedDocument.ParentLineID, null);
         }
 
 

@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ubl:Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+  <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>
+  <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+  <cbc:ID>R87654321012345</cbc:ID>
+  <cbc:IssueDate>2018-08-06</cbc:IssueDate>
+  <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+  <cbc:Note>Es bestehen Rabatt- oder Bonusvereinbarungen.</cbc:Note>
+  <cbc:Note>Der Verkäufer bleibt Eigentümer der Waren bis zu vollständigen Erfüllung der Kaufpreisforderung.</cbc:Note>
+  <cbc:Note>MUSTERLIEFERANT GMBH
+BAHNHOFSTRASSE 99
+99199 MUSTERHAUSEN
+Geschäftsführung:
+Max Mustermann
+USt-IdNr: DE123456789
+Telefon: +49 932 431 0
+www.musterlieferant.de
+HRB Nr. 372876
+Amtsgericht Musterstadt
+GLN 4304171000002
+WEEE-Reg-Nr.: DE87654321
+      </cbc:Note>
+  <cbc:Note>Leergutwert: 46,50</cbc:Note>
+  <cbc:Note>Wichtige Information: Bei Bestellungen bis zum 19.12. ist die Auslieferung bis spätestens 23.12. garantiert.</cbc:Note>
+  <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+  <cac:OrderReference>
+    <cbc:ID>B123456789</cbc:ID>
+  </cac:OrderReference>
+  <cac:ProjectReference />
+  <cac:AccountingSupplierParty>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeID="SEPA"></cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>MUSTERLIEFERANT GMBH</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
+        <cbc:StreetName>BAHNHOFSTRASSE 99</cbc:StreetName>
+        <cbc:CityName>MUSTERHAUSEN</cbc:CityName>
+        <cbc:PostalZone>99199</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>DE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyTaxScheme>
+        <cbc:CompanyID>DE123456789</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>MUSTERLIEFERANT GMBH</cbc:RegistrationName>
+        <cbc:CompanyID>4333741000005</cbc:CompanyID>
+      </cac:PartyLegalEntity>
+      <cac:Contact>
+        <cbc:Telephone>+49 932 431 500</cbc:Telephone>
+        <cbc:ElectronicMail>max.mustermann@musterlieferant.de</cbc:ElectronicMail>
+      </cac:Contact>
+    </cac:Party>
+  </cac:AccountingSupplierParty>
+  <cac:AccountingCustomerParty>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeID="SEPA"></cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>MUSTER-KUNDE GMBH</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
+        <cbc:StreetName>KUNDENWEG 88</cbc:StreetName>
+        <cbc:CityName>DUESSELDORF</cbc:CityName>
+        <cbc:PostalZone>40235</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>DE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>MUSTER-KUNDE GMBH</cbc:RegistrationName>
+        <cbc:CompanyID>4304171000002</cbc:CompanyID>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:AccountingCustomerParty>
+  <cac:Delivery>
+    <cbc:ActualDeliveryDate>2018-08-05</cbc:ActualDeliveryDate>
+    <cac:DeliveryLocation>
+      <cac:Address>
+        <cbc:StreetName>HAUPTSTRASSE 44</cbc:StreetName>
+        <cbc:CityName>SARSTEDT</cbc:CityName>
+        <cbc:PostalZone>31157</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>DE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:Address>
+    </cac:DeliveryLocation>
+    <cac:DeliveryParty>
+      <cac:PartyName>
+        <cbc:Name>MUSTER-MARKT</cbc:Name>
+      </cac:PartyName>
+    </cac:DeliveryParty>
+    <cac:AllowanceCharge>
+      <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+      <cbc:Amount currencyID="EUR">5.60</cbc:Amount>
+      <cbc:BaseAmount currencyID="EUR">280.00</cbc:BaseAmount>
+      <cbc:AllowanceChargeReason>Rechnungsrabatt 1</cbc:AllowanceChargeReason>
+      <cac:TaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>19.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:TaxCategory>
+    </cac:AllowanceCharge>
+    <cac:AllowanceCharge>
+      <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+      <cbc:Amount currencyID="EUR">2.61</cbc:Amount>
+      <cbc:BaseAmount currencyID="EUR">130.70</cbc:BaseAmount>
+      <cbc:AllowanceChargeReason>Rechnungsrabatt 1</cbc:AllowanceChargeReason>
+      <cac:TaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>7.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:TaxCategory>
+    </cac:AllowanceCharge>
+    <cac:AllowanceCharge>
+      <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+      <cbc:Amount currencyID="EUR">2.50</cbc:Amount>
+      <cbc:BaseAmount currencyID="EUR">280.00</cbc:BaseAmount>
+      <cbc:AllowanceChargeReason>Rechnungsrabatt 2</cbc:AllowanceChargeReason>
+      <cac:TaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>19.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:TaxCategory>
+    </cac:AllowanceCharge>
+    <cac:AllowanceCharge>
+      <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+      <cbc:Amount currencyID="EUR">0.50</cbc:Amount>
+      <cbc:BaseAmount currencyID="EUR">130.70</cbc:BaseAmount>
+      <cbc:AllowanceChargeReason>Rechnungsrabatt 2</cbc:AllowanceChargeReason>
+      <cac:TaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>7.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:TaxCategory>
+    </cac:AllowanceCharge>
+    <cac:PaymentTerms>
+      <cbc:Note>
+        Bei Zahlung innerhalb 14 Tagen gewähren wir 2,0% Skonto.
+      </cbc:Note>
+    </cac:PaymentTerms>
+    <cac:TaxTotal>
+      <cbc:TaxAmount currencyID="EUR">70.00</cbc:TaxAmount>
+      <cac:TaxSubtotal>
+        <cbc:TaxableAmount currencyID="EUR">321.40</cbc:TaxableAmount>
+        <cbc:TaxAmount currencyID="EUR">61.07</cbc:TaxAmount>
+        <cac:TaxCategory>
+          <cbc:ID>S</cbc:ID>
+          <cbc:Percent>19.00</cbc:Percent>
+          <cac:TaxScheme>
+            <cbc:ID>VAT</cbc:ID>
+          </cac:TaxScheme>
+        </cac:TaxCategory>
+      </cac:TaxSubtotal>
+      <cac:TaxSubtotal>
+        <cbc:TaxableAmount currencyID="EUR">127.59</cbc:TaxableAmount>
+        <cbc:TaxAmount currencyID="EUR">8.93</cbc:TaxAmount>
+        <cac:TaxCategory>
+          <cbc:ID>S</cbc:ID>
+          <cbc:Percent>7.00</cbc:Percent>
+          <cac:TaxScheme>
+            <cbc:ID>VAT</cbc:ID>
+          </cac:TaxScheme>
+        </cac:TaxCategory>
+      </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+      <cbc:LineExtensionAmount currencyID="EUR">457.20</cbc:LineExtensionAmount>
+      <cbc:TaxExclusiveAmount currencyID="EUR">448.99</cbc:TaxExclusiveAmount>
+      <cbc:TaxInclusiveAmount currencyID="EUR">518.99</cbc:TaxInclusiveAmount>
+      <cbc:ChargeTotalAmount currencyID="EUR">3.00</cbc:ChargeTotalAmount>
+      <cbc:AllowanceTotalAmount currencyID="EUR">11.21</cbc:AllowanceTotalAmount>
+      <cbc:PrepaidAmount currencyID="EUR">0.00</cbc:PrepaidAmount>
+      <cbc:PayableAmount currencyID="EUR">518.99</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    <cac:InvoiceLine>
+      <cbc:ID>1</cbc:ID>
+      <cbc:InvoicedQuantity unitCode="H87">20.00</cbc:InvoicedQuantity>
+      <cbc:LineExtensionAmount currencyID="EUR"></cbc:LineExtensionAmount>
+      <cac:Item>
+        <cbc:Name>Trennblätter A4</cbc:Name>
+        <cac:ClassifiedTaxCategory>
+          <cbc:ID>S</cbc:ID>
+          <cbc:Percent>19.00</cbc:Percent>
+          <cac:TaxScheme>
+            <cbc:ID>VAT</cbc:ID>
+          </cac:TaxScheme>
+        </cac:ClassifiedTaxCategory>
+      </cac:Item>
+      <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">9.90</cbc:PriceAmount>
+      </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+      <cbc:ID>2</cbc:ID>
+      <cbc:InvoicedQuantity unitCode="C62">0.00</cbc:InvoicedQuantity>
+      <cbc:LineExtensionAmount currencyID="EUR"></cbc:LineExtensionAmount>
+      <cac:Item>
+        <cbc:Name>Abschlagsrechnungen</cbc:Name>
+        <cac:ClassifiedTaxCategory>
+          <cbc:ID>S</cbc:ID>
+          <cbc:Percent>0.00</cbc:Percent>
+          <cac:TaxScheme>
+            <cbc:ID>VAT</cbc:ID>
+          </cac:TaxScheme>
+        </cac:ClassifiedTaxCategory>
+      </cac:Item>
+      <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">0.00</cbc:PriceAmount>
+      </cac:Price>
+      <cac:SubInvoiceLine>
+        <cbc:ID>2.1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">-1.00</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR"></cbc:LineExtensionAmount>
+        <cac:Item>
+          <cbc:Name>Abschlagsrechnung vom 01.01.2024</cbc:Name>
+          <cac:ClassifiedTaxCategory>
+            <cbc:ID>S</cbc:ID>
+            <cbc:Percent>19.00</cbc:Percent>
+            <cac:TaxScheme>
+              <cbc:ID>VAT</cbc:ID>
+            </cac:TaxScheme>
+          </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+          <cbc:PriceAmount currencyID="EUR">500.00</cbc:PriceAmount>
+        </cac:Price>
+      </cac:SubInvoiceLine>
+      <cac:SubInvoiceLine>
+        <cbc:ID>2.2</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">-1.00</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR"></cbc:LineExtensionAmount>
+        <cac:Item>
+          <cbc:Name>Abschlagsrechnung vom 20.01.2024</cbc:Name>
+          <cac:ClassifiedTaxCategory>
+            <cbc:ID>S</cbc:ID>
+            <cbc:Percent>19.00</cbc:Percent>
+            <cac:TaxScheme>
+              <cbc:ID>VAT</cbc:ID>
+            </cac:TaxScheme>
+          </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+          <cbc:PriceAmount currencyID="EUR">500.00</cbc:PriceAmount>
+        </cac:Price>
+        <cac:SubInvoiceLine>
+          <cbc:ID>2.2.1</cbc:ID>
+          <cbc:InvoicedQuantity unitCode="C62">-1.00</cbc:InvoicedQuantity>
+          <cbc:LineExtensionAmount currencyID="EUR"></cbc:LineExtensionAmount>
+          <cac:Item>
+            <cbc:Name>Abschlagsrechnung vom 10.01.2024</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+              <cbc:ID>S</cbc:ID>
+              <cbc:Percent>19.00</cbc:Percent>
+              <cac:TaxScheme>
+                <cbc:ID>VAT</cbc:ID>
+              </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+          </cac:Item>
+          <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">100.00</cbc:PriceAmount>
+          </cac:Price>
+        </cac:SubInvoiceLine>
+      </cac:SubInvoiceLine>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+      <cbc:ID>3</cbc:ID>
+      <cbc:InvoicedQuantity unitCode="H87">50.00</cbc:InvoicedQuantity>
+      <cbc:LineExtensionAmount currencyID="EUR"></cbc:LineExtensionAmount>
+      <cac:Item>
+        <cbc:Name>Joghurt Banane</cbc:Name>
+        <cac:ClassifiedTaxCategory>
+          <cbc:ID>S</cbc:ID>
+          <cbc:Percent>7.00</cbc:Percent>
+          <cac:TaxScheme>
+            <cbc:ID>VAT</cbc:ID>
+          </cac:TaxScheme>
+        </cac:ClassifiedTaxCategory>
+      </cac:Item>
+      <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">5.50</cbc:PriceAmount>
+      </cac:Price>
+    </cac:InvoiceLine>
+  </cac:Delivery>
+</ubl:Invoice>

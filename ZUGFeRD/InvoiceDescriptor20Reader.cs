@@ -366,8 +366,6 @@ namespace s2industries.ZUGFeRD
             }
 
             string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, String.Empty);
-            
-            string _parentLineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:ParentLineID", nsmgr, null);
 
             TradeLineItem item = new TradeLineItem(_lineId)
             {                
@@ -389,11 +387,6 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodStart = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString", nsmgr),
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString", nsmgr),
             };
-
-            if(!String.IsNullOrEmpty(_parentLineId))
-            {
-                item.SetParentLineId(_parentLineId);
-            }
 
             if (tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic", nsmgr) != null)
             {

@@ -403,29 +403,11 @@ namespace s2industries.ZUGFeRD
                 Name = String.Empty // TODO: Find value //Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
             };
 
-            foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine | //cac:SubInvoiceLine", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine", nsmgr))
             {
-                if(node.Name == "cac:InvoiceLine")
-                {
-                    retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
-                }
-                else if (node.Name == "cac:SubInvoiceLine")
-                {
-                    TradeLineItem subTradeLineItem = _parseTradeLineItem(node, nsmgr);
-                    // Search for the last InvoiceLine in TradeLineItems
-                    for (int i = retval.TradeLineItems.Count - 1; i >= 0; i--)
-                    {
-                        var previousItem = retval.TradeLineItems[i];
-                        if (previousItem.AssociatedDocument.ParentLineID == null)
-                        {
-                            // Set the ParentLineID of the SubInvoiceLine
-                            subTradeLineItem.SetParentLineId(previousItem.AssociatedDocument.LineID);
-                            break;
-                        }
-                    }
-                    retval.TradeLineItems.Add(subTradeLineItem);
-                }
+                retval.TradeLineItems.AddRange(_parseTradeLineItem(node, nsmgr));
             }
+
 
             return retval;
         } // !Load()        
@@ -464,12 +446,14 @@ namespace s2industries.ZUGFeRD
             return false;
         }
 
-        private static TradeLineItem _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null)
+        private static List<TradeLineItem> _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null, string parentLineId = null)
         {
             if (tradeLineItem == null)
             {
                 return null;
             }
+            
+            List<TradeLineItem> resultList = new List<TradeLineItem>();
 
             string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//cbc:ID", nsmgr);
             TradeLineItem item = new TradeLineItem(_lineId)
@@ -492,6 +476,11 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodStart = XmlUtils.NodeAsDateTime(tradeLineItem, ".//cac:InvoicePeriod/cbc:StartDate", nsmgr),
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//cac:InvoicePeriod/cbc:EndDate", nsmgr),
             };
+
+            if(!String.IsNullOrEmpty(parentLineId))
+            {
+                item.SetParentLineId(parentLineId);
+            }
 
             // Read ApplicableProductCharacteristic 
             if (tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification", nsmgr) != null)
@@ -638,7 +627,26 @@ namespace s2industries.ZUGFeRD
             //  item._AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             //}
 
-            return item;
+            //Add main item to result list
+            resultList.Add(item);
+
+            //Find sub invoice lines recursively
+            //Note that selectnodes also select the sub invoice line from other nodes
+            XmlNodeList subInvoiceLineNodes = tradeLineItem.SelectNodes(".//cac:SubInvoiceLine", nsmgr);
+            foreach (XmlNode subInvoiceLineNode in subInvoiceLineNodes)
+            {
+                List<TradeLineItem> parseResultList = _parseTradeLineItem(subInvoiceLineNode, nsmgr, item.AssociatedDocument.LineID);
+                foreach(TradeLineItem resultItem in  parseResultList)
+                {
+                    //Don't add nodes that are already in the resultList
+                    if(!resultList.Any(t => t.AssociatedDocument.LineID == resultItem.AssociatedDocument.LineID))
+                    {
+                        resultList.Add(resultItem);
+                    }
+                }
+            }
+
+            return resultList;
         } // !_parseTradeLineItem()        
 
 
