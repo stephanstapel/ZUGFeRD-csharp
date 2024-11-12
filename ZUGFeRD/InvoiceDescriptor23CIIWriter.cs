@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 
 namespace s2industries.ZUGFeRD
@@ -459,10 +458,9 @@ namespace s2industries.ZUGFeRD
                 {
                     if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
                     {
-                        Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-
                         foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BT-147
                         {
+                            Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                             #region ChargeIndicator
                             Writer.WriteStartElement("ram", "ChargeIndicator");
                             Writer.WriteElementString("udt", "Indicator", specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false");
@@ -494,8 +492,8 @@ namespace s2industries.ZUGFeRD
                             #endregion
 
                             Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
+                            Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                         }
-                        Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                     }
                 }
                 #endregion
