@@ -2653,5 +2653,19 @@ namespace ZUGFeRD_Test
             //Assert.AreEqual(10, paymentTerm.DueDays);
             //Assert.AreEqual(3m, paymentTerm.Percentage);
         } // !TestPaymentTermsSingleCardinalityStructured()
+
+        [TestMethod]
+        public void TestBuyerOrderReferenceLineId()
+        {
+			string path = @"..\..\..\..\demodata\zugferd22\zugferd_2p2_EXTENDED_Fremdwaehrung-factur-x.xml";
+			path = _makeSurePathIsCrossPlatformCompatible(path);
+
+			Stream s = File.Open(path, FileMode.Open);
+			InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+			s.Close();
+
+			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "1");
+			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.ID, "ORDER84359");
+		}
     }
 }
