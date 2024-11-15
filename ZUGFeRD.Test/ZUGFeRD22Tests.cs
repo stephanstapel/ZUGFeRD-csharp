@@ -2769,11 +2769,12 @@ namespace s2industries.ZUGFeRD.Test
         public void TestPaymentTermsSingleCardinalityStructured()
         {
             // Arrange
+            const string xmlNewLine = "&#10;";
             DateTime timestamp = DateTime.Now.Date;
             var desc = InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
-            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 28, 1m);
+            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
@@ -2797,7 +2798,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(1, paymentTerms.Count);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(paymentTerm);
-            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{Environment.NewLine}#SKONTO#TAGE=28#PROZENT=1.00#{Environment.NewLine}", paymentTerm.Description);
+            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{xmlNewLine}Description2{xmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
             //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
             //Assert.AreEqual(10, paymentTerm.DueDays);
