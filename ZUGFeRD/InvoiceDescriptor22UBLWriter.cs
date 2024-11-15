@@ -506,7 +506,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("cbc", "BaseQuantity"); // BT-149
                     Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
-                    Writer.WriteValue(tradeLineItem.UnitQuantity.ToString());
+                    Writer.WriteValue(_formatDecimal(tradeLineItem.UnitQuantity));
                     Writer.WriteEndElement();
                 }
 
