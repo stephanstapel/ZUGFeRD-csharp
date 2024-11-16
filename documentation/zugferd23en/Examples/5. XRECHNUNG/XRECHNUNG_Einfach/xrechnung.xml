@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!-- English disclaimer below.-->
 <!--Nutzungsrechte 
-ZUGFeRD Datenformat Version 2.3.0, 18.09.2024
-Beispiel Version 18.09.2024
+ZUGFeRD Datenformat Version 2.3.1, 15.11.2024
+Beispiel Version 15.11.2024
  
 Zweck des Forums elektronisch Rechnung Deutschland, welches am 31. März 2010 unter der Arbeitsgemeinschaft für 
 wirtschaftliche Verwaltung e. V. gegründet wurde, ist u. a. die Schaffung und Spezifizierung eines offenen Datenformats 
@@ -44,7 +44,7 @@ beiläufig entstandene, mittelbare Schäden, Straf- oder Folgeschäden und zwar 
 Kosten, Verluste bzw. Schäden hätte normalerweise vorhergesehen werden können.-->
  
  <!--Right of use 
-ZUGFeRD Data format version 2.3.0, September 18th, 2024
+ZUGFeRD Data format version 2.3.1, November 15th, 2024
  
 The purpose of the Forum elektronische Rechnung Deutschland (FeRD), which was founded on March 31, 2010 under the 
 umbrella of Arbeitsgemeinschaft für wirtschaftliche Verwaltung e. V., is, among other things, to create and specify an 
@@ -125,9 +125,6 @@ Handelsregisternummer: H A 123
         <ram:Name>Trennblätter A4</ram:Name>
       </ram:SpecifiedTradeProduct>
       <ram:SpecifiedLineTradeAgreement>
-        <ram:GrossPriceProductTradePrice>
-          <ram:ChargeAmount>9.9000</ram:ChargeAmount>
-        </ram:GrossPriceProductTradePrice>
         <ram:NetPriceProductTradePrice>
           <ram:ChargeAmount>9.9000</ram:ChargeAmount>
         </ram:NetPriceProductTradePrice>
@@ -156,9 +153,6 @@ Handelsregisternummer: H A 123
         <ram:Name>Joghurt Banane</ram:Name>
       </ram:SpecifiedTradeProduct>
       <ram:SpecifiedLineTradeAgreement>
-        <ram:GrossPriceProductTradePrice>
-          <ram:ChargeAmount>5.5000</ram:ChargeAmount>
-        </ram:GrossPriceProductTradePrice>
         <ram:NetPriceProductTradePrice>
           <ram:ChargeAmount>5.5000</ram:ChargeAmount>
         </ram:NetPriceProductTradePrice>
