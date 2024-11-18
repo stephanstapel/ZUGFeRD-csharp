@@ -546,5 +546,18 @@ namespace ZUGFeRD_Test
             // Assert that we entered and exited the <cbc:Note> block
             Assert.IsFalse(insideCbcNote, "We should have exited the <cbc:Note> block.");
         } // !TestMultiSkontoForCorrectIndention()
-    }
+
+		[TestMethod]
+		public void TestBuyerOrderReferenceLineId()
+		{
+			string path = @"..\..\..\..\demodata\xRechnung\xRechnung with LineId.xml";
+			path = _makeSurePathIsCrossPlatformCompatible(path);
+
+			Stream s = File.Open(path, FileMode.Open);
+			InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+			s.Close();
+
+			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "6171175.1");
+		}
+	}
 }

@@ -510,61 +510,63 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            //Read IncludedReferencedProducts
-            //TODO:
+			// Read BuyerOrderReferencedDocument
+			if (tradeLineItem.SelectSingleNode("cac:OrderLineReference", nsmgr) != null)
+			{
+				item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
+				{
+					ID = XmlUtils.NodeAsString(tradeLineItem, ".//cbc:IssuerAssignedID", nsmgr),
+					IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//cac:FormattedIssueDateTime/cbc:DateTimeString", nsmgr),
+					LineID = XmlUtils.NodeAsString(tradeLineItem, ".//cbc:LineID", nsmgr),
+				};
+			}
 
-            // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument", nsmgr) != null)
-            //{
-            //  item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
-            //  {
-            //    ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
-            //    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
-            //  };
-            //}
+			//Read IncludedReferencedProducts
+			//TODO:
 
-            // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument", nsmgr) != null)
-            //{
-            //  item.ContractReferencedDocument = new ContractReferencedDocument()
-            //  {
-            //    ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
-            //    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
-            //  };
-            //}
+			// TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument", nsmgr) != null)
+			//{
+			//  item.ContractReferencedDocument = new ContractReferencedDocument()
+			//  {
+			//    ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
+			//    IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr)
+			//  };
+			//}
 
-            // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement", nsmgr) != null)
-            //{
-            //  XmlNodeList LineTradeSettlementNodes = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement", nsmgr).ChildNodes;
-            //  foreach (XmlNode LineTradeSettlementNode in LineTradeSettlementNodes)
-            //  {
-            //    switch (LineTradeSettlementNode.Name)
-            //    {
-            //      case "ram:ApplicableTradeTax":
-            //        //TODO
-            //        break;
-            //      case "ram:BillingSpecifiedPeriod":
-            //        //TODO
-            //        break;
-            //      case "ram:SpecifiedTradeAllowanceCharge":
-            //        //TODO
-            //        break;
-            //      case "ram:SpecifiedTradeSettlementLineMonetarySummation":
-            //        //TODO
-            //        break;
-            //      case "ram:AdditionalReferencedDocument":
-            //        //TODO
-            //        break;
-            //      case "ram:ReceivableSpecifiedTradeAccountingAccount":
-            //        // TODO: Find value //item.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
-            //        //{
-            //        //  TradeAccountID = XmlUtils.NodeAsString(LineTradeSettlementNode, "./ram:ID", nsmgr),
-            //        //  TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(LineTradeSettlementNode, ".//ram:TypeCode", nsmgr)
-            //        //});
-            //        break;
-            //    }
-            //  }
-            //}            
+			// TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement", nsmgr) != null)
+			//{
+			//  XmlNodeList LineTradeSettlementNodes = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement", nsmgr).ChildNodes;
+			//  foreach (XmlNode LineTradeSettlementNode in LineTradeSettlementNodes)
+			//  {
+			//    switch (LineTradeSettlementNode.Name)
+			//    {
+			//      case "ram:ApplicableTradeTax":
+			//        //TODO
+			//        break;
+			//      case "ram:BillingSpecifiedPeriod":
+			//        //TODO
+			//        break;
+			//      case "ram:SpecifiedTradeAllowanceCharge":
+			//        //TODO
+			//        break;
+			//      case "ram:SpecifiedTradeSettlementLineMonetarySummation":
+			//        //TODO
+			//        break;
+			//      case "ram:AdditionalReferencedDocument":
+			//        //TODO
+			//        break;
+			//      case "ram:ReceivableSpecifiedTradeAccountingAccount":
+			//        // TODO: Find value //item.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+			//        //{
+			//        //  TradeAccountID = XmlUtils.NodeAsString(LineTradeSettlementNode, "./ram:ID", nsmgr),
+			//        //  TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(LineTradeSettlementNode, ".//ram:TypeCode", nsmgr)
+			//        //});
+			//        break;
+			//    }
+			//  }
+			//}            
 
-            XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//cbc:Note", nsmgr);
+			XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//cbc:Note", nsmgr);
             foreach (XmlNode noteNode in noteNodes)
             {
                 item.AssociatedDocument.Notes.Add(new Note(

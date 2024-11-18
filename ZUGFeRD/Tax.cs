@@ -37,7 +37,10 @@ namespace s2industries.ZUGFeRD
         {
             get
             {
-                return System.Math.Round(0.01m * this.Percent * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
+                decimal x = 0.01m * this.Percent * this.BasisAmount;
+                decimal y = this.BasisAmount * this.Percent * 0.01m;
+
+                return System.Math.Round((0.01m * this.Percent) * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
             }
         }
 
