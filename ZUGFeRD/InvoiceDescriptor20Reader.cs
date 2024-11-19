@@ -365,7 +365,7 @@ namespace s2industries.ZUGFeRD
                 return null;
             }
 
-            string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, String.Empty);            
+            string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, String.Empty);
 
             TradeLineItem item = new TradeLineItem(_lineId)
             {                
