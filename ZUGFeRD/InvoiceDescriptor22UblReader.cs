@@ -405,8 +405,9 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine", nsmgr))
             {
-                retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
+                retval.TradeLineItems.AddRange(_parseTradeLineItem(node, nsmgr));
             }
+
 
             return retval;
         } // !Load()        
@@ -445,12 +446,14 @@ namespace s2industries.ZUGFeRD
             return false;
         }
 
-        private static TradeLineItem _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null)
+        private static List<TradeLineItem> _parseTradeLineItem(XmlNode tradeLineItem, XmlNamespaceManager nsmgr = null, string parentLineId = null)
         {
             if (tradeLineItem == null)
             {
                 return null;
             }
+            
+            List<TradeLineItem> resultList = new List<TradeLineItem>();
 
             string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//cbc:ID", nsmgr);
             TradeLineItem item = new TradeLineItem(_lineId)
@@ -473,6 +476,11 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodStart = XmlUtils.NodeAsDateTime(tradeLineItem, ".//cac:InvoicePeriod/cbc:StartDate", nsmgr),
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//cac:InvoicePeriod/cbc:EndDate", nsmgr),
             };
+
+            if(!String.IsNullOrWhiteSpace(parentLineId))
+            {
+                item.SetParentLineId(parentLineId);
+            }
 
             // Read ApplicableProductCharacteristic 
             if (tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification", nsmgr) != null)
@@ -621,7 +629,26 @@ namespace s2industries.ZUGFeRD
             //  item._AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             //}
 
-            return item;
+            //Add main item to result list
+            resultList.Add(item);
+
+            //Find sub invoice lines recursively
+            //Note that selectnodes also select the sub invoice line from other nodes
+            XmlNodeList subInvoiceLineNodes = tradeLineItem.SelectNodes(".//cac:SubInvoiceLine", nsmgr);
+            foreach (XmlNode subInvoiceLineNode in subInvoiceLineNodes)
+            {
+                List<TradeLineItem> parseResultList = _parseTradeLineItem(subInvoiceLineNode, nsmgr, item.AssociatedDocument.LineID);
+                foreach(TradeLineItem resultItem in parseResultList)
+                {
+                    //Don't add nodes that are already in the resultList
+                    if(!resultList.Any(t => t.AssociatedDocument.LineID == resultItem.AssociatedDocument.LineID))
+                    {
+                        resultList.Add(resultItem);
+                    }
+                }
+            }
+
+            return resultList;
         } // !_parseTradeLineItem()        
 
 

@@ -39,6 +39,99 @@ namespace ZUGFeRD_Test
         InvoiceProvider InvoiceProvider = new InvoiceProvider();
 
         [TestMethod]
+        public void TestParentLineId()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+            desc.AdditionalReferencedDocuments.Clear();
+
+            desc.AddTradeLineItem(
+                lineID: "1",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            desc.AddTradeLineItem(
+                lineID: "2",
+                name: "Abschlagsrechnungen",
+                billedQuantity: 0m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 0m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 0m,
+                taxType: TaxTypes.VAT);
+
+            TradeLineItem subTradeLineItem1 = desc.AddTradeLineItem(
+                lineID: "2.1",
+                name: "Abschlagsrechnung vom 01.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 500,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem1.SetParentLineId("2");
+
+            TradeLineItem subTradeLineItem2 = desc.AddTradeLineItem(
+                lineID: "2.2",
+                name: "Abschlagsrechnung vom 20.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 500,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem2.SetParentLineId("2");
+
+            TradeLineItem subTradeLineItem3 = desc.AddTradeLineItem(
+                lineID: "2.2.1",
+                name: "Abschlagsrechnung vom 10.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 100,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem3.SetParentLineId("2.2");
+
+            desc.AddTradeLineItem(
+                lineID: "3",
+                name: "Joghurt Banane",
+                billedQuantity: 50m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 5.5m,
+                grossUnitPrice: 5.5m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 7.0m,
+                taxType: TaxTypes.VAT);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 6);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.ParentLineID, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.ParentLineID, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.ParentLineID, "2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[3].AssociatedDocument.ParentLineID, "2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[4].AssociatedDocument.ParentLineID, "2.2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[5].AssociatedDocument.ParentLineID, null);
+        }
+
+        [TestMethod]
         public void TestLineStatusCode()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";

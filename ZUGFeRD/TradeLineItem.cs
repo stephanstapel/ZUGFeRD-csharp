@@ -332,6 +332,13 @@ namespace s2industries.ZUGFeRD
             return this.SpecifiedTradeAllowanceCharges;
         } // !GetSpecifiedTradeAllowanceCharges()
 
+        /// <summary>
+        /// The value given here refers to the superior line. In this way, a hierarchy tree of invoice items can be mapped.
+        /// </summary>
+        public void SetParentLineId(string parentLineId)
+        {
+            this.AssociatedDocument.ParentLineID = parentLineId;
+        }
 
         public void SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
         {

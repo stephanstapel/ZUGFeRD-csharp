@@ -138,6 +138,11 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("ram", "LineID", tradeLineItem.AssociatedDocument.LineID);
                     }
+                    // It is necessary that Parent Line Id be written directly under LineId
+                    if (!String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
+                    {
+                        Writer.WriteElementString("ram", "ParentLineID", tradeLineItem.AssociatedDocument.ParentLineID);
+                    }
                     if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
                     {
                         Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumValueToString());
