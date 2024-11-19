@@ -100,7 +100,12 @@ namespace s2industries.ZUGFeRD
         /// Supplier remarks
         /// Remarks from or for a supplier of goods or services.
         /// </summary>
-        SUR        
+        SUR,
+
+        /// <summary>
+        /// Grund der Steuerbefreiung
+        /// </summary>
+        TXD
     }
 
 

@@ -1081,7 +1081,8 @@ namespace ZUGFeRD_Test
                 Assert.AreEqual("REF A-123", d2.PaymentMeans.SEPAMandateReference);
                 Assert.AreEqual(1, d2.DebitorBankAccounts.Count);
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
-                Assert.AreEqual("0088", d.Seller.SpecifiedLegalOrganization.ID.SchemeID.EnumToString());
+                Assert.IsTrue(d.Seller.SpecifiedLegalOrganization.ID.SchemeID.HasValue);
+                Assert.AreEqual("0088", d.Seller.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
                 Assert.AreEqual("4000001123452", d.Seller.SpecifiedLegalOrganization.ID.ID);
                 Assert.AreEqual("Lieferant GmbH", d.Seller.SpecifiedLegalOrganization.TradingBusinessName);
             }
@@ -2709,5 +2710,19 @@ namespace ZUGFeRD_Test
             //Assert.AreEqual(10, paymentTerm.DueDays);
             //Assert.AreEqual(3m, paymentTerm.Percentage);
         } // !TestPaymentTermsSingleCardinalityStructured()
+
+        [TestMethod]
+        public void TestBuyerOrderReferenceLineId()
+        {
+			string path = @"..\..\..\..\demodata\zugferd22\zugferd_2p2_EXTENDED_Fremdwaehrung-factur-x.xml";
+			path = _makeSurePathIsCrossPlatformCompatible(path);
+
+			Stream s = File.Open(path, FileMode.Open);
+			InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+			s.Close();
+
+			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "1");
+			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.ID, "ORDER84359");
+		}
     }
 }

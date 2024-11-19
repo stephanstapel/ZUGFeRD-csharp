@@ -78,7 +78,7 @@ desc.AddApplicableTradeTax(129.37m, 7m, TaxTypes.VAT, TaxCategoryCodes.S);
 desc.AddApplicableTradeTax(64.46m, 19m, TaxTypes.VAT, TaxCategoryCodes.S);
 desc.AddLogisticsServiceCharge(5.80m, "Versandkosten", TaxTypes.VAT, TaxCategoryCodes.S, 7m);
 desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
-desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), 3m);
+desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 30, 3m);
 ```
 
 Optionally, to support Peppol, an electronic address can be passed:
@@ -120,8 +120,8 @@ To pass pre-defined line ids, this is the way to go:
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem(lineId: "0001", "Item name", "Detail description", QuantityCodes.C62, ....);
-desc.AddTradeLineItem(lineId: "0002", "Item name", "Detail description", QuantityCodes.C62, ....);
+desc.AddTradeLineItem(lineID: "0001", "Item name", "Detail description", QuantityCodes.C62, ....);
+desc.AddTradeLineItem(lineID: "0002", "Item name", "Detail description", QuantityCodes.C62, ....);
 ```
 
 which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
@@ -132,7 +132,7 @@ One trade product can have one or more product characteristics, which can contai
 
  ```csharp
 // you can optionally add product characteristics:
- desc.TradeLineItems.Add(new TradeLineItem()
+ desc.TradeLineItems.Add(new TradeLineItem("0003")
 {
     ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>
     {
@@ -153,7 +153,7 @@ The library allows to add special references to an invoice which are pretty rare
 desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt AB-312", ID = "AB-312"};
 
 // you can optionally reference a contract:
-desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", Date = new DateTime(2013,1,1)};
+desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", IssueDateTime = new DateTime(2013,1,1)};
 ```
 
 ## Invoice Line Status
@@ -260,7 +260,7 @@ Furthermore, XRechnung comes with some special features. One of these features i
 InvoiceDescriptor desc = _createInvoice();
 byte[] data = System.IO.File.ReadAllBytes("my-calculation.xlsx");
 desc.AddAdditionalReferencedDocument(
-    issuerAssignedID: "calculation-sheet",
+    id: "calculation-sheet",
     typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
     name: "Calculation as the basis for the invoice",
     attachmentBinaryObject: data,
