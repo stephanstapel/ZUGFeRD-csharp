@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRDRenderer
         public static string render(InvoiceDescriptor desc)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "s2industries.ZUGFeRDRenderer.test.cshtml";
+            var resourceName = "ZUGFeRDRenderer.test.cshtml";
 
             string template = "";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -47,10 +47,11 @@ namespace s2industries.ZUGFeRDRenderer
             }
 
 
-            Engine.Razor.AddTemplate(new FullPathTemplateKey("ad", "ad", ResolveType.Global, null),
+            ITemplateKey key = new FullPathTemplateKey("Invoice-Template", "Invoice-Template", ResolveType.Global, null);
+            Engine.Razor.AddTemplate(key,
                                      new LoadedTemplateSource(template));
 
-            string result = Engine.Razor.RunCompile(new FullPathTemplateKey("ad", "ad", ResolveType.Global, null));
+            string result = Engine.Razor.RunCompile(key, typeof(InvoiceDescriptor), desc);
 
 
 
@@ -115,7 +116,7 @@ namespace s2industries.ZUGFeRDRenderer
             string retval = sr.ReadToEnd();
             return retval;
             */
-            return "";
+            return result;
         } // !render()
 
 
