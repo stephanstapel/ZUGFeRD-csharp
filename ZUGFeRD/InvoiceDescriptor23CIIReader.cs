@@ -483,7 +483,7 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString", nsmgr),
             };
 
-            if (!String.IsNullOrEmpty(_parentLineId))
+            if (!String.IsNullOrWhiteSpace(_parentLineId))
             {
                 item.SetParentLineId(_parentLineId);
             }

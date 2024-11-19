@@ -32,7 +32,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestParentLineId()
         {
-            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);

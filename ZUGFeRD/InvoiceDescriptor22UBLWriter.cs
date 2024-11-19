@@ -458,7 +458,7 @@ namespace s2industries.ZUGFeRD
 
         private void _WriteTradeLineItem(TradeLineItem tradeLineItem)
         {   
-            if (String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
+            if (String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
             {
                 Writer.WriteStartElement("cac", "InvoiceLine");
             }
@@ -525,7 +525,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
             Writer.WriteEndElement();
 
-            if (tradeLineItem.UnitQuantity != null)
+            if (tradeLineItem.UnitQuantity.HasValue)
             {
                 Writer.WriteStartElement("cbc", "BaseQuantity"); // BT-149
                 Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150

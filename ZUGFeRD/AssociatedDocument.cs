@@ -40,9 +40,15 @@ namespace s2industries.ZUGFeRD
         public string LineID { get; internal set; }
 
         /// <summary>
-        /// refers to a the superior line
-        /// 
+        /// Refers to the superior line in a hierarchical structure. 
+        /// This property is used to map a hierarchy tree of invoice items, allowing child items to reference their parent line.
         /// BT-X-304
+        /// 
+        /// Example usage:
+        /// <code>
+        /// var tradeLineItem = new TradeLineItem();
+        /// tradeLineItem.SetParentLineId("1");
+        /// </code>
         /// </summary>
         public string ParentLineID { get; internal set; }
 

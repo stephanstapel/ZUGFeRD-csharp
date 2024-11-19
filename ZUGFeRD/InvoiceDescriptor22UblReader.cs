@@ -477,7 +477,7 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//cac:InvoicePeriod/cbc:EndDate", nsmgr),
             };
 
-            if(!String.IsNullOrEmpty(parentLineId))
+            if(!String.IsNullOrWhiteSpace(parentLineId))
             {
                 item.SetParentLineId(parentLineId);
             }
@@ -638,7 +638,7 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode subInvoiceLineNode in subInvoiceLineNodes)
             {
                 List<TradeLineItem> parseResultList = _parseTradeLineItem(subInvoiceLineNode, nsmgr, item.AssociatedDocument.LineID);
-                foreach(TradeLineItem resultItem in  parseResultList)
+                foreach(TradeLineItem resultItem in parseResultList)
                 {
                     //Don't add nodes that are already in the resultList
                     if(!resultList.Any(t => t.AssociatedDocument.LineID == resultItem.AssociatedDocument.LineID))
