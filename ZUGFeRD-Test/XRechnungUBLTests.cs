@@ -469,7 +469,7 @@ namespace ZUGFeRD_Test
         
         
         [TestMethod]
-        public void TestPartyIdentification_for_seller()
+        public void TestPartyIdentificationForSeller()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             MemoryStream ms = new MemoryStream();
@@ -489,6 +489,27 @@ namespace ZUGFeRD_Test
             Assert.IsTrue(Regex.Matches(content, @"\<cac:PartyIdentification\>").Count == 1, "PartyIdentification should only contain once");
             // PartyIdentification may only be contained in AccountingSupplierParty
             Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty>.*<cac:Party>.*<cac:PartyIdentification>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
-        } // !TestInvoiceCreation()
+        } // !TestPartyIdentificationForSeller()
+        
+        [TestMethod]
+        public void TestPartyIdentificationShouldNotExist()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            
+            MemoryStream resultStream = new MemoryStream();
+            loadedInvoice.Save(resultStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+ 
+            // test the raw xml file
+            string content = Encoding.UTF8.GetString(resultStream.ToArray());
+            
+            Assert.IsNotNull(content);
+            Assert.IsFalse(Regex.IsMatch(content, @"\<cac:PartyIdentification\>"), "PartyIdentification should not contain");
+        } // !TestPartyIdentificationShouldNotExist()
 	}
 }

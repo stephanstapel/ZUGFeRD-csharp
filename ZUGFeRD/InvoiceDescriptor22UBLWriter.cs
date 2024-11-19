@@ -653,10 +653,10 @@ namespace s2industries.ZUGFeRD
                     writer.WriteEndElement();
                 }
 
-                if (party == this.Descriptor.Seller)
+                if (partyType == PartyTypes.SellerTradeParty)
                 {
                     // This is the identification of the seller, not the buyer
-                    if (this.Descriptor.PaymentMeans?.SEPAMandateReference != null)
+                    if (!string.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
                     {
                         writer.WriteStartElement("cac", "PartyIdentification");
                         writer.WriteStartElement("cbc", "ID");
