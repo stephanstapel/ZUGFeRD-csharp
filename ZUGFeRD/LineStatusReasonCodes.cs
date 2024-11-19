@@ -57,7 +57,9 @@ namespace s2industries.ZUGFeRD
         public static LineStatusReasonCodes? FromString(this LineStatusReasonCodes _, string s)
         {
             if (s == null)
+            {
                 return null;
+            }
             return EnumExtensions.StringToEnum<LineStatusReasonCodes>(s);
         } // !FromString()
 
