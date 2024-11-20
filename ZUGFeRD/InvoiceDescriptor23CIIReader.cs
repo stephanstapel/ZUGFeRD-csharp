@@ -460,6 +460,9 @@ namespace s2industries.ZUGFeRD
 
             string _parentLineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:ParentLineID", nsmgr, null);
 
+            LineStatusCodes? _lineStatusCode = default(LineStatusCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineStatusCode", nsmgr, null));
+            LineStatusReasonCodes? _lineStatusReasonCode = default(LineStatusReasonCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode", nsmgr, null));
+            
             TradeLineItem item = new TradeLineItem(_lineId)
             {
                 GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr)),
@@ -483,9 +486,15 @@ namespace s2industries.ZUGFeRD
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString", nsmgr),
             };
 
+
             if (!String.IsNullOrWhiteSpace(_parentLineId))
             {
                 item.SetParentLineId(_parentLineId);
+            }
+
+            if (_lineStatusCode.HasValue && _lineStatusReasonCode.HasValue)
+            {
+                item.SetLineStatus(_lineStatusCode.Value, _lineStatusReasonCode.Value);
             }
 
             if (tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic", nsmgr) != null)

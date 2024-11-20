@@ -61,5 +61,21 @@ namespace s2industries.ZUGFeRD
         {
             this.LineID = lineID;
         }
+
+        /// <summary>
+        /// Type of the invoice line item
+        /// 
+        /// If the LineStatusCode element is used, the LineStatusReasonCode must be filled.
+        /// 
+        /// BT-X-7
+        /// </summary>
+        public LineStatusCodes? LineStatusCode { get; internal set; } = null;
+
+        /// <summary>
+        /// Subtype of the invoice line item
+        /// 
+        /// BT-X-8
+        /// </summary>
+        public LineStatusReasonCodes? LineStatusReasonCode { get; internal set; } = null;
     }
 }

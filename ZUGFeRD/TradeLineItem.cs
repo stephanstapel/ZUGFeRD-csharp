@@ -221,8 +221,6 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party UltimateShipTo { get; set; }
 
-
-
         public TradeLineItem(string lineId)
         {
             this.AssociatedDocument = new AssociatedDocument(lineId);
@@ -340,6 +338,12 @@ namespace s2industries.ZUGFeRD
         public void SetParentLineId(string parentLineId)
         {
             this.AssociatedDocument.ParentLineID = parentLineId;
+        }
+
+        public void SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
+        {
+            this.AssociatedDocument.LineStatusCode = lineStatusCode;
+            this.AssociatedDocument.LineStatusReasonCode = lineStatusReasonCode;
         }
 
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)

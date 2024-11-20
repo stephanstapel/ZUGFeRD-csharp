@@ -41,7 +41,7 @@ namespace ZUGFeRD_Test
         [TestMethod]
         public void TestParentLineId()
         {
-            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
@@ -49,6 +49,7 @@ namespace ZUGFeRD_Test
             s.Close();
 
             desc.TradeLineItems.Clear();
+            desc.AdditionalReferencedDocuments.Clear();
 
             desc.AddTradeLineItem(
                 lineID: "1",
@@ -71,7 +72,7 @@ namespace ZUGFeRD_Test
                 taxPercent: 0m,
                 taxType: TaxTypes.VAT);
 
-            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+            TradeLineItem subTradeLineItem1 = desc.AddTradeLineItem(
                 lineID: "2.1",
                 name: "Abschlagsrechnung vom 01.01.2024",
                 billedQuantity: -1m,
@@ -80,7 +81,29 @@ namespace ZUGFeRD_Test
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
                 taxType: TaxTypes.VAT);
-            tradeLineItem.SetParentLineId("2");
+            subTradeLineItem1.SetParentLineId("2");
+
+            TradeLineItem subTradeLineItem2 = desc.AddTradeLineItem(
+                lineID: "2.2",
+                name: "Abschlagsrechnung vom 20.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 500,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem2.SetParentLineId("2");
+
+            TradeLineItem subTradeLineItem3 = desc.AddTradeLineItem(
+                lineID: "2.2.1",
+                name: "Abschlagsrechnung vom 10.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 100,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            subTradeLineItem3.SetParentLineId("2.2");
 
             desc.AddTradeLineItem(
                 lineID: "3",
@@ -95,15 +118,75 @@ namespace ZUGFeRD_Test
 
             MemoryStream ms = new MemoryStream();
 
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 6);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.ParentLineID, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.ParentLineID, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.ParentLineID, "2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[3].AssociatedDocument.ParentLineID, "2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[4].AssociatedDocument.ParentLineID, "2.2");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[5].AssociatedDocument.ParentLineID, null);
+        }
+
+        [TestMethod]
+        public void TestLineStatusCode()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+
+            TradeLineItem tradeLineItem1 = desc.AddTradeLineItem(
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            tradeLineItem1.SetLineStatus(LineStatusCodes.New, LineStatusReasonCodes.DETAIL);
+
+            desc.AddTradeLineItem(
+                name: "Joghurt Banane",
+                billedQuantity: 50m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 5.5m,
+                grossUnitPrice: 5.5m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 7.0m,
+                taxType: TaxTypes.VAT);
+
+            TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
+                name: "Abschlagsrechnung vom 01.01.2024",
+                billedQuantity: -1m,
+                unitCode: QuantityCodes.C62,
+                netUnitPrice: 500,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            tradeLineItem3.SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
+
+            MemoryStream ms = new MemoryStream();
+
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 4);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.ParentLineID, null);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.ParentLineID, null);
-            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.ParentLineID, "2");
-            Assert.AreEqual(loadedInvoice.TradeLineItems[3].AssociatedDocument.ParentLineID, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems.Count, 3);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.LineStatusCode, LineStatusCodes.New);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].AssociatedDocument.LineStatusReasonCode, LineStatusReasonCodes.DETAIL);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.LineStatusCode, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.LineStatusReasonCode, null);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.LineStatusCode, LineStatusCodes.DocumentationClaim);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.LineStatusReasonCode, LineStatusReasonCodes.INFORMATION);
         }
 
         [TestMethod]
