@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -22,13 +22,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZUGFeRDToExcel
+namespace s2industries.ZUGFeRD.Test
 {
-    public class Options
+    public class TestBase
     {
-        public string InputFile { get; set; }
-        public string OutputFile { get; set; }
-        public bool Help { get; set; }
-        public bool Recursive { get; set; }
+        protected string _makeSurePathIsCrossPlatformCompatible(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return path;
+            }
+
+            return path.Replace('\\', System.IO.Path.DirectorySeparatorChar);
+        } // !_makeSurePathIsCrossPlatformCompatible()
     }
 }

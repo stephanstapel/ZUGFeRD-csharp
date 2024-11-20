@@ -16,24 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ZUGFeRD_Test
+namespace s2industries.ZUGFeRD.Render.Demo
 {
-    public class TestBase
+    internal class Program
     {
-        protected string _makeSurePathIsCrossPlatformCompatible(string path)
+        static async Task Main(string[] args)
         {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                return path;
-            }
-
-            return path.Replace('\\', System.IO.Path.DirectorySeparatorChar);
-        } // !_makeSurePathIsCrossPlatformCompatible()
+            Application app = new Application();
+            await app.RunAsync();
+        }
     }
 }

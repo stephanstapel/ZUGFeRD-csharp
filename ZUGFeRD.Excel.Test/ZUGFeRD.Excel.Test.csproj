@@ -5,10 +5,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>s2industries.ZUGFeRD.Excel.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZUGFeRDRenderer\ZUGFeRDRenderer.csproj" />
+    <ProjectReference Include="..\ZUGFeRD.Excel\ZUGFeRD.Excel.csproj" />
+    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace ZUGFeRDToExcel
+namespace s2industries.ZUGFeRD.Excel
 {
     public class InvoiceConverter
     {
@@ -52,14 +52,14 @@ namespace ZUGFeRDToExcel
 
 
 
-        public static void ConvertZUGFeRDToExcel(string inputPath, string outputPath)
+        public static void ToExcel(string inputPath, string outputPath)
         {
             InvoiceDescriptor desc = InvoiceDescriptor.Load(inputPath);
-            ConvertZUGFeRDToExcel(desc, outputPath);
-        } // !ConvertZUGFeRDToExcel()
+            ToExcel(desc, outputPath);
+        } // !ToExcel()
 
 
-        public static void ConvertZUGFeRDToExcel(InvoiceDescriptor descriptor, string outputPath)
+        public static void ToExcel(InvoiceDescriptor descriptor, string outputPath)
         {
 
             // create/ open  Excel file
@@ -118,7 +118,7 @@ namespace ZUGFeRDToExcel
                     new ExcelCell(positionWorksheet, PosColumns.LINE_TOTAL_AMOUNT, i).setValue(lineItem.LineTotalAmount.Value, "0.00");
                 }
 
-                foreach (AdditionalReferencedDocument ard in lineItem.AdditionalReferencedDocuments)
+                foreach (AdditionalReferencedDocument ard in lineItem.GetAdditionalReferencedDocuments())
                 {
                     if (ard.ReferenceTypeCode == ReferenceTypeCodes.IV)
                     {
@@ -130,9 +130,11 @@ namespace ZUGFeRDToExcel
                 new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_0, i).setValue(0m, "0.00").formatWithDecimals();
                 new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_1, i).setValue(0m, "0.00").formatWithDecimals();
                 new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_2, i).setValue(0m, "0.00").formatWithDecimals();
-                for (int j = 0; j < lineItem.TradeAllowanceCharges.Count; j++)
+
+                IList<TradeAllowanceCharge> tradeAllowanceCharges = lineItem.GetTradeAllowanceCharges();
+                for (int j = 0; j < tradeAllowanceCharges.Count; j++)
                 {
-                    TradeAllowanceCharge tac = lineItem.TradeAllowanceCharges[j];
+                    TradeAllowanceCharge tac = tradeAllowanceCharges[j];
                     string column = PosColumns.TRADE_ALLOWANCE_CHARGE_0;
                     if (j == 1)
                     {
@@ -182,7 +184,7 @@ namespace ZUGFeRDToExcel
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Allowances and charges").setBold().joinColumns("B").setAlignCenter();
 
             i += 1;
-            foreach (TradeAllowanceCharge tac in descriptor.TradeAllowanceCharges)
+            foreach (TradeAllowanceCharge tac in descriptor.GetTradeAllowanceCharges())
             {
                 new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Base amount");
                 new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(tac.BasisAmount, "0.00");
@@ -288,6 +290,6 @@ namespace ZUGFeRDToExcel
             headWorksheet.Cells[headWorksheet.Dimension.Address].AutoFitColumns();
 
             pck.Save();
-        } // !ConvertZUGFeRDToExcel()
+        } // !ToExcel()
     }
 }

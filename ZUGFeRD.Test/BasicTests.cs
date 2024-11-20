@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZUGFeRD_Test
+namespace s2industries.ZUGFeRD.Test
 {
     [TestClass]
     public class BasicTests : TestBase

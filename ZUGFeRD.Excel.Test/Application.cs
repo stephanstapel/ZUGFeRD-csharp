@@ -20,7 +20,7 @@ using s2industries.ZUGFeRD;
 using System;
 using System.IO;
 
-namespace ZUGFeRDToExcel
+namespace s2industries.ZUGFeRD.Excel.Test
 {
     internal class Application
     {
@@ -33,7 +33,7 @@ namespace ZUGFeRDToExcel
                 foreach (string _inputPath in System.IO.Directory.GetFiles(baseDirectory, searchPattern, options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
                 {
                     string _outputPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(_inputPath), String.Format("{0}.{1}", System.IO.Path.GetFileNameWithoutExtension(_inputPath), "xlsx"));
-                    InvoiceConverter.ConvertZUGFeRDToExcel(_inputPath, _outputPath);
+                    InvoiceConverter.ToExcel(_inputPath, _outputPath);
                 }
             }
             else
@@ -44,7 +44,7 @@ namespace ZUGFeRDToExcel
                     _outputFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.InputFile), String.Format("{0}.{1}", System.IO.Path.GetFileNameWithoutExtension(options.InputFile), "xlsx"));
                 }
 
-                InvoiceConverter.ConvertZUGFeRDToExcel(options.InputFile, _outputFile);
+                InvoiceConverter.ToExcel(options.InputFile, _outputFile);
             }
         }        
     }

@@ -20,7 +20,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
 using System.IO;
 
-namespace ZUGFeRD_Test
+namespace s2industries.ZUGFeRD.Test
 {
     [TestClass]
     public class ZUGFeRD10Tests : TestBase

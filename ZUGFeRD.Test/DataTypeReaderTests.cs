@@ -21,7 +21,7 @@ using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
 
-namespace ZUGFeRD_Test
+namespace s2industries.ZUGFeRD.Test
 {
     [TestClass]
     public class DataTypeReaderTests

@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZUGFeRDToExcelTest
+namespace s2industries.ZUGFeRD.Excel.Test
 {
     class Program
     {

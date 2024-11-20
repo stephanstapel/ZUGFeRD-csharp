@@ -30,7 +30,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Xml;
 
-namespace s2industries.ZUGFeRDRenderer
+namespace s2industries.ZUGFeRD.Render
 {
     public class InvoiceDescriptorHtmlRenderer
     {

@@ -26,7 +26,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ZUGFeRDToExcel
+namespace s2industries.ZUGFeRD.Excel
 {
     public class ExcelCell
     {

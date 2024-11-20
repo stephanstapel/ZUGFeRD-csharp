@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,14 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-namespace ZUGFeRDRendererDemo
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace s2industries.ZUGFeRD.Excel.Test
 {
-    internal class Program
+    public class Options
     {
-        static async Task Main(string[] args)
-        {
-            Application app = new Application();
-            await app.RunAsync();
-        }
+        public string InputFile { get; set; }
+        public string OutputFile { get; set; }
+        public bool Help { get; set; }
+        public bool Recursive { get; set; }
     }
 }

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRDRendererDemo", "ZUGFeRDRendererDemo.csproj", "{20A0C188-C52F-4FDE-8A6C-9AF01A93A656}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD.Render.Demo", "ZUGFeRD.Render.Demo.csproj", "{20A0C188-C52F-4FDE-8A6C-9AF01A93A656}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRDRenderer", "..\ZUGFeRDRenderer\ZUGFeRDRenderer.csproj", "{80AEF0A2-8319-4846-8FCB-34E98FAE1DE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD.Render", "..\ZUGFeRD.Render\ZUGFeRD.Render.csproj", "{80AEF0A2-8319-4846-8FCB-34E98FAE1DE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD", "..\ZUGFeRD\ZUGFeRD.csproj", "{5DABF65B-C2C0-4F0D-B421-19611008AAA7}"
 EndProject

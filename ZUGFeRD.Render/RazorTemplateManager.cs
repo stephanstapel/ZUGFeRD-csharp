@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace s2industries.ZUGFeRDRenderer
+namespace s2industries.ZUGFeRD.Render
 {
     class RazorTemplateManager : ITemplateManager
     {

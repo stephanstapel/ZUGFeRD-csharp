@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using s2industries.ZUGFeRD;
 
-namespace ZUGFeRD_Test
+namespace s2industries.ZUGFeRD.Test
 {
 	internal class InvoiceProvider
 	{
