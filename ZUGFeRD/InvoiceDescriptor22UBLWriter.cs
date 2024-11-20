@@ -674,14 +674,18 @@ namespace s2industries.ZUGFeRD
                     writer.WriteEndElement();
                 }
 
-                if (this.Descriptor.PaymentMeans?.SEPAMandateReference != null)
+                if (partyType == PartyTypes.SellerTradeParty)
                 {
-                    writer.WriteStartElement("cac", "PartyIdentification");
-                    writer.WriteStartElement("cbc", "ID");
-                    writer.WriteAttributeString("schemeID", "SEPA");
-                    writer.WriteValue(this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
-                    writer.WriteEndElement();//!ID
-                    writer.WriteEndElement();//!PartyIdentification
+                    // This is the identification of the seller, not the buyer
+                    if (!string.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
+                    {
+                        writer.WriteStartElement("cac", "PartyIdentification");
+                        writer.WriteStartElement("cbc", "ID");
+                        writer.WriteAttributeString("schemeID", "SEPA");
+                        writer.WriteValue(this.Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                        writer.WriteEndElement();//!ID
+                        writer.WriteEndElement();//!PartyIdentification
+                    }
                 }
 
                 if (!string.IsNullOrWhiteSpace(party.Name))
