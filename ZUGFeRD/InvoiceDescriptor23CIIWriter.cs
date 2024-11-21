@@ -999,7 +999,7 @@ namespace s2industries.ZUGFeRD
                             // if a note already exists, append a valid line break.
                             if (sbPaymentNotes.Length > 0)
                             {
-                                sbPaymentNotes.Append("&#10;");
+                                sbPaymentNotes.Append(XmlUtils.XmlNewLine);
                             }
 
                             if (paymentTerms.PaymentTermsType.HasValue)
@@ -1008,7 +1008,7 @@ namespace s2industries.ZUGFeRD
                                 if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
                                 {
                                     sbPaymentNotes.Append(paymentTerms.Description);
-                                    sbPaymentNotes.Append("&#10;");
+                                    sbPaymentNotes.Append(XmlUtils.XmlNewLine);
                                 }
                                 
                                 sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
