@@ -114,6 +114,12 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         SelfBilledInvoice = 389,
 
+
+        /// <summary>
+        /// Forwarder's invoice (623)
+        /// </summary>
+        ForwardersInvoice = 623,
+
         /// <summary>
         /// Invoice information for accounting purposes (751)
         /// is an Invoice
