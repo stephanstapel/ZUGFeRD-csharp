@@ -1935,10 +1935,6 @@ namespace s2industries.ZUGFeRD.Test
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
-            StreamReader reader = new StreamReader(ms);
-            string text = reader.ReadToEnd();
-
-            ms.Seek(0, SeekOrigin.Begin);
             Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
 
             ms.Seek(0, SeekOrigin.Begin);
@@ -2010,7 +2006,7 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual("PaymentReference", loadedInvoice.PaymentReference);
 
-            Assert.AreEqual("SepaID", loadedInvoice.PaymentMeans.SEPACreditorIdentifier);
+            Assert.AreEqual("", loadedInvoice.PaymentMeans.SEPACreditorIdentifier);
             Assert.AreEqual("SepaMandat", loadedInvoice.PaymentMeans.SEPAMandateReference);
             Assert.AreEqual("123", loadedInvoice.PaymentMeans.FinancialCard.Id);
             Assert.AreEqual("Mustermann", loadedInvoice.PaymentMeans.FinancialCard.CardholderName);
@@ -2817,5 +2813,176 @@ namespace s2industries.ZUGFeRD.Test
 			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "1");
 			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.ID, "ORDER84359");
 		}
+
+        [TestMethod]
+        public void TestRequiredDirectDebitFieldsShouldExist()
+        {
+            var d = new InvoiceDescriptor();
+            d.Type = InvoiceType.Invoice;
+            d.InvoiceNo = "471102";
+            d.Currency = CurrencyCodes.EUR;
+            d.InvoiceDate = new DateTime(2018, 3, 5);
+            d.AddTradeLineItem(
+                lineID: "1",
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
+                sellerAssignedID: "TB100A4",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 11.781m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            d.SetSeller(
+                id: null,
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                name: "Lieferant GmbH",
+                postcode: "80333",
+                city: "München",
+                street: "Lieferantenstraße 20",
+                country: CountryCodes.DE,
+                legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
+            d.SetBuyer(
+                id: "GE2020211",
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
+                name: "Kunden AG Mitte",
+                postcode: "69876",
+                city: "Frankfurt",
+                street: "Kundenstraße 15",
+                country: CountryCodes.DE);
+            d.SetPaymentMeansSepaDirectDebit(
+                "DE98ZZZ09999999999",
+                "REF A-123");
+            d.AddDebitorFinancialAccount(
+                "DE21860000000086001055",
+                null);
+            d.AddTradePaymentTerms(
+                "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
+            d.SetTotals(
+                198.00m,
+                0.00m,
+                0.00m,
+                198.00m,
+                37.62m,
+                235.62m,
+                0.00m,
+                235.62m);
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.FC,
+                    No = "201/113/40209"
+                });
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.VA,
+                    No = "DE123456789"
+                });
+            d.AddApplicableTradeTax(
+                198.00m,
+                19.00m,
+                TaxTypes.VAT,
+                TaxCategoryCodes.S);
+
+            using (var stream = new MemoryStream())
+            {
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                // test the raw xml file
+                string content = Encoding.UTF8.GetString(stream.ToArray());
+
+                Assert.IsTrue(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
+                Assert.IsTrue(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
+            }
+        } // !TestRequiredDirectDebitFieldsShouldExist()
+
+        [TestMethod]
+        public void TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
+        {
+            var d = new InvoiceDescriptor();
+            d.Type = InvoiceType.Invoice;
+            d.InvoiceNo = "471102";
+            d.Currency = CurrencyCodes.EUR;
+            d.InvoiceDate = new DateTime(2018, 3, 5);
+            d.AddTradeLineItem(
+                lineID: "1",
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
+                sellerAssignedID: "TB100A4",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 11.781m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            d.SetSeller(
+                id: null,
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                name: "Lieferant GmbH",
+                postcode: "80333",
+                city: "München",
+                street: "Lieferantenstraße 20",
+                country: CountryCodes.DE,
+                legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
+            d.SetBuyer(
+                id: "GE2020211",
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
+                name: "Kunden AG Mitte",
+                postcode: "69876",
+                city: "Frankfurt",
+                street: "Kundenstraße 15",
+                country: CountryCodes.DE);
+            d.SetPaymentMeans(PaymentMeansTypeCodes.SEPACreditTransfer,
+                "Information of Payment Means",
+                "DE98ZZZ09999999999",
+                "REF A-123");
+            d.AddDebitorFinancialAccount(
+                "DE21860000000086001055",
+                null);
+            d.AddTradePaymentTerms(
+                "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
+            d.SetTotals(
+                198.00m,
+                0.00m,
+                0.00m,
+                198.00m,
+                37.62m,
+                235.62m,
+                0.00m,
+                235.62m);
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.FC,
+                    No = "201/113/40209"
+                });
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.VA,
+                    No = "DE123456789"
+                });
+            d.AddApplicableTradeTax(
+                198.00m,
+                19.00m,
+                TaxTypes.VAT,
+                TaxCategoryCodes.S);
+
+            using (var stream = new MemoryStream())
+            {
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                // test the raw xml file
+                string content = Encoding.UTF8.GetString(stream.ToArray());
+
+                Assert.IsFalse(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
+                Assert.IsFalse(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
+            }
+        } // !TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
     }
 }
