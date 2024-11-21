@@ -26,8 +26,6 @@ namespace s2industries.ZUGFeRD
 {
     internal class XmlUtils
     {
-        internal const string XmlNewLine = "&#10;";
-        
         internal static bool NodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
         {
             if (node == null)

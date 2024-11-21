@@ -2763,9 +2763,7 @@ namespace s2industries.ZUGFeRD.Test
 
         [TestMethod]
         public void TestPaymentTermsSingleCardinalityStructured()
-        {
-            // Arrange
-            const string xmlNewLine = "&#10;";
+        {                        
             DateTime timestamp = DateTime.Now.Date;
             var desc = InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
@@ -2794,7 +2792,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(1, paymentTerms.Count);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(paymentTerm);
-            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{xmlNewLine}Description2{xmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
+            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{XmlConstants.XmlNewLine}Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
             //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
             //Assert.AreEqual(10, paymentTerm.DueDays);
