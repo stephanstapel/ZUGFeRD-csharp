@@ -995,17 +995,31 @@ namespace s2industries.ZUGFeRD
                         DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                         {
+                            // every line break must be a valid xml line break.
+                            // if a note already exists, append a valid line break.
+                            if (sbPaymentNotes.Length > 0)
+                            {
+                                sbPaymentNotes.Append(XmlUtils.XmlNewLine);
+                            }
+
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
+                                // also write the description if it exists.
+                                if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
+                                {
+                                    sbPaymentNotes.Append(paymentTerms.Description);
+                                    sbPaymentNotes.Append(XmlUtils.XmlNewLine);
+                                }
+                                
                                 sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
                                 sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
                                 sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
-                                sbPaymentNotes.AppendLine("#");
+                                sbPaymentNotes.Append("#");
                             }
                             else
                             {
-                                sbPaymentNotes.AppendLine(paymentTerms.Description);
+                                sbPaymentNotes.Append(paymentTerms.Description);
                             }
                             dueDate = dueDate ?? paymentTerms.DueDate;
                         }
