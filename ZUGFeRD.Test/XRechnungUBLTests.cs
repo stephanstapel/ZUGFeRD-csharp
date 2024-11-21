@@ -579,9 +579,9 @@ namespace s2industries.ZUGFeRD.Test
             // test the raw xml file
             string content = Encoding.UTF8.GetString(resultStream.ToArray());
             // PartyIdentification may only exist once
-            Assert.IsTrue(Regex.Matches(content, @"\<cac:PartyIdentification\>").Count == 1, "PartyIdentification should only contain once");
+            Assert.IsTrue(Regex.Matches(content, "<cac:PartyIdentification.*>").Count == 1, "PartyIdentification should only contain once");
             // PartyIdentification may only be contained in AccountingSupplierParty
-            Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty>.*<cac:Party>.*<cac:PartyIdentification>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
+            Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty.*>.*<cac:Party.*>.*<cac:PartyIdentification.*>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
         } // !TestPartyIdentificationForSeller()
         
         [TestMethod]
@@ -602,7 +602,7 @@ namespace s2industries.ZUGFeRD.Test
             string content = Encoding.UTF8.GetString(resultStream.ToArray());
             
             Assert.IsNotNull(content);
-            Assert.IsFalse(Regex.IsMatch(content, @"\<cac:PartyIdentification\>"), "PartyIdentification should not contain");
+            Assert.IsFalse(Regex.IsMatch(content, @"<cac:PartyIdentification.*>"), "PartyIdentification should not contain");
         } // !TestPartyIdentificationShouldNotExist()
 
         [TestMethod]
@@ -685,8 +685,8 @@ namespace s2industries.ZUGFeRD.Test
                 // test the raw xml file
                 string content = Encoding.UTF8.GetString(stream.ToArray());
 
-                Assert.IsFalse(Regex.IsMatch(content, @"<cac:PaymentMandate>.*<cbc:Name.*<\/cac:PaymentMandate>", RegexOptions.Singleline));
-                Assert.IsFalse(Regex.IsMatch(content, "<cac:PaymentMandate>.*<cac:FinancialInstitutionBranch.*</cac:PaymentMandate>", RegexOptions.Singleline));
+                Assert.IsFalse(Regex.IsMatch(content, @"<cac:PaymentMandate.*>.*<cbc:Name.*><\/cac:PaymentMandate>", RegexOptions.Singleline));
+                Assert.IsFalse(Regex.IsMatch(content, "<cac:PaymentMandate.*>.*<cac:FinancialInstitutionBranch.*></cac:PaymentMandate>", RegexOptions.Singleline));
             }
         } // !TestInDebitInvoiceTheFinancialAccountNameShouldNotExist()
 	}
