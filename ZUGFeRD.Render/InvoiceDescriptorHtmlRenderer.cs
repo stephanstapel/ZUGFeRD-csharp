@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD.Render
         public static string render(InvoiceDescriptor desc)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "ZUGFeRDRenderer.test.cshtml";
+            var resourceName = typeof(InvoiceDescriptorHtmlRenderer).Namespace + ".test.cshtml";
 
             string template = "";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
