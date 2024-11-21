@@ -2900,7 +2900,7 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestRequiredDirectDebitFieldsShouldExist()
 
         [TestMethod]
-        public void TestDirectDebitFieldsShouldNotExist()
+        public void TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
         {
             var d = new InvoiceDescriptor();
             d.Type = InvoiceType.Invoice;
@@ -2983,6 +2983,6 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsFalse(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
                 Assert.IsFalse(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
             }
-        } // !TestDirectDebitFieldsShouldNotExist()
+        } // !TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
     }
 }
