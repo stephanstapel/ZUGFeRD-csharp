@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -44,7 +43,7 @@ namespace s2industries.ZUGFeRD
             long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;
-            this.Writer = new ProfileAwareXmlTextWriter(stream, Encoding.UTF8, descriptor.Profile);
+            this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
             Dictionary<string, string> _namespaces = new Dictionary<string, string>()
             {
                 { "cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" },

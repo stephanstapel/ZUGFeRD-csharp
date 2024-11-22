@@ -59,11 +59,11 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public ProfileAwareXmlTextWriter(System.IO.Stream w, System.Text.Encoding encoding, Profile profile)
+        public ProfileAwareXmlTextWriter(System.IO.Stream w, Profile profile)
         {
             this.TextWriter = XmlWriter.Create(w, new XmlWriterSettings()
             {
-                Encoding = encoding,
+                Encoding = new UTF8Encoding(false, true),
                 Indent = true
             });
             this.CurrentProfile = profile;
