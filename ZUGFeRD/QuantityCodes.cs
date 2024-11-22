@@ -107,7 +107,7 @@ namespace s2industries.ZUGFeRD
         KTM,
 
         /// <summary>
-        /// Kilowattstune
+        /// Kilowattstunde
         /// Abkürzung: kWh
         /// </summary>
         KWH,
