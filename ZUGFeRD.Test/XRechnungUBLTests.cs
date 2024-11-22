@@ -579,9 +579,9 @@ namespace s2industries.ZUGFeRD.Test
             // test the raw xml file
             string content = Encoding.UTF8.GetString(resultStream.ToArray());
             // PartyIdentification may only exist once
-            Assert.IsTrue(Regex.Matches(content, @"\<cac:PartyIdentification\>").Count == 1, "PartyIdentification should only contain once");
+            Assert.IsTrue(Regex.Matches(content, "<cac:PartyIdentification.*>").Count == 1, "PartyIdentification should only contain once");
             // PartyIdentification may only be contained in AccountingSupplierParty
-            Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty>.*<cac:Party>.*<cac:PartyIdentification>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
+            Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty.*>.*<cac:Party.*>.*<cac:PartyIdentification.*>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
         } // !TestPartyIdentificationForSeller()
         
         [TestMethod]
@@ -602,7 +602,92 @@ namespace s2industries.ZUGFeRD.Test
             string content = Encoding.UTF8.GetString(resultStream.ToArray());
             
             Assert.IsNotNull(content);
-            Assert.IsFalse(Regex.IsMatch(content, @"\<cac:PartyIdentification\>"), "PartyIdentification should not contain");
+            Assert.IsFalse(Regex.IsMatch(content, @"<cac:PartyIdentification.*>"), "PartyIdentification should not contain");
         } // !TestPartyIdentificationShouldNotExist()
+
+        [TestMethod]
+        public void TestInDebitInvoiceTheFinancialAccountNameAndFinancialInstitutionBranchShouldNotExist()
+        {
+            var d = new InvoiceDescriptor();
+            d.Type = InvoiceType.Invoice;
+            d.InvoiceNo = "471102";
+            d.Currency = CurrencyCodes.EUR;
+            d.InvoiceDate = new DateTime(2018, 3, 5);
+            d.AddTradeLineItem(
+                lineID: "1",
+                id: new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345001235"),
+                sellerAssignedID: "TB100A4",
+                name: "Trennblätter A4",
+                billedQuantity: 20m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 11.781m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+            d.SetSeller(
+                id: null,
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+                name: "Lieferant GmbH",
+                postcode: "80333",
+                city: "München",
+                street: "Lieferantenstraße 20",
+                country: CountryCodes.DE,
+                legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH"));
+            d.SetBuyer(
+                id: "GE2020211",
+                globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001987658"),
+                name: "Kunden AG Mitte",
+                postcode: "69876",
+                city: "Frankfurt",
+                street: "Kundenstraße 15",
+                country: CountryCodes.DE);
+            d.SetPaymentMeansSepaDirectDebit(
+                "DE98ZZZ09999999999",
+                "REF A-123");
+            d.AddDebitorFinancialAccount(
+                "DE21860000000086001055",
+                null);
+            d.AddTradePaymentTerms(
+                "Der Betrag in Höhe von EUR 235,62 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.");
+            d.SetTotals(
+                198.00m,
+                0.00m,
+                0.00m,
+                198.00m,
+                37.62m,
+                235.62m,
+                0.00m,
+                235.62m);
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.FC,
+                    No = "201/113/40209"
+                });
+            d.SellerTaxRegistration.Add(
+                new TaxRegistration
+                {
+                    SchemeID = TaxRegistrationSchemeID.VA,
+                    No = "DE123456789"
+                });
+            d.AddApplicableTradeTax(
+                198.00m,
+                19.00m,
+                TaxTypes.VAT,
+                TaxCategoryCodes.S);
+
+            using (var stream = new MemoryStream())
+            {
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+                stream.Seek(0, SeekOrigin.Begin);
+                
+                // test the raw xml file
+                string content = Encoding.UTF8.GetString(stream.ToArray());
+
+                Assert.IsFalse(Regex.IsMatch(content, @"<cac:PaymentMandate.*>.*<cbc:Name.*><\/cac:PaymentMandate>", RegexOptions.Singleline));
+                Assert.IsFalse(Regex.IsMatch(content, "<cac:PaymentMandate.*>.*<cac:FinancialInstitutionBranch.*></cac:PaymentMandate>", RegexOptions.Singleline));
+            }
+        } // !TestInDebitInvoiceTheFinancialAccountNameShouldNotExist()
 	}
 }

@@ -355,17 +355,20 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteStartElement("cac", "PayerFinancialAccount");
 
                             Writer.WriteElementString("cbc", "ID", account.IBAN);
-                            Writer.WriteElementString("cbc", "Name", account.Name);
 
-                            Writer.WriteStartElement("cac", "FinancialInstitutionBranch");
-                            Writer.WriteElementString("cbc", "ID", account.BIC);
+                            //[UBL-CR-440]-A UBL invoice should not include the PaymentMeans PaymentMandate PayerFinancialAccount Name
+                            //Writer.WriteElementString("cbc", "Name", account.Name);
+
+                            //[UBL-CR-446]-A UBL invoice should not include the PaymentMeans PaymentMandate PayerFinancialAccount FinancialInstitutionBranch
+                            //Writer.WriteStartElement("cac", "FinancialInstitutionBranch");
+                            //Writer.WriteElementString("cbc", "ID", account.BIC);
 
                             //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
                             //Writer.WriteStartElement("cac", "FinancialInstitution");
                             //Writer.WriteElementString("cbc", "Name", account.BankName);
 
                             //Writer.WriteEndElement(); // !FinancialInstitution
-                            Writer.WriteEndElement(); // !FinancialInstitutionBranch
+                            //Writer.WriteEndElement(); // !FinancialInstitutionBranch
 
                             Writer.WriteEndElement(); // !PayerFinancialAccount
                             Writer.WriteEndElement(); // !PaymentMandate
