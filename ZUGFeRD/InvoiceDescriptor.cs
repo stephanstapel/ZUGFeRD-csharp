@@ -999,12 +999,48 @@ namespace s2industries.ZUGFeRD
         /// <param name="categoryCode"></param>
         /// <param name="allowanceChargeBasisAmount"></param>
         /// <param name="exemptionReasonCode"></param>
-        /// <param name="exemptionReason"></param>
+        /// <param name="exemptionReason"></param>        
+        [Obsolete("Please note that TaxAmount needs to be written manually beginning with version 17.0. Please use the function that includes the taxAmount parameter")]
         public void AddApplicableTradeTax(decimal basisAmount, decimal percent, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal? allowanceChargeBasisAmount = null, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
         {
             Tax tax = new Tax()
             {
                 BasisAmount = basisAmount,
+                Percent = percent,
+                TypeCode = typeCode,
+                AllowanceChargeBasisAmount = allowanceChargeBasisAmount,
+                ExemptionReasonCode = exemptionReasonCode,
+                ExemptionReason = exemptionReason
+            };
+
+            if ((categoryCode != null) && (categoryCode.Value != TaxCategoryCodes.Unknown))
+            {
+                tax.CategoryCode = categoryCode;
+            }
+
+            this.Taxes.Add(tax);
+        } // !AddApplicableTradeTax()
+
+
+        /// <summary>
+        /// Add information about VAT and apply to the invoice line items for goods and services on the invoice.
+        /// 
+        /// This tax is added per VAT/ tax rate.
+        /// </summary>
+        /// <param name="basisAmount"></param>
+        /// <param name="percent">Tax rate where the tax belongs to</param>
+        /// <param name="taxAmount">Tax amount, i.e. basisAmount * percent</param>
+        /// <param name="typeCode"></param>
+        /// <param name="categoryCode"></param>
+        /// <param name="allowanceChargeBasisAmount"></param>
+        /// <param name="exemptionReasonCode"></param>
+        /// <param name="exemptionReason"></param>        
+        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, decimal taxAmount, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal? allowanceChargeBasisAmount = null, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
+        {
+            Tax tax = new Tax()
+            {
+                BasisAmount = basisAmount,
+                TaxAmount = taxAmount,
                 Percent = percent,
                 TypeCode = typeCode,
                 AllowanceChargeBasisAmount = allowanceChargeBasisAmount,
@@ -1191,7 +1227,6 @@ namespace s2industries.ZUGFeRD
                              buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,
                              billingPeriodEnd: billingPeriodEnd);
-
         } // !AddTradeLineItem()
 
 

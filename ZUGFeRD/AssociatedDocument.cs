@@ -39,6 +39,19 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public string LineID { get; internal set; }
 
+        /// <summary>
+        /// Refers to the superior line in a hierarchical structure. 
+        /// This property is used to map a hierarchy tree of invoice items, allowing child items to reference their parent line.
+        /// BT-X-304
+        /// 
+        /// Example usage:
+        /// <code>
+        /// var tradeLineItem = new TradeLineItem();
+        /// tradeLineItem.SetParentLineId("1");
+        /// </code>
+        /// </summary>
+        public string ParentLineID { get; internal set; }
+
 
         /// <summary>
         /// Initializes a new associated document object, optionally passing a certain lineID
@@ -48,5 +61,21 @@ namespace s2industries.ZUGFeRD
         {
             this.LineID = lineID;
         }
+
+        /// <summary>
+        /// Type of the invoice line item
+        /// 
+        /// If the LineStatusCode element is used, the LineStatusReasonCode must be filled.
+        /// 
+        /// BT-X-7
+        /// </summary>
+        public LineStatusCodes? LineStatusCode { get; internal set; } = null;
+
+        /// <summary>
+        /// Subtype of the invoice line item
+        /// 
+        /// BT-X-8
+        /// </summary>
+        public LineStatusReasonCodes? LineStatusReasonCode { get; internal set; } = null;
     }
 }

@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+
 namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor23CIIWriter : IInvoiceDescriptorWriter
@@ -137,6 +138,19 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("ram", "LineID", tradeLineItem.AssociatedDocument.LineID);
                     }
+                    // It is necessary that Parent Line Id be written directly under LineId
+                    if (!String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
+                    {
+                        Writer.WriteElementString("ram", "ParentLineID", tradeLineItem.AssociatedDocument.ParentLineID);
+                    }
+                    if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
+                    {
+                        Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumValueToString());
+                    }
+                    if (tradeLineItem.AssociatedDocument.LineStatusReasonCode.HasValue)
+                    {
+                        Writer.WriteElementString("ram", "LineStatusReasonCode", tradeLineItem.AssociatedDocument.LineStatusReasonCode.Value.EnumToString());
+                    }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes, ALL_PROFILES ^ Profile.Minimum ^ Profile.BasicWL);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended|XRechnung)
                 }
@@ -152,9 +166,9 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
                 Writer.WriteStartElement("ram", "SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && (tradeLineItem.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
-                    _writeElementWithAttributeWithPrefix(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _writeElementWithAttributeWithPrefix(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
 
                 Writer.WriteOptionalElementString("ram", "SellerAssignedID", tradeLineItem.SellerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
@@ -457,10 +471,9 @@ namespace s2industries.ZUGFeRD
                 {
                     if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
                     {
-                        Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-
                         foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BT-147
                         {
+                            Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                             #region ChargeIndicator
                             Writer.WriteStartElement("ram", "ChargeIndicator");
                             Writer.WriteElementString("udt", "Indicator", specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false");
@@ -492,8 +505,8 @@ namespace s2industries.ZUGFeRD
                             #endregion
 
                             Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
+                            Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                         }
-                        Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                     }
                 }
                 #endregion
@@ -741,7 +754,7 @@ namespace s2industries.ZUGFeRD
             #region ApplicableHeaderTradeSettlement
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeSettlement");
             // order of sub-elements of ApplicableHeaderTradeSettlement:
-            //   1. CreditorReferenceID (optional)
+            //   1. CreditorReferenceID (BT-90) is only required/allowed on DirectDebit (BR-DE-30)
             //   2. PaymentReference (optional)
             //   3. TaxCurrencyCode (optional)
             //   4. InvoiceCurrencyCode (optional)
@@ -761,10 +774,10 @@ namespace s2industries.ZUGFeRD
             //  18. ReceivableSpecifiedTradeAccountingAccount (optional)
             //  19. SpecifiedAdvancePayment (optional)
 
-            //   1. CreditorReferenceID (optional)
-            if (!String.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
+            //   1. CreditorReferenceID(BT-90) is only required/allowed on DirectDebit (BR-DE-30)
+            if ((this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit) && !String.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
             {
-                Writer.WriteOptionalElementString("ram", "CreditorReferenceID", Descriptor.PaymentMeans?.SEPACreditorIdentifier, Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1);
+                Writer.WriteElementString("ram", "CreditorReferenceID", Descriptor.PaymentMeans?.SEPACreditorIdentifier, Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1);
             }
 
             //   2. PaymentReference (optional)
@@ -982,17 +995,31 @@ namespace s2industries.ZUGFeRD
                         DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                         {
+                            // every line break must be a valid xml line break.
+                            // if a note already exists, append a valid line break.
+                            if (sbPaymentNotes.Length > 0)
+                            {
+                                sbPaymentNotes.Append(XmlConstants.XmlNewLine);
+                            }
+
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
+                                // also write the description if it exists.
+                                if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
+                                {
+                                    sbPaymentNotes.Append(paymentTerms.Description);
+                                    sbPaymentNotes.Append(XmlConstants.XmlNewLine);
+                                }
+                                
                                 sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
                                 sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
                                 sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
-                                sbPaymentNotes.AppendLine("#");
+                                sbPaymentNotes.Append("#");
                             }
                             else
                             {
-                                sbPaymentNotes.AppendLine(paymentTerms.Description);
+                                sbPaymentNotes.Append(paymentTerms.Description);
                             }
                             dueDate = dueDate ?? paymentTerms.DueDate;
                         }
@@ -1003,7 +1030,12 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(dueDate.Value));
                             Writer.WriteEndElement(); // !ram:DueDateDateTime
                         }
-                        Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        
+                        // BT-89 is only required/allowed on DirectDebit (BR-DE-29)
+                        if (this.Descriptor.PaymentMeans.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
+                        {
+                            Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        }
                         Writer.WriteEndElement();
                     }
                     break;
@@ -1390,10 +1422,10 @@ namespace s2industries.ZUGFeRD
             writer.WriteStartElement(prefix, legalOrganizationTag, this.Descriptor.Profile);
             if (legalOrganization.ID != null)
             {
-                if (!String.IsNullOrWhiteSpace(legalOrganization.ID.ID) && !String.IsNullOrWhiteSpace(legalOrganization.ID.SchemeID.EnumToString()))
+                if (!String.IsNullOrWhiteSpace(legalOrganization.ID.ID) && legalOrganization.ID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(legalOrganization.ID.SchemeID.Value.EnumToString()))
                 {
                     writer.WriteStartElement("ram", "ID");
-                    writer.WriteAttributeString("schemeID", legalOrganization.ID.SchemeID.EnumToString());
+                    writer.WriteAttributeString("schemeID", legalOrganization.ID.SchemeID.Value.EnumToString());
                     writer.WriteValue(legalOrganization.ID.ID);
                     writer.WriteEndElement();
                 }
@@ -1466,10 +1498,10 @@ namespace s2industries.ZUGFeRD
 
             if (party.ID != null && !string.IsNullOrWhiteSpace(party.ID.ID))
             {
-                if (party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown)
+                if (party.ID.SchemeID.HasValue && (party.ID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
                 {
                     writer.WriteStartElement("ram", "ID");
-                    writer.WriteAttributeString("schemeID", party.ID.SchemeID.EnumToString());
+                    writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
                     writer.WriteValue(party.ID.ID);
                     writer.WriteEndElement();
                 }
@@ -1479,10 +1511,10 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && (party.GlobalID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+            if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && party.GlobalID.SchemeID.HasValue && (party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
             {
                 writer.WriteStartElement("ram", "GlobalID");
-                writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.EnumToString());
+                writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
                 writer.WriteValue(party.GlobalID.ID);
                 writer.WriteEndElement();
             }

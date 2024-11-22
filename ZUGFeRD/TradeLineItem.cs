@@ -221,8 +221,6 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public Party UltimateShipTo { get; set; }
 
-
-
         public TradeLineItem(string lineId)
         {
             this.AssociatedDocument = new AssociatedDocument(lineId);
@@ -334,6 +332,19 @@ namespace s2industries.ZUGFeRD
             return this.SpecifiedTradeAllowanceCharges;
         } // !GetSpecifiedTradeAllowanceCharges()
 
+        /// <summary>
+        /// The value given here refers to the superior line. In this way, a hierarchy tree of invoice items can be mapped.
+        /// </summary>
+        public void SetParentLineId(string parentLineId)
+        {
+            this.AssociatedDocument.ParentLineID = parentLineId;
+        }
+
+        public void SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
+        {
+            this.AssociatedDocument.LineStatusCode = lineStatusCode;
+            this.AssociatedDocument.LineStatusReasonCode = lineStatusReasonCode;
+        }
 
         public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
         {

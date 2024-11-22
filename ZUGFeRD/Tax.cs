@@ -28,22 +28,37 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class Tax
     {
+        private decimal? _taxAmount;
+
         /// <summary>
         /// Returns the amount of the tax (Percent * BasisAmount)
         /// 
         /// This information is calculated live.
         /// </summary>
+        [Obsolete("Please note that TaxAmount needs to be set manually beginning with version 17.0, automatic calculation will be removed")]
         public decimal TaxAmount
         {
             get
             {
-                return System.Math.Round(0.01m * this.Percent * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
+                if (_taxAmount.HasValue)
+                {
+                    return _taxAmount.Value;
+                }
+                else
+                {
+                    return System.Math.Round((0.01m * this.Percent) * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
+                }
+            }
+            set
+            {
+                _taxAmount = value;
             }
         }
 
         /// <summary>
         /// VAT category taxable amount
-        /// </summary>
+        /// </summary>        
+        [Obsolete("Please note that TaxAmount needs to be written manually beginning with version 17.0")]
         public decimal BasisAmount { get; set; }
 
         /// <summary>
