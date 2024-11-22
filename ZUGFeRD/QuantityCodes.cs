@@ -82,6 +82,12 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         KGM,
 
+
+        /// <summary>
+        /// Hundred
+        /// </summary>
+        CEN,
+
         /// <summary>
         /// Zentimeter
         /// Abkürzung: cm
@@ -224,6 +230,11 @@ namespace s2industries.ZUGFeRD
         /// Abkürzung: Sekunde(n) 
         /// </summary>
         SEC,
+
+        /// <summary>
+        /// Ten pack
+        /// </summary>
+        TP,
 
         /// <summary>
         /// Bündel
