@@ -24,6 +24,11 @@ namespace s2industries.ZUGFeRD
 {
     public class XmlConstants
     {
-        public const string XmlNewLine = "\n";
+        /// <summary>
+        /// Xml new line. Works just like Environment.NewLine.
+        /// 
+        /// Please note that it does not work if this value is replaced by \n
+        /// </summary>
+        public const string XmlNewLine = "&#10;";
     }
 }
