@@ -1223,7 +1223,11 @@ namespace s2industries.ZUGFeRD
         {
             Writer.WriteStartElement("ram", "AdditionalReferencedDocument", profile);
             Writer.WriteElementString("ram", "IssuerAssignedID", document.ID);
-            Writer.WriteElementString("ram", "TypeCode", document.TypeCode.EnumValueToString());
+
+            if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+            {
+                Writer.WriteElementString("ram", "TypeCode", document.TypeCode.EnumValueToString());
+            }
 
             if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
             {
