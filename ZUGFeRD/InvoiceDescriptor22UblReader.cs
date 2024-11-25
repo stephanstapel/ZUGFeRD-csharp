@@ -297,7 +297,10 @@ namespace s2industries.ZUGFeRD
                                              );
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//cac:AllowanceCharge", nsmgr))
+            // As both document level and document item level element have same name
+            // only using the //cac:AllowanceCharge gives all the allowances from the file 
+            // so we specify the node with the parent node
+            foreach (XmlNode node in doc.DocumentElement.SelectNodes("/ubl:Invoice/cac:AllowanceCharge", nsmgr))
             {
                 retval.AddTradeAllowanceCharge(!XmlUtils.NodeAsBool(node, ".//cbc:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
                                                XmlUtils.NodeAsDecimal(node, ".//cbc:BaseAmount", nsmgr, 0).Value,
