@@ -685,7 +685,7 @@ namespace s2industries.ZUGFeRD.Test
                 // test the raw xml file
                 string content = Encoding.UTF8.GetString(stream.ToArray());
 
-                Assert.IsFalse(Regex.IsMatch(content, @"<cac:PaymentMandate.*>.*<cbc:Name.*><\/cac:PaymentMandate>", RegexOptions.Singleline));
+                Assert.IsFalse(Regex.IsMatch(content, @"<cac:PaymentMandate.*>.*<cbc:Name.*>.*</cac:PaymentMandate>", RegexOptions.Singleline));
                 Assert.IsFalse(Regex.IsMatch(content, "<cac:PaymentMandate.*>.*<cac:FinancialInstitutionBranch.*></cac:PaymentMandate>", RegexOptions.Singleline));
             }
         } // !TestInDebitInvoiceTheFinancialAccountNameShouldNotExist()
