@@ -219,6 +219,8 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.AddTradeAllowanceCharge(isDiscount, basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent);
 
+            desc.TradeLineItems[0].AddTradeAllowanceCharge(true, CurrencyCodes.EUR, 100, 10, "test");
+
             TradeAllowanceCharge? testAllowanceCharge = desc.GetTradeAllowanceCharges().FirstOrDefault();
 
             MemoryStream ms = new MemoryStream();
