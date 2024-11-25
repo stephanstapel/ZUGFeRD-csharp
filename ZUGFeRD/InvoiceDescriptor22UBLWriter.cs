@@ -356,6 +356,9 @@ namespace s2industries.ZUGFeRD
                         {
                             Writer.WriteStartElement("cac", "PaymentMandate");
 
+                            //PEPPOL-EN16931-R061: Mandate reference MUST be provided for direct debit.
+                            Writer.WriteElementString("cbc", "ID", this.Descriptor.PaymentMeans.SEPAMandateReference);
+
                             Writer.WriteStartElement("cac", "PayerFinancialAccount");
 
                             Writer.WriteElementString("cbc", "ID", account.IBAN);
