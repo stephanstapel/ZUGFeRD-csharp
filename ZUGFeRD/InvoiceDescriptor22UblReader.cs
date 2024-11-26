@@ -462,11 +462,11 @@ namespace s2industries.ZUGFeRD
             string _lineId = XmlUtils.NodeAsString(tradeLineItem, ".//cbc:ID", nsmgr);
             TradeLineItem item = new TradeLineItem(_lineId)
             {
-                // TODO: Find value //GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID/@schemeID", nsmgr)),
-                //                          XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID", nsmgr)),
-                SellerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//cac:Item/cac:SellersItemIdentification/cbc:ID", nsmgr),
-                BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//cac:Item/cac:BuyersItemIdentification/cbc:ID", nsmgr),
-                Name = XmlUtils.NodeAsString(tradeLineItem, ".//cac:Item/cbc:Name", nsmgr),
+                GlobalID = new GlobalID(default(GlobalIDSchemeIdentifiers).FromString(XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cac:StandardItemIdentification/cbc:ID/@schemeID", nsmgr)),
+                                        XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cac:StandardItemIdentification/cbc:ID", nsmgr)),
+                SellerAssignedID = XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cac:SellersItemIdentification/cbc:ID", nsmgr),
+                BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cac:BuyersItemIdentification/cbc:ID", nsmgr),
+                Name = XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cbc:Name", nsmgr),
                 Description = XmlUtils.NodeAsString(tradeLineItem, ".//cac:Item/cbc:Description", nsmgr),
                 UnitQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//cac:Price/cbc:BaseQuantity", nsmgr, 1),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//cbc:InvoicedQuantity", nsmgr, 0).Value,
