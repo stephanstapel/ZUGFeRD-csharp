@@ -289,6 +289,7 @@ namespace s2industries.ZUGFeRD
             {
                 retval.AddApplicableTradeTax(XmlUtils.NodeAsDecimal(node, "cbc:TaxableAmount", nsmgr, 0).Value,
                                              XmlUtils.NodeAsDecimal(node, "cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
+                                             XmlUtils.NodeAsDecimal(node, "cbc:TaxAmount", nsmgr, 0).Value,
                                              default(TaxTypes).FromString(XmlUtils.NodeAsString(node, "cac:TaxCategory/cac:TaxScheme/cbc:ID", nsmgr)),
                                              default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, "cac:TaxCategory/cbc:ID", nsmgr)),
                                              null,

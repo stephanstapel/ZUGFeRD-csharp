@@ -194,6 +194,7 @@ namespace s2industries.ZUGFeRD
             {
                 retval.AddApplicableTradeTax(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
                                              XmlUtils.NodeAsDecimal(node, ".//ram:ApplicablePercent", nsmgr, 0).Value,
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:CalculatedAmount", nsmgr, 0).Value,
                                              default(TaxTypes).FromString(XmlUtils.NodeAsString(node, ".//ram:TypeCode", nsmgr)),
                                              default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)));
             }
