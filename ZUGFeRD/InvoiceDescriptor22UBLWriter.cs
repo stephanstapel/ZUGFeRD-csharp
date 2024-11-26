@@ -261,49 +261,6 @@ namespace s2industries.ZUGFeRD
 
             }
 
-
-            #region AllowanceCharge
-            foreach (TradeAllowanceCharge tradeAllowanceCharge in descriptor.GetTradeAllowanceCharges())
-            {
-                Writer.WriteStartElement("cac", "AllowanceCharge");
-
-                Writer.WriteElementString("cbc", "ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-
-                Writer.WriteStartElement("cbc", "Amount"); // BT-92 / BT-99
-                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
-                Writer.WriteEndElement();
-
-                if (tradeAllowanceCharge.BasisAmount != null)
-                {
-                    Writer.WriteStartElement("cbc", "BaseAmount"); // BT-93 / BT-100
-                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
-                    Writer.WriteEndElement();
-                }
-
-                if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
-                {
-                    Writer.WriteStartElement("cbc", "AllowanceChargeReason"); // BT-97 / BT-104
-                    Writer.WriteValue(tradeAllowanceCharge.Reason);
-                    Writer.WriteEndElement();
-                }
-                
-                Writer.WriteStartElement("cac", "TaxCategory");
-                Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.CategoryCode.ToString());
-                if (tradeAllowanceCharge.Tax.Percent != null)
-                {
-                    Writer.WriteElementString("cbc", "Percent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
-                }
-                Writer.WriteStartElement("cac", "TaxScheme");
-                Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
-                Writer.WriteEndElement(); // cac:TaxScheme
-                Writer.WriteEndElement(); // cac:TaxCategory
-
-                Writer.WriteEndElement(); // !AllowanceCharge()
-            }
-            #endregion            
-
             // PaymentMeans
             if (this.Descriptor.PaymentMeans != null)
             {
@@ -356,6 +313,9 @@ namespace s2industries.ZUGFeRD
                         {
                             Writer.WriteStartElement("cac", "PaymentMandate");
 
+                            //PEPPOL-EN16931-R061: Mandate reference MUST be provided for direct debit.
+                            Writer.WriteElementString("cbc", "ID", this.Descriptor.PaymentMeans.SEPAMandateReference);
+
                             Writer.WriteStartElement("cac", "PayerFinancialAccount");
 
                             Writer.WriteElementString("cbc", "ID", account.IBAN);
@@ -406,6 +366,48 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !PaymentTerms
             }
 
+            #region AllowanceCharge
+            foreach (TradeAllowanceCharge tradeAllowanceCharge in descriptor.GetTradeAllowanceCharges())
+            {
+                Writer.WriteStartElement("cac", "AllowanceCharge");
+
+                Writer.WriteElementString("cbc", "ChargeIndicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+
+                Writer.WriteStartElement("cbc", "Amount"); // BT-92 / BT-99
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
+                Writer.WriteEndElement();
+
+                if (tradeAllowanceCharge.BasisAmount != null)
+                {
+                    Writer.WriteStartElement("cbc", "BaseAmount"); // BT-93 / BT-100
+                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount));
+                    Writer.WriteEndElement();
+                }
+
+                if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
+                {
+                    Writer.WriteStartElement("cbc", "AllowanceChargeReason"); // BT-97 / BT-104
+                    Writer.WriteValue(tradeAllowanceCharge.Reason);
+                    Writer.WriteEndElement();
+                }
+
+                Writer.WriteStartElement("cac", "TaxCategory");
+                Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.CategoryCode.ToString());
+                if (tradeAllowanceCharge.Tax.Percent != null)
+                {
+                    Writer.WriteElementString("cbc", "Percent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
+                }
+                Writer.WriteStartElement("cac", "TaxScheme");
+                Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
+                Writer.WriteEndElement(); // cac:TaxScheme
+                Writer.WriteEndElement(); // cac:TaxCategory
+
+                Writer.WriteEndElement(); // !AllowanceCharge()
+            }
+            #endregion            
+
             // Tax Total
             if (this.Descriptor.Taxes.Any() && this.Descriptor.TaxTotalAmount != null)
             {
@@ -437,8 +439,8 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(Writer, "cbc", "LineExtensionAmount", this.Descriptor.LineTotalAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "TaxExclusiveAmount", this.Descriptor.TaxBasisAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "TaxInclusiveAmount", this.Descriptor.GrandTotalAmount, forceCurrency: true);
-            _writeOptionalAmount(Writer, "cbc", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount, forceCurrency: true);
+            _writeOptionalAmount(Writer, "cbc", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, forceCurrency: true);
             //_writeOptionalAmount(Writer, "cbc", "TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "PrepaidAmount", this.Descriptor.TotalPrepaidAmount, forceCurrency: true);
             _writeOptionalAmount(Writer, "cbc", "PayableAmount", this.Descriptor.DuePayableAmount, forceCurrency: true);
