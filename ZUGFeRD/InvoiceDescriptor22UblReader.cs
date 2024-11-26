@@ -489,7 +489,7 @@ namespace s2industries.ZUGFeRD
             // Read ApplicableProductCharacteristic 
             if (tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification", nsmgr) != null)
             {
-                foreach (XmlNode commodityClassification in tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification/cac:ItemClassificationCode", nsmgr))
+                foreach (XmlNode commodityClassification in tradeLineItem.SelectNodes(".//cac:Item/cac:CommodityClassification/cbc:ItemClassificationCode", nsmgr))
                 {
                     DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(commodityClassification, "./@listID", nsmgr));
                     item.AddDesignatedProductClassification(
