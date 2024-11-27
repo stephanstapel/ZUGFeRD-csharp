@@ -223,18 +223,6 @@ namespace s2industries.ZUGFeRD
             //  };
             //}
 
-            string _despatchAdviceNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:ApplicableHeaderTradeDelivery/cac:DespatchAdviceReferencedDocument/cbc:Id", nsmgr);
-            DateTime? _despatchAdviceDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cac:ApplicableHeaderTradeDelivery/cac:DespatchAdviceReferencedDocument/cbc:IssueDate", nsmgr);
-
-            if (_despatchAdviceDate.HasValue || !String.IsNullOrWhiteSpace(_despatchAdviceNo))
-            {
-                retval.DespatchAdviceReferencedDocument = new DespatchAdviceReferencedDocument()
-                {
-                    ID = _despatchAdviceNo,
-                    IssueDateTime = _despatchAdviceDate
-                };
-            }
-
             // TODO: Find value //retval.Invoicee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty", nsmgr);
             retval.Payee = _nodeAsParty(doc.DocumentElement, "//cac:PayeeParty", nsmgr);
 
@@ -329,6 +317,12 @@ namespace s2industries.ZUGFeRD
                     XmlUtils.NodeAsDateTime(invoiceReferencedDocumentNodes, "./cbc:IssueDate", nsmgr)
                 );
                 break; // only one occurrence allowed in UBL
+            }
+
+            XmlNode despatchDocumentReferenceIdNode = doc.DocumentElement.SelectSingleNode("/ubl:Invoice/cac:DespatchDocumentReference/cbc:ID", nsmgr);
+            if (despatchDocumentReferenceIdNode != null)
+            {                
+                retval.SetDespatchAdviceReferencedDocument(despatchDocumentReferenceIdNode.InnerText);
             }
 
             retval.AddTradePaymentTerms(
