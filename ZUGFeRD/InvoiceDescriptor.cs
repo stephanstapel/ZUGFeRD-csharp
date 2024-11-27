@@ -573,12 +573,11 @@ namespace s2industries.ZUGFeRD
         } // !AddNote()        
 
 
-        public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country, string id = null,
-            GlobalID globalID = null, string receiver = "", LegalOrganization legalOrganization = null)
+        public void SetBuyer(string name, string postcode, string city, string street, CountryCodes country,
+                             GlobalID globalID = null, string receiver = "", LegalOrganization legalOrganization = null)
         {
             this.Buyer = new Party()
-            {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, id),
+            {                
                 Name = name,
                 Postcode = postcode,
                 ContactName = receiver,
@@ -591,12 +590,11 @@ namespace s2industries.ZUGFeRD
         }
 
 
-        public void SetSeller(string name, string postcode, string city, string street, CountryCodes country, string id = null,
-            GlobalID globalID = null, LegalOrganization legalOrganization = null, string description = null)
+        public void SetSeller(string name, string postcode, string city, string street, CountryCodes country,
+                              GlobalID globalID = null, LegalOrganization legalOrganization = null, string description = null)
         {
             this.Seller = new Party()
-            {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, id),
+            {                
                 Name = name,
                 Postcode = postcode,
                 City = city,
