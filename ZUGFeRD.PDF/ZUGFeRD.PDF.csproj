@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net480;net8.0</TargetFrameworks>
+	<Authors>Stephan Stapel</Authors>
+    <Company>s2 industries</Company>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>ZUGFeRD.PDF-csharp</PackageId>
+    <PackageReadmeFile></PackageReadmeFile>
+    <RepositoryUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</RepositoryUrl>
+    <UserSecretsId>ceeaa3c6-7c48-4061-b8f6-da26a9de5879</UserSecretsId>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
+    <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PDFsharp" Version="6.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
+  </ItemGroup>
+
+</Project>
