@@ -1316,6 +1316,7 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetPaymentMeans()
 
+
         /// <summary>
         ///     Sets up the payment means for SEPA direct debit.
         /// </summary>
@@ -1330,19 +1331,20 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetPaymentMeans()
 
+
         /// <summary>
-        ///     Sets up the payment means for payment via financial card.
+        ///     Sets up the payment means for payment via bank card.
         /// </summary>
-        public void SetPaymentMeansFinancialCard(string financialCardId, string financialCardCardholder, string information = "")
+        public void SetPaymentMeansBankCard(string bankCardId, string bankCardCardholder, string information = "")
         {
             this.PaymentMeans = new PaymentMeans
             {
-                TypeCode = PaymentMeansTypeCodes.SEPADirectDebit,
+                TypeCode = PaymentMeansTypeCodes.BankCard,
                 Information = information,
                 FinancialCard = new FinancialCard
                 {
-                    Id = financialCardId,
-                    CardholderName = financialCardCardholder
+                    Id = bankCardId,
+                    CardholderName = bankCardCardholder
                 }
             };
         } // !SetPaymentMeans()
