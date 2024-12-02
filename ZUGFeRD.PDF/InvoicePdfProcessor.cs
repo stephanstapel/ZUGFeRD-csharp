@@ -47,15 +47,16 @@ namespace s2industries.ZUGFeRD.PDF
             return await InvoiceDescriptorPdfLoader.LoadAsync(pdfPath);
         } // !LoadFromPdfAsync()
 
-        public static async Task<InvoiceDescriptor> SaveToPdfAsync(Stream pdfStream, InvoiceDescriptor descriptor)
+
+        public static async Task<InvoiceDescriptor> SaveToPdfAsync(Stream targetPdfStream, Stream pdfSourceStream, InvoiceDescriptor descriptor)
         {
-            return await InvoiceDescriptorPdfSaver.SaveAsync(pdfStream, descriptor);
-        } // !LoadFromPdfAsync()
+            return await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfStream, pdfSourceStream, descriptor);
+        } // !SaveToPdfAsync()
 
 
-        public static async Task<InvoiceDescriptor> SaveToPdfAsync(string pdfPath, InvoiceDescriptor descriptor)
+        public static async Task<InvoiceDescriptor> SaveToPdfAsync(string targetPdfPath, string pdfSourcePath, InvoiceDescriptor descriptor)
         {
-            return await InvoiceDescriptorPdfSaver.SaveAsync(pdfPath, descriptor);
-        } // !LoadFromPdfAsync()
+            return await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfPath, pdfSourcePath, descriptor);
+        } // !SaveToPdfAsync()
     }
 }

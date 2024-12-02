@@ -26,13 +26,13 @@ namespace s2industries.ZUGFeRD.PDF
 {
     internal class InvoiceDescriptorPdfSaver
     {
-        internal static async Task<InvoiceDescriptor> SaveAsync(Stream pdfStream, InvoiceDescriptor descriptor)
+        internal static async Task<InvoiceDescriptor> SaveAsync(Stream targetStream, Stream pdfSourceStream, InvoiceDescriptor descriptor)
         {
             throw new NotImplementedException();
         } // !SaveAsync()
 
 
-        internal static async Task<InvoiceDescriptor> SaveAsync(string pdfPath, InvoiceDescriptor descriptor)
+        internal static async Task<InvoiceDescriptor> SaveAsync(string targetPath, string pdfSourcePath, InvoiceDescriptor descriptor)
         {
             throw new NotImplementedException();
         } // !SaveAsync()

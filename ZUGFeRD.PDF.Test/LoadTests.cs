@@ -22,12 +22,13 @@ using s2industries.ZUGFeRD.PDF;
 namespace s2industries.ZUGFeRD.PDF.Test
 {
     [TestClass]
-    public sealed class LoadTests
+    public sealed class LoadTests : TestBase
     {
         [TestMethod]
         public async Task BasicLoadExampleFile()
         {
             string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\EXTENDED_Warenrechnung.pdf";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             InvoiceDescriptor desc = await InvoicePdfProcessor.LoadFromPdfAsync(path);
 
             Assert.IsNotNull(desc);
@@ -38,7 +39,8 @@ namespace s2industries.ZUGFeRD.PDF.Test
         [TestMethod]
         public async Task BasicLoadNonExistingFile()
         {
-            string path = @"doesnotexist.pdf";            
+            string path = @"doesnotexist.pdf";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.LoadFromPdfAsync(path));
         } // !BasicLoadNonExistingFile()
     }

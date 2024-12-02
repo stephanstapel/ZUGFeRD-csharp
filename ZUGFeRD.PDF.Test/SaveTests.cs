@@ -27,19 +27,30 @@ namespace s2industries.ZUGFeRD.PDF.Test
         [TestMethod]
         public async Task BasicSaveExampleFile()
         {
-            string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\EXTENDED_Warenrechnung.pdf";
-            InvoiceDescriptor desc = await InvoicePdfProcessor.SaveToPdfAsync(path);
+            string sourcePath = @"input.pdf"; /* which file to pick? */
+            sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
 
-            Assert.IsNotNull(desc);
-            Assert.AreEqual("R87654321012345", desc.InvoiceNo);
+            string targetPath = @"output.pdf";
+            targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
+
+            InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
+            await InvoicePdfProcessor.SaveToPdfAsync(targetPath, sourcePath, descriptor);
+
+            /* how to test? */
         } // !BasicSaveExampleFile()
 
 
         [TestMethod]
         public async Task BasicSaveFromNonExistingPdfFile()
         {
-            string path = @"doesnotexist.pdf";            
-            await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.SaveToPdfAsync(path));
+            string sourcePath = @"doesnotexist.pdf";
+            sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
+
+            string targetPath = @"output.pdf";
+            targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
+
+            InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
+            await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.SaveToPdfAsync(targetPath, sourcePath, descriptor));
         } // !BasicSaveFromNonExistingPdfFile()
     }
 }
