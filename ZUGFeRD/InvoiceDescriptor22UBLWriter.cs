@@ -279,7 +279,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("cac", "CardAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteElementString("cbc", "PrimaryAccountNumberID", this.Descriptor.PaymentMeans.FinancialCard.Id);
-                        Writer.WriteElementString("cbc", "HolderName", this.Descriptor.PaymentMeans.FinancialCard.CardholderName);
+                        Writer.WriteOptionalElementString("cbc", "HolderName", this.Descriptor.PaymentMeans.FinancialCard.CardholderName);
                         Writer.WriteEndElement(); //!CardAccount
                     }
 
