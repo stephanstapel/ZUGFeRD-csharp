@@ -27,14 +27,8 @@ namespace s2industries.ZUGFeRD.PDF.Test
         [TestMethod]
         public async Task BasicSaveExampleFile()
         {
-            string sourcePath = @"..\..\..\dummy.pdf"; /* which file to pick? */
+            string sourcePath = @"..\..\..\dummy.pdf";
             sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
-
-
-            string s = System.IO.Directory.GetCurrentDirectory();
-
-            System.IO.File.ReadAllBytes(sourcePath);
- 
 
             string targetPath = @"output.pdf";
             targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);

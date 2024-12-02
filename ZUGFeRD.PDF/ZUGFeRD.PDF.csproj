@@ -15,7 +15,9 @@
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
-    <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>
+    <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
+    <Version>15.0.0</Version>	
+    <PackageReleaseNotes>16.0.0: Initial version</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
