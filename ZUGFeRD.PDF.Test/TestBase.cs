@@ -16,30 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using s2industries.ZUGFeRD;
-using s2industries.ZUGFeRD.PDF;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace s2industries.ZUGFeRD.PDF.Test
 {
-    [TestClass]
-    public sealed class LoadTests
+    public class TestBase
     {
-        [TestMethod]
-        public async Task BasicLoadExampleFile()
+        protected string _makeSurePathIsCrossPlatformCompatible(string path)
         {
-            string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\EXTENDED_Warenrechnung.pdf";
-            InvoiceDescriptor desc = await InvoicePdfProcessor.LoadFromPdfAsync(path);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return path;
+            }
 
-            Assert.IsNotNull(desc);
-            Assert.AreEqual("R87654321012345", desc.InvoiceNo);
-        } // !BasicLoadExampleFile()
-
-
-        [TestMethod]
-        public async Task BasicLoadNonExistingFile()
-        {
-            string path = @"doesnotexist.pdf";            
-            await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.LoadFromPdfAsync(path));
-        } // !BasicLoadNonExistingFile()
+            return path.Replace('\\', System.IO.Path.DirectorySeparatorChar);
+        } // !_makeSurePathIsCrossPlatformCompatible()
     }
 }

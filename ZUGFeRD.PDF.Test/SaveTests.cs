@@ -22,24 +22,24 @@ using s2industries.ZUGFeRD.PDF;
 namespace s2industries.ZUGFeRD.PDF.Test
 {
     [TestClass]
-    public sealed class LoadTests
+    public sealed class SaveTests : TestBase
     {
         [TestMethod]
-        public async Task BasicLoadExampleFile()
+        public async Task BasicSaveExampleFile()
         {
             string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\EXTENDED_Warenrechnung.pdf";
-            InvoiceDescriptor desc = await InvoicePdfProcessor.LoadFromPdfAsync(path);
+            InvoiceDescriptor desc = await InvoicePdfProcessor.SaveToPdfAsync(path);
 
             Assert.IsNotNull(desc);
             Assert.AreEqual("R87654321012345", desc.InvoiceNo);
-        } // !BasicLoadExampleFile()
+        } // !BasicSaveExampleFile()
 
 
         [TestMethod]
-        public async Task BasicLoadNonExistingFile()
+        public async Task BasicSaveFromNonExistingPdfFile()
         {
             string path = @"doesnotexist.pdf";            
-            await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.LoadFromPdfAsync(path));
-        } // !BasicLoadNonExistingFile()
+            await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.SaveToPdfAsync(path));
+        } // !BasicSaveFromNonExistingPdfFile()
     }
 }
