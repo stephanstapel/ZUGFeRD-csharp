@@ -318,25 +318,34 @@ descriptor.Save("zugferd-v23.xml", ZUGFeRDVersion.Version23, Profile.Basic); // 
 descriptor.Save("zugferd-v23-xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung); // save as version 2.3, profile XRechnung
 ```
 
+
 # Extracting XML attachments from PDF files
-I am frequently asked how to extract the ZUGFeRD / Factur-X / XRechnung attachment from existing PDF files.
+The ZUGFeRD-csharp component has a sister component which relies on [PDFSharp](https://github.com/empira/PDFsharp) to read and write PDF files.
+It is still in alpha and needs support for making the PDF more compliant.
 
-There is a nice article on Stack Overflow on how this can be achieved using itextsharp:
+Downlaod the alpha version here:
 
-https://stackoverflow.com/a/6334252
+[![NuGet](https://img.shields.io/nuget/v/ZUGFeRD.PDF-csharp?color=blue)](https://www.nuget.org/packages/ZUGFeRD.PDF-csharp/)
 
-and this one covers the same with `itext7` which is the successor of `itextsharp`:
+The component makes loading the invoice from a pdf as easy as this:
 
-https://stackoverflow.com/a/37804285
+```csharp
+InvoiceDescriptor desc = await InvoicePdfProcessor.LoadFromPdfAsync("invoice.pdf");
+```
 
-# Writing XML attachments to PDF files
-It is also possible to add the XML ZUGFeRD or XRechnung attachment to PDF files using `itextsharp`.
-You find information about this here:
+Converting a PDF file to a ZUGFeRD PDF/A is almost as simple:
 
-https://stackoverflow.com/questions/70597318/af-reference-to-file-embedded-into-a-pdf-with-itextsharp
+```csharp
+InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2018, 03, 05), CurrencyCodes.EUR);
+...
+
+await InvoicePdfProcessor.SaveToPdfAsync("zugferd-invoice.pdf", ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, "input-invoice.pdf", descriptor);
+```
+
 
 # Thanks
 
+* First of all I'd like to thank the numerous contributors working on new features and removing bugs
 * The solution is used in CKS.DMS and supported by CKSolution: 
   https://www.cksolution.de
 * ZUGFeRD 2.1 implementation was done by https://netco-solution.de and used in netCo.Butler
