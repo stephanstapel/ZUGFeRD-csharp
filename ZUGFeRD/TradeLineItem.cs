@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 
@@ -483,5 +484,15 @@ namespace s2industries.ZUGFeRD
         {
             return this.DesignedProductClassifications;
         } // !GetDesignatedProductClassifications()
+
+
+        /// <summary>
+        /// Returns all existing designated product classifications
+        /// </summary>
+        /// <returns></returns>
+        public List<DesignatedProductClassification> GetDesignatedProductClassificationsByClassCode(string classCode)
+        {
+            return this.DesignedProductClassifications.Where(c => c.ClassCode.Equals(classCode)).ToList();
+        } // !GetDesignatedProductClassificationsByClassCode()
     }
 }
