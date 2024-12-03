@@ -21,7 +21,7 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
-    <Copyright>Stephan Stapel, s2 industries, 2023</Copyright>
+    <Copyright>Stephan Stapel, s2 industries, 2024</Copyright>
     <AssemblyVersion>16.0.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
     <FileVersion>15.0.0</FileVersion>
