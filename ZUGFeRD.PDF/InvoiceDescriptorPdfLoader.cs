@@ -138,10 +138,25 @@ namespace s2industries.ZUGFeRD.PDF
                             continue;
                         }
 
-                        var efDict = dict.Elements["/EF"] as PdfDictionary;
+
+                        PdfItem efElement = dict.Elements["/EF"];
+
+                        // the element might not be present directly, but be a reference only.
+                        // Thus we have to iterate the references
+                        while (efElement is PdfReference)
+                        {                                                        
+                            var efReference = efElement as PdfReference;
+                            efElement = document.Internals.GetObject(efReference.ObjectID);
+                        }
+
+                        var efDict = efElement as PdfDictionary;
                         var fDict = efDict.Elements["/F"] as PdfReference;
-                        var embeded = fDict.Value as PdfDictionary;
-                        return embeded.Stream;
+
+                        if (fDict != null)
+                        {
+                            var embeded = fDict.Value as PdfDictionary;
+                            return embeded.Stream;
+                        }
                     }
                 } // !foreach(pdfElement)
             }
