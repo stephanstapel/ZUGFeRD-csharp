@@ -169,7 +169,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumToString());
                     }
-                    Writer.WriteOptionalElementString("cbc", "DocumentType", document.Name); // BT-123
+                    Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
 
                     Writer.WriteStartElement("cac", "Attachment");
 
