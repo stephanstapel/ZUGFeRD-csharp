@@ -30,7 +30,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             string sourcePath = @"..\..\..\dummy.pdf";
             sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
 
-            string targetPath = @"e:\\output.pdf";
+            string targetPath = @"output.pdf";
             targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
             
             InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
@@ -46,7 +46,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             string sourcePath = @"doesnotexist.pdf";
             sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
 
-            string targetPath = @"e:\\output.pdf";
+            string targetPath = @"output.pdf";
             targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
 
             InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
