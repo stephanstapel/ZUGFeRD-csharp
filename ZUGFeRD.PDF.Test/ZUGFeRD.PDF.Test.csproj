@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZUGFeRD.PDF\ZUGFeRD.PDF.csproj" />
-    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
   </ItemGroup>
 
   <ItemGroup>

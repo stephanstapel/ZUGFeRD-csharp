@@ -17,8 +17,19 @@
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
     <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
     <Version>15.0.0</Version>	
-    <PackageReleaseNotes>16.0.0: Initial version</PackageReleaseNotes>
+    <PackageReleaseNotes>16.0.0: Initial version</PackageReleaseNotes>	
+    <AssemblyName>s2industries.ZUGFeRD.PDF</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\PdfMedatadataTemplate.xml" />
+    <None Remove="Resources\sRGB-IEC61966-2.1.icc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\PdfMedatadataTemplate.xml" />
+    <EmbeddedResource Include="Resources\sRGB-IEC61966-2.1.icc" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="PDFsharp" Version="6.1.1" />

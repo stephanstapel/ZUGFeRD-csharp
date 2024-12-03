@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD.PDF.Test", "ZUGFeRD.PDF.Test.csproj", "{F9AF8D63-5345-460A-B469-E76E38CD0A9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD.PDF", "..\ZUGFeRD.PDF\ZUGFeRD.PDF.csproj", "{CDDB1672-F63B-4469-ABCA-B0B293C85697}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD", "..\ZUGFeRD\ZUGFeRD.csproj", "{DDE4754D-05A4-4F5A-A69B-25A30FC433B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD", "..\ZUGFeRD\ZUGFeRD.csproj", "{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{CDDB1672-F63B-4469-ABCA-B0B293C85697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDB1672-F63B-4469-ABCA-B0B293C85697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDB1672-F63B-4469-ABCA-B0B293C85697}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDE4754D-05A4-4F5A-A69B-25A30FC433B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDE4754D-05A4-4F5A-A69B-25A30FC433B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDE4754D-05A4-4F5A-A69B-25A30FC433B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDE4754D-05A4-4F5A-A69B-25A30FC433B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

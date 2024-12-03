@@ -85,9 +85,9 @@ namespace s2industries.ZUGFeRD
     }
 
 
-    internal static class ProfileExtensions
+    public static class ProfileExtensions
     {
-        public static Profile FromString(this Profile _, string s)
+        internal static Profile FromString(this Profile _, string s)
         {
             var profileMap = new Dictionary<string, Profile>(StringComparer.OrdinalIgnoreCase)
             {
@@ -135,7 +135,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        public static string EnumToString(this Profile profile, ZUGFeRDVersion version)
+        internal static string EnumToString(this Profile profile, ZUGFeRDVersion version)
         {
             switch (version)
             {
@@ -192,6 +192,7 @@ namespace s2industries.ZUGFeRD
             switch (profile)
             {
                 case Profile.BasicWL: return "BASIC WL";
+                case Profile.Comfort:
                 case Profile.XRechnung1:
                 case Profile.XRechnung: return "EN 16931";
                 default: return profile.ToString();
