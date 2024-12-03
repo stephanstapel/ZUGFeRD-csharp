@@ -877,17 +877,6 @@ namespace s2industries.ZUGFeRD
             return this._TradeAllowanceCharges;
         } // !GetTradeAllowanceCharges()
 
-        /// <summary>
-        /// Clears the current trade payment terms and sets the initial payment terms
-        /// </summary>
-        /// <param name="description"></param>
-        /// <param name="dueDate"></param>
-        [Obsolete("The method has been made redundant and will be removed in a future release. Please use 'AddTradePaymentTerms' instead.", false)]
-        public void SetTradePaymentTerms(string description, DateTime? dueDate = null)
-        {
-            this._PaymentTerms.Clear();
-            AddTradePaymentTerms(description, dueDate);
-        }
 
         /// <summary>
         /// Adds a trade payment term.
