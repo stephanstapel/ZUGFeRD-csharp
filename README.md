@@ -319,7 +319,7 @@ descriptor.Save("zugferd-v23-xrechnung.xml", ZUGFeRDVersion.Version23, Profile.X
 ```
 
 
-# Extracting XML attachments from PDF files
+# Working with ZUGFeRD PDF files
 The ZUGFeRD-csharp component has a sister component which relies on [PDFSharp](https://github.com/empira/PDFsharp) to read and write PDF files.
 It is still in alpha and needs support for making the PDF more compliant.
 
