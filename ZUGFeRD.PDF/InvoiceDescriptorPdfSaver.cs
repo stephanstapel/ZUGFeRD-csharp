@@ -147,6 +147,14 @@ namespace s2industries.ZUGFeRD.PDF
 
             var dateTimeNow = DateTime.UtcNow;
             var conformanceLevelName = profile.GetXMPName();
+            var xmpVersion = "";
+            
+            switch (version)
+            {
+                case ZUGFeRDVersion.Version1: xmpVersion = "1.0"; break;
+                case ZUGFeRDVersion.Version20: xmpVersion = "2.0"; break;
+                case ZUGFeRDVersion.Version23: xmpVersion = "2.3"; break;
+            }
 
             string pdfMetadataTemplate = System.Text.Encoding.Default.GetString(_LoadEmbeddedResource("s2industries.ZUGFeRD.PDF.Resources.PdfMedatadataTemplate.xml"));
             var xmpmeta = pdfMetadataTemplate
@@ -154,6 +162,7 @@ namespace s2industries.ZUGFeRD.PDF
                 .Replace("{{CreationDate}}", dateTimeNow.ToString("yyyy-MM-ddThh:mm:sszzz"))
                 .Replace("{{ModificationDate}}", dateTimeNow.ToString("yyyy-MM-ddThh:mm:sszzz"))
                 .Replace("{{DocumentTitle}}", documentTitle)
+                .Replace("{{Version}}", xmpVersion)
                 .Replace("{{DocumentDescription}}", documentDescription)
                 .Replace("{{ConformanceLevel}}", conformanceLevelName);
 
