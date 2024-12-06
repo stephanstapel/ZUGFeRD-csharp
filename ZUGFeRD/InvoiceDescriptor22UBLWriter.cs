@@ -500,18 +500,18 @@ namespace s2industries.ZUGFeRD
             Writer.WriteOptionalElementString("cbc", "Description", tradeLineItem.Description);
             Writer.WriteElementString("cbc", "Name", tradeLineItem.Name);
 
-            if (!string.IsNullOrWhiteSpace(tradeLineItem.SellerAssignedID))
-            {
-                Writer.WriteStartElement("cac", "SellersItemIdentification");
-                Writer.WriteElementString("cbc", "ID", tradeLineItem.SellerAssignedID);
-                Writer.WriteEndElement(); //!SellersItemIdentification
-            }
-
             if (!string.IsNullOrWhiteSpace(tradeLineItem.BuyerAssignedID))
             {
                 Writer.WriteStartElement("cac", "BuyersItemIdentification");
                 Writer.WriteElementString("cbc", "ID", tradeLineItem.BuyerAssignedID);
                 Writer.WriteEndElement(); //!BuyersItemIdentification
+            }
+
+            if (!string.IsNullOrWhiteSpace(tradeLineItem.SellerAssignedID))
+            {
+                Writer.WriteStartElement("cac", "SellersItemIdentification");
+                Writer.WriteElementString("cbc", "ID", tradeLineItem.SellerAssignedID);
+                Writer.WriteEndElement(); //!SellersItemIdentification
             }
 
             _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
