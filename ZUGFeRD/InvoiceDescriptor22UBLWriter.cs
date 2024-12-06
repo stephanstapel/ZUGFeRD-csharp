@@ -558,10 +558,13 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteValue(_formatDecimal(charges[0].ActualAmount));
                 Writer.WriteEndElement();
 
-                Writer.WriteStartElement("cbc", "BaseAmount"); // BT-148
-                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                Writer.WriteValue(_formatDecimal(charges[0].BasisAmount));
-                Writer.WriteEndElement();
+                if (charges[0].BasisAmount != null) // BT-148 is optional
+                {
+                    Writer.WriteStartElement("cbc", "BaseAmount"); // BT-148
+                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(charges[0].BasisAmount));
+                    Writer.WriteEndElement();
+                }
 
                 Writer.WriteEndElement(); // !AllowanceCharge()
             }
