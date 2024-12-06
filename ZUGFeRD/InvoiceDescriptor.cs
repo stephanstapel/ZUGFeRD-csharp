@@ -1100,10 +1100,9 @@ namespace s2industries.ZUGFeRD
         /// The line id is generated automatically
         /// </summary>
         /// <param name="comment"></param>
-        public void AddTradeLineCommentItem(string comment)
+        public TradeLineItem AddTradeLineCommentItem(string comment)
         {
-            AddTradeLineCommentItem(_getNextLineId(), comment);
-
+            return AddTradeLineCommentItem(_getNextLineId(), comment);
         } // !AddTradeLineCommentItem()
 
         /// <summary>
@@ -1113,7 +1112,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="lineID"></param>
         /// <param name="comment"></param>
-        public void AddTradeLineCommentItem(string lineID, string comment)
+        public TradeLineItem AddTradeLineCommentItem(string lineID, string comment)
         {
             if (String.IsNullOrWhiteSpace(lineID))
             {
@@ -1143,6 +1142,7 @@ namespace s2industries.ZUGFeRD
             ));
 
             this.TradeLineItems.Add(item);
+            return item;
         } // !AddTradeLineCommentItem()
 
 
