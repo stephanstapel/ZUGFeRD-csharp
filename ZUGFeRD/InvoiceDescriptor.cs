@@ -1112,7 +1112,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="lineID"></param>
         /// <param name="comment"></param>
-        public TradeLineItem AddTradeLineCommentItem(string lineID, string comment)
+        public TradeLineItem AddTradeLineCommentItem(string lineID, string comment, string name = "", string sellerAssignedID = "")
         {
             if (String.IsNullOrWhiteSpace(lineID))
             {
@@ -1134,6 +1134,16 @@ namespace s2industries.ZUGFeRD
                 UnitCode = QuantityCodes.C62,
                 TaxCategoryCode = TaxCategoryCodes.O
             };
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                item.Name = name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(sellerAssignedID))
+            {
+                item.SellerAssignedID = sellerAssignedID;
+            }
 
             item.AssociatedDocument.Notes.Add(new Note(
                 content: comment,
