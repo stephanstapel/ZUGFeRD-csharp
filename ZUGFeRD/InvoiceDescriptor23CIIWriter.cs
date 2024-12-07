@@ -471,19 +471,19 @@ namespace s2industries.ZUGFeRD
                 {
                     if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
                     {
-                        foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BT-147
+                        foreach (TradeAllowanceCharge specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges()) // BG-28
                         {
-                            Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                            Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge");
                             #region ChargeIndicator
-                            Writer.WriteStartElement("ram", "ChargeIndicator");
-                            Writer.WriteElementString("udt", "Indicator", specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                            Writer.WriteStartElement("ram", "ChargeIndicator"); // BG-28-0
+                            Writer.WriteElementString("udt", "Indicator", specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false"); // BG-28-1
                             Writer.WriteEndElement(); // !ram:ChargeIndicator
                             #endregion
 
                             #region ChargePercentage
                             if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
                             {
-                                Writer.WriteStartElement("ram", "CalculationPercent", profile: Profile.Extended | Profile.XRechnung);
+                                Writer.WriteStartElement("ram", "CalculationPercent"); // BT-143
                                 Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage.Value, 2));
                                 Writer.WriteEndElement();
                             }
@@ -492,7 +492,7 @@ namespace s2industries.ZUGFeRD
                             #region BasisAmount
                             if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
                             {
-                                Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
+                                Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Extended);
                                 Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount.Value, 2));
                                 Writer.WriteEndElement();
                             }
@@ -504,7 +504,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement();
                             #endregion
 
-                            Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
+                            Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended);
                             Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                         }
                     }
