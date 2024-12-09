@@ -8,10 +8,7 @@ public class TestTaxes
     [TestMethod]
     public void SavingThenReadingAppliedTradeTaxesShouldWork()
     {
-        InvoiceDescriptor expected = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-        expected.BusinessProcess = string.Empty;
-        expected.Name = string.Empty;
-        expected.ReferenceOrderNo = string.Empty;
+        InvoiceDescriptor expected = InvoiceDescriptor.CreateInvoice("123", new DateTime(2024, 12, 5), CurrencyCodes.EUR);
         var lineItem = expected.AddTradeLineItem(name: "Something",
             grossUnitPrice: 9.9m,
             netUnitPrice: 9.9m,
