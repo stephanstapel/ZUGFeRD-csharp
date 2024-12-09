@@ -170,6 +170,13 @@ namespace s2industries.ZUGFeRD
         DL,
 
         /// <summary>
+        /// Lieferscheinnummer
+        /// 
+        ///  Delivery note number
+        /// </summary>
+        DQ,
+
+        /// <summary>
         /// Invoice document identifier
         /// [1334]
         /// Reference number to identify an invoice.
