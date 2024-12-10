@@ -1033,8 +1033,8 @@ namespace s2industries.ZUGFeRD.Test
             // Modifiy trade line settlement data
             originalInvoiceDescriptor.TradeLineItems.RemoveAll(_ => true);
 
-            originalInvoiceDescriptor.AddTradeLineCommentItem("2", "Comment_2");
-            originalInvoiceDescriptor.AddTradeLineCommentItem("3", "Comment_3");
+            originalInvoiceDescriptor.AddTradeLineCommentItem(lineID: "2", comment: "Comment_2");
+            originalInvoiceDescriptor.AddTradeLineCommentItem(lineID: "3", comment: "Comment_3");
             originalInvoiceDescriptor.IsTest = false;
 
             using (var memoryStream = new MemoryStream())
@@ -2160,7 +2160,6 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestFinancialInstitutionBICEmpty()
         {
-            string uuid = System.Guid.NewGuid().ToString();
             DateTime issueDateTime = DateTime.Today;
 
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
@@ -2601,10 +2600,10 @@ namespace s2industries.ZUGFeRD.Test
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-            Assert.AreEqual("List Version ID Value", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-            Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-            Assert.AreEqual("Class Name", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);            
+            Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
+            Assert.AreEqual("List Version ID Value", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+            Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
+            Assert.AreEqual("Class Name", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);            
 	    } // !TestDesignatedProductClassificationWithFullClassification()
 
 
@@ -2653,10 +2652,13 @@ namespace s2industries.ZUGFeRD.Test
 			ms.Seek(0, SeekOrigin.Begin);
 			InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
-            Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-            Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);			
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
+            var x = loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First();
+
+
+            Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
+            Assert.AreEqual(String.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
+            Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);			
+			Assert.AreEqual(String.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
 		} // !TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
 
 
