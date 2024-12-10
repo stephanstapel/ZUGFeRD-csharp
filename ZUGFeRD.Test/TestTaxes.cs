@@ -7,6 +7,7 @@ public class TestTaxes
 {
     [TestMethod]
     [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+    [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
     public void SavingThenReadingAppliedTradeTaxesShouldWork(ZUGFeRDVersion version, Profile profile)
     {
         InvoiceDescriptor expected = InvoiceDescriptor.CreateInvoice("123", new DateTime(2024, 12, 5), CurrencyCodes.EUR);
