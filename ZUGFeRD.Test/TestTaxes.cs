@@ -6,7 +6,8 @@ namespace s2industries.ZUGFeRD.Test;
 public class TestTaxes
 {
     [TestMethod]
-    public void SavingThenReadingAppliedTradeTaxesShouldWork()
+    [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+    public void SavingThenReadingAppliedTradeTaxesShouldWork(ZUGFeRDVersion version, Profile profile)
     {
         InvoiceDescriptor expected = InvoiceDescriptor.CreateInvoice("123", new DateTime(2024, 12, 5), CurrencyCodes.EUR);
         var lineItem = expected.AddTradeLineItem(name: "Something",
@@ -33,7 +34,7 @@ public class TestTaxes
         expected.DuePayableAmount = expected.GrandTotalAmount;
 
         using MemoryStream ms = new();
-        expected.Save(ms);
+        expected.Save(ms, version, profile);
         ms.Seek(0, SeekOrigin.Begin);
 
         InvoiceDescriptor actual = InvoiceDescriptor.Load(ms);
