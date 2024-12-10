@@ -1100,10 +1100,13 @@ namespace s2industries.ZUGFeRD
         /// The line id is generated automatically
         /// </summary>
         /// <param name="comment"></param>
-        public TradeLineItem AddTradeLineCommentItem(string comment)
+        /// /// <param name="name">The item name (could e.g. be TEXT or COMMENT for comment items)</param>
+        /// <param name="sellerAssignedID">ID of the comment, same as item no for regular invoice lines. Could e.g. bei TEXT or COMMENT</param>
+        public TradeLineItem AddTradeLineCommentItem(string comment, string name = "", string sellerAssignedID = "")
         {
-            return AddTradeLineCommentItem(_getNextLineId(), comment);
+            return AddTradeLineCommentItem(_getNextLineId(), comment, name, sellerAssignedID);
         } // !AddTradeLineCommentItem()
+
 
         /// <summary>
         /// Adds a new comment as a dedicated line of the invoice.
@@ -1112,6 +1115,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="lineID"></param>
         /// <param name="comment"></param>
+        /// <param name="name">The item name (could e.g. be TEXT or COMMENT for comment items)</param>
+        /// <param name="sellerAssignedID">ID of the comment, same as item no for regular invoice lines. Could e.g. bei TEXT or COMMENT</param>
         public TradeLineItem AddTradeLineCommentItem(string lineID, string comment, string name = "", string sellerAssignedID = "")
         {
             if (String.IsNullOrWhiteSpace(lineID))
