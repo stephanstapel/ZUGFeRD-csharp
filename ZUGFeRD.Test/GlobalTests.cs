@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestAutomaticLineIds(ZUGFeRDVersion version, Profile profile)
+        public void TestAutomaticLineIds()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
@@ -46,7 +46,7 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestManualLineIds(ZUGFeRDVersion version, Profile profile)
+        public void TestManualLineIds()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
@@ -59,7 +59,7 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestCommentLine(ZUGFeRDVersion version, Profile profile)
+        public void TestCommentLine()
         {
             string COMMENT = System.Guid.NewGuid().ToString();
             string CUSTOM_LINE_ID = System.Guid.NewGuid().ToString();
