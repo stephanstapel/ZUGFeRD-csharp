@@ -78,7 +78,7 @@ namespace s2industries.ZUGFeRD.Test
             numberOfTradeLineItems = desc.TradeLineItems.Count;
             desc.AddTradeLineCommentItem(lineID: CUSTOM_LINE_ID, comment: COMMENT);
 
-            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);            
+            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.LineID, CUSTOM_LINE_ID);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
