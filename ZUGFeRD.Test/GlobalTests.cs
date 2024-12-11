@@ -151,7 +151,8 @@ namespace s2industries.ZUGFeRD.Test
                 taxAmount: 29.82m, // 19% of 198
                 typeCode: TaxTypes.VAT,
                 categoryCode: TaxCategoryCodes.S,
-                allowanceChargeBasisAmount: -5m
+                allowanceChargeBasisAmount: -5m,
+                lineTotalBasisAmount: lineItem.LineTotalAmount!.Value
                 );
             expected.LineTotalAmount = 198m;
             expected.TaxBasisAmount = 198m;
@@ -174,6 +175,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(TaxTypes.VAT, actualTax.TypeCode);
             Assert.AreEqual(TaxCategoryCodes.S, actualTax.CategoryCode);
             Assert.AreEqual(-5m, actualTax.AllowanceChargeBasisAmount);
+            Assert.AreEqual(198m, actualTax.LineTotalBasisAmount);
         } // !SavingThenReadingAppliedTradeTaxes()
     }
 }
