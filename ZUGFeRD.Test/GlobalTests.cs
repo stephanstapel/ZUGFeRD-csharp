@@ -17,10 +17,6 @@
  * under the License.
  */
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using s2industries.ZUGFeRD;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace s2industries.ZUGFeRD.Test
