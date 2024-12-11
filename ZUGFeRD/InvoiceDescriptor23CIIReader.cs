@@ -317,7 +317,8 @@ namespace s2industries.ZUGFeRD
                                              default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)),
                                              XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr),
                                              default(TaxExemptionReasonCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:ExemptionReasonCode", nsmgr)),
-                                             XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr));
+                                             XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr),
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:LineTotalBasisAmount", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
@@ -443,7 +444,7 @@ namespace s2industries.ZUGFeRD
                     "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3", // XRechnung 2.3
                     "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0", // XRechnung 3.0
                     "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0#conformant#urn:xeinkauf.de:kosit:extension:xrechnung_3.0", // XRechnung 3.0
-					"urn.cpro.gouv.fr:1p0:ereporting" //Factur-X E-reporting
+                    "urn.cpro.gouv.fr:1p0:ereporting" //Factur-X E-reporting
                 };
 
             return _IsReadableByThisReaderVersion(stream, validURIs);
