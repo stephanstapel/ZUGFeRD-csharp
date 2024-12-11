@@ -1326,11 +1326,20 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0 && (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung)))
+                if (Descriptor.Profile == Profile.Extended)
                 {
-                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
-                    writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
-                    writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                    if (tax.AllowanceChargeBasisAmount.HasValue && tax.AllowanceChargeBasisAmount.Value != 0)
+                    {
+                        writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                        writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
+                        writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                    }
+                    if (tax.LineTotalBasisAmount.HasValue && tax.LineTotalBasisAmount.Value != 0)
+                    {
+                        writer.WriteStartElement("ram", "LineTotalBasisAmount");
+                        writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
+                        writer.WriteEndElement();
+                    }
                 }
 
                 if (tax.CategoryCode.HasValue)

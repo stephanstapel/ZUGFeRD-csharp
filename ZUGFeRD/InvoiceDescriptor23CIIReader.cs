@@ -317,7 +317,8 @@ namespace s2industries.ZUGFeRD
                                              default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)),
                                              XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr),
                                              default(TaxExemptionReasonCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:ExemptionReasonCode", nsmgr)),
-                                             XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr));
+                                             XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr),
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:LineTotalBasisAmount", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
