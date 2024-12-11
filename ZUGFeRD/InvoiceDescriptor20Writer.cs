@@ -457,12 +457,12 @@ namespace s2industries.ZUGFeRD
                     if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
                     {
                         Writer.WriteElementString("ram", "TypeCode", document.TypeCode.EnumToString());
-                    }   
+                    }
 
                     if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
                     {
                         Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
-                    }                    
+                    }
 
                     Writer.WriteElementString("ram", "ID", document.ID);
                     Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
@@ -539,12 +539,12 @@ namespace s2industries.ZUGFeRD
             //   2. PaymentReference (optional)
             Writer.WriteOptionalElementString("ram", "PaymentReference", this.Descriptor.PaymentReference);
 
-			//   3. TaxCurrencyCode (optional)
-			//   BT-6
-			if (this.Descriptor.TaxCurrency.HasValue)
-			{
+            //   3. TaxCurrencyCode (optional)
+            //   BT-6
+            if (this.Descriptor.TaxCurrency.HasValue)
+            {
                 Writer.WriteElementString("ram", "TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-			}
+            }
 
             //   4. InvoiceCurrencyCode (optional)
             Writer.WriteElementString("ram", "InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
@@ -552,11 +552,11 @@ namespace s2industries.ZUGFeRD
             //   5. InvoiceIssuerReference (optional)
             Writer.WriteElementString("ram", "InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, profile: Profile.Extended);
 
-			//   6. InvoicerTradeParty (optional)
-			_writeOptionalParty(Writer, "ram", "InvoicerTradeParty", this.Descriptor.Invoicer);
+            //   6. InvoicerTradeParty (optional)
+            _writeOptionalParty(Writer, "ram", "InvoicerTradeParty", this.Descriptor.Invoicer);
 
-			//   7. InvoiceeTradeParty (optional)
-			if (Descriptor.Profile == Profile.Extended)
+            //   7. InvoiceeTradeParty (optional)
+            if (Descriptor.Profile == Profile.Extended)
             {
                 _writeOptionalParty(Writer, "ram", "InvoiceeTradeParty", this.Descriptor.Invoicee);
             }
@@ -894,7 +894,7 @@ namespace s2industries.ZUGFeRD
 
             #region InvoiceReferencedDocument
             //  17. InvoiceReferencedDocument (optional)
-            foreach(InvoiceReferencedDocument invoiceReferencedDocument in this.Descriptor.GetInvoiceReferencedDocuments())
+            foreach (InvoiceReferencedDocument invoiceReferencedDocument in this.Descriptor.GetInvoiceReferencedDocuments())
             {
                 Writer.WriteStartElement("ram", "InvoiceReferencedDocument", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 Writer.WriteOptionalElementString("ram", "IssuerAssignedID", invoiceReferencedDocument.ID);
