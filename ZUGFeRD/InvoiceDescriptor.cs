@@ -888,7 +888,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="percentage"></param>
         /// <param name="baseAmount"></param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
-            PaymentTermsType? paymentTermsType = null, int? dueDays = null, 
+            PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null)
         {
             _PaymentTerms.Add(new PaymentTerms()
