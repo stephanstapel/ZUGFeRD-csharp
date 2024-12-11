@@ -714,13 +714,22 @@ namespace s2industries.ZUGFeRD
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
-
-                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
+                if (Descriptor.Profile == Profile.Extended)
                 {
-                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                    writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
-                    writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                    if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
+                    {
+                        writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                        writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                        writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
+                        writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                    }
+                    if (tax.LineTotalBasisAmount.HasValue && (tax.LineTotalBasisAmount.Value != 0))
+                    {
+                        writer.WriteStartElement("ram", "LineTotalBasisAmount");
+                        writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                        writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
+                        writer.WriteEndElement();
+                    }
                 }
 
                 if (tax.CategoryCode.HasValue)
