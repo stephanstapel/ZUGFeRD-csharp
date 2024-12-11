@@ -80,6 +80,10 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public decimal? AllowanceChargeBasisAmount { get; set; }
 
+        /// <summary>
+        /// Line Total Basis Amount
+        /// </summary>
+        public decimal? LineTotalBasisAmount { get; set; }
 
         /// <summary>
         /// ExemptionReasonCode for no Tax
