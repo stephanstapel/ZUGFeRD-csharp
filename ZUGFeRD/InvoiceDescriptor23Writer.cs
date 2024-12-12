@@ -41,11 +41,20 @@ namespace s2industries.ZUGFeRD
         /// <param name="format">Format of the target file</param>
         public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
-            IInvoiceDescriptorWriter _writer;
-            switch (format)
+            IInvoiceDescriptorWriter _writer = null;
+
+            if (format == ZUGFeRDFormats.CII)
             {
-                case ZUGFeRDFormats.UBL: _writer = new InvoiceDescriptor22UBLWriter(); break;
-                default: _writer = new InvoiceDescriptor23CIIWriter(); break;
+                _writer = new InvoiceDescriptor23CIIWriter();
+            }
+            else if ((format == ZUGFeRDFormats.UBL) && (descriptor.Profile == Profile.XRechnung))
+            {
+                _writer = new InvoiceDescriptor22UBLWriter();
+            }
+
+            if (_writer == null)
+            {
+                throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");                
             }
 
             _writer.Save(descriptor, stream, format);
