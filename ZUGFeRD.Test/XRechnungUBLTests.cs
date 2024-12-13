@@ -225,7 +225,7 @@ namespace s2industries.ZUGFeRD.Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, version, Profile.Extended, ZUGFeRDFormats.UBL);
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -261,7 +261,7 @@ namespace s2industries.ZUGFeRD.Test
 
             MemoryStream ms = new MemoryStream();
 
-            desc.Save(ms, version, Profile.Extended, ZUGFeRDFormats.UBL);
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);

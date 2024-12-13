@@ -21,6 +21,7 @@ using s2industries.ZUGFeRD;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -105,6 +106,31 @@ namespace s2industries.ZUGFeRD.Test
             path = _makeSurePathIsCrossPlatformCompatible(path);
             Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version23);
         } // !TestGetVersion()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.XRechnung)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.XRechnung)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.XRechnung1)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]        
+        [DataRow(ZUGFeRDVersion.Version23, Profile.XRechnung1)]        
+        public void UBLNonAvailability(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+            Assert.ThrowsException<UnsupportedException>(() => desc.Save(ms, version, profile, ZUGFeRDFormats.UBL));
+        } // !UBLNonAvailability()
+
+
+        [TestMethod]        
+        public void UBLAvailability()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+        } // !UBLAvailability()
 
 
         [TestMethod]
