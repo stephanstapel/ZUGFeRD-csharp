@@ -81,7 +81,7 @@ namespace s2industries.ZUGFeRD
         public decimal? AllowanceChargeBasisAmount { get; set; }
 
         /// <summary>
-        /// Line Total Basis Amount
+        /// A monetary value used as the line total basis on which this trade related tax, levy or duty is calculated
         /// </summary>
         public decimal? LineTotalBasisAmount { get; set; }
 
