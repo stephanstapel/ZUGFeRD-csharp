@@ -524,6 +524,29 @@ namespace s2industries.ZUGFeRD
             Writer.WriteValue(_formatDecimal(tradeLineItem.LineTotalAmount));
             Writer.WriteEndElement();
 
+            if (tradeLineItem._AdditionalReferencedDocuments.Count > 0)
+            {
+                foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
+                {
+                    Writer.WriteStartElement("cac", "DocumentReference");
+                    Writer.WriteStartElement("cbc", "ID"); // BT-18, BT-22
+
+                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    {
+                        Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.EnumToString()); // BT-18-1
+                    }
+
+                    Writer.WriteValue(document.ID);
+                    Writer.WriteEndElement(); // !cbc:ID
+                    if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                    {
+                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumValueToString());
+                    }
+                    Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
+
+                    Writer.WriteEndElement(); // !DocumentReference
+                }
+            }
 
             Writer.WriteStartElement("cac", "Item");
 
