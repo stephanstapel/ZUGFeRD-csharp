@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
@@ -168,7 +169,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !cbc:ID
                     if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
                     {
-                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumToString());
+                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumValueToString());
                     }
                     Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
 
@@ -271,84 +272,109 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentMeans
-            if (this.Descriptor.PaymentMeans != null)
+            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
             {
+                if (this.Descriptor.PaymentMeans != null)
+                {
 
-                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    {
+                        Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
+
+                        if (this.Descriptor.PaymentMeans.FinancialCard != null)
+                        {
+                            Writer.WriteStartElement("cac", "CardAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                            Writer.WriteElementString("cbc", "PrimaryAccountNumberID", this.Descriptor.PaymentMeans.FinancialCard.Id);
+                            Writer.WriteOptionalElementString("cbc", "HolderName", this.Descriptor.PaymentMeans.FinancialCard.CardholderName);
+                            Writer.WriteEndElement(); //!CardAccount
+                        }
+                        Writer.WriteEndElement(); // !PaymentMeans
+                    }
+                }
+            }
+            else
+            {
+                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                    Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
-                    Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
 
-                    if (this.Descriptor.PaymentMeans.FinancialCard != null)
+                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteStartElement("cac", "CardAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                        Writer.WriteElementString("cbc", "PrimaryAccountNumberID", this.Descriptor.PaymentMeans.FinancialCard.Id);
-                        Writer.WriteOptionalElementString("cbc", "HolderName", this.Descriptor.PaymentMeans.FinancialCard.CardholderName);
-                        Writer.WriteEndElement(); //!CardAccount
-                    }
+                        Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
 
-
-                    if (this.Descriptor.CreditorBankAccounts.Count > 0)
-                    {
-                        foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                        if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            // PayeeFinancialAccount
-                            Writer.WriteStartElement("cac", "PayeeFinancialAccount");
-                            Writer.WriteElementString("cbc", "ID", account.IBAN);
-                            Writer.WriteOptionalElementString("cbc", "Name", account.Name);
-
-                            if (!string.IsNullOrWhiteSpace(account.BIC))
-                            {
-                                Writer.WriteStartElement("cac", "FinancialInstitutionBranch");
-                                Writer.WriteElementString("cbc", "ID", account.BIC);
-
-                                //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
-                                //Writer.WriteStartElement("cac", "FinancialInstitution");
-                                //Writer.WriteElementString("cbc", "Name", account.BankName);
-
-                                //Writer.WriteEndElement(); // !FinancialInstitution
-                                Writer.WriteEndElement(); // !FinancialInstitutionBranch
-                            }
-
-                            Writer.WriteEndElement(); // !PayeeFinancialAccount
+                            Writer.WriteStartElement("cac", "CardAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                            Writer.WriteElementString("cbc", "PrimaryAccountNumberID", this.Descriptor.PaymentMeans.FinancialCard.Id);
+                            Writer.WriteOptionalElementString("cbc", "HolderName", this.Descriptor.PaymentMeans.FinancialCard.CardholderName);
+                            Writer.WriteEndElement(); //!CardAccount
                         }
                     }
 
-                    if (this.Descriptor.DebitorBankAccounts.Count > 0)
+                    // PayeeFinancialAccount
+                    Writer.WriteStartElement("cac", "PayeeFinancialAccount");
+                    Writer.WriteElementString("cbc", "ID", account.IBAN);
+                    Writer.WriteOptionalElementString("cbc", "Name", account.Name);
+
+                    if (!string.IsNullOrWhiteSpace(account.BIC))
                     {
-                        // PaymentMandate --> PayerFinancialAccount
-                        foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
-                        {
-                            Writer.WriteStartElement("cac", "PaymentMandate");
+                        Writer.WriteStartElement("cac", "FinancialInstitutionBranch");
+                        Writer.WriteElementString("cbc", "ID", account.BIC);
 
-                            //PEPPOL-EN16931-R061: Mandate reference MUST be provided for direct debit.
-                            Writer.WriteElementString("cbc", "ID", this.Descriptor.PaymentMeans.SEPAMandateReference);
+                        //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
+                        //Writer.WriteStartElement("cac", "FinancialInstitution");
+                        //Writer.WriteElementString("cbc", "Name", account.BankName);
 
-                            Writer.WriteStartElement("cac", "PayerFinancialAccount");
-
-                            Writer.WriteElementString("cbc", "ID", account.IBAN);
-
-                            //[UBL-CR-440]-A UBL invoice should not include the PaymentMeans PaymentMandate PayerFinancialAccount Name
-                            //Writer.WriteElementString("cbc", "Name", account.Name);
-
-                            //[UBL-CR-446]-A UBL invoice should not include the PaymentMeans PaymentMandate PayerFinancialAccount FinancialInstitutionBranch
-                            //Writer.WriteStartElement("cac", "FinancialInstitutionBranch");
-                            //Writer.WriteElementString("cbc", "ID", account.BIC);
-
-                            //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
-                            //Writer.WriteStartElement("cac", "FinancialInstitution");
-                            //Writer.WriteElementString("cbc", "Name", account.BankName);
-
-                            //Writer.WriteEndElement(); // !FinancialInstitution
-                            //Writer.WriteEndElement(); // !FinancialInstitutionBranch
-
-                            Writer.WriteEndElement(); // !PayerFinancialAccount
-                            Writer.WriteEndElement(); // !PaymentMandate
-                        }
+                        //Writer.WriteEndElement(); // !FinancialInstitution
+                        Writer.WriteEndElement(); // !FinancialInstitutionBranch
                     }
 
-                    Writer.WriteEndElement(); //!PaymentMeans
+                    Writer.WriteEndElement(); // !PayeeFinancialAccount
+
+                    Writer.WriteEndElement(); // !PaymentMeans
+                }
+
+                //[BR - 67] - An Invoice shall contain maximum one Payment Mandate(BG - 19).
+                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                {
+                    Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+
+                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    {
+                        Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
+                    }
+                    
+                    Writer.WriteStartElement("cac", "PaymentMandate");
+
+                    //PEPPOL-EN16931-R061: Mandate reference MUST be provided for direct debit.
+                    Writer.WriteElementString("cbc", "ID", this.Descriptor.PaymentMeans.SEPAMandateReference);
+
+                    Writer.WriteStartElement("cac", "PayerFinancialAccount");
+
+                    Writer.WriteElementString("cbc", "ID", account.IBAN);
+
+                    //[UBL-CR-440]-A UBL invoice should not include the PaymentMeans PaymentMandate PayerFinancialAccount Name
+                    //Writer.WriteElementString("cbc", "Name", account.Name);
+
+                    //[UBL-CR-446]-A UBL invoice should not include the PaymentMeans PaymentMandate PayerFinancialAccount FinancialInstitutionBranch
+                    //Writer.WriteStartElement("cac", "FinancialInstitutionBranch");
+                    //Writer.WriteElementString("cbc", "ID", account.BIC);
+
+                    //[UBL - CR - 664] - A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
+                    //Writer.WriteStartElement("cac", "FinancialInstitution");
+                    //Writer.WriteElementString("cbc", "Name", account.BankName);
+
+                    //Writer.WriteEndElement(); // !FinancialInstitution
+                    //Writer.WriteEndElement(); // !FinancialInstitutionBranch
+
+                    Writer.WriteEndElement(); // !PayerFinancialAccount
+                    Writer.WriteEndElement(); // !PaymentMandate
+
+                    Writer.WriteEndElement(); // !PaymentMeans
                 }
             }
 
