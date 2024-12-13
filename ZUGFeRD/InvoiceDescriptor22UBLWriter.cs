@@ -51,7 +51,7 @@ namespace s2industries.ZUGFeRD
                 { "ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" },
                 { "xs", "http://www.w3.org/2001/XMLSchema" }
             };
-            if (this.Descriptor.Type == InvoiceType.Invoice)
+            if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
             {             
                 _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
@@ -64,12 +64,13 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartDocument();
 
-            if (this.Descriptor.Type != InvoiceType.Invoice && this.Descriptor.Type != InvoiceType.CreditNote)
+
+            if (this.Descriptor.Type != InvoiceType.Invoice && this.Descriptor.Type != InvoiceType.CreditNote && this.Descriptor.Type != InvoiceType.Correction)
                 throw new NotImplementedException("Not implemented yet.");
 
             #region Kopfbereich
             // UBL has different namespace for different types
-            if (this.Descriptor.Type == InvoiceType.Invoice)
+            if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
             {
                 Writer.WriteStartElement("ubl", "Invoice");
                 Writer.WriteAttributeString("xmlns", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
@@ -171,24 +172,28 @@ namespace s2industries.ZUGFeRD
                     }
                     Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
 
-                    Writer.WriteStartElement("cac", "Attachment");
+                    if (document.AttachmentBinaryObject != null)
+                    {
+                        Writer.WriteStartElement("cac", "Attachment");
 
-                    Writer.WriteStartElement("cbc", "EmbeddedDocumentBinaryObject"); // BT-125
-                    Writer.WriteAttributeString("filename", document.Filename);
-                    Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
-                    Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
-                    Writer.WriteEndElement(); // !cbc:EmbeddedDocumentBinaryObject
+                        Writer.WriteStartElement("cbc", "EmbeddedDocumentBinaryObject"); // BT-125
+                        Writer.WriteAttributeString("filename", document.Filename);
+                        Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                        Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+                        Writer.WriteEndElement(); // !cbc:EmbeddedDocumentBinaryObject
 
-                    /*
-                     // not supported yet
-                    Writer.WriteStartElement("cac", "ExternalReference");
-                    Writer.WriteStartElement("cbc", "URI"); // BT-124
-                    Writer.WriteValue("");
-                    Writer.WriteEndElement(); // !cbc:URI
-                    Writer.WriteEndElement(); // !cac:ExternalReference
-                    */
+                        /*
+                         // not supported yet
+                        Writer.WriteStartElement("cac", "ExternalReference");
+                        Writer.WriteStartElement("cbc", "URI"); // BT-124
+                        Writer.WriteValue("");
+                        Writer.WriteEndElement(); // !cbc:URI
+                        Writer.WriteEndElement(); // !cac:ExternalReference
+                        */
 
-                    Writer.WriteEndElement(); // !cac:Attachment
+                        Writer.WriteEndElement(); // !cac:Attachment
+                    }
+
                     Writer.WriteEndElement(); // !AdditionalDocumentReference
                 }
             }
