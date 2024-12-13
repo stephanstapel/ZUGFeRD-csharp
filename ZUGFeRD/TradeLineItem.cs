@@ -143,6 +143,11 @@ namespace s2industries.ZUGFeRD
         public QuantityCodes UnitCode { get; set; }
 
         /// <summary>
+        /// BT-130
+        /// </summary>
+        public ExtendedQuantityCode ExtendedUnitCode { get; set; }   
+
+        /// <summary>
         /// Identifier of the invoice line item
         /// 
         /// BT-126

@@ -483,7 +483,7 @@ namespace s2industries.ZUGFeRD
 
             //Writer.WriteElementString("cbc", "InvoicedQuantity", tradeLineItem.BilledQuantity.ToString());
             Writer.WriteStartElement("cbc", "InvoicedQuantity");
-            Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
+            Writer.WriteAttributeString("unitCode", tradeLineItem.ExtendedUnitCode != null ? tradeLineItem.ExtendedUnitCode.ToString() : tradeLineItem.UnitCode.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
             Writer.WriteEndElement();
 
@@ -541,7 +541,7 @@ namespace s2industries.ZUGFeRD
             if (tradeLineItem.UnitQuantity.HasValue)
             {
                 Writer.WriteStartElement("cbc", "BaseQuantity"); // BT-149
-                Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
+                Writer.WriteAttributeString("unitCode", tradeLineItem.ExtendedUnitCode != null ? tradeLineItem.ExtendedUnitCode.ToString() : tradeLineItem.UnitCode.EnumToString()); // BT-150
                 Writer.WriteValue(_formatDecimal(tradeLineItem.UnitQuantity));
                 Writer.WriteEndElement();
             }
