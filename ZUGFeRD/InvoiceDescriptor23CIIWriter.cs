@@ -492,7 +492,7 @@ namespace s2industries.ZUGFeRD
                             #region BasisAmount
                             if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
                             {
-                                Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Extended | Profile.XRechnung);
+                                Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Extended | Profile.XRechnung | Profile.Comfort);
                                 Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount.Value, 2));
                                 Writer.WriteEndElement();
                             }
@@ -504,7 +504,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement();
                             #endregion
 
-                            Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended | Profile.XRechnung);
+                            Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason, Profile.Extended | Profile.XRechnung | Profile.Comfort);
                             Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
                         }
                     }
