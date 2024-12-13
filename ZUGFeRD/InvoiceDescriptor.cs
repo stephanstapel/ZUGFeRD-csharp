@@ -1024,7 +1024,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="allowanceChargeBasisAmount"></param>
         /// <param name="exemptionReasonCode"></param>
         /// <param name="exemptionReason"></param>        
-        /// <param name="lineTotalBasisAmount">Basis amount of the line total</param>
+        /// <param name="lineTotalBasisAmount">A monetary value used as the line total basis on which this trade related tax, levy or duty is calculated</param>
         public void AddApplicableTradeTax(decimal basisAmount,
             decimal percent,
             decimal taxAmount,
