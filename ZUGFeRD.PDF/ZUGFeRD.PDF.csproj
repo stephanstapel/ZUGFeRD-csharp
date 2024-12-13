@@ -42,7 +42,7 @@ This library allows to load and create PDF/A files.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PDFsharp" Version="6.1.1" />
+    <PackageReference Include="PDFsharp-extended" Version="1.1.1" />
     <PackageReference Include="ZUGFeRD-csharp" Version="16.0.0" />
   </ItemGroup>
 

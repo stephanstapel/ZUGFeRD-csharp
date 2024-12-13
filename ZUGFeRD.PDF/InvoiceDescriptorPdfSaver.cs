@@ -29,6 +29,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
+using Microsoft.Extensions.Options;
+using System.Xml.Linq;
+using static PdfSharp.Pdf.PdfDictionary;
 
 namespace s2industries.ZUGFeRD.PDF
 {
@@ -91,6 +94,8 @@ namespace s2industries.ZUGFeRD.PDF
             var pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
 
             PdfDocument outputDocument = new PdfDocument();
+            outputDocument.Options.ManualXmpGeneration = true;
+
             for (int i = 0; i < pdfDocument.PageCount; i++)
             {
                 outputDocument.AddPage(pdfDocument.Pages[i]);
@@ -167,13 +172,15 @@ namespace s2industries.ZUGFeRD.PDF
                 .Replace("{{ConformanceLevel}}", conformanceLevelName);
 
             var metadataBytes = System.Text.Encoding.UTF8.GetBytes(xmpmeta);
-            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
+//            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
 
             PdfDictionary metadataDictionary = new PdfDictionary();
-            metadataDictionary.CreateStream(metadataEncodedBytes);
-            metadataDictionary.Elements.Add("/Filter", new PdfName("/FlateDecode"));
+
+            metadataDictionary.CreateStream(metadataBytes);
+        //    metadataDictionary.Elements.Add("/Filter", new PdfName("/FlateDecode"));
             metadataDictionary.Elements.Add("/Subtype", new PdfName("/XML"));
             metadataDictionary.Elements.Add("/Type", new PdfName("/Metadata"));
+            
             outputDocument.Internals.AddObject(metadataDictionary);
 
             outputDocument.Internals.Catalog.Elements.Add("/Metadata", metadataDictionary.Reference);
@@ -186,11 +193,23 @@ namespace s2industries.ZUGFeRD.PDF
             embeddedFilesDict.Elements.Add("/Names", namesPdfArray);
             PdfDictionary namesDict = new PdfDictionary();
             namesDict.Elements.Add("/EmbeddedFiles", embeddedFilesDict);
-
             outputDocument.Internals.Catalog.Elements.Add("/Names", namesDict);
 
+            // MarkInfo
+            PdfDictionary markInfoDict = new PdfDictionary();
+            markInfoDict.Elements.Add("/Marked", new PdfBoolean(true));
+            outputDocument.Internals.Catalog.Elements.Add("/MarkInfo", markInfoDict);
 
+            // StructureRoot
+            PdfDictionary structTreeRoot = new PdfDictionary();
+            structTreeRoot.Elements["/Type"] = new PdfName("/StructTreeRoot");            
+            PdfDictionary structElement = new PdfDictionary();
+            structElement.Elements["/Type"] = new PdfName("/StructElem");
+            structElement.Elements["/S"] = new PdfName("/Document");
+            structElement.Elements["/P"] = structTreeRoot;
+            outputDocument.Internals.Catalog.Elements.Add("/StructTreeRoot", structTreeRoot);
 
+            // Profile
             PdfDictionary rgbProfileDict = new PdfDictionary();
             rgbProfileDict.CreateStream(_LoadEmbeddedResource("s2industries.ZUGFeRD.PDF.Resources.sRGB-IEC61966-2.1.icc"));
             rgbProfileDict.Elements.Add("/N", new PdfInteger(3));
@@ -206,8 +225,8 @@ namespace s2industries.ZUGFeRD.PDF
             var outputIntentsArray = new PdfArray();
             outputIntentsArray.Elements.Add(outputIntent0Dict.Reference);
             outputDocument.Internals.Catalog.Elements.Add("/OutputIntents", outputIntentsArray);
+            outputDocument.Info.Creator = "S2 Industries";            
 
-            outputDocument.Info.Creator = "S2 Industries";
 
             MemoryStream memoryStream = new MemoryStream();
             outputDocument.Save(memoryStream);
