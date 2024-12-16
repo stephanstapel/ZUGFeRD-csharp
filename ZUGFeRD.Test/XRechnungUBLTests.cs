@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -579,13 +580,21 @@ namespace s2industries.ZUGFeRD.Test
             loadedInvoice.Save(resultStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
  
             // test the raw xml file
-            string content = Encoding.UTF8.GetString(resultStream.ToArray());
+            XmlDocument doc = new XmlDocument();
+            doc.Load(resultStream);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+            nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+
             // PartyIdentification may only exist once
-            Assert.IsTrue(Regex.Matches(content, "<cac:PartyIdentification.*>").Count == 1, "PartyIdentification should only contain once");
-            // PartyIdentification may only be contained in AccountingSupplierParty
-            Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty.*>.*<cac:Party.*>.*<cac:PartyIdentification.*>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
+            Assert.AreEqual(doc.SelectNodes("//cac:AccountingSupplierParty//cac:PartyIdentification", nsmgr).Count, 1);
+
+            // PartyIdentification may only be contained in AccountingSupplierParty --> only one such node in the document
+            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 1);
         } // !TestPartyIdentificationForSeller()
         
+
         [TestMethod]
         public void TestPartyIdentificationShouldNotExist()
         {
@@ -599,13 +608,18 @@ namespace s2industries.ZUGFeRD.Test
             
             MemoryStream resultStream = new MemoryStream();
             loadedInvoice.Save(resultStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
- 
+
             // test the raw xml file
-            string content = Encoding.UTF8.GetString(resultStream.ToArray());
-            
-            Assert.IsNotNull(content);
-            Assert.IsFalse(Regex.IsMatch(content, @"<cac:PartyIdentification.*>"), "PartyIdentification should not contain");
+            XmlDocument doc = new XmlDocument();
+            doc.Load(resultStream);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+            nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+
+            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 0);
         } // !TestPartyIdentificationShouldNotExist()
+
 
         [TestMethod]
         public void TestInDebitInvoiceTheFinancialAccountNameAndFinancialInstitutionBranchShouldNotExist()

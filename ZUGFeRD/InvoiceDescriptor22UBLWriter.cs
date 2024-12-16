@@ -705,7 +705,7 @@ namespace s2industries.ZUGFeRD
                 }
                 else if (partyType == PartyTypes.BuyerTradeParty)
                 {
-                    if (party.GlobalID != null)
+                    if ((party.GlobalID != null) && (!String.IsNullOrWhiteSpace(party.GlobalID.ID)))
                     {
                         writer.WriteStartElement("cac", "PartyIdentification");
                         writer.WriteStartElement("cbc", "ID");
