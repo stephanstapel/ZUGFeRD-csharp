@@ -703,6 +703,22 @@ namespace s2industries.ZUGFeRD
                         writer.WriteEndElement();//!PartyIdentification
                     }
                 }
+                else if (partyType == PartyTypes.BuyerTradeParty)
+                {
+                    if (party.GlobalID != null)
+                    {
+                        writer.WriteStartElement("cac", "PartyIdentification");
+                        writer.WriteStartElement("cbc", "ID");
+
+                        if (party.GlobalID.SchemeID.HasValue)
+                        {
+                            writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
+                        }
+                        writer.WriteValue(party.GlobalID.ID);
+                        writer.WriteEndElement();//!ID
+                        writer.WriteEndElement();//!PartyIdentification
+                    }
+                }
 
                 if (!string.IsNullOrWhiteSpace(party.Name))
                 {
