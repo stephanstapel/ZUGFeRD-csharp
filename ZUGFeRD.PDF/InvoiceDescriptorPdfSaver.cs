@@ -117,7 +117,7 @@ namespace s2industries.ZUGFeRD.PDF
 
             PdfDictionary xmlParamsDict = new PdfDictionary();
             xmlParamsDict.Elements.Add("/CheckSum", new PdfString(xmlChecksum));
-            xmlParamsDict.Elements.Add("/ModDate", new PdfString("D:" + DateTime.UtcNow.ToString("yyyyMMddHHmmsszzz")));
+            xmlParamsDict.Elements.Add("/ModDate", new PdfString(_FormatPdfDateTime(DateTime.UtcNow)));
             xmlParamsDict.Elements.Add("/Size", new PdfInteger(xmlFileBytes.Length));
 
 
@@ -172,7 +172,15 @@ namespace s2industries.ZUGFeRD.PDF
                 .Replace("{{ConformanceLevel}}", conformanceLevelName);
 
             var metadataBytes = System.Text.Encoding.UTF8.GetBytes(xmpmeta);
-//            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
+            if (metadataBytes[metadataBytes.Length - 1] == 0x0A) // remove trailing EOL
+            {
+                var trimmedMetadataBytes = new byte[metadataBytes.Length - 1];
+                Array.Copy(metadataBytes, trimmedMetadataBytes, trimmedMetadataBytes.Length); // remove eol marker
+                metadataBytes = trimmedMetadataBytes;
+            }
+            
+
+            //            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
 
             PdfDictionary metadataDictionary = new PdfDictionary();
 
@@ -180,7 +188,7 @@ namespace s2industries.ZUGFeRD.PDF
         //    metadataDictionary.Elements.Add("/Filter", new PdfName("/FlateDecode"));
             metadataDictionary.Elements.Add("/Subtype", new PdfName("/XML"));
             metadataDictionary.Elements.Add("/Type", new PdfName("/Metadata"));
-            
+
             outputDocument.Internals.AddObject(metadataDictionary);
 
             outputDocument.Internals.Catalog.Elements.Add("/Metadata", metadataDictionary.Reference);
@@ -233,6 +241,19 @@ namespace s2industries.ZUGFeRD.PDF
             memoryStream.Seek(0, SeekOrigin.Begin);
             return memoryStream;
         } // !_CreateFacturXStream()
+
+
+        private static string _FormatPdfDateTime(DateTime dateTime)
+        {
+            // Get the offset for the current time zone
+            TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(dateTime);
+
+            // Format the offset as "+HH'mm'" or "-HH'mm'"
+            string offsetString = $"{(offset >= TimeSpan.Zero ? "+" : "-")}{offset.Hours:00}'{offset.Minutes:00}'";
+
+            // Format the datetime according to the PDF specification
+            return $"D:{dateTime:yyyyMMddHHmmss}{offsetString}";
+        } // !_FormatPdfDateTime()
 
 
         private static byte[] _LoadEmbeddedResource(string path)
