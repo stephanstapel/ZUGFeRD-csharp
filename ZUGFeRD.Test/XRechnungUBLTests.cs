@@ -175,6 +175,26 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].ApplicableProductCharacteristics[1].Value, "3 kg");
         } // !TestTradelineitemProductCharacterstics()
 
+        [TestMethod]
+        public void TestTradelineitemAdditionalDocuments()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems[0].AddAdditionalReferencedDocument("testid", AdditionalReferencedDocumentTypeCode.InvoiceDataSheet, referenceTypeCode: ReferenceTypeCodes.ON);
+            desc.TradeLineItems[0].AddAdditionalReferencedDocument("testid2", AdditionalReferencedDocumentTypeCode.InvoiceDataSheet, referenceTypeCode: ReferenceTypeCodes.ON);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].GetAdditionalReferencedDocuments().Count, 2);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].GetAdditionalReferencedDocuments()[0].ID, "testid");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].GetAdditionalReferencedDocuments()[1].ID, "testid2");
+        } // !TestTradelineitemAdditionalDocuments()
 
         /// <summary>
         /// https://github.com/stephanstapel/ZUGFeRD-csharp/issues/319
@@ -562,8 +582,44 @@ namespace s2industries.ZUGFeRD.Test
 
 			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "6171175.1");
 		}
-        
-        
+
+        [TestMethod]
+        public void TestMultipleCreditorBankAccounts()
+        {
+            string iban1 = "DE901213213312311231";
+            string iban2 = "DE911213213312311231";
+            string bic1 = "BIC-Test";
+            string bic2 = "BIC-Test2";
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            desc.CreditorBankAccounts.Clear();
+
+            desc.CreditorBankAccounts.Add(new BankAccount() 
+            { 
+                IBAN = iban1, 
+                BIC = bic1 
+            });
+            desc.CreditorBankAccounts.Add(new BankAccount() 
+            { 
+                IBAN = iban2,
+                BIC = bic2 
+            });
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the BankAccounts
+            Assert.AreEqual(iban1, loadedInvoice.CreditorBankAccounts[0].IBAN);
+            Assert.AreEqual(bic1, loadedInvoice.CreditorBankAccounts[0].BIC);
+            Assert.AreEqual(iban2, loadedInvoice.CreditorBankAccounts[1].IBAN);
+            Assert.AreEqual(bic2, loadedInvoice.CreditorBankAccounts[1].BIC);
+        } // !TestMultipleCreditorBankAccounts()
+
+
         [TestMethod]
         public void TestPartyIdentificationForSeller()
         {
