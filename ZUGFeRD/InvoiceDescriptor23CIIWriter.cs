@@ -390,6 +390,18 @@ namespace s2industries.ZUGFeRD
                     _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, tradeLineItem.UltimateShipTo, Profile.Extended);
                 }
 
+                if (tradeLineItem.ActualDeliveryDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-170 for XRechnung 3
+                    Writer.WriteStartElement("ram", "OccurrenceDateTime");
+                    Writer.WriteStartElement("udt", "DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
+                    Writer.WriteEndElement(); // !udt:DateTimeString
+                    Writer.WriteEndElement(); // !OccurrenceDateTime()
+                    Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
+                }
+
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
                     Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-175 for XRechnung 3
@@ -406,18 +418,6 @@ namespace s2industries.ZUGFeRD
                     }
 
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
-                }
-
-                if (tradeLineItem.ActualDeliveryDate.HasValue)
-                {
-                    Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-170 for XRechnung 3
-                    Writer.WriteStartElement("ram", "OccurrenceDateTime");
-                    Writer.WriteStartElement("udt", "DateTimeString");
-                    Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
-                    Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !OccurrenceDateTime()
-                    Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
                 }
 
                 /// TODO: Add ShipToTradeParty
