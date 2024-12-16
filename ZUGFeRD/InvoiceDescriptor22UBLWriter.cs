@@ -66,7 +66,9 @@ namespace s2industries.ZUGFeRD
 
 
             if (this.Descriptor.Type != InvoiceType.Invoice && this.Descriptor.Type != InvoiceType.CreditNote && this.Descriptor.Type != InvoiceType.Correction)
+            {
                 throw new NotImplementedException("Not implemented yet.");
+            }
 
             #region Kopfbereich
             // UBL has different namespace for different types
