@@ -17,6 +17,10 @@ In particular, I am searching for sponsors for:
 The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor Factur-X. One special profile of Factur-X is the German XRechnung format.
 The library is meant to be as simple as possible, however it is not straight forward to use as the resulting XML file contains a complete invoice in XML format. Please take a look at the ZUGFeRD-Test project to find sample creation code. This code creates the same XML file as shipped with the ZUGFeRD information package.
 
+# Consulting/ Commercial Support
+*Auf Deutsch:* Falls Sie kommerzielle Unterstützung bei der Umsetzung von ZUGFeRD/ XRechnung in Ihrem Unternehmen benötigen, schreiben Sie mir gerne an stephan@s2-industries.com
+*In English* In case you you consulting or commercial support for implementing ZUGFeRD/ XRechnung/ Factur-X in your company, please send an email to stephan@s2-industries.com
+
 # Relationship between the different standards
 Since there are a lot of terms and standards around electronic invoices, I'd like to lay out my understanding:
 
