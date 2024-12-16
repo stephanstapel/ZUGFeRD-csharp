@@ -1032,7 +1032,7 @@ namespace s2industries.ZUGFeRD
                         }
                         
                         // BT-89 is only required/allowed on DirectDebit (BR-DE-29)
-                        if (this.Descriptor.PaymentMeans.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
+                        if (this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
                         {
                             Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         }
