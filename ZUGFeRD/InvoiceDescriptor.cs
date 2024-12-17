@@ -888,7 +888,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="percentage"></param>
         /// <param name="baseAmount"></param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
-            PaymentTermsType? paymentTermsType = null, int? dueDays = null, 
+            PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null)
         {
             _PaymentTerms.Add(new PaymentTerms()
@@ -1024,7 +1024,16 @@ namespace s2industries.ZUGFeRD
         /// <param name="allowanceChargeBasisAmount"></param>
         /// <param name="exemptionReasonCode"></param>
         /// <param name="exemptionReason"></param>        
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, decimal taxAmount, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal? allowanceChargeBasisAmount = null, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
+        /// <param name="lineTotalBasisAmount">A monetary value used as the line total basis on which this trade related tax, levy or duty is calculated</param>
+        public void AddApplicableTradeTax(decimal basisAmount,
+            decimal percent,
+            decimal taxAmount,
+            TaxTypes typeCode,
+            TaxCategoryCodes? categoryCode = null,
+            decimal? allowanceChargeBasisAmount = null,
+            TaxExemptionReasonCodes? exemptionReasonCode = null,
+            string exemptionReason = null,
+            decimal? lineTotalBasisAmount = null)
         {
             Tax tax = new Tax()
             {
@@ -1033,6 +1042,7 @@ namespace s2industries.ZUGFeRD
                 Percent = percent,
                 TypeCode = typeCode,
                 AllowanceChargeBasisAmount = allowanceChargeBasisAmount,
+                LineTotalBasisAmount = lineTotalBasisAmount,
                 ExemptionReasonCode = exemptionReasonCode,
                 ExemptionReason = exemptionReason
             };
