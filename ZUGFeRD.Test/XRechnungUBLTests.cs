@@ -929,5 +929,29 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsFalse(content.Contains("OrderReference"));
             }
         } // !TestInvoiceWithoutOrderReferenceShouldNotWriteEmptyOrderReferenceElement()
-	}
+
+
+        [TestMethod]
+        public void TestApplicableTradeTaxWithExemption()
+        {
+            InvoiceDescriptor descriptor = InvoiceProvider.CreateInvoice();
+            int taxCount = descriptor.Taxes.Count;
+            descriptor.AddApplicableTradeTax(123.00m, 23m, 23m, TaxTypes.VAT, TaxCategoryCodes.S, exemptionReasonCode: TaxExemptionReasonCodes.VATEX_132_2, exemptionReason: "Tax exemption reason");
+
+            MemoryStream ms = new MemoryStream();
+            descriptor.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            File.WriteAllBytes("C:\\temp\\test.xml", ms.ToArray());
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNotNull(loadedInvoice);
+
+            Assert.AreEqual(loadedInvoice.Taxes.Count, taxCount + 1);
+            Assert.AreEqual(loadedInvoice.Taxes.Last().ExemptionReason, "Tax exemption reason");
+            Assert.AreEqual(loadedInvoice.Taxes.Last().ExemptionReasonCode, TaxExemptionReasonCodes.VATEX_132_2);
+        } // !TestApplicableTradeTaxWithExemption()
+    }
 }

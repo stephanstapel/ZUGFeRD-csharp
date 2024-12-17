@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD
 {
@@ -460,9 +461,14 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteElementString("cbc", "ID", tax.CategoryCode.ToString());
                     Writer.WriteElementString("cbc", "Percent", _formatDecimal(tax.Percent));
 
+                    if (tax.ExemptionReasonCode.HasValue)
+                    {
+                        Writer.WriteElementString("cbc", "TaxExemptionReasonCode", tax.ExemptionReasonCode.Value.EnumToString());
+                    }
+                    Writer.WriteOptionalElementString("cbc", "TaxExemptionReason", tax.ExemptionReason);
                     Writer.WriteStartElement("cac", "TaxScheme");
                     Writer.WriteElementString("cbc", "ID", tax.TypeCode.EnumToString());
-                    Writer.WriteEndElement();// !TaxScheme
+                    Writer.WriteEndElement();// !TaxScheme                                       
 
                     Writer.WriteEndElement();// !TaxCategory
                     Writer.WriteEndElement();// !TaxSubtotal
