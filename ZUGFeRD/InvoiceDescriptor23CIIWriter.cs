@@ -104,8 +104,8 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("ram", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
             Writer.WriteElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext)
             Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
-                                                                                                                       //ToDo: LanguageID      //Sprachkennzeichen
-                                                                                                                       //ToDo: IncludedNote    //Freitext zur Rechnung
+                                                                                                                          //ToDo: LanguageID      //Sprachkennzeichen
+                                                                                                                          //ToDo: IncludedNote    //Freitext zur Rechnung
             if (this.Descriptor.InvoiceDate.HasValue)
             {
                 Writer.WriteStartElement("ram", "IssueDateTime");
@@ -198,7 +198,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteStartElement("ram", "IncludedReferencedProduct");
                         Writer.WriteOptionalElementString("ram", "Name", includedItem.Name);
 
-                        if(includedItem.UnitQuantity.HasValue)
+                        if (includedItem.UnitQuantity.HasValue)
                         {
                             _writeElementWithAttributeWithPrefix(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.Value.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
                         }
@@ -1010,7 +1010,7 @@ namespace s2industries.ZUGFeRD
                                     sbPaymentNotes.Append(paymentTerms.Description);
                                     sbPaymentNotes.Append(XmlConstants.XmlNewLine);
                                 }
-                                
+
                                 sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
                                 sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
@@ -1030,7 +1030,7 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(dueDate.Value));
                             Writer.WriteEndElement(); // !ram:DueDateDateTime
                         }
-                        
+
                         // BT-89 is only required/allowed on DirectDebit (BR-DE-29)
                         if (this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
                         {
@@ -1326,11 +1326,17 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0 && (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung)))
+                if (tax.AllowanceChargeBasisAmount.HasValue && tax.AllowanceChargeBasisAmount.Value != 0)
                 {
-                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount", Profile.Extended);
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                }
+                if (tax.LineTotalBasisAmount.HasValue && tax.LineTotalBasisAmount.Value != 0)
+                {
+                    writer.WriteStartElement("ram", "LineTotalBasisAmount", Profile.Extended);
+                    writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
+                    writer.WriteEndElement();
                 }
 
                 if (tax.CategoryCode.HasValue)
@@ -1456,7 +1462,7 @@ namespace s2industries.ZUGFeRD
             {
                 return;
             }
-             
+
             switch (partyType)
             {
                 case PartyTypes.SellerTradeParty:
