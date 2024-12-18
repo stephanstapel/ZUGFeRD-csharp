@@ -164,8 +164,8 @@ namespace s2industries.ZUGFeRD.PDF
             string pdfMetadataTemplate = System.Text.Encoding.Default.GetString(_LoadEmbeddedResource("s2industries.ZUGFeRD.PDF.Resources.PdfMedatadataTemplate.xml"));
             var xmpmeta = pdfMetadataTemplate
                 .Replace("{{InvoiceFilename}}", invoiceFilename)
-                .Replace("{{CreationDate}}", dateTimeNow.ToString("yyyy-MM-ddThh:mm:sszzz"))
-                .Replace("{{ModificationDate}}", dateTimeNow.ToString("yyyy-MM-ddThh:mm:sszzz"))
+                .Replace("{{CreationDate}}", _FormatXMPDateTime(dateTimeNow))
+                .Replace("{{ModificationDate}}", _FormatXMPDateTime(dateTimeNow))
                 .Replace("{{DocumentTitle}}", documentTitle)
                 .Replace("{{Version}}", xmpVersion)
                 .Replace("{{DocumentDescription}}", documentDescription)
@@ -254,6 +254,19 @@ namespace s2industries.ZUGFeRD.PDF
             // Format the datetime according to the PDF specification
             return $"D:{dateTime:yyyyMMddHHmmss}{offsetString}";
         } // !_FormatPdfDateTime()
+
+
+        private static string _FormatXMPDateTime(DateTime dateTime)
+        {
+            // Get the offset for the current time zone
+            TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(dateTime);
+
+            // Format the offset as "+HH'mm'" or "-HH'mm'"
+            string offsetString = $"{(offset >= TimeSpan.Zero ? "+" : "-")}{offset.Hours:00}:{offset.Minutes:00}'";
+
+            // Format the datetime according to the PDF specification
+            return $"{dateTime:yyyy-MM-ddTHH:mm:ss}{offsetString}";
+        } // !_FormatXMPDateTime()
 
 
         private static byte[] _LoadEmbeddedResource(string path)
