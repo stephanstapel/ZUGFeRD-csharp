@@ -47,5 +47,10 @@ namespace s2industries.ZUGFeRD
         /// BT-X-20-1
         /// </summary>
         public QuantityCodes? UnitCode { get; set; }
+
+        /// <summary>
+        /// BT-X-20-1
+        /// </summary>
+        public ExtendedQuantityCode ExtendedUnitCode { get; set; }
     }
 }
