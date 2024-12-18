@@ -423,7 +423,78 @@ namespace s2industries.ZUGFeRD
         /// <remarks>
         /// A quantity of allowance of food allotted to, or enough for, one person.
         /// </remarks>
-        PTN
+        PTN,
+
+        /// <summary>
+        /// microcurie
+        /// Abkürzung: µCi
+        /// </summary>
+        M5,
+
+        /// <summary>
+        /// microlitre
+        /// Abkürzung: µl
+        /// </summary>
+        _4G,
+
+        /// <summary>
+        /// megabecquerel
+        /// Abkürzung: MBq
+        /// </summary>
+        _4N,
+
+        /// <summary>
+        /// microgram
+        /// Abkürzung: µg
+        /// </summary>
+        MC,
+
+        /// <summary>
+        /// micromole
+        /// Abkürzung: µmol
+        /// </summary>
+        FH,
+
+        /// <summary>
+        /// becquerel
+        /// Abkürzung: Bq
+        /// </summary>
+        BQL,
+
+        /// <summary>
+        /// curie
+        /// Abkürzung: Ci
+        /// </summary>
+        CUR,
+
+        /// <summary>
+        /// millicurie
+        /// Abkürzung: mCi
+        /// </summary>
+        MCU,
+
+        /// <summary>
+        /// milligram
+        /// Abkürzung: mg
+        /// </summary>
+        MGM,
+
+        /// <summary>
+        /// millilitre
+        /// Abkürzung: ml
+        /// </summary>
+        MLT,
+
+        /// <summary>
+        /// nanomole
+        /// Abkürzung: nmol
+        /// </summary>
+        Z9,
+
+        /// <summary>
+        /// Packet
+        /// </summary>
+        XPA
     }
 
 
@@ -433,7 +504,14 @@ namespace s2industries.ZUGFeRD
         {
             try
             {
-                return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
+                if (!string.IsNullOrWhiteSpace(s) && char.IsDigit(s[0]))
+                {
+                    return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), "_" + s);
+                }
+                else
+                {
+                    return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
+                }
             }
             catch
             {
@@ -454,7 +532,7 @@ namespace s2industries.ZUGFeRD
 
         public static string EnumToString(this QuantityCodes c)
         {
-            return c.ToString("g");
+            return c.ToString("g").Replace("_","");
         } // !ToString()
     }
 }

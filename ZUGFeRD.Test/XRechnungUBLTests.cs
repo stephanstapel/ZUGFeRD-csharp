@@ -176,6 +176,31 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestTradelineitemProductCharacterstics()
 
         [TestMethod]
+        public void TestSpecialUnitCodes()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems[0].UnitCode = QuantityCodes._4G;
+            desc.TradeLineItems[1].UnitCode = QuantityCodes.H87;
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the raw xml file
+            string content = Encoding.UTF8.GetString(ms.ToArray());
+            Assert.IsTrue(content.Contains("unitCode=\"H87\"", StringComparison.OrdinalIgnoreCase));
+            Assert.IsTrue(content.Contains("unitCode=\"4G\"", StringComparison.OrdinalIgnoreCase));
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].UnitCode, QuantityCodes._4G);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].UnitCode, QuantityCodes.H87);
+        } // !TestSpecialUnitCodes()
+
+        [TestMethod]
         public void TestTradelineitemAdditionalDocuments()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
