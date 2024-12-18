@@ -104,13 +104,13 @@ namespace s2industries.ZUGFeRD.PDF
             string xmlChecksum = string.Empty;
             byte[] xmlFileBytes = null;
             using (var md5 = MD5.Create())
-            {
-                var hashBytes = md5.ComputeHash(xmlStream);
-                xmlChecksum = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-
+            {                
                 xmlStream.Seek(0, SeekOrigin.Begin);
                 xmlFileBytes = new byte[xmlStream.Length];
                 xmlStream.Read(xmlFileBytes, 0, (int)xmlStream.Length);
+
+                var hashBytes = md5.ComputeHash(xmlStream);
+                xmlChecksum = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
             }
 
             var xmlFileEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(xmlFileBytes);
@@ -258,14 +258,8 @@ namespace s2industries.ZUGFeRD.PDF
 
         private static string _FormatXMPDateTime(DateTime dateTime)
         {
-            // Get the offset for the current time zone
-            TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(dateTime);
-
-            // Format the offset as "+HH'mm'" or "-HH'mm'"
-            string offsetString = $"{(offset >= TimeSpan.Zero ? "+" : "-")}{offset.Hours:00}:{offset.Minutes:00}'";
-
-            // Format the datetime according to the PDF specification
-            return $"{dateTime:yyyy-MM-ddTHH:mm:ss}{offsetString}";
+            DateTime utcTime = dateTime.ToUniversalTime();
+            return $"{utcTime:yyyy-MM-ddTHH:mm}Z";
         } // !_FormatXMPDateTime()
 
 
