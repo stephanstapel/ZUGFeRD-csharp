@@ -349,6 +349,7 @@ namespace s2industries.ZUGFeRD
                 {
                     "urn:cen.eu:EN16931:2017#conformant#urn:zugferd.de:2p0:extended", // Profil EXTENDED
                     "urn:cen.eu:EN16931:2017", // Profil EN 16931 (COMFORT)" +
+                    "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:comfort", // Profil COMFORT
                     "urn:cen.eu:EN16931:2017#compliant#urn:zugferd.de:2p0:basic", // Profil BASIC
                     "urn:zugferd.de:2p0:basicwl", // Profil BASIC WL
                     "urn:zugferd.de:2p0:minimum" // Profil MINIMUM                    
