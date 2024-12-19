@@ -103,6 +103,11 @@ namespace s2industries.ZUGFeRD
         SEPADirectDebit = 59,
 
         /// <summary>
+        /// Payment will be made or has been made by an online payment service.
+        /// </summary>
+        OnlinePaymentService = 68,
+
+        /// <summary>
         /// Ausgleich zwischen Partnern.
         /// Beträge, die zwei Partner sich gegenseitig schulden werden ausgeglichen um unnütze Zahlungen zu vermeiden.
         /// Available in: Basic, Extended
