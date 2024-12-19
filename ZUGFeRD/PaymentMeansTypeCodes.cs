@@ -103,7 +103,7 @@ namespace s2industries.ZUGFeRD
         SEPADirectDebit = 59,
 
         /// <summary>
-        /// Payment will be made or has been made by an online payment service.
+        /// Payment will be made or has been made by an online payment service like Paypal, Stripe etc.
         /// </summary>
         OnlinePaymentService = 68,
 
