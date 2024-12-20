@@ -102,7 +102,7 @@ namespace s2industries.ZUGFeRD
             //Gruppierung der Eigenschaften, die das gesamte Dokument betreffen.
             Writer.WriteStartElement("rsm", "ExchangedDocument");
             Writer.WriteElementString("ram", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
-            Writer.WriteElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext)
+            Writer.WriteOptionalElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext)
             Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
                                                                                                                           //ToDo: LanguageID      //Sprachkennzeichen
                                                                                                                           //ToDo: IncludedNote    //Freitext zur Rechnung
