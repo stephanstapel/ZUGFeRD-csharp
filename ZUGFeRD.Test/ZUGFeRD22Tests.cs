@@ -1913,7 +1913,7 @@ namespace s2industries.ZUGFeRD.Test
             lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
             lineItem.SetContractReferencedDocument("12345", timestamp);
 
-            lineItem.AddAdditionalReferencedDocument("xyz", ReferenceTypeCodes.AAB, timestamp);
+            lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp);
 
             lineItem.UnitQuantity = 3m;
             lineItem.ActualDeliveryDate = timestamp;
@@ -2128,6 +2128,7 @@ namespace s2industries.ZUGFeRD.Test
             var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
             Assert.IsNotNull(lineItemReferencedDoc);
             Assert.AreEqual("xyz", lineItemReferencedDoc.ID);
+            Assert.AreEqual(AdditionalReferencedDocumentTypeCode.ReferenceDocument, lineItemReferencedDoc.TypeCode);
             Assert.AreEqual(timestamp, lineItemReferencedDoc.IssueDateTime);
             Assert.AreEqual(ReferenceTypeCodes.AAB, lineItemReferencedDoc.ReferenceTypeCode);
 
