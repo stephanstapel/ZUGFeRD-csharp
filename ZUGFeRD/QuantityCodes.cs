@@ -65,10 +65,10 @@ namespace s2industries.ZUGFeRD
         H87,
 
         /// <summary>
-        /// Hektar
-        /// Abkürzung: ha
+        /// square hectometre
+        /// Abbreviation: ha
         /// </summary>        
-        HAR,
+        H18,
 
         /// <summary>
         /// Stunde
@@ -99,12 +99,6 @@ namespace s2industries.ZUGFeRD
         /// Abkürzung: km (Rec20r13) für XRechnung
         /// </summary>
         KMT,
-
-        /// <summary>
-        /// Kilometer
-        /// Abkürzung: km (Rec20r16)
-        /// </summary>
-        KTM,
 
         /// <summary>
         /// Kilowattstunde
@@ -392,7 +386,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Block
         /// </summary>
-        D64,
+        XOK,
 
         /// <summary>
         ///  Tray
@@ -523,6 +517,18 @@ namespace s2industries.ZUGFeRD
                 else if (s == "PCE")
                 {
                     return QuantityCodes.C62;
+                }
+                else if (s == "KTM")
+                {
+                    return QuantityCodes.KMT;
+                }
+                else if (s == "HAR")
+                {
+                    return QuantityCodes.H18;
+                }
+                else if (s == "D64")
+                {
+                    return QuantityCodes.XOK;
                 }
 
                 return QuantityCodes.Unknown;
