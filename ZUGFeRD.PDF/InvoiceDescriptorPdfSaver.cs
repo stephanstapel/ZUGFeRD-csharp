@@ -144,7 +144,7 @@ namespace s2industries.ZUGFeRD.PDF
             };
 
             PdfDictionary af0Dict = new PdfDictionary();
-            af0Dict.Elements.Add("/AFRelationship", new PdfName("$/{relationship}"));
+            af0Dict.Elements.Add("/AFRelationship", new PdfName($"/{relationship}"));
             af0Dict.Elements.Add("/Desc", new PdfString("Factur-X XML file"));
             af0Dict.Elements.Add("/Type", new PdfName("/Filespec"));
             af0Dict.Elements.Add("/F", new PdfString(invoiceFilename));

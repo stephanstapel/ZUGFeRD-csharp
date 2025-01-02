@@ -147,6 +147,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !cac:BillingReference
             }
 
+            // DespatchDocumentReference
+            if (this.Descriptor.DespatchAdviceReferencedDocument != null)
+            {
+                Writer.WriteStartElement("cac", "DespatchDocumentReference");
+                Writer.WriteOptionalElementString("cbc", "ID", this.Descriptor.DespatchAdviceReferencedDocument.ID);
+                Writer.WriteEndElement(); // !DespatchDocumentReference
+            }
+
             // ContractDocumentReference
             if (this.Descriptor.ContractReferencedDocument != null)
             {

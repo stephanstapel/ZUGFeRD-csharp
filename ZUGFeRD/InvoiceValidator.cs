@@ -98,6 +98,7 @@ namespace s2industries.ZUGFeRD
             retval.Add("Adding tax amounts from invoice allowance charge...");
 
             decimal allowanceTotal = 0.0m;
+            decimal chargeTotal = 0.0m;
             foreach (TradeAllowanceCharge charge in descriptor.GetTradeAllowanceCharges())
             {
                 retval.Add(String.Format("==> added {0:0.00} to {1:0.00}%", -charge.Amount, charge.Tax.Percent));
@@ -107,7 +108,15 @@ namespace s2industries.ZUGFeRD
                     lineTotalPerTax.Add(charge.Tax.Percent, new decimal());
                 }
                 lineTotalPerTax[charge.Tax.Percent] -= charge.Amount;
-                allowanceTotal += charge.Amount;
+
+                if (charge.ChargeIndicator == false)
+                {
+                    allowanceTotal += charge.Amount;
+                }
+                else
+                {
+                    chargeTotal += charge.Amount;
+                }
             }
 
             retval.Add("Adding tax amounts from invoice service charge...");
@@ -126,19 +135,20 @@ namespace s2industries.ZUGFeRD
             }
 
             decimal grandTotal = lineTotal - allowanceTotal + taxTotal;
+            decimal prepaid = 0m; // TODO: calculcate
 
             retval.Add(String.Format("Recalculated tax total = {0:0.00}", taxTotal));
             retval.Add(String.Format("Recalculated grand total = {0:0.0000} EUR(tax basis total + tax total)", grandTotal));
             retval.Add("Recalculating invoice monetary summation DONE!");
             retval.Add(String.Format("==> result: MonetarySummation[lineTotal = {0:0.0000} EUR, chargeTotal = {1:0.0000} EUR, allowanceTotal = {2:0.0000} EUR, taxBasisTotal = {3:0.0000} EUR, taxTotal = {4:0.0000} EUR, grandTotal = {5:0.0000} EUR, totalPrepaid = {6:0.0000} EUR, duePayable = {7:0.0000} EUR]",
                                      lineTotal,
-                                     0.0m, // chargeTotal
+                                     chargeTotal,
                                      allowanceTotal,
-                                     lineTotal - allowanceTotal, // - chargeTotal
+                                     lineTotal - allowanceTotal + chargeTotal, // tax basis total
                                      taxTotal,
                                      grandTotal,
-                                     0.0m, // prepaid
-                                     lineTotal - allowanceTotal + taxTotal // - chargetotal + prepaid 
+                                     prepaid,
+                                     lineTotal - allowanceTotal + taxTotal + chargeTotal + prepaid
                                      ));
 
 

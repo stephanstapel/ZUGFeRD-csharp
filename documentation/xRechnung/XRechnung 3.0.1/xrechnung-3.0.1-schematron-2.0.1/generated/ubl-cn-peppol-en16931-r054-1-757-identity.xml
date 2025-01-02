@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2"
+            xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+            xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>
+    <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+    <cbc:ID>3009000003</cbc:ID>
+    <cbc:IssueDate>2022-09-21</cbc:IssueDate>
+    <cbc:CreditNoteTypeCode>381</cbc:CreditNoteTypeCode>
+    <cbc:Note>RECHNUNG</cbc:Note>
+    <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+    <cbc:TaxCurrencyCode>USD</cbc:TaxCurrencyCode>
+    <cbc:BuyerReference>05 123456 123</cbc:BuyerReference>
+    <cac:OrderReference>
+        <cbc:ID>0000200123</cbc:ID>
+    </cac:OrderReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="EM">rechnungsausgang@test.com</cbc:EndpointID>
+            <cac:PostalAddress>
+                <cbc:StreetName>Muster Straße 4-6</cbc:StreetName>
+                <cbc:CityName>Dorf</cbc:CityName>
+                <cbc:PostalZone>12345</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>DE</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>DE123</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Test GmbH</cbc:RegistrationName>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>Musterperson</cbc:Name>
+                <cbc:Telephone>123</cbc:Telephone>
+                <cbc:ElectronicMail>musterperson@test.de</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="EM">rechnungseingang@test.de</cbc:EndpointID>
+            <cac:PostalAddress>
+                <cbc:StreetName>Testweg 1</cbc:StreetName>
+                <cbc:CityName>Dorf</cbc:CityName>
+                <cbc:PostalZone>12345</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>DE</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Musterfirma</cbc:RegistrationName>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>Musterfirma</cbc:Name>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode name="Credit transfer">30</cbc:PaymentMeansCode>
+        <cbc:PaymentID>1000000001</cbc:PaymentID>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>DE94820800000815609800</cbc:ID>
+            <cbc:Name>Testbank</cbc:Name>
+            <cac:FinancialInstitutionBranch>
+                <cbc:ID>TESTTESTTT</cbc:ID>
+            </cac:FinancialInstitutionBranch>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentTerms>
+        <cbc:Note>innerhalb 14 Tagen ohne Abzug Bis zum 05.10.2022 ohne Abzug</cbc:Note>
+    </cac:PaymentTerms>
+    <cac:TaxTotal><!-- BT-110 -->
+        
+        <cbc:TaxAmount currencyID="EUR">70.00</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="EUR">1000.00</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">70.00</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>7.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <!--This is the active mutation configuration: ubl-cn-peppol-en16931-r054-1-757-identity -->
+   <?xmute mutator="identity" schematron-valid="xrubl:PEPPOL-EN16931-R054" id="ubl-cn-one-tax-total-without-tax-subtotals-correct" description="exactly one TaxTotal without TaxSubtotal(s) provided with tax currency code"?>
+    <?xmute mutator="remove" schematron-invalid="xrubl:PEPPOL-EN16931-R054" id="ubl-cn-no-tax-total-without-tax-subtotals-invalid" description="exactly one TaxTotal without TaxSubtotal(s) must be provided with tax currency code"?>
+    <cac:TaxTotal><!-- BT-111 -->
+        
+        <cbc:TaxAmount currencyID="USD">70.00</cbc:TaxAmount>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="EUR">1325.00</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="EUR">1325.00</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="EUR">1395.00</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="EUR">1395.00</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    <cac:CreditNoteLine>
+        <cbc:ID>000000</cbc:ID>
+        <cbc:CreditedQuantity unitCode="HUR">65</cbc:CreditedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">325.00</cbc:LineExtensionAmount>
+        <cac:Item>
+            <cbc:Name>Sascha Test</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>19</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">20.00</cbc:PriceAmount>
+            <cbc:BaseQuantity>4</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:CreditNoteLine>
+    <cac:CreditNoteLine>
+        <cbc:ID>000001</cbc:ID>
+        <cbc:CreditedQuantity unitCode="HUR">10.000</cbc:CreditedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1000.00</cbc:LineExtensionAmount>
+        <cac:Item>
+            <cbc:Name>Sascha Test</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>7</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">100.00</cbc:PriceAmount>
+        </cac:Price>
+    </cac:CreditNoteLine>
+</CreditNote>

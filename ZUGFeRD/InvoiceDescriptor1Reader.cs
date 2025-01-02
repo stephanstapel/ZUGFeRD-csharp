@@ -374,10 +374,12 @@ namespace s2industries.ZUGFeRD
             XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedSupplyChainTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referenceNodes)
             {
-                string _code = XmlUtils.NodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
+                string _typeCode = XmlUtils.NodeAsString(referenceNode, "ram:TypeCode", nsmgr);
+                string _code = XmlUtils.NodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);                
 
                 item.AddAdditionalReferencedDocument(
                     id: XmlUtils.NodeAsString(referenceNode, "ram:ID", nsmgr),
+                    typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
                     code: default(ReferenceTypeCodes).FromString(_code),
                     issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTime", nsmgr)
                 );

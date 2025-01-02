@@ -45,24 +45,67 @@ namespace s2industries.ZUGFeRD
                 throw new IllegalStreamException("Cannot read from stream");
             }
 
+            byte[] firstPartOfDocumentBuffer = new byte[1024];
+            stream.Read(firstPartOfDocumentBuffer, 0, 1024);
+            stream.Position = 0;
+            string firstPartOfDocument = System.Text.Encoding.UTF8.GetString(firstPartOfDocumentBuffer);
+            bool isInvoice = true;
+
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
-            nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+
+            if ((firstPartOfDocument.IndexOf("<CreditNote", StringComparison.OrdinalIgnoreCase) > -1) ||
+                (firstPartOfDocument.IndexOf("<ubl:CreditNote", StringComparison.OrdinalIgnoreCase) > -1))
+            {
+                isInvoice = false;
+            }
+            
+            if (isInvoice)
+            {
+                nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");                
+            }
+            else
+            {
+                nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
+            }
+                     
             nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
             nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+
+            string _typeSelector = "//cbc:InvoiceTypeCode";
+            string _tradeLineItemSelector = "//cac:InvoiceLine";
+            XmlNode baseNode = null;
+            if (isInvoice)
+            {
+                baseNode = doc.SelectSingleNode("/ubl:Invoice", nsmgr);
+                if (baseNode == null)
+                {
+                    baseNode = doc.SelectSingleNode("/Invoice", nsmgr);
+                }
+            }
+            else
+            {
+                _typeSelector = "//cbc:CreditNoteTypeCode";
+                _tradeLineItemSelector = "//cac:CreditNoteLine";
+                baseNode = doc.SelectSingleNode("/ubl:CreditNote", nsmgr);
+                if (baseNode == null)
+                {
+                    baseNode = doc.SelectSingleNode("/CreditNote", nsmgr);
+                }
+            }
 
             InvoiceDescriptor retval = new InvoiceDescriptor
             {
                 IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//cbc:TestIndicator", nsmgr, false),
                 BusinessProcess = XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:ProfileID", nsmgr),
-                Profile = Profile.XRechnung, //default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
-                Type = default(InvoiceType).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:InvoiceTypeCode", nsmgr)),
+                Profile = Profile.XRechnung, //default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),                
                 InvoiceNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:ID", nsmgr),
-                InvoiceDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cbc:IssueDate", nsmgr)
+                InvoiceDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cbc:IssueDate", nsmgr),
+                Type = default(InvoiceType).FromString(XmlUtils.NodeAsString(doc.DocumentElement, _typeSelector, nsmgr))
             };
 
-            foreach (XmlNode node in doc.SelectNodes("/ubl:Invoice/cbc:Note", nsmgr))
+            foreach (XmlNode node in baseNode.SelectNodes("./cbc:Note", nsmgr))
             {
                 string content = XmlUtils.NodeAsString(node, ".", nsmgr);
                 if (string.IsNullOrWhiteSpace(content)) continue;
@@ -289,7 +332,7 @@ namespace s2industries.ZUGFeRD
             // As both document level and document item level element have same name
             // only using the //cac:AllowanceCharge gives all the allowances from the file 
             // so we specify the node with the parent node
-            foreach (XmlNode node in doc.DocumentElement.SelectNodes("/ubl:Invoice/cac:AllowanceCharge", nsmgr))
+            foreach (XmlNode node in baseNode.SelectNodes("./cac:AllowanceCharge", nsmgr))
             {
                 retval.AddTradeAllowanceCharge(!XmlUtils.NodeAsBool(node, ".//cbc:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
                                                XmlUtils.NodeAsDecimal(node, ".//cbc:BaseAmount", nsmgr, 0).Value,
@@ -319,7 +362,7 @@ namespace s2industries.ZUGFeRD
                 break; // only one occurrence allowed in UBL
             }
 
-            XmlNode despatchDocumentReferenceIdNode = doc.DocumentElement.SelectSingleNode("/ubl:Invoice/cac:DespatchDocumentReference/cbc:ID", nsmgr);
+            XmlNode despatchDocumentReferenceIdNode = baseNode.SelectSingleNode("./cac:DespatchDocumentReference/cbc:ID", nsmgr);
             if (despatchDocumentReferenceIdNode != null)
             {                
                 retval.SetDespatchAdviceReferencedDocument(despatchDocumentReferenceIdNode.InnerText);
@@ -401,11 +444,10 @@ namespace s2industries.ZUGFeRD
                 Name = String.Empty // TODO: Find value //Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
             };
 
-            foreach (XmlNode node in doc.SelectNodes("//cac:InvoiceLine", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes(_tradeLineItemSelector, nsmgr))
             {
                 retval.TradeLineItems.AddRange(_parseTradeLineItem(node, nsmgr));
             }
-
 
             return retval;
         } // !Load()        
