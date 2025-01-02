@@ -119,6 +119,20 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteOptionalElementString("cbc", "BuyerReference", this.Descriptor.ReferenceOrderNo);
 
+            if (this.Descriptor.BillingPeriodEnd.HasValue || this.Descriptor.BillingPeriodEnd.HasValue)
+            {
+                Writer.WriteStartElement("cac", "InvoicePeriod");
+
+                if (this.Descriptor.BillingPeriodStart.HasValue)
+                {
+                    Writer.WriteElementString("cbc", "StartDate", _formatDate(this.Descriptor.BillingPeriodStart.Value, false, true));
+                }
+                if (this.Descriptor.BillingPeriodEnd.HasValue)
+                {
+                    Writer.WriteElementString("cbc", "EndDate", _formatDate(this.Descriptor.BillingPeriodEnd.Value, false, true));
+                }
+            }
+
             // OrderReference is optional
             if (!string.IsNullOrWhiteSpace(this.Descriptor.OrderNo))
             {
