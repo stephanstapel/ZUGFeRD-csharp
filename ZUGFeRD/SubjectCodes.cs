@@ -58,7 +58,14 @@ namespace s2industries.ZUGFeRD
         /// Angaben zu Entgeltminderungen
         /// </summary>
         AAK,
-        
+
+        /// <summary>
+        /// Lieferbedingungen
+        /// 
+        /// Freier Text der Nicht-Incoterms-Lieferbedingungen. Für Incoterms, verwenden: 4053.
+        /// </summary>
+        AAR,
+
         /// <summary>
         /// Zusätzliche Angaben
         /// </summary>
