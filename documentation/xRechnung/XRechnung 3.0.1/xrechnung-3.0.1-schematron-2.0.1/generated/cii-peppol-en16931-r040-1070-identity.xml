@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+                          xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
+                          xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+                          xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+    <rsm:ExchangedDocumentContext><!-- BT-23 -->
+		
+        <ram:BusinessProcessSpecifiedDocumentContextParameter>
+            <ram:ID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</ram:ID>
+        </ram:BusinessProcessSpecifiedDocumentContextParameter>
+      <!-- BT-24 -->
+		
+        <ram:GuidelineSpecifiedDocumentContextParameter>
+            <ram:ID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</ram:ID>
+        </ram:GuidelineSpecifiedDocumentContextParameter>
+    </rsm:ExchangedDocumentContext>
+    <rsm:ExchangedDocument><!-- BT-1 -->
+		
+        <ram:ID>1234567</ram:ID>
+      <!-- BT-3 -->
+		
+        <ram:TypeCode>380</ram:TypeCode>
+      <!-- BT-2 -->
+		
+        <ram:IssueDateTime>
+            <udt:DateTimeString format="102">20180413</udt:DateTimeString>
+        </ram:IssueDateTime>
+        <ram:IncludedNote><!-- BT-22 -->
+			
+            <ram:Content>Invoice Note Description</ram:Content>
+         <!-- BT-21 -->
+			
+            <ram:SubjectCode>AAC</ram:SubjectCode>
+        </ram:IncludedNote>
+    </rsm:ExchangedDocument>
+    <rsm:SupplyChainTradeTransaction>
+        <ram:IncludedSupplyChainTradeLineItem>
+            <ram:AssociatedDocumentLineDocument><!-- BT-126 -->
+				
+                <ram:LineID>1</ram:LineID>
+            <!-- BT-127 -->
+				
+                <ram:IncludedNote>
+                    <ram:Content>Die letzte Lieferung im Rahmen des abgerechneten Abonnements erfolgt in 12/2016 Lieferung erfolgt / erfolgte direkt vom Verlag</ram:Content>
+                </ram:IncludedNote>
+            </ram:AssociatedDocumentLineDocument>
+            <ram:SpecifiedTradeProduct><!-- BT-157, BT-157-1 -->
+                
+                <ram:GlobalID schemeID="0088">123456789</ram:GlobalID>
+            <!-- BT-155 -->
+				
+                <ram:SellerAssignedID>1034</ram:SellerAssignedID>
+            <!-- BT-156 -->
+                
+                <ram:BuyerAssignedID>5034</ram:BuyerAssignedID>
+            <!-- BT-153 -->
+				
+                <ram:Name>Beratung</ram:Name>
+            <!-- BT-154 -->
+				
+                <ram:Description>Anforderungmanagament</ram:Description>
+                <ram:ApplicableProductCharacteristic><!-- BT-160 -->
+                    
+                    <ram:Description>[Description]</ram:Description>
+               <!-- BT-161 -->
+                    
+                    <ram:Value>[Value]</ram:Value>
+                </ram:ApplicableProductCharacteristic>
+            <!-- BT-158, BT-158-1, BT-158-2 -->
+				
+                <ram:DesignatedProductClassification>
+                    <ram:ClassCode listID="IB" listVersionID="88">0721-880X</ram:ClassCode>
+                </ram:DesignatedProductClassification>
+            <!-- BT-159 -->                
+                
+                <ram:OriginTradeCountry>
+                    <ram:ID>DE</ram:ID>
+                </ram:OriginTradeCountry>
+            </ram:SpecifiedTradeProduct>
+            <ram:SpecifiedLineTradeAgreement><!-- BT-132-->
+				
+                <ram:BuyerOrderReferencedDocument>
+                    <ram:LineID>6171175.1</ram:LineID>
+                </ram:BuyerOrderReferencedDocument>				
+                <ram:GrossPriceProductTradePrice><!-- BT-148 -->
+                    
+                    <ram:ChargeAmount>168.125000000</ram:ChargeAmount>
+               <!-- BT-149, BT-150 -->
+                    
+                    <ram:BasisQuantity unitCode="XPP">30</ram:BasisQuantity>
+                    <ram:AppliedTradeAllowanceCharge>
+                        <ram:ChargeIndicator>
+                            <udt:Indicator>false</udt:Indicator>
+                        </ram:ChargeIndicator>
+                  <!-- BT-147 -->
+                        
+                        <ram:ActualAmount>10.000000000000000000</ram:ActualAmount>
+                    </ram:AppliedTradeAllowanceCharge>
+                </ram:GrossPriceProductTradePrice>
+            <!-- BT-146 -->
+                
+                <ram:NetPriceProductTradePrice>
+                    <ram:ChargeAmount>158.125000000</ram:ChargeAmount>
+                </ram:NetPriceProductTradePrice>                
+            </ram:SpecifiedLineTradeAgreement>
+            <ram:SpecifiedLineTradeDelivery><!-- BT-129, BT-130 -->
+				
+                <ram:BilledQuantity unitCode="XPP">30.00000000000</ram:BilledQuantity>
+            </ram:SpecifiedLineTradeDelivery>
+            <ram:SpecifiedLineTradeSettlement>
+                <ram:ApplicableTradeTax><!-- BT-151 -->
+					
+                    <ram:TypeCode>VAT</ram:TypeCode>
+               <!-- BT-151 -->
+					
+                    <ram:CategoryCode>S</ram:CategoryCode>
+               <!-- BT-152 -->
+					
+                    <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+                </ram:ApplicableTradeTax>
+                <ram:BillingSpecifiedPeriod><!-- BT-134 -->
+					
+                    <ram:StartDateTime>
+                        <udt:DateTimeString format="102">20160101</udt:DateTimeString>
+                    </ram:StartDateTime>
+               <!-- BT-135 -->
+					
+                    <ram:EndDateTime>
+                        <udt:DateTimeString format="102">20161231</udt:DateTimeString>
+                    </ram:EndDateTime>
+                </ram:BillingSpecifiedPeriod>
+                <ram:SpecifiedTradeAllowanceCharge>
+                    <ram:ChargeIndicator>
+                        <udt:Indicator>true</udt:Indicator>
+                    </ram:ChargeIndicator>
+               <!-- BT-143 -->
+                    
+                    <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-percentage-must-be-correct" description="invoice line allowance basis amount is correct"?>
+                    <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-line-charge-percentage" description="invoice line basis amount not provided"?>
+                    <?xmute mutator="code" values="98,102" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-percentage-slack" description="invoice line basis amount correct"?>
+                    <?xmute mutator="code" values="90,10,0" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-percentage-amount" description="invoice line basis amount must be correct"?>
+                    <ram:CalculationPercent>100</ram:CalculationPercent>
+               <!-- BT-142 -->
+                    
+                    <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-basis-amount-must-be-correct" description="invoice line allowance basis amount is correct"?>
+                    <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-line-charge-basis-amount" description="invoice line basis amount not provided"?>
+                    <?xmute mutator="code" values="1.02, 0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-basis-amount-slack" description="invoice line basis amount correct"?>
+                    <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-basis-amount" description="invoice line basis amount must be correct"?>
+                    <ram:BasisAmount>1</ram:BasisAmount>
+               <!-- BT-141 -->
+                    
+                    <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-amount-must-be-correct" description="invoice line allowance amount is correct"?>
+                    <?xmute mutator="remove" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-no-line-charge-amount" description="invoice line amount not provided"?>
+                    <?xmute mutator="code" values="1.02, 0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-amount-slack" description="invoice line amount correct"?>
+                    <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-line-charge-amount" description="invoice line amount must be correct"?>
+                    <ram:ActualAmount>1</ram:ActualAmount>
+               <!-- BT-145 -->
+                    
+                    <ram:ReasonCode>TAC</ram:ReasonCode>
+               <!-- BT-144 -->
+                    
+                    <ram:Reason>Testing</ram:Reason>                    
+                </ram:SpecifiedTradeAllowanceCharge>
+                <ram:SpecifiedTradeAllowanceCharge>
+                    <ram:ChargeIndicator>
+                        <udt:Indicator>false</udt:Indicator>
+                    </ram:ChargeIndicator>
+               <!-- BT-138 -->
+                    
+                    <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-percentage-must-be-correct" description="invoice line allowance basis amount is correct"?>
+                    <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-line-allowance-percentage" description="invoice line basis amount not provided"?>
+                    <?xmute mutator="code" values="98,102" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-percentage-slack" description="invoice line basis amount correct"?>
+                    <?xmute mutator="code" values="90,10,0" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-percentage-amount" description="invoice line basis amount must be correct"?>
+                    <ram:CalculationPercent>100</ram:CalculationPercent>
+               <!-- BT-137 -->
+                    
+                    <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-basis-amount-must-be-correct" description="invoice line charge basis amount is correct"?>
+                    <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-line-allowance-basis-amount" description="invoice line basis amount not provided"?>
+                    <?xmute mutator="code" values="1.02, 0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-basis-amount-slack" description="invoice line basis amount correct"?>
+                    <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-basis-amount" description="invoice line basis amount must be correct"?>
+                    <ram:BasisAmount>1</ram:BasisAmount>
+               <!-- BT-136 -->
+                    
+                    <!--This is the active mutation configuration: cii-peppol-en16931-r040-1070-identity -->
+               <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-amount-must-be-correct" description="invoice line allowance amount is correct"?>
+                    <?xmute mutator="remove" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-no-line-allowance-amount" description="invoice line amount not provided"?>
+                    <?xmute mutator="code" values="1.02,0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-amount-slack" description="invoice line amount correct"?>
+                    <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-line-allowance-amount" description="invoice line amount must be correct"?>
+                    <ram:ActualAmount>1</ram:ActualAmount>
+               <!-- BT-140 -->
+                    
+                    <ram:ReasonCode>102</ram:ReasonCode>
+               <!-- BT-139 -->
+                    
+                    <ram:Reason>Fixed long term</ram:Reason>                    
+                </ram:SpecifiedTradeAllowanceCharge>
+                <ram:SpecifiedTradeSettlementLineMonetarySummation><!-- BT-131 -->
+					                    
+                    <ram:LineTotalAmount>4743.75</ram:LineTotalAmount>
+                </ram:SpecifiedTradeSettlementLineMonetarySummation>
+            <!-- BT-128 -->
+                
+                <ram:AdditionalReferencedDocument>
+                    <ram:IssuerAssignedID>ANG987654321</ram:IssuerAssignedID>
+                    <ram:TypeCode>130</ram:TypeCode>
+               <!-- BT-128-1 -->
+                    
+                    <ram:ReferenceTypeCode>ABZ</ram:ReferenceTypeCode>
+                </ram:AdditionalReferencedDocument>
+            <!-- BT-133 -->
+                
+                <ram:ReceivableSpecifiedTradeAccountingAccount>
+                    <ram:ID>Konto 1</ram:ID>
+                </ram:ReceivableSpecifiedTradeAccountingAccount>
+            </ram:SpecifiedLineTradeSettlement>
+        </ram:IncludedSupplyChainTradeLineItem>
+        <ram:IncludedSupplyChainTradeLineItem><!-- BT-126 -->
+			
+            <ram:AssociatedDocumentLineDocument>
+                <ram:LineID>2</ram:LineID>
+            </ram:AssociatedDocumentLineDocument>
+            <ram:SpecifiedTradeProduct><!-- BT-153 -->
+				
+                <ram:Name>Beratung</ram:Name>
+            </ram:SpecifiedTradeProduct>
+            <ram:SpecifiedLineTradeAgreement><!-- BT-146 -->
+				
+                <ram:NetPriceProductTradePrice>
+                    <ram:ChargeAmount>143.75</ram:ChargeAmount>
+                </ram:NetPriceProductTradePrice>
+            </ram:SpecifiedLineTradeAgreement>
+            <ram:SpecifiedLineTradeDelivery><!-- BT-129, BT-130 -->
+				
+                <ram:BilledQuantity unitCode="XPP">42</ram:BilledQuantity>
+            </ram:SpecifiedLineTradeDelivery>
+            <ram:SpecifiedLineTradeSettlement>
+                <ram:ApplicableTradeTax><!-- BT-151 -->
+					
+                    <ram:TypeCode>VAT</ram:TypeCode>
+               <!-- BT-151 -->
+					
+                    <ram:CategoryCode>S</ram:CategoryCode>
+               <!-- BT-152 -->
+					
+                    <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+                </ram:ApplicableTradeTax>
+                <ram:SpecifiedTradeSettlementLineMonetarySummation><!-- BT-131 -->
+					
+                    <ram:LineTotalAmount>6037.5</ram:LineTotalAmount>
+                </ram:SpecifiedTradeSettlementLineMonetarySummation>
+            </ram:SpecifiedLineTradeSettlement>
+        </ram:IncludedSupplyChainTradeLineItem>
+        <ram:ApplicableHeaderTradeAgreement><!-- BT-10 -->
+			
+            <ram:BuyerReference>90000000-03083-72</ram:BuyerReference>
+            <ram:SellerTradeParty><!-- BT-29 -->
+				
+                <ram:GlobalID schemeID="0088">987654321</ram:GlobalID>
+            <!-- BT-27 -->
+				
+                <ram:Name>[Seller name]</ram:Name>
+            <!-- BT-33 -->
+				
+                <ram:Description>Amtsgericht […], Geschäftsführer: […], Sitz der Gesellschaft […], Aufsichtsratvorsitzender: […]</ram:Description>
+                <ram:SpecifiedLegalOrganization><!-- BT-30 -->
+					
+                    <ram:ID schemeID="0088">123456789</ram:ID>
+               <!-- BT-28 -->
+					
+                    <ram:TradingBusinessName>[Seller trading name]</ram:TradingBusinessName>
+                </ram:SpecifiedLegalOrganization>
+                <ram:DefinedTradeContact><!-- BT-41 -->
+					
+                    <ram:PersonName>Tim Tester</ram:PersonName>
+               <!-- BT-41 -->
+                    
+                    <ram:DepartmentName>Testorganisation</ram:DepartmentName>
+               <!-- BT-42 -->
+					
+                    <ram:TelephoneUniversalCommunication>
+                        <ram:CompleteNumber>012 3456789</ram:CompleteNumber>
+                    </ram:TelephoneUniversalCommunication>
+               <!-- BT-43 -->
+					
+                    <ram:EmailURIUniversalCommunication>
+                        <ram:URIID>tim.tester@test.com</ram:URIID>
+                    </ram:EmailURIUniversalCommunication>
+                </ram:DefinedTradeContact>
+                <ram:PostalTradeAddress><!-- BT-38 -->
+					
+                    <ram:PostcodeCode>12345</ram:PostcodeCode>
+               <!-- BT-35 -->
+					
+                    <ram:LineOne>[Seller address line 1]</ram:LineOne>
+               <!-- BT-36 -->
+					
+                    <ram:LineTwo>[Seller address line 2]</ram:LineTwo>
+               <!-- BT-162 -->
+					
+                    <ram:LineThree>[Seller address line 3]</ram:LineThree>
+               <!-- BT-37 -->
+					
+                    <ram:CityName>[Seller city]</ram:CityName>
+               <!-- BT-40 -->
+					
+                    <ram:CountryID>DE</ram:CountryID>
+               <!-- BT-39 -->
+                    
+                    <ram:CountrySubDivisionName>Bayern</ram:CountrySubDivisionName>
+                </ram:PostalTradeAddress>
+            <!-- BT-34 -->
+				
+                <ram:URIUniversalCommunication>
+                    <ram:URIID schemeID="EM">rechnungsausgang@test.com</ram:URIID>
+                </ram:URIUniversalCommunication>
+            <!-- BT-31 -->
+				
+                <ram:SpecifiedTaxRegistration>
+                    <ram:ID schemeID="VA">ATU123456789</ram:ID>
+                </ram:SpecifiedTaxRegistration>
+            <!-- BT-32 -->
+				
+                <ram:SpecifiedTaxRegistration>
+                    <ram:ID schemeID="FC">123/456/789</ram:ID>
+                </ram:SpecifiedTaxRegistration>
+            </ram:SellerTradeParty>
+            <ram:BuyerTradeParty><!-- BT-46 -->
+				
+                <ram:ID>138</ram:ID>
+            <!-- BT-44 -->
+				
+                <ram:Name>[Buyer name]</ram:Name>
+                <ram:SpecifiedLegalOrganization><!-- BT-47 -->
+					
+                    <ram:ID schemeID="0204">90000000-03083-72</ram:ID>
+               <!-- BT-45 -->
+                    
+                    <ram:TradingBusinessName>[Buyer trading name]</ram:TradingBusinessName>
+                </ram:SpecifiedLegalOrganization>
+                <ram:DefinedTradeContact><!-- BT-56 -->
+					
+                    <ram:PersonName>Tina Tester</ram:PersonName>
+               <!-- BT-56 -->
+                    
+                    <ram:DepartmentName>Tina Tester</ram:DepartmentName>
+               <!-- BT-57 -->
+					
+                    <ram:TelephoneUniversalCommunication>
+                        <ram:CompleteNumber>0800 123456</ram:CompleteNumber>
+                    </ram:TelephoneUniversalCommunication>
+               <!-- BT-58 -->
+					
+                    <ram:EmailURIUniversalCommunication>
+                        <ram:URIID>tester@test.de</ram:URIID>
+                    </ram:EmailURIUniversalCommunication>
+                </ram:DefinedTradeContact>
+                <ram:PostalTradeAddress><!-- BT-53 -->
+					
+                    <ram:PostcodeCode>98765</ram:PostcodeCode>
+               <!-- BT-50 -->
+					
+                    <ram:LineOne>[Buyer address line 1]</ram:LineOne>
+               <!-- BT-51 -->
+					
+                    <ram:LineTwo>[Buyer address line 2]</ram:LineTwo>
+               <!-- BT-163 -->
+					
+                    <ram:LineThree>[Buyer address line 3]</ram:LineThree>
+               <!-- BT-52 -->
+					
+                    <ram:CityName>[Buyer city]</ram:CityName>
+               <!-- BT-55 -->
+					
+                    <ram:CountryID>DE</ram:CountryID>
+               <!-- BT-54 -->
+                    
+                    <ram:CountrySubDivisionName>Bayern</ram:CountrySubDivisionName>
+                </ram:PostalTradeAddress>
+            <!-- BT-49 -->
+				
+                <ram:URIUniversalCommunication>
+                    <ram:URIID schemeID="EM">rechnungseingang@test.de</ram:URIID>
+                </ram:URIUniversalCommunication>
+                <ram:SpecifiedTaxRegistration><!-- BT-48 -->
+					
+                    <ram:ID schemeID="VA">DE12345ABC</ram:ID>                    
+                </ram:SpecifiedTaxRegistration>
+            </ram:BuyerTradeParty>
+            <ram:SellerTaxRepresentativeTradeParty><!-- BT-62 -->
+				
+                <ram:Name>[Seller tax representative name]</ram:Name>				
+                <ram:PostalTradeAddress><!-- BT-67 -->
+					
+                    <ram:PostcodeCode>12345</ram:PostcodeCode>
+               <!-- BT-64 -->
+					
+                    <ram:LineOne>[Seller tax representative address line 1]</ram:LineOne>
+               <!-- BT-65 -->
+					
+                    <ram:LineTwo>[Seller tax representative address line 2]</ram:LineTwo>
+               <!-- BT-164 -->
+					
+                    <ram:LineThree>[Seller tax representative address line 2]</ram:LineThree>
+               <!-- BT-66 -->
+					
+                    <ram:CityName>[Seller tax representative city]</ram:CityName>
+               <!-- BT-69 -->
+					
+                    <ram:CountryID>DE</ram:CountryID>
+               <!-- BT-68 -->
+					
+                    <ram:CountrySubDivisionName>Bayern</ram:CountrySubDivisionName>
+                </ram:PostalTradeAddress>
+            <!-- BT-63 -->
+				
+                <ram:SpecifiedTaxRegistration>
+                    <ram:ID schemeID="VA">DE124567</ram:ID>
+                </ram:SpecifiedTaxRegistration>
+            </ram:SellerTaxRepresentativeTradeParty>
+         <!-- BT-14 -->
+			
+            <ram:SellerOrderReferencedDocument>
+                <ram:IssuerAssignedID>ABC123456789</ram:IssuerAssignedID>
+            </ram:SellerOrderReferencedDocument>
+         <!-- BT-13 -->
+			
+            <ram:BuyerOrderReferencedDocument>
+                <ram:IssuerAssignedID>65002278</ram:IssuerAssignedID>
+            </ram:BuyerOrderReferencedDocument>
+         <!-- BT-12 -->            
+			
+            <ram:ContractReferencedDocument>
+                <ram:IssuerAssignedID>0000000752</ram:IssuerAssignedID>
+            </ram:ContractReferencedDocument>
+            <ram:AdditionalReferencedDocument><!-- BT-122 -->
+				
+                <ram:IssuerAssignedID>01_15_Anhang_01.pdf</ram:IssuerAssignedID>
+            <!-- BT-124 -->
+                
+                <ram:URIID>[External document location]</ram:URIID>
+            <!-- BT-122 -->
+				
+                <ram:TypeCode>916</ram:TypeCode>
+            <!-- BT-123 -->
+				
+                <ram:Name>Aufschlüsselung der einzelnen Leistungspositionen</ram:Name>
+            <!-- BT-125, BT-125-1, BT-125-2 -->
+            <!--<ram:AttachmentBinaryObject mimeCode="application/pdf" filename="01_15_Anhang_01.pdf">JVBER</ram:AttachmentBinaryObject>-->
+				
+                                
+            </ram:AdditionalReferencedDocument>
+         <!-- BT-17 -->
+			
+            <ram:AdditionalReferencedDocument>
+                <ram:IssuerAssignedID>ANG987654321</ram:IssuerAssignedID>
+                <ram:TypeCode>50</ram:TypeCode>
+            </ram:AdditionalReferencedDocument>
+         <!-- BT-18 -->
+			
+            <ram:AdditionalReferencedDocument>
+                <ram:IssuerAssignedID>OK987654321</ram:IssuerAssignedID>
+                <ram:TypeCode>130</ram:TypeCode>
+            </ram:AdditionalReferencedDocument>
+         <!-- BT-11 -->
+			
+            <ram:SpecifiedProcuringProject>
+                <ram:ID>PR12345678</ram:ID>
+                <ram:Name>Project reference</ram:Name>
+            </ram:SpecifiedProcuringProject>
+        </ram:ApplicableHeaderTradeAgreement>
+        <ram:ApplicableHeaderTradeDelivery>
+            <ram:ShipToTradeParty><!-- BT-71 -->
+				
+                <ram:ID>68</ram:ID>
+            <!-- BT-70 -->
+				
+                <ram:Name>[Deliver to party name]</ram:Name>
+                <ram:PostalTradeAddress><!-- BT-78 -->
+					
+                    <ram:PostcodeCode>98765</ram:PostcodeCode>
+               <!-- BT-75 -->
+					
+                    <ram:LineOne>[Deliver to street]</ram:LineOne>
+               <!-- BT-76 -->
+					
+                    <ram:LineTwo>4. OG</ram:LineTwo>
+               <!-- BT-165 -->
+					
+                    <ram:LineThree>More Details</ram:LineThree>
+               <!-- BT-77 -->
+					
+                    <ram:CityName>[Deliver to city]</ram:CityName>
+               <!-- BT-80 -->
+					
+                    <ram:CountryID>DE</ram:CountryID>
+               <!-- BT-79 -->
+					
+                    <ram:CountrySubDivisionName>Bayern</ram:CountrySubDivisionName>
+                </ram:PostalTradeAddress>
+            </ram:ShipToTradeParty>
+            <ram:ActualDeliverySupplyChainEvent><!-- BT-72 -->
+				
+                <ram:OccurrenceDateTime>
+                    <udt:DateTimeString format="102">20180413</udt:DateTimeString>
+                </ram:OccurrenceDateTime>
+            </ram:ActualDeliverySupplyChainEvent>
+         <!-- BT-16 -->
+            
+            <ram:DespatchAdviceReferencedDocument>
+                <ram:IssuerAssignedID>DAR123456789</ram:IssuerAssignedID>
+            </ram:DespatchAdviceReferencedDocument>
+         <!-- BT-15 -->
+            
+            <ram:ReceivingAdviceReferencedDocument>
+                <ram:IssuerAssignedID>RAR123456789</ram:IssuerAssignedID>
+            </ram:ReceivingAdviceReferencedDocument>
+        </ram:ApplicableHeaderTradeDelivery>
+        <ram:ApplicableHeaderTradeSettlement><!-- BT-83 -->
+			
+            <ram:PaymentReference>Deb. 12345 / Fact. 9876543</ram:PaymentReference>
+         <!-- BT-6 -->            
+			
+            <ram:TaxCurrencyCode>GBP</ram:TaxCurrencyCode>
+         <!-- BT-5 -->           
+			
+            <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>            
+            <ram:PayeeTradeParty><!-- BT-60 -->
+				
+                <ram:ID>74</ram:ID>
+            <!-- BT-59 -->
+				
+                <ram:Name>[Payee name]</ram:Name>
+                <ram:SpecifiedLegalOrganization><!-- BT-61, BT-61-1 -->
+                    
+                    <ram:ID schemeID="0204">90000000-03083-72</ram:ID>                    
+                </ram:SpecifiedLegalOrganization>
+            </ram:PayeeTradeParty>           
+            <ram:SpecifiedTradeSettlementPaymentMeans><!-- BT-81 -->				
+                
+                <ram:TypeCode>58</ram:TypeCode>
+            <!-- BT-82 -->
+                
+                <ram:Information>[Payment means text]</ram:Information>
+                <ram:PayeePartyCreditorFinancialAccount><!-- BT-84 -->
+					
+                    <ram:IBANID>DE75512108001245126199</ram:IBANID>
+               <!-- BT-85 -->
+					
+                    <ram:AccountName>[Payment account name]</ram:AccountName>
+                </ram:PayeePartyCreditorFinancialAccount>
+                <ram:PayeeSpecifiedCreditorFinancialInstitution><!-- BT-86 -->
+					
+                    <ram:BICID>[BIC]</ram:BICID>
+                </ram:PayeeSpecifiedCreditorFinancialInstitution>
+            </ram:SpecifiedTradeSettlementPaymentMeans>
+            <ram:ApplicableTradeTax><!-- BT-117 -->
+				
+                <ram:CalculatedAmount>2048.44</ram:CalculatedAmount>
+            <!-- BT-118 -->
+				
+                <ram:TypeCode>VAT</ram:TypeCode>
+            <!-- BT-116 -->
+				
+                <ram:BasisAmount>10781.25</ram:BasisAmount>
+            <!-- BT-118 -->
+				
+                <ram:CategoryCode>S</ram:CategoryCode>
+            <!-- BT-7 -->
+				
+                <ram:TaxPointDate>
+                    <udt:DateString format="102">20180413</udt:DateString>
+                </ram:TaxPointDate>
+            <!-- BT-119 -->
+				
+                <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+            </ram:ApplicableTradeTax>
+            <ram:ApplicableTradeTax><!-- BT-117 -->
+				
+                <ram:CalculatedAmount>0</ram:CalculatedAmount>
+            <!-- BT-118 -->
+				
+                <ram:TypeCode>VAT</ram:TypeCode>
+            <!-- BT-120 -->
+                
+                <ram:ExemptionReason>[VAT exemption reason text]</ram:ExemptionReason>
+            <!-- BT-116 -->
+				
+                <ram:BasisAmount>0</ram:BasisAmount>
+            <!-- BT-118 -->
+				
+                <ram:CategoryCode>E</ram:CategoryCode>
+            <!-- BT-121 -->                
+				
+				        <ram:ExemptionReasonCode>vatex-eu-132-1a</ram:ExemptionReasonCode>
+            <!-- BT-7 -->               
+				
+                <ram:TaxPointDate>
+                    <udt:DateString format="102">20180413</udt:DateString>
+                </ram:TaxPointDate>
+            <!-- BT-119 -->
+				
+                <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
+            </ram:ApplicableTradeTax>
+            <ram:BillingSpecifiedPeriod><!-- BT-73 -->
+				
+                <ram:StartDateTime>
+                    <udt:DateTimeString format="102">20160101</udt:DateTimeString>
+                </ram:StartDateTime>
+            <!-- BT-74 -->
+				
+                <ram:EndDateTime>
+                    <udt:DateTimeString format="102">20161231</udt:DateTimeString>
+                </ram:EndDateTime>
+            </ram:BillingSpecifiedPeriod>
+            <ram:SpecifiedTradeAllowanceCharge>
+                <ram:ChargeIndicator>
+                    <udt:Indicator>true</udt:Indicator>
+                </ram:ChargeIndicator>
+            <!-- BT-101 -->
+				
+                <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-percentage-must-be-correct" description="invoice charge percentage is correct"?>
+                <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-charge-percentage" description="invoice charge percentage not provided"?>
+                <?xmute mutator="code" values="98,102" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-percentage-slack" description="invoice charge percentage correct"?>
+                <?xmute mutator="code" values="90,10,0" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-percentage-amount" description="invoice charge percentage must be correct"?>
+                <ram:CalculationPercent>100</ram:CalculationPercent>
+            <!-- BT-100 -->
+				
+                <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-basis-amount-must-be-correct" description="invoice charge basis amount is correct"?>
+                <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-charge-basis-amount" description="invoice basis amount not provided"?>
+                <?xmute mutator="code" values="1.02, 0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-basis-amount-slack" description="invoice basis amount correct"?>
+                <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-basis-amount" description="invoice basis amount must be correct"?>
+                <ram:BasisAmount>1</ram:BasisAmount>
+            <!-- BT-99 -->
+				
+                <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-amount-must-be-correct" description="invoice line allowance amount is correct"?>
+                <?xmute mutator="remove" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-no-charge-amount" description="invoice line amount not provided"?>
+                <?xmute mutator="code" values="1.02,0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-amount-slack" description="invoice line amount correct"?>
+                <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-charge-amount" description="invoice line amount must be correct"?>
+                <ram:ActualAmount>1</ram:ActualAmount>
+            <!-- BT-105 -->
+				
+                <ram:ReasonCode>TAC</ram:ReasonCode>
+            <!-- BT-104 -->
+				
+                <ram:Reason>Testing</ram:Reason>
+                <ram:CategoryTradeTax><!-- BT-102 -->
+					
+                    <ram:TypeCode>VAT</ram:TypeCode>
+               <!-- BT-102 -->
+					
+                    <ram:CategoryCode>E</ram:CategoryCode>
+               <!-- BT-103 -->
+					
+                    <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
+                </ram:CategoryTradeTax>
+            </ram:SpecifiedTradeAllowanceCharge>
+            <ram:SpecifiedTradeAllowanceCharge>
+                <ram:ChargeIndicator>
+                    <udt:Indicator>false</udt:Indicator>
+                </ram:ChargeIndicator>
+            <!-- BT-94 -->
+				
+                <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-percentage-must-be-correct" description="invoice allowance percentage is correct"?>
+                <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-allowance-percentage" description="invoice allowance percentage not provided"?>
+                <?xmute mutator="code" values="98,102" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-percentage-slack" description="invoice allowance percentage correct"?>
+                <?xmute mutator="code" values="90,10,0" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-percentage-amount" description="invoice allowance percentage must be correct"?>
+                <ram:CalculationPercent>100</ram:CalculationPercent>
+            <!-- BT-93 -->
+				
+                <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-amount-basis-must-be-correct" description="invoice allowance basis amount is correct"?>
+                <?xmute mutator="remove" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-no-allowance-basis-amount" description="invoice allowance basis amount not provided"?>
+                <?xmute mutator="code" values="1.02, 0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-basis-amount-slack" description="invoice allowance basis amount correct"?>
+                <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-basis-amount" description="invoice allowance basis amount must be correct"?>
+                <ram:BasisAmount>1</ram:BasisAmount>
+            <!-- BT-92 -->
+				
+                <?xmute mutator="identity" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-amount-must-be-correct" description="invoice allowance amount is correct"?>
+                <?xmute mutator="remove" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-no-allowance-amount" description="invoice line amount not provided"?>
+                <?xmute mutator="code" values="1.02,0.98" schematron-valid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-amount-slack" description="invoice line amount correct"?>
+                <?xmute mutator="code" values="0.00, 1.1" schematron-invalid="xrcii:PEPPOL-EN16931-R040" id="cii-allowance-amount" description="invoice line amount must be correct"?>
+                <ram:ActualAmount>1</ram:ActualAmount>
+            <!-- BT-98 -->
+				
+                <ram:ReasonCode>102</ram:ReasonCode>
+            <!-- BT-97 -->
+				
+                <ram:Reason>Fixed long term</ram:Reason>
+                <ram:CategoryTradeTax><!-- BT-95 -->
+					
+                    <ram:TypeCode>VAT</ram:TypeCode>
+               <!-- BT-95 -->
+					
+                    <ram:CategoryCode>E</ram:CategoryCode>
+               <!-- BT-96 -->
+					
+                    <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
+                </ram:CategoryTradeTax>
+            </ram:SpecifiedTradeAllowanceCharge>
+            <ram:SpecifiedTradePaymentTerms><!-- BT-20 -->
+				
+                <ram:Description>Beschreibung 1: Bitte überweisen Sie bis zum 13.04.2018 auf das unten aufgeführte Konto.</ram:Description>
+            <!-- BT-9 -->               
+				
+                <ram:DueDateDateTime>
+                    <udt:DateTimeString format="102">20180413</udt:DateTimeString>
+                </ram:DueDateDateTime>                
+            </ram:SpecifiedTradePaymentTerms>            
+            <ram:SpecifiedTradeSettlementHeaderMonetarySummation><!-- BT-106 -->
+				
+                <ram:LineTotalAmount>10781.25</ram:LineTotalAmount>
+            <!-- BT-108 -->
+				
+                <ram:ChargeTotalAmount>1</ram:ChargeTotalAmount>
+            <!-- BT-107 -->
+				
+                <ram:AllowanceTotalAmount>1</ram:AllowanceTotalAmount>
+            <!-- BT-109 -->
+				
+                <ram:TaxBasisTotalAmount>10781.25</ram:TaxBasisTotalAmount>
+            <!-- BT-110 -->
+				
+                <ram:TaxTotalAmount currencyID="EUR">2048.44</ram:TaxTotalAmount>
+            <!-- BT-111 -->
+				
+                <ram:TaxTotalAmount currencyID="GBP">2048.44</ram:TaxTotalAmount>
+            <!-- BT-114 -->
+				
+                <ram:RoundingAmount>0</ram:RoundingAmount>
+            <!-- BT-112 -->
+				
+                <ram:GrandTotalAmount>12829.69</ram:GrandTotalAmount>
+            <!-- BT-113 -->
+				
+                <ram:TotalPrepaidAmount>0</ram:TotalPrepaidAmount>
+            <!-- BT-115 -->
+				
+                <ram:DuePayableAmount>12829.69</ram:DuePayableAmount>
+            </ram:SpecifiedTradeSettlementHeaderMonetarySummation>            
+            <ram:InvoiceReferencedDocument><!-- BT-25 -->                               
+                
+                <ram:IssuerAssignedID>PIR1234567890</ram:IssuerAssignedID>
+            <!-- BT-26 -->
+                
+                <ram:FormattedIssueDateTime>
+                    <qdt:DateTimeString format="102">20180204</qdt:DateTimeString>
+                </ram:FormattedIssueDateTime>                
+            </ram:InvoiceReferencedDocument>
+         <!-- BT-19 -->
+            
+            <ram:ReceivableSpecifiedTradeAccountingAccount>
+                <ram:ID>Buchungscode1</ram:ID>
+            </ram:ReceivableSpecifiedTradeAccountingAccount>
+        </ram:ApplicableHeaderTradeSettlement>
+    </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>
