@@ -195,7 +195,7 @@ namespace s2industries.ZUGFeRD
                 case Profile.Comfort:
                 case Profile.XRechnung1:
                 case Profile.XRechnung: return "EN 16931";
-                default: return profile.ToString();
+                default: return profile.ToString().ToUpper();
             }
         } // !GetXMPName()
     }
