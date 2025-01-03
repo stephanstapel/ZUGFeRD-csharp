@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,7 @@ namespace s2industries.ZUGFeRD
 {
     internal abstract class IInvoiceDescriptorReader
     {
-        public abstract InvoiceDescriptor Load(Stream stream);        
+        public abstract InvoiceDescriptor Load(Stream stream);
         public abstract bool IsReadableByThisReaderVersion(Stream stream);
 
 
@@ -55,13 +55,13 @@ namespace s2industries.ZUGFeRD
             Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
             bool retval = IsReadableByThisReaderVersion(fs);
             fs.Close();
-            return retval;            
+            return retval;
         } // !IsReadableByThisReaderVersion()
 
 
         protected XmlNamespaceManager _GenerateNamespaceManagerFromNode(XmlNode node)
         {
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(node.OwnerDocument.NameTable);   
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(node.OwnerDocument.NameTable);
             foreach (XmlAttribute attr in node.Attributes)
             {
                 if (attr.Prefix == "xmlns")
@@ -77,7 +77,7 @@ namespace s2industries.ZUGFeRD
             return nsmgr;
         } // !_GenerateNamespaceManagerFromNode()
 
-        
+
         protected bool _IsReadableByThisReaderVersion(Stream stream, IList<string> validURIs)
         {
             long _oldStreamPosition = stream.Position;

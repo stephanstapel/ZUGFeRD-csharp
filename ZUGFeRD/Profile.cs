@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -41,7 +41,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// The Comfort profile corresponds to the European standard EN 16931.
-        /// 
+        ///
         /// Invoices in this profile contain all necessary information and thus are valid electronic invoices.
         /// </summary>
         Comfort = 2,
@@ -77,8 +77,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// The e-reporting (https://www.impots.gouv.fr/e-reporting-la-transmission-de-donnees-de-transaction-ladministration)
-        /// concern companies subject to VAT in France and trading with private individuals and, more generally, non-taxable persons 
-        /// (business to consumer or BtoC), with companies not established on French territory (i.e. taxable persons who do not have 
+        /// concern companies subject to VAT in France and trading with private individuals and, more generally, non-taxable persons
+        /// (business to consumer or BtoC), with companies not established on French territory (i.e. taxable persons who do not have
         /// an establishment, domicile or habitual residence in France).
         /// </summary>
         EReporting = 128,
@@ -150,7 +150,7 @@ namespace s2industries.ZUGFeRD
                 case ZUGFeRDVersion.Version20:
                     switch (profile)
                     {
-                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";                        
+                        case Profile.Minimum: return "urn:zugferd.de:2p0:minimum";
                         case Profile.Basic: return "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic";
                         case Profile.BasicWL: return "urn:zugferd.de:2p0:basicwl";
                         case Profile.Comfort: return "urn:cen.eu:en16931:2017";
@@ -179,7 +179,7 @@ namespace s2industries.ZUGFeRD
                             }
                         case Profile.EReporting: return "urn.cpro.gouv.fr:1p0:ereporting";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
-                    }                    
+                    }
                 default:
                     // return "";
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");

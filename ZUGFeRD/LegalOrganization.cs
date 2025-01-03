@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -20,38 +20,38 @@ using System;
 
 namespace s2industries.ZUGFeRD
 {
-  /// <summary>
-  /// Details about a legal organization
-  /// </summary>
-  public class LegalOrganization
-  {
     /// <summary>
-    /// Create a new LegalOrganization instance
+    /// Details about a legal organization
     /// </summary>
-    public LegalOrganization()
+    public class LegalOrganization
     {
-      ID = null;
-      TradingBusinessName = String.Empty;
-    }
-    /// <summary>
-    /// Create a new LegalOrganization instance
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="schemeID"></param>
-    /// <param name="tradingBusinessName"></param>
-    public LegalOrganization(GlobalIDSchemeIdentifiers schemeID = GlobalIDSchemeIdentifiers.Unknown, string id = "", string tradingBusinessName = "")
-    {
-      ID = new GlobalID(schemeID, id);
-      TradingBusinessName = tradingBusinessName;
-    }
-    /// <summary>
-    /// Legal organization ID
-    /// </summary>
-    public GlobalID ID { get; set; }
+        /// <summary>
+        /// Create a new LegalOrganization instance
+        /// </summary>
+        public LegalOrganization()
+        {
+            ID = null;
+            TradingBusinessName = String.Empty;
+        }
+        /// <summary>
+        /// Create a new LegalOrganization instance
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="schemeID"></param>
+        /// <param name="tradingBusinessName"></param>
+        public LegalOrganization(GlobalIDSchemeIdentifiers schemeID = GlobalIDSchemeIdentifiers.Unknown, string id = "", string tradingBusinessName = "")
+        {
+            ID = new GlobalID(schemeID, id);
+            TradingBusinessName = tradingBusinessName;
+        }
+        /// <summary>
+        /// Legal organization ID
+        /// </summary>
+        public GlobalID ID { get; set; }
 
-    /// <summary>
-    /// A name by which the party is known, other than party name (also known as Business name). 
-    /// </summary>
-    public string TradingBusinessName { get; set; }
-  }
+        /// <summary>
+        /// A name by which the party is known, other than party name (also known as Business name).
+        /// </summary>
+        public string TradingBusinessName { get; set; }
+    }
 }
