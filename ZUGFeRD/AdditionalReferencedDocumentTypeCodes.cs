@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD
         // this entry needs to be the first in the list (default value)
         /// <summary>
         /// Unknown reference document type
-        /// </summary>        
+        /// </summary>
         Unknown = 65536,
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// price and sales catalog
         /// </summary>
-        PriceSalesCatalogueResponse = 50,        
+        PriceSalesCatalogueResponse = 50,
     }
 
 
@@ -55,7 +55,7 @@ namespace s2industries.ZUGFeRD
     {
         public static AdditionalReferencedDocumentTypeCode FromString(this AdditionalReferencedDocumentTypeCode _, string s)
         {
-            return EnumExtensions.StringToEnum<AdditionalReferencedDocumentTypeCode>(s);        
+            return EnumExtensions.StringToEnum<AdditionalReferencedDocumentTypeCode>(s);
         } // !FromString()
 
 

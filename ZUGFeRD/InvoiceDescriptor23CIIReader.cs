@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
-        /// 
+        ///
         /// Make sure that the stream is open, otherwise an IllegalStreamException exception is thrown.
         /// Important: the stream will not be closed by this function.
         /// </summary>
@@ -161,7 +161,7 @@ namespace s2industries.ZUGFeRD
 
             //        retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
             //                                               typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
-            //                                               issueDateTime: _date,                                                           
+            //                                               issueDateTime: _date,
             //                                               referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
             //                                               name: _name,
             //                                               attachmentBinaryObject: data,
@@ -171,7 +171,7 @@ namespace s2industries.ZUGFeRD
             //    {
             //        retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
             //                                               typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
-            //                                               issueDateTime: _date,                                                           
+            //                                               issueDateTime: _date,
             //                                               referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
             //                                               name: _name);
             //    }
@@ -425,7 +425,7 @@ namespace s2industries.ZUGFeRD
             }
 
             return retval;
-        } // !Load()        
+        } // !Load()
 
 
         public override bool IsReadableByThisReaderVersion(Stream stream)
@@ -440,7 +440,7 @@ namespace s2industries.ZUGFeRD
                     "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_1.2", // XRechnung 1.2
                     "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.0", // XRechnung 2.0
                     "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.1", // XRechnung 2.1
-                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2", // XRechnung 2.2                    
+                    "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2", // XRechnung 2.2
                     "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3", // XRechnung 2.3
                     "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0", // XRechnung 3.0
                     "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0#conformant#urn:xeinkauf.de:kosit:extension:xrechnung_3.0", // XRechnung 3.0
@@ -594,9 +594,9 @@ namespace s2industries.ZUGFeRD
                 foreach (XmlNode noteNode in noteNodes)
                 {
                     item.AssociatedDocument.Notes.Add(new Note(
-                                content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
-                                subjectCode: default(SubjectCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
-                                contentCode: default(ContentCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
+						content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
+						subjectCode: default(SubjectCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
+						contentCode: default(ContentCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
                     ));
                 }
             }
@@ -667,7 +667,7 @@ namespace s2industries.ZUGFeRD
             } // !foreach(designatedProductClassificationNode))
 
             return item;
-        } // !_parseTradeLineItem()        
+        } // !_parseTradeLineItem()
 
 
         private static LegalOrganization _nodeAsLegalOrganization(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
@@ -685,6 +685,8 @@ namespace s2industries.ZUGFeRD
             };
             return retval;
         }
+
+
         private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
             if (baseNode == null)

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -35,7 +35,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Unknown/ invalid value
         /// </summary>
-        Unknown = 0, 
+        Unknown = 0,
 
         /// <summary>
         /// Auftragsbestätigungsnummer
@@ -69,7 +69,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Transportdokumenten-Nummer
-        /// 
+        ///
         /// Referenz zu einem Transportdokument, vergeben vom Frachtführer oder seinem Agenten. (z.B.
         /// Paketdienst-Zustell-Nr.)
         /// </summary>
@@ -82,7 +82,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Vehicle licence number
-        /// 
+        ///
         /// Number of the licence issued for a vehicle by an agency of government.
         /// </summary>
         ABZ,
@@ -111,7 +111,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Nummer einer Rücksendungsanzeige
-        /// 
+        ///
         /// Referenznummer für eine Rücksendungsanzeige. (z.B. Retourennummer)
         /// </summary>
         ALQ,
@@ -154,7 +154,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Vertragsnummer (Käufer)
-        /// 
+        ///
         /// Referenznummer vergeben vom Käufer für einen Vertrag (z.B. Abkommennummer)
         /// </summary>
         BC,
@@ -171,7 +171,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Lieferscheinnummer
-        /// 
+        ///
         ///  Delivery note number
         /// </summary>
         DQ,
@@ -185,7 +185,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Zählernummer
-        /// 
+        ///
         /// z.B. Zählpunktbezeichnung
         /// </summary>
         MG,

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -41,11 +41,11 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Zusätzliche Konditionen zu diesem Kauf
-        /// 
+        ///
         /// Angaben zum Eigentumsvorbehalt
         /// </summary>
         AAJ,
-        
+
         /// <summary>
         /// Buchhaltungsinformationen
         /// </summary>
@@ -54,11 +54,11 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Preiskonditionen
-        /// 
+        ///
         /// Angaben zu Entgeltminderungen
         /// </summary>
         AAK,
-        
+
         /// <summary>
         /// Zusätzliche Angaben
         /// </summary>
@@ -72,7 +72,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Zahlungsinformation
-        /// 
+        ///
         /// Bekanntgabe der Abtretung der
         /// Forderung (Zession)
         /// </summary>
@@ -80,7 +80,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Preiskalkulationsschema
-        /// 
+        ///
         /// Zum Beispiel Angabe Zählerstand,
         /// Zähler etc. oder andere Hinweise
         /// bezüglich Abrechnung.
@@ -89,7 +89,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Regulatorische Informationen
-        /// 
+        ///
         /// Angaben zum leistenden Unternehmen
         /// (Angabe Geschäftsführer, HR-Nummer
         /// etc.)

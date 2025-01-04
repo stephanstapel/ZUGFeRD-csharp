@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,7 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     ///  Structure holding item information
-    ///  
+    ///
     /// Please note that you might use the object that is returned from InvoiceDescriptor.AddTradeLineItem(...) and use it
     /// to e.g. add an allowance charge using lineItem.AddTradeAllowanceCharge(...)
     /// </summary>
@@ -35,7 +35,7 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// The identification of articles based on a registered scheme
-        /// 
+        ///
         /// The global identifier of the article is a globally unique identifier of the product being assigned to it by its
         /// producer, bases on the rules of a global standardisation body.
         /// </summary>
@@ -53,31 +53,31 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// An article’s name
-        /// 
+        ///
         /// BT-153
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
         /// The description of an item
-        /// 
+        ///
         /// The item’s description makes it possible to describe a product and its properties more comprehensively
         /// than would be possible with just the article name.
-        /// 
+        ///
         /// BT-154
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
         /// Included amount
-        /// 
+        ///
         /// BT-149
         /// </summary>
         public decimal? UnitQuantity { get; set; }
 
         /// <summary>
         /// Invoiced quantity
-        /// 
+        ///
         /// BT-129
         /// </summary>
         public decimal BilledQuantity { get; set; }
@@ -90,21 +90,21 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Detailed information about the invoicing period
-        /// 
+        ///
         /// Invoicing period start date
         /// </summary>
         public DateTime? BillingPeriodStart { get; set; }
 
         /// <summary>
         /// Detailed information about the invoicing period
-        /// 
+        ///
         /// Invoicing period end date
         /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
 
         /// <summary>
         /// he code valid for the invoiced goods sales tax category
-        /// 
+        ///
         /// BT-151
         /// </summary>
         public TaxCategoryCodes TaxCategoryCode { get; set; }
@@ -116,35 +116,35 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Tax type
-        /// 
+        ///
         /// BT-151-0
         /// </summary>
         public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
 
         /// <summary>
         /// net unit price of the item
-        /// 
+        ///
         /// BT-146
         /// </summary>
         public decimal? NetUnitPrice { get; set; }
 
         /// <summary>
         /// gross unit price of the item
-        /// 
+        ///
         /// BT-148
         /// </summary>
         public decimal? GrossUnitPrice { get; set; }
 
         /// <summary>
         /// Item Base Quantity Unit Code
-        /// 
+        ///
         /// BT-130
         /// </summary>
         public QuantityCodes UnitCode { get; set; }
 
         /// <summary>
         /// Identifier of the invoice line item
-        /// 
+        ///
         /// BT-126
         /// </summary>
         public AssociatedDocument AssociatedDocument { get; internal set; }
@@ -171,21 +171,21 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Details of an additional document reference
-        /// 
+        ///
         /// Marked as internal so it can be accessed by the readers and writers
         /// </summary>
         internal List<AdditionalReferencedDocument> _AdditionalReferencedDocuments { get; set; } = new List<AdditionalReferencedDocument>();
 
-        /// <summary>       
+        /// <summary>
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
-        /// 
+        ///
         /// Now private. Please use GetTradeAllowanceCharges() instead
         /// </summary>
         private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
 
-        /// <summary>       
+        /// <summary>
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice item
-        /// 
+        ///
         /// Now private. Please use GetSpecifiedTradeAllowanceCharges() instead
         /// </summary>
         private List<TradeAllowanceCharge> SpecifiedTradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
@@ -197,14 +197,14 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Included Items referenced from this trade product.
-        /// 
+        ///
         /// BG-X-1
         /// </summary>
         public List<IncludedReferencedProduct> IncludedReferencedProducts { get; internal set; } = new List<IncludedReferencedProduct>();
 
         /// <summary>
         /// Additional product information
-        /// 
+        ///
         /// BG-32
         /// </summary>
         public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; } = new List<ApplicableProductCharacteristic>();
@@ -247,7 +247,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason
             });
         } // !AddTradeAllowanceCharge()
-        
+
 
         /// <summary>
         /// As an allowance or charge on item level, attaching it to the corresponding item.
@@ -383,43 +383,43 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="id">Document number such as delivery note no or credit memo no</param>
         /// <param name="typeCode"></param>
-        /// <param name="issueDateTime">Document Date</param>        
+        /// <param name="issueDateTime">Document Date</param>
         /// <param name="name"></param>
         /// <param name="referenceTypeCode">Type of the referenced document</param>
         /// <param name="attachmentBinaryObject"></param>
         /// <param name="filename"></param>
         public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
-		{
-			this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
-			{
-				ReferenceTypeCode = referenceTypeCode,
-				ID = id,
-				IssueDateTime = issueDateTime,
-				Name = name,
-				AttachmentBinaryObject = attachmentBinaryObject,
-				Filename = filename,
-				TypeCode = typeCode
-			});
-		} // !AddAdditionalReferencedDocument()
+        {
+            this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            {
+                ReferenceTypeCode = referenceTypeCode,
+                ID = id,
+                IssueDateTime = issueDateTime,
+                Name = name,
+                AttachmentBinaryObject = attachmentBinaryObject,
+                Filename = filename,
+                TypeCode = typeCode
+            });
+        } // !AddAdditionalReferencedDocument()
 
 
-		/// <summary>
-		/// Returns all additional referenced documents for the trade line item
-		/// </summary>
-		/// <returns></returns>
-		public IList<AdditionalReferencedDocument> GetAdditionalReferencedDocuments()
-		{
-			return this._AdditionalReferencedDocuments;
-		} // !GetAdditionalReferencedDocuments()
+        /// <summary>
+        /// Returns all additional referenced documents for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<AdditionalReferencedDocument> GetAdditionalReferencedDocuments()
+        {
+            return this._AdditionalReferencedDocuments;
+        } // !GetAdditionalReferencedDocuments()
 
 
 
-		/// <summary>
-		/// Sets a purchase order line reference. BT-132
-		/// Please note that XRechnung/ FacturX allows a maximum of one such reference and will only output the referenced order line id 
+        /// <summary>
+        /// Sets a purchase order line reference. BT-132
+        /// Please note that XRechnung/ FacturX allows a maximum of one such reference and will only output the referenced order line id
         /// but not issuer assigned id and date
-		/// </summary>
-		public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
+        /// </summary>
+        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
@@ -444,11 +444,11 @@ namespace s2industries.ZUGFeRD
         }
 
 
-		/// <summary>
-		/// Adds an invoice line Buyer accounting reference. BT-133
+        /// <summary>
+        /// Adds an invoice line Buyer accounting reference. BT-133
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference
-		/// </summary>
-		public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+        /// </summary>
+        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
@@ -458,14 +458,14 @@ namespace s2industries.ZUGFeRD
         }
 
 
-		/// <summary>
-		/// Adds a product classification
-		/// </summary>
-		/// <param name="className">Classification name. If you leave className empty, it will be omitted in the output</param>
-		/// <param name="classCode">Identifier of the item classification (optional)</param>
-		/// <param name="listID">Product classification name (optional)</param>
-		/// <param name="listVersionID">Version of product classification (optional)</param>		
-		public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes listID, string listVersionID = null, string classCode = null, string className = null)
+        /// <summary>
+        /// Adds a product classification
+        /// </summary>
+        /// <param name="className">Classification name. If you leave className empty, it will be omitted in the output</param>
+        /// <param name="classCode">Identifier of the item classification (optional)</param>
+        /// <param name="listID">Product classification name (optional)</param>
+        /// <param name="listVersionID">Version of product classification (optional)</param>
+        public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes listID, string listVersionID = null, string classCode = null, string className = null)
         {
             this.DesignedProductClassifications.Add(new DesignatedProductClassification()
             {

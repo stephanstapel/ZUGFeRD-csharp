@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -54,7 +54,7 @@ namespace s2industries.ZUGFeRD
                 Encoding = encoding,
                 Indent = true
             });
-            
+
             this.CurrentProfile = profile;
         }
 
@@ -100,21 +100,25 @@ namespace s2industries.ZUGFeRD
                 this.XmlStack.Push(new StackInfo() { Profile = _profile, IsVisible = true });
             }
 
+            if (this.TextWriter == null)
+            {
+                return;
+            }
 
-            string ns = Namespaces.ContainsKey(prefix) ? Namespaces[prefix] : null; 
+            string ns = Namespaces.ContainsKey(prefix) ? Namespaces[prefix] : null;
 
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
             {
-                this.TextWriter?.WriteStartElement(prefix, localName, ns);
+                this.TextWriter.WriteStartElement(prefix, localName, ns);
             }
             else if (!String.IsNullOrWhiteSpace(ns))
             {
-                this.TextWriter?.WriteStartElement(localName, ns);
+                this.TextWriter.WriteStartElement(localName, ns);
             }
             else
             {
-                this.TextWriter?.WriteStartElement(localName);
+                this.TextWriter.WriteStartElement(localName);
             }
         } // !WriteStartElement()
 
@@ -132,7 +136,7 @@ namespace s2industries.ZUGFeRD
 
                 this.TextWriter?.WriteEndElement();
             }
-        }
+        } // !WriteEndElement()
 
 
         public void WriteOptionalElementString(string prefix, string tagName, string value, Profile profile = Profile.Unknown)
@@ -152,7 +156,7 @@ namespace s2industries.ZUGFeRD
                 _profile = this.CurrentProfile;
             }
 
-            if (!_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(_profile))
+            if (this.TextWriter == null || !_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(_profile))
             {
                 return;
             }
@@ -160,15 +164,15 @@ namespace s2industries.ZUGFeRD
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
             {
-                this.TextWriter?.WriteElementString(prefix, localName, ns, value);
+                this.TextWriter.WriteElementString(prefix, localName, ns, value);
             }
             else if (!String.IsNullOrWhiteSpace(ns))
             {
-                this.TextWriter?.WriteElementString(localName, ns, value);
+                this.TextWriter.WriteElementString(localName, ns, value);
             }
             else
             {
-                this.TextWriter?.WriteElementString(localName, value);
+                this.TextWriter.WriteElementString(localName, value);
             }
         } // !WriteElementString()
 
@@ -234,17 +238,17 @@ namespace s2industries.ZUGFeRD
 
         public void WriteRawString(string value, Profile profile = Profile.Unknown)
         {
-			StackInfo infoForCurrentNode = this.XmlStack.First();
-			if (!infoForCurrentNode.IsVisible)
-			{
-				return;
-			}
+            StackInfo infoForCurrentNode = this.XmlStack.First();
+            if (!infoForCurrentNode.IsVisible)
+            {
+                return;
+            }
 
             _NeedToIndentEndElement = true;
 
             // write value
             this.TextWriter?.WriteString(value);
-		} // !WriteRawString()
+        } // !WriteRawString()
 
 
         /// <summary>
@@ -290,11 +294,11 @@ namespace s2industries.ZUGFeRD
 
 
         private bool _IsNodeVisible()
-        {            
+        {
             foreach (StackInfo stackInfo in this.XmlStack)
             {
                 if (!stackInfo.IsVisible)
-                { 
+                {
                     return false;
                 }
             }
@@ -304,7 +308,7 @@ namespace s2industries.ZUGFeRD
         #endregion // !Stack Management
 
 
-        #region Convience functions        
+        #region Convenience functions
         public void WriteElementString(string prefix, string localName, string value, Profile profile = Profile.Unknown)
         {
             this.WriteElementString(prefix, localName, null, value, profile);

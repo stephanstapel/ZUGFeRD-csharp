@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,10 +27,8 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor22UBLWriter : IInvoiceDescriptorWriter
     {
-
         private ProfileAwareXmlTextWriter Writer;
         private InvoiceDescriptor Descriptor;
-
 
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
@@ -57,7 +55,7 @@ namespace s2industries.ZUGFeRD
                 _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
             else if (this.Descriptor.Type == InvoiceType.CreditNote)
-            {                
+            {
                 _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
             this.Writer.SetNamespaces(_namespaces);
@@ -96,7 +94,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteElementString("cbc", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
             Writer.WriteElementString("cbc", "IssueDate", _formatDate(this.Descriptor.InvoiceDate.Value, false, true));
 
-            // DueDate (BT-9) 
+            // DueDate (BT-9)
             // has cardinality 0..1
             DateTime? dueDate = this.Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
             if (dueDate != null)
@@ -250,10 +248,10 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("cac", "Delivery");
 
                 if (this.Descriptor.ActualDeliveryDate.HasValue)
-                {                 
+                {
                     Writer.WriteStartElement("cbc", "ActualDeliveryDate");
                     Writer.WriteValue(_formatDate(this.Descriptor.ActualDeliveryDate.Value, false, true));
-                    Writer.WriteEndElement(); // !ActualDeliveryDate                 
+                    Writer.WriteEndElement(); // !ActualDeliveryDate
                 }
 
                 if (this.Descriptor.ShipTo != null)
@@ -415,13 +413,13 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteRawString(Environment.NewLine);
                         Writer.WriteRawIndention();
-                        Writer.WriteValue(paymentTerms.Description);                                             
+                        Writer.WriteValue(paymentTerms.Description);
                     }
 
                     Writer.WriteRawString(Environment.NewLine);
                     Writer.WriteEndElement(); // !Note()
                 }
-                
+
                 Writer.WriteEndElement(); // !PaymentTerms
             }
 
@@ -465,7 +463,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteEndElement(); // !AllowanceCharge()
             }
-            #endregion            
+            #endregion
 
             // Tax Total
             if (this.Descriptor.Taxes.Any() && this.Descriptor.TaxTotalAmount != null)
@@ -514,7 +512,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
             {
-                //Skip items with parent line id because these are written recursively in the _WriteTradeLineItem method 
+                //Skip items with parent line id because these are written recursively in the _WriteTradeLineItem method
                 if (String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
                 {
                     _WriteTradeLineItem(tradeLineItem);
@@ -530,7 +528,7 @@ namespace s2industries.ZUGFeRD
         }
 
         private void _WriteTradeLineItem(TradeLineItem tradeLineItem)
-        {   
+        {
             if (String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
             {
                 Writer.WriteStartElement("cac", "InvoiceLine");
@@ -654,7 +652,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteEndElement(); //!Price
 
-            // TODO Add Tax Information for the tradeline item 
+            // TODO Add Tax Information for the tradeline item
 
             //Write sub invoice lines recursively
             foreach (TradeLineItem subTradeLineItem in this.Descriptor.TradeLineItems.Where(t => t.AssociatedDocument.ParentLineID == tradeLineItem.AssociatedDocument.LineID))
@@ -682,7 +680,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158
-                writer.WriteValue(classification.ClassCode, profile : ALL_PROFILES);
+                writer.WriteValue(classification.ClassCode, profile: ALL_PROFILES);
                 Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
@@ -934,15 +932,15 @@ namespace s2industries.ZUGFeRD
 
         private void _writeIncludedReferencedProducts(ProfileAwareXmlTextWriter writer, List<IncludedReferencedProduct> includedReferencedProducts)
         {
-            if(includedReferencedProducts.Count > 0)
+            if (includedReferencedProducts.Count > 0)
             {
-                foreach(var item in includedReferencedProducts)
+                foreach (var item in includedReferencedProducts)
                 {
-                    //TODO: 
+                    //TODO:
                 }
             }
         }
-            
+
         private void _writeApplicableProductCharacteristics(ProfileAwareXmlTextWriter writer, List<ApplicableProductCharacteristic> productCharacteristics)
         {
 
@@ -968,7 +966,6 @@ namespace s2industries.ZUGFeRD
                 }
             }
         } // !_writeNotes()
-
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
@@ -998,6 +995,7 @@ namespace s2industries.ZUGFeRD
 
             return (int)type;
         } // !_translateInvoiceType()
+
         internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
         {
             throw new NotImplementedException();
