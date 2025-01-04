@@ -200,7 +200,7 @@ namespace s2industries.ZUGFeRD
 
                         if (includedItem.UnitQuantity.HasValue)
                         {
-                            _writeElementWithAttributeWithPrefix(Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.Value.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
+                            _writeElementWithAttributeWithPrefix(Writer, "ram", "UnitQuantity", "unitCode", includedItem.ExtendedUnitCode != null ? includedItem.ExtendedUnitCode.ToString() : includedItem.UnitCode.Value.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));
                         }
                         Writer.WriteEndElement(); // !ram:IncludedReferencedProduct
                     }
@@ -311,7 +311,7 @@ namespace s2industries.ZUGFeRD
                         _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2);   // BT-148
                         if (tradeLineItem.UnitQuantity.HasValue)
                         {
-                            _writeElementWithAttributeWithPrefix(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                            _writeElementWithAttributeWithPrefix(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.ExtendedUnitCode != null ? tradeLineItem.ExtendedUnitCode.ToString() : tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                         }
 
                         foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.GetTradeAllowanceCharges()) // BT-147
@@ -364,7 +364,7 @@ namespace s2industries.ZUGFeRD
 
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
-                        _writeElementWithAttributeWithPrefix(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                        _writeElementWithAttributeWithPrefix(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.ExtendedUnitCode != null ? tradeLineItem.ExtendedUnitCode.ToString() : tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                     }
                     Writer.WriteEndElement(); // ram:NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
                     #endregion // !NetPriceProductTradePrice(Basic|Comfort|Extended|XRechnung)
@@ -378,7 +378,7 @@ namespace s2industries.ZUGFeRD
 
                 #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
                 Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                _writeElementWithAttributeWithPrefix(Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
+                _writeElementWithAttributeWithPrefix(Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.ExtendedUnitCode != null ? tradeLineItem.ExtendedUnitCode.ToString() : tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
 
                 if (tradeLineItem.ShipTo != null)
                 {

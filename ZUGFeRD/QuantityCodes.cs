@@ -23,6 +23,7 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+
     /// <summary>
     /// ISO Quantity Codes
     /// 
@@ -541,4 +542,102 @@ namespace s2industries.ZUGFeRD
             return c.ToString("g").Replace("_","");
         } // !ToString()
     }
+
+    #region Custom
+
+    /// <summary>
+    /// Extended Quantity Code
+    /// </summary>
+    public class ExtendedQuantityCode
+    {
+        /// <summary>
+        /// Code from the standard list
+        /// </summary>
+        public QuantityCodes? Code { get; }
+        
+        /// <summary>
+        /// Custom Code
+        /// </summary>
+        public string CustomCode { get; }
+
+        /// <summary>
+        /// Constructor for standard codes
+        /// </summary>
+        /// <param name="code"></param>
+        public ExtendedQuantityCode(QuantityCodes code)
+        {
+            Code = code;
+            CustomCode = null;            
+        }
+
+        /// <summary>
+        /// Constructor for custom codes
+        /// </summary>
+        /// <param name="customCode"></param>
+        public ExtendedQuantityCode(string customCode)
+        {
+            Code = null;
+            CustomCode = customCode;            
+        }
+
+        /// <summary>
+        /// Get the string representation of the code
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Code?.ToString() ?? CustomCode;
+        }
+    }
+
+    /// <summary>
+    /// Manager for custom quantity codes
+    /// </summary>
+    public static class ExtendedQuantityCodeManager
+    {
+        private static readonly Dictionary<string, ExtendedQuantityCode> _codes = new Dictionary<string, ExtendedQuantityCode>();
+
+        static ExtendedQuantityCodeManager()
+        {
+            foreach (QuantityCodes code in Enum.GetValues(typeof(QuantityCodes)))
+            {
+                _codes[code.ToString()] = new ExtendedQuantityCode(code);
+            }
+        }
+
+        /// <summary>
+        /// Add a custom code
+        /// </summary>
+        /// <param name="customCode"></param>
+        public static void AddCustomCode(string customCode)
+        {
+            _codes[customCode] = new ExtendedQuantityCode(customCode);
+        }
+
+        /// <summary>
+        /// Get the code for a given string
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static ExtendedQuantityCode GetCode(string code)
+        {
+            if (_codes.TryGetValue(code, out var result))
+            {
+                return result;
+            }
+
+            return new ExtendedQuantityCode(QuantityCodes.Unknown);
+        }
+
+        /// <summary>
+        /// Get all codes
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<ExtendedQuantityCode> GetAllCodes()
+        {
+            return _codes.Values;
+        }
+    }
+
+    #endregion Custom
 }
