@@ -14,8 +14,26 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 # C# specific rules
-dotnet_sort_system_directives_first = true
-dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_property = false:suggestion
-dotnet_style_qualification_for_method = false:suggestion
-dotnet_style_qualification_for_event = false:suggestion
+dotnet_style_require_accessibility_modifiers = always:error
+dotnet_sort_system_directives_first = true:error
+
+dotnet_naming_rule.interface_should_be_begins_with_i.severity = error
+dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
+dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
+
+dotnet_naming_rule.types_should_be_pascal_case.severity = error
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = error
+dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
+dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_symbols.local_variables.applicable_kinds = local
+dotnet_naming_symbols.local_variables.applicable_accessibilities = *
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+
+dotnet_naming_rule.local_variables_must_be_camel_case.severity = error
+dotnet_naming_rule.local_variables_must_be_camel_case.symbols = local_variables
+dotnet_naming_rule.local_variables_must_be_camel_case.style = camel_case_style

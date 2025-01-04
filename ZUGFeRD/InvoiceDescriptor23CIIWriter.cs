@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -77,18 +77,13 @@ namespace s2industries.ZUGFeRD
             #region ExchangedDocumentContext
             //Prozesssteuerung
             Writer.WriteStartElement("rsm", "ExchangedDocumentContext");
-            if (this.Descriptor.IsTest && descriptor.Profile == Profile.Extended)
+            if (this.Descriptor.IsTest)
             {
-                Writer.WriteStartElement("ram", "TestIndicator");
+                Writer.WriteStartElement("ram", "TestIndicator", Profile.Extended);
                 Writer.WriteElementString("udt", "Indicator", "true");
                 Writer.WriteEndElement(); // !ram:TestIndicator
             }
 
-            // Sicher stellen, dass bei XRechnung 3.x der BusinessProcess gesetzt ist
-            if (descriptor.Profile == Profile.XRechnung && string.IsNullOrEmpty(this.Descriptor.BusinessProcess))
-            {
-                this.Descriptor.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
-            }
             if (!String.IsNullOrWhiteSpace(this.Descriptor.BusinessProcess))
             {
                 Writer.WriteStartElement("ram", "BusinessProcessSpecifiedDocumentContextParameter");
@@ -107,7 +102,7 @@ namespace s2industries.ZUGFeRD
             //Gruppierung der Eigenschaften, die das gesamte Dokument betreffen.
             Writer.WriteStartElement("rsm", "ExchangedDocument");
             Writer.WriteElementString("ram", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
-            Writer.WriteElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext), ISO 15000-5:2014, Anhang B
+            Writer.WriteOptionalElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext), ISO 15000-5:2014, Anhang B
             Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
 
             if (this.Descriptor.InvoiceDate.HasValue)
@@ -149,24 +144,21 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("ram", "LineID", tradeLineItem.AssociatedDocument.LineID);
                     }
-                    if (descriptor.Profile == Profile.Extended)
+                    // ID der übergeordneten Zeile, BT-X-304, Extended
+                    // It is necessary that Parent Line Id be written directly under LineId
+                    if (!String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
                     {
-                        // ID der übergeordneten Zeile, BT-X-304, Extended
-                        // It is necessary that Parent Line Id be written directly under LineId
-                        if (!String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
-                        {
-                            Writer.WriteElementString("ram", "ParentLineID", tradeLineItem.AssociatedDocument.ParentLineID);
-                        }
-                        // Typ der Rechnungsposition (Code), BT-X-7, Extended
-                        if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
-                        {
-                            Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumValueToString());
-                        }
-                        // Untertyp der Rechnungsposition, BT-X-8, Extended
-                        if (tradeLineItem.AssociatedDocument.LineStatusReasonCode.HasValue)
-                        {
-                            Writer.WriteElementString("ram", "LineStatusReasonCode", tradeLineItem.AssociatedDocument.LineStatusReasonCode.Value.EnumToString());
-                        }
+                        Writer.WriteElementString("ram", "ParentLineID", tradeLineItem.AssociatedDocument.ParentLineID, Profile.Extended);
+                    }
+                    // Typ der Rechnungsposition (Code), BT-X-7, Extended
+                    if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
+                    {
+                        Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumValueToString(), Profile.Extended);
+                    }
+                    // Untertyp der Rechnungsposition, BT-X-8, Extended
+                    if (tradeLineItem.AssociatedDocument.LineStatusReasonCode.HasValue)
+                    {
+                        Writer.WriteElementString("ram", "LineStatusReasonCode", tradeLineItem.AssociatedDocument.LineStatusReasonCode.Value.EnumToString(), Profile.Extended);
                     }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes, ALL_PROFILES ^ Profile.Minimum ^ Profile.BasicWL);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended|XRechnung)
@@ -243,7 +235,7 @@ namespace s2industries.ZUGFeRD
                 // ToDo: IndividualTradeProductInstance, BG-X-84, Artikel (Handelsprodukt) Instanzen
                 // ToDo: OriginTradeCountry + ID, BT-159, Detailinformationen zur Produktherkunft, Comfort+Extended+XRechnung
 
-                if (descriptor.Profile == Profile.Extended && tradeLineItem.IncludedReferencedProducts?.Any() == true) // BG-X-1
+                if ((descriptor.Profile == Profile.Extended) && (tradeLineItem.IncludedReferencedProducts?.Any() == true)) // BG-X-1
                 {
                     foreach (var includedItem in tradeLineItem.IncludedReferencedProducts)
                     {
@@ -1294,7 +1286,10 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
-            if (!value.HasValue) { return; }
+            if (!value.HasValue)
+            {
+                return;
+            }
 
             writer.WriteStartElement(prefix, tagName, profile);
             if (forceCurrency)
@@ -1344,7 +1339,10 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
-            if (this.Descriptor.Taxes?.Count == 0) return;
+            if (this.Descriptor.Taxes?.Count == 0)
+            {
+                return;
+            }
 
             foreach (Tax tax in this.Descriptor.Taxes)
             {
@@ -1360,14 +1358,13 @@ namespace s2industries.ZUGFeRD
                 writer.WriteValue(_formatDecimal(tax.BasisAmount));
                 writer.WriteEndElement(); // !BasisAmount
 
-                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0 &&
-                   (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung)))
+                if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
                 {
                     writer.WriteStartElement("ram", "AllowanceChargeBasisAmount", Profile.Extended);
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
-                if (tax.LineTotalBasisAmount.HasValue && tax.LineTotalBasisAmount.Value != 0)
+                if (tax.LineTotalBasisAmount.HasValue && (tax.LineTotalBasisAmount.Value != 0))
                 {
                     writer.WriteStartElement("ram", "LineTotalBasisAmount", Profile.Extended);
                     writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
@@ -1392,7 +1389,10 @@ namespace s2industries.ZUGFeRD
 
         private void _writeNotes(ProfileAwareXmlTextWriter writer, List<Note> notes, Profile profile = Profile.Unknown)
         {
-            if (notes?.Count == 0) return;
+            if (notes?.Count == 0)
+            {
+                return;
+            }
 
             foreach (Note note in notes)
             {
@@ -1413,7 +1413,10 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalLegalOrganization(ProfileAwareXmlTextWriter writer, string prefix, string legalOrganizationTag, LegalOrganization legalOrganization, PartyTypes partyType = PartyTypes.Unknown)
         {
-            if (legalOrganization == null) return;
+            if (legalOrganization == null)
+            {
+                 return;
+            }
 
             switch (partyType)
             {
@@ -1489,7 +1492,10 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, PartyTypes partyType, Party party, Profile profile, Contact contact = null, ElectronicAddress electronicAddress = null, List<TaxRegistration> taxRegistrations = null)
         {
-            if (party == null) return;
+            if (party == null)
+			{
+				return;
+			}
 
             switch (partyType)
             {
@@ -1616,7 +1622,10 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalContact(ProfileAwareXmlTextWriter writer, string prefix, string contactTag, Contact contact, Profile profile = Profile.Unknown)
         {
-            if (contact == null) return;
+            if (contact == null)
+			{
+				return;
+			}
 
             writer.WriteStartElement(prefix, contactTag, profile);
 
