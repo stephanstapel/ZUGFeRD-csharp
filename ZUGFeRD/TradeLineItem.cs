@@ -357,12 +357,13 @@ namespace s2industries.ZUGFeRD
         } // !SetDeliveryNoteReferencedDocument()
 
 
-        public void AddAdditionalReferencedDocument(string id, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
+        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
         {
             this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
                 ID = id,
                 IssueDateTime = issueDateTime,
+                TypeCode = typeCode,
                 ReferenceTypeCode = code
             });
         } // !AddAdditionalReferencedDocument()

@@ -423,6 +423,18 @@ namespace s2industries.ZUGFeRD
                     _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, tradeLineItem.UltimateShipTo, Profile.Extended);
                 }
 
+                if (tradeLineItem.ActualDeliveryDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-170 for XRechnung 3
+                    Writer.WriteStartElement("ram", "OccurrenceDateTime");
+                    Writer.WriteStartElement("udt", "DateTimeString");
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
+                    Writer.WriteEndElement(); // !udt:DateTimeString
+                    Writer.WriteEndElement(); // !OccurrenceDateTime()
+                    Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
+                }
+
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
                     Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-175 for XRechnung 3
@@ -439,18 +451,6 @@ namespace s2industries.ZUGFeRD
                     }
 
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
-                }
-
-                if (tradeLineItem.ActualDeliveryDate.HasValue)
-                {
-                    Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-170 for XRechnung 3
-                    Writer.WriteStartElement("ram", "OccurrenceDateTime");
-                    Writer.WriteStartElement("udt", "DateTimeString");
-                    Writer.WriteAttributeString("format", "102");
-                    Writer.WriteValue(_formatDate(tradeLineItem.ActualDeliveryDate.Value));
-                    Writer.WriteEndElement(); // !udt:DateTimeString
-                    Writer.WriteEndElement(); // !OccurrenceDateTime()
-                    Writer.WriteEndElement(); // !ActualDeliverySupplyChainEvent
                 }
 
                 /// TODO: Add ShipToTradeParty
@@ -1064,7 +1064,7 @@ namespace s2industries.ZUGFeRD
                         }
 
                         // BT-89 is only required/allowed on DirectDebit (BR-DE-29)
-                        if (this.Descriptor.PaymentMeans.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
+                        if (this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
                         {
                             Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         }
@@ -1363,9 +1363,15 @@ namespace s2industries.ZUGFeRD
                 if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0 &&
                    (Descriptor.Profile != Profile.XRechnung1 && Descriptor.Profile != Profile.XRechnung)))
                 {
-                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount", Profile.Extended);
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                }
+                if (tax.LineTotalBasisAmount.HasValue && tax.LineTotalBasisAmount.Value != 0)
+                {
+                    writer.WriteStartElement("ram", "LineTotalBasisAmount", Profile.Extended);
+                    writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
+                    writer.WriteEndElement();
                 }
 
                 if (tax.CategoryCode.HasValue)

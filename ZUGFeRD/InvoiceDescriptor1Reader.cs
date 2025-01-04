@@ -197,7 +197,8 @@ namespace s2industries.ZUGFeRD
                                              XmlUtils.NodeAsDecimal(node, ".//ram:CalculatedAmount", nsmgr, 0).Value,
                                              default(TaxTypes).FromString(XmlUtils.NodeAsString(node, ".//ram:TypeCode", nsmgr)),
                                              default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)),
-                                             XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr));
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr),
+                                             lineTotalBasisAmount: XmlUtils.NodeAsDecimal(node, ".//ram:LineTotalBasisAmount", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradeAllowanceCharge", nsmgr))
@@ -373,10 +374,12 @@ namespace s2industries.ZUGFeRD
             XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedSupplyChainTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referenceNodes)
             {
-                string _code = XmlUtils.NodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
+                string _typeCode = XmlUtils.NodeAsString(referenceNode, "ram:TypeCode", nsmgr);
+                string _code = XmlUtils.NodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);                
 
                 item.AddAdditionalReferencedDocument(
                     id: XmlUtils.NodeAsString(referenceNode, "ram:ID", nsmgr),
+                    typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
                     code: default(ReferenceTypeCodes).FromString(_code),
                     issueDateTime: XmlUtils.NodeAsDateTime(referenceNode, "ram:IssueDateTime", nsmgr)
                 );

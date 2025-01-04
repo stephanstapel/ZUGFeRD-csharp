@@ -247,7 +247,8 @@ namespace s2industries.ZUGFeRD
                                              default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)),
                                              XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr),
                                              default(TaxExemptionReasonCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:ExemptionReasonCode", nsmgr)),
-                                             XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr));
+                                             XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr),
+                                             lineTotalBasisAmount: XmlUtils.NodeAsDecimal(node, ".//ram:LineTotalBasisAmount", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
@@ -348,6 +349,7 @@ namespace s2industries.ZUGFeRD
                 {
                     "urn:cen.eu:EN16931:2017#conformant#urn:zugferd.de:2p0:extended", // Profil EXTENDED
                     "urn:cen.eu:EN16931:2017", // Profil EN 16931 (COMFORT)" +
+                    "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:comfort", // Profil COMFORT
                     "urn:cen.eu:EN16931:2017#compliant#urn:zugferd.de:2p0:basic", // Profil BASIC
                     "urn:zugferd.de:2p0:basicwl", // Profil BASIC WL
                     "urn:zugferd.de:2p0:minimum" // Profil MINIMUM                    

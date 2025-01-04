@@ -17,9 +17,6 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
@@ -83,6 +80,10 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public decimal? AllowanceChargeBasisAmount { get; set; }
 
+        /// <summary>
+        /// A monetary value used as the line total basis on which this trade related tax, levy or duty is calculated
+        /// </summary>
+        public decimal? LineTotalBasisAmount { get; set; }
 
         /// <summary>
         /// ExemptionReasonCode for no Tax

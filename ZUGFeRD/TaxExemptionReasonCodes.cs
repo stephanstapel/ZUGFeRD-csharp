@@ -442,7 +442,7 @@ namespace s2industries.ZUGFeRD
         {
             try
             {
-                return (TaxExemptionReasonCodes)Enum.Parse(typeof(TaxExemptionReasonCodes), s.Replace("_", "-"));
+                return (TaxExemptionReasonCodes)Enum.Parse(typeof(TaxExemptionReasonCodes), s.Replace("-", "_"));
             }
             catch
             {

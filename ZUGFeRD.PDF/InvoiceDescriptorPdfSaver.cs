@@ -104,20 +104,20 @@ namespace s2industries.ZUGFeRD.PDF
             string xmlChecksum = string.Empty;
             byte[] xmlFileBytes = null;
             using (var md5 = MD5.Create())
-            {
-                var hashBytes = md5.ComputeHash(xmlStream);
-                xmlChecksum = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-
+            {                
                 xmlStream.Seek(0, SeekOrigin.Begin);
                 xmlFileBytes = new byte[xmlStream.Length];
                 xmlStream.Read(xmlFileBytes, 0, (int)xmlStream.Length);
+
+                var hashBytes = md5.ComputeHash(xmlStream);
+                xmlChecksum = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
             }
 
             var xmlFileEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(xmlFileBytes);
 
             PdfDictionary xmlParamsDict = new PdfDictionary();
             xmlParamsDict.Elements.Add("/CheckSum", new PdfString(xmlChecksum));
-            xmlParamsDict.Elements.Add("/ModDate", new PdfString("D:" + DateTime.UtcNow.ToString("yyyyMMddHHmmsszzz")));
+            xmlParamsDict.Elements.Add("/ModDate", new PdfString(_FormatPdfDateTime(DateTime.UtcNow)));
             xmlParamsDict.Elements.Add("/Size", new PdfInteger(xmlFileBytes.Length));
 
 
@@ -131,8 +131,20 @@ namespace s2industries.ZUGFeRD.PDF
             outputDocument.Internals.AddObject(fStreamDict);
 
 
+            string relationship = "";
+            switch (profile)
+            {
+                case Profile.Minimum:
+                case Profile.BasicWL:
+                    relationship = "Data";
+                    break;
+                default:
+                    relationship = "Alternative";
+                    break;
+            };
+
             PdfDictionary af0Dict = new PdfDictionary();
-            af0Dict.Elements.Add("/AFRelationship", new PdfName("/Data"));
+            af0Dict.Elements.Add("/AFRelationship", new PdfName($"/{relationship}"));
             af0Dict.Elements.Add("/Desc", new PdfString("Factur-X XML file"));
             af0Dict.Elements.Add("/Type", new PdfName("/Filespec"));
             af0Dict.Elements.Add("/F", new PdfString(invoiceFilename));
@@ -164,15 +176,23 @@ namespace s2industries.ZUGFeRD.PDF
             string pdfMetadataTemplate = System.Text.Encoding.Default.GetString(_LoadEmbeddedResource("s2industries.ZUGFeRD.PDF.Resources.PdfMedatadataTemplate.xml"));
             var xmpmeta = pdfMetadataTemplate
                 .Replace("{{InvoiceFilename}}", invoiceFilename)
-                .Replace("{{CreationDate}}", dateTimeNow.ToString("yyyy-MM-ddThh:mm:sszzz"))
-                .Replace("{{ModificationDate}}", dateTimeNow.ToString("yyyy-MM-ddThh:mm:sszzz"))
+                .Replace("{{CreationDate}}", _FormatXMPDateTime(dateTimeNow))
+                .Replace("{{ModificationDate}}", _FormatXMPDateTime(dateTimeNow))
                 .Replace("{{DocumentTitle}}", documentTitle)
                 .Replace("{{Version}}", xmpVersion)
                 .Replace("{{DocumentDescription}}", documentDescription)
                 .Replace("{{ConformanceLevel}}", conformanceLevelName);
 
             var metadataBytes = System.Text.Encoding.UTF8.GetBytes(xmpmeta);
-//            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
+            if (metadataBytes[metadataBytes.Length - 1] == 0x0A) // remove trailing EOL
+            {
+                var trimmedMetadataBytes = new byte[metadataBytes.Length - 1];
+                Array.Copy(metadataBytes, trimmedMetadataBytes, trimmedMetadataBytes.Length); // remove eol marker
+                metadataBytes = trimmedMetadataBytes;
+            }
+            
+
+            //            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
 
             PdfDictionary metadataDictionary = new PdfDictionary();
 
@@ -180,7 +200,7 @@ namespace s2industries.ZUGFeRD.PDF
         //    metadataDictionary.Elements.Add("/Filter", new PdfName("/FlateDecode"));
             metadataDictionary.Elements.Add("/Subtype", new PdfName("/XML"));
             metadataDictionary.Elements.Add("/Type", new PdfName("/Metadata"));
-            
+
             outputDocument.Internals.AddObject(metadataDictionary);
 
             outputDocument.Internals.Catalog.Elements.Add("/Metadata", metadataDictionary.Reference);
@@ -233,6 +253,26 @@ namespace s2industries.ZUGFeRD.PDF
             memoryStream.Seek(0, SeekOrigin.Begin);
             return memoryStream;
         } // !_CreateFacturXStream()
+
+
+        private static string _FormatPdfDateTime(DateTime dateTime)
+        {
+            // Get the offset for the current time zone
+            TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(dateTime);
+
+            // Format the offset as "+HH'mm'" or "-HH'mm'"
+            string offsetString = $"{(offset >= TimeSpan.Zero ? "+" : "-")}{offset.Hours:00}'{offset.Minutes:00}'";
+
+            // Format the datetime according to the PDF specification
+            return $"D:{dateTime:yyyyMMddHHmmss}{offsetString}";
+        } // !_FormatPdfDateTime()
+
+
+        private static string _FormatXMPDateTime(DateTime dateTime)
+        {
+            DateTime utcTime = dateTime.ToUniversalTime();
+            return $"{utcTime:yyyy-MM-ddTHH:mm}Z";
+        } // !_FormatXMPDateTime()
 
 
         private static byte[] _LoadEmbeddedResource(string path)

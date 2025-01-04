@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -174,6 +175,51 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].ApplicableProductCharacteristics[1].Value, "3 kg");
         } // !TestTradelineitemProductCharacterstics()
 
+        [TestMethod]
+        public void TestSpecialUnitCodes()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems[0].UnitCode = QuantityCodes._4G;
+            desc.TradeLineItems[1].UnitCode = QuantityCodes.H87;
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the raw xml file
+            string content = Encoding.UTF8.GetString(ms.ToArray());
+            Assert.IsTrue(content.Contains("unitCode=\"H87\"", StringComparison.OrdinalIgnoreCase));
+            Assert.IsTrue(content.Contains("unitCode=\"4G\"", StringComparison.OrdinalIgnoreCase));
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].UnitCode, QuantityCodes._4G);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[1].UnitCode, QuantityCodes.H87);
+        } // !TestSpecialUnitCodes()
+
+        [TestMethod]
+        public void TestTradelineitemAdditionalDocuments()
+        {
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems[0].AddAdditionalReferencedDocument("testid", AdditionalReferencedDocumentTypeCode.InvoiceDataSheet, referenceTypeCode: ReferenceTypeCodes.ON);
+            desc.TradeLineItems[0].AddAdditionalReferencedDocument("testid2", AdditionalReferencedDocumentTypeCode.InvoiceDataSheet, referenceTypeCode: ReferenceTypeCodes.ON);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].GetAdditionalReferencedDocuments().Count, 2);
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].GetAdditionalReferencedDocuments()[0].ID, "testid");
+            Assert.AreEqual(loadedInvoice.TradeLineItems[0].GetAdditionalReferencedDocuments()[1].ID, "testid2");
+        } // !TestTradelineitemAdditionalDocuments()
 
         /// <summary>
         /// https://github.com/stephanstapel/ZUGFeRD-csharp/issues/319
@@ -561,8 +607,44 @@ namespace s2industries.ZUGFeRD.Test
 
 			Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "6171175.1");
 		}
-        
-        
+
+        [TestMethod]
+        public void TestMultipleCreditorBankAccounts()
+        {
+            string iban1 = "DE901213213312311231";
+            string iban2 = "DE911213213312311231";
+            string bic1 = "BIC-Test";
+            string bic2 = "BIC-Test2";
+
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            desc.CreditorBankAccounts.Clear();
+
+            desc.CreditorBankAccounts.Add(new BankAccount() 
+            { 
+                IBAN = iban1, 
+                BIC = bic1 
+            });
+            desc.CreditorBankAccounts.Add(new BankAccount() 
+            { 
+                IBAN = iban2,
+                BIC = bic2 
+            });
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // test the BankAccounts
+            Assert.AreEqual(iban1, loadedInvoice.CreditorBankAccounts[0].IBAN);
+            Assert.AreEqual(bic1, loadedInvoice.CreditorBankAccounts[0].BIC);
+            Assert.AreEqual(iban2, loadedInvoice.CreditorBankAccounts[1].IBAN);
+            Assert.AreEqual(bic2, loadedInvoice.CreditorBankAccounts[1].BIC);
+        } // !TestMultipleCreditorBankAccounts()
+
+
         [TestMethod]
         public void TestPartyIdentificationForSeller()
         {
@@ -579,13 +661,21 @@ namespace s2industries.ZUGFeRD.Test
             loadedInvoice.Save(resultStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
  
             // test the raw xml file
-            string content = Encoding.UTF8.GetString(resultStream.ToArray());
+            XmlDocument doc = new XmlDocument();
+            doc.Load(resultStream);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+            nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+
             // PartyIdentification may only exist once
-            Assert.IsTrue(Regex.Matches(content, "<cac:PartyIdentification.*>").Count == 1, "PartyIdentification should only contain once");
-            // PartyIdentification may only be contained in AccountingSupplierParty
-            Assert.IsTrue(Regex.IsMatch(content, "<cac:AccountingSupplierParty.*>.*<cac:Party.*>.*<cac:PartyIdentification.*>.*<cbc:ID.schemeID=\"SEPA\">DE75512108001245126199</cbc:ID>", RegexOptions.Singleline));
+            Assert.AreEqual(doc.SelectNodes("//cac:AccountingSupplierParty//cac:PartyIdentification", nsmgr).Count, 1);
+
+            // PartyIdentification may only be contained in AccountingSupplierParty --> only one such node in the document
+            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 1);
         } // !TestPartyIdentificationForSeller()
         
+
         [TestMethod]
         public void TestPartyIdentificationShouldNotExist()
         {
@@ -599,13 +689,18 @@ namespace s2industries.ZUGFeRD.Test
             
             MemoryStream resultStream = new MemoryStream();
             loadedInvoice.Save(resultStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
- 
+
             // test the raw xml file
-            string content = Encoding.UTF8.GetString(resultStream.ToArray());
-            
-            Assert.IsNotNull(content);
-            Assert.IsFalse(Regex.IsMatch(content, @"<cac:PartyIdentification.*>"), "PartyIdentification should not contain");
+            XmlDocument doc = new XmlDocument();
+            doc.Load(resultStream);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+            nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+
+            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 0);
         } // !TestPartyIdentificationShouldNotExist()
+
 
         [TestMethod]
         public void TestInDebitInvoiceTheFinancialAccountNameAndFinancialInstitutionBranchShouldNotExist()
@@ -859,5 +954,189 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsFalse(content.Contains("OrderReference"));
             }
         } // !TestInvoiceWithoutOrderReferenceShouldNotWriteEmptyOrderReferenceElement()
-	}
+
+
+        [TestMethod]
+        public void TestApplicableTradeTaxWithExemption()
+        {
+            InvoiceDescriptor descriptor = InvoiceProvider.CreateInvoice();
+            int taxCount = descriptor.Taxes.Count;
+            descriptor.AddApplicableTradeTax(123.00m, 23m, 23m, TaxTypes.VAT, TaxCategoryCodes.S, exemptionReasonCode: TaxExemptionReasonCodes.VATEX_132_2, exemptionReason: "Tax exemption reason");
+
+            MemoryStream ms = new MemoryStream();
+            descriptor.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNotNull(loadedInvoice);
+
+            Assert.AreEqual(loadedInvoice.Taxes.Count, taxCount + 1);
+            Assert.AreEqual(loadedInvoice.Taxes.Last().ExemptionReason, "Tax exemption reason");
+            Assert.AreEqual(loadedInvoice.Taxes.Last().ExemptionReasonCode, TaxExemptionReasonCodes.VATEX_132_2);
+        } // !TestApplicableTradeTaxWithExemption()
+
+
+        [TestMethod]
+        public void TestNote()
+        {
+            InvoiceDescriptor descriptor = InvoiceProvider.CreateInvoice();
+            String note = System.Guid.NewGuid().ToString();
+            descriptor.AddNote(note);
+
+            MemoryStream ms = new MemoryStream();
+            descriptor.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNotNull(loadedInvoice);
+
+            Assert.AreEqual(loadedInvoice.Notes.Count, 3); // 2 notes are already added by the InvoiceProvider
+            Assert.AreEqual(loadedInvoice.Notes.Last().Content, note);
+        } // !TestNote()
+
+
+        [TestMethod]
+        public void TestDespatchDocumentReference()
+        {
+            String reference = System.Guid.NewGuid().ToString();
+            DateTime adviseDate = DateTime.Today;
+
+            InvoiceDescriptor descriptor = InvoiceProvider.CreateInvoice();
+            descriptor.SetDespatchAdviceReferencedDocument(reference, adviseDate);
+
+            MemoryStream ms = new MemoryStream();
+            descriptor.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNotNull(loadedInvoice);
+
+            Assert.IsNotNull(loadedInvoice.DespatchAdviceReferencedDocument);
+            Assert.AreEqual(loadedInvoice.DespatchAdviceReferencedDocument.ID, reference);
+            Assert.IsNull(loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime); // not defined in Peppol standard!
+        } // !TestNote()
+
+
+        [TestMethod]
+        public void TestSampleCreditNote326()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\ubl-cn-br-de-17-test-557-code-326.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Assert.AreEqual(desc.Type, InvoiceType.PartialInvoice);
+            Assert.AreEqual(desc.Notes.Count, 1);
+            Assert.AreEqual(desc.Notes.First().Content, "Invoice Note Description");
+            Assert.AreEqual(desc.TradeLineItems.Count, 2);
+            Assert.AreEqual(desc.TradeLineItems.First().Name, "Beratung");
+            Assert.AreEqual(desc.TradeLineItems.First().Description, "Anforderungmanagament");
+            Assert.AreEqual(desc.TradeLineItems.Last().Name, "Beratung");
+            Assert.AreEqual(desc.TradeLineItems.Last().Description, String.Empty);
+        } // !TestSampleCreditNote326()
+
+        [TestMethod]
+        public void TestSampleCreditNote384()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\ubl-cn-br-de-17-test-559-code-384.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Assert.AreEqual(desc.Type, InvoiceType.Correction);
+            Assert.AreEqual(desc.Notes.Count, 1);
+            Assert.AreEqual(desc.Notes.First().Content, "Invoice Note Description");
+            Assert.AreEqual(desc.TradeLineItems.Count, 2);
+            Assert.AreEqual(desc.TradeLineItems.First().Name, "Beratung");
+            Assert.AreEqual(desc.TradeLineItems.First().Description, "Anforderungmanagament");
+            Assert.AreEqual(desc.TradeLineItems.Last().Name, "Beratung");
+            Assert.AreEqual(desc.TradeLineItems.Last().Description, String.Empty);
+        } // !TestSampleCreditNote326()
+
+
+        [TestMethod]
+        public void TestReferenceXRechnung21UBL()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung UBL.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+
+            Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
+            Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 6, 21));
+            Assert.AreEqual(desc.PaymentReference, "0815-99-1-a");
+            Assert.AreEqual(desc.OrderNo, "0815-99-1");
+            Assert.AreEqual(desc.Currency, CurrencyCodes.EUR);
+
+            Assert.AreEqual(desc.Buyer.Name, "Rechnungs Roulette GmbH & Co KG");
+            Assert.AreEqual(desc.Buyer.City, "Klein Schlappstadt a.d. Lusche");
+            Assert.AreEqual(desc.Buyer.Postcode, "12345");
+            Assert.AreEqual(desc.Buyer.Country, (CountryCodes)276);
+            Assert.AreEqual(desc.Buyer.Street, "Beispielgasse 17b");
+            Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette GmbH & Co KG");
+
+            Assert.AreEqual(desc.BuyerContact.Name, "Manfred Mustermann");
+            Assert.AreEqual(desc.BuyerContact.EmailAddress, "manfred.mustermann@rr.de");
+            Assert.AreEqual(desc.BuyerContact.PhoneNo, "012345 98 765 - 44");
+
+            Assert.AreEqual(desc.Seller.Name, "Harry Hirsch Holz- und Trockenbau");
+            Assert.AreEqual(desc.Seller.City, "Klein Schlappstadt a.d. Lusche");
+            Assert.AreEqual(desc.Seller.Postcode, "12345");
+            Assert.AreEqual(desc.Seller.Country, (CountryCodes)276);
+            Assert.AreEqual(desc.Seller.Street, "Beispielgasse 17a");
+            Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch Holz- und Trockenbau");
+
+            Assert.AreEqual(desc.SellerContact.Name, "Harry Hirsch");
+            Assert.AreEqual(desc.SellerContact.EmailAddress, "harry.hirsch@hhhtb.de");
+            Assert.AreEqual(desc.SellerContact.PhoneNo, "012345 78 657 - 8");
+
+            Assert.AreEqual(desc.TradeLineItems.Count, 2);
+
+            Assert.AreEqual(desc.TradeLineItems[0].SellerAssignedID, "0815");
+            Assert.AreEqual(desc.TradeLineItems[0].Name, "Leimbinder");
+            Assert.AreEqual(desc.TradeLineItems[0].Description, "Leimbinder 2x18m; Birke");
+            Assert.AreEqual(desc.TradeLineItems[0].BilledQuantity, 1);
+            Assert.AreEqual(desc.TradeLineItems[0].LineTotalAmount, 1245.98m);
+            Assert.AreEqual(desc.TradeLineItems[0].TaxPercent, 19);
+
+            Assert.AreEqual(desc.TradeLineItems[1].SellerAssignedID, "MON");
+            Assert.AreEqual(desc.TradeLineItems[1].Name, "Montage");
+            Assert.AreEqual(desc.TradeLineItems[1].Description, "Montage durch Fachpersonal");
+            Assert.AreEqual(desc.TradeLineItems[1].BilledQuantity, 1);
+            Assert.AreEqual(desc.TradeLineItems[1].LineTotalAmount, 200.00m);
+            Assert.AreEqual(desc.TradeLineItems[1].TaxPercent, 7);
+
+            Assert.AreEqual(desc.LineTotalAmount, 1445.98m);
+            Assert.AreEqual(desc.TaxTotalAmount, 250.74m);
+            Assert.AreEqual(desc.GrandTotalAmount, 1696.72m);
+            Assert.AreEqual(desc.DuePayableAmount, 1696.72m);
+
+            Assert.AreEqual(desc.Taxes[0].TaxAmount, 236.74m);
+            Assert.AreEqual(desc.Taxes[0].BasisAmount, 1245.98m);
+            Assert.AreEqual(desc.Taxes[0].Percent, 19);
+            Assert.AreEqual(desc.Taxes[0].TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.Taxes[0].CategoryCode, TaxCategoryCodes.S);
+
+            Assert.AreEqual(desc.Taxes[1].TaxAmount, 14.0000m);
+            Assert.AreEqual(desc.Taxes[1].BasisAmount, 200.00m);
+            Assert.AreEqual(desc.Taxes[1].Percent, 7);
+            Assert.AreEqual(desc.Taxes[1].TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.Taxes[1].CategoryCode, TaxCategoryCodes.S);
+
+            Assert.AreEqual(desc.GetTradePaymentTerms().FirstOrDefault().DueDate, new DateTime(2020, 6, 21));
+
+            Assert.AreEqual(desc.CreditorBankAccounts[0].IBAN, "DE12500105170648489890");
+            Assert.AreEqual(desc.CreditorBankAccounts[0].BIC, "INGDDEFFXXX");
+            Assert.AreEqual(desc.CreditorBankAccounts[0].Name, "Harry Hirsch");
+
+            Assert.AreEqual(desc.PaymentMeans.TypeCode, (PaymentMeansTypeCodes)30);
+        } // !TestReferenceXRechnung21UBL()
+    }
 }

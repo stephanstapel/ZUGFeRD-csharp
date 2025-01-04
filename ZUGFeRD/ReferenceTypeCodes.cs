@@ -196,6 +196,13 @@ namespace s2industries.ZUGFeRD
         OI,
 
         /// <summary>
+        /// Order document identifier, buyer assigned
+        /// [1022] 
+        /// Identifier assigned by the buyer to an order.
+        /// </summary>
+        ON,
+
+        /// <summary>
         /// Preisliste
         /// </summary>
         PL,

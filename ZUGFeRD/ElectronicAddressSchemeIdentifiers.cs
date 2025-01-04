@@ -31,9 +31,139 @@ namespace s2industries.ZUGFeRD
     {
 
         /// <summary>
+        /// System Information et Repertoire des Entreprise et des Etablissements: SIRENE
+        /// </summary>
+        SystemInformationEtRepertoireDesEntrepriseEtDesEtablissementsSirene = 0002,
+
+        /// <summary>
+        /// Organisationsnummer (Swedish legal entities)
+        /// </summary>
+        OrganisationsnummerSwedishLegalEntities = 0007,
+
+        /// <summary>
+        /// SIRET-CODE
+        /// </summary>
+        SiretCode = 0009,
+
+        /// <summary>
+        /// LY-tunnus
+        /// </summary>
+        LyTunnus = 0037,
+
+        /// <summary>
+        /// Data Universal Numbering System (D-U-N-S Number)
+        /// </summary>
+        DataUniversalNumberingSystemDUNSNumber = 0060,
+
+        /// <summary>
         /// EAN Location Code
         /// </summary>
         EanLocationCode = 0088,
+
+        /// <summary>
+        /// DANISH CHAMBER OF COMMERCE Scheme (EDIRA compliant)
+        /// </summary>
+        DanishChamberOfCommerceSchemeEdiraCompliant = 0096,
+
+        /// <summary>
+        /// FTI - Ediforum Italia, (EDIRA compliant)
+        /// </summary>
+        FtiEdiforumItaliaEdiraCompliant = 0097,
+
+        /// <summary>
+        /// "Vereniging van Kamers van Koophandel en Fabrieken in Nederland (Association of Chambers of Commerce and Industry in the Netherlands), Scheme (EDIRA compliant)"
+        /// </summary>
+        VerenigingVanKamersVanKoophandelEnFabriekenInNederlandAssociationOfChambersOfCommerceAndIndustryInTheNetherlandsSchemeEdiraCompliant = 0106,
+
+        /// <summary>
+        /// Directorates of the European Commission
+        /// </summary>
+        DirectoratesOfTheEuropeanCommission = 0130,
+
+        /// <summary>
+        /// SIA Object Identifiers
+        /// </summary>
+        SiaObjectIdentifiers = 0135,
+
+        /// <summary>
+        /// SECETI Object Identifiers
+        /// </summary>
+        SecetiObjectIdentifiers = 0142,
+
+        /// <summary>
+        /// Australian Business Number (ABN) Scheme
+        /// </summary>
+        AustralianBusinessNumberAbnScheme = 0151,
+
+        /// <summary>
+        /// Numéro d'identification suisse des enterprises (IDE), Swiss Unique Business Identification Number (UIDB)
+        /// </summary>
+        NumRoDIdentificationSuisseDesEnterprisesIdeSwissUniqueBusinessIdentificationNumberUidb = 0183,
+
+        /// <summary>
+        /// DIGSTORG
+        /// </summary>
+        Digstorg = 0184,
+
+        /// <summary>
+        /// Corporate Number of The Social Security and Tax Number System
+        /// </summary>
+        CorporateNumberOfTheSocialSecurityAndTaxNumberSystem = 0188,
+
+        /// <summary>
+        /// Dutch Originator's Identification Number
+        /// </summary>
+        DutchOriginatorSIdentificationNumber = 0190,
+
+        /// <summary>
+        /// Centre of Registers and Information Systems of the Ministry of Justice
+        /// </summary>
+        CentreOfRegistersAndInformationSystemsOfTheMinistryOfJustice = 0191,
+
+        /// <summary>
+        /// Enhetsregisteret ved Bronnoysundregisterne
+        /// </summary>
+        EnhetsregisteretVedBronnoysundregisterne = 0192,
+
+        /// <summary>
+        /// UBL.BE party identifier
+        /// </summary>
+        UblBePartyIdentifier = 0193,
+
+        /// <summary>
+        /// Singapore UEN identifier
+        /// </summary>
+        SingaporeUenIdentifier = 0195,
+
+        /// <summary>
+        /// Kennitala - Iceland legal id for individuals and legal entities
+        /// </summary>
+        KennitalaIcelandLegalIdForIndividualsAndLegalEntities = 0196,
+
+        /// <summary>
+        /// ERSTORG
+        /// </summary>
+        Erstorg = 0198,
+
+        /// <summary>
+        /// Legal Entity Identifier (LEI)
+        /// </summary>
+        LegalEntityIdentifierLei = 0199,
+
+        /// <summary>
+        /// Legal entity code (Lithuania)
+        /// </summary>
+        LegalEntityCodeLithuania = 0200,
+
+        /// <summary>
+        /// Codice Univoco Unità Organizzativa iPA
+        /// </summary>
+        CodiceUnivocoUnitOrganizzativaIpa = 0201,
+
+        /// <summary>
+        /// Indirizzo di Posta Elettronica Certificata
+        /// </summary>
+        IndirizzoDiPostaElettronicaCertificata = 0202,
 
         /// <summary>
         /// Leitweg-ID
@@ -41,53 +171,138 @@ namespace s2industries.ZUGFeRD
         LeitwegID = 0204,
 
         /// <summary>
+        /// Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
+        /// </summary>
+        NumeroDEntrepriseOndernemingsnummerUnternehmensnummer = 0208,
+
+        /// <summary>
+        /// GS1 identification keys
+        /// </summary>
+        Gs1IdentificationKeys = 0209,
+
+        /// <summary>
+        /// CODICE FISCALE
+        /// </summary>
+        CodiceFiscale = 0210,
+
+        /// <summary>
+        /// PARTITA IVA
+        /// </summary>
+        PartitaIva = 0211,
+
+        /// <summary>
+        /// Finnish Organization Identifier
+        /// </summary>
+        FinnishOrganizationIdentifier = 0212,
+
+        /// <summary>
+        /// Finnish Organization Value Add Tax Identifier
+        /// </summary>
+        FinnishOrganizationValueAddTaxIdentifier = 0213,
+
+        /// <summary>
+        /// Net service ID
+        /// </summary>
+        NetServiceId = 0215,
+
+        /// <summary>
+        /// OVTcode
+        /// </summary>
+        Ovtcode = 0216,
+
+        /// <summary>
+        /// Unified registration number (Latvia)
+        /// </summary>
+        UnifiedRegistrationNumberLatvia = 0218,
+
+        /// <summary>
+        /// The registered number of the qualified invoice issuer (Japan)
+        /// </summary>
+        TheRegisteredNumberOfTheQualifiedInvoiceIssuerJapan = 0221,
+
+        /// <summary>
+        /// National e-Invoicing Framework (Malaysia)
+        /// </summary>
+        NationalEInvoicingFrameworkMalaysia = 0230,
+
+        /// <summary>
+        /// Danish Ministry of the Interior and Health
+        /// </summary>
+        DanishMinistryOfTheInteriorAndHealth = 9901,
+
+        /// <summary>
         /// Hungary VAT number
-        /// </summary>      
+        /// </summary>
         HungaryVatNumber = 9910,
 
         /// <summary>
+        /// Business Registers Network
+        /// </summary>
+        BusinessRegistersNetwork = 9913,
+
+        /// <summary>
         /// Austria VAT number
-        /// </summary>      
+        /// </summary>
         AustriaVatNumber = 9914,
 
         /// <summary>
+        /// "Österreichisches Verwaltungs bzw. Organisationskennzeichen"
+        /// </summary>
+        OesterreichischesVerwaltungsBzwOrganisationskennzeichen = 9915,
+
+        /// <summary>
+        /// "SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T"
+        /// </summary>
+        SocietyForWorldwideInterbankFinancialTelecommunicationSWIFT = 9918,
+
+        /// <summary>
+        /// Kennziffer des Unternehmensregisters
+        /// </summary>
+        KennzifferDesUnternehmensregisters = 9919,
+
+        /// <summary>
+        /// Agencia Española de Administración Tributaria
+        /// </summary>
+        AgenciaEspaOlaDeAdministraciNTributaria = 9920,
+
+        /// <summary>
         /// Andorra VAT number
-        /// </summary>      
+        /// </summary>
         AndorraVatNumber = 9922,
 
         /// <summary>
         /// Albania VAT number
-        /// </summary>      
+        /// </summary>
         AlbaniaVatNumber = 9923,
 
         /// <summary>
         /// Bosnia and Herzegovina VAT number
-        /// </summary>      
+        /// </summary>
         BosniaAndHerzegovinaVatNumber = 9924,
 
         /// <summary>
         /// Belgium VAT number
-        /// </summary>      
+        /// </summary>
         BelgiumVatNumber = 9925,
 
         /// <summary>
         /// Bulgaria VAT number
-        /// </summary>      
+        /// </summary>
         BulgariaVatNumber = 9926,
 
         /// <summary>
         /// Switzerland VAT number
-        /// </summary>      
+        /// </summary>
         SwitzerlandVatNumber = 9927,
 
         /// <summary>
         /// Cyprus VAT number
-        /// </summary>      
+        /// </summary>
         CyprusVatNumber = 9928,
 
         /// <summary>
         /// Czech Republic VAT number
-        /// </summary>      
+        /// </summary>
         CzechRepublicVatNumber = 9929,
 
         /// <summary>
@@ -216,14 +431,14 @@ namespace s2industries.ZUGFeRD
         SwedishVatNumber = 9955,
 
         /// <summary>
+        /// Belgian Crossroad Bank of Enterprises
+        /// </summary>
+        BelgianCrossroad = 9956,
+
+        /// <summary>
         /// French VAT number
         /// </summary>
         FrenchVatNumber = 9957,
-
-        /// <summary>
-        /// Belgian Crossroad Bank of Enterprises 
-        /// </summary>
-        BelgianCrossroad = 9956,
 
         /// <summary>
         /// German Leitweg ID

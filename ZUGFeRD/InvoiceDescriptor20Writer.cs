@@ -100,7 +100,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("rsm", "ExchangedDocument");
             Writer.WriteElementString("ram", "ID", this.Descriptor.InvoiceNo);
-            Writer.WriteElementString("ram", "Name", this.Descriptor.Name, Profile.Extended);
+            Writer.WriteOptionalElementString("ram", "Name", this.Descriptor.Name, Profile.Extended);
             Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
 
             if (this.Descriptor.InvoiceDate.HasValue)
@@ -245,6 +245,11 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteElementString("ram", "LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
                     Writer.WriteOptionalElementString("ram", "IssuerAssignedID", document.ID);
+
+                    if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                    {
+                        Writer.WriteElementString("ram", "TypeCode", document.TypeCode.EnumValueToString());
+                    }
 
                     if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
                     {
@@ -964,9 +969,15 @@ namespace s2industries.ZUGFeRD
 
                 if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
                 {
-                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                    writer.WriteStartElement("ram", "AllowanceChargeBasisAmount", Profile.Extended);
                     writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
+                }
+                if (tax.LineTotalBasisAmount.HasValue && (tax.LineTotalBasisAmount.Value != 0))
+                {
+                    writer.WriteStartElement("ram", "LineTotalBasisAmount", Profile.Extended);
+                    writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
+                    writer.WriteEndElement();
                 }
 
                 if (tax.CategoryCode.HasValue)

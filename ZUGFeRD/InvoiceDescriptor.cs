@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -1023,8 +1023,17 @@ namespace s2industries.ZUGFeRD
         /// <param name="categoryCode"></param>
         /// <param name="allowanceChargeBasisAmount"></param>
         /// <param name="exemptionReasonCode"></param>
-        /// <param name="exemptionReason"></param>
-        public void AddApplicableTradeTax(decimal basisAmount, decimal percent, decimal taxAmount, TaxTypes typeCode, TaxCategoryCodes? categoryCode = null, decimal? allowanceChargeBasisAmount = null, TaxExemptionReasonCodes? exemptionReasonCode = null, string exemptionReason = null)
+        /// <param name="exemptionReason"></param>        
+        /// <param name="lineTotalBasisAmount">A monetary value used as the line total basis on which this trade related tax, levy or duty is calculated</param>
+        public void AddApplicableTradeTax(decimal basisAmount,
+            decimal percent,
+            decimal taxAmount,
+            TaxTypes typeCode,
+            TaxCategoryCodes? categoryCode = null,
+            decimal? allowanceChargeBasisAmount = null,
+            TaxExemptionReasonCodes? exemptionReasonCode = null,
+            string exemptionReason = null,
+            decimal? lineTotalBasisAmount = null)
         {
             Tax tax = new Tax()
             {
@@ -1033,6 +1042,7 @@ namespace s2industries.ZUGFeRD
                 Percent = percent,
                 TypeCode = typeCode,
                 AllowanceChargeBasisAmount = allowanceChargeBasisAmount,
+                LineTotalBasisAmount = lineTotalBasisAmount,
                 ExemptionReasonCode = exemptionReasonCode,
                 ExemptionReason = exemptionReason
             };

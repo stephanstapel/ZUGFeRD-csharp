@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD.PDF.Test", "ZUGFeRD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD.PDF", "..\ZUGFeRD.PDF\ZUGFeRD.PDF.csproj", "{CDDB1672-F63B-4469-ABCA-B0B293C85697}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZUGFeRD", "..\ZUGFeRD\ZUGFeRD.csproj", "{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{CDDB1672-F63B-4469-ABCA-B0B293C85697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDB1672-F63B-4469-ABCA-B0B293C85697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDB1672-F63B-4469-ABCA-B0B293C85697}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FCAE01A-C1A1-4CB4-A1D4-FC6A342BA681}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
