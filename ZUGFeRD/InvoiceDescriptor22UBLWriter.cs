@@ -616,6 +616,8 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("cbc", "PriceAmount");
             Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+			// UBL-DT-01 explicitly excempts the price amount from the 2 decimal rule for amount elements,
+			// thus allowing for 4 decimal places (needed for e.g. fuel prices)
             Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value, 4));
             Writer.WriteEndElement();
 
