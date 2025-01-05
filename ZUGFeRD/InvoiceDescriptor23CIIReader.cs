@@ -459,9 +459,7 @@ namespace s2industries.ZUGFeRD
             }
 
             string lineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineID", nsmgr, String.Empty);
-
             string parentLineId = XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:ParentLineID", nsmgr, null);
-
             LineStatusCodes? lineStatusCode = default(LineStatusCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineStatusCode", nsmgr, null));
             LineStatusReasonCodes? lineStatusReasonCode = default(LineStatusReasonCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode", nsmgr, null));
 
