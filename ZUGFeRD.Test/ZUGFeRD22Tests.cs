@@ -36,7 +36,7 @@ namespace s2industries.ZUGFeRD.Test
     [TestClass]
     public class ZUGFeRD22Tests : TestBase
     {
-        InvoiceProvider InvoiceProvider = new InvoiceProvider();
+        private InvoiceProvider InvoiceProvider = new InvoiceProvider();
         
 
         [TestMethod]
@@ -252,18 +252,18 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.TradeLineItems.Count, 6);
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
 
-            IList<TradeAllowanceCharge> _tradeAllowanceCharges = desc.GetTradeAllowanceCharges();
-            foreach (TradeAllowanceCharge charge in _tradeAllowanceCharges)
+            IList<TradeAllowanceCharge> tradeAllowanceCharges = desc.GetTradeAllowanceCharges();
+            foreach (TradeAllowanceCharge charge in tradeAllowanceCharges)
             {
                 Assert.AreEqual(charge.Tax.TypeCode, TaxTypes.VAT);
                 Assert.AreEqual(charge.Tax.CategoryCode, TaxCategoryCodes.S);
             }
 
-            Assert.AreEqual(_tradeAllowanceCharges.Count, 4);
-            Assert.AreEqual(_tradeAllowanceCharges[0].Tax.Percent, 19m);
-            Assert.AreEqual(_tradeAllowanceCharges[1].Tax.Percent, 7m);
-            Assert.AreEqual(_tradeAllowanceCharges[2].Tax.Percent, 19m);
-            Assert.AreEqual(_tradeAllowanceCharges[3].Tax.Percent, 7m);
+            Assert.AreEqual(tradeAllowanceCharges.Count, 4);
+            Assert.AreEqual(tradeAllowanceCharges[0].Tax.Percent, 19m);
+            Assert.AreEqual(tradeAllowanceCharges[1].Tax.Percent, 7m);
+            Assert.AreEqual(tradeAllowanceCharges[2].Tax.Percent, 19m);
+            Assert.AreEqual(tradeAllowanceCharges[3].Tax.Percent, 7m);
 
             Assert.AreEqual(desc.ServiceCharges.Count, 1);
             Assert.AreEqual(desc.ServiceCharges[0].Tax.TypeCode, TaxTypes.VAT);
@@ -2294,6 +2294,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(despatchAdviceDate, loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime);
         } //!TestWriteAndReadDespatchAdviceDocumentReference
 
+
         [TestMethod]
         public void TestSpecifiedTradeAllowanceCharge()
         {
@@ -2364,12 +2365,12 @@ namespace s2industries.ZUGFeRD.Test
                               description: description
                               );
 
-            string SELLER_CONTACT = "1-123";
-            string ORG_UNIT = "2-123";
-            string EMAIL_ADDRESS = "3-123";
-            string PHONE_NO = "4-123";
-            string FAX_NO = "5-123";
-            invoice.SetSellerContact(SELLER_CONTACT, ORG_UNIT, EMAIL_ADDRESS, PHONE_NO, FAX_NO);
+            string sellerContact = "1-123";
+            string orgUnit = "2-123";
+            string emailAddress = "3-123";
+            string phoneNo = "4-123";
+            string faxNo = "5-123";
+            invoice.SetSellerContact(sellerContact, orgUnit, emailAddress, phoneNo, faxNo);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2377,11 +2378,11 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual(SELLER_CONTACT, loadedInvoice.SellerContact.Name);
-            Assert.AreEqual(ORG_UNIT, loadedInvoice.SellerContact.OrgUnit);
-            Assert.AreEqual(EMAIL_ADDRESS, loadedInvoice.SellerContact.EmailAddress);
-            Assert.AreEqual(PHONE_NO, loadedInvoice.SellerContact.PhoneNo);
-            Assert.AreEqual(FAX_NO, loadedInvoice.SellerContact.FaxNo);
+            Assert.AreEqual(sellerContact, loadedInvoice.SellerContact.Name);
+            Assert.AreEqual(orgUnit, loadedInvoice.SellerContact.OrgUnit);
+            Assert.AreEqual(emailAddress, loadedInvoice.SellerContact.EmailAddress);
+            Assert.AreEqual(phoneNo, loadedInvoice.SellerContact.PhoneNo);
+            Assert.AreEqual(faxNo, loadedInvoice.SellerContact.FaxNo);
 
             Assert.AreEqual(loadedInvoice.Seller.Description, description);
         } // !TestSellerContact()
