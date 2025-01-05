@@ -41,23 +41,23 @@ namespace s2industries.ZUGFeRD
         /// <param name="format">Format of the target file</param>
         public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
-            IInvoiceDescriptorWriter _writer = null;
+            IInvoiceDescriptorWriter writer = null;
 
             if (format == ZUGFeRDFormats.CII)
             {
-                _writer = new InvoiceDescriptor23CIIWriter();
+                writer = new InvoiceDescriptor23CIIWriter();
             }
             else if ((format == ZUGFeRDFormats.UBL) && (descriptor.Profile == Profile.XRechnung))
             {
-                _writer = new InvoiceDescriptor22UBLWriter();
+                writer = new InvoiceDescriptor22UBLWriter();
             }
 
-            if (_writer == null)
+            if (writer == null)
             {
                 throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");
             }
 
-            _writer.Save(descriptor, stream, format);
+            writer.Save(descriptor, stream, format);
         } // !Save()
 
 
@@ -65,7 +65,7 @@ namespace s2industries.ZUGFeRD
         {
             if (descriptor.Profile == Profile.BasicWL)
             {
-                if (throwExceptions) { throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.0 invoice."); }
+                if (throwExceptions) { throw new UnsupportedException("Invalid profile used for ZUGFeRD 2.x invoice."); }
                 return false;
             }
 
