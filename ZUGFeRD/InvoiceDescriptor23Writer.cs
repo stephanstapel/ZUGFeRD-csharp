@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Saves the given invoice to the given stream.
-        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.        
+        /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
         /// </summary>
         /// <param name="descriptor">The invoice object that should be saved</param>
         /// <param name="stream">The target stream for saving the invoice</param>
@@ -54,7 +54,7 @@ namespace s2industries.ZUGFeRD
 
             if (_writer == null)
             {
-                throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");                
+                throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");
             }
 
             _writer.Save(descriptor, stream, format);

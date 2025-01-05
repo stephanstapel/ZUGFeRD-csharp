@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -52,7 +52,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Partial invoice (326)
         /// is an Invoice
-        /// 
+        ///
         /// Teilrechnung
         /// </summary>
         PartialInvoice = 326,
@@ -60,9 +60,9 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Commercial invoice (380)
         /// is an Invoice
-        /// 
+        ///
         /// This is the main invoice type
-        /// 
+        ///
         /// Handelsrechnung
         /// </summary>
         Invoice = 380,
@@ -70,9 +70,9 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Credit note (381)
         /// is a Credit Note
-        /// 
+        ///
         /// This is the main credit note type
-        /// 
+        ///
         /// Gutschriftanzeige
         /// </summary>
         CreditNote = 381,
@@ -80,7 +80,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Debit note (383)
         /// is an Invoice
-        /// 
+        ///
         /// Belastungsanzeige
         /// </summary>
         DebitNote = 383,
@@ -88,7 +88,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Corrected invoice (384)
         /// is an Invoice
-        /// 
+        ///
         /// Rechnungskorrektur
         /// </summary>
         Correction = 384,
@@ -96,7 +96,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Prepayment invoice (386)
         /// is an Invoice
-        /// 
+        ///
         /// Vorauszahlungsrechnung
         /// Eine Rechnung, die Vorauszahlung für Produkte anfordert.
         /// Die darin enthaltenen Beträge werden in der Schlussrechnung abgezogen.
@@ -106,7 +106,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Self-billed invoice (389)
         /// is an Invoice
-        /// 
+        ///
         /// Gutschrift (Selbst ausgestellte Rechnung)
         /// Gutschrift im Gutschriftverfahren
         /// Eine Rechnung, die der Zahlungspflichtige selbst ausstellt
@@ -123,9 +123,9 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Invoice information for accounting purposes (751)
         /// is an Invoice
-        /// 
+        ///
         /// Buchungshilfe - KEINE Rechnung
-        /// 
+        ///
         /// Für die Profile BASIC WL und MINIMUM darf ausschließlich dieser
         /// Code 751 "Buchungshilfe - KEINE Rechnung" verwendet werden,
         /// da diese Profile in DE steuerrechtlich keine Rechnungen darstellen!
@@ -137,10 +137,10 @@ namespace s2industries.ZUGFeRD
         /// is an Invoice
         /// Old ZUGFeRD variant, use
         /// Corrected Invoice (384) instead
-        /// </summary>        
+        /// </summary>
         [Obsolete("Use 'Correction' instead")]
         CorrectionOld = 1380,
-        
+
         /// <summary>
         /// Cancellation (457)
         ///
@@ -161,7 +161,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Appears to be only valid in Germany for XRechnung (BR-DE-17)
         /// </summary>
-        FinalConstructionInvoice = 877       
+        FinalConstructionInvoice = 877
     }
 
 

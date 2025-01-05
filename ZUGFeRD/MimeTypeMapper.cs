@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -24,8 +24,8 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Class for mapping between file extensions and mime types
-    /// 
-    /// Only those mime types are present that are supported by the additional reference document according to 
+    ///
+    /// Only those mime types are present that are supported by the additional reference document according to
     /// XRechnung specification, see e.g. https://projekte.kosit.org/xrechnung/xrechnung/-/issues/59
     /// </summary>
     internal class MimeTypeMapper
@@ -47,11 +47,11 @@ namespace s2industries.ZUGFeRD
         {
             if (!String.IsNullOrWhiteSpace(filename))
             {
-                string extension = System.IO.Path.GetExtension(filename);                
+                string extension = System.IO.Path.GetExtension(filename);
                 if (!String.IsNullOrWhiteSpace(extension) && _MimeTypes.TryGetValue(extension.ToLower(), out string mimeType))
                 {
                     return mimeType;
-                }                    
+                }
             }
 
             return "application/octet-stream";

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -23,46 +23,46 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-	/// <summary>
-	/// Specification of the invoice currency, local currency and exchange rate
-	/// </summary>
-	public class TradeCurrencyExchange
-	{
-		/// <summary>
-		/// Invoice currency
-		/// </summary>
-		public CurrencyCodes SourceCurrency { get; private set; }
+    /// <summary>
+    /// Specification of the invoice currency, local currency and exchange rate
+    /// </summary>
+    public class TradeCurrencyExchange
+    {
+        /// <summary>
+        /// Invoice currency
+        /// </summary>
+        public CurrencyCodes SourceCurrency { get; private set; }
 
-		/// <summary>
-		/// Local currency
-		/// </summary>
-		public CurrencyCodes TargetCurrency { get; private set; }
+        /// <summary>
+        /// Local currency
+        /// </summary>
+        public CurrencyCodes TargetCurrency { get; private set; }
 
-		/// <summary>
-		/// Exchange rate
-		/// </summary>
-		public decimal ConversionRate { get; private set; }
+        /// <summary>
+        /// Exchange rate
+        /// </summary>
+        public decimal ConversionRate { get; private set; }
 
-		/// <summary>
-		/// Exchange rate date
-		/// </summary>
-		public DateTime? ConversionRateTimestamp { get; private set; }
-
-
-		public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate)
-		{
-			SourceCurrency = sourceCurrency;
-			TargetCurrency = targetCurrency;
-			ConversionRate = conversionRate;
-		} // !TradeCurrencyExchange()
+        /// <summary>
+        /// Exchange rate date
+        /// </summary>
+        public DateTime? ConversionRateTimestamp { get; private set; }
 
 
-		public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate, DateTime conversionRateTimestamp)
-		{
-			SourceCurrency = sourceCurrency;
-			TargetCurrency = targetCurrency;
-			ConversionRate = conversionRate;
-			ConversionRateTimestamp = conversionRateTimestamp;
-		} // !TradeCurrencyExchange()
-	}
+        public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate)
+        {
+            SourceCurrency = sourceCurrency;
+            TargetCurrency = targetCurrency;
+            ConversionRate = conversionRate;
+        } // !TradeCurrencyExchange()
+
+
+        public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate, DateTime conversionRateTimestamp)
+        {
+            SourceCurrency = sourceCurrency;
+            TargetCurrency = targetCurrency;
+            ConversionRate = conversionRate;
+            ConversionRateTimestamp = conversionRateTimestamp;
+        } // !TradeCurrencyExchange()
+    }
 }

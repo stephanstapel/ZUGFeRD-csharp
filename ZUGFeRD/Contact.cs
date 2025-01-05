@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -30,7 +30,7 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// Contact Name
-        /// </summary>        
+        /// </summary>
         public string Name { get; set; }
 
         /// <summary>
@@ -40,14 +40,14 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Contact email address
-        /// </summary>        
+        /// </summary>
         public string EmailAddress { get; set; }
 
         /// <summary>
         /// Contact phone number
-        /// </summary>        
+        /// </summary>
         public string PhoneNo { get; set; }
-        
+
 
         /// <summary>
         /// Contact fax number

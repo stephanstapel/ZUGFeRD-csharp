@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -24,58 +24,58 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     // Source: https://raw.githubusercontent.com/datasets/currency-codes/master/data/codes-all.csv
-    // 
+    //
     // You can regenerate the codes using:
-    // 
+    //
     // import csv
-    // 
+    //
     // currencies = {}
-    // 
+    //
     // with open('currencies.csv', newline= '') as f:
     // lines = csv.reader(f, delimiter = ',', quotechar = '"')
-    // for line in lines:        
+    // for line in lines:
     //     if len(line) < 4:
     //         continue
-    // 
+    //
     //     country = line[0]
     //     currency = line[1]
     //     alphaThree = line[2]
     //     code = line[3]
-    // 
+    //
     //     if len(code) == 0:
     //         continue
-    // 
+    //
     //     # first line
     //     if country.find('Entity') > -1:
     //         continue
-    // 
+    //
     //     if currency.find('Zimbabwe Dollar (old)') > -1:
     //         continue
-    // 
+    //
     //     if code in currencies:
     //         continue
-    // 
+    //
     //     currencies[code] = { 'country' : country, 'currency' : currency, 'alphaThree' : alphaThree, 'code' : code }
-    // 
+    //
     // g = open('currencies.cs', 'w+')
-    // 
-    // for currency in currencies.values():    
+    //
+    // for currency in currencies.values():
     //     g.write('/// <summary>\n')
     //     g.write('/// Country: ' + currency['country'] + '\n')
     //     g.write('/// Currency: ' + currency['currency'] + '\n')
     //     g.write('/// </summary>\n')
     //     g.write(currency['alphaThree'] + ' = ' + currency['code'] + ',\n')
     //     g.write('\n')
-    // 
+    //
     // g.close()
 
 
     /// <summary>
     /// Full usage of http://csharpmoney.codeplex.com/ not required here,
     /// mapping of ISO codes sufficient.
-    /// 
+    ///
     /// ISO 4217 currency codes
-    /// 
+    ///
     /// Source: https://raw.githubusercontent.com/datasets/currency-codes/master/data/codes-all.csv
     /// </summary>
     public enum CurrencyCodes
@@ -333,7 +333,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Country: COMOROS (THE)
-        /// Currency: Comorian Franc 
+        /// Currency: Comorian Franc
         /// </summary>
         KMF = 174,
 
@@ -530,7 +530,7 @@ namespace s2industries.ZUGFeRD
         IDR = 360,
 
         /// <summary>
-        /// Country: INTERNATIONAL MONETARY FUND (IMF) 
+        /// Country: INTERNATIONAL MONETARY FUND (IMF)
         /// Currency: SDR (Special Drawing Right)
         /// </summary>
         XDR = 960,
@@ -1490,7 +1490,7 @@ namespace s2industries.ZUGFeRD
         SIT = 705,
 
         /// <summary>
-        /// Country: SOUTHERN RHODESIA 
+        /// Country: SOUTHERN RHODESIA
         /// Currency: Rhodesian Dollar
         /// </summary>
         RHD = 716,
@@ -1601,7 +1601,7 @@ namespace s2industries.ZUGFeRD
         /// Country: ZIMBABWE
         /// Currency: Zimbabwe Dollar
         /// </summary>
-        ZWR = 935        
+        ZWR = 935
     }
 
 

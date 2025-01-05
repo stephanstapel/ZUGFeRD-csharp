@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,9 +26,9 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Validator for ZUGFeRD invoice descriptor.
-    ///  
+    ///
     /// Currently limited to summarizing line totals
-    /// 
+    ///
     /// Output syntax copied from Konik library (https://konik.io/)
     /// </summary>
     public class InvoiceValidator
@@ -65,7 +65,7 @@ namespace s2industries.ZUGFeRD
 
             decimal lineTotal = 0m;
             Dictionary<decimal, decimal> lineTotalPerTax = new Dictionary<decimal, decimal>();
-            foreach(TradeLineItem item in descriptor.TradeLineItems)
+            foreach (TradeLineItem item in descriptor.TradeLineItems)
             {
                 decimal _total = 0m;
                 if (item.NetUnitPrice.HasValue)
@@ -159,7 +159,7 @@ namespace s2industries.ZUGFeRD
             }
 
             decimal _allowanceTotal = 0m;
-            foreach(TradeAllowanceCharge allowance in descriptor.GetTradeAllowanceCharges())
+            foreach (TradeAllowanceCharge allowance in descriptor.GetTradeAllowanceCharges())
             {
                 _allowanceTotal += allowance.ActualAmount;
             }
@@ -219,7 +219,6 @@ namespace s2industries.ZUGFeRD
             {
                 retval.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", allowanceTotal, _allowanceTotal));
             }
-
 
             return retval;
         } // !Validate()
