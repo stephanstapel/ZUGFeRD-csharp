@@ -538,22 +538,22 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedTradeSettlementLineMonetarySummation (Basic, Comfort, Extended)
                 //Detailinformationen zu Positionssummen
                 Writer.WriteStartElement("ram", "SpecifiedTradeSettlementLineMonetarySummation");
-                decimal _total = 0m;
+                decimal total = 0m;
                 if (tradeLineItem.LineTotalAmount.HasValue)
                 {
-                    _total = tradeLineItem.LineTotalAmount.Value;
+                    total = tradeLineItem.LineTotalAmount.Value;
                 }
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
-                    _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
+                    total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
                     if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
                     {
-                        _total /= tradeLineItem.UnitQuantity.Value;
+                        total /= tradeLineItem.UnitQuantity.Value;
                     }
                 }
 
                 Writer.WriteStartElement("ram", "LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                Writer.WriteValue(_formatDecimal(_total));
+                Writer.WriteValue(_formatDecimal(total));
                 Writer.WriteEndElement(); // !ram:LineTotalAmount
 
                 //ToDo: TotalAllowanceChargeAmount
@@ -582,20 +582,20 @@ namespace s2industries.ZUGFeRD
                 else
                 {
                     //multiple ReceivableSpecifiedTradeAccountingAccounts are allowed in other profiles
-                    foreach (ReceivableSpecifiedTradeAccountingAccount RSTA in tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts)
+                    foreach (ReceivableSpecifiedTradeAccountingAccount rsta in tradeLineItem.ReceivableSpecifiedTradeAccountingAccounts)
                     {
                         Writer.WriteStartElement("ram", "ReceivableSpecifiedTradeAccountingAccount", Profile.Comfort | Profile.Extended);
 
                         {
                             Writer.WriteStartElement("ram", "ID");
-                            Writer.WriteValue(RSTA.TradeAccountID);
+                            Writer.WriteValue(rsta.TradeAccountID);
                             Writer.WriteEndElement(); // !ram:ID
                         }
 
-                        if (RSTA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
+                        if (rsta.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
                         {
                             Writer.WriteStartElement("ram", "TypeCode", Profile.Extended);
-                            Writer.WriteValue(((int)RSTA.TradeAccountTypeCode).ToString());
+                            Writer.WriteValue(((int)rsta.TradeAccountTypeCode).ToString());
                             Writer.WriteEndElement(); // !ram:TypeCode
                         }
 
@@ -628,7 +628,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             // TODO: implement SellerTaxRepresentativeTradeParty
-            // BT-63: the tax registration of the SellerTaxRepresentativeTradeParty
+            // BT-63: the tax taxRegistration of the SellerTaxRepresentativeTradeParty
 
             #region 1. SellerOrderReferencedDocument (BT-14: Comfort, Extended)
             if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
@@ -1206,21 +1206,21 @@ namespace s2industries.ZUGFeRD
                 }
                 else
                 {
-                    foreach (ReceivableSpecifiedTradeAccountingAccount RSTAA in this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts)
+                    foreach (ReceivableSpecifiedTradeAccountingAccount traceAccountingAccount in this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts)
                     {
                         Writer.WriteStartElement("ram", "ReceivableSpecifiedTradeAccountingAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended);
 
                         {
                             //BT-19
                             Writer.WriteStartElement("ram", "ID", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended);
-                            Writer.WriteValue(RSTAA.TradeAccountID);
+                            Writer.WriteValue(traceAccountingAccount.TradeAccountID);
                             Writer.WriteEndElement(); // !ram:ID
                         }
 
-                        if (RSTAA.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
+                        if (traceAccountingAccount.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
                         {
                             Writer.WriteStartElement("ram", "TypeCode", Profile.Extended);
-                            Writer.WriteValue(((int)RSTAA.TradeAccountTypeCode).ToString());
+                            Writer.WriteValue(((int)traceAccountingAccount.TradeAccountTypeCode).ToString());
                             Writer.WriteEndElement(); // !ram:TypeCode
                         }
 
@@ -1302,19 +1302,13 @@ namespace s2industries.ZUGFeRD
 
 
         private void _writeAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, decimal defaultValue = 0m, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
-        {
-            decimal _value = defaultValue;
-            if (value.HasValue)
-            {
-                _value = value.Value;
-            }
-
+        {            
             writer.WriteStartElement(prefix, tagName, profile);
             if (forceCurrency)
             {
                 writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
             }
-            writer.WriteValue(_formatDecimal(_value, numDecimals));
+            writer.WriteValue(_formatDecimal(value ?? defaultValue, numDecimals));
             writer.WriteEndElement(); // !tagName
         } // !_writeAmount()
 
@@ -1605,12 +1599,12 @@ namespace s2industries.ZUGFeRD
             {
                 // for seller: BT-31
                 // for buyer : BT-48
-                foreach (TaxRegistration _reg in taxRegistrations.Where(tr => !String.IsNullOrWhiteSpace(tr.No)))
+                foreach (TaxRegistration taxRegistration in taxRegistrations.Where(tr => !String.IsNullOrWhiteSpace(tr.No)))
                 {
                     writer.WriteStartElement("ram", "SpecifiedTaxRegistration");
                     writer.WriteStartElement("ram", "ID");
-                    writer.WriteAttributeString("schemeID", _reg.SchemeID.EnumToString());
-                    writer.WriteValue(_reg.No);
+                    writer.WriteAttributeString("schemeID", taxRegistration.SchemeID.EnumToString());
+                    writer.WriteValue(taxRegistration.No);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                 }
