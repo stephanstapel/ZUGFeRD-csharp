@@ -36,7 +36,7 @@ namespace s2industries.ZUGFeRD.Test
     [TestClass]
     public class ZUGFeRD22Tests : TestBase
     {
-        private InvoiceProvider InvoiceProvider = new InvoiceProvider();
+        private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
         
 
         [TestMethod]
@@ -309,7 +309,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestElectronicAddress()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.SetSellerElectronicAddress("DE123456789", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
             desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers.LuxemburgVatNumber);
 
@@ -333,7 +333,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestMinimumInvoice()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Invoicee = new Party() // this information will not be stored in the output file since it is available in Extended profile only
             {
                 Name = "Invoicee"
@@ -363,7 +363,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestInvoiceWithAttachmentXRechnung()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename = "myrandomdata.bin";
             byte[] data = new byte[32768];
             new Random().NextBytes(data);
@@ -399,7 +399,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestInvoiceWithAttachmentExtended()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename = "myrandomdata.bin";
             byte[] data = new byte[32768];
             new Random().NextBytes(data);
@@ -435,7 +435,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestInvoiceWithAttachmentComfort()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename = "myrandomdata.bin";
             byte[] data = new byte[32768];
             new Random().NextBytes(data);
@@ -471,7 +471,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestInvoiceWithAttachmentBasic()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename = "myrandomdata.bin";
             byte[] data = new byte[32768];
             new Random().NextBytes(data);
@@ -497,7 +497,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestXRechnung1()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
             MemoryStream ms = new MemoryStream();
 
@@ -513,7 +513,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestXRechnung2()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
             MemoryStream ms = new MemoryStream();
 
@@ -529,7 +529,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestCreateInvoice_WithProfileEReporting()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
             MemoryStream ms = new MemoryStream();
 
@@ -548,7 +548,7 @@ namespace s2industries.ZUGFeRD.Test
             string uuid = System.Guid.NewGuid().ToString();
             DateTime orderDate = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.SetBuyerOrderReferenceDocument(uuid, orderDate);
 
             MemoryStream ms = new MemoryStream();
@@ -569,7 +569,7 @@ namespace s2industries.ZUGFeRD.Test
             string uuid = System.Guid.NewGuid().ToString();
             DateTime orderDate = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.SetBuyerOrderReferenceDocument(uuid, orderDate);
 
             MemoryStream ms = new MemoryStream();
@@ -590,7 +590,7 @@ namespace s2industries.ZUGFeRD.Test
             string uuid = System.Guid.NewGuid().ToString();
             DateTime issueDateTime = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.ContractReferencedDocument = new ContractReferencedDocument()
             {
                 ID = uuid,
@@ -616,7 +616,7 @@ namespace s2industries.ZUGFeRD.Test
             string uuid = System.Guid.NewGuid().ToString();
             DateTime issueDateTime = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.ContractReferencedDocument = new ContractReferencedDocument()
             {
                 ID = uuid,
@@ -642,7 +642,7 @@ namespace s2industries.ZUGFeRD.Test
             var uuid = Guid.NewGuid().ToString();
             var issueDateTime = DateTime.Today;
 
-            var desc = InvoiceProvider.CreateInvoice();
+            var desc = _InvoiceProvider.CreateInvoice();
             desc.ContractReferencedDocument = new ContractReferencedDocument
             {
                 ID = uuid,
@@ -672,7 +672,7 @@ namespace s2industries.ZUGFeRD.Test
             var uuid = Guid.NewGuid().ToString();
             var issueDateTime = DateTime.Today;
 
-            var desc = InvoiceProvider.CreateInvoice();
+            var desc = _InvoiceProvider.CreateInvoice();
             desc.ContractReferencedDocument = new ContractReferencedDocument
             {
                 ID = uuid,
@@ -1093,7 +1093,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestValidTaxTypes()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
             invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.VAT);
 
             MemoryStream ms = new MemoryStream();
@@ -1168,7 +1168,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestInvalidTaxTypes()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
             invoice.TradeLineItems.ForEach(i => i.TaxType = TaxTypes.AAA);
 
             MemoryStream ms = new MemoryStream();
@@ -1236,7 +1236,7 @@ namespace s2industries.ZUGFeRD.Test
             string uuid = Guid.NewGuid().ToString();
             DateTime issueDateTime = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.AddAdditionalReferencedDocument(uuid, AdditionalReferencedDocumentTypeCode.Unknown, issueDateTime, "Additional Test Document");
 
             MemoryStream ms = new MemoryStream();
@@ -1257,7 +1257,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestPartyExtensions()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Invoicee = new Party() // most of this information will NOT be stored in the output file
             {
                 Name = "Invoicee",
@@ -1377,7 +1377,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestShipTo() {
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
             desc.ShipTo = new Party() {
                 ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
@@ -1476,7 +1476,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestShipToTradePartyOnItemLevel()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.First().ShipTo = new Party()
             {
                 Name = "ShipTo",
@@ -1531,7 +1531,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestUltimateShipToTradePartyOnItemLevel()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.First().UltimateShipTo = new Party()
             {
                 Name = "ShipTo",
@@ -1586,7 +1586,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestMimetypeOfEmbeddedAttachment()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename1 = "myrandomdata.pdf";
             string filename2 = "myrandomdata.bin";
             DateTime timestamp = DateTime.Now.Date;
@@ -1672,7 +1672,7 @@ namespace s2industries.ZUGFeRD.Test
             string uuid = System.Guid.NewGuid().ToString();
             DateTime issueDateTime = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
             {
                 ID = uuid,
@@ -1697,7 +1697,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestWriteAndReadBusinessProcess()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.BusinessProcess = "A1";
 
             MemoryStream ms = new MemoryStream();
@@ -1714,7 +1714,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestWriteAndReadExtended()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename2 = "myrandomdata.bin";
             DateTime timestamp = DateTime.Now.Date;
             byte[] data = new byte[32768];
@@ -2071,7 +2071,7 @@ namespace s2industries.ZUGFeRD.Test
         {
             DateTime issueDateTime = DateTime.Today;
 
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             //PayeeSpecifiedCreditorFinancialInstitution
             desc.CreditorBankAccounts[0].BIC = String.Empty;
             //PayerSpecifiedDebtorFinancialInstitution
@@ -2164,7 +2164,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestBasisQuantityStandard()
         {
-            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
 
             desc.TradeLineItems.Clear();
             desc.AddTradeLineItem(name: "Joghurt Banane",
@@ -2200,7 +2200,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestBasisQuantityMultiple()
         {
-            InvoiceDescriptor desc = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
 
             desc.TradeLineItems.Clear();
             TradeLineItem tli = desc.AddTradeLineItem(name: "Joghurt Banane",
@@ -2237,7 +2237,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestTradeAllowanceChargeWithoutExplicitPercentage()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
             invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
@@ -2259,7 +2259,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestTradeAllowanceChargeWithExplicitPercentage()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
             invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
@@ -2280,7 +2280,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestWriteAndReadDespatchAdviceDocumentReferenceXRechnung()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string despatchAdviceNo = "421567982";
             DateTime despatchAdviceDate = new DateTime(2024, 5, 14);
             desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
@@ -2298,7 +2298,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestSpecifiedTradeAllowanceCharge()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
           
@@ -2322,7 +2322,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestSellerDescription()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             string description = "Test description";
 
@@ -2350,7 +2350,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestSellerContact()
         {
-            InvoiceDescriptor invoice = InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             string description = "Test description";
 
@@ -2406,7 +2406,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestDesignatedProductClassificationWithFullClassification()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.First().AddDesignatedProductClassification(
                 DesignatedProductClassificationClassCodes.HS,
                 "List Version ID Value",
@@ -2439,8 +2439,8 @@ namespace s2industries.ZUGFeRD.Test
 		[TestMethod]
 		public void TestDesignatedProductClassificationWithEmptyVersionId()
 		{
-			// test with empty version id value
-			InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+			// test with empty _Version id value
+			InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 			desc.TradeLineItems.First().AddDesignatedProductClassification(
                 DesignatedProductClassificationClassCodes.HS,
                 null,
@@ -2466,8 +2466,8 @@ namespace s2industries.ZUGFeRD.Test
 		[TestMethod]
 		public void TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
 		{
-			// test with empty version id value
-			InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+			// test with empty _Version id value
+			InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 			desc.TradeLineItems.First().AddDesignatedProductClassification(
                 DesignatedProductClassificationClassCodes.HS,
                 null,
@@ -2494,8 +2494,8 @@ namespace s2industries.ZUGFeRD.Test
 		[TestMethod]
 		public void TestDesignatedProductClassificationWithoutAnyOptionalInformation()
 		{
-			// test with empty version id value
-			InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+			// test with empty _Version id value
+			InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 			desc.TradeLineItems.First().AddDesignatedProductClassification(DesignatedProductClassificationClassCodes.HS);
 
 			MemoryStream ms = new MemoryStream();
@@ -2517,7 +2517,7 @@ namespace s2industries.ZUGFeRD.Test
         {
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
-            var desc = InvoiceProvider.CreateInvoice();
+            var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
@@ -2560,7 +2560,7 @@ namespace s2industries.ZUGFeRD.Test
         {
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
-            var desc = InvoiceProvider.CreateInvoice();
+            var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
@@ -2596,7 +2596,7 @@ namespace s2industries.ZUGFeRD.Test
         public void TestPaymentTermsSingleCardinalityStructured()
         {                        
             DateTime timestamp = DateTime.Now.Date;
-            var desc = InvoiceProvider.CreateInvoice();
+            var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
             desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);

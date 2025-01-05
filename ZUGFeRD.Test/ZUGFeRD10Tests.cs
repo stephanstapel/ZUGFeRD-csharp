@@ -25,7 +25,7 @@ namespace s2industries.ZUGFeRD.Test
     [TestClass]
     public class ZUGFeRD10Tests : TestBase
     {
-        InvoiceProvider InvoiceProvider = new InvoiceProvider();
+        private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
 
         [TestMethod]
         public void TestReferenceComfortInvoice()
@@ -60,7 +60,7 @@ namespace s2industries.ZUGFeRD.Test
         public void TestStoringInvoiceViaFile()
         {
             string path = "output.xml";
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Save(path, ZUGFeRDVersion.Version1, Profile.Comfort);
 
             InvoiceDescriptor desc2 = InvoiceDescriptor.Load(path);
@@ -71,7 +71,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestStoringInvoiceViaStreams()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
             string path = "output_stream.xml";
             FileStream saveStream = new FileStream(path, FileMode.Create);

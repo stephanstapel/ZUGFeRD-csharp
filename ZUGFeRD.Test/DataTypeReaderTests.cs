@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD.Test
     [TestClass]
     public class DataTypeReaderTests
     {
-        private readonly Type? _dataTypeReader = typeof(InvoiceDescriptor).Assembly.GetType("s2industries.ZUGFeRD.DataTypeReader");
+        private readonly Type? _DataTypeReader = typeof(InvoiceDescriptor).Assembly.GetType("s2industries.ZUGFeRD.DataTypeReader");
 
         [TestMethod]
         public void ReadFormattedIssueDateTime_ReturnsCorrectDateTime_WhenNodeContainsQdt()
@@ -108,9 +108,9 @@ namespace s2industries.ZUGFeRD.Test
 
         private DateTime? InvokeReadFormattedIssueDateTime(params object?[] methodParams)
         {
-            ArgumentNullException.ThrowIfNull(_dataTypeReader);
+            ArgumentNullException.ThrowIfNull(_DataTypeReader);
 
-            var method = _dataTypeReader.GetMethod("ReadFormattedIssueDateTime", BindingFlags.NonPublic | BindingFlags.Static);
+            var method = _DataTypeReader.GetMethod("ReadFormattedIssueDateTime", BindingFlags.NonPublic | BindingFlags.Static);
 
             ArgumentNullException.ThrowIfNull(method);
 

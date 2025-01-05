@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD.Test
     [TestClass]
     public class ZUGFeRD20Tests : TestBase
     {
-        InvoiceProvider InvoiceProvider = new InvoiceProvider();
+        private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
 
         [TestMethod]
         public void TestLineStatusCode()
@@ -466,7 +466,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestWriteAndReadBusinessProcess()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.BusinessProcess = "A1";
 
             MemoryStream ms = new MemoryStream();
@@ -483,7 +483,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestWriteAndReadExtended()
         {
-            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string filename2 = "myrandomdata.bin";
             DateTime timestamp = DateTime.Now.Date;
             byte[] data = new byte[32768];
