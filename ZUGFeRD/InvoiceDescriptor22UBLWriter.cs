@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -43,7 +43,7 @@ namespace s2industries.ZUGFeRD
 
             this.Descriptor = descriptor;
             this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
-            Dictionary<string, string> _namespaces = new Dictionary<string, string>()
+            Dictionary<string, string> namespaces = new Dictionary<string, string>()
             {
                 { "cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" },
                 { "cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" },
@@ -51,14 +51,14 @@ namespace s2industries.ZUGFeRD
                 { "xs", "http://www.w3.org/2001/XMLSchema" }
             };
             if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
-            {             
-                _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            {
+                namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
             else if (this.Descriptor.Type == InvoiceType.CreditNote)
             {
-                _namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
+                namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
-            this.Writer.SetNamespaces(_namespaces);
+            this.Writer.SetNamespaces(namespaces);
 
 
             Writer.WriteStartDocument();
@@ -369,7 +369,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
                     }
-                    
+
                     Writer.WriteStartElement("cac", "PaymentMandate");
 
                     //PEPPOL-EN16931-R061: Mandate reference MUST be provided for direct debit.
@@ -452,7 +452,7 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("cac", "TaxCategory");
                 Writer.WriteElementString("cbc", "ID", tradeAllowanceCharge.Tax.CategoryCode.ToString());
-                if (tradeAllowanceCharge.Tax.Percent != null)
+                if (tradeAllowanceCharge.Tax?.Percent != null)
                 {
                     Writer.WriteElementString("cbc", "Percent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
                 }
@@ -466,7 +466,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             // Tax Total
-            if (this.Descriptor.Taxes.Any() && this.Descriptor.TaxTotalAmount != null)
+            if ((this.Descriptor.Taxes?.Any() == true) && (this.Descriptor.TaxTotalAmount != null))
             {
                 Writer.WriteStartElement("cac", "TaxTotal");
                 _writeOptionalAmount(Writer, "cbc", "TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
@@ -488,13 +488,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteOptionalElementString("cbc", "TaxExemptionReason", tax.ExemptionReason);
                     Writer.WriteStartElement("cac", "TaxScheme");
                     Writer.WriteElementString("cbc", "ID", tax.TypeCode.EnumToString());
-                    Writer.WriteEndElement();// !TaxScheme                                       
+                    Writer.WriteEndElement(); // !TaxScheme
 
-                    Writer.WriteEndElement();// !TaxCategory
-                    Writer.WriteEndElement();// !TaxSubtotal
+                    Writer.WriteEndElement(); // !TaxCategory
+                    Writer.WriteEndElement(); // !TaxSubtotal
                 }
 
-                Writer.WriteEndElement();// !TaxTotal
+                Writer.WriteEndElement(); // !TaxTotal
             }
 
             Writer.WriteStartElement("cac", "LegalMonetaryTotal");
@@ -616,7 +616,7 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("cbc", "PriceAmount");
             Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-            Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value));
+            Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value, 4));
             Writer.WriteEndElement();
 
             if (tradeLineItem.UnitQuantity.HasValue)
