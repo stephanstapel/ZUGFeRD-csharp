@@ -26,12 +26,12 @@ The library is meant to be as simple as possible, however it is not straight for
 Since there are a lot of terms and standards around electronic invoices, I'd like to lay out my understanding:
 
 - ZUGFeRD was developed by a German initiative as a standard for electronic invoices (https://www.ferd-net.de/).
-- ZUGFeRD 2.1 is identical to the German/French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0) (https://www.ferd-net.de/standards/what-is-factur-x/index.html).
+- ZUGFeRD 2.1 is identical to the German/French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0) (https://www.ferd-net.de/en/standards/zugferd/factur-x).
 - The standard Factur-X 1.0 (respectively ZUGFeRD 2.1) is conform with the European norm EN 16931.
 - EN 16931 in turn is based on worldwide UN/CEFACT standard 'Cross Industry Invoice' (CII).
-- XRechnung as another German standard is a subset of EN 16931. It is defined by another party called KoSIT (https://www.xoev.de/). It comes with its own validation rules (https://www.ferd-net.de/standards/what-is-xrechnung/index.html).
-- This means that both Factur-X 1.0 (respectively ZUGFeRD 2.1) and XRechnung are conform with EN 16931. This does not automatically result that those invoices are per se identical
-- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two sister formats
+- XRechnung as another German standard is a subset of EN 16931. It is defined by another party called KoSIT (https://www.xoev.de/). It comes with its own validation rules (https://xeinkauf.de/dokumente/).
+- This means that both Factur-X 1.0 (respectively ZUGFeRD 2.1) and XRechnung are conform with EN 16931. This does not automatically result that those invoices are per se identical.
+- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two sister formats.
 
 # License
 Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
@@ -95,9 +95,8 @@ desc.SetBuyerElectronicAddress("LU987654321", ElectronicAddressSchemeIdentifiers
 The fields are only necessary if you want to send the XRechnung via the Peppol network.
 A description of the fields can be found in the following documents:
 
-[https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.1.0-2020-03-11.pdf](https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.2.0-2023-06-19.pdf)
+[https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.3.0-2024-10-03.pdf](https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.3.0-2024-10-03.pdf)
 
-https://www.ferd-net.de/upload/Dokumente/FACTUR-X_ZUGFeRD_2p0_Teil1_Profil_EN16931_1p03.pdf
 
 In Luxembourg, it has been mandatory since this year to process all invoices via Peppol:
 
