@@ -1339,7 +1339,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
-            if (this.Descriptor.Taxes?.Count == 0)
+            if (this.Descriptor.Taxes?.Any() != true)
             {
                 return;
             }
@@ -1389,7 +1389,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeNotes(ProfileAwareXmlTextWriter writer, List<Note> notes, Profile profile = Profile.Unknown)
         {
-            if (notes?.Count == 0)
+            if (notes?.Any() != true)
             {
                 return;
             }
