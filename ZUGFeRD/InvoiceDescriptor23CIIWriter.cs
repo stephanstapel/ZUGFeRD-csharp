@@ -352,7 +352,7 @@ namespace s2industries.ZUGFeRD
                             #region ChargePercentage
                             if (tradeAllowanceCharge.ChargePercentage.HasValue)
                             {
-                                Writer.WriteStartElement("ram", "CalculationPercent", profile: Profile.Extended | Profile.XRechnung);
+                                Writer.WriteStartElement("ram", "CalculationPercent", profile: Profile.Extended); // not in XRechnung, according to CII-SR-122
                                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
                                 Writer.WriteEndElement();
                             }
@@ -1302,7 +1302,7 @@ namespace s2industries.ZUGFeRD
 
 
         private void _writeAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, decimal defaultValue = 0m, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
-        {            
+        {
             writer.WriteStartElement(prefix, tagName, profile);
             if (forceCurrency)
             {
