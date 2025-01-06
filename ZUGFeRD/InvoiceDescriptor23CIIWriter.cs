@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 
@@ -1474,8 +1475,9 @@ namespace s2industries.ZUGFeRD
 
 
                 // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
-                if ((this.Descriptor.Profile == Profile.Minimum && partyType.In(PartyTypes.SellerTradeParty, PartyTypes.PayeeTradeParty, PartyTypes.BuyerTradeParty)) ||
-                    (this.Descriptor.Profile == Profile.Extended)) /* remaining party types */
+                if ((this.Descriptor.Profile == Profile.Extended) ||
+                    ((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum) ) ||                    
+                    ((partyType == PartyTypes.BuyerTradeParty) && this.Descriptor.Profile.In(Profile.Comfort, Profile.XRechnung1, Profile.XRechnung, Profile.Extended)))
                 {
                     writer.WriteOptionalElementString("ram", "TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
                 }

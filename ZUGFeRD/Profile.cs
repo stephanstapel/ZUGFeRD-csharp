@@ -198,5 +198,11 @@ namespace s2industries.ZUGFeRD
                 default: return profile.ToString().ToUpper();
             }
         } // !GetXMPName()
+
+
+        internal static bool In(this Profile profile, params Profile[] allowedProfiles)
+        {
+            return allowedProfiles.Contains(profile);
+        }
     }
 }
