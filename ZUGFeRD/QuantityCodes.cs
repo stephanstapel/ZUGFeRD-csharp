@@ -36,6 +36,82 @@ namespace s2industries.ZUGFeRD
     ///
     /// Codes updated from above PEPPOL list: 2025-01-06
     /// </summary>
+
+	// Most commonly used codes (with German abbreviations and descriptions):
+	// Unknown  Unknown/invalid quantity code
+	// ANN      Jahr | Abkürzung: Jahr(e)
+	// BQL      becquerel | Abkürzung: Bq
+	// C62      Eins (Stück) | Abkürzung: Stk. | Previously, PCE was also used. This has been removed.
+	// CEN      Hundred
+	// CMT      Zentimeter | Abkürzung: cm
+	// CUR      curie | Abkürzung: Ci
+	// DAY      Tag | Abkürzung: Tag(e)
+	// DTN      Zentner | decitonne
+	// FF       Ar | Abkürzung: a | 100 m^2
+	// FH       micromole | Abkürzung: µmol
+	// GRM      Gramm
+	// H18      square hectometre | Abbreviation: ha
+	// H87      Piece: A unit of count defining the number of pieces (piece: a single item, article or exemplar).
+	// HUR      Stunde | Abkürzung: Std.
+	// KGM      Kilogramm | Abkürzung: kg
+	// KMT      Kilometer | Abkürzung: km (Rec20r13) für XRechnung
+	// KT       Kit
+	// KWH      Kilowattstunde | Abkürzung: kWh
+	// KWT      Kilowatt | Abkürzung: kW
+	// LS       Pauschale | Abkürzung: pausch.
+	// LTR      Liter | Abkürzung: l
+	// M5       microcurie | Abkürzung: µCi
+	// MC       microgram | Abkürzung: µg
+	// MCU      millicurie | Abkürzung: mCi
+	// MGM      milligram | Abkürzung: mg
+	// MIN      Minute | Abkürzung: min
+	// MLT      millilitre | Abkürzung: ml
+	// MMK      Quadratmillimeter | Abkürzung: mm^2
+	// MMT      Millimeter | Abkürzung: mm
+	// MON      Monat | Abkürzung: Monat(e)
+	// MTK      Quadratmeter | Abkürzung: m^2
+	// MTQ      Kubikmeter | Abkürzung: m^3
+	// MTR      Meter | Abkürzung: m
+	// MWH      Megawatt Stunde (1000 kW.h) | Abkürzung: MWh
+	// NAR      Anzahl Artikel | Abkürzung: Anz.
+	// P1       Prozent | Abkürzung: %
+	// PR       Paar | Pair | Previously, NPR was used to indicate pairs. This has been removed.
+	// PTN      Portion | A quantity of allowance of food allotted to, or enough for, one person.
+	// SEC      Sekunde | Abkürzung: Sekunde(n)
+	// SET      Set | Abkürzung: Set(s)
+	// T3       tausend Stück | Abkürzung: Tsd
+	// TNE      Tonne (metrisch) | Abkürzung: t
+	// TP       Ten pack
+	// WEE      Woche | Abkürzung: Woche(n)
+	// XBA      Fass
+	// XBD      Tafel/Board | Abkürzung: Tf
+	// XBE      Bündel | Abkürzung: Bund
+	// XBG      Beutel
+	// XBJ      Eimer
+	// XBK      Korb | Basket
+	// XBO      Flasche | Abkürzung: Fl
+	// XBX      Box
+	// XCH      Container | Chest
+	// XCI      Kanister
+	// XCR      Kiste | Crate
+	// XCT      Karton | Abkürzung: Kt
+	// XCU      Becher | Cup
+	// XDR      Trommel | Drum
+	// XOK      Block
+	// XPA      Packet
+	// XPK      Verpackung | Standard packaging unit
+	// XPP      Piece | A loose or unpacked article.
+	// XPU      Tray
+	// XPX      Palette | Abkürzung: Pal
+	// XRD      Stange | Abkürzung: Stg
+	// XRO      Rolle
+	// XSA      Sack
+	// XST      (Papier) Bogen
+	// XTN      Dose
+	// XTU      Tube
+	// Z9       nanomole | Abkürzung: nmol
+	// _4G      microlitre | Abkürzung: µl
+	// _4N      megabecquerel | Abkürzung: MBq
     public enum QuantityCodes
     {
         #region Codes
