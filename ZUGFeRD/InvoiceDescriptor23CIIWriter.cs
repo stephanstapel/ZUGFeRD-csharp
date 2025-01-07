@@ -1472,16 +1472,14 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram", "ID", legalOrganization.ID.ID);
                 }
-
-
-                // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
-                if ((this.Descriptor.Profile == Profile.Extended) ||
-                    ((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum) ) ||                    
-                    ((partyType == PartyTypes.BuyerTradeParty) && this.Descriptor.Profile.In(Profile.Comfort, Profile.XRechnung1, Profile.XRechnung, Profile.Extended)))
-                {
-                    writer.WriteOptionalElementString("ram", "TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
-                }
             }
+			// filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
+			if ((this.Descriptor.Profile == Profile.Extended) ||
+				((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
+				((partyType == PartyTypes.BuyerTradeParty) && this.Descriptor.Profile.In(Profile.Comfort, Profile.XRechnung1, Profile.XRechnung, Profile.Extended)))
+			{
+				writer.WriteOptionalElementString("ram", "TradingBusinessName", legalOrganization.TradingBusinessName, this.Descriptor.Profile);
+			}
             writer.WriteEndElement();
         } // !_writeOptionalLegalOrganization()
 
