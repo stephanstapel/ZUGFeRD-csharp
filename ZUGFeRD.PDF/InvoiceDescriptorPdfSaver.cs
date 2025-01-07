@@ -38,7 +38,7 @@ namespace s2industries.ZUGFeRD.PDF
 {
     internal class InvoiceDescriptorPdfSaver
     {
-        internal static async Task SaveAsync(Stream targetStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor)
+        internal static async Task SaveAsync(Stream targetStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor, string password = null)
         {
             if (pdfSourceStream == null)
             {
@@ -54,12 +54,12 @@ namespace s2industries.ZUGFeRD.PDF
             descriptor.Save(xmlSourceStream, version, profile, format);
             xmlSourceStream.Seek(0, SeekOrigin.Begin);
 
-            Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile);
+            Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, password);
             await temp.CopyToAsync(targetStream);
         } // !SaveAsync()
 
 
-        internal static async Task SaveAsync(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor)
+        internal static async Task SaveAsync(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
         {
             if (!File.Exists(pdfSourcePath))
             {
@@ -73,14 +73,14 @@ namespace s2industries.ZUGFeRD.PDF
 
             FileStream pdfSourceStream = File.OpenRead(pdfSourcePath);
             MemoryStream targetStream = new MemoryStream();
-            await SaveAsync(targetStream, version, profile, format, pdfSourceStream, descriptor);
+            await SaveAsync(targetStream, version, profile, format, pdfSourceStream, descriptor, password);
 
             targetStream.Seek(0, SeekOrigin.Begin);
             System.IO.File.WriteAllBytes(targetPath, targetStream.ToArray());
         } // !SaveAsync()
 
 
-        private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string documentTitle = "Invoice", string documentDescription = "Invoice description", string invoiceFilename = "factur-x.xml")
+        private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string documentTitle = "Invoice", string documentDescription = "Invoice description", string invoiceFilename = "factur-x.xml", string password = null)
         {
             if (pdfStream == null)
             {
@@ -95,7 +95,14 @@ namespace s2industries.ZUGFeRD.PDF
             PdfDocument pdfDocument = null;
             try
             {
-                pdfDocument = PdfReader.Open(pdfStream, "SecretPassw.rd", PdfDocumentOpenMode.Import);
+                if (!String.IsNullOrWhiteSpace(password))
+                {
+                    pdfDocument = PdfReader.Open(pdfStream, password, PdfDocumentOpenMode.Import);
+                }
+                else
+                {
+                    pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
+                }
             }
             catch (Exception ex)
             {

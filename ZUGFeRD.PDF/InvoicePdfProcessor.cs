@@ -48,15 +48,15 @@ namespace s2industries.ZUGFeRD.PDF
         } // !LoadFromPdfAsync()
 
 
-        public static async Task SaveToPdfAsync(Stream targetPdfStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor)
+        public static async Task SaveToPdfAsync(Stream targetPdfStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor, string password = null)
         {
-            await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfStream, version, profile, format, pdfSourceStream, descriptor);
+            await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfStream, version, profile, format, pdfSourceStream, descriptor, password);
         } // !SaveToPdfAsync()
 
 
-        public static async Task SaveToPdfAsync(string targetPdfPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor)
+        public static async Task SaveToPdfAsync(string targetPdfPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
         {
-            await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfPath, version, profile, format, pdfSourcePath, descriptor);
+            await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfPath, version, profile, format, pdfSourcePath, descriptor, password);
         } // !SaveToPdfAsync()
     }
 }
