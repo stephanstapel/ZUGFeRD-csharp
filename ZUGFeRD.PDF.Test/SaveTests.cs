@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+using System.Formats.Asn1;
 using s2industries.ZUGFeRD;
 using s2industries.ZUGFeRD.PDF;
 
@@ -53,5 +54,19 @@ namespace s2industries.ZUGFeRD.PDF.Test
             InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
             await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.SaveToPdfAsync(targetPath, ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor));
         } // !BasicSaveFromNonExistingPdfFile()
+
+
+        [TestMethod]
+        public async Task TestFileWithPassword()
+        {
+            string sourcePath = @"..\..\..\PDFWithPassword.pdf";
+            sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
+
+            string targetPath = @"output.pdf";
+            targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
+
+            InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
+            await InvoicePdfProcessor.SaveToPdfAsync(targetPath, ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor);
+        } // !TestFileWithPassword()
     }
 }

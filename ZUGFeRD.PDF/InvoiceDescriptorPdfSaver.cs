@@ -32,6 +32,7 @@ using System.Xml;
 using Microsoft.Extensions.Options;
 using System.Xml.Linq;
 using static PdfSharp.Pdf.PdfDictionary;
+using PdfSharp.UniversalAccessibility;
 
 namespace s2industries.ZUGFeRD.PDF
 {
@@ -91,10 +92,17 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new ArgumentNullException(nameof(xmlStream));
             }
 
-            var pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
+            PdfDocument pdfDocument = null;
+            try
+            {
+                pdfDocument = PdfReader.Open(pdfStream, "SecretPassw.rd", PdfDocumentOpenMode.Import);
+            }
+            catch (Exception ex)
+            {
+                throw new SaveFailedException();
+            }
 
             PdfDocument outputDocument = new PdfDocument();
-            outputDocument.Options.ManualXmpGeneration = true;
 
             for (int i = 0; i < pdfDocument.PageCount; i++)
             {
@@ -245,11 +253,17 @@ namespace s2industries.ZUGFeRD.PDF
             var outputIntentsArray = new PdfArray();
             outputIntentsArray.Elements.Add(outputIntent0Dict.Reference);
             outputDocument.Internals.Catalog.Elements.Add("/OutputIntents", outputIntentsArray);
-            outputDocument.Info.Creator = "S2 Industries";            
-
+            outputDocument.Info.Creator = "S2 Industries";
 
             MemoryStream memoryStream = new MemoryStream();
-            outputDocument.Save(memoryStream);
+            try
+            {
+                outputDocument.Save(memoryStream);
+            }
+            catch (Exception ex)
+            {
+                throw new SaveFailedException();
+            }
             memoryStream.Seek(0, SeekOrigin.Begin);
             return memoryStream;
         } // !_CreateFacturXStream()
