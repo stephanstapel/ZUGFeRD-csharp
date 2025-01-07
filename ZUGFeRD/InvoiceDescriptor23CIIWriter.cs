@@ -1416,52 +1416,34 @@ namespace s2industries.ZUGFeRD
             switch (partyType)
             {
                 case PartyTypes.SellerTradeParty:
-                    // all profiles
-                    break;
                 case PartyTypes.BuyerTradeParty:
                     // all profiles
                     break;
                 case PartyTypes.ShipToTradeParty:
                     if (this.Descriptor.Profile == Profile.Minimum) { return; } // it is also possible to add ShipToTradeParty() to a LineItem. In this case, the correct profile filter is different!
                     break;
-                case PartyTypes.UltimateShipToTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.ShipFromTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.InvoiceeTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
                 case PartyTypes.PayeeTradeParty:
-                    // all profiles
-                    break;
-                case PartyTypes.SalesAgentTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.BuyerTaxRepresentativeTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
-                case PartyTypes.ProductEndUserTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
+                    if (this.Descriptor.Profile == Profile.Minimum) { return; } // BT-61 / BT-X-508-00
                     break;
                 case PartyTypes.BuyerAgentTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
+                case PartyTypes.BuyerTaxRepresentativeTradeParty:
+                case PartyTypes.InvoiceeTradeParty:
                 case PartyTypes.InvoicerTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
                 case PartyTypes.PayerTradeParty:
-                    if ((this.Descriptor.Profile != Profile.Extended) && (this.Descriptor.Profile != Profile.XRechnung1) && (this.Descriptor.Profile != Profile.XRechnung)) { return; } // extended, XRechnung1, XRechnung profile only
-                    break;
+                case PartyTypes.ProductEndUserTradeParty:
+                case PartyTypes.SalesAgentTradeParty:
+                case PartyTypes.ShipFromTradeParty:
+                case PartyTypes.UltimateShipToTradeParty:
+					if (this.Descriptor.Profile != Profile.Extended) { return; }
+					break;
                 default:
                     return;
             }
 
             writer.WriteStartElement(prefix, legalOrganizationTag, this.Descriptor.Profile);
-            if (legalOrganization.ID != null)
+            if (!String.IsNullOrWhiteSpace(legalOrganization.ID?.ID))
             {
-                if (!String.IsNullOrWhiteSpace(legalOrganization.ID.ID) && legalOrganization.ID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(legalOrganization.ID.SchemeID.Value.EnumToString()))
+                if (legalOrganization.ID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(legalOrganization.ID.SchemeID.Value.EnumToString()))
                 {
                     writer.WriteStartElement("ram", "ID");
                     writer.WriteAttributeString("schemeID", legalOrganization.ID.SchemeID.Value.EnumToString());
@@ -1473,6 +1455,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("ram", "ID", legalOrganization.ID.ID);
                 }
             }
+
 			// filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
 			if ((this.Descriptor.Profile == Profile.Extended) ||
 				((partyType == PartyTypes.SellerTradeParty) && (this.Descriptor.Profile != Profile.Minimum)) ||
@@ -1532,21 +1515,13 @@ namespace s2industries.ZUGFeRD
                 case PartyTypes.InvoicerTradeParty:
                     writer.WriteStartElement("ram", "InvoicerTradeParty", profile);
                     break;
+                default:
+                    return;
             }
 
-            if (party.ID != null && !string.IsNullOrWhiteSpace(party.ID.ID))
+            if (!string.IsNullOrWhiteSpace(party.ID?.ID))
             {
-                if (party.ID.SchemeID.HasValue && (party.ID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
-                {
-                    writer.WriteStartElement("ram", "ID");
-                    writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
-                    writer.WriteValue(party.ID.ID);
-                    writer.WriteEndElement();
-                }
-                else
-                {
-                    writer.WriteOptionalElementString("ram", "ID", party.ID.ID);
-                }
+                writer.WriteOptionalElementString("ram", "ID", party.ID.ID);
             }
 
             if (!String.IsNullOrWhiteSpace(party.GlobalID?.ID) && party.GlobalID.SchemeID.HasValue && (party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
