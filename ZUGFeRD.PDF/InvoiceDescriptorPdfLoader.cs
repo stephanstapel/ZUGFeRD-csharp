@@ -91,7 +91,7 @@ namespace s2industries.ZUGFeRD.PDF
 
         private static PdfStream _GetEmbeddedXmlStream(PdfDocument document, string xmlFileName = null)
         {
-            List<string> potentialFilenames = new List<string>() { "zugferd.xml", "factur-x.xml" };
+            List<string> potentialFilenames = new List<string>() { "zugferd.xml", "zugferd-invoice.xml", "factur-x.xml", "xrechnung.xml" };
             if (!String.IsNullOrWhiteSpace(xmlFileName))
             {
                 potentialFilenames.Add(xmlFileName);
