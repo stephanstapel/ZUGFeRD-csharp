@@ -847,7 +847,7 @@ namespace s2industries.ZUGFeRD
 
                 if (!String.IsNullOrWhiteSpace(contact.FaxNo))
                 {
-                    writer.WriteStartElement("ram", "FaxUniversalCommunication");
+                    writer.WriteStartElement("ram", "FaxUniversalCommunication", Profile.Extended);
                     writer.WriteElementString("ram", "CompleteNumber", contact.FaxNo);
                     writer.WriteEndElement();
                 }
