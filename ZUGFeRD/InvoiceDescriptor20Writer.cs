@@ -810,14 +810,14 @@ namespace s2industries.ZUGFeRD
                         }
                         if (paymentTerms.PaymentTermsType.HasValue)
                         {
-                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Discount)
                             {
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                 Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                 Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
                             }
-                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Surcharge)
                             {
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
@@ -845,14 +845,14 @@ namespace s2industries.ZUGFeRD
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
-                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Discount)
                                 {
                                     Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
                                     _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                     Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                     Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
                                 }
-                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Surcharge)
                                 {
                                     Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
                                     _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);

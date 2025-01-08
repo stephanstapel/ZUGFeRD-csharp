@@ -1077,14 +1077,14 @@ namespace s2industries.ZUGFeRD
                         }
                         if (paymentTerms.PaymentTermsType.HasValue)
                         {
-                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Discount)
                             {
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                 Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                 Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
                             }
-                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Surcharge)
                             {
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
@@ -1112,16 +1112,16 @@ namespace s2industries.ZUGFeRD
                         {
                             if (paymentTerms.PaymentTermsType.HasValue)
                             {
-                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Discount)
                                 {
-                                    Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
+                                    Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms", Profile.Extended);
                                     _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                     Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                     Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
                                 }
-                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                                if (paymentTerms.PaymentTermsType == PaymentTermsType.Surcharge)
                                 {
-                                    Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
+                                    Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms", Profile.Extended);
                                     _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                     Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                     Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
@@ -1133,7 +1133,7 @@ namespace s2industries.ZUGFeRD
                             }
                             dueDate = dueDate ?? paymentTerms.DueDate;
                         }
-                        Writer.WriteOptionalElementString("ram", "Description", sbPaymentNotes.ToString().TrimEnd());
+                        Writer.WriteOptionalElementString("ram", "Description", sbPaymentNotes.ToString().TrimEnd(), ALL_PROFILES ^ Profile.Minimum);
                         if (dueDate.HasValue)
                         {
                             Writer.WriteStartElement("ram", "DueDateDateTime");

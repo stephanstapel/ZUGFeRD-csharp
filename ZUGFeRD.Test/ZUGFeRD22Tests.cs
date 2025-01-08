@@ -2520,7 +2520,7 @@ namespace s2industries.ZUGFeRD.Test
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
-            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Discount, 10, 3m);
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
@@ -2547,7 +2547,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
 
-            paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
+            paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Discount);
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             // Assert.AreEqual(10, paymentTerm.DueDays);
@@ -2598,8 +2598,8 @@ namespace s2industries.ZUGFeRD.Test
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
-            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
-            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
+            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Discount, 14, 2.25m);
+            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Discount, 28, 1m);
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
@@ -2625,7 +2625,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{XmlConstants.XmlNewLine}Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-            //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
+            //Assert.AreEqual(PaymentTermsType.Discount, paymentTerm.PaymentTermsType);
             //Assert.AreEqual(10, paymentTerm.DueDays);
             //Assert.AreEqual(3m, paymentTerm.Percentage);
         } // !TestPaymentTermsSingleCardinalityStructured()

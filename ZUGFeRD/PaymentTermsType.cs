@@ -27,11 +27,11 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Discount indicator
         /// </summary>
-        Skonto,
+        Discount,
         /// <summary>
         /// Surcharge indicator
         /// </summary>
-        Verzug
+        Surcharge
     }
 
 
