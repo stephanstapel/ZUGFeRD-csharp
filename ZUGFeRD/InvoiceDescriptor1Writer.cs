@@ -607,22 +607,22 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("ram", "SpecifiedTradeSettlementMonetarySummation");
 
-                decimal _total = 0m;
+                decimal total = 0m;
 
                 if (tradeLineItem.LineTotalAmount.HasValue)
                 {
-                    _total = tradeLineItem.LineTotalAmount.Value;
+                    total = tradeLineItem.LineTotalAmount.Value;
                 }
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
-                    _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
+                    total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
                     if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
                     {
-                        _total /= tradeLineItem.UnitQuantity.Value;
+                        total /= tradeLineItem.UnitQuantity.Value;
                     }
                 }
 
-                _writeElementWithAttribute(Writer, "ram", "LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(_total));
+                _writeElementWithAttribute(Writer, "ram", "LineTotalAmount", "currencyID", this.Descriptor.Currency.EnumToString(), _formatDecimal(total));
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                 Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
 
@@ -811,14 +811,14 @@ namespace s2industries.ZUGFeRD
 
                 if (TaxRegistrations != null)
                 {
-                    foreach (TaxRegistration _reg in TaxRegistrations)
+                    foreach (TaxRegistration taxRegistration in TaxRegistrations)
                     {
-                        if (!String.IsNullOrWhiteSpace(_reg.No))
+                        if (!String.IsNullOrWhiteSpace(taxRegistration.No))
                         {
                             writer.WriteStartElement("ram", "SpecifiedTaxRegistration");
                             writer.WriteStartElement("ram", "ID");
-                            writer.WriteAttributeString("schemeID", _reg.SchemeID.EnumToString());
-                            writer.WriteValue(_reg.No);
+                            writer.WriteAttributeString("schemeID", taxRegistration.SchemeID.EnumToString());
+                            writer.WriteValue(taxRegistration.No);
                             writer.WriteEndElement();
                             writer.WriteEndElement();
                         }
