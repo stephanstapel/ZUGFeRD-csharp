@@ -111,6 +111,11 @@ namespace s2industries.ZUGFeRD
         DMT,
 
         /// <summary>
+        /// each: A unit of count defining the number of items regarded as separate units.
+        /// </summary>
+        EA,
+
+        /// <summary>
         /// Piece: A unit of count defining the number of pieces (piece: a single item, article or exemplar).
         /// </summary>
         /// <seealso cref="QuantityCodes.C62"/>
