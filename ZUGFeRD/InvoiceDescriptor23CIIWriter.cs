@@ -264,7 +264,7 @@ namespace s2industries.ZUGFeRD
 
                     #region BuyerOrderReferencedDocument (Comfort, Extended, XRechnung)
                     //Detailangaben zur zugehörigen Bestellung
-                    if (tradeLineItem.BuyerOrderReferencedDocument != null)
+                    if (tradeLineItem.BuyerOrderReferencedDocument != null && (!string.IsNullOrWhiteSpace(tradeLineItem.BuyerOrderReferencedDocument.LineID) || descriptor.Profile == Profile.Extended))
                     {
                         Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
@@ -430,7 +430,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                 {
-                    Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-175 for XRechnung 3
+                    Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", Profile.Extended); // this violates CII-SR-175 for XRechnung 3
                     Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
 
                     if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
@@ -657,7 +657,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("ram", "IssuerAssignedID", this.Descriptor.OrderNo);
                 if (this.Descriptor.OrderDate.HasValue)
                 {
-                    Writer.WriteStartElement("ram", "FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                    Writer.WriteStartElement("ram", "FormattedIssueDateTime", Profile.Extended);
                     Writer.WriteStartElement("qdt", "DateTimeString");
                     Writer.WriteAttributeString("format", "102");
                     Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
