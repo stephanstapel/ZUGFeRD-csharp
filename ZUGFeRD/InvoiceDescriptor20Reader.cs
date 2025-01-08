@@ -280,8 +280,8 @@ namespace s2industries.ZUGFeRD
                 decimal? penaltyPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:CalculationPercent", nsmgr, null);
                 int? penaltyDueDays = null; // XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
                 decimal? penaltyAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisAmount", nsmgr, null);
-                PaymentTermsType? paymentTermsType = discountPercent.HasValue ? PaymentTermsType.Discount :
-                    penaltyPercent.HasValue ? PaymentTermsType.Surcharge :
+                PaymentTermsType? paymentTermsType = discountPercent.HasValue ? PaymentTermsType.Skonto :
+                    penaltyPercent.HasValue ? PaymentTermsType.Verzug :
                     (PaymentTermsType?)null;
 
                 retval.AddTradePaymentTerms(XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
