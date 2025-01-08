@@ -43,11 +43,13 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// An identification of the item assigned by the seller.
+        /// BT-155
         /// </summary>
         public string SellerAssignedID { get; set; }
 
         /// <summary>
         /// An identification of the item assigned by the buyer.
+        /// BT-156
         /// </summary>
         public string BuyerAssignedID { get; set; }
 
