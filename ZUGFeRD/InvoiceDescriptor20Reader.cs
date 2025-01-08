@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
-        /// 
+        ///
         /// Make sure that the stream is open, otherwise an IllegalStreamException exception is thrown.
         /// Important: the stream will not be closed by this function.
         /// </summary>
@@ -340,7 +340,7 @@ namespace s2industries.ZUGFeRD
 
             return retval;
 
-        } // !Load()        
+        } // !Load()
 
 
         public override bool IsReadableByThisReaderVersion(Stream stream)
@@ -352,7 +352,7 @@ namespace s2industries.ZUGFeRD
                     "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:comfort", // Profil COMFORT
                     "urn:cen.eu:EN16931:2017#compliant#urn:zugferd.de:2p0:basic", // Profil BASIC
                     "urn:zugferd.de:2p0:basicwl", // Profil BASIC WL
-                    "urn:zugferd.de:2p0:minimum" // Profil MINIMUM                    
+                    "urn:zugferd.de:2p0:minimum" // Profil MINIMUM
                 };
 
             return _IsReadableByThisReaderVersion(stream, validURIs);
@@ -464,8 +464,8 @@ namespace s2industries.ZUGFeRD
                 item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(buyerOrderReferencedDocumentNode, "ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(buyerOrderReferencedDocumentNode, "ram:FormattedIssueDateTime", nsmgr),
-                    LineID = XmlUtils.NodeAsString(buyerOrderReferencedDocumentNode, "ram:BuyerOrderReferencedDocument/ram:LineID", nsmgr)
+                    LineID = XmlUtils.NodeAsString(buyerOrderReferencedDocumentNode, "ram:LineID", nsmgr),
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(buyerOrderReferencedDocumentNode, "ram:FormattedIssueDateTime", nsmgr)
                 };
             }
 
