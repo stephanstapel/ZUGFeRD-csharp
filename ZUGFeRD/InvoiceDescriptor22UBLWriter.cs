@@ -595,7 +595,6 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); //!SellersItemIdentification
             }
 
-            _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
             _writeIncludedReferencedProducts(Writer, tradeLineItem.IncludedReferencedProducts);
             _WriteCommodityClassification(Writer, tradeLineItem.GetDesignatedProductClassifications());
 
@@ -609,6 +608,8 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement();// !TaxScheme
 
             Writer.WriteEndElement();// !ClassifiedTaxCategory
+
+            _writeApplicableProductCharacteristics(Writer, tradeLineItem.ApplicableProductCharacteristics);
 
             Writer.WriteEndElement(); //!Item
 
