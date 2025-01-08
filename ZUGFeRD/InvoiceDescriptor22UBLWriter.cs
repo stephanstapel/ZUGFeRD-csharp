@@ -990,11 +990,6 @@ namespace s2industries.ZUGFeRD
                 type -= 1000;
             }
 
-            if (type == InvoiceType.CorrectionOld)
-            {
-                return (int)InvoiceType.Correction;
-            }
-
             return (int)type;
         } // !_translateInvoiceType()
 

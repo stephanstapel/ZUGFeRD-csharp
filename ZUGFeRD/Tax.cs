@@ -30,32 +30,13 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Returns the amount of the tax (Percent * BasisAmount)
         /// 
-        /// This information is calculated live.
+        /// This information is not calculated anymore but must be set explicitly as of version 17.0 of the component.
         /// </summary>
-        [Obsolete("Please note that TaxAmount needs to be set manually beginning with version 17.0, automatic calculation will be removed")]
-        public decimal TaxAmount
-        {
-            get
-            {
-                if (_taxAmount.HasValue)
-                {
-                    return _taxAmount.Value;
-                }
-                else
-                {
-                    return System.Math.Round((0.01m * this.Percent) * this.BasisAmount, 2, MidpointRounding.AwayFromZero);
-                }
-            }
-            set
-            {
-                _taxAmount = value;
-            }
-        }
+        public decimal TaxAmount { get; set; }
 
         /// <summary>
         /// VAT category taxable amount
-        /// </summary>        
-        [Obsolete("Please note that TaxAmount needs to be written manually beginning with version 17.0")]
+        /// </summary>
         public decimal BasisAmount { get; set; }
 
         /// <summary>

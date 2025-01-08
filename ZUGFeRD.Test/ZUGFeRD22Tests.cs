@@ -1063,11 +1063,13 @@ namespace s2industries.ZUGFeRD.Test
             d.AddApplicableTradeTax(
                 275.00m,
                 7.00m,
+                275.00m / 100m * 7.00m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                198.00m / 100m * 19.00m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 
@@ -2141,8 +2143,9 @@ namespace s2industries.ZUGFeRD.Test
                                   categoryCode: TaxCategoryCodes.Z,
                                   taxPercent: 0);
 
-            desc.AddApplicableTradeTax(basisAmount: 1000,
-                                       percent: 19,
+            desc.AddApplicableTradeTax(basisAmount: 1000m,
+                                       percent: 19m,
+                                       1000m / 100m * 19m,
                                        TaxTypes.VAT,
                                        TaxCategoryCodes.S);
 
@@ -2514,7 +2517,7 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestPaymentTermsMultiCardinality()
+        public void TestPaymentTermsMultiCardinalityWithExtended()
         {
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
@@ -2551,9 +2554,86 @@ namespace s2industries.ZUGFeRD.Test
             paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
-            // Assert.AreEqual(10, paymentTerm.DueDays);
+            // Assert.AreEqual(10, firstPaymentTerm.DueDays);
             Assert.AreEqual(3m, paymentTerm.Percentage);
-        } // !TestPaymentTermsMultiCardinality()
+        } // !TestPaymentTermsMultiCardinalityWithExtended()
+
+
+        [TestMethod]
+        public void TestPaymentTermsMultiCardinalityWithBasic()
+        {
+            // Arrange
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = _InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(2, paymentTerms.Count);
+            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
+            Assert.IsNotNull(paymentTerm);
+            Assert.IsNull(paymentTerm.PaymentTermsType);
+            Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
+
+            paymentTerm = loadedInvoice.GetTradePaymentTerms().LastOrDefault();
+            Assert.IsNotNull(paymentTerm);
+            Assert.IsNull(paymentTerm.PaymentTermsType);
+            Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);            
+            Assert.IsNull(paymentTerm.Percentage);
+        } // !TestPaymentTermsMultiCardinalityWithBasic()
+
+
+        [TestMethod]
+        public void TestPaymentTermsMultiCardinalityWithMinimum()
+        {
+            // Arrange
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = _InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
+            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(0, paymentTerms.Count);
+        } // !TestPaymentTermsMultiCardinalityWithMinimum()
 
 
         [TestMethod]
@@ -2563,9 +2643,8 @@ namespace s2industries.ZUGFeRD.Test
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
-            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
-            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), percentage: 3m);
-            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));            
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
@@ -2588,20 +2667,20 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(1, paymentTerms.Count);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(paymentTerm);
-            Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018{Environment.NewLine}3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
+            Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
         } // !TestPaymentTermsSingleCardinality()
 
 
         [TestMethod]
-        public void TestPaymentTermsSingleCardinalityStructured()
-        {
+        public void TestPaymentTermsMultiCardinalityXRechnungStructured()
+        {                        
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
-            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
-            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
+            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);            
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
@@ -2621,14 +2700,20 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(1, paymentTerms.Count);
-            var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
-            Assert.IsNotNull(paymentTerm);
-            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#{XmlConstants.XmlNewLine}Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", paymentTerm.Description);
-            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
-            //Assert.AreEqual(PaymentTermsType.Skonto, paymentTerm.PaymentTermsType);
-            //Assert.AreEqual(10, paymentTerm.DueDays);
-            //Assert.AreEqual(3m, paymentTerm.Percentage);
+            Assert.AreEqual(2, paymentTerms.Count);
+            var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(firstPaymentTerm);
+            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#", firstPaymentTerm.Description);
+            Assert.AreEqual(timestamp.AddDays(14), firstPaymentTerm.DueDate);
+
+
+            var secondPaymentTerm = loadedInvoice.GetTradePaymentTerms().LastOrDefault();
+            Assert.IsNotNull(secondPaymentTerm);
+            Assert.AreEqual($"Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", secondPaymentTerm.Description);
+
+            //Assert.AreEqual(PaymentTermsType.Skonto, firstPaymentTerm.PaymentTermsType);
+            //Assert.AreEqual(10, firstPaymentTerm.DueDays);
+            //Assert.AreEqual(3m, firstPaymentTerm.Percentage);
         } // !TestPaymentTermsSingleCardinalityStructured()
 
         [TestMethod]
@@ -2714,6 +2799,7 @@ namespace s2industries.ZUGFeRD.Test
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                198.00m / 100m * 19m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 
@@ -2800,6 +2886,7 @@ namespace s2industries.ZUGFeRD.Test
             d.AddApplicableTradeTax(
                 198.00m,
                 19.00m,
+                198.00m / 100m * 19.00m,
                 TaxTypes.VAT,
                 TaxCategoryCodes.S);
 

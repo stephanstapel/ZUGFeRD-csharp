@@ -379,22 +379,22 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("ram", "SpecifiedTradeSettlementLineMonetarySummation");
 
-                decimal _total = 0m;
+                decimal total = 0m;
 
                 if (tradeLineItem.LineTotalAmount.HasValue)
                 {
-                    _total = tradeLineItem.LineTotalAmount.Value;
+                    total = tradeLineItem.LineTotalAmount.Value;
                 }
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
-                    _total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
+                    total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
                     if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
                     {
-                        _total /= tradeLineItem.UnitQuantity.Value;
+                        total /= tradeLineItem.UnitQuantity.Value;
                     }
                 }
 
-                Writer.WriteElementString("ram", "LineTotalAmount", _formatDecimal(_total));
+                Writer.WriteElementString("ram", "LineTotalAmount", _formatDecimal(total));
 
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementLineMonetarySummation
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeSettlement
@@ -1069,14 +1069,14 @@ namespace s2industries.ZUGFeRD
 
                 if (TaxRegistrations != null)
                 {
-                    foreach (TaxRegistration _reg in TaxRegistrations)
+                    foreach (TaxRegistration registration in TaxRegistrations)
                     {
-                        if (!String.IsNullOrWhiteSpace(_reg.No))
+                        if (!String.IsNullOrWhiteSpace(registration.No))
                         {
                             writer.WriteStartElement("ram", "SpecifiedTaxRegistration");
                             writer.WriteStartElement("ram", "ID");
-                            writer.WriteAttributeString("schemeID", _reg.SchemeID.EnumToString());
-                            writer.WriteValue(_reg.No);
+                            writer.WriteAttributeString("schemeID", registration.SchemeID.EnumToString());
+                            writer.WriteValue(registration.No);
                             writer.WriteEndElement();
                             writer.WriteEndElement();
                         }
@@ -1105,7 +1105,7 @@ namespace s2industries.ZUGFeRD
 
                 if (!String.IsNullOrWhiteSpace(contact.FaxNo))
                 {
-                    writer.WriteStartElement("ram", "FaxUniversalCommunication");
+                    writer.WriteStartElement("ram", "FaxUniversalCommunication", Profile.Extended);
                     writer.WriteElementString("ram", "CompleteNumber", contact.FaxNo);
                     writer.WriteEndElement();
                 }
@@ -1135,8 +1135,7 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.PartialInvoice: return "TEILRECHNUNG";
                 case InvoiceType.PrepaymentInvoice: return "VORAUSZAHLUNGSRECHNUNG";
                 case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
-                case InvoiceType.Correction:
-                case InvoiceType.CorrectionOld: return "KORREKTURRECHNUNG";
+                case InvoiceType.Correction: return "KORREKTURRECHNUNG";
                 case InvoiceType.Unknown: return String.Empty;
                 default: return String.Empty;
             }
@@ -1148,11 +1147,6 @@ namespace s2industries.ZUGFeRD
             if ((int)type > 1000)
             {
                 type -= 1000;
-            }
-
-            if (type == InvoiceType.CorrectionOld)
-            {
-                return (int)InvoiceType.Correction;
             }
 
             return (int)type;

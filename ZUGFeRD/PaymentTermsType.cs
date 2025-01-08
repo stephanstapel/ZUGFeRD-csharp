@@ -25,11 +25,11 @@ namespace s2industries.ZUGFeRD
     public enum PaymentTermsType
     {
         /// <summary>
-        /// Discount indicator
+        /// Skonto indicator
         /// </summary>
         Skonto,
         /// <summary>
-        /// Surcharge indicator
+        /// Verzug indicator
         /// </summary>
         Verzug
     }

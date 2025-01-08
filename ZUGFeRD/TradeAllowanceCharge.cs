@@ -45,8 +45,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Switch for discount and surcharge
         /// 
-        /// false: Discount
-        /// true: Surcharge
+        /// false: Skonto
+        /// true: Verzug
         /// 
         /// In case of a discount (BG-27) the value of the ChargeIndicators has to be "false". In case of a surcharge (BG-28) the value of the ChargeIndicators has to be "true".
         /// </summary>
