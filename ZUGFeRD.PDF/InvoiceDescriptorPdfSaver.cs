@@ -71,12 +71,13 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new ArgumentNullException("Invalid invoiceDescriptor");
             }
 
-            FileStream pdfSourceStream = File.OpenRead(pdfSourcePath);
-            MemoryStream targetStream = new MemoryStream();
-            await SaveAsync(targetStream, version, profile, format, pdfSourceStream, descriptor, password);
-
-            targetStream.Seek(0, SeekOrigin.Begin);
-            System.IO.File.WriteAllBytes(targetPath, targetStream.ToArray());
+            using (FileStream pdfSourceStream = File.OpenRead(pdfSourcePath))
+            using (MemoryStream targetStream = new MemoryStream())
+            {
+                await SaveAsync(targetStream, version, profile, format, pdfSourceStream, descriptor, password);
+                targetStream.Seek(0, SeekOrigin.Begin);
+                System.IO.File.WriteAllBytes(targetPath, targetStream.ToArray());
+            }            
         } // !SaveAsync()
 
 
