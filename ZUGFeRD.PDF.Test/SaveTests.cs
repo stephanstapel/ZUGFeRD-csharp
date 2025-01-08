@@ -66,7 +66,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
 
             InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
-            await InvoicePdfProcessor.SaveToPdfAsync(targetPath, ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor, password: "SecretPassw.rd");
+            await InvoicePdfProcessor.SaveToPdfAsync(targetPath, ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor, password: "SecretPassw.rdxx");
         } // !TestFileWithPassword()
     }
 }

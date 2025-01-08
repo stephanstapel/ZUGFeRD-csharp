@@ -58,7 +58,7 @@ namespace s2industries.ZUGFeRD.PDF
             await temp.CopyToAsync(targetStream);
         } // !SaveAsync()
 
-
+        
         internal static async Task SaveAsync(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
         {
             if (!File.Exists(pdfSourcePath))
@@ -111,6 +111,11 @@ namespace s2industries.ZUGFeRD.PDF
             }
 
             PdfDocument outputDocument = new PdfDocument();
+
+            if (!String.IsNullOrWhiteSpace(password))
+            {
+                outputDocument.SecuritySettings.UserPassword = password;
+            }
 
             for (int i = 0; i < pdfDocument.PageCount; i++)
             {
