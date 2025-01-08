@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -37,7 +37,7 @@ namespace s2industries.ZUGFeRD.Test
     public class ZUGFeRD22Tests : TestBase
     {
         private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
-        
+
 
         [TestMethod]
         public void TestLineStatusCode()
@@ -560,7 +560,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.OrderNo, uuid);
             Assert.AreEqual(loadedInvoice.OrderDate, orderDate); // explicitly not to be set in XRechnung, see separate test case
-        } // !TestBuyerOrderReferencedDocumentWithExtended() 
+        } // !TestBuyerOrderReferencedDocumentWithExtended()
 
 
         [TestMethod]
@@ -581,7 +581,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.OrderNo, uuid);
             Assert.AreEqual(loadedInvoice.OrderDate, null); // explicitly not to be set in XRechnung, see separate test case
-        } // !TestBuyerOrderReferencedDocumentWithXRechnung() 
+        } // !TestBuyerOrderReferencedDocumentWithXRechnung()
 
 
         [TestMethod]
@@ -633,7 +633,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.ID, uuid);
             Assert.AreEqual(loadedInvoice.ContractReferencedDocument.IssueDateTime, issueDateTime); // explicitly not to be set in XRechnung, see separate test case
-        } // !TestContractReferencedDocumentWithExtended()        
+        } // !TestContractReferencedDocumentWithExtended()
 
 
         [TestMethod]
@@ -977,7 +977,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
-            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.", 
+            Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.",
                 invoiceDescriptor.GetTradePaymentTerms().FirstOrDefault().Description.Trim());
         } // !TestLoadingSepaPreNotification()
 
@@ -1282,7 +1282,7 @@ namespace s2industries.ZUGFeRD.Test
                 AddressLine3 = "EG links",
                 CountrySubdivisionName = "Bayern",
                 Country = CountryCodes.DE
-            };            
+            };
 
             MemoryStream ms = new MemoryStream();
 
@@ -1293,7 +1293,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.IsNull(loadedInvoice.Invoicee);
             Assert.IsNotNull(loadedInvoice.Seller);
-            Assert.IsNotNull(loadedInvoice.Payee);           
+            Assert.IsNotNull(loadedInvoice.Payee);
 
             Assert.AreEqual(loadedInvoice.Seller.Name, "Lieferant GmbH");
             Assert.AreEqual(loadedInvoice.Seller.Street, "Lieferantenstraße 20");
@@ -1339,7 +1339,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.Payee.CountrySubdivisionName, "Bayern");
             Assert.AreEqual(loadedInvoice.Payee.Country, CountryCodes.DE);
 
-            // 
+            //
             // Check the output in the XML for Comfort.
             // REM: In Comfort only ID, GlobalID, Name, and SpecifiedLegalOrganization are allowed.
 
@@ -1819,7 +1819,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(lineItem);
             lineItem.Description = "This is line item TB100A4";
             lineItem.BuyerAssignedID = "0815";
-            lineItem.SetOrderReferencedDocument("12345", timestamp);
+            lineItem.SetOrderReferencedDocument("12345", timestamp, "1");
             lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
             lineItem.SetContractReferencedDocument("12345", timestamp);
 
@@ -1848,7 +1848,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
 
             ms.Seek(0, SeekOrigin.Begin);
-            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);            
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.AreEqual("471102", loadedInvoice.InvoiceNo);
             Assert.AreEqual(new DateTime(2018, 03, 05), loadedInvoice.InvoiceDate);
@@ -1885,8 +1885,8 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("Project 123", loadedInvoice.SpecifiedProcuringProject.Name);
 
             Assert.AreEqual("Ultimate Ship To", loadedInvoice.UltimateShipTo.Name);
-            /** 
-             * @todo we can add further asserts for the remainder of properties 
+            /**
+             * @todo we can add further asserts for the remainder of properties
              */
 
             Assert.AreEqual<string>("123", loadedInvoice.ShipTo.ID.ID);
@@ -2028,6 +2028,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(TaxCategoryCodes.S, loadedLineItem.TaxCategoryCode);
             Assert.AreEqual(19m, loadedLineItem.TaxPercent);
 
+            Assert.AreEqual("1", loadedLineItem.BuyerOrderReferencedDocument.LineID);
             Assert.AreEqual("12345", loadedLineItem.BuyerOrderReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.BuyerOrderReferencedDocument.IssueDateTime);
             Assert.AreEqual("12345", loadedLineItem.DeliveryNoteReferencedDocument.ID);
@@ -2278,7 +2279,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(allowanceCharges[0].Amount, 10m);
             Assert.AreEqual(allowanceCharges[0].ChargePercentage, 12);
         } // !TestTradeAllowanceChargeWithExplicitPercentage()
-        
+
 
         [TestMethod]
         public void TestWriteAndReadDespatchAdviceDocumentReferenceXRechnung()
@@ -2304,7 +2305,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
-          
+
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
@@ -2435,7 +2436,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
             Assert.AreEqual("List Version ID Value", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
             Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-            Assert.AreEqual("Class Name", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);            
+            Assert.AreEqual("Class Name", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
 	    } // !TestDesignatedProductClassificationWithFullClassification()
 
 
@@ -2448,7 +2449,7 @@ namespace s2industries.ZUGFeRD.Test
                 DesignatedProductClassificationClassCodes.HS,
                 null,
                 "Class Code",
-                "Class Name"							
+                "Class Name"
 				);
 
 			MemoryStream ms = new MemoryStream();
@@ -2461,7 +2462,7 @@ namespace s2industries.ZUGFeRD.Test
 			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
             Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
             Assert.AreEqual("Class Code", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-            Assert.AreEqual("Class Name", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);					
+            Assert.AreEqual("Class Name", desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
 		} // !TestDesignatedProductClassificationWithEmptyVersionId()
 
 
@@ -2489,7 +2490,7 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
             Assert.AreEqual(String.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
-            Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);			
+            Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
 			Assert.AreEqual(String.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
 		} // !TestDesignatedProductClassificationWithEmptyListIdAndVersionId()
 
@@ -2511,7 +2512,7 @@ namespace s2industries.ZUGFeRD.Test
 			Assert.AreEqual(DesignatedProductClassificationClassCodes.HS, desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListID);
             Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ListVersionID);
             Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
-			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);			
+			Assert.IsNull(desc.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
         } // !TestDesignatedProductClassificationWithoutAnyOptionalInformation()
 
 
@@ -2806,7 +2807,7 @@ namespace s2industries.ZUGFeRD.Test
             {
                 d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 // test the raw xml file
                 string content = Encoding.UTF8.GetString(stream.ToArray());
 
@@ -2893,7 +2894,7 @@ namespace s2industries.ZUGFeRD.Test
             {
                 d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
                 stream.Seek(0, SeekOrigin.Begin);
-                
+
                 // test the raw xml file
                 string content = Encoding.UTF8.GetString(stream.ToArray());
 

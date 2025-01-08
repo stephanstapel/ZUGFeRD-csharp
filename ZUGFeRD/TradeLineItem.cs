@@ -421,12 +421,13 @@ namespace s2industries.ZUGFeRD
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference and will only output the referenced order line id
         /// but not issuer assigned id and date
         /// </summary>
-        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate)
+        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate, string orderReferencedLineId)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
                 ID = orderReferencedId,
-                IssueDateTime = orderReferencedDate
+                IssueDateTime = orderReferencedDate,
+                LineID = orderReferencedLineId
             };
         } // !SetOrderReferencedDocument()
 
