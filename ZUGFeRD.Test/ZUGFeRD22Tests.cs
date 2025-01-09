@@ -2922,5 +2922,17 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsFalse(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
             }
         } // !TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
+
+
+        [TestMethod]
+        public void TestDueDate()
+        {
+            string path = @"..\..\..\..\documentation\zugferd23en\Examples\2. BASIC\BASIC_Einfach\factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+            Assert.IsTrue(desc.GetTradePaymentTerms().First().DueDate.HasValue);
+            Assert.AreEqual(new DateTime(2024, 12, 15), desc.GetTradePaymentTerms().First().DueDate.Value);
+        } // !TestDueDate()
     }
 }

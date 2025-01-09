@@ -364,7 +364,7 @@ namespace s2industries.ZUGFeRD
                     (PaymentTermsType?)null;
 
                 retval.AddTradePaymentTerms(XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
-                                            XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime", nsmgr),
+                                            XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime/udt:DateTimeString", nsmgr),
                                             paymentTermsType,
                                             discountDueDays ?? penaltyDueDays,
                                             discountPercent ?? penaltyPercent,
