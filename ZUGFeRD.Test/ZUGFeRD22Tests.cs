@@ -2925,7 +2925,7 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestDueDate()
+        public void TestSpecifiedTradePaymentTermsDueDate()
         {
             string path = @"..\..\..\..\documentation\zugferd23en\Examples\2. BASIC\BASIC_Einfach\factur-x.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
@@ -2933,6 +2933,18 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
             Assert.IsTrue(desc.GetTradePaymentTerms().First().DueDate.HasValue);
             Assert.AreEqual(new DateTime(2024, 12, 15), desc.GetTradePaymentTerms().First().DueDate.Value);
-        } // !TestDueDate()
+        } // !TestSpecifiedTradePaymentTermsDueDate()
+
+
+        [TestMethod]
+        public void TestSpecifiedTradePaymentTermsDescription()
+        {
+            string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+            Assert.IsNotNull(desc.GetTradePaymentTerms().First().Description);
+            Assert.AreEqual("Bei Zahlung innerhalb 14 Tagen gewähren wir 2,0% Skonto.", desc.GetTradePaymentTerms().First().Description);
+        } // !TestSpecifiedTradePaymentTermsDescription()
     }
 }
