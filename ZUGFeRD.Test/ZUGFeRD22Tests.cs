@@ -2307,7 +2307,7 @@ namespace s2industries.ZUGFeRD.Test
             invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
 
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
