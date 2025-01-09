@@ -16,8 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using RazorEngine;
-using RazorEngine.Templating;
+using RazorLight;
 using s2industries.ZUGFeRD;
 using System;
 using System.Collections.Generic;
@@ -28,118 +27,46 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace s2industries.ZUGFeRD.Render
 {
     public class InvoiceDescriptorHtmlRenderer
     {
-        public static string render(InvoiceDescriptor desc)
+        public static string Render(InvoiceDescriptor desc)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = typeof(InvoiceDescriptorHtmlRenderer).Namespace + ".test.cshtml";
 
-            string template = "";
+            string templateText = "";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                template = reader.ReadToEnd();
+                templateText = reader.ReadToEnd();
             }
 
-
-            ITemplateKey key = new FullPathTemplateKey("Invoice-Template", "Invoice-Template", ResolveType.Global, null);
-            Engine.Razor.AddTemplate(key,
-                                     new LoadedTemplateSource(template));
-
-            string result = Engine.Razor.RunCompile(key, typeof(InvoiceDescriptor), desc);
-
-
-
-
-            /*
-            MemoryStream ms = new MemoryStream();
-            XmlTextWriter writer = new XmlTextWriter(ms, Encoding.UTF8);
-            writer.Formatting = Formatting.Indented;
-            writer.WriteStartDocument();
-            writer.WriteDocType("html", "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", null);
-            writer.WriteStartElement("html");
-            writer.WriteStartElement("head");
-            writer.WriteRaw("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" integrity=\"sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7\" crossorigin=\"anonymous\">");
-            writer.WriteEndElement(); // !head
-            writer.WriteStartElement("body");
-
-            // Absender
-            writer.WriteRaw("<div class=\"row\">");
-            writer.WriteRaw("<div class=\"col-md-3\">");
-            writer.WriteRaw("<table class=\"table table-bordered\">");
-            writer.WriteStartElement("tr");
-            writer.WriteStartElement("td");
-            writer.WriteRaw("<small>Rechnungsersteller</small><br />");
-            _writeParty(writer, desc.Seller);
-            writer.WriteEndElement(); // !td
-            writer.WriteEndElement(); // !tr
-
-            writer.WriteStartElement("tr");
-            writer.WriteStartElement("td");
-            writer.WriteRaw("<small>Rechnungsempfänger</small><br />");
-            _writeParty(writer, desc.Buyer);
-            writer.WriteEndElement(); // !td
-            writer.WriteEndElement(); // !tr
-            writer.WriteRaw("</table>");
-            writer.WriteRaw("</div>");
-            writer.WriteRaw("</div>");
-
-            // Empfänger
-            writer.WriteRaw("<div class=\"row\">");
-            writer.WriteRaw("<div class=\"col-md-3\">");
-            
-            writer.WriteRaw("</div>");
-            writer.WriteRaw("</div>");
-
-            // Kopfdaten
-            writer.WriteRaw("<div class=\"row\">");
-            writer.WriteRaw("<div class=\"col-md-6\">");
-            writer.WriteRaw(String.Format("Rechnungsnummer: {0}", desc.InvoiceNo));
-            writer.WriteElementString("br", "");
-            writer.WriteRaw(String.Format("Rechnungsdatum: {0}", desc.InvoiceDate));
-            writer.WriteRaw("</div>");
-            writer.WriteRaw("</div>");
+            var engine = new RazorLightEngineBuilder()
+                .UseOptions(new RazorLightOptions()
+                {
+                    EnableDebugMode = true
+                })
+                .SetOperatingAssembly(typeof(InvoiceDescriptorHtmlRenderer).GetTypeInfo().Assembly)
+                .Build();
+            Task<string> resultTask = engine.CompileRenderAsync("test", desc);
+            resultTask.Wait();
 
 
-            writer.WriteEndElement(); // !body
-            writer.WriteEndElement(); // !html
-            writer.WriteEndDocument();
-            writer.Flush();
-
-            ms.Position = 0;
-            StreamReader sr = new StreamReader(ms);
-            string retval = sr.ReadToEnd();
-            return retval;
-            */
-            return result;
-        } // !render()
+            return resultTask.Result;
+        } // !Render()
 
 
-        public static void render(InvoiceDescriptor desc, string filename)
+        public static void Render(InvoiceDescriptor desc, string filename)
         {
-            string output = render(desc);
+            string output = Render(desc);
             StreamWriter writer = File.CreateText(filename);
             writer.WriteLine(output);
             writer.Close();
-        } // !render()
-
-
-        private static void _writeParty(XmlTextWriter writer, Party p)
-        {
-            writer.WriteRaw(p.Name);
-            writer.WriteElementString("br", "");
-            writer.WriteRaw(p.Street);
-            writer.WriteElementString("br", "");
-            writer.WriteRaw(String.Format("{0} {1} {2}", p.Country.EnumToString(), p.Postcode, p.City));
-            writer.WriteElementString("br", "");
-            writer.WriteRaw(String.Format("ID: ", p.ID));
-            writer.WriteElementString("br", "");
-            writer.WriteRaw(String.Format("GlobalID: ", p.GlobalID.ID));
-        } // !_writeParty()
+        } // !Render()
     }
 }

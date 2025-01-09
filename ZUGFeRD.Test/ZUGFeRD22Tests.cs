@@ -2300,14 +2300,18 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestSpecifiedTradeAllowanceCharge()
+        [DataRow(Profile.Basic)]
+        [DataRow(Profile.Comfort)]
+        [DataRow(Profile.Extended)]
+        [DataRow(Profile.XRechnung)]
+        public void TestSpecifiedTradeAllowanceCharge(Profile profile)
         {
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
 
             MemoryStream ms = new MemoryStream();
-            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
+            invoice.Save(ms, ZUGFeRDVersion.Version23, profile);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
@@ -2321,6 +2325,22 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(allowanceCharge.ChargePercentage, 10m);
             Assert.AreEqual(allowanceCharge.Reason, "Discount 10%");
         } // !SpecifiedTradeAllowanceCharge()
+
+
+        [TestMethod]
+        public void TestSpecifiedTradeAllowanceChargeNotWrittenInMinimum()
+        {
+            InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
+
+            invoice.TradeLineItems[0].AddSpecifiedTradeAllowanceCharge(true, CurrencyCodes.EUR, 198m, 19.8m, 10m, "Discount 10%");
+
+            MemoryStream ms = new MemoryStream();
+            invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
+            ms.Position = 0;
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(0, loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowanceCharges().Count);
+        } // !TestSpecifiedTradeAllowanceChargeNotWrittenInMinimum()
 
 
         [TestMethod]

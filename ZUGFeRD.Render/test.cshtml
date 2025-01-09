@@ -13,7 +13,7 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Buyer</h5>
+                        <h5 class="card-title">Buyer</h5>                        
                         @Model.Buyer?.Name<br />
                         @Model.Buyer?.Street<br />
                         @Model.Buyer?.Postcode @Model.Buyer?.City<br />
@@ -29,6 +29,76 @@
                         @Model.Seller?.Postcode @Model.Seller?.City<br />
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (s2industries.ZUGFeRD.TradeLineItem item in Model.TradeLineItems)
+                        {
+                            <tr>
+                                <td>@item.Name
+                                    @if (!String.IsNullOrWhiteSpace(item.Description))
+                                    {
+                                        <br />
+                                        <small>@item.Description</small>
+                                    }
+                                </td>
+                                <td>
+                                    @item.BilledQuantity
+
+                                    @if (item.UnitQuantity.HasValue)
+                                    {
+                                        <br />
+                                        <small>Unit quantity: @item.UnitQuantity.Value</small>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.NetUnitPrice.HasValue)
+                                    {
+                                        @Html.Raw(item.NetUnitPrice.Value.ToString("N2"))
+                                    }
+                                </td>
+                                <td>@(item.BilledQuantity * item.NetUnitPrice.Value).ToString("N2")</td>                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="offset-8 col-4">
+                <dl>
+                    <dt>Line Total</dt>
+                    <dd>@Model.LineTotalAmount.Value.ToString("N2")</dd>
+                    <dt>Tax Total</dt>
+                    <dd>@Model.TaxTotalAmount.Value.ToString("N2")</dd>
+                    <dt>Grand Total</dt>
+                    <dd>@Model.GrandTotalAmount.Value.ToString("N2")</dd>
+
+                    @if (Model.TotalPrepaidAmount.HasValue)
+                    {
+                        <dt>Prepaid Amount</dt>
+                        <dd>@Model.TotalPrepaidAmount.Value.ToString("N2")</dd>
+                    }
+
+                    @if (Model.DuePayableAmount.HasValue)
+                    {
+                        <dt>Due Payable</dt>
+                        <dd>@Model.DuePayableAmount.Value.ToString("N2")</dd>
+                    }
+                </dl>
             </div>
         </div>
     </div>

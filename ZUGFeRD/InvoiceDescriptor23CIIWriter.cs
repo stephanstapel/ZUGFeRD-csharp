@@ -258,7 +258,7 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedLineTradeAgreement (Basic, Comfort, Extended, XRechnung)
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den Preis für die in der betreffenden Rechnungsposition in Rechnung gestellten Waren und Dienstleistungen enthält
 
-                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung, Profile.XRechnung1 }.Contains(descriptor.Profile))
+                if (descriptor.Profile.In(Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung, Profile.XRechnung1))
                 {
                     Writer.WriteStartElement("ram", "SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
@@ -492,7 +492,7 @@ namespace s2industries.ZUGFeRD
 
                 #region SpecifiedTradeAllowanceCharge (Basic, Comfort, Extended, XRechnung)
                 //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended, XRechnung)
-                if (new Profile[] { Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung1, Profile.XRechnung }.Contains(descriptor.Profile))
+                if (descriptor.Profile.In(Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung1, Profile.XRechnung))
                 {
                     if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
                     {

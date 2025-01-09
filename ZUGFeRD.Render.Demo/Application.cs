@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD.Render.Demo
         internal async Task RunAsync()
         {
             InvoiceDescriptor desc = InvoiceDescriptor.Load("../../../../demodata/zugferd22/zugferd_2p2_EXTENDED_Fremdwaehrung-factur-x.xml");
-            string html = InvoiceDescriptorHtmlRenderer.render(desc);
+            string html = InvoiceDescriptorHtmlRenderer.Render(desc);
             System.IO.File.WriteAllText("output.html", html);
         } // !RunAsync()
     }
