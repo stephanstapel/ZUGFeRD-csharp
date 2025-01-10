@@ -154,7 +154,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
             Assert.AreEqual(desc.InvoiceNo, "471102");
             Assert.AreEqual(desc.TradeLineItems.Count, 0);
-            Assert.AreEqual(desc.LineTotalAmount, 0.0m); // not present in file
+            Assert.IsNull(desc.LineTotalAmount); // not present in file
             Assert.AreEqual(desc.TaxBasisAmount, 198.0m);
             Assert.AreEqual(desc.IsTest, false); // not present in file
         }
@@ -286,7 +286,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
             Assert.AreEqual(desc.InvoiceNo, "471102");
             Assert.AreEqual(desc.TradeLineItems.Count, 0);
-            Assert.AreEqual(desc.LineTotalAmount, 0.0m); // not present in file
+            Assert.IsNull(desc.LineTotalAmount); // not present in file
             Assert.AreEqual(desc.TaxBasisAmount, 198.0m);
         } // !TestReferenceMinimumInvoice()
 
@@ -662,7 +662,7 @@ namespace s2industries.ZUGFeRD.Test
             msBasic.Seek(0, SeekOrigin.Begin);
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
-            Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
+            Assert.IsNull(loadedInvoice.RoundingAmount);
         } // !TestTotalRoundingExtended()
 
 
@@ -692,8 +692,8 @@ namespace s2industries.ZUGFeRD.Test
             msBasic.Seek(0, SeekOrigin.Begin);
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
-            Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
-        } // !TestTotalRoundingExtended()
+            Assert.IsNull(loadedInvoice.RoundingAmount);
+        } // !TestTotalRoundingExtended()   
 
 
 

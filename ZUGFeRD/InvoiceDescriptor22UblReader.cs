@@ -373,15 +373,15 @@ namespace s2industries.ZUGFeRD
                 dueDate: XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cbc:DueDate", nsmgr)
             );
 
-            retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:LineExtensionAmount", nsmgr, null).Value;
-            retval.ChargeTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:ChargeTotalAmount", nsmgr, null);
-            retval.AllowanceTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:AllowanceTotalAmount", nsmgr, null);
-            retval.TaxBasisAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount", nsmgr, null);
-            retval.TaxTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:TaxTotal/cbc:TaxAmount", nsmgr, null).Value;
-            retval.GrandTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount", nsmgr, null).Value; ;
-            retval.RoundingAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PayableRoundingAmount", nsmgr, null).Value;
-            retval.TotalPrepaidAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PrepaidAmount", nsmgr, null);
-            retval.DuePayableAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PayableAmount", nsmgr, null).Value;
+            retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:LineExtensionAmount", nsmgr);
+            retval.ChargeTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:ChargeTotalAmount", nsmgr);
+            retval.AllowanceTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:AllowanceTotalAmount", nsmgr);
+            retval.TaxBasisAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount", nsmgr);
+            retval.TaxTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:TaxTotal/cbc:TaxAmount", nsmgr);
+            retval.GrandTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount", nsmgr);
+            retval.RoundingAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PayableRoundingAmount", nsmgr);
+            retval.TotalPrepaidAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PrepaidAmount", nsmgr);
+            retval.DuePayableAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PayableAmount", nsmgr);
 
             // TODO: Find value //foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount", nsmgr))
             //{

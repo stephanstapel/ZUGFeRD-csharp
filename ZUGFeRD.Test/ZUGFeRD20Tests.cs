@@ -152,7 +152,7 @@ namespace s2industries.ZUGFeRD.Test
             msBasic.Seek(0, SeekOrigin.Begin);
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
-            Assert.AreEqual(loadedInvoice.RoundingAmount, 0m);
+            Assert.IsNull(loadedInvoice.RoundingAmount);
         } // !TestTotalRounding()
 
 
