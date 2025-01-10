@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -891,7 +891,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="dueDays"></param>
         /// <param name="percentage"></param>
         /// <param name="baseAmount"></param>
-        /// /// <param name="actualAmount"></param>
+        /// <param name="actualAmount"></param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
             PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null)
