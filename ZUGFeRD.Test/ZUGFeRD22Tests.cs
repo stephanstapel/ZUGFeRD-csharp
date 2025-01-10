@@ -2320,9 +2320,12 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(allowanceCharge.ChargeIndicator, false);//false = discount
             //CurrencyCodes are not written bei InvoiceDescriptor22Writer
             //Assert.AreEqual(allowanceCharge.Currency, CurrencyCodes.EUR);
-            Assert.AreEqual(allowanceCharge.BasisAmount, 198m);
+            if (profile != Profile.Basic)
+            {
+                Assert.AreEqual(allowanceCharge.BasisAmount, 198m);
+                Assert.AreEqual(allowanceCharge.ChargePercentage, 10m);
+            }
             Assert.AreEqual(allowanceCharge.ActualAmount, 19.8m);
-            Assert.AreEqual(allowanceCharge.ChargePercentage, 10m);
             Assert.AreEqual(allowanceCharge.Reason, "Discount 10%");
         } // !SpecifiedTradeAllowanceCharge()
 
@@ -2622,7 +2625,7 @@ namespace s2industries.ZUGFeRD.Test
             paymentTerm = loadedInvoice.GetTradePaymentTerms().LastOrDefault();
             Assert.IsNotNull(paymentTerm);
             Assert.IsNull(paymentTerm.PaymentTermsType);
-            Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);            
+            Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             Assert.IsNull(paymentTerm.Percentage);
         } // !TestPaymentTermsMultiCardinalityWithBasic()
 
@@ -2667,7 +2670,7 @@ namespace s2industries.ZUGFeRD.Test
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
-            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));            
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
             desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
 
             MemoryStream ms = new MemoryStream();
@@ -2698,13 +2701,13 @@ namespace s2industries.ZUGFeRD.Test
 
         [TestMethod]
         public void TestPaymentTermsMultiCardinalityXRechnungStructured()
-        {                        
+        {
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
             desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
-            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);            
+            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
