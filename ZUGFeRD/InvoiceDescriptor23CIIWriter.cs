@@ -512,18 +512,18 @@ namespace s2industries.ZUGFeRD
                             #endregion
 
                             #region ChargePercentage
-                            if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue && descriptor.Profile != Profile.Basic)
+                            if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
                             {
-                                Writer.WriteStartElement("ram", "CalculationPercent"); // BT-138, BT-143
+                                Writer.WriteStartElement("ram", "CalculationPercent", ALL_PROFILES ^ Profile.Basic); // BT-138, BT-143
                                 Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage.Value, 2));
                                 Writer.WriteEndElement();
                             }
                             #endregion
 
                             #region BasisAmount
-                            if (specifiedTradeAllowanceCharge.BasisAmount.HasValue && descriptor.Profile != Profile.Basic)
+                            if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
                             {
-                                Writer.WriteStartElement("ram", "BasisAmount"); // BT-137, BT-142
+                                Writer.WriteStartElement("ram", "BasisAmount", ALL_PROFILES ^ Profile.Basic); // BT-137, BT-142
                                 Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount.Value, 2));
                                 Writer.WriteEndElement();
                             }
