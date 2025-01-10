@@ -107,5 +107,32 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodStart == null));
             Assert.IsTrue(invoiceDescriptor.TradeLineItems.TrueForAll(x => x.BillingPeriodEnd == null));
         } // !TestMissingPropertiesAreNull()
+
+
+        [TestMethod]
+        public void TestSpecifiedTradePaymentTermsDescription()
+        {
+            string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_EXTENDED_Warenrechnung.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+            Assert.IsNotNull(desc.GetTradePaymentTerms().First().Description);
+            Assert.AreEqual("Bei Zahlung innerhalb 14 Tagen gewähren wir 2,0% Skonto.", desc.GetTradePaymentTerms().First().Description);
+        } // !TestSpecifiedTradePaymentTermsDescription()
+
+
+        [TestMethod]
+        public void TestSpecifiedTradePaymentTermsCalculationPercent()
+        {
+            string path = @"..\..\..\..\demodata\zugferd10\ZUGFeRD_1p0_EXTENDED_Warenrechnung.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            var x = desc.GetTradePaymentTerms();
+
+            Assert.IsNotNull(desc.GetTradePaymentTerms().First().Percentage);
+            Assert.AreEqual(2m, desc.GetTradePaymentTerms().First().Percentage);
+        } // !TestSpecifiedTradePaymentTermsCalculationPercent()
     }
 }

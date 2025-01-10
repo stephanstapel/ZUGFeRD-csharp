@@ -845,11 +845,10 @@ namespace s2industries.ZUGFeRD
             {
                 if (this.Descriptor.PaymentMeans != null)
                 {
-
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
                         Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
@@ -867,11 +866,11 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
                 {
-                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
+                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
@@ -883,7 +882,7 @@ namespace s2industries.ZUGFeRD
                         }
                     }
 
-                    Writer.WriteStartElement("ram", "PayeePartyCreditorFinancialAccount");
+                    Writer.WriteStartElement("ram", "PayeePartyCreditorFinancialAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                     Writer.WriteElementString("ram", "IBANID", account.IBAN);
                     Writer.WriteOptionalElementString("ram", "AccountName", account.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                     Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
@@ -901,15 +900,15 @@ namespace s2industries.ZUGFeRD
 
                 foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
                 {
-                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans"); // BG-16
+                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); // BG-16
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
+                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                     }
 
-                    Writer.WriteStartElement("ram", "PayerPartyDebtorFinancialAccount");
+                    Writer.WriteStartElement("ram", "PayerPartyDebtorFinancialAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                     Writer.WriteElementString("ram", "IBANID", account.IBAN);
                     Writer.WriteOptionalElementString("ram", "AccountName", account.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                     Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
@@ -1096,6 +1095,7 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                 Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                _writeOptionalAmount(Writer, "ram", "ActualDiscountAmount", paymentTerms.ActualAmount, forceCurrency: false);
                                 Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
                             }
                             if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
@@ -1103,6 +1103,7 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                 Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                _writeOptionalAmount(Writer, "ram", "ActualPenaltyAmount", paymentTerms.ActualAmount, forceCurrency: false);
                                 Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
                             }
                         }

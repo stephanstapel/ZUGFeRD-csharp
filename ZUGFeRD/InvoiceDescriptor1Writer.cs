@@ -384,6 +384,32 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttribute(Writer, "udt", "DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
                             Writer.WriteEndElement(); // !ram:DueDateDateTime
                         }
+                        if (paymentTerms.PaymentTermsType.HasValue)
+                        {
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
+                            {
+                                Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
+                                _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount);
+                                Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                _writeOptionalAmount(Writer, "ram", "ActualDiscountAmount", paymentTerms.ActualAmount);
+                                Writer.WriteEndElement(); // !ram:ApplicableTradePaymentDiscountTerms
+                            }
+                            if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
+                            {
+                                Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
+                                _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount);
+                                Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
+                                _writeOptionalAmount(Writer, "ram", "ActualPenaltyAmount", paymentTerms.ActualAmount);
+                                Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
+                            }
+                        }
+                        Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        Writer.WriteEndElement();
+                    }
+                    if (this.Descriptor.GetTradePaymentTerms().Count == 0 && !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
+                    {
+                        Writer.WriteStartElement("ram", "SpecifiedTradePaymentTerms");
+                        Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         Writer.WriteEndElement();
                     }
                     break;

@@ -56,5 +56,10 @@ namespace s2industries.ZUGFeRD
         /// Base amount applied to percentage of discount or surcharge
         /// </summary>
         public decimal? BaseAmount { get; set; }
+
+        /// <summary>
+        /// The actual amount of discount or surcharge
+        /// </summary>
+        public decimal? ActualAmount { get; set; }
     }
 }
