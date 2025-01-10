@@ -2957,6 +2957,6 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
             Assert.IsNotNull(desc.GetTradePaymentTerms().First().Percentage);
             Assert.AreEqual(2m, desc.GetTradePaymentTerms().First().Percentage);
-        } // !TestSpecifiedTradePaymentTermsDescription()
+        } // !TestSpecifiedTradePaymentTermsCalculationPercent()
     }
 }
