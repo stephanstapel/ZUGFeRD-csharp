@@ -2541,11 +2541,13 @@ namespace s2industries.ZUGFeRD.Test
         {
             // Arrange
             DateTime timestamp = DateTime.Now.Date;
+            decimal baseAmount = 123m;
+            decimal percentage = 3m;
+            decimal actualAmount = 123m * 3m / 100m;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
-            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", new DateTime(2018, 4, 4));
-            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, 3m);
-            desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
+            desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", timestamp.AddDays(14));
+            desc.AddTradePaymentTerms("3% Skonto innerhalb 10 Tagen bis 15.03.2018", new DateTime(2018, 3, 15), PaymentTermsType.Skonto, 10, percentage: percentage, baseAmount: baseAmount, actualAmount: actualAmount);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2569,13 +2571,15 @@ namespace s2industries.ZUGFeRD.Test
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
-            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);            
 
             paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual("3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerm.Description);
             // Assert.AreEqual(10, firstPaymentTerm.DueDays);
-            Assert.AreEqual(3m, paymentTerm.Percentage);
+            Assert.AreEqual(percentage, paymentTerm.Percentage);
+            Assert.AreEqual(baseAmount, paymentTerm.BaseAmount);
+            Assert.AreEqual(actualAmount, paymentTerm.ActualAmount);
         } // !TestPaymentTermsMultiCardinalityWithExtended()
 
 
