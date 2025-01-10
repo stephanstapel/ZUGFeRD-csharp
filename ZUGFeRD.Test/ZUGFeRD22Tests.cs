@@ -2946,5 +2946,17 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(desc.GetTradePaymentTerms().First().Description);
             Assert.AreEqual("Bei Zahlung innerhalb 14 Tagen gewähren wir 2,0% Skonto.", desc.GetTradePaymentTerms().First().Description);
         } // !TestSpecifiedTradePaymentTermsDescription()
+
+
+        [TestMethod]
+        public void TestSpecifiedTradePaymentTermsCalculationPercent()
+        {
+            string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+            Assert.IsNotNull(desc.GetTradePaymentTerms().First().Percentage);
+            Assert.AreEqual(2m, desc.GetTradePaymentTerms().First().Percentage);
+        } // !TestSpecifiedTradePaymentTermsDescription()
     }
 }
