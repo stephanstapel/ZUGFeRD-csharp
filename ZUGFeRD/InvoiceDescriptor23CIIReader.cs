@@ -135,49 +135,12 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-
-            //Get all referenced and embedded documents (BG-24)
+            //Get all referenced and embedded documents, BG-24
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referencedDocNodes)
             {
                 retval.AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
             }
-
-            //-------------------------------------------------
-            // hzi: With old implementation only the first document has been read instead of all documents
-            //-------------------------------------------------
-            //if (doc.SelectSingleNode("//ram:AdditionalReferencedDocument", nsmgr) != null)
-            //{
-            //    string _issuerAssignedID = XmlUtils.NodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:IssuerAssignedID", nsmgr);
-            //    string _typeCode = XmlUtils.NodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:TypeCode", nsmgr);
-            //    string _referenceTypeCode = XmlUtils.NodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:ReferenceTypeCode", nsmgr);
-            //    string _name = XmlUtils.NodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:Name", nsmgr);
-            //    DateTime? _date = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:AdditionalReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr);
-
-            //    if (doc.SelectSingleNode("//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject", nsmgr) != null)
-            //    {
-            //        string _filename = XmlUtils.NodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject/@filename", nsmgr);
-            //        byte[] data = Convert.FromBase64String(XmlUtils.NodeAsString(doc, "//ram:AdditionalReferencedDocument/ram:AttachmentBinaryObject", nsmgr));
-
-            //        retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
-            //                                               typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
-            //                                               issueDateTime: _date,
-            //                                               referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
-            //                                               name: _name,
-            //                                               attachmentBinaryObject: data,
-            //                                               filename: _filename);
-            //    }
-            //    else
-            //    {
-            //        retval.AddAdditionalReferencedDocument(id: _issuerAssignedID,
-            //                                               typeCode: default(AdditionalReferencedDocumentTypeCode).FromString(_typeCode),
-            //                                               issueDateTime: _date,
-            //                                               referenceTypeCode: default(ReferenceTypeCodes).FromString(_referenceTypeCode),
-            //                                               name: _name);
-            //    }
-            //}
-            //-------------------------------------------------
-
 
             retval.ShipTo = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty", nsmgr);
             retval.UltimateShipTo = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty", nsmgr);
@@ -575,8 +538,8 @@ namespace s2industries.ZUGFeRD
                         case "ram:SpecifiedTradeSettlementLineMonetarySummation":
                             //TODO
                             break;
-                        case "ram:AdditionalReferencedDocument":
-                            //TODO
+                        case "ram:AdditionalReferencedDocument": // BT-128-00
+                            item._AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(lineTradeSettlementNode, nsmgr));
                             break;
                         case "ram:ReceivableSpecifiedTradeAccountingAccount":
                             item.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
@@ -649,13 +612,6 @@ namespace s2industries.ZUGFeRD
             //        IssueDateTime = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr),
             //    };
             //}
-
-            //Get all referenced AND embedded documents
-            XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
-            foreach (XmlNode referenceNode in referenceNodes)
-            {
-                item._AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(referenceNode, nsmgr));
-            }
 
             foreach (XmlNode designatedProductClassificationNode in tradeLineItem.SelectNodes(".//ram:DesignatedProductClassification", nsmgr))
             {
@@ -747,8 +703,10 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(node, "ram:FormattedIssueDateTime", nsmgr),
                 AttachmentBinaryObject = !string.IsNullOrWhiteSpace(strBase64BinaryData) ? Convert.FromBase64String(strBase64BinaryData) : null,
                 Filename = XmlUtils.NodeAsString(node, "ram:AttachmentBinaryObject/@filename", nsmgr),
-                ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr))
-            };
+                ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr)),
+                URIID = XmlUtils.NodeAsString(node, "ram:URIID", nsmgr, null),
+                LineID = XmlUtils.NodeAsString(node, "ram:LineID", nsmgr, null)
+			};
         } // !_readAdditionalReferencedDocument()
 
     }
