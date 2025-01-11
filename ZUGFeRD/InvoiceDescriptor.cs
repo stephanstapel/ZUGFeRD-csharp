@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -813,15 +813,19 @@ namespace s2industries.ZUGFeRD
         /// <param name="currency">Curency of the allowance</param>
         /// <param name="actualAmount">Actual allowance charge amount</param>
         /// <param name="reason">Reason for the allowance</param>
+        /// <param name="reasonCode">Reason code for the allowance</param>
         /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
+                                            string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
+                                            AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Reason = reason,
+                ReasonCode = reasonCode,
                 BasisAmount = basisAmount,
                 ActualAmount = actualAmount,
                 Currency = currency,
@@ -851,12 +855,14 @@ namespace s2industries.ZUGFeRD
         /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
+        /// <param name="reasonCode">Reason code for the allowance</param>
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
                 ChargeIndicator = !isDiscount,
                 Reason = reason,
+                ReasonCode = reasonCode,
                 BasisAmount = basisAmount,
                 ActualAmount = actualAmount,
                 Currency = currency,
@@ -1210,7 +1216,7 @@ namespace s2industries.ZUGFeRD
                              buyerAssignedID: buyerAssignedID,
                              deliveryNoteID: deliveryNoteID,
                              deliveryNoteDate: deliveryNoteDate,
-							 buyerOrderLineID: buyerOrderLineID,
+                             buyerOrderLineID: buyerOrderLineID,
                              buyerOrderID: buyerOrderID, // Extended!
                              buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,

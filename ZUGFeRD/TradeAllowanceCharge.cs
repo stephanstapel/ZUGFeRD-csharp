@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Zu- und Abschlag
-    /// 
+    ///
     /// Beispiel:
     /// <SpecifiedTradeAllowanceCharge>
 	///   <ChargeIndicator>false</ChargeIndicator>
@@ -44,10 +44,10 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// Switch for discount and surcharge
-        /// 
+        ///
         /// false: Skonto
         /// true: Verzug
-        /// 
+        ///
         /// In case of a discount (BG-27) the value of the ChargeIndicators has to be "false". In case of a surcharge (BG-28) the value of the ChargeIndicators has to be "true".
         /// </summary>
         public bool ChargeIndicator { get; internal set; }
@@ -56,6 +56,11 @@ namespace s2industries.ZUGFeRD
         /// The reason for the surcharge or discount in written form
         /// </summary>
         public string Reason { get; internal set; }
+
+        /// <summary>
+        /// The reason code for the surcharge or discount
+        /// </summary>
+        public AllowanceReasonCodes ReasonCode { get; internal set; }
 
         /// <summary>
         /// The base amount that may be used in conjunction with the percentage of the invoice line discount to calculate the amount of the invoice line discount
