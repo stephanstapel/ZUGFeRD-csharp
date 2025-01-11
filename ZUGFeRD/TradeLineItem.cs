@@ -467,7 +467,11 @@ namespace s2industries.ZUGFeRD
         /// <param name="referenceTypeCode">Type of the referenced document</param>
         /// <param name="attachmentBinaryObject"></param>
         /// <param name="filename"></param>
-        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        /// <param name="uriID"></param>
+        /// <param name="lineID"></param>
+        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null,
+            string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null,
+            string filename = null, string uriID = null, string lineID = null)
         {
             this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -477,7 +481,9 @@ namespace s2industries.ZUGFeRD
                 Name = name,
                 AttachmentBinaryObject = attachmentBinaryObject,
                 Filename = filename,
-                TypeCode = typeCode
+                TypeCode = typeCode,
+                URIID = uriID,
+                LineID = lineID
             });
         } // !AddAdditionalReferencedDocument()
 

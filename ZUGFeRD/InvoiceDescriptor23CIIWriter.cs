@@ -318,7 +318,7 @@ namespace s2industries.ZUGFeRD
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz
                     foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
                     {
-                        _writeAdditionalReferencedDocument(document, Profile.Extended);
+                        _writeAdditionalReferencedDocument(document, Profile.Extended, "BG-X-3");
                     } // !foreach(document)
                     #endregion
 
@@ -571,9 +571,27 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                 #endregion
 
+                // TODO: InvoiceReferencedDocument, BG-X-48
+
                 #region AdditionalReferencedDocument
-                //Objektkennung auf Ebene der Rechnungsposition
-                // TODO: AdditionalReferencedDocument
+                //Objektkennung auf Ebene der Rechnungsposition, BT-128-00
+                if (tradeLineItem.GetAdditionalReferencedDocuments().Count > 0)
+                {
+                    foreach (var document in tradeLineItem.GetAdditionalReferencedDocuments())
+                    {
+                        if (string.IsNullOrWhiteSpace(document.ID))
+                        {
+                            continue;
+                        }
+
+                        _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1, "BT-128-00");
+                        // only Extended allows multiple entries
+                        if (this.Descriptor.Profile != Profile.Extended)
+                        {
+                            break;
+                        }
+                    }
+                }
                 #endregion
 
                 #region ReceivableSpecifiedTradeAccountingAccount
@@ -695,11 +713,11 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region 4. AdditionalReferencedDocument
-            if (this.Descriptor.AdditionalReferencedDocuments != null)
+            if (this.Descriptor.AdditionalReferencedDocuments != null) // BG-24
             {
-                foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
+                foreach (var document in this.Descriptor.AdditionalReferencedDocuments)
                 {
-                    _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung); // BG-24
+                    _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1, "BG-24");
                 }
             }
             #endregion
@@ -1229,10 +1247,34 @@ namespace s2industries.ZUGFeRD
         } // !Save()
 
 
-        private void _writeAdditionalReferencedDocument(AdditionalReferencedDocument document, Profile profile)
+        private void _writeAdditionalReferencedDocument(AdditionalReferencedDocument document, Profile profile, string parentElement = "")
         {
+            if (string.IsNullOrWhiteSpace(document?.ID))
+            {
+                return;
+            }
+
             Writer.WriteStartElement("ram", "AdditionalReferencedDocument", profile);
             Writer.WriteElementString("ram", "IssuerAssignedID", document.ID);
+
+            var subProfile = profile;
+            switch (parentElement)
+            {
+                case "BG-24":
+                    subProfile = Profile.Comfort | Profile.Extended | Profile.XRechnung;
+                    break;
+                case "BG-X-3":
+                    subProfile = Profile.Extended;
+                    break;
+            }
+            if (parentElement == "BG-24" || parentElement == "BG-X-3")
+            {
+                Writer.WriteOptionalElementString("ram", "URIID", document.URIID, subProfile); // BT-124, BT-X-28
+            }
+            if (parentElement == "BG-X-3")
+            {
+                Writer.WriteOptionalElementString("ram", "LineID", document.LineID, subProfile); // BT-X-29
+            }
 
             if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
             {
@@ -1241,14 +1283,20 @@ namespace s2industries.ZUGFeRD
 
             if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
             {
-                Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+                if (parentElement == "BT-18-00" || parentElement == "BT-128-00" || parentElement == "BG-X-3")
+                {
+                    Writer.WriteOptionalElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString()); // BT-128-1, BT-18-1, BT-X-32
+                }
             }
 
-            Writer.WriteOptionalElementString("ram", "Name", document.Name);
+            if (parentElement == "BG-24" || parentElement == "BG-X-3")
+            {
+                Writer.WriteOptionalElementString("ram", "Name", document.Name, subProfile); // BT-123, BT-X-299
+            }
 
             if (document.AttachmentBinaryObject != null)
             {
-                Writer.WriteStartElement("ram", "AttachmentBinaryObject");
+                Writer.WriteStartElement("ram", "AttachmentBinaryObject", subProfile); // BT-125, BT-X-31
                 Writer.WriteAttributeString("filename", document.Filename);
                 Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
                 Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
@@ -1257,7 +1305,7 @@ namespace s2industries.ZUGFeRD
 
             if (document.IssueDateTime.HasValue)
             {
-                Writer.WriteStartElement("ram", "FormattedIssueDateTime");
+                Writer.WriteStartElement("ram", "FormattedIssueDateTime", Profile.Extended);
                 Writer.WriteStartElement("qdt", "DateTimeString");
                 Writer.WriteAttributeString("format", "102");
                 Writer.WriteValue(_formatDate(document.IssueDateTime.Value));

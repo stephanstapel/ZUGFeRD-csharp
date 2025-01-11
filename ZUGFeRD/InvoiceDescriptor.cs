@@ -704,6 +704,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Add an additional reference document
+        /// Note: LineID is only on line item-level
         /// </summary>
         /// <param name="id">Document number such as delivery note no or credit memo no</param>
         /// <param name="typeCode"></param>
@@ -712,7 +713,10 @@ namespace s2industries.ZUGFeRD
         /// <param name="referenceTypeCode">Type of the referenced document</param>
         /// <param name="attachmentBinaryObject"></param>
         /// <param name="filename"></param>
-        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        /// <param name="uriID"></param>
+        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode,
+            DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown,
+            byte[] attachmentBinaryObject = null, string filename = null, string uriID = null)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -722,7 +726,8 @@ namespace s2industries.ZUGFeRD
                 Name = name,
                 AttachmentBinaryObject = attachmentBinaryObject,
                 Filename = filename,
-                TypeCode = typeCode
+                TypeCode = typeCode,
+                URIID = uriID
             });
         } // !AddAdditionalReferencedDocument()
 
@@ -740,8 +745,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Sets detailed information about the corresponding despatch advice
         /// </summary>
-        /// <param name="deliveryNoteNo"></param>
-        /// <param name="deliveryNoteDate"></param>
+        /// <param name="despatchAdviceNo"></param>
+        /// <param name="despatchAdviceDate"></param>
         public void SetDespatchAdviceReferencedDocument(string despatchAdviceNo, DateTime? despatchAdviceDate = null)
         {
             this.DespatchAdviceReferencedDocument = new DespatchAdviceReferencedDocument()
