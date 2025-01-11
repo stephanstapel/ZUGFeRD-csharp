@@ -574,7 +574,6 @@ namespace s2industries.ZUGFeRD
                 // TODO: InvoiceReferencedDocument, BG-X-48
 
                 #region AdditionalReferencedDocument
-<<<<<<< HEAD
                 //Objektkennung auf Ebene der Rechnungsposition, BT-128-00
                 if (tradeLineItem.GetAdditionalReferencedDocuments().Count > 0)
                 {
@@ -593,10 +592,6 @@ namespace s2industries.ZUGFeRD
                         }
                     }
                 }
-=======
-                //Objektkennung auf Ebene der Rechnungsposition
-                // TODO: AdditionalReferencedDocument
->>>>>>> master
                 #endregion
 
                 #region ReceivableSpecifiedTradeAccountingAccount
