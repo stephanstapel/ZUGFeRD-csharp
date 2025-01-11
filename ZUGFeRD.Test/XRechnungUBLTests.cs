@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -261,13 +261,14 @@ namespace s2industries.ZUGFeRD.Test
             CurrencyCodes currency = CurrencyCodes.EUR;
             decimal actualAmount = 12.34m;
             string reason = "Gutschrift";
+            AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Packaging;
             TaxTypes taxTypeCode = TaxTypes.VAT;
             TaxCategoryCodes taxCategoryCode = TaxCategoryCodes.AA;
             decimal taxPercent = 19.0m;
 
-            desc.AddTradeAllowanceCharge(isDiscount, basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent);
+            desc.AddTradeAllowanceCharge(isDiscount, basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
 
-            desc.TradeLineItems[0].AddTradeAllowanceCharge(true, CurrencyCodes.EUR, 100, 10, "test");
+            desc.TradeLineItems[0].AddTradeAllowanceCharge(true, CurrencyCodes.EUR, 100, 10, "test", reasonCode);
 
             TradeAllowanceCharge? testAllowanceCharge = desc.GetTradeAllowanceCharges().FirstOrDefault();
 
@@ -286,6 +287,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedAllowanceCharge.Currency, currency, message: "currency");
             Assert.AreEqual(loadedAllowanceCharge.Amount, actualAmount, message: "actualAmount");
             Assert.AreEqual(loadedAllowanceCharge.Reason, reason, message: "reason");
+            Assert.AreEqual(loadedAllowanceCharge.ReasonCode, reasonCode, message: "reasonCode");
             Assert.AreEqual(loadedAllowanceCharge.Tax.TypeCode, taxTypeCode, message: "taxTypeCode");
             Assert.AreEqual(loadedAllowanceCharge.Tax.CategoryCode, taxCategoryCode, message: "taxCategoryCode");
             Assert.AreEqual(loadedAllowanceCharge.Tax.Percent, taxPercent, message: "taxPercent");
@@ -1202,7 +1204,7 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.IsTrue(invoiceAsString.Contains($">{Math.Round(duePayableAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<"));
             Assert.IsFalse(invoiceAsString.Contains($">{Math.Round(duePayableAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<"));
-            Assert.AreEqual(desc.DuePayableAmount, Math.Round(duePayableAmount, 2, MidpointRounding.AwayFromZero));            
+            Assert.AreEqual(desc.DuePayableAmount, Math.Round(duePayableAmount, 2, MidpointRounding.AwayFromZero));
         } // !TestDecimals()
     }
 }

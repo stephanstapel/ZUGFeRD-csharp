@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,7 @@ namespace s2industries.ZUGFeRD
     {
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
-        /// 
+        ///
         /// Make sure that the stream is open, otherwise an IllegalStreamException exception is thrown.
         /// Important: the stream will not be closed by this function.
         /// </summary>
@@ -210,7 +210,8 @@ namespace s2industries.ZUGFeRD
                                                XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
                                                default(TaxTypes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                                default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
-                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:ApplicablePercent", nsmgr, 0).Value);
+                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:ApplicablePercent", nsmgr, 0).Value,
+                                               EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -392,7 +393,7 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode referenceNode in referenceNodes)
             {
                 string typeCodeAsString = XmlUtils.NodeAsString(referenceNode, "ram:TypeCode", nsmgr);
-                string codeAsString = XmlUtils.NodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);                
+                string codeAsString = XmlUtils.NodeAsString(referenceNode, "ram:ReferenceTypeCode", nsmgr);
 
                 item.AddAdditionalReferencedDocument(
                     id: XmlUtils.NodeAsString(referenceNode, "ram:ID", nsmgr),

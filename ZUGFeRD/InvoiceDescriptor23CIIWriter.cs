@@ -380,6 +380,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement();
                             #endregion
 
+                            Writer.WriteOptionalElementString("ram", "ReasonCode", tradeAllowanceCharge.ReasonCode.GetDescriptionAttribute(), Profile.Extended);
                             Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Extended); // not in XRechnung according to CII-SR-128
 
                             Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
@@ -535,7 +536,7 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteEndElement();
                             #endregion
 
-                            // TODO: ReasonCode, BT-140, BT-145 -> missing in TradeAllowanceCharge
+                            Writer.WriteOptionalElementString("ram", "ReasonCode", specifiedTradeAllowanceCharge.ReasonCode.GetDescriptionAttribute()); // BT-140, BT-145
                             Writer.WriteOptionalElementString("ram", "Reason", specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
 
                             Writer.WriteEndElement(); // !ram:SpecifiedTradeAllowanceCharge
@@ -974,31 +975,36 @@ namespace s2industries.ZUGFeRD
             //  13. SpecifiedTradeAllowanceCharge (optional)
             foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.GetTradeAllowanceCharges())
             {
-                Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge");
-                Writer.WriteStartElement("ram", "ChargeIndicator");
-                Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", ALL_PROFILES ^ Profile.Minimum);
+                Writer.WriteStartElement("ram", "ChargeIndicator"); // BG-21-0
+                Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false"); // BG-21-1
                 Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+                // TODO: SequenceNumeric, BT-X-268, Berechnungsreihenfolge
 
                 if (tradeAllowanceCharge.ChargePercentage.HasValue)
                 {
-                    Writer.WriteStartElement("ram", "CalculationPercent", profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "CalculationPercent", profile: Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); // BT-101
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value));
                     Writer.WriteEndElement();
                 }
 
                 if (tradeAllowanceCharge.BasisAmount.HasValue)
                 {
-                    Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "BasisAmount"); // BT-100
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value));
                     Writer.WriteEndElement();
                 }
 
-                Writer.WriteStartElement("ram", "ActualAmount");
+                // TODO: BasisQuantity (+unitCode), BT-X-269, Basismenge des Rabatts
+
+                Writer.WriteStartElement("ram", "ActualAmount"); // BT-99
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
                 Writer.WriteEndElement();
 
 
-                Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason);
+                Writer.WriteOptionalElementString("ram", "ReasonCode", tradeAllowanceCharge.ReasonCode.GetDescriptionAttribute()); // BT-98
+                Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason); // BT-97
 
                 if (tradeAllowanceCharge.Tax != null)
                 {
