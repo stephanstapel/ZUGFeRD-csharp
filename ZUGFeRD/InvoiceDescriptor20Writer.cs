@@ -30,6 +30,9 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
+        private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
+
+
         /// <summary>
         /// Saves the given invoice to the given stream.
         /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
@@ -260,7 +263,7 @@ namespace s2industries.ZUGFeRD
                 } // !foreach(document)
 
                 Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, numDecimals: 4, forceCurrency: false);
+                _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice);
                 if (tradeLineItem.UnitQuantity.HasValue)
                 {
                     _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
@@ -284,7 +287,8 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
                     Writer.WriteEndElement();
 
-                    Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason);
+                    Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
+					// "ReasonCode" nicht im 2.0 Standard!
 
                     Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                 }
@@ -292,7 +296,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
 
                 Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, numDecimals: 4, forceCurrency: false);
+                _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice);
 
                 if (tradeLineItem.UnitQuantity.HasValue)
                 {
@@ -705,10 +709,12 @@ namespace s2industries.ZUGFeRD
             //  13. SpecifiedTradeAllowanceCharge (optional)
             foreach (TradeAllowanceCharge tradeAllowanceCharge in this.Descriptor.GetTradeAllowanceCharges())
             {
-                Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge");
+                Writer.WriteStartElement("ram", "SpecifiedTradeAllowanceCharge", ALL_PROFILES ^ Profile.Minimum);
                 Writer.WriteStartElement("ram", "ChargeIndicator");
                 Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                 Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+				// TODO: SequenceNumeric
 
                 if (tradeAllowanceCharge.BasisAmount.HasValue)
                 {
@@ -721,8 +727,8 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
                 Writer.WriteEndElement();
 
-
-                Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason);
+                Writer.WriteOptionalElementString("ram", "ReasonCode", tradeAllowanceCharge.Reason); // BT-98
+                Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason); // BT-97
 
                 if (tradeAllowanceCharge.Tax != null)
                 {

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 
 
 namespace s2industries.ZUGFeRD
@@ -331,7 +332,8 @@ namespace s2industries.ZUGFeRD
                                                XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
                                                default(TaxTypes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                                default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
-                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value);
+                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
+                                               EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -564,13 +566,15 @@ namespace s2industries.ZUGFeRD
                             string actualAmountCurrency = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:ActualAmount/@currencyID", nsmgr);
                             string reason = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:Reason", nsmgr);
                             decimal? chargePercentage = XmlUtils.NodeAsDecimal(lineTradeSettlementNode, "./ram:CalculationPercent", nsmgr, null);
+                            string reasonCode = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:ReasonCode", nsmgr);
 
                             item.AddSpecifiedTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                                         default(CurrencyCodes).FromString(basisAmountCurrency),
                                                         basisAmount,
                                                         actualAmount,
                                                         chargePercentage,
-                                                        reason);
+                                                        reason,
+                                                        EnumExtensions.FromDescription<AllowanceReasonCodes>(reasonCode));
                             break;
                         case "ram:SpecifiedTradeSettlementLineMonetarySummation":
                             //TODO
@@ -595,9 +599,9 @@ namespace s2industries.ZUGFeRD
                 foreach (XmlNode noteNode in noteNodes)
                 {
                     item.AssociatedDocument.Notes.Add(new Note(
-						content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
-						subjectCode: default(SubjectCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
-						contentCode: default(ContentCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
+                        content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
+                        subjectCode: default(SubjectCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
+                        contentCode: default(ContentCodes).FromString(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
                     ));
                 }
             }

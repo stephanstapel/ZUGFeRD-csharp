@@ -277,7 +277,9 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, string reason)
+        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                            string reason, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -285,7 +287,8 @@ namespace s2industries.ZUGFeRD
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
-                Reason = reason
+                Reason = reason,
+                ReasonCode = reasonCode
             });
         } // !AddTradeAllowanceCharge()
 
@@ -299,7 +302,9 @@ namespace s2industries.ZUGFeRD
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, decimal? chargePercentage, string reason)
+        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                            decimal? chargePercentage, string reason, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -308,7 +313,8 @@ namespace s2industries.ZUGFeRD
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
                 ChargePercentage = chargePercentage,
-                Reason = reason
+                Reason = reason,
+                ReasonCode = reasonCode
             });
         } // !AddTradeAllowanceCharge()
 
@@ -331,7 +337,9 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, string reason)
+        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                                     string reason,
+                                                     AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -339,7 +347,8 @@ namespace s2industries.ZUGFeRD
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
-                Reason = reason
+                Reason = reason,
+                ReasonCode = reasonCode
             });
         } // !AddSpecifiedTradeAllowanceCharge()
 
@@ -353,7 +362,9 @@ namespace s2industries.ZUGFeRD
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount, decimal? chargePercentage, string reason)
+        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                                     decimal? chargePercentage, string reason,
+                                                     AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowanceCharge()
             {
@@ -362,7 +373,8 @@ namespace s2industries.ZUGFeRD
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
                 ChargePercentage = chargePercentage,
-                Reason = reason
+                Reason = reason,
+                ReasonCode = reasonCode
             });
         } // !AddSpecifiedTradeAllowanceCharge()
 

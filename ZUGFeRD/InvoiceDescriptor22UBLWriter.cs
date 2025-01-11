@@ -443,6 +443,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
+                if (tradeAllowanceCharge.ReasonCode != AllowanceReasonCodes.Unknown)
+                {
+                    Writer.WriteStartElement("cbc", "AllowanceChargeReasonCode"); // BT-97 / BT-104
+                    Writer.WriteValue(tradeAllowanceCharge.ReasonCode.GetDescriptionAttribute());
+                    Writer.WriteEndElement();
+                }
+
                 if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
                 {
                     Writer.WriteStartElement("cbc", "AllowanceChargeReason"); // BT-97 / BT-104

@@ -60,16 +60,16 @@ namespace s2industries.ZUGFeRD
             {
                 isInvoice = false;
             }
-            
+
             if (isInvoice)
             {
-                nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");                
+                nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
             else
             {
                 nsmgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
-                     
+
             nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
             nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
 
@@ -99,7 +99,7 @@ namespace s2industries.ZUGFeRD
             {
                 IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//cbc:TestIndicator", nsmgr, false),
                 BusinessProcess = XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:ProfileID", nsmgr),
-                Profile = Profile.XRechnung, //default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),                
+                Profile = Profile.XRechnung, //default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
                 InvoiceNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:ID", nsmgr),
                 InvoiceDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cbc:IssueDate", nsmgr),
                 Type = default(InvoiceType).FromString(XmlUtils.NodeAsString(doc.DocumentElement, typeSelector, nsmgr))
@@ -341,7 +341,8 @@ namespace s2industries.ZUGFeRD
                                                XmlUtils.NodeAsString(node, ".//cbc:AllowanceChargeReason", nsmgr),
                                                default(TaxTypes).FromString(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cac:TaxScheme/cbc:ID", nsmgr)),
                                                default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cbc:ID", nsmgr)),
-                                               XmlUtils.NodeAsDecimal(node, ".//cac:TaxCategory/cbc:Percent", nsmgr, 0).Value);
+                                               XmlUtils.NodeAsDecimal(node, ".//cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
+                                               EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./cbc:AllowanceChargeReasonCode", nsmgr)));
             }
 
             // TODO: Find value //foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -625,7 +626,7 @@ namespace s2industries.ZUGFeRD
             //        break;
             //    }
             //  }
-            //}            
+            //}
 
             XmlNodeList noteNodes = tradeLineItem.SelectNodes(".//cbc:Note", nsmgr);
             foreach (XmlNode noteNode in noteNodes)
@@ -646,12 +647,14 @@ namespace s2industries.ZUGFeRD
                 decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./cbc:Amount", nsmgr, 0).Value;
                 string actualAmountCurrency = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:Amount/@currencyID", nsmgr);
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:AllowanceChargeReason", nsmgr);
+                string reasonCode = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:AllowanceChargeReasonCode", nsmgr);
 
                 item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
                                                 default(CurrencyCodes).FromString(basisAmountCurrency),
                                                 basisAmount,
                                                 actualAmount,
-                                                reason);
+                                                reason,
+                                                EnumExtensions.FromDescription<AllowanceReasonCodes>(reasonCode));
             }
 
             if (item.UnitCode == QuantityCodes.Unknown)
