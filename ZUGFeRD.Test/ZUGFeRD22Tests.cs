@@ -693,7 +693,7 @@ namespace s2industries.ZUGFeRD.Test
 
             loadedInvoice = InvoiceDescriptor.Load(msBasic);
             Assert.IsNull(loadedInvoice.RoundingAmount);
-        } // !TestTotalRoundingExtended()   
+        } // !TestTotalRoundingExtended()
 
 
 
@@ -1807,7 +1807,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.BillingPeriodStart = timestamp;
             desc.BillingPeriodEnd = timestamp.AddDays(14);
 
-            desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m);
+            desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m, AllowanceReasonCodes.Packaging);
             desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
@@ -1838,7 +1838,7 @@ namespace s2industries.ZUGFeRD.Test
             lineItem.BillingPeriodEnd = timestamp.AddDays(10);
 
             lineItem.AddReceivableSpecifiedTradeAccountingAccount("987654");
-            lineItem.AddTradeAllowanceCharge(false, CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest");
+            lineItem.AddTradeAllowanceCharge(false, CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest", AllowanceReasonCodes.Packaging);
 
 
             MemoryStream ms = new MemoryStream();
@@ -2244,7 +2244,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
-            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19, AllowanceReasonCodes.Packaging);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2266,7 +2266,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
-            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19);
+            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19, AllowanceReasonCodes.Packaging);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
@@ -2574,7 +2574,7 @@ namespace s2industries.ZUGFeRD.Test
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
-            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);            
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
 
             paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.PaymentTermsType == PaymentTermsType.Skonto);
             Assert.IsNotNull(paymentTerm);

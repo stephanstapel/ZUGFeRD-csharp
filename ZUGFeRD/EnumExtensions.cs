@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -18,6 +18,9 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Reflection;
+
 
 namespace s2industries.ZUGFeRD
 {
@@ -59,5 +62,30 @@ namespace s2industries.ZUGFeRD
         {
             return (int)(object)value;
         } // !EnumToInt()
+
+
+        internal static string GetDescriptionAttribute<T>(this T value) where T : Enum
+        {
+            FieldInfo field = value.GetType().GetField(value.ToString());
+            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
+            return attribute?.Description ?? value.ToString();
+        } // !GetDescriptionAttribute()
+
+
+        internal static T FromDescription<T>(string code) where T : Enum
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return default(T);
+            }
+            foreach (T value in Enum.GetValues(typeof(T)))
+            {
+                if (value.GetDescriptionAttribute().Equals(code, StringComparison.OrdinalIgnoreCase))
+                {
+                    return value;
+                }
+            }
+            return default(T);
+        } // !FromDescription()
     }
 }
