@@ -704,7 +704,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Add an additional reference document
-		/// Note: LineID is only on line item-level
+        /// Note: LineID is only on line item-level
         /// </summary>
         /// <param name="id">Document number such as delivery note no or credit memo no</param>
         /// <param name="typeCode"></param>
@@ -715,8 +715,8 @@ namespace s2industries.ZUGFeRD
         /// <param name="filename"></param>
         /// <param name="uriID"></param>
         public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode,
-			DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown,
-			byte[] attachmentBinaryObject = null, string filename = null, string uriID = null)
+            DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown,
+            byte[] attachmentBinaryObject = null, string filename = null, string uriID = null)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -727,7 +727,7 @@ namespace s2industries.ZUGFeRD
                 AttachmentBinaryObject = attachmentBinaryObject,
                 Filename = filename,
                 TypeCode = typeCode,
-				URIID = uriID
+                URIID = uriID
             });
         } // !AddAdditionalReferencedDocument()
 
@@ -902,7 +902,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="dueDays"></param>
         /// <param name="percentage"></param>
         /// <param name="baseAmount"></param>
-        /// /// <param name="actualAmount"></param>
+        /// <param name="actualAmount"></param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
             PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null)
