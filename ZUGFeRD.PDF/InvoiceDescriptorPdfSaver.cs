@@ -33,6 +33,7 @@ using Microsoft.Extensions.Options;
 using System.Xml.Linq;
 using static PdfSharp.Pdf.PdfDictionary;
 using PdfSharp.UniversalAccessibility;
+using PdfSharp.Drawing;
 
 namespace s2industries.ZUGFeRD.PDF
 {
@@ -111,6 +112,7 @@ namespace s2industries.ZUGFeRD.PDF
             }
 
             PdfDocument outputDocument = new PdfDocument();
+            outputDocument.Options.ManualXmpGeneration = true;
 
             if (!String.IsNullOrWhiteSpace(password))
             {
@@ -223,9 +225,7 @@ namespace s2industries.ZUGFeRD.PDF
             metadataDictionary.Elements.Add("/Type", new PdfName("/Metadata"));
 
             outputDocument.Internals.AddObject(metadataDictionary);
-
             outputDocument.Internals.Catalog.Elements.Add("/Metadata", metadataDictionary.Reference);
-
 
             var namesPdfArray = new PdfArray();
             namesPdfArray.Elements.Add(new PdfString(invoiceFilename));
@@ -273,7 +273,7 @@ namespace s2industries.ZUGFeRD.PDF
             {
                 outputDocument.Save(memoryStream);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new SaveFailedException();
             }
