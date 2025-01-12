@@ -112,6 +112,7 @@ namespace s2industries.ZUGFeRD.PDF
             }
 
             PdfDocument outputDocument = new PdfDocument();
+            outputDocument.Options.ManualXmpGeneration = true;
 
             if (!String.IsNullOrWhiteSpace(password))
             {
