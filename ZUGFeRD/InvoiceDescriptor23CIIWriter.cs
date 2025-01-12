@@ -638,8 +638,10 @@ namespace s2industries.ZUGFeRD
             #region ApplicableHeaderTradeAgreement
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeAgreement");
 
+            #region BuyerReference
             // BT-10
             Writer.WriteOptionalElementString("ram", "BuyerReference", this.Descriptor.ReferenceOrderNo);
+            #endregion
 
             #region SellerTradeParty
             // BT-31: this.Descriptor.SellerTaxRegistration
@@ -649,6 +651,16 @@ namespace s2industries.ZUGFeRD
             #region BuyerTradeParty
             // BT-48: this.Descriptor.BuyerTaxRegistration
             _writeOptionalParty(Writer, PartyTypes.BuyerTradeParty, this.Descriptor.Buyer, ALL_PROFILES, this.Descriptor.BuyerContact, this.Descriptor.BuyerElectronicAddress, this.Descriptor.BuyerTaxRegistration);
+            #endregion
+
+            #region ApplicableTradeDeliveryTerms
+            if (Descriptor.ApplicableTradeDeliveryTermsCode.HasValue)
+            {
+				// BG-X-22, BT-X-145
+                Writer.WriteStartElement("ram", "ApplicableTradeDeliveryTerms", Profile.Extended);
+                Writer.WriteElementString("ram", "DeliveryTypeCode", this.Descriptor.ApplicableTradeDeliveryTermsCode.Value.GetDescriptionAttribute());
+                Writer.WriteEndElement(); // !ApplicableTradeDeliveryTerms
+			}
             #endregion
 
             // TODO: implement SellerTaxRepresentativeTradeParty
@@ -781,6 +793,7 @@ namespace s2industries.ZUGFeRD
             {
                 Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", Profile.Extended);
                 Writer.WriteElementString("ram", "IssuerAssignedID", this.Descriptor.DeliveryNoteReferencedDocument.ID);
+				// TODO: LineID, Lieferscheinposition, BT-X-93
 
                 if (this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                 {

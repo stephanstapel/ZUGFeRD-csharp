@@ -377,6 +377,11 @@ namespace s2industries.ZUGFeRD
         public DateTime? BillingPeriodEnd { get; set; }
 
         /// <summary>
+        /// Code for trade delivery terms / Detailangaben zu den Lieferbedingungen, BT-X-22
+        /// </summary>
+        public TradeDeliveryTermCodes? ApplicableTradeDeliveryTermsCode { get; set; }
+
+        /// <summary>
         /// Details about the associated order confirmation (BT-14).
         /// This is optional and can be used in Profiles Comfort and Extended.
         /// If you add a SellerOrderReferencedDocument you must set the property "ID".

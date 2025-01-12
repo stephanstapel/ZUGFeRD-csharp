@@ -40,7 +40,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                return default(T);
+                return default;
             }
         } // !IntToEnum()
 
@@ -53,7 +53,7 @@ namespace s2industries.ZUGFeRD
             }
             catch
             {
-                return default(T);
+                return default;
             }
         } // !IntToEnum()
 
@@ -67,8 +67,12 @@ namespace s2industries.ZUGFeRD
         internal static string GetDescriptionAttribute<T>(this T value) where T : Enum
         {
             FieldInfo field = value.GetType().GetField(value.ToString());
-            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
-            return attribute?.Description ?? value.ToString();
+			if (field == null)
+			{
+				return null;
+			}
+			DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
+			return attribute?.Description;
         } // !GetDescriptionAttribute()
 
 
@@ -76,7 +80,7 @@ namespace s2industries.ZUGFeRD
         {
             if (string.IsNullOrEmpty(code))
             {
-                return default(T);
+                return default;
             }
             foreach (T value in Enum.GetValues(typeof(T)))
             {
@@ -85,7 +89,7 @@ namespace s2industries.ZUGFeRD
                     return value;
                 }
             }
-            return default(T);
+            return default;
         } // !FromDescription()
     }
 }

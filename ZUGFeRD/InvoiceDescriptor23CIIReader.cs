@@ -136,6 +136,21 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
+            // TODO: SalesAgentTradeParty, Detaillierte Informationen über den Handelsvertreter, BG-X-49
+            // TODO: BuyerTaxRepresentativeTradeParty Detaillierte Informationen über den Steuerbevollmächtigten des Käufers, BG-X-54
+            // TODO: SellerTaxRepresentativeTradeParty STEUERBEVOLLMÄCHTIGTER DES VERKÄUFERS, BG-11
+            // TODO: ProductEndUserTradeParty Detailinformationen zum abweichenden Endverbraucher, BG-X-18
+
+            var deliveryCodeStr = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode", nsmgr);
+            if (!string.IsNullOrWhiteSpace(deliveryCodeStr))
+            {
+                TradeDeliveryTermCodes? tradeCode = EnumExtensions.FromDescription<TradeDeliveryTermCodes>(deliveryCodeStr);
+                if (tradeCode != null)
+                {
+                    retval.ApplicableTradeDeliveryTermsCode = tradeCode;
+                }
+            }
+
             //Get all referenced and embedded documents, BG-24
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referencedDocNodes)
@@ -165,7 +180,7 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            string deliveryNoteNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID", nsmgr);
+            string deliveryNoteID = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID", nsmgr);
             DateTime? deliveryNoteDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr);
 
             if (!deliveryNoteDate.HasValue)
@@ -173,11 +188,12 @@ namespace s2industries.ZUGFeRD
                 deliveryNoteDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime", nsmgr);
             }
 
-            if (deliveryNoteDate.HasValue || !String.IsNullOrWhiteSpace(deliveryNoteNo))
+            if (deliveryNoteDate.HasValue || !String.IsNullOrWhiteSpace(deliveryNoteID))
             {
+                // TODO: LineID, Lieferscheinposition, BT-X-93
                 retval.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
                 {
-                    ID = deliveryNoteNo,
+                    ID = deliveryNoteID,
                     IssueDateTime = deliveryNoteDate
                 };
             }
@@ -710,7 +726,7 @@ namespace s2industries.ZUGFeRD
                 ReferenceTypeCode = default(ReferenceTypeCodes).FromString(XmlUtils.NodeAsString(node, "ram:ReferenceTypeCode", nsmgr)),
                 URIID = XmlUtils.NodeAsString(node, "ram:URIID", nsmgr, null),
                 LineID = XmlUtils.NodeAsString(node, "ram:LineID", nsmgr, null)
-			};
+            };
         } // !_readAdditionalReferencedDocument()
 
     }
