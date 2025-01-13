@@ -1074,7 +1074,6 @@ namespace s2industries.ZUGFeRD
                                 if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
                                 {
                                     sbPaymentNotes.Append(paymentTerms.Description);
-                                    sbPaymentNotes.Append(XmlConstants.XmlNewLine);
                                 }
                             }
                             dueDate = dueDate ?? paymentTerms.DueDate;
