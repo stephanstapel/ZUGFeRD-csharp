@@ -606,7 +606,15 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Packet
         /// </summary>
-        XPA
+        XPA,
+
+        /// <summary>
+        /// Service
+        /// </summary>
+        /// <remarks>
+        /// Services offered with no time frame specified
+        /// </remarks>
+        E48
     }
 
 
