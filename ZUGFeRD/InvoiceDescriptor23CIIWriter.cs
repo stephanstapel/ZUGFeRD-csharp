@@ -656,11 +656,11 @@ namespace s2industries.ZUGFeRD
             #region ApplicableTradeDeliveryTerms
             if (Descriptor.ApplicableTradeDeliveryTermsCode.HasValue)
             {
-				// BG-X-22, BT-X-145
+                // BG-X-22, BT-X-145
                 Writer.WriteStartElement("ram", "ApplicableTradeDeliveryTerms", Profile.Extended);
                 Writer.WriteElementString("ram", "DeliveryTypeCode", this.Descriptor.ApplicableTradeDeliveryTermsCode.Value.GetDescriptionAttribute());
                 Writer.WriteEndElement(); // !ApplicableTradeDeliveryTerms
-			}
+            }
             #endregion
 
             // TODO: implement SellerTaxRepresentativeTradeParty
@@ -793,7 +793,7 @@ namespace s2industries.ZUGFeRD
             {
                 Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", Profile.Extended);
                 Writer.WriteElementString("ram", "IssuerAssignedID", this.Descriptor.DeliveryNoteReferencedDocument.ID);
-				// TODO: LineID, Lieferscheinposition, BT-X-93
+                // TODO: LineID, Lieferscheinposition, BT-X-93
 
                 if (this.Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                 {

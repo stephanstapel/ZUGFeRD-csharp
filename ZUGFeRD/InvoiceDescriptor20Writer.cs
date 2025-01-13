@@ -123,7 +123,7 @@ namespace s2industries.ZUGFeRD
              * @todo continue here to adopt v2 tag names
              */
 
-            #region SpecifiedSupplyChainTradeTransaction
+            #region SupplyChainTradeTransaction
             Writer.WriteStartElement("rsm", "SupplyChainTradeTransaction");
 
             foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
@@ -202,7 +202,6 @@ namespace s2industries.ZUGFeRD
 
                     // reference to the order position
                     Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.BuyerOrderReferencedDocument.LineID);
-                    #endregion
 
                     if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
                     {
@@ -288,7 +287,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
 
                     Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
-					// "ReasonCode" nicht im 2.0 Standard!
+                    // "ReasonCode" nicht im 2.0 Standard!
 
                     Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                 }
@@ -411,6 +410,15 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, "ram", "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
             _writeOptionalParty(Writer, "ram", "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
+            #region ApplicableTradeDeliveryTerms
+            if (Descriptor.ApplicableTradeDeliveryTermsCode.HasValue)
+            {
+                // BG-X-22, BT-X-145
+                Writer.WriteStartElement("ram", "ApplicableTradeDeliveryTerms", Profile.Extended);
+                Writer.WriteElementString("ram", "DeliveryTypeCode", this.Descriptor.ApplicableTradeDeliveryTermsCode.Value.GetDescriptionAttribute());
+                Writer.WriteEndElement(); // !ApplicableTradeDeliveryTerms
+            }
+            #endregion
 
             #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
             if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
@@ -714,7 +722,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                 Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-				// TODO: SequenceNumeric
+                // TODO: SequenceNumeric
 
                 if (tradeAllowanceCharge.BasisAmount.HasValue)
                 {
@@ -926,6 +934,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
 
             Writer.WriteEndElement(); // !ram:SupplyChainTradeTransaction
+            #endregion
 
             Writer.WriteEndElement(); // !ram:Invoice
             Writer.WriteEndDocument();
