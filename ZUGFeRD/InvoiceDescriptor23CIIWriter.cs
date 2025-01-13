@@ -32,6 +32,7 @@ namespace s2industries.ZUGFeRD
         private InvoiceDescriptor Descriptor;
 
 
+        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
 
@@ -183,8 +184,8 @@ namespace s2industries.ZUGFeRD
                     _writeElementWithAttributeWithPrefix(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
 
-                Writer.WriteOptionalElementString("ram", "SellerAssignedID", tradeLineItem.SellerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                Writer.WriteOptionalElementString("ram", "BuyerAssignedID", tradeLineItem.BuyerAssignedID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteOptionalElementString("ram", "SellerAssignedID", tradeLineItem.SellerAssignedID, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                Writer.WriteOptionalElementString("ram", "BuyerAssignedID", tradeLineItem.BuyerAssignedID, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
                 // TODO: IndustryAssignedID     // BT-X-532, Von der Industrie zugewiesene Produktkennung
                 // TODO: ModelID                // BT-X-533, Modelkennung des Artikels
@@ -193,7 +194,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("ram", "Name", tradeLineItem.Name, Profile.Basic | Profile.Comfort | Profile.Extended);
                 Writer.WriteOptionalElementString("ram", "Name", isCommentItem ? "TEXT" : tradeLineItem.Name, Profile.XRechnung1 | Profile.XRechnung); // XRechnung erfordert einen Item-Namen (BR-25)
 
-                Writer.WriteOptionalElementString("ram", "Description", tradeLineItem.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteOptionalElementString("ram", "Description", tradeLineItem.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
                 // TODO: BatchID                // BT-X-534, Kennung der Charge (des Loses) des Artikels
                 // TODO: BrandName              // BT-X-535, Markenname des Artikels
@@ -222,7 +223,7 @@ namespace s2industries.ZUGFeRD
                             continue;
                         }
 
-                        Writer.WriteStartElement("ram", "DesignatedProductClassification", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram", "DesignatedProductClassification", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                         Writer.WriteStartElement("ram", "ClassCode");
                         Writer.WriteAttributeString("listID", designatedProductClassification.ListID.EnumToString());
                         Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
@@ -272,7 +273,7 @@ namespace s2industries.ZUGFeRD
                         (((descriptor.Profile != Profile.Extended) && hasLineID) ||
                          ((descriptor.Profile == Profile.Extended) && (hasLineID || hasIssuerAssignedID || hasIssueDateTime))))
                     {
-                        Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
                         //Bestellnummer
                         Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID, Profile.Extended);
@@ -339,7 +340,7 @@ namespace s2industries.ZUGFeRD
 
                     if (needToWriteGrossUnitPrice)
                     {
-                        Writer.WriteStartElement("ram", "GrossPriceProductTradePrice", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram", "GrossPriceProductTradePrice", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                         _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2);   // BT-148
                         if (tradeLineItem.UnitQuantity.HasValue)
                         {
@@ -479,7 +480,7 @@ namespace s2industries.ZUGFeRD
                 #region BillingSpecifiedPeriod
                 if (tradeLineItem.BillingPeriodStart.HasValue || tradeLineItem.BillingPeriodEnd.HasValue)
                 {
-                    Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", ALL_PROFILES ^ Profile.Minimum);
                     if (tradeLineItem.BillingPeriodStart.HasValue)
                     {
                         Writer.WriteStartElement("ram", "StartDateTime");
@@ -584,7 +585,7 @@ namespace s2industries.ZUGFeRD
                             continue;
                         }
 
-                        _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1, "BT-128-00");
+                        _writeAdditionalReferencedDocument(document, PROFILE_COMFORT_EXTENDED_XRECHNUNG, "BT-128-00");
                         // only Extended allows multiple entries
                         if (this.Descriptor.Profile != Profile.Extended)
                         {
@@ -605,7 +606,7 @@ namespace s2industries.ZUGFeRD
                             continue;
                         }
 
-                        Writer.WriteStartElement("ram", "ReceivableSpecifiedTradeAccountingAccount", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram", "ReceivableSpecifiedTradeAccountingAccount", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                         Writer.WriteStartElement("ram", "ID");
                         Writer.WriteValue(traceAccountingAccount.TradeAccountID); // BT-133
                         Writer.WriteEndElement(); // !ram:ID
@@ -666,11 +667,11 @@ namespace s2industries.ZUGFeRD
             // TODO: implement SellerTaxRepresentativeTradeParty
             // BT-63: the tax taxRegistration of the SellerTaxRepresentativeTradeParty
 
-            #region 1. SellerOrderReferencedDocument (BT-14: Comfort, Extended)
-            if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
+            #region 1. SellerOrderReferencedDocument (BT-14-00: Comfort+)
+            if (!string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument?.ID))
             {
-                Writer.WriteStartElement("ram", "SellerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                Writer.WriteElementString("ram", "IssuerAssignedID", this.Descriptor.SellerOrderReferencedDocument.ID);
+                Writer.WriteStartElement("ram", "SellerOrderReferencedDocument", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                Writer.WriteElementString("ram", "IssuerAssignedID", this.Descriptor.SellerOrderReferencedDocument.ID); // BT-14
                 if (this.Descriptor.SellerOrderReferencedDocument.IssueDateTime.HasValue)
                 {
                     Writer.WriteStartElement("ram", "FormattedIssueDateTime", Profile.Extended);
@@ -729,7 +730,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (var document in this.Descriptor.AdditionalReferencedDocuments)
                 {
-                    _writeAdditionalReferencedDocument(document, Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1, "BG-24");
+                    _writeAdditionalReferencedDocument(document, PROFILE_COMFORT_EXTENDED_XRECHNUNG, "BG-24");
                 }
             }
             #endregion
@@ -738,9 +739,9 @@ namespace s2industries.ZUGFeRD
             if (Descriptor.SpecifiedProcuringProject != null)
             {
 
-                Writer.WriteStartElement("ram", "SpecifiedProcuringProject", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                Writer.WriteElementString("ram", "ID", Descriptor.SpecifiedProcuringProject.ID, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                Writer.WriteElementString("ram", "Name", Descriptor.SpecifiedProcuringProject.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteStartElement("ram", "SpecifiedProcuringProject", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                Writer.WriteElementString("ram", "ID", Descriptor.SpecifiedProcuringProject.ID, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                Writer.WriteElementString("ram", "Name", Descriptor.SpecifiedProcuringProject.Name, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                 Writer.WriteEndElement(); // !ram:SpecifiedProcuringProject
             }
             #endregion
@@ -835,14 +836,15 @@ namespace s2industries.ZUGFeRD
             //  18. ReceivableSpecifiedTradeAccountingAccount (optional)
             //  19. SpecifiedAdvancePayment (optional)
 
-            //   1. CreditorReferenceID(BT-90) is only required/allowed on DirectDebit (BR-DE-30)
-            if ((this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit) && !String.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
+            //   1. CreditorReferenceID (BT-90) is only required/allowed on DirectDebit (BR-DE-30)
+            if ((this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit) &&
+                !String.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans?.SEPACreditorIdentifier))
             {
-                Writer.WriteElementString("ram", "CreditorReferenceID", Descriptor.PaymentMeans?.SEPACreditorIdentifier, Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1);
+                Writer.WriteElementString("ram", "CreditorReferenceID", Descriptor.PaymentMeans?.SEPACreditorIdentifier, ALL_PROFILES ^ Profile.Minimum);
             }
 
-            //   2. PaymentReference (optional)
-            Writer.WriteOptionalElementString("ram", "PaymentReference", this.Descriptor.PaymentReference);
+            //   2. PaymentReference (optional), Verwendungszweck, BT-83
+            Writer.WriteOptionalElementString("ram", "PaymentReference", this.Descriptor.PaymentReference, ALL_PROFILES ^ Profile.Minimum);
 
             //   3. TaxCurrencyCode (optional)
             //   BT-6
@@ -851,74 +853,71 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("ram", "TaxCurrencyCode", this.Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
             }
 
-            //   4. InvoiceCurrencyCode (optional)
+            //   4. InvoiceCurrencyCode (optional), BT-5
             Writer.WriteElementString("ram", "InvoiceCurrencyCode", this.Descriptor.Currency.EnumToString());
 
-            //   5. InvoiceIssuerReference (optional)
-            Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, profile: Profile.Extended);
+            //   5. InvoiceIssuerReference (optional), BT-X-204
+            Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this.Descriptor.SellerReferenceNo, Profile.Extended);
 
-            //   6. InvoicerTradeParty (optional)
-            _writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            //   6. InvoicerTradeParty (optional), BG-X-33
+            _writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer, Profile.Extended);
 
-            //   7. InvoiceeTradeParty (optional)
-            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            //   7. InvoiceeTradeParty (optional), BG-X-36
+            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee, Profile.Extended);
 
-            //   8. PayeeTradeParty (optional)
+            //   8. PayeeTradeParty (optional), BG-10
             _writeOptionalParty(Writer, PartyTypes.PayeeTradeParty, this.Descriptor.Payee, ALL_PROFILES ^ Profile.Minimum);
 
             #region SpecifiedTradeSettlementPaymentMeans
-            //  10. SpecifiedTradeSettlementPaymentMeans (optional)
+            //  10. SpecifiedTradeSettlementPaymentMeans (optional), BG-16
 
             if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
             {
-                if (this.Descriptor.PaymentMeans != null)
+                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                 {
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
-                    {
-                        Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                        Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
+                    Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
+                    Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
-                        if (this.Descriptor.PaymentMeans.FinancialCard != null)
-                        {
-                            Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung);
-                            Writer.WriteOptionalElementString("ram", "ID", Descriptor.PaymentMeans.FinancialCard.Id);
-                            Writer.WriteOptionalElementString("ram", "CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName);
-                            Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
-                        }
-                        Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
+                    if (!string.IsNullOrWhiteSpace(this.Descriptor.PaymentMeans.FinancialCard?.Id)) // BG-18
+                    {
+                        Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                        Writer.WriteElementString("ram", "ID", Descriptor.PaymentMeans.FinancialCard.Id); // BT-87
+                        Writer.WriteOptionalElementString("ram", "CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName); // BT-88
+                        Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
                     }
+                    Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
             }
             else
             {
                 foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
                 {
-                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum);
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                        Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
+                        Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
                         if (this.Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                            Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                             Writer.WriteOptionalElementString("ram", "ID", Descriptor.PaymentMeans.FinancialCard.Id);
                             Writer.WriteOptionalElementString("ram", "CardholderName", Descriptor.PaymentMeans.FinancialCard.CardholderName);
                             Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
                         }
                     }
 
-                    Writer.WriteStartElement("ram", "PayeePartyCreditorFinancialAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "PayeePartyCreditorFinancialAccount", ALL_PROFILES ^ Profile.Minimum);
                     Writer.WriteElementString("ram", "IBANID", account.IBAN);
-                    Writer.WriteOptionalElementString("ram", "AccountName", account.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteOptionalElementString("ram", "AccountName", account.Name, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                     Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
                     Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
 
                     if (!String.IsNullOrWhiteSpace(account.BIC))
                     {
-                        Writer.WriteStartElement("ram", "PayeeSpecifiedCreditorFinancialInstitution", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteStartElement("ram", "PayeeSpecifiedCreditorFinancialInstitution", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                         Writer.WriteElementString("ram", "BICID", account.BIC);
                         Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
                     }
@@ -928,17 +927,17 @@ namespace s2industries.ZUGFeRD
 
                 foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
                 {
-                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); // BG-16
+                    Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
 
                     if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                     {
-                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                        Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                        Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
+                        Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                     }
 
-                    Writer.WriteStartElement("ram", "PayerPartyDebtorFinancialAccount", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteStartElement("ram", "PayerPartyDebtorFinancialAccount", ALL_PROFILES ^ Profile.Minimum);
                     Writer.WriteElementString("ram", "IBANID", account.IBAN);
-                    Writer.WriteOptionalElementString("ram", "AccountName", account.Name, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    Writer.WriteOptionalElementString("ram", "AccountName", account.Name, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                     Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
                     Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
 
@@ -963,7 +962,7 @@ namespace s2industries.ZUGFeRD
             //  12. BillingSpecifiedPeriod (optional)
             if (Descriptor.BillingPeriodStart.HasValue || Descriptor.BillingPeriodEnd.HasValue)
             {
-                Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", ALL_PROFILES ^ Profile.Minimum);
                 if (Descriptor.BillingPeriodStart.HasValue)
                 {
                     Writer.WriteStartElement("ram", "StartDateTime");
@@ -1088,7 +1087,6 @@ namespace s2industries.ZUGFeRD
                                 if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
                                 {
                                     sbPaymentNotes.Append(paymentTerms.Description);
-                                    sbPaymentNotes.Append(XmlConstants.XmlNewLine);
                                 }
                             }
                             dueDate = dueDate ?? paymentTerms.DueDate;
@@ -1197,7 +1195,7 @@ namespace s2industries.ZUGFeRD
             #region InvoiceReferencedDocument
             foreach (InvoiceReferencedDocument invoiceReferencedDocument in this.Descriptor.GetInvoiceReferencedDocuments())
             {
-                Writer.WriteStartElement("ram", "InvoiceReferencedDocument", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                Writer.WriteStartElement("ram", "InvoiceReferencedDocument", ALL_PROFILES ^ Profile.Minimum);
                 Writer.WriteOptionalElementString("ram", "IssuerAssignedID", invoiceReferencedDocument.ID);
                 if (invoiceReferencedDocument.IssueDateTime.HasValue)
                 {
@@ -1568,10 +1566,10 @@ namespace s2industries.ZUGFeRD
             }
 
             writer.WriteOptionalElementString("ram", "Name", party.Name);
-            writer.WriteOptionalElementString("ram", "Description", party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            writer.WriteOptionalElementString("ram", "Description", party.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
             _writeOptionalLegalOrganization(writer, "ram", "SpecifiedLegalOrganization", party.SpecifiedLegalOrganization, partyType);
-            _writeOptionalContact(writer, "ram", "DefinedTradeContact", contact, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            _writeOptionalContact(writer, "ram", "DefinedTradeContact", contact, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
             // spec 2.3 says: Minimum/BuyerTradeParty does not include PostalTradeAddress
             if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.BuyerTradeParty, PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
