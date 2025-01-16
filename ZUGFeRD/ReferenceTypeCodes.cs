@@ -148,6 +148,12 @@ namespace s2industries.ZUGFeRD
         AWR,
 
         /// <summary>
+        /// Aktueller Anfangszählerstand
+        /// (z.B. Kilometerstand eines Fahrzeugs)
+        /// </summary>
+        BA,
+
+        /// <summary>
         /// Rahmenauftragsnummer
         /// </summary>
         BO,
@@ -221,6 +227,11 @@ namespace s2industries.ZUGFeRD
         /// Bestelländerung
         /// </summary>
         PP,
+
+        /// <summary>
+        /// Seriennummer
+        /// </summary>
+        SE,
 
         /// <summary>
         /// Transportauftragsnummer
