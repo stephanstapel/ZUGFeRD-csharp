@@ -28,6 +28,15 @@ namespace s2industries.ZUGFeRD
     public enum TaxExemptionReasonCodes
     {
         /// <summary>
+        /// Exempt based on article 79, point c of Council Directive 2006/112/EC
+        /// Exemptions relating to repayment of expenditures.
+        /// <remarks>
+        /// Repayment of expenditure is not an exemption in the sense of the VAT Directive but may be handled as such in the context of the EN16931.
+        /// </remarks>
+        /// </summary>
+        VATEX_EU_79_C,
+
+        /// <summary>
         /// Exempt based on article 132 of Council Directive 2006/112/EC
         ///
         /// Exemptions for certain activities in public interest.
