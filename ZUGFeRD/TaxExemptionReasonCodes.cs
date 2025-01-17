@@ -38,6 +38,12 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Exempt based on article 132 of Council Directive 2006/112/EC
+        /// Exemptions for certain activities in public interest.
+        /// </summary>
+        VATEX_EU_132,
+
+        /// <summary>
+        /// Exempt based on article 132 of Council Directive 2006/112/EC
         ///
         /// Exemptions for certain activities in public interest.
         /// </summary>
@@ -260,6 +266,24 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         VATEX_EU_143_1L,
 
+
+        /// <summary>
+        /// Exempt based on article 144 of Council Directive 2006/112/EC
+        /// Member States shall exempt the supply of services relating to the importation of goods
+        /// where the value of such services is included in the taxable amount in accordance with Article 86(1)(b)
+        /// </summary>
+        VATEX_EU_144,
+
+        /// <summary>
+        /// Exempt based on article 146 section 1 (e) of Council Directive 2006/112/EC
+        /// the supply of services, including transport and ancillary transactions,
+        /// but excluding the supply of services exempted in accordance with
+        /// Articles 132 and 135, where these are directly connected with the
+        /// exportation or importation of goods covered by Article 61 and
+        /// Article 157(1)(a).
+        /// </summary>
+        VATEX_EU_146_1E,
+
         /// <summary>
         /// Exempt based on article 148 of Council Directive 2006/112/EC
         ///
@@ -366,6 +390,12 @@ namespace s2industries.ZUGFeRD
         VATEX_EU_151_1E,
 
         /// <summary>
+        /// Exempt based on article 159 of Council Directive 2006/112/EC
+        /// Member States may exempt the supply of services relating to the supply of goods referred to in Article 156, Article 157(1)(b) or Article 158.
+        /// </summary>
+        VATEX_EU_159,
+
+        /// <summary>
         /// Exempt based on article 309 of Council Directive 2006/112/EC
         ///
         /// Travel agents performed outside of EU.
@@ -442,7 +472,19 @@ namespace s2industries.ZUGFeRD
         ///
         /// Only use with VAT category code O
         /// </summary>
-        VATEX_EU_O
+        VATEX_EU_O,
+
+        /// <summary>
+        /// France domestic VAT franchise in base
+        /// VAT exemption for Micro companies when Revenue is lower than a threashold
+        /// </summary>
+        VATEX_FR_FRANCHISE,
+
+        /// <summary>
+        /// France domestic Credit Notes without VAT, due to supplier forfeit of VAT for discount
+        /// </summary>
+        VATEX_FR_CNWVAT
+
     }
 
     internal static class TaxExemptionReasonCodesExtensions
