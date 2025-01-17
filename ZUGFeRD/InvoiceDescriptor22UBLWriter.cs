@@ -444,6 +444,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
+                if (tradeAllowanceCharge.ChargePercentage.HasValue && tradeAllowanceCharge.BasisAmount != null)
+                {
+                    Writer.WriteStartElement("cbc", "MultiplierFactorNumeric"); 
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
+                    Writer.WriteEndElement();
+                }
+
                 Writer.WriteStartElement("cbc", "Amount"); // BT-92 / BT-99
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
