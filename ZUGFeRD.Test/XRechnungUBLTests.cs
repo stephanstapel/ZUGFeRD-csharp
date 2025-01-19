@@ -1043,6 +1043,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.TradeLineItems.Last().Name, "Beratung");
             Assert.AreEqual(desc.TradeLineItems.Last().Description, String.Empty);
         } // !TestSampleCreditNote326()
+        
 
         [TestMethod]
         public void TestSampleCreditNote384()
