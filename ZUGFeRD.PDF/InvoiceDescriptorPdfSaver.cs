@@ -27,6 +27,9 @@ using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using PdfSharp.Drawing;
+using System.Linq;
+using SkiaSharp;
 
 
 
@@ -278,6 +281,11 @@ namespace s2industries.ZUGFeRD.PDF
             outputDocument.Internals.Catalog.Elements.Add("/OutputIntents", outputIntentsArray);
             outputDocument.Info.Creator = "S2 Industries";
 
+            foreach (XFont font in _LoadFonts(inputDocument))
+            {
+                outputDocument.AddCharacters(font, "");
+            }
+
             MemoryStream memoryStream = new MemoryStream();
             try
             {
@@ -290,6 +298,75 @@ namespace s2industries.ZUGFeRD.PDF
             memoryStream.Seek(0, SeekOrigin.Begin);
             return memoryStream;
         } // !_CreateFacturXStream()
+
+
+        private static List<XFont> _LoadFonts(PdfDocument pdfDocument)
+        {
+            List<XFont> retval = new List<XFont>();
+
+            var fontManager = SKFontManager.Default;
+            var availableFamilies = fontManager.FontFamilies;
+
+            // Postscript to TrueType mapping as the PDF file contains the Postscript names of the font
+            var postScriptToTrueTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Arial-BoldMT", "Arial Bold" },
+                { "ArialMT", "Arial" },
+                { "Times-Roman", "Times New Roman" },
+                { "Courier-Bold", "Courier New" }
+                // add more mappings here if needed
+            };
+
+            for (int pageIndex = 0; pageIndex < pdfDocument.PageCount; pageIndex++)
+            {
+                PdfPage page = pdfDocument.Pages[pageIndex];
+
+                // Get the page's resources
+                PdfDictionary resources = page.Resources;
+                if (resources == null || !resources.Elements.ContainsKey("/Font"))
+                {
+                    continue;
+                }
+
+                PdfDictionary fonts = resources.Elements.GetDictionary("/Font");
+
+                foreach (var fontNameInPdfFile in fonts.Elements.Keys)
+                {
+                    PdfDictionary font = fonts.Elements.GetDictionary(fontNameInPdfFile);
+                    if (font == null)
+                    {
+                        continue;
+                    }
+
+                    string fontName = font.Elements.GetString("/BaseFont").Split('+').Last();
+                    bool existsInSystem = availableFamilies.Any(f => f.Equals(fontName, StringComparison.OrdinalIgnoreCase));
+
+                    List<string> fasd = availableFamilies.ToList();
+
+                    if (!existsInSystem && (postScriptToTrueTypeMap.TryGetValue(fontName, out string tempFontName)))
+                    {
+                        fontName = tempFontName;
+                    }
+
+                    if (String.IsNullOrWhiteSpace(fontName))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var embeddedFont = new XFont(fontName, 10, XFontStyleEx.Regular, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
+                        retval.Add(embeddedFont);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+
+            return retval;
+        } // !_LoadFonts()
 
 
         private static string _DetermineFilenameBasedOnVersionAndProfile(ZUGFeRDVersion version, Profile profile)
