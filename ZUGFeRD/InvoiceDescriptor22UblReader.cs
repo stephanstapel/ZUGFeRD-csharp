@@ -531,7 +531,7 @@ namespace s2industries.ZUGFeRD
                     DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(commodityClassification, "./@listID", nsmgr));
                     item.AddDesignatedProductClassification(
                         listID,
-                        XmlUtils.NodeAsString(commodityClassification, "./@istVersionID", nsmgr),
+                        XmlUtils.NodeAsString(commodityClassification, "./@listVersionID", nsmgr),
                         commodityClassification.InnerText,
                         String.Empty // no name in Peppol Billing!
                         );

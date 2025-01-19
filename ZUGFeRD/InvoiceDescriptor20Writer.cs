@@ -735,7 +735,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
                 Writer.WriteEndElement();
 
-                Writer.WriteOptionalElementString("ram", "ReasonCode", tradeAllowanceCharge.Reason); // BT-98
+                Writer.WriteOptionalElementString("ram", "ReasonCode", tradeAllowanceCharge.ReasonCode.GetDescriptionAttribute()); // BT-98
                 Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason); // BT-97
 
                 if (tradeAllowanceCharge.Tax != null)
