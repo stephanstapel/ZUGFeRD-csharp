@@ -38,7 +38,12 @@ namespace s2industries.ZUGFeRD
             {
                 throw new IllegalStreamException("Cannot write to stream");
             }
+            
 
+            long streamPosition = stream.Position;
+
+            this.Descriptor = descriptor;
+            this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
             bool isInvoice = true;
             if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
             {
@@ -54,10 +59,6 @@ namespace s2industries.ZUGFeRD
                 throw new NotImplementedException("Not implemented yet.");
             }
 
-            long streamPosition = stream.Position;
-
-            this.Descriptor = descriptor;
-            this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
             Dictionary<string, string> namespaces = new Dictionary<string, string>()
             {
                 { "cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" },
@@ -704,6 +705,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); //!InvoiceLine
         }
 
+
         private void _WriteCommodityClassification(ProfileAwareXmlTextWriter writer, List<DesignatedProductClassification> designatedProductClassifications)
         {
             if ((designatedProductClassifications == null) || (designatedProductClassifications.Count == 0))
@@ -720,8 +722,7 @@ namespace s2industries.ZUGFeRD
                     continue;
                 }
 
-                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158
-                writer.WriteValue(classification.ClassCode, profile: ALL_PROFILES);
+                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158                
                 Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
@@ -730,6 +731,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 // no name attribute in Peppol Billing!
+                writer.WriteValue(classification.ClassCode, profile: ALL_PROFILES);
 
                 writer.WriteEndElement();
             }
