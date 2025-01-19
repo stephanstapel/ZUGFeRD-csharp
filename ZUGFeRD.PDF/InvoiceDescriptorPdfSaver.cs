@@ -27,13 +27,8 @@ using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Xml;
-using Microsoft.Extensions.Options;
-using System.Xml.Linq;
-using static PdfSharp.Pdf.PdfDictionary;
-using PdfSharp.UniversalAccessibility;
-using PdfSharp.Drawing;
+
+
 
 namespace s2industries.ZUGFeRD.PDF
 {
@@ -51,15 +46,17 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new ArgumentNullException("Invalid invoiceDescriptor");
             }
 
+            string invoiceFilename = _DetermineFilenameBasedOnVersionAndProfile(version, profile);
+
             MemoryStream xmlSourceStream = new MemoryStream();
             descriptor.Save(xmlSourceStream, version, profile, format);
             xmlSourceStream.Seek(0, SeekOrigin.Begin);
 
-            Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, password);
+            Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, invoiceFilename, password: password);
             await temp.CopyToAsync(targetStream);
-        } // !SaveAsync()
+        } // !SaveAsync()        
 
-        
+
         internal static async Task SaveAsync(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
         {
             if (!File.Exists(pdfSourcePath))
@@ -82,7 +79,7 @@ namespace s2industries.ZUGFeRD.PDF
         } // !SaveAsync()
 
 
-        private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string documentTitle = "Invoice", string documentDescription = "Invoice description", string invoiceFilename = "factur-x.xml", string password = null)
+        private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
         {
             if (pdfStream == null)
             {
@@ -94,22 +91,35 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new ArgumentNullException(nameof(xmlStream));
             }
 
-            PdfDocument pdfDocument = null;
+            PdfDocument inputDocument = null;
             try
             {
                 if (!String.IsNullOrWhiteSpace(password))
                 {
-                    pdfDocument = PdfReader.Open(pdfStream, password, PdfDocumentOpenMode.Import);
+                    inputDocument = PdfReader.Open(pdfStream, password, PdfDocumentOpenMode.Import);
                 }
                 else
                 {
-                    pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
+                    inputDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
                 }
             }
             catch (Exception ex)
             {
                 throw new SaveFailedException();
             }
+
+            string safeDocumentTitle = "Invoice";
+            if (!String.IsNullOrWhiteSpace(documentTitle))
+            {
+                safeDocumentTitle = documentTitle;
+            }
+
+            string safeDocumentDescription = "Invoice";
+            if (!String.IsNullOrWhiteSpace(documentDescription))
+            {
+                safeDocumentDescription = documentDescription;
+            }
+
 
             PdfDocument outputDocument = new PdfDocument();
             outputDocument.Options.ManualXmpGeneration = true;
@@ -119,9 +129,9 @@ namespace s2industries.ZUGFeRD.PDF
                 outputDocument.SecuritySettings.UserPassword = password;
             }
 
-            for (int i = 0; i < pdfDocument.PageCount; i++)
+            for (int i = 0; i < inputDocument.PageCount; i++)
             {
-                outputDocument.AddPage(pdfDocument.Pages[i]);
+                outputDocument.AddPage(inputDocument.Pages[i]);
             }
 
             string xmlChecksum = string.Empty;
@@ -201,9 +211,9 @@ namespace s2industries.ZUGFeRD.PDF
                 .Replace("{{InvoiceFilename}}", invoiceFilename)
                 .Replace("{{CreationDate}}", _FormatXMPDateTime(dateTimeNow))
                 .Replace("{{ModificationDate}}", _FormatXMPDateTime(dateTimeNow))
-                .Replace("{{DocumentTitle}}", documentTitle)
+                .Replace("{{DocumentTitle}}", safeDocumentTitle)
                 .Replace("{{Version}}", xmpVersion)
-                .Replace("{{DocumentDescription}}", documentDescription)
+                .Replace("{{DocumentDescription}}", safeDocumentDescription)
                 .Replace("{{ConformanceLevel}}", conformanceLevelName);
 
             var metadataBytes = System.Text.Encoding.UTF8.GetBytes(xmpmeta);
@@ -280,6 +290,28 @@ namespace s2industries.ZUGFeRD.PDF
             memoryStream.Seek(0, SeekOrigin.Begin);
             return memoryStream;
         } // !_CreateFacturXStream()
+
+
+        private static string _DetermineFilenameBasedOnVersionAndProfile(ZUGFeRDVersion version, Profile profile)
+        {
+            if (version == ZUGFeRDVersion.Version1)
+            {
+                return "ZUGFeRD-invoice.xml";
+            }
+            else if (version == ZUGFeRDVersion.Version20)
+            {
+                return "zugferd-invoice.xml";
+            }
+            else
+            {
+                if ((profile == Profile.XRechnung1) || (profile == Profile.XRechnung))
+                {
+                    return "xrechnung.xml";
+                }
+            }
+
+            return "factur-x.xml";
+        } // !_DetermineFilenameBasedOnVersionAndProfile()
 
 
         private static string _FormatPdfDateTime(DateTime dateTime)
