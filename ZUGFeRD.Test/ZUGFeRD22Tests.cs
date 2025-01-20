@@ -2782,8 +2782,8 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
             s.Close();
 
-            Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.LineID, "1");
-            Assert.AreEqual(desc.TradeLineItems[0].BuyerOrderReferencedDocument.ID, "ORDER84359");
+            Assert.AreEqual(desc.GetTradeLineItems().First().BuyerOrderReferencedDocument.LineID, "1");
+            Assert.AreEqual(desc.GetTradeLineItems().First().BuyerOrderReferencedDocument.ID, "ORDER84359");
         }
 
         [TestMethod]

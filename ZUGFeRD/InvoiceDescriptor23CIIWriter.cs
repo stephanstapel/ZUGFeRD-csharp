@@ -132,7 +132,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("rsm", "SupplyChainTradeTransaction");
 
             #region IncludedSupplyChainTradeLineItem
-            foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
+            foreach (TradeLineItem tradeLineItem in this.Descriptor.GetTradeLineItems())
             {
                 Writer.WriteStartElement("ram", "IncludedSupplyChainTradeLineItem");
 
@@ -858,7 +858,7 @@ namespace s2industries.ZUGFeRD
             #region SpecifiedTradeSettlementPaymentMeans
             //  10. SpecifiedTradeSettlementPaymentMeans (optional), BG-16
 
-            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
+            if (!this.Descriptor.AnyCreditorFinancialAccount() && !this.Descriptor.AnyDebitorFinancialAccount())
             {
                 if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                 {
@@ -878,7 +878,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetCreditorFinancialAccounts())
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum);
 
@@ -912,7 +912,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
 
-                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetDebitorFinancialAccounts())
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
 
@@ -1014,7 +1014,7 @@ namespace s2industries.ZUGFeRD
             }
 
             //  14. SpecifiedLogisticsServiceCharge (optional)
-            foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
+            foreach (ServiceCharge serviceCharge in this.Descriptor.GetLogisticsServiceCharges())
             {
                 Writer.WriteStartElement("ram", "SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
                 Writer.WriteOptionalElementString("ram", "Description", serviceCharge.Description);
@@ -1196,9 +1196,9 @@ namespace s2industries.ZUGFeRD
 
             #region ReceivableSpecifiedTradeAccountingAccount
             // Detailinformationen zur Buchungsreferenz, BT-19-00
-            if (this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts?.Any() == true)
+            if (this.Descriptor.AnyReceivableSpecifiedTradeAccountingAccounts())
             {
-                foreach (var traceAccountingAccount in this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts)
+                foreach (var traceAccountingAccount in this.Descriptor.GetReceivableSpecifiedTradeAccountingAccounts())
                 {
                     if (string.IsNullOrWhiteSpace(traceAccountingAccount.TradeAccountID))
                     {
@@ -1364,7 +1364,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
-            this.Descriptor.Taxes?.ForEach (tax =>
+            this.Descriptor.GetApplicableTradeTaxes()?.ForEach (tax =>
             {
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 

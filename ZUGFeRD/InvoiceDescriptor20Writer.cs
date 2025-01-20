@@ -126,7 +126,7 @@ namespace s2industries.ZUGFeRD
             #region SpecifiedSupplyChainTradeTransaction
             Writer.WriteStartElement("rsm", "SupplyChainTradeTransaction");
 
-            foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
+            foreach (TradeLineItem tradeLineItem in this.Descriptor.GetTradeLineItems())
             {
                 Writer.WriteStartElement("ram", "IncludedSupplyChainTradeLineItem");
 
@@ -577,7 +577,7 @@ namespace s2industries.ZUGFeRD
             }
 
             //  10. SpecifiedTradeSettlementPaymentMeans (optional)
-            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
+            if (!this.Descriptor.AnyCreditorFinancialAccount() && !this.Descriptor.AnyDebitorFinancialAccount())
             {
                 if (this.Descriptor.PaymentMeans != null)
                 {
@@ -601,7 +601,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                foreach (BankAccount creditorAccount in this.Descriptor.GetCreditorFinancialAccounts())
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
@@ -620,19 +620,19 @@ namespace s2industries.ZUGFeRD
                     }
 
                     Writer.WriteStartElement("ram", "PayeePartyCreditorFinancialAccount");
-                    Writer.WriteElementString("ram", "IBANID", account.IBAN);
-                    Writer.WriteOptionalElementString("ram", "AccountName", account.Name);
-                    Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
+                    Writer.WriteElementString("ram", "IBANID", creditorAccount.IBAN);
+                    Writer.WriteOptionalElementString("ram", "AccountName", creditorAccount.Name);
+                    Writer.WriteOptionalElementString("ram", "ProprietaryID", creditorAccount.ID);
                     Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
 
                     Writer.WriteStartElement("ram", "PayeeSpecifiedCreditorFinancialInstitution");
-                    Writer.WriteElementString("ram", "BICID", account.BIC);
-                    Writer.WriteOptionalElementString("ram", "GermanBankleitzahlID", account.Bankleitzahl);
+                    Writer.WriteElementString("ram", "BICID", creditorAccount.BIC);
+                    Writer.WriteOptionalElementString("ram", "GermanBankleitzahlID", creditorAccount.Bankleitzahl);
                     Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
 
-                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                foreach (BankAccount debitorAccount in this.Descriptor.GetDebitorFinancialAccounts())
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
@@ -643,19 +643,19 @@ namespace s2industries.ZUGFeRD
                     }
 
                     Writer.WriteStartElement("ram", "PayerPartyDebtorFinancialAccount");
-                    Writer.WriteElementString("ram", "IBANID", account.IBAN);
-                    Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
+                    Writer.WriteElementString("ram", "IBANID", debitorAccount.IBAN);
+                    Writer.WriteOptionalElementString("ram", "ProprietaryID", debitorAccount.ID);
                     Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
 
-                    if (!string.IsNullOrWhiteSpace(account.BIC) ||
-                        !string.IsNullOrWhiteSpace(account.Bankleitzahl) ||
-                        !string.IsNullOrWhiteSpace(account.BankName))
+                    if (!string.IsNullOrWhiteSpace(debitorAccount.BIC) ||
+                        !string.IsNullOrWhiteSpace(debitorAccount.Bankleitzahl) ||
+                        !string.IsNullOrWhiteSpace(debitorAccount.BankName))
                     {
                         Writer.WriteStartElement("ram", "PayerSpecifiedDebtorFinancialInstitution");
 
-                        Writer.WriteOptionalElementString("ram", "BICID", account.BIC);
-                        Writer.WriteOptionalElementString("ram", "GermanBankleitzahlID", account.Bankleitzahl);
-                        Writer.WriteOptionalElementString("ram", "Name", account.BankName);
+                        Writer.WriteOptionalElementString("ram", "BICID", debitorAccount.BIC);
+                        Writer.WriteOptionalElementString("ram", "GermanBankleitzahlID", debitorAccount.Bankleitzahl);
+                        Writer.WriteOptionalElementString("ram", "Name", debitorAccount.BankName);
                         Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
                     }
 
@@ -743,7 +743,7 @@ namespace s2industries.ZUGFeRD
             }
 
             //  14. SpecifiedLogisticsServiceCharge (optional)
-            foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
+            foreach (ServiceCharge serviceCharge in this.Descriptor.GetLogisticsServiceCharges())
             {
                 Writer.WriteStartElement("ram", "SpecifiedLogisticsServiceCharge");
                 if (!String.IsNullOrWhiteSpace(serviceCharge.Description))
@@ -961,7 +961,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
-            foreach (Tax tax in this.Descriptor.Taxes)
+            foreach (Tax tax in this.Descriptor.GetApplicableTradeTaxes())
             {
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 
@@ -1174,7 +1174,7 @@ namespace s2industries.ZUGFeRD
 
             if (descriptor.Profile != Profile.Extended) // check tax types, only extended profile allows tax types other than vat
             {
-                if (!descriptor.TradeLineItems.All(l => l.TaxType.Equals(TaxTypes.VAT) || l.TaxType.Equals(TaxTypes.Unknown)))
+                if (!descriptor.GetTradeLineItems().All(l => l.TaxType.Equals(TaxTypes.VAT) || l.TaxType.Equals(TaxTypes.Unknown)))
                 {
                     if (throwExceptions) { throw new UnsupportedException("Tax types other than VAT only possible with extended profile."); }
                     return false;
