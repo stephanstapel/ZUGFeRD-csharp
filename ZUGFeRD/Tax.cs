@@ -25,8 +25,6 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class Tax
     {
-        private decimal? _taxAmount;
-
         /// <summary>
         /// Returns the amount of the tax (Percent * BasisAmount)
         /// 
