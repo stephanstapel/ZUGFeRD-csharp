@@ -156,17 +156,12 @@ namespace s2industries.ZUGFeRD
             {
                 for (int i = 0; i < creditorFinancialAccountNodes.Count; i++)
                 {
-                    BankAccount account = new BankAccount()
-                    {
-                        ID = XmlUtils.NodeAsString(creditorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
-                        IBAN = XmlUtils.NodeAsString(creditorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
-                        BIC = XmlUtils.NodeAsString(creditorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
-                        Bankleitzahl = XmlUtils.NodeAsString(creditorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = XmlUtils.NodeAsString(creditorFinancialInstitutions[0], ".//ram:Name", nsmgr),
-                        Name = XmlUtils.NodeAsString(creditorFinancialInstitutions[0], ".//ram:AccountName", nsmgr),
-                    };
-
-                    retval.CreditorBankAccounts.Add(account);
+                    retval.AddCreditorFinancialAccount(iban: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr),
+                                                       bic: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr),
+                                                       id: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr),
+                                                       bankleitzahl: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr),
+                                                       bankName: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr),
+                                                       name: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:AccountName", nsmgr));
                 } // !for(i)
             }
 
@@ -177,16 +172,11 @@ namespace s2industries.ZUGFeRD
             {
                 for (int i = 0; i < debitorFinancialAccountNodes.Count; i++)
                 {
-                    BankAccount account = new BankAccount()
-                    {
-                        ID = XmlUtils.NodeAsString(debitorFinancialAccountNodes[0], ".//ram:ProprietaryID", nsmgr),
-                        IBAN = XmlUtils.NodeAsString(debitorFinancialAccountNodes[0], ".//ram:IBANID", nsmgr),
-                        BIC = XmlUtils.NodeAsString(debitorFinancialInstitutions[0], ".//ram:BICID", nsmgr),
-                        Bankleitzahl = XmlUtils.NodeAsString(debitorFinancialInstitutions[0], ".//ram:GermanBankleitzahlID", nsmgr),
-                        BankName = XmlUtils.NodeAsString(debitorFinancialInstitutions[0], ".//ram:Name", nsmgr),
-                    };
-
-                    retval.DebitorBankAccounts.Add(account);
+                    retval.AddDebitorFinancialAccount(iban: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr),
+                                                      bic: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr),
+                                                      id: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr),
+                                                      bankleitzahl: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr),
+                                                      bankName: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr));
                 } // !for(i)
             }
 
@@ -265,7 +255,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
             {
-                retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
+                retval._AddTradeLineItem(_parseTradeLineItem(node, nsmgr));
             }
             return retval;
         } // !Load()

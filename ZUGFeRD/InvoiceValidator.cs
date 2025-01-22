@@ -60,12 +60,12 @@ namespace s2industries.ZUGFeRD
 
             // line item summation
             retval.Add("Validating invoice monetary summation");
-            retval.Add(String.Format("Starting recalculating line total from {0} items...", descriptor.TradeLineItems.Count));
+            retval.Add(String.Format("Starting recalculating line total from {0} items...", descriptor.GetTradeLineItems().Count));
             int lineCounter = 0;
 
             decimal lineTotal = 0m;
             Dictionary<decimal, decimal> lineTotalPerTax = new Dictionary<decimal, decimal>();
-            foreach (TradeLineItem item in descriptor.TradeLineItems)
+            foreach (TradeLineItem item in descriptor.GetTradeLineItems())
             {
                 decimal total = 0m;
                 if (item.NetUnitPrice.HasValue)
@@ -153,7 +153,7 @@ namespace s2industries.ZUGFeRD
 
 
             decimal taxBasisTotal = 0m;
-            foreach (Tax tax in descriptor.Taxes)
+            foreach (Tax tax in descriptor.GetApplicableTradeTaxes())
             {
                 taxBasisTotal += tax.BasisAmount;
             }
