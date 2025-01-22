@@ -816,6 +816,14 @@ namespace s2industries.ZUGFeRD
                         writer.WriteEndElement();//!ID
                         writer.WriteEndElement();//!PartyIdentification
                     }
+                    else if ((party.ID != null) && (!String.IsNullOrWhiteSpace(party.ID.ID)))
+                    {
+                        writer.WriteStartElement("cac", "PartyIdentification");
+                        writer.WriteStartElement("cbc", "ID");
+                        writer.WriteValue(party.ID.ID);
+                        writer.WriteEndElement();//!ID
+                        writer.WriteEndElement();//!PartyIdentification
+                    }
                 }
 
                 if (!string.IsNullOrWhiteSpace(party.Name))
