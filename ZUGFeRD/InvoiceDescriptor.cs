@@ -1063,7 +1063,7 @@ namespace s2industries.ZUGFeRD
         } // !AnyApplicableTradeTaxes()
 
 
-        private IInvoiceDescriptorWriter _selectInvoiceDescriptorWriter(ZUGFeRDVersion version)
+        private static IInvoiceDescriptorWriter _SelectInvoiceDescriptorWriter(ZUGFeRDVersion version)
         {
             switch (version)
             {
@@ -1076,7 +1076,7 @@ namespace s2industries.ZUGFeRD
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
-        } // !_selectInvoiceDescriptorWriter()
+        } // !_SelectInvoiceDescriptorWriter()
 
 
         /// <summary>
@@ -1092,7 +1092,7 @@ namespace s2industries.ZUGFeRD
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
-            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
+            IInvoiceDescriptorWriter writer = _SelectInvoiceDescriptorWriter(version);
             writer.Save(this, stream, format);
         } // !Save()
 
@@ -1106,7 +1106,7 @@ namespace s2industries.ZUGFeRD
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
-            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
+            IInvoiceDescriptorWriter writer = _SelectInvoiceDescriptorWriter(version);
             writer.Save(this, filename, format);
         } // !Save()
 
