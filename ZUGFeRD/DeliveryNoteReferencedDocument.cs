@@ -28,5 +28,9 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class DeliveryNoteReferencedDocument : BaseReferencedDocument
     {
+        /// <summary>
+        /// Reference to the delivery note item BT-X-93
+        /// </summary>
+        public string LineID { get; set; }
     }
 }

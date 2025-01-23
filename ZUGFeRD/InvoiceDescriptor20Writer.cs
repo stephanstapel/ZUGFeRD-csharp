@@ -220,6 +220,10 @@ namespace s2industries.ZUGFeRD
                 if (tradeLineItem.ContractReferencedDocument != null)
                 {
                     Writer.WriteStartElement("ram", "ContractReferencedDocument", Profile.Extended);
+
+                    // reference to the contract position
+                    Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.ContractReferencedDocument.LineID);
+
                     if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                     {
                         Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -324,12 +328,13 @@ namespace s2industries.ZUGFeRD
                             Writer.WriteStartElement("ram", "FormattedIssueDateTime");
                             Writer.WriteStartElement("qdt", "DateTimeString");
                             Writer.WriteAttributeString("format", "102");
-                            Writer.WriteValue(_formatDate(this.Descriptor.OrderDate.Value));
+                            Writer.WriteValue(_formatDate(tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.Value));
                             Writer.WriteEndElement(); // !qdt:DateTimeString
                             Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                         }
 
                         Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+                        Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.DeliveryNoteReferencedDocument.LineID);
                         Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                     }
 

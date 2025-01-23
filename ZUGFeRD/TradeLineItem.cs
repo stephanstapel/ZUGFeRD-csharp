@@ -413,12 +413,13 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="deliveryNoteId">The identifier of the delivery note</param>
         /// <param name="deliveryNoteDate">The date of the delivery note</param>
-        public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
+        public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate, string deliveryNoteReferencedLineId = null)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
                 ID = deliveryNoteId,
-                IssueDateTime = deliveryNoteDate
+                IssueDateTime = deliveryNoteDate,
+                LineID = deliveryNoteReferencedLineId
             };
         } // !SetDeliveryNoteReferencedDocument()
 
@@ -519,12 +520,13 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="contractReferencedId">The identifier of the contract</param>
         /// <param name="contractReferencedDate">The date of the contract</param>
-        public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
+        public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate, string contractReferencedLineId = null)
         {
             this.ContractReferencedDocument = new ContractReferencedDocument()
             {
                 ID = contractReferencedId,
-                IssueDateTime = contractReferencedDate
+                IssueDateTime = contractReferencedDate,
+                LineID = contractReferencedLineId
             };
         } // !SetContractReferencedDocument()
 
