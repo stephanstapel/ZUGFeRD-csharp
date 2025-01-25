@@ -89,6 +89,20 @@ namespace s2industries.ZUGFeRD
         public decimal BilledQuantity { get; set; }
 
         /// <summary>
+        /// No charge quantity
+        ///
+        /// BT-X-46
+        /// </summary>
+        public decimal? ChargeFreeQuantity { get; set; }
+
+        /// <summary>
+        /// Package quantity
+        ///
+        /// BT-X-47
+        /// </summary>
+        public decimal? PackageQuantity { get; set; }
+
+        /// <summary>
         /// Invoice line net amount including (!) trade allowance charges for the line item
         ///
         /// BT-131
@@ -155,6 +169,20 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public QuantityCodes UnitCode { get; set; }
 
+        /// <summary>
+        /// Charge Free Quantity Unit Code
+        /// 
+        /// BT-X-46-0
+        /// </summary>
+        public QuantityCodes ChargeFreeUnitCode { get; set; }
+
+        /// <summary>
+        /// Package Quantity Unit Code
+        /// 
+        /// BT-X-47-0
+        /// </summary>
+        public QuantityCodes PackageUnitCode { get; set; }
+        
         /// <summary>
         /// Identifier of the invoice line item
         ///
