@@ -312,7 +312,7 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentMeans
-            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
+            if (!this.Descriptor.AnyCreditorFinancialAccount() && !this.Descriptor.AnyDebitorFinancialAccount())
             {
                 if (this.Descriptor.PaymentMeans != null)
                 {
@@ -336,7 +336,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetCreditorFinancialAccounts())
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
@@ -378,7 +378,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 //[BR - 67] - An Invoice shall contain maximum one Payment Mandate(BG - 19).
-                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetDebitorFinancialAccounts())
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
@@ -491,12 +491,12 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             // Tax Total
-            if ((this.Descriptor.Taxes?.Any() == true) && (this.Descriptor.TaxTotalAmount != null))
+            if (this.Descriptor.AnyApplicableTradeTaxes() && (this.Descriptor.TaxTotalAmount != null))
             {
                 Writer.WriteStartElement("cac", "TaxTotal");
                 _writeOptionalAmount(Writer, "cbc", "TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
 
-                foreach (Tax tax in this.Descriptor.Taxes)
+                foreach (Tax tax in this.Descriptor.GetApplicableTradeTaxes())
                 {
                     Writer.WriteStartElement("cac", "TaxSubtotal");
                     _writeOptionalAmount(Writer, "cbc", "TaxableAmount", tax.BasisAmount, forceCurrency: true);
@@ -535,7 +535,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); //!LegalMonetaryTotal
 
 
-            foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
+            foreach (TradeLineItem tradeLineItem in this.Descriptor.GetTradeLineItems())
             {
                 //Skip items with parent line id because these are written recursively in the _WriteTradeLineItem method
                 if (String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
@@ -697,7 +697,7 @@ namespace s2industries.ZUGFeRD
             // TODO Add Tax Information for the tradeline item
 
             //Write sub invoice lines recursively
-            foreach (TradeLineItem subTradeLineItem in this.Descriptor.TradeLineItems.Where(t => t.AssociatedDocument.ParentLineID == tradeLineItem.AssociatedDocument.LineID))
+            foreach (TradeLineItem subTradeLineItem in this.Descriptor.GetTradeLineItems().Where(t => t.AssociatedDocument.ParentLineID == tradeLineItem.AssociatedDocument.LineID))
             {
                 _WriteTradeLineItem(subTradeLineItem, isInvoice);
             }

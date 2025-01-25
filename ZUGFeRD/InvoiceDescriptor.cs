@@ -241,6 +241,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// An aggregation of business terms containing information about individual invoice positions
         /// </summary>
+        [Obsolete("This property will not be available any more with version 18.0. Please use GetTradeLineItems() instead")]
         public List<TradeLineItem> TradeLineItems { get; internal set; } = new List<TradeLineItem>();
 
         /// <summary>
@@ -310,11 +311,13 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// A group of business terms providing information about VAT breakdown by different categories, rates and exemption reasons
         /// </summary>
-        public List<Tax> Taxes { get; internal set; } = new List<Tax>();
+        [Obsolete("This property will be removed in version 18.0. Please use GetApplicableTradeTaxes() instead")]
+        public  List<Tax> Taxes { get; internal set; } = new List<Tax>();
 
         /// <summary>
         /// Transport and packaging costs
         /// </summary>
+        [Obsolete("This property will be removed in version 18.0. Please use GetLogisticsServiceCharges() instead")]
         public List<ServiceCharge> ServiceCharges { get; internal set; } = new List<ServiceCharge>();
 
         /// <summary>
@@ -342,19 +345,22 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Detailed information about the accounting reference
         /// </summary>
-        public List<ReceivableSpecifiedTradeAccountingAccount> ReceivableSpecifiedTradeAccountingAccounts { get; internal set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
+        [Obsolete("This property will be removed in version 18.0. Please use GetReceivableSpecifiedTradeAccountingAccounts() instead")]
+        public List<ReceivableSpecifiedTradeAccountingAccount> _ReceivableSpecifiedTradeAccountingAccounts { get; internal set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
 
         /// <summary>
         /// Credit Transfer
         ///
         /// A group of business terms to specify credit transfer payments
         /// </summary>
-        public List<BankAccount> CreditorBankAccounts { get; set; } = new List<BankAccount>();
+        [Obsolete("This property will be removed in version 18.0. Please use GetCreditorFinancialAccounts() instead")]
+        public List<BankAccount> CreditorBankAccounts { get; internal set; } = new List<BankAccount>();
 
         /// <summary>
         /// Buyer bank information
         /// </summary>
-        public List<BankAccount> DebitorBankAccounts { get; set; } = new List<BankAccount>();
+        [Obsolete("This property will be removed in version 18.0. Please use GetDebitorFinancialAccounts() instead")]
+        public List<BankAccount> DebitorBankAccounts { get; internal set; } = new List<BankAccount>();
 
         /// <summary>
         /// Payment instructions
@@ -808,6 +814,12 @@ namespace s2industries.ZUGFeRD
         } // !AddLogisticsServiceCharge()
 
 
+        public List<ServiceCharge> GetLogisticsServiceCharges()
+        {
+            return this.ServiceCharges;
+        } // !GetLogisticsServiceCharges()
+
+
         /// <summary>
         /// Adds an allowance or charge on document level.
         ///
@@ -1039,7 +1051,19 @@ namespace s2industries.ZUGFeRD
         } // !AddApplicableTradeTax()
 
 
-        private IInvoiceDescriptorWriter _selectInvoiceDescriptorWriter(ZUGFeRDVersion version)
+        public List<Tax> GetApplicableTradeTaxes()
+        {
+            return this.Taxes;
+        } // !GetApplicableTradeTaxes()
+
+
+        public bool AnyApplicableTradeTaxes()
+        {
+            return this.Taxes.Any();
+        } // !AnyApplicableTradeTaxes()
+
+
+        private static IInvoiceDescriptorWriter _SelectInvoiceDescriptorWriter(ZUGFeRDVersion version)
         {
             switch (version)
             {
@@ -1052,7 +1076,7 @@ namespace s2industries.ZUGFeRD
                 default:
                     throw new UnsupportedException("New ZUGFeRDVersion '" + version + "' defined but not implemented!");
             }
-        } // !_selectInvoiceDescriptorWriter()
+        } // !_SelectInvoiceDescriptorWriter()
 
 
         /// <summary>
@@ -1068,7 +1092,7 @@ namespace s2industries.ZUGFeRD
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
-            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
+            IInvoiceDescriptorWriter writer = _SelectInvoiceDescriptorWriter(version);
             writer.Save(this, stream, format);
         } // !Save()
 
@@ -1082,7 +1106,7 @@ namespace s2industries.ZUGFeRD
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version1, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
         {
             this.Profile = profile;
-            IInvoiceDescriptorWriter writer = _selectInvoiceDescriptorWriter(version);
+            IInvoiceDescriptorWriter writer = _SelectInvoiceDescriptorWriter(version);
             writer.Save(this, filename, format);
         } // !Save()
 
@@ -1304,6 +1328,30 @@ namespace s2industries.ZUGFeRD
         } // !AddTradeLineItem()
 
 
+        internal void _AddTradeLineItem(TradeLineItem item)
+        {
+            this.TradeLineItems.Add(item);
+        } // !_AddTradeLineItem()
+
+
+        internal void _AddTradeLineItems(IEnumerable<TradeLineItem> items)
+        {
+            this.TradeLineItems.AddRange(items);
+        } // !_AddTradeLineItems()
+
+
+        public List<TradeLineItem> GetTradeLineItems()
+        {
+            return this.TradeLineItems;
+        } // !GetTradeLineItems()
+
+
+        public bool AnyTradeLineItems()
+        {
+            return this.TradeLineItems.Any();
+        } // !AnyTradeLineItems()
+
+
         /// <summary>
         /// Sets up the payment means.
         /// </summary>
@@ -1379,6 +1427,24 @@ namespace s2industries.ZUGFeRD
         } // !AddCreditorFinancialAccount()
 
 
+        internal void _AddCreditorFinancialAccount(BankAccount bankAccount)
+        {
+            this.CreditorBankAccounts.Add(bankAccount);
+        } // !_AddCreditorFinancialAccount()
+
+
+        public List<BankAccount> GetCreditorFinancialAccounts()
+        {
+            return this.CreditorBankAccounts;
+        } // !GetCreditorFinancialAccounts()
+
+
+        public bool AnyCreditorFinancialAccount()
+        {
+            return this.CreditorBankAccounts.Any();
+        } // !AnyCreditorFinancialAccount()
+
+
         public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
             this.DebitorBankAccounts.Add(new BankAccount()
@@ -1392,6 +1458,24 @@ namespace s2industries.ZUGFeRD
         } // !AddDebitorFinancialAccount()
 
 
+        internal void _AddDebitorFinancialAccount(BankAccount bankAccount)
+        {
+            this.DebitorBankAccounts.Add(bankAccount);
+        } // !_AddDebitorFinancialAccount()
+
+
+        public List<BankAccount> GetDebitorFinancialAccounts()
+        {
+            return this.DebitorBankAccounts;
+        } // !GetDebitorFinancialAccounts()
+
+
+        public bool AnyDebitorFinancialAccount()
+        {
+            return this.DebitorBankAccounts.Any();
+        } // !AnyDebitorFinancialAccount()
+
+
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
@@ -1400,12 +1484,25 @@ namespace s2industries.ZUGFeRD
 
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
-            this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+            this._ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
                 TradeAccountID = AccountID,
                 TradeAccountTypeCode = AccountTypeCode
             });
-        }
+        } // !AddReceivableSpecifiedTradeAccountingAccount()
+
+
+        public List<ReceivableSpecifiedTradeAccountingAccount> GetReceivableSpecifiedTradeAccountingAccounts()
+        {
+            return this._ReceivableSpecifiedTradeAccountingAccounts;
+        } // !GetReceivableSpecifiedTradeAccountingAccounts()
+
+
+        public bool AnyReceivableSpecifiedTradeAccountingAccounts()
+        {
+            return this._ReceivableSpecifiedTradeAccountingAccounts.Any();
+        } // !AnyReceivableSpecifiedTradeAccountingAccounts()
+
 
         private string _getNextLineId()
         {

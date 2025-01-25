@@ -225,26 +225,19 @@ namespace s2industries.ZUGFeRD
             XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
             XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 
-            int numberOfAccounts = creditorFinancialAccountNodes.Count > creditorFinancialInstitutions.Count ? creditorFinancialAccountNodes.Count : creditorFinancialInstitutions.Count;
+            int numberOfAccounts = Math.Min(creditorFinancialAccountNodes.Count, creditorFinancialInstitutions.Count);
+
             for (int i = 0; i < numberOfAccounts; i++)
             {
-                BankAccount account = new BankAccount();
-                retval.CreditorBankAccounts.Add(account);
-            }
-
-            for (int i = 0; i < creditorFinancialAccountNodes.Count; i++)
-            {
-                retval.CreditorBankAccounts[i].ID = XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr);
-                retval.CreditorBankAccounts[i].IBAN = XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr);
-                retval.CreditorBankAccounts[i].Name = XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:AccountName", nsmgr);
-            }
-
-            for (int i = 0; i < creditorFinancialInstitutions.Count; i++)
-            {
-                retval.CreditorBankAccounts[i].BIC = XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr);
-                retval.CreditorBankAccounts[i].Bankleitzahl = XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr);
-                retval.CreditorBankAccounts[i].BankName = XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr);
-            }
+                retval.AddCreditorFinancialAccount(
+                    iban: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr),
+                    bic: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr),
+                    id: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr),
+                    bankleitzahl: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr),
+                    bankName: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr),
+                    name: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:AccountName", nsmgr)
+                );
+            } // !for(i)
 
             var specifiedTradeSettlementPaymentMeansNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans", nsmgr);
 
@@ -269,7 +262,7 @@ namespace s2industries.ZUGFeRD
                 if (payerSpecifiedDebtorFinancialInstitutionNode != null)
                     account.BIC = XmlUtils.NodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:BICID", nsmgr);
 
-                retval.DebitorBankAccounts.Add(account);
+                retval._AddDebitorFinancialAccount(account);
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax", nsmgr))
@@ -351,11 +344,10 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount", nsmgr))
             {
-                retval.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
-                {
-                    TradeAccountID = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr),
-                    TradeAccountTypeCode = XmlUtils.NodeAsEnum<AccountingAccountTypeCodes>(node, ".//ram:TypeCode", nsmgr),
-                });
+                retval.AddReceivableSpecifiedTradeAccountingAccount(
+                    AccountID: XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr),
+                    AccountTypeCode: XmlUtils.NodeAsEnum<AccountingAccountTypeCodes>(node, ".//ram:TypeCode", nsmgr)
+                );
             }
 
             retval.OrderDate = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr);
@@ -389,7 +381,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
             {
-                retval.TradeLineItems.Add(_parseTradeLineItem(node, nsmgr));
+                retval._AddTradeLineItem(_parseTradeLineItem(node, nsmgr));
             }
 
             return retval;
@@ -529,8 +521,7 @@ namespace s2industries.ZUGFeRD
                             bool chargeIndicator = XmlUtils.NodeAsBool(lineTradeSettlementNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
                             decimal? basisAmount = XmlUtils.NodeAsDecimal(lineTradeSettlementNode, "./ram:BasisAmount", nsmgr, null);
                             string basisAmountCurrency = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:BasisAmount/@currencyID", nsmgr);
-                            decimal actualAmount = XmlUtils.NodeAsDecimal(lineTradeSettlementNode, "./ram:ActualAmount", nsmgr, 0).Value;
-                            string actualAmountCurrency = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:ActualAmount/@currencyID", nsmgr);
+                            decimal actualAmount = XmlUtils.NodeAsDecimal(lineTradeSettlementNode, "./ram:ActualAmount", nsmgr, 0).Value;                            
                             string reason = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:Reason", nsmgr);
                             decimal? chargePercentage = XmlUtils.NodeAsDecimal(lineTradeSettlementNode, "./ram:CalculationPercent", nsmgr, null);
                             string reasonCode = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:ReasonCode", nsmgr);
@@ -579,8 +570,7 @@ namespace s2industries.ZUGFeRD
                 bool chargeIndicator = XmlUtils.NodeAsBool(appliedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
                 decimal? basisAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, null);
                 string basisAmountCurrency = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
-                decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;
-                string actualAmountCurrency = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:ActualAmount/@currencyID", nsmgr);
+                decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;                
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
                 decimal? chargePercentage = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:CalculationPercent", nsmgr, null);
 
