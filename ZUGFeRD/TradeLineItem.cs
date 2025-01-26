@@ -437,16 +437,19 @@ namespace s2industries.ZUGFeRD
         }
 
         /// <summary>
-        /// Sets the delivery note reference information for this trade line item
+        /// Sets the delivery note reference information for this trade line item. BG-X-83
+        /// Only available in Extended profile.
         /// </summary>
-        /// <param name="deliveryNoteId">The identifier of the delivery note</param>
-        /// <param name="deliveryNoteDate">The date of the delivery note</param>
-        public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
+        /// <param name="deliveryNoteId">The identifier of the delivery note. BT-X-92</param>
+        /// <param name="deliveryNoteDate">The date of the delivery note. BT-X-94</param>
+        /// <param name="deliveryNoteReferencedLineId">The identifier of the delivery note item. BT-X-93</param>
+        public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate, string deliveryNoteReferencedLineId = null)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
                 ID = deliveryNoteId,
-                IssueDateTime = deliveryNoteDate
+                IssueDateTime = deliveryNoteDate,
+                LineID = deliveryNoteReferencedLineId
             };
         } // !SetDeliveryNoteReferencedDocument()
 
@@ -543,16 +546,19 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// Sets the contract reference information for this trade line item
+        /// Sets the contract reference information for this trade line item. BG-X-2
+        /// Only available in Extended profile.
         /// </summary>
-        /// <param name="contractReferencedId">The identifier of the contract</param>
-        /// <param name="contractReferencedDate">The date of the contract</param>
-        public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
+        /// <param name="contractReferencedId">The identifier of the contract. BT-X-24</param>
+        /// <param name="contractReferencedDate">The date of the contract. BT-X-26</param>
+        /// <param name="contractReferencedLineId">The identifier of the contract position. BT-X-25</param>
+        public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate, string contractReferencedLineId = null)
         {
             this.ContractReferencedDocument = new ContractReferencedDocument()
             {
                 ID = contractReferencedId,
-                IssueDateTime = contractReferencedDate
+                IssueDateTime = contractReferencedDate,
+                LineID = contractReferencedLineId
             };
         } // !SetContractReferencedDocument()
 

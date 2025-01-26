@@ -473,6 +473,7 @@ namespace s2industries.ZUGFeRD
                 item.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(deliveryNoteReferencedDocumentNode, "ram:IssuerAssignedID", nsmgr),
+                    LineID = XmlUtils.NodeAsString(deliveryNoteReferencedDocumentNode, "ram:LineID", nsmgr),
                     IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(deliveryNoteReferencedDocumentNode, "ram:FormattedIssueDateTime", nsmgr),
                 };
             }
@@ -488,6 +489,7 @@ namespace s2industries.ZUGFeRD
                 item.ContractReferencedDocument = new ContractReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(contractReferencedDocument, "ram:IssuerAssignedID", nsmgr),
+                    LineID = XmlUtils.NodeAsString(contractReferencedDocument, "ram:LineID", nsmgr),
                     IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(contractReferencedDocument, "ram:FormattedIssueDateTime", nsmgr),
                 };
             }

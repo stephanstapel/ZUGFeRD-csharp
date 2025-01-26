@@ -614,7 +614,15 @@ namespace s2industries.ZUGFeRD
         /// <remarks>
         /// Services offered with no time frame specified
         /// </remarks>
-        E48
+        E48,
+
+        /// <summary>
+        /// Metric Carat
+        /// </summary>
+        /// <remarks>
+        /// Einheit für die Masse von Edelsteinen. Abkürzung Kt oder ct (kein gesetzliches Einheitszeichen)
+        /// </remarks>
+        CTM
     }
 
 

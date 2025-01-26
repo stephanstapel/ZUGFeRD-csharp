@@ -300,6 +300,10 @@ namespace s2industries.ZUGFeRD
                     if (tradeLineItem.ContractReferencedDocument != null)
                     {
                         Writer.WriteStartElement("ram", "ContractReferencedDocument", Profile.Extended);
+
+                        // reference to the contract position
+                        Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.ContractReferencedDocument.LineID);
+
                         if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                         {
                             Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -447,6 +451,9 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", Profile.Extended); // this violates CII-SR-175 for XRechnung 3
                     Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
+
+                    // reference to the delivery note item
+                    Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.DeliveryNoteReferencedDocument.LineID);
 
                     if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                     {
