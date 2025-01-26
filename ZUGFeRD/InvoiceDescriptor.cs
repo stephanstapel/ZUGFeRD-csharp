@@ -172,11 +172,13 @@ namespace s2industries.ZUGFeRD
         /// This party is optional and is written in most profiles except Minimum profile
         /// </summary>
         public Party ShipTo { get; set; }
+        public Contact ShipToContact { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
         /// </summary>
         public Party UltimateShipTo { get; set; }
+        public Contact UltimateShipToContact { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
@@ -1208,6 +1210,10 @@ namespace s2industries.ZUGFeRD
         /// <param name="buyerOrderDate"></param>
         /// <param name="billingPeriodStart"></param>
         /// <param name="billingPeriodEnd"></param>
+        /// <param name="chargeFreeQuantity"></param>
+        /// <param name="packageQuantity"></param>
+        /// <param name="chargeFreeUnitCode"></param>
+        /// <param name="packageUnitCode"></param>
         /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
         public TradeLineItem AddTradeLineItem(string name,
                                      string description = null,
@@ -1225,7 +1231,10 @@ namespace s2industries.ZUGFeRD
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null,
+                                     decimal? chargeFreeQuantity = null, decimal? packageQuantity = null,
+                                     QuantityCodes chargeFreeUnitCode = QuantityCodes.Unknown, QuantityCodes packageUnitCode = QuantityCodes.Unknown
+                                     )
         {
             return AddTradeLineItem(lineID: _getNextLineId(),
                              name: name,
@@ -1249,7 +1258,12 @@ namespace s2industries.ZUGFeRD
                              buyerOrderID: buyerOrderID, // Extended!
                              buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,
-                             billingPeriodEnd: billingPeriodEnd);
+                             billingPeriodEnd: billingPeriodEnd,
+                             chargeFreeQuantity: chargeFreeQuantity,
+                             packageQuantity: packageQuantity,
+                             chargeFreeUnitCode: chargeFreeUnitCode,
+                             packageUnitCode: packageUnitCode
+                             );
         } // !AddTradeLineItem()
 
 
@@ -1274,7 +1288,10 @@ namespace s2industries.ZUGFeRD
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null,
+                                     decimal? chargeFreeQuantity = null, decimal? packageQuantity = null,
+                                     QuantityCodes chargeFreeUnitCode = QuantityCodes.Unknown, QuantityCodes packageUnitCode = QuantityCodes.Unknown
+                                     )
         {
             if (String.IsNullOrWhiteSpace(lineID))
             {
@@ -1305,7 +1322,11 @@ namespace s2industries.ZUGFeRD
                 TaxCategoryCode = categoryCode,
                 TaxPercent = taxPercent,
                 BillingPeriodStart = billingPeriodStart,
-                BillingPeriodEnd = billingPeriodEnd
+                BillingPeriodEnd = billingPeriodEnd,
+                ChargeFreeQuantity = chargeFreeQuantity,
+                PackageQuantity = packageQuantity,
+                ChargeFreeUnitCode = chargeFreeUnitCode,
+                PackageUnitCode = packageUnitCode
             };
 
             if (!String.IsNullOrWhiteSpace(comment))
