@@ -624,5 +624,28 @@ namespace s2industries.ZUGFeRD
         {
             return this.DesignatedProductClassifications.Where(c => c.ClassCode.Equals(classCode)).ToList();
         } // !GetDesignatedProductClassificationsByClassCode()
+
+        /// sets the quantity, at line level, free of charge, in this trade delivery.
+        /// </summary>
+        /// <param name="chargeFreeQuantity">Quantity of the included charge free product</param>
+        /// <param name="chargeFreeUnitCode">Unit code for the quantity</param>
+        public void SetChargeFreeQuantity(decimal chargeFreeQuantity, QuantityCodes chargeFreeUnitCode)
+        {
+            ChargeFreeQuantity = chargeFreeQuantity;
+            ChargeFreeUnitCode = chargeFreeUnitCode;
+
+        } // !SetChargeFreeQuantity()
+
+        /// sets the number of packages, at line level, in this trade delivery.
+        /// </summary>
+        /// <param name="packageQuantity">Quantity of the included charge free product</param>
+        /// <param name="packageUnitCode">Unit code for the quantity</param>
+        public void SetPackageQuantity(decimal packageQuantity, QuantityCodes packageUnitCode)
+        {
+            PackageQuantity = packageQuantity;
+            PackageUnitCode = packageUnitCode;
+
+        } // !SetPackageQuantity()
+
     }
 }

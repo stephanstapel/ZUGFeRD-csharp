@@ -901,6 +901,35 @@ namespace s2industries.ZUGFeRD.Test
         }
 
         [TestMethod]
+        public void TestWriteTradeLineChargeFreePackage()
+        {
+            // Read XRechnung
+            var path = @"..\..\..\..\demodata\xRechnung\xrechnung with trade line settlement empty.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            var fileStream = File.Open(path, FileMode.Open);
+            var originalInvoiceDescriptor = InvoiceDescriptor.Load(fileStream);
+            fileStream.Close();
+
+            // Modifiy trade line settlement data
+            TradeLineItem tradelineItem = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
+            tradelineItem.SetChargeFreeQuantity(10, QuantityCodes.C62);
+            tradelineItem.SetPackageQuantity(20, QuantityCodes.C62);
+
+            originalInvoiceDescriptor.IsTest = false;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                originalInvoiceDescriptor.Save(memoryStream, ZUGFeRDVersion.Version23, Profile.Extended);
+                originalInvoiceDescriptor.Save(@"xrechnung with trade line settlement filled.xml", ZUGFeRDVersion.Version23, Profile.Extended);
+
+                // Load Invoice and compare to expected
+                var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
+                Assert.AreEqual(10, invoiceDescriptor.TradeLineItems[0].ChargeFreeQuantity);
+                Assert.AreEqual(20, invoiceDescriptor.TradeLineItems[0].PackageQuantity);
+            }
+        }
+        [TestMethod]
         public void TestWriteTradeLineNetUnitPrice()
         {
             // Read XRechnung
