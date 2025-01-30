@@ -281,10 +281,7 @@ namespace s2industries.ZUGFeRD.PDF
             outputDocument.Internals.Catalog.Elements.Add("/OutputIntents", outputIntentsArray);
             outputDocument.Info.Creator = "S2 Industries";
 
-            foreach (XFont font in _LoadFonts(inputDocument))
-            {
-                outputDocument.AddCharacters(font, "");
-            }
+            _EmbedFonts(outputDocument);
 
             MemoryStream memoryStream = new MemoryStream();
             try
@@ -299,6 +296,17 @@ namespace s2industries.ZUGFeRD.PDF
             return memoryStream;
         } // !_CreateFacturXStream()
 
+        private static void _EmbedFonts(PdfDocument pdfDocument)
+        {
+            XGraphics gfx = XGraphics.FromPdfPage(pdfDocument.Pages[0]);
+            foreach (XFont usedFont in _LoadFonts(pdfDocument))
+            {
+                // Use the embedded font
+                XFont xFont = new XFont(usedFont.Name, 1, usedFont.Style, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
+                gfx.DrawString(" ", xFont, XBrushes.Transparent, new XPoint(1, 1));
+            }
+            gfx.Dispose();
+        }
 
         private static List<XFont> _LoadFonts(PdfDocument pdfDocument)
         {
@@ -338,24 +346,26 @@ namespace s2industries.ZUGFeRD.PDF
                         continue;
                     }
 
-                    string fontName = font.Elements.GetString("/BaseFont").Split('+').Last();
-                    bool existsInSystem = availableFamilies.Any(f => f.Equals(fontName, StringComparison.OrdinalIgnoreCase));
+                    string baseFont = font.Elements.GetString("/BaseFont").Split('+').Last();
 
-                    List<string> fasd = availableFamilies.ToList();
+                    _ExtractFontValues(baseFont, fonts, out string fontFamily, out XFontStyleEx fontStyle);
 
-                    if (!existsInSystem && (postScriptToTrueTypeMap.TryGetValue(fontName, out string tempFontName)))
+                    bool existsInSystem = availableFamilies.Any(f => f.Equals(fontFamily, StringComparison.OrdinalIgnoreCase));
+
+
+                    if (!existsInSystem && (postScriptToTrueTypeMap.TryGetValue(fontFamily, out string tempFontName)))
                     {
-                        fontName = tempFontName;
+                        fontFamily = tempFontName;
                     }
 
-                    if (String.IsNullOrWhiteSpace(fontName))
+                    if (String.IsNullOrWhiteSpace(fontFamily))
                     {
                         continue;
                     }
 
                     try
                     {
-                        var embeddedFont = new XFont(fontName, 10, XFontStyleEx.Regular, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
+                        var embeddedFont = new XFont(fontFamily, 10, fontStyle);
                         retval.Add(embeddedFont);
                     }
                     catch (Exception ex)
@@ -368,6 +378,33 @@ namespace s2industries.ZUGFeRD.PDF
             return retval;
         } // !_LoadFonts()
 
+        private static void _ExtractFontValues(string baseFont, PdfDictionary fontDict, out string fontFamily, out XFontStyleEx fontStyle)
+        {
+            fontStyle = XFontStyleEx.Regular;
+
+            // Split by comma or hyphen to detect styles
+            string[] fontParts = baseFont.Split(new[] { ',', '-' }, StringSplitOptions.RemoveEmptyEntries);
+            fontFamily = fontParts[0].TrimStart('/'); // Base font name (e.g., "Arial")
+
+            if (fontParts.Length > 1)
+            {
+                string stylePart = fontParts[1].ToLower();
+                if (stylePart.Contains("bold")) fontStyle |= XFontStyleEx.Bold;
+                if (stylePart.Contains("italic") || stylePart.Contains("oblique")) fontStyle |= XFontStyleEx.Italic;
+            }
+
+            // Check FontDescriptor flags (if available)
+            if (fontDict.Elements.ContainsKey("/FontDescriptor"))
+            {
+                var fontDescriptor = fontDict.Elements.GetDictionary("/FontDescriptor");
+                if (fontDescriptor.Elements.ContainsKey("/Flags"))
+                {
+                    int flags = fontDescriptor.Elements.GetInteger("/Flags");
+                    if ((flags & 0x40000) != 0) fontStyle |= XFontStyleEx.Bold;   // Bold flag
+                    if ((flags & 0x10) != 0) fontStyle |= XFontStyleEx.Italic; // Italic flag
+                }
+            }
+        }
 
         private static string _DetermineFilenameBasedOnVersionAndProfile(ZUGFeRDVersion version, Profile profile)
         {
