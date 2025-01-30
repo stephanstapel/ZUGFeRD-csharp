@@ -16,9 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+using System;
 using System.Formats.Asn1;
 using s2industries.ZUGFeRD;
 using s2industries.ZUGFeRD.PDF;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace s2industries.ZUGFeRD.PDF.Test
 {
@@ -40,6 +42,21 @@ namespace s2industries.ZUGFeRD.PDF.Test
             /* how to test? */
         } // !BasicSaveExampleFile()
 
+
+        [TestMethod]
+        public async Task BasicSaveFileAndEmbedFonts()
+        {
+            string sourcePath = @"..\..\..\not-embedded.pdf";
+            sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
+
+            string targetPath = @"output-not-embedded.pdf";
+            targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
+
+            InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
+            await InvoicePdfProcessor.SaveToPdfAsync(targetPath, ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor);
+
+            /* how to test? */
+        } // !BasicSaveExampleFile()
 
         [TestMethod]
         public async Task BasicSaveExampleAsStream()
