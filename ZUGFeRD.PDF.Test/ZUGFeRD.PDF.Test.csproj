@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="MSTest" Version="3.6.3" />
+    <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
   </ItemGroup>
 
   <ItemGroup>

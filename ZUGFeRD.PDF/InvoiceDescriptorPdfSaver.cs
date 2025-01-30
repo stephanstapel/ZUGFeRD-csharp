@@ -378,6 +378,7 @@ namespace s2industries.ZUGFeRD.PDF
             return retval;
         } // !_LoadFonts()
 
+
         private static void _ExtractFontValues(string baseFont, PdfDictionary fontDict, out string fontFamily, out XFontStyleEx fontStyle)
         {
             fontStyle = XFontStyleEx.Regular;
@@ -389,8 +390,16 @@ namespace s2industries.ZUGFeRD.PDF
             if (fontParts.Length > 1)
             {
                 string stylePart = fontParts[1].ToLower();
-                if (stylePart.Contains("bold")) fontStyle |= XFontStyleEx.Bold;
-                if (stylePart.Contains("italic") || stylePart.Contains("oblique")) fontStyle |= XFontStyleEx.Italic;
+                if (stylePart.IndexOf("bold", StringComparison.OrdinalIgnoreCase) > -1)
+                {
+                    fontStyle |= XFontStyleEx.Bold;
+                }
+
+                if ((stylePart.IndexOf("italic", StringComparison.OrdinalIgnoreCase) > -1) ||
+                    (stylePart.IndexOf("oblique", StringComparison.OrdinalIgnoreCase) > -1))
+                {
+                    fontStyle |= XFontStyleEx.Italic;
+                }
             }
 
             // Check FontDescriptor flags (if available)
@@ -404,7 +413,8 @@ namespace s2industries.ZUGFeRD.PDF
                     if ((flags & 0x10) != 0) fontStyle |= XFontStyleEx.Italic; // Italic flag
                 }
             }
-        }
+        } // !_ExtractFontValues()
+
 
         private static string _DetermineFilenameBasedOnVersionAndProfile(ZUGFeRDVersion version, Profile profile)
         {
