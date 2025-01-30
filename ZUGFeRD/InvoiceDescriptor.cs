@@ -170,14 +170,26 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// This party is optional and is written in most profiles except Minimum profile
+        ///
+        /// BG-13
         /// </summary>
         public Party ShipTo { get; set; }
+
+        /// <summary>
+        /// Detailed contact information of the recipient
+        /// BG-X-26
+        /// </summary>
         public Contact ShipToContact { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
         /// </summary>
         public Party UltimateShipTo { get; set; }
+
+        /// <summary>
+        /// Detailed contact information of the final goods recipient
+        /// BG-X-11
+        /// </summary>
         public Contact UltimateShipToContact { get; set; }
 
         /// <summary>

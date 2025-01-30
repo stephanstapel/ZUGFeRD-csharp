@@ -51,7 +51,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.TradeLineItems.Clear();
 
-            TradeLineItem tradeLineItem1 = desc.AddTradeLineItem(
+            desc.AddTradeLineItem(
                 name: "Trennblätter A4",
                 billedQuantity: 20m,
                 unitCode: QuantityCodes.H87,
@@ -59,8 +59,8 @@ namespace s2industries.ZUGFeRD.Test
                 grossUnitPrice: 9.9m,
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
-                taxType: TaxTypes.VAT);
-            tradeLineItem1.SetLineStatus(LineStatusCodes.New, LineStatusReasonCodes.DETAIL);
+                taxType: TaxTypes.VAT)
+            .SetLineStatus(LineStatusCodes.New, LineStatusReasonCodes.DETAIL);
 
             desc.AddTradeLineItem(
                 name: "Joghurt Banane",
@@ -72,15 +72,15 @@ namespace s2industries.ZUGFeRD.Test
                 taxPercent: 7.0m,
                 taxType: TaxTypes.VAT);
 
-            TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
+            desc.AddTradeLineItem(
                 name: "Abschlagsrechnung vom 01.01.2024",
                 billedQuantity: -1m,
                 unitCode: QuantityCodes.C62,
                 netUnitPrice: 500,
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
-                taxType: TaxTypes.VAT);
-            tradeLineItem3.SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
+                taxType: TaxTypes.VAT)
+            .SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
 
             MemoryStream ms = new MemoryStream();
 
@@ -109,7 +109,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.TradeLineItems.Clear();
 
-            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+            desc.AddTradeLineItem(
                 lineID: "1",
                 name: "Trennblätter A4",
                 billedQuantity: 20m,
@@ -118,10 +118,9 @@ namespace s2industries.ZUGFeRD.Test
                 grossUnitPrice: 9.9m,
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
-                taxType: TaxTypes.VAT);
-
-            tradeLineItem.AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62);
-            tradeLineItem.AddIncludedReferencedProduct("Test2");
+                taxType: TaxTypes.VAT)
+            .AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62)
+            .AddIncludedReferencedProduct("Test2");
 
             MemoryStream ms = new MemoryStream();
 
@@ -912,9 +911,9 @@ namespace s2industries.ZUGFeRD.Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            TradeLineItem tradelineItem = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
-            tradelineItem.SetChargeFreeQuantity(10, QuantityCodes.C62);
-            tradelineItem.SetPackageQuantity(20, QuantityCodes.C62);
+            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty)
+                .SetChargeFreeQuantity(10, QuantityCodes.C62)
+                .SetPackageQuantity(20, QuantityCodes.C62);
 
             originalInvoiceDescriptor.IsTest = false;
 
