@@ -417,7 +417,14 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
                 Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 _writeElementWithAttributeWithPrefix(Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
-
+                if (tradeLineItem.ChargeFreeQuantity.HasValue)
+                {
+                    _writeElementWithAttributeWithPrefix(Writer, "ram", "ChargeFreeQuantity", "unitCode", tradeLineItem.ChargeFreeUnitCode.EnumToString(), _formatDecimal(tradeLineItem.ChargeFreeQuantity, 4), Profile.Extended);
+                }
+                if (tradeLineItem.PackageQuantity.HasValue)
+                {
+                    _writeElementWithAttributeWithPrefix(Writer, "ram", "PackageQuantity", "unitCode", tradeLineItem.PackageUnitCode.EnumToString(), _formatDecimal(tradeLineItem.PackageQuantity, 4), Profile.Extended);
+                }
                 if (tradeLineItem.ShipTo != null)
                 {
                     _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, tradeLineItem.ShipTo, Profile.Extended);
@@ -460,9 +467,6 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                 }
-
-                /// TODO: Add ShipToTradeParty
-                /// TODO: Add UltimateShipToTradeParty
 
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
                 #endregion
@@ -746,8 +750,8 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum);
-            _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum, this.Descriptor.ShipToContact);
+            _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, this.Descriptor.UltimateShipToContact);
             _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom, Profile.Extended);
 
             #region ActualDeliverySupplyChainEvent

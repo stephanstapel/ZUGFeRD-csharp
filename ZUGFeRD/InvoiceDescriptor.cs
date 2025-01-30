@@ -172,11 +172,13 @@ namespace s2industries.ZUGFeRD
         /// This party is optional and is written in most profiles except Minimum profile
         /// </summary>
         public Party ShipTo { get; set; }
+        public Contact ShipToContact { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
         /// </summary>
         public Party UltimateShipTo { get; set; }
+        public Contact UltimateShipToContact { get; set; }
 
         /// <summary>
         /// This party is optional and only relevant for Extended profile
@@ -1225,7 +1227,8 @@ namespace s2industries.ZUGFeRD
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
+                                     )
         {
             return AddTradeLineItem(lineID: _getNextLineId(),
                              name: name,
@@ -1249,7 +1252,8 @@ namespace s2industries.ZUGFeRD
                              buyerOrderID: buyerOrderID, // Extended!
                              buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,
-                             billingPeriodEnd: billingPeriodEnd);
+                             billingPeriodEnd: billingPeriodEnd
+                             );
         } // !AddTradeLineItem()
 
 
@@ -1274,7 +1278,8 @@ namespace s2industries.ZUGFeRD
                                      string sellerAssignedID = "", string buyerAssignedID = "",
                                      string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
                                      string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null)
+                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
+                                     )
         {
             if (String.IsNullOrWhiteSpace(lineID))
             {

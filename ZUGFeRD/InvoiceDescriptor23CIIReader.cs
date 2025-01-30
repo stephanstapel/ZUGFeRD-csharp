@@ -144,7 +144,9 @@ namespace s2industries.ZUGFeRD
             }
 
             retval.ShipTo = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty", nsmgr);
+            retval.ShipToContact = _nodeAsContact(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty", nsmgr);
             retval.UltimateShipTo = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty", nsmgr);
+            retval.UltimateShipToContact = _nodeAsContact(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:UltimateShipToTradeParty", nsmgr);
             retval.ShipFrom = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty", nsmgr);
             retval.ActualDeliveryDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString", nsmgr);
 
@@ -435,6 +437,8 @@ namespace s2industries.ZUGFeRD
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
                 ShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty", nsmgr),
                 UltimateShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty", nsmgr),
+                ChargeFreeQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:ChargeFreeQuantity", nsmgr, 0).Value,
+                PackageQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:PackageQuantity", nsmgr, 0).Value,
                 LineTotalAmount = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:LineTotalAmount", nsmgr, 0),
                 TaxCategoryCode = default(TaxCategoryCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
                 TaxType = default(TaxTypes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),
@@ -442,6 +446,8 @@ namespace s2industries.ZUGFeRD
                 NetUnitPrice = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:NetPriceProductTradePrice/ram:ChargeAmount", nsmgr, 0).Value,
                 GrossUnitPrice = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:GrossPriceProductTradePrice/ram:ChargeAmount", nsmgr, 0).Value,
                 UnitCode = default(QuantityCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr)),
+                ChargeFreeUnitCode = default(QuantityCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ChargeFreeQuantity/@unitCode", nsmgr)),
+                PackageUnitCode = default(QuantityCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:PackageQuantity/@unitCode", nsmgr)),
                 BillingPeriodStart = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString", nsmgr),
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString", nsmgr),
             };
@@ -639,6 +645,29 @@ namespace s2industries.ZUGFeRD
             return retval;
         }
 
+        private static Contact _nodeAsContact(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
+        {
+            if (baseNode == null)
+            {
+                return null;
+            }
+
+            XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
+            if (node == null)
+            {
+                return null;
+            }
+
+            Contact retval = new Contact()
+                {
+                    Name = XmlUtils.NodeAsString(node, "./ram:PersonName", nsmgr),
+                    OrgUnit = XmlUtils.NodeAsString(node, "./ram:DepartmentName", nsmgr),
+                    PhoneNo = XmlUtils.NodeAsString(node, "./ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    FaxNo = XmlUtils.NodeAsString(node, "./ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    EmailAddress = XmlUtils.NodeAsString(node, "./ram:EmailURIUniversalCommunication/ram:URIID", nsmgr)
+                };
+            return retval;
+        }
 
         private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
@@ -665,6 +694,7 @@ namespace s2industries.ZUGFeRD
                 City = XmlUtils.NodeAsString(node, "./ram:PostalTradeAddress/ram:CityName", nsmgr),
                 Country = default(CountryCodes).FromString(XmlUtils.NodeAsString(node, "./ram:PostalTradeAddress/ram:CountryID", nsmgr)),
                 SpecifiedLegalOrganization = _nodeAsLegalOrganization(node, "./ram:SpecifiedLegalOrganization", nsmgr),
+ 
             };
 
             string lineOne = XmlUtils.NodeAsString(node, "./ram:PostalTradeAddress/ram:LineOne", nsmgr);
