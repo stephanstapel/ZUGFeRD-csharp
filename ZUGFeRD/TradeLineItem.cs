@@ -629,6 +629,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="chargeFreeQuantity">Quantity of the included charge free product</param>
         /// <param name="chargeFreeUnitCode">Unit code for the quantity</param>
+        /// </summary>
+        /// <returns></returns>
         public void SetChargeFreeQuantity(decimal chargeFreeQuantity, QuantityCodes chargeFreeUnitCode)
         {
             ChargeFreeQuantity = chargeFreeQuantity;
@@ -640,6 +642,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="packageQuantity">Quantity of the included charge free product</param>
         /// <param name="packageUnitCode">Unit code for the quantity</param>
+        /// </summary>
+        /// <returns></returns>
         public void SetPackageQuantity(decimal packageQuantity, QuantityCodes packageUnitCode)
         {
             PackageQuantity = packageQuantity;
