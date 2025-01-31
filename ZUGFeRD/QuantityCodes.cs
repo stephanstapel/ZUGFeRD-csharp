@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,21 +53,21 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         C62,
 
-		/// <summary>
-		/// centigram; Zentigramm
-		/// </summary>
-		CGM,
+        /// <summary>
+        /// centigram; Zentigramm
+        /// </summary>
+        CGM,
 
-		/// <summary>
+        /// <summary>
         /// hundred leave; 100 Blätter
         /// A unit of count defining the number of leaves, expressed in units of one hundred leaves.
-		/// </summary>
-		CLF,
+        /// </summary>
+        CLF,
 
         /// <summary>
         /// centilitre
         /// </summary>
-		CLT,
+        CLT,
 
         /// <summary>
         /// square centimetre
@@ -617,12 +618,9 @@ namespace s2industries.ZUGFeRD
         E48,
 
         /// <summary>
-        /// Metric Carat
+        /// Mutually Defined
         /// </summary>
-        /// <remarks>
-        /// Einheit für die Masse von Edelsteinen. Abkürzung Kt oder ct (kein gesetzliches Einheitszeichen)
-        /// </remarks>
-        CTM
+        ZZ,
     }
 
 
@@ -672,7 +670,7 @@ namespace s2industries.ZUGFeRD
 
         public static string EnumToString(this QuantityCodes c)
         {
-            return c.ToString("g").Replace("_","");
+            return c == QuantityCodes.Unknown ? "ZZ" : c.ToString("g").Replace("_", "");
         } // !ToString()
     }
 }
