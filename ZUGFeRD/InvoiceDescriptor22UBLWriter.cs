@@ -469,13 +469,6 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
-                if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
-                {
-                    Writer.WriteStartElement("cbc", "AllowanceChargeReason"); // BT-97 / BT-104
-                    Writer.WriteValue(tradeAllowanceCharge.Reason);
-                    Writer.WriteEndElement();
-                }
-
                 Writer.WriteStartElement("cbc", "Amount"); // BT-92 / BT-99
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
