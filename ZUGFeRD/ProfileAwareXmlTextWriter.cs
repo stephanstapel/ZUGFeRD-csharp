@@ -84,20 +84,20 @@ namespace s2industries.ZUGFeRD
 
         public void WriteStartElement(string prefix, string localName, Profile profile = Profile.Unknown)
         {
-            Profile _profile = profile;
+            Profile safeProfile = profile;
             if (profile == Profile.Unknown)
             {
-                _profile = this.CurrentProfile;
+                safeProfile = this.CurrentProfile;
             }
 
-            if (!_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(_profile))
+            if (!_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(safeProfile))
             {
-                this.XmlStack.Push(new StackInfo() { Profile = _profile, IsVisible = false });
+                this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = false });
                 return;
             }
             else
             {
-                this.XmlStack.Push(new StackInfo() { Profile = _profile, IsVisible = true });
+                this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = true });
             }
 
             if (this.TextWriter == null)
@@ -150,13 +150,13 @@ namespace s2industries.ZUGFeRD
 
         public void WriteElementString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
         {
-            Profile _profile = profile;
+            Profile safeProfile = profile;
             if (profile == Profile.Unknown)
             {
-                _profile = this.CurrentProfile;
+                safeProfile = this.CurrentProfile;
             }
 
-            if (this.TextWriter == null || !_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(_profile))
+            if (this.TextWriter == null || !_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(safeProfile))
             {
                 return;
             }

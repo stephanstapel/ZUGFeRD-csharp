@@ -38,11 +38,27 @@ namespace s2industries.ZUGFeRD
             {
                 throw new IllegalStreamException("Cannot write to stream");
             }
+            
 
             long streamPosition = stream.Position;
 
             this.Descriptor = descriptor;
             this.Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
+            bool isInvoice = true;
+            if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
+            {
+                // this is a duplicate, just to make sure: also a Correction is regarded as an Invoice
+                isInvoice = true;
+            }
+            else if (this.Descriptor.Type == InvoiceType.CreditNote)
+            {
+                isInvoice = false;
+            }
+            else
+            {
+                throw new NotImplementedException("Not implemented yet.");
+            }
+
             Dictionary<string, string> namespaces = new Dictionary<string, string>()
             {
                 { "cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" },
@@ -50,12 +66,13 @@ namespace s2industries.ZUGFeRD
                 { "ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" },
                 { "xs", "http://www.w3.org/2001/XMLSchema" }
             };
-            if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
-            {
+            
+            if (isInvoice)
+            {                
                 namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
-            else if (this.Descriptor.Type == InvoiceType.CreditNote)
-            {
+            else
+            {                
                 namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
             this.Writer.SetNamespaces(namespaces);
@@ -63,20 +80,14 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartDocument();
 
-
-            if (this.Descriptor.Type != InvoiceType.Invoice && this.Descriptor.Type != InvoiceType.CreditNote && this.Descriptor.Type != InvoiceType.Correction)
-            {
-                throw new NotImplementedException("Not implemented yet.");
-            }
-
             #region Kopfbereich
             // UBL has different namespace for different types
-            if (this.Descriptor.Type == InvoiceType.Invoice || this.Descriptor.Type == InvoiceType.Correction)
+            if (isInvoice)
             {
                 Writer.WriteStartElement("ubl", "Invoice");
                 Writer.WriteAttributeString("xmlns", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
-            else if (this.Descriptor.Type == InvoiceType.CreditNote)
+            else
             {
                 Writer.WriteStartElement("ubl", "CreditNote");
                 Writer.WriteAttributeString("xmlns", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
@@ -102,7 +113,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
             }
 
-            Writer.WriteElementString("cbc", "InvoiceTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
+            if (isInvoice)
+            {
+                Writer.WriteElementString("cbc", "InvoiceTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
+            }
+            else
+            {
+                Writer.WriteElementString("cbc", "CreditNoteTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
+            }
 
 
             _writeNotes(Writer, this.Descriptor.Notes);
@@ -294,7 +312,7 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentMeans
-            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
+            if (!this.Descriptor.AnyCreditorFinancialAccount() && !this.Descriptor.AnyDebitorFinancialAccount())
             {
                 if (this.Descriptor.PaymentMeans != null)
                 {
@@ -318,7 +336,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetCreditorFinancialAccounts())
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
@@ -360,7 +378,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 //[BR - 67] - An Invoice shall contain maximum one Payment Mandate(BG - 19).
-                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetDebitorFinancialAccounts())
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
@@ -451,6 +469,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
+                if (!string.IsNullOrWhiteSpace(tradeAllowanceCharge.Reason))
+                {
+                    Writer.WriteStartElement("cbc", "AllowanceChargeReason"); // BT-97 / BT-104
+                    Writer.WriteValue(tradeAllowanceCharge.Reason);
+                    Writer.WriteEndElement();
+                }
+
                 Writer.WriteStartElement("cbc", "Amount"); // BT-92 / BT-99
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
@@ -480,12 +505,12 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             // Tax Total
-            if ((this.Descriptor.Taxes?.Any() == true) && (this.Descriptor.TaxTotalAmount != null))
+            if (this.Descriptor.AnyApplicableTradeTaxes() && (this.Descriptor.TaxTotalAmount != null))
             {
                 Writer.WriteStartElement("cac", "TaxTotal");
                 _writeOptionalAmount(Writer, "cbc", "TaxAmount", this.Descriptor.TaxTotalAmount, forceCurrency: true);
 
-                foreach (Tax tax in this.Descriptor.Taxes)
+                foreach (Tax tax in this.Descriptor.GetApplicableTradeTaxes())
                 {
                     Writer.WriteStartElement("cac", "TaxSubtotal");
                     _writeOptionalAmount(Writer, "cbc", "TaxableAmount", tax.BasisAmount, forceCurrency: true);
@@ -524,12 +549,12 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); //!LegalMonetaryTotal
 
 
-            foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
+            foreach (TradeLineItem tradeLineItem in this.Descriptor.GetTradeLineItems())
             {
                 //Skip items with parent line id because these are written recursively in the _WriteTradeLineItem method
                 if (String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
                 {
-                    _WriteTradeLineItem(tradeLineItem);
+                    _WriteTradeLineItem(tradeLineItem, isInvoice);
                 }
             }
 
@@ -541,15 +566,29 @@ namespace s2industries.ZUGFeRD
 
         }
 
-        private void _WriteTradeLineItem(TradeLineItem tradeLineItem)
+        private void _WriteTradeLineItem(TradeLineItem tradeLineItem, bool isInvoice = true)
         {
             if (String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
             {
-                Writer.WriteStartElement("cac", "InvoiceLine");
+                if (isInvoice)
+                {
+                    Writer.WriteStartElement("cac", "InvoiceLine");
+                }
+                else
+                {
+                    Writer.WriteStartElement("cac", "CreditNoteLine");
+                }
             }
             else
             {
-                Writer.WriteStartElement("cac", "SubInvoiceLine");
+                if (isInvoice)
+                {
+                    Writer.WriteStartElement("cac", "SubInvoiceLine");
+                }
+                else
+                {
+                    Writer.WriteStartElement("cac", "SubCreditNoteLine");
+                }
             }
             Writer.WriteElementString("cbc", "ID", tradeLineItem.AssociatedDocument.LineID);
 
@@ -672,13 +711,14 @@ namespace s2industries.ZUGFeRD
             // TODO Add Tax Information for the tradeline item
 
             //Write sub invoice lines recursively
-            foreach (TradeLineItem subTradeLineItem in this.Descriptor.TradeLineItems.Where(t => t.AssociatedDocument.ParentLineID == tradeLineItem.AssociatedDocument.LineID))
+            foreach (TradeLineItem subTradeLineItem in this.Descriptor.GetTradeLineItems().Where(t => t.AssociatedDocument.ParentLineID == tradeLineItem.AssociatedDocument.LineID))
             {
-                _WriteTradeLineItem(subTradeLineItem);
+                _WriteTradeLineItem(subTradeLineItem, isInvoice);
             }
 
             Writer.WriteEndElement(); //!InvoiceLine
         }
+
 
         private void _WriteCommodityClassification(ProfileAwareXmlTextWriter writer, List<DesignatedProductClassification> designatedProductClassifications)
         {
@@ -696,8 +736,7 @@ namespace s2industries.ZUGFeRD
                     continue;
                 }
 
-                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158
-                writer.WriteValue(classification.ClassCode, profile: ALL_PROFILES);
+                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158                
                 Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
@@ -706,6 +745,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 // no name attribute in Peppol Billing!
+                writer.WriteValue(classification.ClassCode, profile: ALL_PROFILES);
 
                 writer.WriteEndElement();
             }

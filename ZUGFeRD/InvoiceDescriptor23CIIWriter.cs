@@ -132,7 +132,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("rsm", "SupplyChainTradeTransaction");
 
             #region IncludedSupplyChainTradeLineItem
-            foreach (TradeLineItem tradeLineItem in this.Descriptor.TradeLineItems)
+            foreach (TradeLineItem tradeLineItem in this.Descriptor.GetTradeLineItems())
             {
                 Writer.WriteStartElement("ram", "IncludedSupplyChainTradeLineItem");
 
@@ -300,6 +300,10 @@ namespace s2industries.ZUGFeRD
                     if (tradeLineItem.ContractReferencedDocument != null)
                     {
                         Writer.WriteStartElement("ram", "ContractReferencedDocument", Profile.Extended);
+
+                        // reference to the contract position
+                        Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.ContractReferencedDocument.LineID);
+
                         if (tradeLineItem.ContractReferencedDocument.IssueDateTime.HasValue)
                         {
                             Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -413,7 +417,14 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
                 Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 _writeElementWithAttributeWithPrefix(Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
-
+                if (tradeLineItem.ChargeFreeQuantity.HasValue)
+                {
+                    _writeElementWithAttributeWithPrefix(Writer, "ram", "ChargeFreeQuantity", "unitCode", tradeLineItem.ChargeFreeUnitCode.EnumToString(), _formatDecimal(tradeLineItem.ChargeFreeQuantity, 4), Profile.Extended);
+                }
+                if (tradeLineItem.PackageQuantity.HasValue)
+                {
+                    _writeElementWithAttributeWithPrefix(Writer, "ram", "PackageQuantity", "unitCode", tradeLineItem.PackageUnitCode.EnumToString(), _formatDecimal(tradeLineItem.PackageQuantity, 4), Profile.Extended);
+                }
                 if (tradeLineItem.ShipTo != null)
                 {
                     _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, tradeLineItem.ShipTo, Profile.Extended);
@@ -441,6 +452,9 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument", Profile.Extended); // this violates CII-SR-175 for XRechnung 3
                     Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.DeliveryNoteReferencedDocument.ID);
 
+                    // reference to the delivery note item
+                    Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.DeliveryNoteReferencedDocument.LineID);
+
                     if (tradeLineItem.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                     {
                         Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -453,9 +467,6 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteEndElement(); // !ram:DeliveryNoteReferencedDocument
                 }
-
-                /// TODO: Add ShipToTradeParty
-                /// TODO: Add UltimateShipToTradeParty
 
                 Writer.WriteEndElement(); // !ram:SpecifiedLineTradeDelivery
                 #endregion
@@ -739,8 +750,8 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum);
-            _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum, this.Descriptor.ShipToContact);
+            _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, this.Descriptor.UltimateShipToContact);
             _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom, Profile.Extended);
 
             #region ActualDeliverySupplyChainEvent
@@ -858,7 +869,7 @@ namespace s2industries.ZUGFeRD
             #region SpecifiedTradeSettlementPaymentMeans
             //  10. SpecifiedTradeSettlementPaymentMeans (optional), BG-16
 
-            if (this.Descriptor.CreditorBankAccounts.Count == 0 && this.Descriptor.DebitorBankAccounts.Count == 0)
+            if (!this.Descriptor.AnyCreditorFinancialAccount() && !this.Descriptor.AnyDebitorFinancialAccount())
             {
                 if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
                 {
@@ -878,7 +889,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                foreach (BankAccount account in this.Descriptor.CreditorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetCreditorFinancialAccounts())
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum);
 
@@ -912,7 +923,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
 
-                foreach (BankAccount account in this.Descriptor.DebitorBankAccounts)
+                foreach (BankAccount account in this.Descriptor.GetDebitorFinancialAccounts())
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
 
@@ -1014,7 +1025,7 @@ namespace s2industries.ZUGFeRD
             }
 
             //  14. SpecifiedLogisticsServiceCharge (optional)
-            foreach (ServiceCharge serviceCharge in this.Descriptor.ServiceCharges)
+            foreach (ServiceCharge serviceCharge in this.Descriptor.GetLogisticsServiceCharges())
             {
                 Writer.WriteStartElement("ram", "SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
                 Writer.WriteOptionalElementString("ram", "Description", serviceCharge.Description);
@@ -1196,9 +1207,9 @@ namespace s2industries.ZUGFeRD
 
             #region ReceivableSpecifiedTradeAccountingAccount
             // Detailinformationen zur Buchungsreferenz, BT-19-00
-            if (this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts?.Any() == true)
+            if (this.Descriptor.AnyReceivableSpecifiedTradeAccountingAccounts())
             {
-                foreach (var traceAccountingAccount in this.Descriptor.ReceivableSpecifiedTradeAccountingAccounts)
+                foreach (var traceAccountingAccount in this.Descriptor.GetReceivableSpecifiedTradeAccountingAccounts())
                 {
                     if (string.IsNullOrWhiteSpace(traceAccountingAccount.TradeAccountID))
                     {
@@ -1364,7 +1375,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
-            this.Descriptor.Taxes?.ForEach (tax =>
+            this.Descriptor.GetApplicableTradeTaxes()?.ForEach (tax =>
             {
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 

@@ -29,5 +29,9 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class ContractReferencedDocument : BaseReferencedDocument
     {
+        /// <summary>
+        /// Reference to the contract position BT-X-25
+        /// </summary>
+        public string LineID { get; set; }
     }
 }

@@ -46,6 +46,7 @@ This library allows to load and create PDF/A files.
 
   <ItemGroup>
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
+    <PackageReference Include="SkiaSharp" Version="3.118.0-preview.2.3" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.0" />
     <PackageReference Include="ZUGFeRD-csharp" Version="16.1.0" />
   </ItemGroup>

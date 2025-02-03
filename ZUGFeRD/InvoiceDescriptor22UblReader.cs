@@ -307,13 +307,13 @@ namespace s2industries.ZUGFeRD
             XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//cac:PaymentMeans/cac:PayeeFinancialAccount", nsmgr);
             foreach (XmlNode node in creditorFinancialAccountNodes)
             {
-                retval.CreditorBankAccounts.Add(_nodeAsBankAccount(node, ".", nsmgr));
+                retval._AddCreditorFinancialAccount(_nodeAsBankAccount(node, ".", nsmgr));
             }
 
             XmlNodeList debitorFinancialAccountNodes = doc.SelectNodes("//cac:PaymentMeans/cac:PaymentMandate/cac:PayerFinancialAccount", nsmgr);
             foreach (XmlNode node in debitorFinancialAccountNodes)
             {
-                retval.DebitorBankAccounts.Add(_nodeAsBankAccount(node, ".", nsmgr));
+                retval._AddDebitorFinancialAccount(_nodeAsBankAccount(node, ".", nsmgr));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//cac:TaxTotal/cac:TaxSubtotal", nsmgr))
@@ -386,7 +386,7 @@ namespace s2industries.ZUGFeRD
 
             // TODO: Find value //foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount", nsmgr))
             //{
-            //  retval.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+            //  retval._ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             //  {
             //    TradeAccountID = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr),
             //    TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(node, ".//ram:TypeCode", nsmgr),
@@ -447,7 +447,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes(tradeLineItemSelector, nsmgr))
             {
-                retval.TradeLineItems.AddRange(_parseTradeLineItem(node, nsmgr));
+                retval._AddTradeLineItems(_parseTradeLineItem(node, nsmgr));
             }
 
             return retval;
@@ -531,7 +531,7 @@ namespace s2industries.ZUGFeRD
                     DesignatedProductClassificationClassCodes listID = default(DesignatedProductClassificationClassCodes).FromString(XmlUtils.NodeAsString(commodityClassification, "./@listID", nsmgr));
                     item.AddDesignatedProductClassification(
                         listID,
-                        XmlUtils.NodeAsString(commodityClassification, "./@istVersionID", nsmgr),
+                        XmlUtils.NodeAsString(commodityClassification, "./@listVersionID", nsmgr),
                         commodityClassification.InnerText,
                         String.Empty // no name in Peppol Billing!
                         );
@@ -618,7 +618,7 @@ namespace s2industries.ZUGFeRD
             //        //TODO
             //        break;
             //      case "ram:ReceivableSpecifiedTradeAccountingAccount":
-            //        // TODO: Find value //item.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
+            //        // TODO: Find value //item._ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             //        //{
             //        //  TradeAccountID = XmlUtils.NodeAsString(LineTradeSettlementNode, "./ram:ID", nsmgr),
             //        //  TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(LineTradeSettlementNode, ".//ram:TypeCode", nsmgr)
