@@ -89,6 +89,20 @@ namespace s2industries.ZUGFeRD
         public decimal BilledQuantity { get; set; }
 
         /// <summary>
+        /// No charge quantity
+        ///
+        /// BT-X-46
+        /// </summary>
+        public decimal? ChargeFreeQuantity { get; set; }
+
+        /// <summary>
+        /// Package quantity
+        ///
+        /// BT-X-47
+        /// </summary>
+        public decimal? PackageQuantity { get; set; }
+
+        /// <summary>
         /// Invoice line net amount including (!) trade allowance charges for the line item
         ///
         /// BT-131
@@ -155,6 +169,20 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public QuantityCodes UnitCode { get; set; }
 
+        /// <summary>
+        /// Charge Free Quantity Unit Code
+        /// 
+        /// BT-X-46-0
+        /// </summary>
+        public QuantityCodes ChargeFreeUnitCode { get; set; }
+
+        /// <summary>
+        /// Package Quantity Unit Code
+        /// 
+        /// BT-X-47-0
+        /// </summary>
+        public QuantityCodes PackageUnitCode { get; set; }
+        
         /// <summary>
         /// Identifier of the invoice line item
         ///
@@ -278,7 +306,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
         /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+        public TradeLineItem AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                             string reason, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
@@ -290,6 +318,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason,
                 ReasonCode = reasonCode
             });
+            return this;
         } // !AddTradeAllowanceCharge()
 
 
@@ -303,7 +332,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
         /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+        public TradeLineItem AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                             decimal? chargePercentage, string reason, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
             this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
@@ -316,6 +345,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason,
                 ReasonCode = reasonCode
             });
+            return this;
         } // !AddTradeAllowanceCharge()
 
 
@@ -337,7 +367,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+        public TradeLineItem AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                      string reason,
                                                      AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
@@ -350,6 +380,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason,
                 ReasonCode = reasonCode
             });
+            return this;
         } // !AddSpecifiedTradeAllowanceCharge()
 
 
@@ -362,7 +393,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
-        public void AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+        public TradeLineItem AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                      decimal? chargePercentage, string reason,
                                                      AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
         {
@@ -376,6 +407,7 @@ namespace s2industries.ZUGFeRD
                 Reason = reason,
                 ReasonCode = reasonCode
             });
+            return this;
         } // !AddSpecifiedTradeAllowanceCharge()
 
 
@@ -392,9 +424,10 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// The value given here refers to the superior line. In this way, a hierarchy tree of invoice items can be mapped.
         /// </summary>
-        public void SetParentLineId(string parentLineId)
+        public TradeLineItem SetParentLineId(string parentLineId)
         {
             this.AssociatedDocument.ParentLineID = parentLineId;
+            return this;
         }
 
         /// <summary>
@@ -402,24 +435,30 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="lineStatusCode">The status code for this line</param>
         /// <param name="lineStatusReasonCode">The reason code explaining the status</param>
-        public void SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
+        public TradeLineItem SetLineStatus(LineStatusCodes lineStatusCode, LineStatusReasonCodes lineStatusReasonCode)
         {
             this.AssociatedDocument.LineStatusCode = lineStatusCode;
             this.AssociatedDocument.LineStatusReasonCode = lineStatusReasonCode;
+            return this;
         }
 
+
         /// <summary>
-        /// Sets the delivery note reference information for this trade line item
+        /// Sets the delivery note reference information for this trade line item. BG-X-83
+        /// Only available in Extended profile.
         /// </summary>
-        /// <param name="deliveryNoteId">The identifier of the delivery note</param>
-        /// <param name="deliveryNoteDate">The date of the delivery note</param>
-        public void SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate)
+        /// <param name="deliveryNoteId">The identifier of the delivery note. BT-X-92</param>
+        /// <param name="deliveryNoteDate">The date of the delivery note. BT-X-94</param>
+        /// <param name="deliveryNoteReferencedLineId">The identifier of the delivery note item. BT-X-93</param>
+        public TradeLineItem SetDeliveryNoteReferencedDocument(string deliveryNoteId, DateTime? deliveryNoteDate, string deliveryNoteReferencedLineId = null)
         {
             this.DeliveryNoteReferencedDocument = new DeliveryNoteReferencedDocument()
             {
                 ID = deliveryNoteId,
-                IssueDateTime = deliveryNoteDate
+                IssueDateTime = deliveryNoteDate,
+                LineID = deliveryNoteReferencedLineId
             };
+            return this;
         } // !SetDeliveryNoteReferencedDocument()
 
 
@@ -430,7 +469,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="typeCode">Type of the document</param>
         /// <param name="code">Reference type code</param>
         /// <param name="issueDateTime">Issue date and time of the document</param>
-        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
+        public TradeLineItem AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
         {
             this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -439,7 +478,9 @@ namespace s2industries.ZUGFeRD
                 TypeCode = typeCode,
                 ReferenceTypeCode = code
             });
+            return this;
         } // !AddAdditionalReferencedDocument()
+
 
         /// <summary>
         /// Adds a referenced product that is included in this trade line item
@@ -447,7 +488,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="name">Name of the included product</param>
         /// <param name="unitQuantity">Quantity of the included product</param>
         /// <param name="quantityCodes">Unit code for the quantity</param>
-        public void AddIncludedReferencedProduct(string name, decimal? unitQuantity = null, QuantityCodes? quantityCodes = null)
+        public TradeLineItem AddIncludedReferencedProduct(string name, decimal? unitQuantity = null, QuantityCodes? quantityCodes = null)
         {
             this.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
             {
@@ -455,7 +496,9 @@ namespace s2industries.ZUGFeRD
                 UnitQuantity = unitQuantity,
                 UnitCode = quantityCodes
             });
-        }
+            return this;
+        } // !AddIncludedReferencedProduct()
+
 
         /// <summary>
         /// Add an additional reference document
@@ -469,7 +512,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="filename"></param>
         /// <param name="uriID"></param>
         /// <param name="lineID"></param>
-        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null,
+        public TradeLineItem AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null,
             string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null,
             string filename = null, string uriID = null, string lineID = null)
         {
@@ -485,6 +528,7 @@ namespace s2industries.ZUGFeRD
                 URIID = uriID,
                 LineID = lineID
             });
+            return this;
         } // !AddAdditionalReferencedDocument()
 
 
@@ -503,7 +547,7 @@ namespace s2industries.ZUGFeRD
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference and will only output the referenced order line id
         /// but not issuer assigned id and date
         /// </summary>
-        public void SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate, string orderReferencedLineId)
+        public TradeLineItem SetOrderReferencedDocument(string orderReferencedId, DateTime? orderReferencedDate, string orderReferencedLineId)
         {
             this.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
             {
@@ -511,21 +555,26 @@ namespace s2industries.ZUGFeRD
                 IssueDateTime = orderReferencedDate,
                 LineID = orderReferencedLineId
             };
+            return this;
         } // !SetOrderReferencedDocument()
 
 
         /// <summary>
-        /// Sets the contract reference information for this trade line item
+        /// Sets the contract reference information for this trade line item. BG-X-2
+        /// Only available in Extended profile.
         /// </summary>
-        /// <param name="contractReferencedId">The identifier of the contract</param>
-        /// <param name="contractReferencedDate">The date of the contract</param>
-        public void SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate)
+        /// <param name="contractReferencedId">The identifier of the contract. BT-X-24</param>
+        /// <param name="contractReferencedDate">The date of the contract. BT-X-26</param>
+        /// <param name="contractReferencedLineId">The identifier of the contract position. BT-X-25</param>
+        public TradeLineItem SetContractReferencedDocument(string contractReferencedId, DateTime? contractReferencedDate, string contractReferencedLineId = null)
         {
             this.ContractReferencedDocument = new ContractReferencedDocument()
             {
                 ID = contractReferencedId,
-                IssueDateTime = contractReferencedDate
+                IssueDateTime = contractReferencedDate,
+                LineID = contractReferencedLineId
             };
+            return this;
         } // !SetContractReferencedDocument()
 
 
@@ -533,9 +582,10 @@ namespace s2industries.ZUGFeRD
         /// Adds an invoice line Buyer accounting reference with default Unknown account type
         /// </summary>
         /// <param name="AccountID">The accounting reference identifier</param>
-        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
+        public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
         {
             AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
+            return this;
         }
 
 
@@ -543,13 +593,14 @@ namespace s2industries.ZUGFeRD
         /// Adds an invoice line Buyer accounting reference. BT-133
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference
         /// </summary>
-        public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+        public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
                 TradeAccountID = AccountID,
                 TradeAccountTypeCode = AccountTypeCode
             });
+            return this;
         }
 
 
@@ -590,5 +641,32 @@ namespace s2industries.ZUGFeRD
         {
             return this.DesignatedProductClassifications.Where(c => c.ClassCode.Equals(classCode)).ToList();
         } // !GetDesignatedProductClassificationsByClassCode()
+
+        /// sets the quantity, at line level, free of charge, in this trade delivery.
+        /// </summary>
+        /// <param name="chargeFreeQuantity">Quantity of the included charge free product</param>
+        /// <param name="chargeFreeUnitCode">Unit code for the quantity</param>
+        /// </summary>
+        /// <returns></returns>
+        public TradeLineItem SetChargeFreeQuantity(decimal chargeFreeQuantity, QuantityCodes chargeFreeUnitCode)
+        {
+            ChargeFreeQuantity = chargeFreeQuantity;
+            ChargeFreeUnitCode = chargeFreeUnitCode;
+            return this;
+        } // !SetChargeFreeQuantity()
+
+        /// sets the number of packages, at line level, in this trade delivery.
+        /// </summary>
+        /// <param name="packageQuantity">Quantity of the included charge free product</param>
+        /// <param name="packageUnitCode">Unit code for the quantity</param>
+        /// </summary>
+        /// <returns></returns>
+        public TradeLineItem SetPackageQuantity(decimal packageQuantity, QuantityCodes packageUnitCode)
+        {
+            PackageQuantity = packageQuantity;
+            PackageUnitCode = packageUnitCode;
+            return this;
+        } // !SetPackageQuantity()
+
     }
 }

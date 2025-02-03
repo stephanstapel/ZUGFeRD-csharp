@@ -578,8 +578,8 @@ namespace s2industries.ZUGFeRD.Test
             lineItem.Description = "This is line item TB100A4";
             lineItem.BuyerAssignedID = "0815";
             lineItem.SetOrderReferencedDocument("12345", timestamp, "1");
-            lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp);
-            lineItem.SetContractReferencedDocument("12345", timestamp);
+            lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp, "1");
+            lineItem.SetContractReferencedDocument("12345", timestamp, "1");
 
             lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp);
 
@@ -787,8 +787,10 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("1", loadedLineItem.BuyerOrderReferencedDocument.LineID);
             Assert.AreEqual("12345", loadedLineItem.BuyerOrderReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.BuyerOrderReferencedDocument.IssueDateTime);
+            Assert.AreEqual("1", loadedLineItem.DeliveryNoteReferencedDocument.LineID);
             Assert.AreEqual("12345", loadedLineItem.DeliveryNoteReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.DeliveryNoteReferencedDocument.IssueDateTime);
+            Assert.AreEqual("1", loadedLineItem.ContractReferencedDocument.LineID);
             Assert.AreEqual("12345", loadedLineItem.ContractReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.ContractReferencedDocument.IssueDateTime);
 
