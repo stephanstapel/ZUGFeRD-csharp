@@ -462,6 +462,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
                 }
 
+                if (tradeAllowanceCharge.ChargePercentage.HasValue && tradeAllowanceCharge.BasisAmount != null)
+                {
+                    Writer.WriteStartElement("cbc", "MultiplierFactorNumeric"); 
+                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
+                    Writer.WriteEndElement();
+                }
+
                 Writer.WriteStartElement("cbc", "Amount"); // BT-92 / BT-99
                 Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                 Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount));
@@ -839,6 +846,14 @@ namespace s2industries.ZUGFeRD
                             writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
                         }
                         writer.WriteValue(party.GlobalID.ID);
+                        writer.WriteEndElement();//!ID
+                        writer.WriteEndElement();//!PartyIdentification
+                    }
+                    else if ((party.ID != null) && (!String.IsNullOrWhiteSpace(party.ID.ID)))
+                    {
+                        writer.WriteStartElement("cac", "PartyIdentification");
+                        writer.WriteStartElement("cbc", "ID");
+                        writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();//!ID
                         writer.WriteEndElement();//!PartyIdentification
                     }
