@@ -1590,7 +1590,7 @@ namespace s2industries.ZUGFeRD
 
         internal void _AddCreditorFinancialAccount(BankAccount bankAccount)
         {
-            this.GetCreditorFinancialAccounts()?.Add(bankAccount);
+            this.CreditorBankAccounts.Add(bankAccount);
         } // !_AddCreditorFinancialAccount()
 
 
@@ -1600,7 +1600,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>List of creditor financial accounts</returns>
         public List<BankAccount> GetCreditorFinancialAccounts()
         {
-            return this.GetCreditorFinancialAccounts()?.ToList();
+            return this.CreditorBankAccounts;
         } // !GetCreditorFinancialAccounts()
 
 
@@ -1647,7 +1647,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>List of debitor financial accounts</returns>
         public List<BankAccount> GetDebitorFinancialAccounts()
         {
-            return this.GetDebitorFinancialAccounts()?.ToList();
+            return this.DebitorBankAccounts;
         } // !GetDebitorFinancialAccounts()
 
 
@@ -1692,7 +1692,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>List of receivable specified trade accounting accounts</returns>
         public List<ReceivableSpecifiedTradeAccountingAccount> GetReceivableSpecifiedTradeAccountingAccounts()
         {
-            return this.GetReceivableSpecifiedTradeAccountingAccounts()?.ToList();
+            return this._ReceivableSpecifiedTradeAccountingAccounts;
         } // !GetReceivableSpecifiedTradeAccountingAccounts()
 
 
