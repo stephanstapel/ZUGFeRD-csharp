@@ -1159,7 +1159,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>True if trade taxes exist, false otherwise</returns>
         public bool AnyApplicableTradeTaxes()
         {
-            return this.GetApplicableTradeTaxes()?.Any() == true;
+            return this.Taxes?.Any() == true;
         } // !AnyApplicableTradeTaxes()
 
 
