@@ -149,6 +149,20 @@ namespace s2industries.ZUGFeRD
         public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
 
         /// <summary>
+        /// Exemption Reason Text for no Tax
+        /// 
+        /// BT-X-96
+        /// </summary>
+        public string ExemptionReason { get; set; }
+
+        /// <summary>
+        /// ExemptionReasonCode for no Tax
+        /// 
+        /// BT-X-97
+        /// </summary>
+        public TaxExemptionReasonCodes? ExemptionReasonCode { get; set; }
+
+        /// <summary>
         /// Net unit price of the item
         ///
         /// BT-146
