@@ -1249,7 +1249,7 @@ namespace s2industries.ZUGFeRD
             }
             else
             {
-                if (this.GetTradeLineItems()?.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)) == true)
+                if (this.TradeLineItems?.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)) == true)
                 {
                     throw new ArgumentException("LineID must be unique");
                 }
