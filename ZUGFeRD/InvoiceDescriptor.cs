@@ -338,20 +338,12 @@ namespace s2industries.ZUGFeRD
         [Obsolete("This property will be removed in version 18.0. Please use GetApplicableTradeTaxes() instead")]
         public  List<Tax> Taxes { get; internal set; } = new List<Tax>();
 
-        /// <summary>
-        /// Transport and packaging costs
-        /// </summary>
-        private List<ServiceCharge> _serviceCharges = new List<ServiceCharge>();
 
         /// <summary>
         /// Transport and packaging costs
         /// </summary>
         [Obsolete("This property will be removed in version 18.0. Please use GetLogisticsServiceCharges() instead")]
-        public List<ServiceCharge> ServiceCharges
-        {
-            get => _serviceCharges;
-            internal set => _serviceCharges = value;
-        }
+        public List<ServiceCharge> ServiceCharges { get; internal set; } = new List<ServiceCharge>();
 
         /// <summary>
         /// Gets all logistics service charges
@@ -359,7 +351,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>List of service charges</returns>
         public List<ServiceCharge> GetLogisticsServiceCharges()
         {
-            return _serviceCharges;
+            return this.ServiceCharges;
         } // !GetLogisticsServiceCharges()
 
         /// <summary>
@@ -906,7 +898,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="taxPercent">Tax percentage</param>
         public void AddLogisticsServiceCharge(decimal amount, string description, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
-            GetLogisticsServiceCharges()?.Add(new ServiceCharge()
+            this.ServiceCharges.Add(new ServiceCharge()
             {
                 Description = description,
                 Amount = amount,
@@ -1147,7 +1139,7 @@ namespace s2industries.ZUGFeRD
                 tax.CategoryCode = categoryCode;
             }
 
-            this.GetApplicableTradeTaxes()?.Add(tax);
+            this.Taxes.Add(tax);
         } // !AddApplicableTradeTax()
 
 
@@ -1288,7 +1280,7 @@ namespace s2industries.ZUGFeRD
                 contentCode: ContentCodes.Unknown
             ));
 
-            this.GetTradeLineItems()?.Add(item);
+            this.TradeLineItems.Add(item);
             return item;
         } // !AddTradeLineCommentItem()
 
@@ -1462,7 +1454,7 @@ namespace s2industries.ZUGFeRD
                 newItem.SetOrderReferencedDocument(buyerOrderID, buyerOrderDate, buyerOrderLineID);
             }
 
-            this.GetTradeLineItems()?.Add(newItem);
+            this.TradeLineItems.Add(newItem);
             return newItem;
         } // !AddTradeLineItem()
 
@@ -1473,7 +1465,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="item">Trade line item to add</param>
         internal void _AddTradeLineItem(TradeLineItem item)
         {
-            this.GetTradeLineItems()?.Add(item);
+            this.TradeLineItems.Add(item);
         } // !_AddTradeLineItem()
 
 
@@ -1483,7 +1475,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="items">Collection of trade line items to add</param>
         internal void _AddTradeLineItems(IEnumerable<TradeLineItem> items)
         {
-            this.GetTradeLineItems()?.AddRange(items);
+            this.TradeLineItems.AddRange(items);
         } // !_AddTradeLineItems()
 
 
@@ -1503,7 +1495,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>True if trade line items exist, false otherwise</returns>
         public bool AnyTradeLineItems()
         {
-            return this.GetTradeLineItems()?.Any() == true;
+            return this.TradeLineItems?.Any() == true;
         } // !AnyTradeLineItems()
 
 
@@ -1576,7 +1568,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="name">Optional: bank account name</param>
         public void AddCreditorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null, string name = null)
         {
-            this.GetCreditorFinancialAccounts()?.Add(new BankAccount()
+            this.CreditorBankAccounts.Add(new BankAccount()
             {
                 ID = id,
                 IBAN = iban,
@@ -1610,7 +1602,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>True if creditor financial accounts exist, false otherwise</returns>
         public bool AnyCreditorFinancialAccount()
         {
-            return this.GetCreditorFinancialAccounts()?.Any() == true;
+            return this.CreditorBankAccounts?.Any() == true;
         } // !AnyCreditorFinancialAccount()
 
 
@@ -1624,7 +1616,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="bankName">Optional: old German bank name</param>
         public void AddDebitorFinancialAccount(string iban, string bic, string id = null, string bankleitzahl = null, string bankName = null)
         {
-            this.GetDebitorFinancialAccounts()?.Add(new BankAccount()
+            this.DebitorBankAccounts.Add(new BankAccount()
             {
                 ID = id,
                 IBAN = iban,
@@ -1637,7 +1629,7 @@ namespace s2industries.ZUGFeRD
 
         internal void _AddDebitorFinancialAccount(BankAccount bankAccount)
         {
-            this.GetDebitorFinancialAccounts()?.Add(bankAccount);
+            this.DebitorBankAccounts.Add(bankAccount);
         } // !_AddDebitorFinancialAccount()
 
 
@@ -1657,7 +1649,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>True if debitor financial accounts exist, false otherwise</returns>
         public bool AnyDebitorFinancialAccount()
         {
-            return this.GetDebitorFinancialAccounts()?.Any() == true;
+            return this.DebitorBankAccounts?.Any() == true;
         } // !AnyDebitorFinancialAccount()
 
 
@@ -1678,7 +1670,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="AccountTypeCode">The account type code</param>
         public void AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
         {
-            this.GetReceivableSpecifiedTradeAccountingAccounts()?.Add(new ReceivableSpecifiedTradeAccountingAccount()
+            this._ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {
                 TradeAccountID = AccountID,
                 TradeAccountTypeCode = AccountTypeCode
@@ -1702,7 +1694,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>True if receivable specified trade accounting accounts exist, false otherwise</returns>
         public bool AnyReceivableSpecifiedTradeAccountingAccounts()
         {
-            return this.GetReceivableSpecifiedTradeAccountingAccounts()?.Any() == true;
+            return this._ReceivableSpecifiedTradeAccountingAccounts?.Any() == true;
         } // !AnyReceivableSpecifiedTradeAccountingAccounts()
 
 
