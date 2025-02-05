@@ -471,6 +471,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram", "FormattedIssueDateTime");
                         Writer.WriteStartElement("qdt", "DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
                         Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
                         Writer.WriteEndElement(); // !udt:DateTimeString
                         Writer.WriteEndElement(); // !FormattedIssueDateTime
