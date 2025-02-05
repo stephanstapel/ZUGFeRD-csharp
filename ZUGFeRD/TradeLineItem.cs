@@ -167,6 +167,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BT-146
         /// </summary>
+        [Obsolete("Please note that NetUnitPrice will not be optional but mandatory beginning with version 18.0")]
         public decimal? NetUnitPrice { get; set; }
 
         /// <summary>

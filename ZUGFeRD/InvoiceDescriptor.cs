@@ -1332,6 +1332,131 @@ namespace s2industries.ZUGFeRD
                                     string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
                                     )
+        {
+            return AddTradeLineItem(lineID: _getNextLineId(),
+                            name: name,
+                            netUnitPrice: netUnitPrice,
+                            description: description,
+                            unitCode: unitCode,
+                            unitQuantity: unitQuantity,
+                            grossUnitPrice: grossUnitPrice,                            
+                            billedQuantity: billedQuantity,
+                            lineTotalAmount: lineTotalAmount,
+                            taxType: taxType,
+                            categoryCode: categoryCode,
+                            taxPercent: taxPercent,
+                            comment: comment,
+                            id: id,
+                            sellerAssignedID: sellerAssignedID,
+                            buyerAssignedID: buyerAssignedID,
+                            deliveryNoteID: deliveryNoteID,
+                            deliveryNoteDate: deliveryNoteDate,
+                            buyerOrderLineID: buyerOrderLineID,
+                            buyerOrderID: buyerOrderID, // Extended!
+                            buyerOrderDate: buyerOrderDate,
+                            billingPeriodStart: billingPeriodStart,
+                            billingPeriodEnd: billingPeriodEnd
+                            );
+        } // !AddTradeLineItem()
+
+
+        /// <summary>
+        /// Adds a new line to the invoice. The line id is passed as a parameter.
+        /// </summary>
+        /// <param name="lineID">Line identifier</param>
+        /// <param name="name">Item name</param>
+        /// <param name="netUnitPrice">Net price per unit</param>
+        /// <param name="description">Item description</param>
+        /// <param name="unitCode">Unit of measure code</param>
+        /// <param name="unitQuantity">Quantity per unit</param>
+        /// <param name="grossUnitPrice">Gross price per unit</param>        
+        /// <param name="billedQuantity">Quantity being invoiced</param>
+        /// <param name="lineTotalAmount">Total line amount</param>
+        /// <param name="taxType">Type of tax</param>
+        /// <param name="categoryCode">Tax category</param>
+        /// <param name="taxPercent">Tax percentage</param>
+        /// <param name="comment">Optional comment</param>
+        /// <param name="id">Optional global ID</param>
+        /// <param name="sellerAssignedID">Seller's reference ID</param>
+        /// <param name="buyerAssignedID">Buyer's reference ID</param>
+        /// <param name="deliveryNoteID">Delivery note reference</param>
+        /// <param name="deliveryNoteDate">Delivery note date</param>
+        /// <param name="buyerOrderLineID">Buyer's order line reference</param>
+        /// <param name="buyerOrderID">Buyer's order reference</param>
+        /// <param name="buyerOrderDate">Order date</param>
+        /// <param name="billingPeriodStart">Start of billing period</param>
+        /// <param name="billingPeriodEnd">End of billing period</param>
+        /// <returns>Created trade line item</returns>
+        public TradeLineItem AddTradeLineItem(string lineID,
+                                    string name,
+                                    decimal netUnitPrice,
+                                    string description = null,
+                                    QuantityCodes unitCode = QuantityCodes.Unknown,
+                                    decimal? unitQuantity = null,
+                                    decimal? grossUnitPrice = null,                                    
+                                    decimal billedQuantity = 0,
+                                    decimal? lineTotalAmount = null,
+                                    TaxTypes taxType = TaxTypes.Unknown,
+                                    TaxCategoryCodes categoryCode = TaxCategoryCodes.Unknown,
+                                    decimal taxPercent = 0,
+                                    string comment = null,
+                                    GlobalID id = null,
+                                    string sellerAssignedID = "", string buyerAssignedID = "",
+                                    string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
+                                    string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
+                                    DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
+                                    )
+        {
+            if (String.IsNullOrWhiteSpace(lineID))
+            {
+                throw new ArgumentException("LineID cannot be Null or Empty");
+            }
+            else
+            {
+                if (this.GetTradeLineItems()?.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)) == true)
+                {
+                    throw new ArgumentException("LineID must be unique");
+                }
+            }
+
+            TradeLineItem newItem = new TradeLineItem(lineID)
+            {
+                GlobalID = id,
+                SellerAssignedID = sellerAssignedID,
+                BuyerAssignedID = buyerAssignedID,
+                Name = name,
+                Description = description,
+                UnitCode = unitCode,
+                UnitQuantity = unitQuantity,
+                GrossUnitPrice = grossUnitPrice,
+                NetUnitPrice = netUnitPrice,
+                BilledQuantity = billedQuantity,
+                LineTotalAmount = lineTotalAmount,
+                TaxType = taxType,
+                TaxCategoryCode = categoryCode,
+                TaxPercent = taxPercent,
+                BillingPeriodStart = billingPeriodStart,
+                BillingPeriodEnd = billingPeriodEnd
+            };
+
+            if (!String.IsNullOrWhiteSpace(comment))
+            {
+                newItem.AssociatedDocument.Notes.Add(new Note(comment, SubjectCodes.Unknown, ContentCodes.Unknown));
+            }
+
+            if (!String.IsNullOrWhiteSpace(deliveryNoteID) || deliveryNoteDate.HasValue)
+            {
+                newItem.SetDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
+            }
+
+            if (!String.IsNullOrWhiteSpace(buyerOrderLineID) || buyerOrderDate.HasValue || !String.IsNullOrWhiteSpace(buyerOrderID))
+            {
+                newItem.SetOrderReferencedDocument(buyerOrderID, buyerOrderDate, buyerOrderLineID);
+            }
+
+            this.TradeLineItems.Add(newItem);
+            return newItem;
+        } // !AddTradeLineItem()
 
 
         /// <summary>
@@ -1363,6 +1488,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
+        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0")]
         public TradeLineItem AddTradeLineItem(string name,
                                     string description = null,
                                     QuantityCodes unitCode = QuantityCodes.Unknown,
@@ -1436,6 +1562,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Created trade line item</returns>
+        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0")]
         public TradeLineItem AddTradeLineItem(string lineID,
                                     string name,
                                     string description = null,
