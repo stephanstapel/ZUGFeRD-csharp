@@ -824,5 +824,50 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(50m, lineItemTradeAllowanceCharge.ActualAmount);
             Assert.AreEqual("Reason: UnitTest", lineItemTradeAllowanceCharge.Reason);
         }
+
+        [TestMethod]
+        public void TestApplicableTradeDeliveryTermsExists()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.ApplicableTradeDeliveryTermsCode = TradeDeliveryTermCodes.CFR;
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.AreEqual(loadedInvoice.ApplicableTradeDeliveryTermsCode, TradeDeliveryTermCodes.CFR);
+        } // !TestSellerOrderReferencedDocument()
+
+        [TestMethod]
+        public void TestApplicableTradeDeliveryTermsIsNull()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.IsNull(loadedInvoice.ApplicableTradeDeliveryTermsCode);
+        } // !TestSellerOrderReferencedDocument()
     }
 }
