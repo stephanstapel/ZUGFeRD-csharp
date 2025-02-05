@@ -637,6 +637,12 @@ namespace s2industries.ZUGFeRD
         } // !AddDesignatedProductClassification()
 
 
+        public bool AnyDesignatedProductClassifications()
+        {
+            return this.DesignatedProductClassifications.Any();
+        } // !AnyDesignatedProductClassifications()
+
+
         /// <summary>
         /// Returns all existing designated product classifications
         /// </summary>

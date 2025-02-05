@@ -213,25 +213,22 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ApplicableProductCharacteristic
                     }
                 }
-
-                if (tradeLineItem.GetDesignatedProductClassifications().Any())
+                
+                foreach (var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
                 {
-                    foreach (var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
+                    if (designatedProductClassification.ListID == default(DesignatedProductClassificationClassCodes))
                     {
-                        if (designatedProductClassification.ListID == default(DesignatedProductClassificationClassCodes))
-                        {
-                            continue;
-                        }
-
-                        Writer.WriteStartElement("ram", "DesignatedProductClassification", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
-                        Writer.WriteStartElement("ram", "ClassCode");
-                        Writer.WriteAttributeString("listID", designatedProductClassification.ListID.EnumToString());
-                        Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
-                        Writer.WriteValue(designatedProductClassification.ClassCode);
-                        Writer.WriteEndElement(); // !ram::ClassCode
-                        Writer.WriteOptionalElementString("ram", "ClassName", designatedProductClassification.ClassName);
-                        Writer.WriteEndElement(); // !ram:DesignatedProductClassification
+                        continue;
                     }
+
+                    Writer.WriteStartElement("ram", "DesignatedProductClassification", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                    Writer.WriteStartElement("ram", "ClassCode");
+                    Writer.WriteAttributeString("listID", designatedProductClassification.ListID.EnumToString());
+                    Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
+                    Writer.WriteValue(designatedProductClassification.ClassCode);
+                    Writer.WriteEndElement(); // !ram::ClassCode
+                    Writer.WriteOptionalElementString("ram", "ClassName", designatedProductClassification.ClassName);
+                    Writer.WriteEndElement(); // !ram:DesignatedProductClassification
                 }
 
                 // TODO: IndividualTradeProductInstance, BG-X-84, Artikel (Handelsprodukt) Instanzen
