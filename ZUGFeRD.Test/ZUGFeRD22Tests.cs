@@ -3070,6 +3070,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNull(loadedInvoice.ApplicableTradeDeliveryTermsCode);
         } // !TestSellerOrderReferencedDocument()
 
+       
         [TestMethod]
         public void TestInvoiceExemptions()
         {

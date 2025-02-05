@@ -342,7 +342,7 @@ namespace s2industries.ZUGFeRD
                     if (needToWriteGrossUnitPrice)
                     {
                         Writer.WriteStartElement("ram", "GrossPriceProductTradePrice", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
-                        _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2);   // BT-148
+                        _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);   // BT-148
                         if (tradeLineItem.UnitQuantity.HasValue)
                         {
                             _writeElementWithAttributeWithPrefix(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
@@ -395,7 +395,7 @@ namespace s2industries.ZUGFeRD
                     #region NetPriceProductTradePrice
                     //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
                     Writer.WriteStartElement("ram", "NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                    _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2); // BT-146
+                    _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4); // BT-146
 
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
@@ -1338,6 +1338,33 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
         } // !_writeAdditionalReferencedDocument()
+
+
+        private void _writeOptionalAdaptiveAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, int maxNumDecimals = 4, bool forceCurrency = false, Profile profile = Profile.Unknown)
+        {
+            if (!value.HasValue)
+            {
+                return;
+            }
+
+            writer.WriteStartElement(prefix, tagName, profile);
+            if (forceCurrency)
+            {
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+            }
+
+            decimal rounded = Math.Round(value.Value, numDecimals, MidpointRounding.AwayFromZero);
+            if (value == rounded)
+            {
+                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
+            }
+            else
+            {
+                writer.WriteValue(_formatDecimal(value.Value, maxNumDecimals));
+            }
+
+            writer.WriteEndElement(); // !tagName
+        } // !_writeOptionalAdaptiveAmount()
 
 
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
