@@ -153,14 +153,14 @@ namespace s2industries.ZUGFeRD
         /// 
         /// BT-X-96
         /// </summary>
-        public string ExemptionReason { get; set; }
+        public string TaxExemptionReason { get; set; }
 
         /// <summary>
         /// ExemptionReasonCode for no Tax
         /// 
         /// BT-X-97
         /// </summary>
-        public TaxExemptionReasonCodes? ExemptionReasonCode { get; set; }
+        public TaxExemptionReasonCodes? TaxExemptionReasonCode { get; set; }
 
         /// <summary>
         /// Net unit price of the item
