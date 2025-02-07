@@ -1,4 +1,5 @@
 [![NuGet](https://img.shields.io/nuget/v/ZUGFeRD-csharp?color=blue)](https://www.nuget.org/packages/ZUGFeRD-csharp/)
+[![NuGet](https://img.shields.io/nuget/v/ZUGFeRD.PDF-csharp?color=blue)](https://www.nuget.org/packages/ZUGFeRD.PDF-csharp/)
 
 Part of the ZUGFeRD community:
 https://github.com/zugferd
