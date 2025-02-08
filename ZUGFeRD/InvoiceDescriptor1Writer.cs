@@ -746,19 +746,19 @@ namespace s2industries.ZUGFeRD
                 writer.WriteEndElement(); // !BasisAmount
                 if (Descriptor.Profile == Profile.Extended)
                 {
-                    if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
-                    {
-                        writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
-                        writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                        writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
-                        writer.WriteEndElement(); // !AllowanceChargeBasisAmount
-                    }
                     if (tax.LineTotalBasisAmount.HasValue && (tax.LineTotalBasisAmount.Value != 0))
                     {
                         writer.WriteStartElement("ram", "LineTotalBasisAmount");
                         writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                         writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
                         writer.WriteEndElement();
+                    }
+                    if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
+                    {
+                        writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                        writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                        writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
+                        writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                     }
                 }
 
