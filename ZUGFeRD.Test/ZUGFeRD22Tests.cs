@@ -51,7 +51,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.TradeLineItems.Clear();
 
-            TradeLineItem tradeLineItem1 = desc.AddTradeLineItem(
+            desc.AddTradeLineItem(
                 name: "Trennblätter A4",
                 billedQuantity: 20m,
                 unitCode: QuantityCodes.H87,
@@ -59,8 +59,8 @@ namespace s2industries.ZUGFeRD.Test
                 grossUnitPrice: 9.9m,
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
-                taxType: TaxTypes.VAT);
-            tradeLineItem1.SetLineStatus(LineStatusCodes.New, LineStatusReasonCodes.DETAIL);
+                taxType: TaxTypes.VAT)
+            .SetLineStatus(LineStatusCodes.New, LineStatusReasonCodes.DETAIL);
 
             desc.AddTradeLineItem(
                 name: "Joghurt Banane",
@@ -72,15 +72,15 @@ namespace s2industries.ZUGFeRD.Test
                 taxPercent: 7.0m,
                 taxType: TaxTypes.VAT);
 
-            TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
+            desc.AddTradeLineItem(
                 name: "Abschlagsrechnung vom 01.01.2024",
                 billedQuantity: -1m,
                 unitCode: QuantityCodes.C62,
                 netUnitPrice: 500,
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
-                taxType: TaxTypes.VAT);
-            tradeLineItem3.SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
+                taxType: TaxTypes.VAT)
+            .SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReasonCodes.INFORMATION);
 
             MemoryStream ms = new MemoryStream();
 
@@ -109,7 +109,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.TradeLineItems.Clear();
 
-            TradeLineItem tradeLineItem = desc.AddTradeLineItem(
+            desc.AddTradeLineItem(
                 lineID: "1",
                 name: "Trennblätter A4",
                 billedQuantity: 20m,
@@ -118,10 +118,9 @@ namespace s2industries.ZUGFeRD.Test
                 grossUnitPrice: 9.9m,
                 categoryCode: TaxCategoryCodes.S,
                 taxPercent: 19.0m,
-                taxType: TaxTypes.VAT);
-
-            tradeLineItem.AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62);
-            tradeLineItem.AddIncludedReferencedProduct("Test2");
+                taxType: TaxTypes.VAT)
+            .AddIncludedReferencedProduct("Test", 1, QuantityCodes.C62)
+            .AddIncludedReferencedProduct("Test2");
 
             MemoryStream ms = new MemoryStream();
 
@@ -912,9 +911,9 @@ namespace s2industries.ZUGFeRD.Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            TradeLineItem tradelineItem = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
-            tradelineItem.SetChargeFreeQuantity(10, QuantityCodes.C62);
-            tradelineItem.SetPackageQuantity(20, QuantityCodes.C62);
+            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty)
+                .SetChargeFreeQuantity(10, QuantityCodes.C62)
+                .SetPackageQuantity(20, QuantityCodes.C62);
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -3025,5 +3024,112 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(desc.GetTradePaymentTerms().First().Percentage);
             Assert.AreEqual(2m, desc.GetTradePaymentTerms().First().Percentage);
         } // !TestSpecifiedTradePaymentTermsCalculationPercent()
+
+        [TestMethod]
+        public void TestApplicableTradeDeliveryTermsExists()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.ApplicableTradeDeliveryTermsCode = TradeDeliveryTermCodes.CFR;
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.AreEqual(loadedInvoice.ApplicableTradeDeliveryTermsCode, TradeDeliveryTermCodes.CFR);
+        } // !TestSellerOrderReferencedDocument()
+
+        [TestMethod]
+        public void TestApplicableTradeDeliveryTermsIsNull()
+        {
+            string uuid = System.Guid.NewGuid().ToString();
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(Profile.Extended, loadedInvoice.Profile);
+            Assert.IsNull(loadedInvoice.ApplicableTradeDeliveryTermsCode);
+        } // !TestSellerOrderReferencedDocument()
+
+       
+        [TestMethod]
+        public void TestInvoiceExemptions()
+        {
+            string path = @"..\..\..\..\documentation\zugferd23de\Beispiele\4. EXTENDED\EXTENDED_InnergemeinschLieferungMehrereBestellungen\factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            var tax = desc.GetApplicableTradeTaxes().First();
+
+            Assert.AreEqual("Kein Ausweis der Umsatzsteuer bei innergemeinschaftlichen Lieferungen", tax.ExemptionReason);
+            Assert.AreEqual(TaxCategoryCodes.K, tax.CategoryCode);
+            Assert.AreEqual(TaxTypes.VAT, tax.TypeCode);
+            Assert.AreEqual(0m, tax.Percent);
+            Assert.IsNull(tax.ExemptionReasonCode);
+
+            var tradeLineItems = desc.GetTradeLineItems();
+
+            foreach (var tradeLineItem in tradeLineItems)
+            {
+                Assert.AreEqual("Kein Ausweis der Umsatzsteuer bei innergemeinschaftlichen Lieferungen", tradeLineItem.TaxExemptionReason);
+                Assert.AreEqual(TaxCategoryCodes.K, tradeLineItem.TaxCategoryCode);
+                Assert.AreEqual(TaxTypes.VAT, tradeLineItem.TaxType);
+                Assert.AreEqual(0m, tradeLineItem.TaxPercent);
+                Assert.IsNull(tradeLineItem.TaxExemptionReasonCode);
+            }
+
+            tax.ExemptionReason = "Steuerfreie innergemeinschaftlichen Lieferung";
+            tax.ExemptionReasonCode = TaxExemptionReasonCodes.VATEX_EU_IC;
+
+            desc.GetTradeLineItems().ForEach(x => x.TaxExemptionReason = "Steuerfreie innergemeinschaftlichen Lieferung");
+            desc.GetTradeLineItems().ForEach(x => x.TaxExemptionReasonCode = TaxExemptionReasonCodes.VATEX_EU_IC);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            var taxLoaded = loadedInvoice.GetApplicableTradeTaxes().First();
+
+            Assert.AreEqual("Steuerfreie innergemeinschaftlichen Lieferung", taxLoaded.ExemptionReason);
+            Assert.AreEqual(TaxCategoryCodes.K, taxLoaded.CategoryCode);
+            Assert.AreEqual(TaxTypes.VAT, taxLoaded.TypeCode);
+            Assert.AreEqual(0m, taxLoaded.Percent);
+            Assert.AreEqual(TaxExemptionReasonCodes.VATEX_EU_IC, taxLoaded.ExemptionReasonCode);
+
+            var tradeLineItemsLoaded = loadedInvoice.GetTradeLineItems();
+
+            foreach (var tradeLineItem in tradeLineItems)
+            {
+                Assert.AreEqual("Steuerfreie innergemeinschaftlichen Lieferung", tradeLineItem.TaxExemptionReason);
+                Assert.AreEqual(TaxCategoryCodes.K, tradeLineItem.TaxCategoryCode);
+                Assert.AreEqual(TaxTypes.VAT, tradeLineItem.TaxType);
+                Assert.AreEqual(0m, tradeLineItem.TaxPercent);
+                Assert.AreEqual(TaxExemptionReasonCodes.VATEX_EU_IC, tradeLineItem.TaxExemptionReasonCode);
+            }
+
+        } // !TestInvoiceExemptions()
     }
 }

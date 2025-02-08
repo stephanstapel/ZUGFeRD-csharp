@@ -649,6 +649,33 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(bic2, loadedInvoice.CreditorBankAccounts[1].BIC);
         } // !TestMultipleCreditorBankAccounts()
 
+        [TestMethod]
+        public void TestBuyerPartyIdwithoutGloablID()
+        {
+            var d = new InvoiceDescriptor();
+            d.Type = InvoiceType.Invoice;
+            d.InvoiceNo = "471102";
+            d.Currency = CurrencyCodes.EUR;
+            d.InvoiceDate = new DateTime(2018, 3, 5);
+            d.SetBuyer(
+                id: "GE2020211",
+                globalID: null,
+                name: "Kunden AG Mitte",
+                postcode: "69876",
+                city: "Frankfurt",
+                street: "Kundenstraße 15",
+                country: CountryCodes.DE);
+
+            using (var stream = new MemoryStream())
+            {
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+                stream.Seek(0, SeekOrigin.Begin);
+                InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(stream);
+
+                Assert.AreEqual(loadedInvoice.Buyer.ID.ID, "GE2020211");
+            }
+        } // !TestInDebitInvoiceTheFinancialAccountNameShouldNotExist()
+
 
         [TestMethod]
         public void TestPartyIdentificationForSeller()
@@ -676,13 +703,13 @@ namespace s2industries.ZUGFeRD.Test
             // PartyIdentification may only exist once
             Assert.AreEqual(doc.SelectNodes("//cac:AccountingSupplierParty//cac:PartyIdentification", nsmgr).Count, 1);
 
-            // PartyIdentification may only be contained in AccountingSupplierParty --> only one such node in the document
-            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 1);
+            // PartyIdentification may only exist once
+            Assert.AreEqual(doc.SelectNodes("//cac:AccountingCustomerParty//cac:PartyIdentification", nsmgr).Count, 1);
         } // !TestPartyIdentificationForSeller()
 
 
         [TestMethod]
-        public void TestPartyIdentificationShouldNotExist()
+        public void TestPartyIdentificationShouldExistOneTime()
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             MemoryStream ms = new MemoryStream();
@@ -703,7 +730,7 @@ namespace s2industries.ZUGFeRD.Test
             nsmgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
             nsmgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
 
-            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 0);
+            Assert.AreEqual(doc.SelectNodes("//cac:PartyIdentification", nsmgr).Count, 1);
         } // !TestPartyIdentificationShouldNotExist()
 
 
