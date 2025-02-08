@@ -245,6 +245,62 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(contractNumber, loadedLine?.ContractReferencedDocument?.ID);
             Assert.AreEqual(contractDate, loadedLine?.ContractReferencedDocument?.IssueDateTime);
             Assert.AreEqual(contractLineID, loadedLine?.ContractReferencedDocument?.LineID);
-        }
+        } // !TestContractReferencedDocumentLineIdInExtended()
+
+
+        [DataRow(ZUGFeRDVersion.Version1)]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        [TestMethod]
+        public void TestLongerDecimalPlacesForNetUnitPrice(ZUGFeRDVersion version)
+        {
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
+
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45m);
+            desc.AddTradeLineItem("Item with 3 decimal places", netUnitPrice: 123.456m);
+            desc.AddTradeLineItem("Item with 4 decimal places", netUnitPrice: 123.4567m);
+            desc.AddTradeLineItem("Item with 5 decimal places", netUnitPrice: 123.45678m);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            List<TradeLineItem> items = loadedInvoice.GetTradeLineItems();
+
+            Assert.AreEqual(items[items.Count - 4].NetUnitPrice, 123.45m);
+            Assert.AreEqual(items[items.Count - 3].NetUnitPrice, 123.456m);
+            Assert.AreEqual(items[items.Count - 2].NetUnitPrice, 123.4567m);
+            Assert.AreEqual(items[items.Count - 1].NetUnitPrice, 123.4568m); // rounded!
+        } // !TestLongerDecimalPlacesForNetUnitPrice()
+
+
+        [DataRow(ZUGFeRDVersion.Version1)]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        [TestMethod]
+        public void TestLongerDecimalPlacesForGrossUnitPrice(ZUGFeRDVersion version)
+        {
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
+
+            desc.AddTradeLineItem("Item with 2 decimal places", grossUnitPrice: 123.45m);
+            desc.AddTradeLineItem("Item with 3 decimal places", grossUnitPrice: 123.456m);
+            desc.AddTradeLineItem("Item with 4 decimal places", grossUnitPrice: 123.4567m);
+            desc.AddTradeLineItem("Item with 5 decimal places", grossUnitPrice: 123.45678m);
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            List<TradeLineItem> items = loadedInvoice.GetTradeLineItems();
+
+            Assert.AreEqual(items[items.Count - 4].GrossUnitPrice, 123.45m);
+            Assert.AreEqual(items[items.Count - 3].GrossUnitPrice, 123.456m);
+            Assert.AreEqual(items[items.Count - 2].GrossUnitPrice, 123.4567m);
+            Assert.AreEqual(items[items.Count - 1].GrossUnitPrice, 123.4568m); // rounded!
+        } // !TestLongerDecimalPlacesForGrossUnitPrice()
     }
 }

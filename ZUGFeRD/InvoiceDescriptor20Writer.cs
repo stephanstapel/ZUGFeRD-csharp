@@ -123,7 +123,7 @@ namespace s2industries.ZUGFeRD
              * @todo continue here to adopt v2 tag names
              */
 
-            #region SpecifiedSupplyChainTradeTransaction
+            #region SupplyChainTradeTransaction
             Writer.WriteStartElement("rsm", "SupplyChainTradeTransaction");
 
             foreach (TradeLineItem tradeLineItem in this.Descriptor.GetTradeLineItems())
@@ -202,7 +202,6 @@ namespace s2industries.ZUGFeRD
 
                     // reference to the order position
                     Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.BuyerOrderReferencedDocument.LineID);
-                    #endregion
 
                     if (tradeLineItem.BuyerOrderReferencedDocument.IssueDateTime.HasValue)
                     {
@@ -267,7 +266,7 @@ namespace s2industries.ZUGFeRD
                 } // !foreach(document)
 
                 Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice);
+                _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);
                 if (tradeLineItem.UnitQuantity.HasValue)
                 {
                     _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
@@ -292,7 +291,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement();
 
                     Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
-					// "ReasonCode" nicht im 2.0 Standard!
+                    // "ReasonCode" nicht im 2.0 Standard!
 
                     Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
                 }
@@ -300,7 +299,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
 
                 Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
-                _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice);
+                _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4);
 
                 if (tradeLineItem.UnitQuantity.HasValue)
                 {
@@ -416,6 +415,15 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, "ram", "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
             _writeOptionalParty(Writer, "ram", "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
+            #region ApplicableTradeDeliveryTerms
+            if (Descriptor.ApplicableTradeDeliveryTermsCode.HasValue)
+            {
+                // BG-X-22, BT-X-145
+                Writer.WriteStartElement("ram", "ApplicableTradeDeliveryTerms", Profile.Extended);
+                Writer.WriteElementString("ram", "DeliveryTypeCode", this.Descriptor.ApplicableTradeDeliveryTermsCode.Value.GetDescriptionAttribute());
+                Writer.WriteEndElement(); // !ApplicableTradeDeliveryTerms
+            }
+            #endregion
 
             #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
             if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
@@ -463,6 +471,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteStartElement("ram", "FormattedIssueDateTime");
                         Writer.WriteStartElement("qdt", "DateTimeString");
+                        Writer.WriteAttributeString("format", "102");
                         Writer.WriteValue(_formatDate(document.IssueDateTime.Value));
                         Writer.WriteEndElement(); // !udt:DateTimeString
                         Writer.WriteEndElement(); // !FormattedIssueDateTime
@@ -719,7 +728,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                 Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-				// TODO: SequenceNumeric
+                // TODO: SequenceNumeric
 
                 if (tradeAllowanceCharge.BasisAmount.HasValue)
                 {
@@ -931,6 +940,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteEndElement(); // !ram:ApplicableHeaderTradeSettlement
 
             Writer.WriteEndElement(); // !ram:SupplyChainTradeTransaction
+            #endregion
 
             Writer.WriteEndElement(); // !ram:Invoice
             Writer.WriteEndDocument();
@@ -953,6 +963,33 @@ namespace s2industries.ZUGFeRD
                 writer.WriteEndElement(); // !tagName
             }
         } // !_writeOptionalAmount()
+
+
+        private void _writeOptionalAdaptiveAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, int maxNumDecimals = 4, bool forceCurrency = false, Profile profile = Profile.Unknown)
+        {
+            if (!value.HasValue)
+            {
+                return;
+            }
+
+            writer.WriteStartElement(prefix, tagName, profile);
+            if (forceCurrency)
+            {
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+            }
+
+            decimal rounded = Math.Round(value.Value, numDecimals, MidpointRounding.AwayFromZero);
+            if (value == rounded)
+            {
+                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
+            }
+            else
+            {
+                writer.WriteValue(_formatDecimal(value.Value, maxNumDecimals));
+            }
+
+            writer.WriteEndElement(); // !tagName
+        } // !_writeOptionalAdaptiveAmount()
 
 
         private void _writeElementWithAttribute(ProfileAwareXmlTextWriter writer, string prefix, string tagName, string attributeName, string attributeValue, string nodeValue)
