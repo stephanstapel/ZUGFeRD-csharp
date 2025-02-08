@@ -386,6 +386,12 @@ namespace s2industries.ZUGFeRD
         XRD,
 
         /// <summary>
+        /// Kiste oder ein Gestell, das mehrere Flaschen sicher hält
+        /// Bottlecrate / bottlerack
+        /// </summary>
+        XBC,
+
+        /// <summary>
         /// Tafel/Board
         /// Abkürzung: Tf
         /// </summary>
