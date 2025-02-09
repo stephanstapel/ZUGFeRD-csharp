@@ -953,13 +953,6 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteOptionalElementString("ram", "ProprietaryID", account.ID);
                     Writer.WriteEndElement(); // !PayerPartyDebtorFinancialAccount
 
-                    if (!String.IsNullOrWhiteSpace(account.BIC))
-                    {
-                        Writer.WriteStartElement("ram", "PayerSpecifiedDebtorFinancialInstitution");
-                        Writer.WriteElementString("ram", "BICID", account.BIC);
-                        Writer.WriteEndElement(); // !PayerSpecifiedDebtorFinancialInstitution
-                    }
-
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
             }

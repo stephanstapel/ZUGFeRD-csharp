@@ -2156,12 +2156,48 @@ namespace s2industries.ZUGFeRD.Test
             nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
             nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
 
+            // no financial instituation shall be present if we didn't specify any BIC
             XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
             XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
 
             Assert.AreEqual(creditorFinancialInstitutions.Count, 0);
             Assert.AreEqual(debitorFinancialInstitutions.Count, 0);
         } // !TestFinancialInstitutionBICEmpty()
+
+
+        /// <summary>
+        /// This test ensure that no BIC is created for the debitor account even if it specified
+        /// </summary>
+        [TestMethod]
+        public void TestNoBICIDForDebitorFinancialInstitution()
+        {
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();            
+            //PayerSpecifiedDebtorFinancialInstitution
+            desc.AddDebitorFinancialAccount("DE02120300000000202051", "MYBIC");
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(ms);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
+            nsmgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            nsmgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+
+            // no financial instituation shall be present for the debitor
+            XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedDebtorFinancialInstitution", nsmgr);
+            Assert.AreEqual(debitorFinancialInstitutions.Count, 0);
+        } // !TestNoBICIDForDebitorFinancialInstitution()
 
 
         /// <summary>

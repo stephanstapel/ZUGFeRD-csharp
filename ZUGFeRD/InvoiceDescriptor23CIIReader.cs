@@ -276,10 +276,6 @@ namespace s2industries.ZUGFeRD
                     BankName = XmlUtils.NodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:Name", nsmgr),
                 };
 
-                var payerSpecifiedDebtorFinancialInstitutionNode = specifiedTradeSettlementPaymentMeansNode.SelectSingleNode("ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
-                if (payerSpecifiedDebtorFinancialInstitutionNode != null)
-                    account.BIC = XmlUtils.NodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:BICID", nsmgr);
-
                 retval._AddDebitorFinancialAccount(account);
             }
 
