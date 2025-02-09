@@ -634,42 +634,31 @@ namespace s2industries.ZUGFeRD
     {
         public static QuantityCodes FromString(this QuantityCodes _, string s)
         {
-            try
+            if (!string.IsNullOrWhiteSpace(s) && char.IsDigit(s[0]))
             {
-                if (!string.IsNullOrWhiteSpace(s) && char.IsDigit(s[0]))
-                {
-                    return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), "_" + s);
-                }
-                else
-                {
-                    return (QuantityCodes)Enum.Parse(typeof(QuantityCodes), s);
-                }
+                s = "_" + s;
             }
-            catch
-            {
-                // mapping of legacy unit codes
-                if (s == "NPR")
-                {
-                    return QuantityCodes.PR;
-                }
-                else if (s == "PCE")
-                {
-                    return QuantityCodes.C62;
-                }
-                else if (s == "KTM")
-                {
-                    return QuantityCodes.KMT;
-                }
-                else if (s == "HAR")
-                {
-                    return QuantityCodes.H18;
-                }
-                else if (s == "D64")
-                {
-                    return QuantityCodes.XOK;
-                }
 
-                return QuantityCodes.Unknown;
+            if (Enum.TryParse(s, true, out QuantityCodes result))
+            {
+                return result;
+            }
+
+            // mapping of legacy unit codes
+            switch (s)
+            {
+                case "NPR":
+                    return QuantityCodes.PR;
+                case "PCE":
+                    return QuantityCodes.C62;
+                case "KTM":
+                    return QuantityCodes.KMT;
+                case "HAR":
+                    return QuantityCodes.H18;
+                case "D64":
+                    return QuantityCodes.XOK;
+                default:
+                    return QuantityCodes.Unknown;
             }
         } // !FromString()
 
