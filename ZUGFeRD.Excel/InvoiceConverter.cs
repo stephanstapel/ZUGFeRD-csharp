@@ -214,10 +214,10 @@ namespace s2industries.ZUGFeRD.Excel
             }
 
             // analysis of allowance charges
-            string _calculation = "=";
-            foreach(string _cell in cellsForAllowanceChargesPerVAT) { _calculation += _cell + "+"; }
-            _calculation = _calculation.Substring(0, _calculation.Length - 1);
-            new ExcelCell(headWorksheet, cellForAllowanceAnalysis).setFormula(_calculation).formatWithDecimals().setColor(ExcelColors.Green);
+            string calculation = "=";
+            foreach(string cellName in cellsForAllowanceChargesPerVAT) { calculation += cellName + "+"; }
+            calculation = calculation.Substring(0, calculation.Length - 1);
+            new ExcelCell(headWorksheet, cellForAllowanceAnalysis).setFormula(calculation).formatWithDecimals().setColor(ExcelColors.Green);
 
             i += 1;
 
@@ -247,13 +247,13 @@ namespace s2industries.ZUGFeRD.Excel
             }
 
             // analysis of taxes
-            _calculation = "=";
-            foreach(string _cell in cellsForTaxes)
+            calculation = "=";
+            foreach(string cellName in cellsForTaxes)
             {
-                _calculation += _cell + "+";
+                calculation += cellName + "+";
             }
-            _calculation = _calculation.Substring(0, _calculation.Length - 1);
-            new ExcelCell(headWorksheet, cellForTaxAnalysis).setFormula(_calculation).formatWithDecimals().setColor(ExcelColors.Green);
+            calculation = calculation.Substring(0, calculation.Length - 1);
+            new ExcelCell(headWorksheet, cellForTaxAnalysis).setFormula(calculation).formatWithDecimals().setColor(ExcelColors.Green);
 
             i += 1;
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Totals").setBold().joinColumns("B").setAlignCenter();

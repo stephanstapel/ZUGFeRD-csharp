@@ -48,9 +48,9 @@ namespace s2industries.ZUGFeRD.Excel
         public ExcelCell(ExcelWorksheet worksheet, string cell)
         {
             this._worksheet = worksheet;
-            string _rowValue = Regex.Match(cell, @"\d+").Value;
-            this._row = Int32.Parse(_rowValue);
-            this._column = cell.Replace(_rowValue, "");
+            string rowValue = Regex.Match(cell, @"\d+").Value;
+            this._row = Int32.Parse(rowValue);
+            this._column = cell.Replace(rowValue, "");
             this._cell = cell;
         }
 

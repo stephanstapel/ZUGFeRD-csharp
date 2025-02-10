@@ -21,13 +21,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mono.Options;
 
 namespace s2industries.ZUGFeRD.Excel.Test
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            Options options = new Options();
+
+            OptionSet set = null;
+            try
+            {
+                set = new OptionSet
+                {
+                    { "?|help|h", "Outputs help", m => options.Help = true },
+                    { "i|inputfile=", "ZUGFeRD input file. Might also be a file pattern", i => options.InputFile = i },
+                    { "o|outputfile=", "Excel output file", o => options.OutputFile = o },
+                    { "r|recursive", "In case you pass a pattern as inputfile, recursive determines if sub directories are recursively iterated", c => options.Recursive = true },
+                };
+            }
+            catch (FormatException)
+            {
+                System.Console.WriteLine("Error parsing arguments.");
+                Environment.Exit(-1);
+            }
+
+            try
+            {
+                set.Parse(args);
+            }
+            catch (OptionException)
+            {
+                set.WriteOptionDescriptions(Console.Out);
+            }
+
+
+            if (options.Help)
+            {
+                set.WriteOptionDescriptions(Console.Out);
+                Environment.Exit(0);
+            }
+
+            Application app = new Application();
+            app.Run(options);
         }
     }
 }
