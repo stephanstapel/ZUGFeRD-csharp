@@ -44,11 +44,15 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// A textual value used to establish a link between the payment and the invoice, issued by the seller.
+        ///
+        /// BT-83
         /// </summary>
         public string PaymentReference { get; set; } = String.Empty;
 
         /// <summary>
         /// Order Id
+        ///
+        /// BT-13
         /// </summary>
         public string OrderNo { get; set; } = string.Empty;
 
@@ -77,6 +81,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Actual delivery date
+        ///
+        /// BT-72
         /// </summary>
         public DateTime? ActualDeliveryDate { get; set; } = null;
 
@@ -89,11 +95,15 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Details about a project reference
+        ///
+        /// BT-11
         /// </summary>
         public SpecifiedProcuringProject SpecifiedProcuringProject { get; set; }
 
         /// <summary>
         /// Currency of the invoice
+        ///
+        /// BT-5
         /// </summary>
         public CurrencyCodes Currency { get; set; }
 
@@ -119,6 +129,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Information about the buyer
+        ///
         /// BG-7
         /// </summary>
         public Party Buyer { get; set; }
@@ -127,11 +138,15 @@ namespace s2industries.ZUGFeRD
         /// Buyer contact information
         ///
         /// A group of business terms providing contact information relevant for the buyer.
+        ///
+        /// BG-9
         /// </summary>
         public Contact BuyerContact { get; set; }
 
         /// <summary>
         /// List of tax registration numbers for the buyer
+        ///
+        /// BT-48
         /// </summary>
         [Obsolete("This property will not be available any more with version 18.0. Please use GetBuyerTaxRegistration() instead")]
         public List<TaxRegistration> BuyerTaxRegistration { get; internal set; } = new List<TaxRegistration>();
@@ -146,12 +161,18 @@ namespace s2industries.ZUGFeRD
         /// BG-4
         /// </summary>
         public Party Seller { get; set; }
+
         /// <summary>
         /// Details about the seller's contact information.
+        ///
+        /// BG-6
         /// </summary>
         public Contact SellerContact { get; set; }
+
         /// <summary>
         /// List of tax registration numbers for the seller.
+        ///
+        /// BT-31
         /// </summary>
         [Obsolete("This property will not be available any more with version 18.0. Please use GetSellerTaxRegistration() instead")]
         public List<TaxRegistration> SellerTaxRegistration { get; internal set; } = new List<TaxRegistration>();
@@ -217,6 +238,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Free text on header level
+        ///
+        /// BG-1
         /// </summary>
         [Obsolete("This property will not be available any more with version 18.0. Please use GetNotes() instead")]
         public List<Note> Notes { get; internal set; } = new List<Note>();
@@ -268,12 +291,16 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// An aggregation of business terms containing information about individual invoice positions
+        ///
+        /// BG-31
         /// </summary>
         [Obsolete("This property will not be available any more with version 18.0. Please use GetTradeLineItems() instead")]
         public List<TradeLineItem> TradeLineItems { get; internal set; } = new List<TradeLineItem>();
 
         /// <summary>
         /// Sum of all invoice line net amounts in the invoice
+        ///
+        /// BT-131
         /// </summary>
         public decimal? LineTotalAmount { get; set; } = null;
 
@@ -281,6 +308,7 @@ namespace s2industries.ZUGFeRD
         /// Sum of all surcharges on document level in the invoice
         ///
         /// Surcharges on line level are included in the invoice line net amount which is summed up into the sum of invoice line net amount.
+        /// BT-108
         /// </summary>
         public decimal? ChargeTotalAmount { get; set; } = null;
 
@@ -288,6 +316,8 @@ namespace s2industries.ZUGFeRD
         /// Sum of discounts on document level in the invoice
         ///
         /// Discounts on line level are included in the invoice line net amount which is summed up into the sum of invoice line net amount.
+        ///
+        /// BT-107
         /// </summary>
         public decimal? AllowanceTotalAmount { get; set; } = null;
 
@@ -295,6 +325,8 @@ namespace s2industries.ZUGFeRD
         /// The total amount of the invoice without VAT.
         ///
         /// The invoice total amount without VAT is the sum of invoice line net amount minus sum of discounts on document level plus sum of surcharges on document level.
+        ///
+        /// BT-109
         /// </summary>
         public decimal? TaxBasisAmount { get; set; } = null;
 
@@ -305,6 +337,8 @@ namespace s2industries.ZUGFeRD
         /// To be used when the VAT accounting currency (BT-6) differs from the Invoice currency code (BT-5) in accordance
         /// with article 230 of Directive 2006/112 / EC on VAT. The VAT amount in accounting currency is not used
         /// in the calculation of the Invoice totals..
+        ///
+        /// BT-110
         /// </summary>
         public decimal? TaxTotalAmount { get; set; } = null;
 
@@ -312,6 +346,8 @@ namespace s2industries.ZUGFeRD
         /// Invoice total amount with VAT
         ///
         /// The invoice total amount with VAT is the invoice without VAT plus the invoice total VAT amount.
+        ///
+        /// BT-112
         /// </summary>
         public decimal? GrandTotalAmount { get; set; } = null;
 
@@ -319,11 +355,15 @@ namespace s2industries.ZUGFeRD
         /// Sum of amount paid in advance
         ///
         /// This amount is subtracted from the invoice total amount with VAT to calculate the amount due for payment.
+        ///
+        /// BT-113
         /// </summary>
         public decimal? TotalPrepaidAmount { get; set; } = null;
 
         /// <summary>
         /// The amount to be added to the invoice total to round the amount to be paid.
+        ///
+        /// BT-114
         /// </summary>
         public decimal? RoundingAmount { get; set; } = null;
 
@@ -333,11 +373,15 @@ namespace s2industries.ZUGFeRD
         /// This amount is the invoice total amount with VAT minus the paid amount that has
         /// been paid in advance. The amount is zero in case of a fully paid invoice.
         /// The amount may be negative; in that case the seller owes the amount to the buyer.
+        ///
+        /// BT-115
         /// </summary>
         public decimal? DuePayableAmount { get; set; } = null;
 
         /// <summary>
         /// A group of business terms providing information about VAT breakdown by different categories, rates and exemption reasons
+        ///
+        /// BG-23
         /// </summary>
         [Obsolete("This property will be removed in version 18.0. Please use GetApplicableTradeTaxes() instead")]
         public  List<Tax> Taxes { get; internal set; } = new List<Tax>();
@@ -347,18 +391,21 @@ namespace s2industries.ZUGFeRD
         /// Transport and packaging costs
         /// </summary>
         [Obsolete("This property will be removed in version 18.0. Please use GetLogisticsServiceCharges() instead")]
-        public List<ServiceCharge> ServiceCharges { get; internal set; } = new List<ServiceCharge>();        
+        public List<ServiceCharge> ServiceCharges { get; internal set; } = new List<ServiceCharge>();
 
         /// <summary>
         /// Detailed information on discounts and charges.
         /// This field is marked as private now, please use GetTradeAllowanceCharges() to retrieve all trade allowance charges
+        ///
+        /// BG-27
         /// </summary>
         private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information about payment terms
+        ///
+        /// BT-20
         /// </summary>
-        /// <remarks>BT-20</remarks>
         private List<PaymentTerms> _PaymentTerms { get; set; } = new List<PaymentTerms>();
 
         /// <summary>
@@ -368,11 +415,15 @@ namespace s2industries.ZUGFeRD
         /// — a preceding invoice is corrected;
         /// — preceding partial invoices are referred to from a final invoice;
         /// — preceding pre-payment invoices are referred to from a final invoice.
+        ///
+        /// BG-3
         /// </summary>
         private List<InvoiceReferencedDocument> _InvoiceReferencedDocuments { get; set; } = new List<InvoiceReferencedDocument>();
 
         /// <summary>
         /// Detailed information about the accounting reference
+        ///
+        /// BT-19
         /// </summary>
         [Obsolete("This property will be removed in version 18.0. Please use GetReceivableSpecifiedTradeAccountingAccounts() instead")]
         public List<ReceivableSpecifiedTradeAccountingAccount> _ReceivableSpecifiedTradeAccountingAccounts { get; internal set; } = new List<ReceivableSpecifiedTradeAccountingAccount>();
@@ -381,12 +432,16 @@ namespace s2industries.ZUGFeRD
         /// Credit Transfer
         ///
         /// A group of business terms to specify credit transfer payments
+        ///
+        /// BG-17
         /// </summary>
         [Obsolete("This property will be removed in version 18.0. Please use GetCreditorFinancialAccounts() instead")]
         public List<BankAccount> CreditorBankAccounts { get; internal set; } = new List<BankAccount>();
 
         /// <summary>
         /// Buyer bank information
+        ///
+        /// BG-16
         /// </summary>
         [Obsolete("This property will be removed in version 18.0. Please use GetDebitorFinancialAccounts() instead")]
         public List<BankAccount> DebitorBankAccounts { get; internal set; } = new List<BankAccount>();
@@ -398,16 +453,22 @@ namespace s2industries.ZUGFeRD
         /// SpecifiedTradeSettlementPaymentMeans can be repeated for each account. The code
         /// for the type of payment within the element typecode (BT-81) should therefore not
         /// differ within the repetitions.
+        ///
+        /// BG-16 / BG-17 / BG-18
         /// </summary>
         public PaymentMeans PaymentMeans { get; set; }
 
         /// <summary>
         /// Detailed information about the invoicing period, start date
+        ///
+        /// BT-73
         /// </summary>
         public DateTime? BillingPeriodStart { get; set; }
 
         /// <summary>
         /// Detailed information about the invoicing period, end date
+        ///
+        /// BT-74
         /// </summary>
         public DateTime? BillingPeriodEnd { get; set; }
 
@@ -603,6 +664,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Adds a note to the invoice with optional subject and content codes
+        ///
+        /// BG-1
         /// </summary>
         /// <param name="note">The note text to add</param>
         /// <param name="subjectCode">Optional subject code categorizing the note</param>
@@ -621,6 +684,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the buyer information for the invoice
+        ///
+        /// BG-7
         /// </summary>
         /// <param name="name">Name of the buyer</param>
         /// <param name="postcode">Postal code</param>
@@ -655,6 +720,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the seller information for the invoice
+        ///
+        /// BG-4
         /// </summary>
         /// <param name="name">Name of the seller</param>
         /// <param name="postcode">Postal code</param>
@@ -689,6 +756,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the seller contact information
+        ///
+        /// BG-6
         /// </summary>
         /// <param name="name">Contact person name</param>
         /// <param name="orgunit">Organizational unit</param>
@@ -710,6 +779,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the buyer contact information
+        ///
+        /// BG-9
         /// </summary>
         /// <param name="name">Contact person name</param>
         /// <param name="orgunit">Organizational unit</param>
@@ -731,6 +802,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the project information for the invoice
+        ///
+        /// BT-11
         /// </summary>
         /// <param name="id">Project identifier</param>
         /// <param name="name">Project name</param>
@@ -746,6 +819,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Adds a tax registration number for the buyer
+        ///
+        /// BT-48
         /// </summary>
         /// <param name="no">Tax registration number</param>
         /// <param name="schemeID">Type of tax registration</param>
@@ -761,6 +836,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Adds a tax registration number for the seller.
+        ///
+        /// BT-31
         /// </summary>
         /// <param name="no">The tax registration number.</param>
         /// <param name="schemeID">The tax registration scheme identifier.</param>
@@ -775,6 +852,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the buyer's electronic address for Peppol
+        ///
+        /// BT-49
         /// </summary>
         /// <param name="address">Electronic address</param>
         /// <param name="electronicAddressSchemeID">Type of electronic address</param>
@@ -789,6 +868,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the seller's electronic address for Peppol
+        ///
+        /// BT-34
         /// </summary>
         /// <param name="address">Electronic address</param>
         /// <param name="electronicAddressSchemeID">Type of electronic address</param>
@@ -871,6 +952,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets the contract reference information
+        ///
+        /// BT-12
         /// </summary>
         /// <param name="contractNo">Contract number</param>
         /// <param name="contractDate">Contract date</param>
@@ -915,6 +998,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an allowance or charge on document level.
         ///
+        /// BG-27
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>
         /// <param name="isDiscount">True if this is a discount, false if it's a charge</param>
@@ -953,6 +1037,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an allowance or charge on document level.
         ///
+        /// BG-27
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>
         /// <param name="isDiscount">Marks if the allowance charge is a discount. Please note that in contrary to this function, the xml file indicated a surcharge, not a discount (value will be inverted)</param>
@@ -989,6 +1074,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Returns all existing trade allowance charges
+        ///
+        /// BG-27
         /// </summary>
         /// <returns></returns>
         public IList<TradeAllowanceCharge> GetTradeAllowanceCharges()
@@ -999,6 +1086,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Adds payment terms to the invoice
+        ///
+        /// BT-20
         /// </summary>
         /// <param name="description">Description of payment terms</param>
         /// <param name="dueDate">Due date for payment</param>
@@ -1026,6 +1115,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Removes all existing payment terms
+        ///
+        /// BT-20
         /// </summary>
         public void ClearTradePaymentTerms()
         {
@@ -1035,6 +1126,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets all payment terms
+        ///
+        /// BT-20
         /// </summary>
         /// <returns>List of payment terms</returns>
         public IList<PaymentTerms> GetTradePaymentTerms()
@@ -1045,6 +1138,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds a reference to a preceding invoice
         /// Please note that all versions prior ZUGFeRD 2.3 and UBL only allow one of such reference.
+        ///
+        /// BG-3
         /// </summary>
         /// <param name="id">Preceding invoice number</param>
         /// <param name="IssueDateTime">Preceding invoice date</param>
@@ -1060,6 +1155,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets all preceding invoice references
+        ///
+        /// BG-3
         /// </summary>
         /// <returns>List of invoice references</returns>
         public List<InvoiceReferencedDocument> GetInvoiceReferencedDocuments()
@@ -1102,6 +1199,8 @@ namespace s2industries.ZUGFeRD
         /// Add information about VAT and apply to the invoice line items for goods and services on the invoice.
         ///
         /// This tax is added per VAT tax rate.
+        ///
+        /// BG-23
         /// </summary>
         /// <param name="basisAmount">Base amount for tax calculation</param>
         /// <param name="percent">Tax percentage rate</param>
@@ -1145,6 +1244,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets all applicable trade taxes
+        ///
+        /// BG-23
         /// </summary>
         /// <returns>List of trade taxes</returns>
         public List<Tax> GetApplicableTradeTaxes()
@@ -1155,6 +1256,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Checks if any trade taxes are defined
+        ///
+        /// BG-23
         /// </summary>
         /// <returns>True if trade taxes exist, false otherwise</returns>
         public bool AnyApplicableTradeTaxes()
@@ -1296,7 +1399,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="description">Item description</param>
         /// <param name="unitCode">Unit of measure code</param>
         /// <param name="unitQuantity">Quantity per unit</param>
-        /// <param name="grossUnitPrice">Gross price per unit</param>        
+        /// <param name="grossUnitPrice">Gross price per unit</param>
         /// <param name="billedQuantity">Quantity being invoiced</param>
         /// <param name="lineTotalAmount">net total including discounts and surcharges. This parameter is optional. If it is not filled, the line total amount is automatically calculated based on netUnitPrice and billedQuantity</param>
         /// <param name="taxType">Type of tax</param>
@@ -1319,7 +1422,7 @@ namespace s2industries.ZUGFeRD
                                     string description = null,
                                     QuantityCodes unitCode = QuantityCodes.Unknown,
                                     decimal? unitQuantity = null,
-                                    decimal? grossUnitPrice = null,                                    
+                                    decimal? grossUnitPrice = null,
                                     decimal billedQuantity = 0,
                                     decimal? lineTotalAmount = null,
                                     TaxTypes taxType = TaxTypes.Unknown,
@@ -1339,7 +1442,7 @@ namespace s2industries.ZUGFeRD
                             description: description,
                             unitCode: unitCode,
                             unitQuantity: unitQuantity,
-                            grossUnitPrice: grossUnitPrice,                            
+                            grossUnitPrice: grossUnitPrice,
                             billedQuantity: billedQuantity,
                             lineTotalAmount: lineTotalAmount,
                             taxType: taxType,
@@ -1369,7 +1472,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="description">Item description</param>
         /// <param name="unitCode">Unit of measure code</param>
         /// <param name="unitQuantity">Quantity per unit</param>
-        /// <param name="grossUnitPrice">Gross price per unit</param>        
+        /// <param name="grossUnitPrice">Gross price per unit</param>
         /// <param name="billedQuantity">Quantity being invoiced</param>
         /// <param name="lineTotalAmount">Total line amount</param>
         /// <param name="taxType">Type of tax</param>
@@ -1393,7 +1496,7 @@ namespace s2industries.ZUGFeRD
                                     string description = null,
                                     QuantityCodes unitCode = QuantityCodes.Unknown,
                                     decimal? unitQuantity = null,
-                                    decimal? grossUnitPrice = null,                                    
+                                    decimal? grossUnitPrice = null,
                                     decimal billedQuantity = 0,
                                     decimal? lineTotalAmount = null,
                                     TaxTypes taxType = TaxTypes.Unknown,
@@ -1735,6 +1838,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Adds a group of business terms to specify credit transfer payments
+        ///
+        /// BG-17
         /// </summary>
         /// <param name="iban">IBAN</param>
         /// <param name="bic">BIC</param>
@@ -1764,6 +1869,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets all creditor financial accounts
+        ///
+        /// BG-17
         /// </summary>
         /// <returns>List of creditor financial accounts</returns>
         public List<BankAccount> GetCreditorFinancialAccounts()
@@ -1774,6 +1881,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Checks if any creditor financial accounts exist
+        ///
+        /// BG-17
         /// </summary>
         /// <returns>True if creditor financial accounts exist, false otherwise</returns>
         public bool AnyCreditorFinancialAccount()
@@ -1841,6 +1950,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Adds a receivable specified trade accounting account with ID and type code
+        ///
+        /// BT-19
         /// </summary>
         /// <param name="AccountID">The account identifier</param>
         /// <param name="AccountTypeCode">The account type code</param>
@@ -1856,6 +1967,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets all receivable specified trade accounting accounts
+        ///
+        /// BT-19
         /// </summary>
         /// <returns>List of receivable specified trade accounting accounts</returns>
         public List<ReceivableSpecifiedTradeAccountingAccount> GetReceivableSpecifiedTradeAccountingAccounts()
@@ -1866,6 +1979,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Checks if any receivable specified trade accounting accounts exist
+        ///
+        /// BT-19
         /// </summary>
         /// <returns>True if receivable specified trade accounting accounts exist, false otherwise</returns>
         public bool AnyReceivableSpecifiedTradeAccountingAccounts()
@@ -1890,18 +2005,36 @@ namespace s2industries.ZUGFeRD
         } // !GetAdditionalReferencedDocuments()
 
 
+        /// <summary>
+        /// List of tax registration numbers for the buyer
+        ///
+        /// BT-48
+        /// </summary>
+        /// <returns></returns>
         public List<TaxRegistration> GetBuyerTaxRegistration()
         {
             return this.BuyerTaxRegistration;
         } // !GetBuyerTaxRegistration()
 
 
+        /// <summary>
+        /// List of tax registration numbers for the seller.
+        ///
+        // BT-31
+        /// </summary>
+        /// <returns></returns>
         public List<TaxRegistration> GetSellerTaxRegistration()
         {
             return this.SellerTaxRegistration;
         } // !GetSellerTaxRegistration()
 
 
+        /// <summary>
+        /// Free text on header level
+        ///
+        /// BG-1
+        /// </summary>
+        /// <returns></returns>
         public List<Note> GetNotes()
         {
             return this.Notes;
