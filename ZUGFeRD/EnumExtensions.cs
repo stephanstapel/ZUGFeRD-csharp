@@ -44,18 +44,14 @@ namespace s2industries.ZUGFeRD
             }
         } // !IntToEnum()
 
-
-        internal static T StringToEnum<T>(this string value) where T : Enum
+        internal static T StringToEnum<T>(this string value) where T : struct, Enum
         {
-            try
+            if (Enum.TryParse(value, true, out T result))
             {
-                return (T)Enum.Parse(typeof(T), value);
+                return result;
             }
-            catch
-            {
-                return default;
-            }
-        } // !IntToEnum()
+            return default;
+        } // !StringToEnum()
 
 
         internal static int EnumToInt<T>(this T value) where T : Enum

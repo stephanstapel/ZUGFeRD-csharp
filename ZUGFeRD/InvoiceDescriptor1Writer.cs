@@ -523,7 +523,7 @@ namespace s2industries.ZUGFeRD
                     }
 
                     Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
-                    _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 4);
+                    _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
                         _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
@@ -557,7 +557,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
 
                     Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
-                    _writeOptionalAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 4);
+                    _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4);
 
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
@@ -718,6 +718,33 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalAmount()
 
 
+        private void _writeOptionalAdaptiveAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, int maxNumDecimals = 4, bool forceCurrency = false, Profile profile = Profile.Unknown)
+        {
+            if (!value.HasValue)
+            {
+                return;
+            }
+
+            writer.WriteStartElement(prefix, tagName, profile);
+            if (forceCurrency)
+            {
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+            }
+
+            decimal rounded = Math.Round(value.Value, numDecimals, MidpointRounding.AwayFromZero);
+            if (value == rounded)
+            {
+                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
+            }
+            else
+            {
+                writer.WriteValue(_formatDecimal(value.Value, maxNumDecimals));
+            }
+
+            writer.WriteEndElement(); // !tagName
+        } // !_writeOptionalAdaptiveAmount()
+
+
         private void _writeElementWithAttribute(ProfileAwareXmlTextWriter writer, string prefix, string tagName, string attributeName, string attributeValue, string nodeValue)
         {
             writer.WriteStartElement(prefix, tagName);
@@ -746,19 +773,19 @@ namespace s2industries.ZUGFeRD
                 writer.WriteEndElement(); // !BasisAmount
                 if (Descriptor.Profile == Profile.Extended)
                 {
-                    if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
-                    {
-                        writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
-                        writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                        writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
-                        writer.WriteEndElement(); // !AllowanceChargeBasisAmount
-                    }
                     if (tax.LineTotalBasisAmount.HasValue && (tax.LineTotalBasisAmount.Value != 0))
                     {
                         writer.WriteStartElement("ram", "LineTotalBasisAmount");
                         writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
                         writer.WriteValue(_formatDecimal(tax.LineTotalBasisAmount));
                         writer.WriteEndElement();
+                    }
+                    if (tax.AllowanceChargeBasisAmount.HasValue && (tax.AllowanceChargeBasisAmount.Value != 0))
+                    {
+                        writer.WriteStartElement("ram", "AllowanceChargeBasisAmount");
+                        writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                        writer.WriteValue(_formatDecimal(tax.AllowanceChargeBasisAmount));
+                        writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                     }
                 }
 

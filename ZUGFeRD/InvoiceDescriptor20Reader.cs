@@ -206,10 +206,6 @@ namespace s2industries.ZUGFeRD
                     BankName = XmlUtils.NodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:Name", nsmgr),
                 };
 
-                var payerSpecifiedDebtorFinancialInstitutionNode = specifiedTradeSettlementPaymentMeansNode.SelectSingleNode("ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
-                if (payerSpecifiedDebtorFinancialInstitutionNode != null)
-                    account.BIC = XmlUtils.NodeAsString(payerPartyDebtorFinancialAccountNode, ".//ram:BICID", nsmgr);
-
                 retval._AddDebitorFinancialAccount(account);
             }
 
@@ -322,6 +318,16 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
             {
                 retval._AddTradeLineItem(_parseTradeLineItem(node, nsmgr));
+            }
+
+            var deliveryCodeStr = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode", nsmgr);
+            if (!string.IsNullOrWhiteSpace(deliveryCodeStr))
+            {
+                TradeDeliveryTermCodes? tradeCode = EnumExtensions.FromDescription<TradeDeliveryTermCodes>(deliveryCodeStr);
+                if (tradeCode != null)
+                {
+                    retval.ApplicableTradeDeliveryTermsCode = tradeCode;
+                }
             }
 
             //SellerOrderReferencedDocument

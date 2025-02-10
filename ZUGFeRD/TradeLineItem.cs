@@ -149,10 +149,25 @@ namespace s2industries.ZUGFeRD
         public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
 
         /// <summary>
+        /// Exemption Reason Text for no Tax
+        /// 
+        /// BT-X-96
+        /// </summary>
+        public string TaxExemptionReason { get; set; }
+
+        /// <summary>
+        /// ExemptionReasonCode for no Tax
+        /// 
+        /// BT-X-97
+        /// </summary>
+        public TaxExemptionReasonCodes? TaxExemptionReasonCode { get; set; }
+
+        /// <summary>
         /// Net unit price of the item
         ///
         /// BT-146
         /// </summary>
+        [Obsolete("Please note that NetUnitPrice will not be optional but mandatory beginning with version 18.0")]
         public decimal? NetUnitPrice { get; set; }
 
         /// <summary>
@@ -621,6 +636,12 @@ namespace s2industries.ZUGFeRD
                 ListVersionID = listVersionID
             });
         } // !AddDesignatedProductClassification()
+
+
+        public bool AnyDesignatedProductClassifications()
+        {
+            return this.DesignatedProductClassifications.Any();
+        } // !AnyDesignatedProductClassifications()
 
 
         /// <summary>

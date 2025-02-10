@@ -19,6 +19,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using s2industries.ZUGFeRD;
 using System.IO;
+using System.Runtime.Intrinsics.Arm;
+using System.Xml;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -94,6 +96,40 @@ namespace s2industries.ZUGFeRD.Test
             string s = System.Text.Encoding.Default.GetString(data);
             // TODO: Add more asserts
         } // !TestStoringInvoiceViaStream()
+
+
+        /// <summary>
+        /// This test ensure that a BIC is created for the debitor account if it specified (in contrary to later versions of ZUGFeRD)
+        /// </summary>
+        [TestMethod]
+        public void TestBICIDForDebitorFinancialInstitution()
+        {
+            DateTime issueDateTime = DateTime.Today;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            //PayerSpecifiedDebtorFinancialInstitution
+            desc.AddDebitorFinancialAccount("DE02120300000000202051", "MYBIC");
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version1, Profile.Comfort);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(ms);
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);            
+            nsmgr.AddNamespace("rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0");
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12");
+            nsmgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15");
+
+            // no financial instituation shall be present for the debitor            
+            XmlNodeList debitorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableSupplyChainTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerSpecifiedDebtorFinancialInstitution", nsmgr);
+            Assert.AreEqual(debitorFinancialInstitutions.Count, 1);
+            Assert.AreEqual(debitorFinancialInstitutions[0].SelectSingleNode("./ram:BICID", nsmgr).InnerText, "MYBIC");
+        } // !TestBICIDForDebitorFinancialInstitution()
 
 
         [TestMethod]

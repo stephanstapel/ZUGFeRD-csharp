@@ -1581,16 +1581,13 @@ namespace s2industries.ZUGFeRD
                 return CountryCodes._1A;
             }
 
-            try
+            if (Enum.TryParse(s, true, out CountryCodes result))
             {
-                return (CountryCodes)Enum.Parse(typeof(CountryCodes), s);
+                return result;
             }
-            catch
-            {
-                return CountryCodes.Unknown;
-            }
-        } // !FromString()
 
+            return CountryCodes.Unknown;
+        } // !FromString()
 
         public static string EnumToString(this CountryCodes c)
         {
