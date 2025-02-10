@@ -491,14 +491,11 @@ namespace s2industries.ZUGFeRD
     {
         public static TaxExemptionReasonCodes? FromString(this TaxExemptionReasonCodes _, string s)
         {
-            try
+            if (Enum.TryParse(s.Replace("-", "_"), true, out TaxExemptionReasonCodes result))
             {
-                return (TaxExemptionReasonCodes)Enum.Parse(typeof(TaxExemptionReasonCodes), s.Replace("-", "_"));
+                return result;
             }
-            catch
-            {
-                return null;
-            }
+            return null;
         } // !FromString()
 
 

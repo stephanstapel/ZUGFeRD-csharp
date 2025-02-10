@@ -59,14 +59,11 @@ namespace s2industries.ZUGFeRD
     {
         public static TaxRegistrationSchemeID FromString(this TaxRegistrationSchemeID _, string s)
         {
-            try
+            if (Enum.TryParse(s, true, out TaxRegistrationSchemeID result))
             {
-                return (TaxRegistrationSchemeID)Enum.Parse(typeof(TaxRegistrationSchemeID), s);
+                return result;
             }
-            catch
-            {
-                return TaxRegistrationSchemeID.Unknown;
-            }
+            return TaxRegistrationSchemeID.Unknown;
         } // !FromString()
 
 

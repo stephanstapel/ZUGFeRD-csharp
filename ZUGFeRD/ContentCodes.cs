@@ -76,14 +76,11 @@ namespace s2industries.ZUGFeRD
     {
         public static ContentCodes FromString(this ContentCodes _, string s)
         {
-            try
+            if (Enum.TryParse(s, true, out ContentCodes result))
             {
-                return (ContentCodes)Enum.Parse(typeof(ContentCodes), s);
+                return result;
             }
-            catch
-            {
-                return ContentCodes.Unknown;
-            }
+            return ContentCodes.Unknown;
         } // !FromString()
 
 

@@ -249,14 +249,11 @@ namespace s2industries.ZUGFeRD
     {
         public static ReferenceTypeCodes FromString(this ReferenceTypeCodes _, string s)
         {
-            try
+            if (Enum.TryParse(s, true, out ReferenceTypeCodes result))
             {
-                return (ReferenceTypeCodes)Enum.Parse(typeof(ReferenceTypeCodes), s);
+                return result;
             }
-            catch
-            {
-                return ReferenceTypeCodes.Unknown;
-            }
+            return ReferenceTypeCodes.Unknown;
         } // !FromString()
 
 
