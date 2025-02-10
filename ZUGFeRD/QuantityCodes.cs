@@ -525,6 +525,12 @@ namespace s2industries.ZUGFeRD
         XBK,
 
         /// <summary>
+        /// Matte
+        /// Mat
+        /// </summary>
+        XMT,
+
+        /// <summary>
         /// Zentner
         /// decitonne
         /// </summary>
