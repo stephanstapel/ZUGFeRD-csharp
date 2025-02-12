@@ -1250,9 +1250,10 @@ namespace s2industries.ZUGFeRD.Test
             MemoryStream ms = new MemoryStream();
 
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
-            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
-
-
+            string tempPath = Path.Combine(Path.GetTempPath(), "output.xml");
+            Console.WriteLine($"Saving testfile for {nameof(TestDesignatedProductClassificationWithFullClassification)} to \"{tempPath}\"");
+            desc.Save(tempPath, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            
             // string comparison
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
