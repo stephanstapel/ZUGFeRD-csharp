@@ -1878,7 +1878,7 @@ namespace s2industries.ZUGFeRD.Test
             lineItem.SetDeliveryNoteReferencedDocument("12345", timestamp, "1");
             lineItem.SetContractReferencedDocument("12345", timestamp, "1");
 
-            lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp);
+            lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp); // To align with PEPPOL-EN16931-R101, this shall be ignored
             lineItem.AddAdditionalReferencedDocument("abc", AdditionalReferencedDocumentTypeCode.InvoiceDataSheet, ReferenceTypeCodes.PP, timestamp);
 
             lineItem.UnitQuantity = 3m;
@@ -2094,7 +2094,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("12345", loadedLineItem.ContractReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.ContractReferencedDocument.IssueDateTime);
 
-            Assert.IsTrue(loadedLineItem.GetAdditionalReferencedDocuments().Count == 2);
+            Assert.IsTrue(loadedLineItem.GetAdditionalReferencedDocuments().Count == 1);
             var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
             Assert.IsNotNull(lineItemReferencedDoc);
             Assert.AreEqual("xyz", lineItemReferencedDoc.ID);
