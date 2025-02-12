@@ -2097,10 +2097,10 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsTrue(loadedLineItem.GetAdditionalReferencedDocuments().Count == 1);
             var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
             Assert.IsNotNull(lineItemReferencedDoc);
-            Assert.AreEqual("xyz", lineItemReferencedDoc.ID);
-            Assert.AreEqual(AdditionalReferencedDocumentTypeCode.ReferenceDocument, lineItemReferencedDoc.TypeCode);
+            Assert.AreEqual("abc", lineItemReferencedDoc.ID);
+            Assert.AreEqual(AdditionalReferencedDocumentTypeCode.InvoiceDataSheet, lineItemReferencedDoc.TypeCode);
             Assert.AreEqual(timestamp, lineItemReferencedDoc.IssueDateTime);
-            Assert.AreEqual(ReferenceTypeCodes.AAB, lineItemReferencedDoc.ReferenceTypeCode);
+            Assert.AreEqual(ReferenceTypeCodes.PP, lineItemReferencedDoc.ReferenceTypeCode);
 
 
             var productCharacteristics = loadedLineItem.ApplicableProductCharacteristics.FirstOrDefault();
