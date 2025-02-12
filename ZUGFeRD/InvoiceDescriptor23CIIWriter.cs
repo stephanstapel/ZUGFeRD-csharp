@@ -590,7 +590,8 @@ namespace s2industries.ZUGFeRD
                 //Objektkennung auf Ebene der Rechnungsposition, BT-128-00
                 if (tradeLineItem.GetAdditionalReferencedDocuments().Count > 0)
                 {
-                    foreach (var document in tradeLineItem.GetAdditionalReferencedDocuments())
+                    foreach (var document in tradeLineItem.GetAdditionalReferencedDocuments()
+                                                          .Where(x => x.TypeCode == AdditionalReferencedDocumentTypeCode.InvoiceDataSheet))  // PEPPOL-EN16931-R101
                     {
                         if (string.IsNullOrWhiteSpace(document.ID))
                         {
@@ -1299,7 +1300,9 @@ namespace s2industries.ZUGFeRD
 
             if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
             {
-                if (parentElement == "BT-18-00" || parentElement == "BT-128-00" || parentElement == "BG-X-3")
+                // CII-DT-024: ReferenceTypeCode is only allowed in BT-18-00 and BT-128-00 for InvoiceDataSheet
+                if (((parentElement == "BT-18-00" || parentElement == "BT-128-00") && document.TypeCode == AdditionalReferencedDocumentTypeCode.InvoiceDataSheet)
+                    || parentElement == "BG-X-3")
                 {
                     Writer.WriteOptionalElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString()); // BT-128-1, BT-18-1, BT-X-32
                 }
