@@ -591,7 +591,7 @@ namespace s2industries.ZUGFeRD
                 if (tradeLineItem.GetAdditionalReferencedDocuments().Count > 0)
                 {
                     foreach (var document in tradeLineItem.GetAdditionalReferencedDocuments()
-                                                          .Where(x => x.TypeCode == AdditionalReferencedDocumentTypeCode.InvoiceDataSheet))  // PEPPOL-EN16931-R101
+                                                          .Where(x => x.TypeCode == AdditionalReferencedDocumentTypeCode.InvoiceDataSheet))  // PEPPOL-EN16931-R101: Element Document reference can only be used for Invoice line object
                     {
                         if (string.IsNullOrWhiteSpace(document.ID))
                         {
