@@ -9,8 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mono.Options" Version="6.12.0.148" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ZUGFeRD.Excel\ZUGFeRD.Excel.csproj" />
     <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

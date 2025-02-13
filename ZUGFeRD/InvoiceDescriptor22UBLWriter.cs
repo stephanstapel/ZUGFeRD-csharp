@@ -585,18 +585,23 @@ namespace s2industries.ZUGFeRD
             }
             Writer.WriteElementString("cbc", "ID", tradeLineItem.AssociatedDocument.LineID);
 
-            //Writer.WriteElementString("cbc", "InvoicedQuantity", tradeLineItem.BilledQuantity.ToString());
-            Writer.WriteStartElement("cbc", "InvoicedQuantity");
+
+            if (isInvoice)
+            {
+                Writer.WriteStartElement("cbc", "InvoicedQuantity");
+            }
+            else
+            {
+                Writer.WriteStartElement("cbc", "CreditedQuantity");
+            }
             Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
-            Writer.WriteEndElement();
-
-
-            //Writer.WriteElementString("cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount.ToString());
+            Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
+            
             Writer.WriteStartElement("cbc", "LineExtensionAmount");
             Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.LineTotalAmount));
-            Writer.WriteEndElement();
+            Writer.WriteEndElement(); // !LineExtensionAmount
 
             if (tradeLineItem._AdditionalReferencedDocuments.Count > 0)
             {

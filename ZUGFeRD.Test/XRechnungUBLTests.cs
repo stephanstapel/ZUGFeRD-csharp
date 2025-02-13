@@ -1270,5 +1270,24 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("Class Code", loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassCode);
             Assert.AreEqual(String.Empty, loadedInvoice.TradeLineItems.First().GetDesignatedProductClassifications().First().ClassName);
         } // !TestDesignatedProductClassificationWithFullClassification()
+
+
+        /// <summary>
+        /// UBL credit notes contain tag names different from invoices for the document, the trade line items and the billed quantity.
+        /// </summary>
+        [TestMethod]
+        public void TestBasicCreditNote()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\ubl-cn-br-de-17-test-559-code-384.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+            
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+            Assert.AreEqual(desc.Type, InvoiceType.Correction);
+            Assert.AreEqual(desc.GetTradeLineItems().Count, 2);
+            Assert.AreEqual(desc.GetTradeLineItems().First().BilledQuantity, 33);
+            Assert.AreEqual(desc.GetTradeLineItems().First().UnitCode, QuantityCodes.XPP);
+            Assert.AreEqual(desc.GetTradeLineItems().Last().BilledQuantity, 42);
+            Assert.AreEqual(desc.GetTradeLineItems().Last().UnitCode, QuantityCodes.XPP);
+        } // !TestBasicCreditNote()
     }
 }

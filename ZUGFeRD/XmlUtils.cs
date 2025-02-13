@@ -17,15 +17,34 @@
  * under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.XPath;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace s2industries.ZUGFeRD
 {
     internal class XmlUtils
     {
+        internal static bool NodeExists(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+            try
+            {
+                return node.SelectSingleNode(xpath, nsmgr) != null;
+            }
+            catch (XPathException)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            };
+        } // !NodeExists()
+
+
         internal static bool NodeAsBool(XmlNode node, string xpath, XmlNamespaceManager nsmgr = null, bool defaultValue = true)
         {
             if (node == null)
@@ -61,14 +80,14 @@ namespace s2industries.ZUGFeRD
 
             try
             {
-                XmlNode _node = node.SelectSingleNode(xpath, nsmgr);
-                if (_node == null)
+                XmlNode selectedNode = node.SelectSingleNode(xpath, nsmgr);
+                if (selectedNode == null)
                 {
                     return defaultValue;
                 }
                 else
                 {
-                    return _node.InnerText;
+                    return selectedNode.InnerText;
                 }
             }
             catch (XPathException)
@@ -255,37 +274,37 @@ namespace s2industries.ZUGFeRD
 
         private static DateTime? _safeParseDateTime(string year, string month, string day, string hour = "0", string minute = "0", string second = "0")
         {
-            if (!Int32.TryParse(year, out int _year))
+            if (!Int32.TryParse(year, out int yearParsed))
             {
                 return null;
             }
 
-            if (!Int32.TryParse(month, out int _month))
+            if (!Int32.TryParse(month, out int monthParsed))
             {
                 return null;
             }
 
-            if (!Int32.TryParse(day, out int _day))
+            if (!Int32.TryParse(day, out int dayParsed))
             {
                 return null;
             }
 
-            if (!Int32.TryParse(hour, out int _hour))
+            if (!Int32.TryParse(hour, out int hourParsed))
             {
                 return null;
             }
 
-            if (!Int32.TryParse(minute, out int _minute))
+            if (!Int32.TryParse(minute, out int minuteParsed))
             {
                 return null;
             }
 
-            if (!Int32.TryParse(second, out int _second))
+            if (!Int32.TryParse(second, out int secondParsed))
             {
                 return null;
             }
 
-            return new DateTime(_year, _month, _day, _hour, _minute, _second);
+            return new DateTime(yearParsed, monthParsed, dayParsed, hourParsed, minuteParsed, secondParsed);
         } // !_safeParseDateTime()
     }
 }

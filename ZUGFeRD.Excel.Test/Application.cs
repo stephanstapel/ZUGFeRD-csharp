@@ -25,26 +25,26 @@ namespace s2industries.ZUGFeRD.Excel.Test
     internal class Application
     {
         internal void Run(Options options)
-        {            
+        {
             if (options.InputFile.Contains("*"))
             {
                 string baseDirectory = System.IO.Path.GetDirectoryName(options.InputFile);
                 string searchPattern = System.IO.Path.GetFileName(options.InputFile);
-                foreach (string _inputPath in System.IO.Directory.GetFiles(baseDirectory, searchPattern, options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
+                foreach (string inputPath in System.IO.Directory.GetFiles(baseDirectory, searchPattern, options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
                 {
-                    string _outputPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(_inputPath), String.Format("{0}.{1}", System.IO.Path.GetFileNameWithoutExtension(_inputPath), "xlsx"));
-                    InvoiceConverter.ToExcel(_inputPath, _outputPath);
+                    string outputPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(inputPath), String.Format("{0}.{1}", System.IO.Path.GetFileNameWithoutExtension(inputPath), "xlsx"));
+                    InvoiceConverter.ToExcel(inputPath, outputPath);
                 }
             }
             else
             {
-                string _outputFile = options.OutputFile;
-                if (String.IsNullOrEmpty(_outputFile))
+                string outputFile = options.OutputFile;
+                if (String.IsNullOrEmpty(outputFile))
                 {
-                    _outputFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.InputFile), String.Format("{0}.{1}", System.IO.Path.GetFileNameWithoutExtension(options.InputFile), "xlsx"));
+                    outputFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.InputFile), String.Format("{0}.{1}", System.IO.Path.GetFileNameWithoutExtension(options.InputFile), "xlsx"));
                 }
 
-                InvoiceConverter.ToExcel(options.InputFile, _outputFile);
+                InvoiceConverter.ToExcel(options.InputFile, outputFile);
             }
         }        
     }
