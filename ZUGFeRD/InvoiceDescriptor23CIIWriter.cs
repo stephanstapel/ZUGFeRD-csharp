@@ -746,7 +746,7 @@ namespace s2industries.ZUGFeRD
                 foreach (var document in this.Descriptor.AdditionalReferencedDocuments)
                 {
                     _writeAdditionalReferencedDocument(document, PROFILE_COMFORT_EXTENDED_XRECHNUNG,
-                        document.ReferenceTypeCode != ReferenceTypeCodes.Unknown ? "BG-18-00" : "BG-24");
+                        document.ReferenceTypeCode != ReferenceTypeCodes.Unknown ? "BT-18-00" : "BG-24");
                 }
             }
             #endregion
