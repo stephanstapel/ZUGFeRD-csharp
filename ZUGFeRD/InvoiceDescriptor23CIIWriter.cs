@@ -1287,6 +1287,7 @@ namespace s2industries.ZUGFeRD
             var subProfile = profile;
             switch (parentElement)
             {
+                case "BT-18-00":
                 case "BG-24":
                     subProfile = Profile.Comfort | Profile.Extended | Profile.XRechnung;
                     break;
