@@ -285,6 +285,11 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         private List<DesignatedProductClassification> DesignatedProductClassifications { get; set; } = new List<DesignatedProductClassification>();
 
+        /// <summary>
+        /// Detailed information on the item origin country
+        /// BT-159
+        /// </summary>
+        public CountryCodes? OriginTradeCountry { get; set; }
 
         /// <summary>
         /// Recipient of the delivered goods. This party is optional and is written in Extended profile only

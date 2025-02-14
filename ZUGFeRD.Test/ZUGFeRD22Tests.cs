@@ -3167,5 +3167,23 @@ namespace s2industries.ZUGFeRD.Test
             }
 
         } // !TestInvoiceExemptions()
+
+        [TestMethod]
+        public void TestOriginTradeCountry()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems[0].OriginTradeCountry = CountryCodes.DE;
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            List<TradeLineItem> items = loadedInvoice.GetTradeLineItems();
+
+            Assert.AreEqual(items[0].OriginTradeCountry.ToString(), "DE");
+        } // !TestOriginTradeCountry()
     }
 }
