@@ -232,7 +232,14 @@ namespace s2industries.ZUGFeRD
                 }
 
                 // TODO: IndividualTradeProductInstance, BG-X-84, Artikel (Handelsprodukt) Instanzen
-                // TODO: OriginTradeCountry + ID, BT-159, Detailinformationen zur Produktherkunft, Comfort+Extended+XRechnung
+
+                // BT-159, Detailinformationen zur Produktherkunft
+                if (tradeLineItem.OriginTradeCountry != null)
+                {
+                    Writer.WriteStartElement("ram", "OriginTradeCountry", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                    Writer.WriteElementString("ram", "ID", tradeLineItem.OriginTradeCountry.ToString());
+                    Writer.WriteEndElement(); // !ram:OriginTradeCountry
+                }
 
                 if ((descriptor.Profile == Profile.Extended) && (tradeLineItem.IncludedReferencedProducts?.Any() == true)) // BG-X-1
                 {

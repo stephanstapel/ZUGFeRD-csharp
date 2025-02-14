@@ -639,6 +639,12 @@ namespace s2industries.ZUGFeRD
                 item.AddDesignatedProductClassification(listID, listVersionID, classCode, className);
             } // !foreach(designatedProductClassificationNode))
 
+            if (tradeLineItem.SelectSingleNode(".//ram:OriginTradeCountry//ram:ID", nsmgr) != null)
+            {
+                item.OriginTradeCountry = default(CountryCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:OriginTradeCountry//ram:ID", nsmgr));
+            }
+
+
             return item;
         } // !_parseTradeLineItem()
 
