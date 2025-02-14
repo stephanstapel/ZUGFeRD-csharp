@@ -169,12 +169,6 @@ namespace s2industries.ZUGFeRD
         KMT,
 
         /// <summary>
-        /// Kilometer
-        /// Abkürzung: km (Rec20r16)
-        /// </summary>
-        KTM,
-
-        /// <summary>
         /// Kilowattstunde
         /// Abkürzung: kWh
         /// </summary>
