@@ -746,11 +746,12 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region 4. AdditionalReferencedDocument
-            if (this.Descriptor.AdditionalReferencedDocuments != null) // BG-24
+            if (this.Descriptor.AdditionalReferencedDocuments != null) // BG-24 | BT-18-00
             {
                 foreach (var document in this.Descriptor.AdditionalReferencedDocuments)
                 {
-                    _writeAdditionalReferencedDocument(document, PROFILE_COMFORT_EXTENDED_XRECHNUNG, "BG-24");
+                    _writeAdditionalReferencedDocument(document, PROFILE_COMFORT_EXTENDED_XRECHNUNG,
+                        document.ReferenceTypeCode != ReferenceTypeCodes.Unknown ? "BT-18-00" : "BG-24");
                 }
             }
             #endregion
@@ -1284,6 +1285,7 @@ namespace s2industries.ZUGFeRD
             var subProfile = profile;
             switch (parentElement)
             {
+                case "BT-18-00":
                 case "BG-24":
                     subProfile = Profile.Comfort | Profile.Extended | Profile.XRechnung;
                     break;
