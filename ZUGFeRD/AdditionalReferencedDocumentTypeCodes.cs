@@ -28,12 +28,6 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum AdditionalReferencedDocumentTypeCode
     {
-        // this entry needs to be the first in the list (default value)
-        /// <summary>
-        /// Unknown reference document type
-        /// </summary>
-        Unknown = 65536,
-
         /// <summary>
         /// simple reference document
         /// </summary>

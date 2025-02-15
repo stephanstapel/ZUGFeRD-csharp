@@ -33,11 +33,6 @@ namespace s2industries.ZUGFeRD
     public enum ReferenceTypeCodes
     {
         /// <summary>
-        /// Unknown/ invalid value
-        /// </summary>
-        Unknown = 0,
-
-        /// <summary>
         /// Auftragsbestätigungsnummer
         /// </summary>
         AAA,
@@ -247,13 +242,13 @@ namespace s2industries.ZUGFeRD
 
     internal static class ReferenceTypeCodesExtensions
     {
-        public static ReferenceTypeCodes FromString(this ReferenceTypeCodes _, string s)
+        public static ReferenceTypeCodes? FromString(this ReferenceTypeCodes _, string s)
         {
             if (Enum.TryParse(s, true, out ReferenceTypeCodes result))
             {
                 return result;
             }
-            return ReferenceTypeCodes.Unknown;
+            return null;
         } // !FromString()
 
 

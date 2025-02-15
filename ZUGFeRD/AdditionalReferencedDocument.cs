@@ -47,13 +47,13 @@ namespace s2industries.ZUGFeRD
         /// Type of the reference document
         /// BT-17-0, BT-18-0, BT-122-0, BT-X-30
         /// </summary>
-        public AdditionalReferencedDocumentTypeCode TypeCode { get; set; }
+        public AdditionalReferencedDocumentTypeCode? TypeCode { get; set; }
 
         /// <summary>
         /// Reference documents are strongly typed, specify ReferenceTypeCode to allow easy processing by invoicee
         /// BT-18-1
         /// </summary>
-        public ReferenceTypeCodes ReferenceTypeCode { get; set; }
+        public ReferenceTypeCodes? ReferenceTypeCode { get; set; }
 
         /// <summary>
         /// Description of document

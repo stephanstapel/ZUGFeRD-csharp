@@ -489,7 +489,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="typeCode">Type of the document</param>
         /// <param name="code">Reference type code</param>
         /// <param name="issueDateTime">Issue date and time of the document</param>
-        public TradeLineItem AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes code = ReferenceTypeCodes.Unknown, DateTime? issueDateTime = null)
+        public TradeLineItem AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes? code = null, DateTime? issueDateTime = null)
         {
             this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -533,7 +533,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="uriID"></param>
         /// <param name="lineID"></param>
         public TradeLineItem AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null,
-            string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null,
+            string name = null, ReferenceTypeCodes? referenceTypeCode = null, byte[] attachmentBinaryObject = null,
             string filename = null, string uriID = null, string lineID = null)
         {
             this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()

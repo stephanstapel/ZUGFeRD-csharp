@@ -895,7 +895,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="filename">Optional filename for the attachment</param>
         /// <param name="uriID">Optional URI identifier</param>
         public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode,
-            DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown,
+            DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes? referenceTypeCode = null,
             byte[] attachmentBinaryObject = null, string filename = null, string uriID = null)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()

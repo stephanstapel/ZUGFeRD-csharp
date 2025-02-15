@@ -156,14 +156,14 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !IssueDateTime()
                 }
 
-                if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                if (document.TypeCode.HasValue)
                 {
-                    Writer.WriteElementString("ram", "TypeCode", document.TypeCode.EnumToString());
+                    Writer.WriteElementString("ram", "TypeCode", document.TypeCode.Value.EnumToString());
                 }
 
-                if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                if (document.ReferenceTypeCode.HasValue)
                 {
-                    Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+                    Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.Value.EnumToString());
                 }
 
                 Writer.WriteElementString("ram", "ID", document.ID);
@@ -516,7 +516,11 @@ namespace s2industries.ZUGFeRD
 
                             Writer.WriteElementString("ram", "LineID", String.Format("{0}", tradeLineItem.AssociatedDocument?.LineID));
                             Writer.WriteOptionalElementString("ram", "ID", document.ID);
-                            Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString());
+
+                            if (document.ReferenceTypeCode.HasValue)
+                            {
+                                Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.Value.EnumToString());
+                            }
 
                             Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                         }

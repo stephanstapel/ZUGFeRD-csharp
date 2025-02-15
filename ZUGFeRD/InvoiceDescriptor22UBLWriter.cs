@@ -200,16 +200,16 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("cac", "AdditionalDocumentReference");
                     Writer.WriteStartElement("cbc", "ID"); // BT-18, BT-22
 
-                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    if (document.ReferenceTypeCode.HasValue)
                     {
-                        Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.EnumToString()); // BT-18-1
+                        Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.Value.EnumToString()); // BT-18-1
                     }
 
                     Writer.WriteValue(document.ID);
                     Writer.WriteEndElement(); // !cbc:ID
-                    if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                    if (document.TypeCode.HasValue)
                     {
-                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumValueToString());
+                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.Value.EnumValueToString());
                     }
                     Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
 
@@ -610,16 +610,16 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("cac", "DocumentReference");
                     Writer.WriteStartElement("cbc", "ID"); // BT-18, BT-22
 
-                    if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+                    if (document.ReferenceTypeCode.HasValue)
                     {
-                        Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.EnumToString()); // BT-18-1
+                        Writer.WriteAttributeString("schemeID", document.ReferenceTypeCode.Value.EnumToString()); // BT-18-1
                     }
 
                     Writer.WriteValue(document.ID);
                     Writer.WriteEndElement(); // !cbc:ID
-                    if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+                    if (document.TypeCode.HasValue)
                     {
-                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.EnumValueToString());
+                        Writer.WriteElementString("cbc", "DocumentTypeCode", document.TypeCode.Value.EnumValueToString());
                     }
                     Writer.WriteOptionalElementString("cbc", "DocumentDescription", document.Name); // BT-123
 

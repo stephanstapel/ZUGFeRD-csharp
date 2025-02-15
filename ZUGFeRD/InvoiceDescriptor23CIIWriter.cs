@@ -751,7 +751,7 @@ namespace s2industries.ZUGFeRD
                 foreach (var document in this.Descriptor.AdditionalReferencedDocuments)
                 {
                     _writeAdditionalReferencedDocument(document, PROFILE_COMFORT_EXTENDED_XRECHNUNG,
-                        document.ReferenceTypeCode != ReferenceTypeCodes.Unknown ? "BT-18-00" : "BG-24");
+                        document.ReferenceTypeCode.HasValue ? "BT-18-00" : "BG-24");
                 }
             }
             #endregion
@@ -1302,18 +1302,18 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("ram", "LineID", document.LineID, subProfile); // BT-X-29
             }
 
-            if (document.TypeCode != AdditionalReferencedDocumentTypeCode.Unknown)
+            if (document.TypeCode.HasValue)
             {
-                Writer.WriteElementString("ram", "TypeCode", document.TypeCode.EnumValueToString());
+                Writer.WriteElementString("ram", "TypeCode", document.TypeCode.Value.EnumValueToString());
             }
 
-            if (document.ReferenceTypeCode != ReferenceTypeCodes.Unknown)
+            if (document.ReferenceTypeCode.HasValue)
             {
                 // CII-DT-024: ReferenceTypeCode is only allowed in BT-18-00 and BT-128-00 for InvoiceDataSheet
                 if (((parentElement == "BT-18-00" || parentElement == "BT-128-00") && document.TypeCode == AdditionalReferencedDocumentTypeCode.InvoiceDataSheet)
                     || parentElement == "BG-X-3")
                 {
-                    Writer.WriteOptionalElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.EnumToString()); // BT-128-1, BT-18-1, BT-X-32
+                    Writer.WriteOptionalElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.Value.EnumToString()); // BT-128-1, BT-18-1, BT-X-32
                 }
             }
 
