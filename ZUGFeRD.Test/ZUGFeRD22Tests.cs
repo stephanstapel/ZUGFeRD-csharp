@@ -1305,7 +1305,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(id+"2", loadedInvoice.AdditionalReferencedDocuments[1].ID);
             Assert.IsNull(loadedInvoice.AdditionalReferencedDocuments[1].URIID);
             Assert.IsNull(loadedInvoice.AdditionalReferencedDocuments[1].LineID);
-            Assert.AreEqual(ReferenceTypeCodes.PP, loadedInvoice.AdditionalReferencedDocuments[1].ReferenceTypeCode);
+            Assert.AreEqual(ReferenceTypeCodes.Unknown, loadedInvoice.AdditionalReferencedDocuments[1].ReferenceTypeCode);
         } // !TestAdditionalReferencedDocument()
 
 
