@@ -29,10 +29,6 @@ namespace s2industries.ZUGFeRD
     public enum AccountingAccountTypeCodes
     {
         /// <summary>
-        /// TypeCode not set
-        /// </summary>
-        Unknown = 0,
-        /// <summary>
         /// The code indicates a financial account
         /// </summary>
         Financial = 1,

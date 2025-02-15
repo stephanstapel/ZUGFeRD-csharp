@@ -35,6 +35,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// EDIFICAS-EU Type Codes: https://www.unece.org/fileadmin/DAM/uncefact/codelist/standard/EDIFICASEU_AccountingAccountType_D11A.xsd
         /// </summary>
-        public AccountingAccountTypeCodes TradeAccountTypeCode { get; set; }
+        public AccountingAccountTypeCodes? TradeAccountTypeCode { get; set; }
     }
 }

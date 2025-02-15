@@ -599,21 +599,11 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// Adds an invoice line Buyer accounting reference with default Unknown account type
-        /// </summary>
-        /// <param name="AccountID">The accounting reference identifier</param>
-        public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID)
-        {
-            AddReceivableSpecifiedTradeAccountingAccount(AccountID, AccountingAccountTypeCodes.Unknown);
-            return this;
-        }
-
-
-        /// <summary>
         /// Adds an invoice line Buyer accounting reference. BT-133
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference
         /// </summary>
-        public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes AccountTypeCode)
+        /// <param name="AccountID">The accounting reference identifier</param>
+        public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes? AccountTypeCode = null)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
             {

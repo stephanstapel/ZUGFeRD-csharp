@@ -631,10 +631,10 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteValue(traceAccountingAccount.TradeAccountID); // BT-133
                         Writer.WriteEndElement(); // !ram:ID
 
-                        if (traceAccountingAccount.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
+                        if (traceAccountingAccount.TradeAccountTypeCode.HasValue)
                         {
                             Writer.WriteStartElement("ram", "TypeCode", Profile.Extended);
-                            Writer.WriteValue(((int)traceAccountingAccount.TradeAccountTypeCode).ToString()); // BT-X-99
+                            Writer.WriteValue(((int)traceAccountingAccount.TradeAccountTypeCode.Value).ToString()); // BT-X-99
                             Writer.WriteEndElement(); // !ram:TypeCode
                         }
 
@@ -1237,10 +1237,10 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteValue(traceAccountingAccount.TradeAccountID); // BT-19
                     Writer.WriteEndElement(); // !ram:ID
 
-                    if (traceAccountingAccount.TradeAccountTypeCode != AccountingAccountTypeCodes.Unknown)
+                    if (traceAccountingAccount.TradeAccountTypeCode.HasValue)
                     {
                         Writer.WriteStartElement("ram", "TypeCode", Profile.Extended);
-                        Writer.WriteValue(((int)traceAccountingAccount.TradeAccountTypeCode).ToString()); // BT-X-290
+                        Writer.WriteValue(((int)traceAccountingAccount.TradeAccountTypeCode.Value).ToString()); // BT-X-290
                         Writer.WriteEndElement(); // !ram:TypeCode
                     }
 
