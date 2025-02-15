@@ -3060,7 +3060,7 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestSpecifiedTradePaymentTermsCalculationPercent()
 
         [TestMethod]
-        public void TestSpecifiedTradePaymentTermsUnitChargeFreePackageQuantity()
+        public void TestTradeLineItemUnitChargeFreePackageQuantity()
         {
             string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\factur-x.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
@@ -3068,8 +3068,8 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
             Assert.IsNull(desc.GetTradeLineItems().First().UnitQuantity);
             Assert.IsNull(desc.GetTradeLineItems().First().ChargeFreeQuantity);
-            Assert.IsNull(desc.GetTradeLineItems().First().PackageQuantity);
-        } // !TestSpecifiedTradePaymentTermsUnitChargeFreePackageQuantity()
+            Assert.IsNotNull(desc.GetTradeLineItems().First().PackageQuantity);
+        } // !TestTradeLineItemUnitChargeFreePackageQuantity()
 
         [TestMethod]
         public void TestApplicableTradeDeliveryTermsExists()
