@@ -3060,6 +3060,18 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestSpecifiedTradePaymentTermsCalculationPercent()
 
         [TestMethod]
+        public void TestSpecifiedTradePaymentTermsUnitChargeFreePackageQuantity()
+        {
+            string path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+            Assert.IsNull(desc.GetTradeLineItems().First().UnitQuantity);
+            Assert.IsNull(desc.GetTradeLineItems().First().ChargeFreeQuantity);
+            Assert.IsNull(desc.GetTradeLineItems().First().PackageQuantity);
+        } // !TestSpecifiedTradePaymentTermsUnitChargeFreePackageQuantity()
+
+        [TestMethod]
         public void TestApplicableTradeDeliveryTermsExists()
         {
             string uuid = System.Guid.NewGuid().ToString();
