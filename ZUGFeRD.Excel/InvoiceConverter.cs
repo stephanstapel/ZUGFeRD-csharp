@@ -29,17 +29,18 @@ namespace s2industries.ZUGFeRD.Excel
     {
         internal class PosColumns
         {
-            public static readonly string DESCRIPTION = "A";
-            public static readonly string SELLER_ASSIGNED_ID = "B";
-            public static readonly string NET_UNIT_PRICE = "C";
-            public static readonly string GROSS_UNIT_PRICE = "D";
-            public static readonly string QUANTITY = "E";
-            public static readonly string LINE_TOTAL_AMOUNT = "F";
-            public static readonly string TRADE_ALLOWANCE_CHARGE_0 = "G";
-            public static readonly string TRADE_ALLOWANCE_CHARGE_1 = "H";
-            public static readonly string TRADE_ALLOWANCE_CHARGE_2 = "I";
-            public static readonly string TRADE_ALLOWANCE_CHARGE_TOTAL = "J";
-            public static readonly string ADDITIONAL_REFERENCE = "K";
+            public static readonly string LINE_ITEM_NO = "A";
+            public static readonly string DESCRIPTION = "B";
+            public static readonly string SELLER_ASSIGNED_ID = "C";
+            public static readonly string NET_UNIT_PRICE = "D";
+            public static readonly string GROSS_UNIT_PRICE = "E";
+            public static readonly string QUANTITY = "F";
+            public static readonly string LINE_TOTAL_AMOUNT = "G";
+            public static readonly string TRADE_ALLOWANCE_CHARGE_0 = "H";
+            public static readonly string TRADE_ALLOWANCE_CHARGE_1 = "I";
+            public static readonly string TRADE_ALLOWANCE_CHARGE_2 = "J";
+            public static readonly string TRADE_ALLOWANCE_CHARGE_TOTAL = "K";
+            public static readonly string ADDITIONAL_REFERENCE = "L";
         }
 
         internal class HeadColumns
@@ -61,29 +62,30 @@ namespace s2industries.ZUGFeRD.Excel
 
         public static void ToExcel(InvoiceDescriptor descriptor, string outputPath)
         {
+            if (System.IO.File.Exists(outputPath))
+            {
+                try
+                {
+                    System.IO.File.Delete(outputPath);
+                }
+                catch
+                {                    
+                }
+            }
+
+            if (System.IO.File.Exists(outputPath))
+            {
+                throw new Exception($"Output file {outputPath} exists and could not be deleted");
+                return;
+            }
 
             // create/ open  Excel file
             ExcelPackage pck = new ExcelPackage(new FileInfo(outputPath));
 
-            // make sure that our Excel file is clean
-            for (int j = 1; j <= pck.Workbook.Worksheets.Count;)
-            {
-                if (pck.Workbook.Worksheets[j].Name.Equals("Positions"))
-                {
-                    pck.Workbook.Worksheets.Delete(j);
-                }
-                else if (pck.Workbook.Worksheets[j].Name.Equals("Head"))
-                {
-                    pck.Workbook.Worksheets.Delete(j);
-                }
-                else
-                {
-                    j++;
-                }
-            }
 
             ExcelWorksheet positionWorksheet = pck.Workbook.Worksheets.Add("Positions");
 
+            new ExcelCell(positionWorksheet, PosColumns.LINE_ITEM_NO, 1).setText("No").setBold().setBorderBottom();
             new ExcelCell(positionWorksheet, PosColumns.DESCRIPTION, 1).setText("Name").setBold().setBorderBottom();
             new ExcelCell(positionWorksheet, PosColumns.SELLER_ASSIGNED_ID, 1).setText("Seller assigned Id").setBold().setBorderBottom();
             new ExcelCell(positionWorksheet, PosColumns.NET_UNIT_PRICE, 1).setText("Net Unit Price").setBold().setBorderBottom();
@@ -99,8 +101,10 @@ namespace s2industries.ZUGFeRD.Excel
             string cellForLineTotal = "";
 
             int i = 2;
-            foreach (TradeLineItem lineItem in descriptor.TradeLineItems)
+            foreach (TradeLineItem lineItem in descriptor.GetTradeLineItems())
             {
+                new ExcelCell(positionWorksheet, PosColumns.LINE_ITEM_NO, i).setText(lineItem.AssociatedDocument?.LineID);
+
                 if (!String.IsNullOrEmpty(lineItem.Name))
                 {
                     new ExcelCell(positionWorksheet, PosColumns.DESCRIPTION, i).setText(lineItem.Name);
@@ -110,9 +114,9 @@ namespace s2industries.ZUGFeRD.Excel
                     new ExcelCell(positionWorksheet, PosColumns.DESCRIPTION, i).setText(lineItem.AssociatedDocument.Notes[0].Content);
                 }
                 new ExcelCell(positionWorksheet, PosColumns.SELLER_ASSIGNED_ID, i).setText(lineItem.SellerAssignedID);
-                new ExcelCell(positionWorksheet, PosColumns.NET_UNIT_PRICE, i).setValue(lineItem.NetUnitPrice, "0.00");
-                new ExcelCell(positionWorksheet, PosColumns.GROSS_UNIT_PRICE, i).setValue(lineItem.GrossUnitPrice, "0.00");
-                new ExcelCell(positionWorksheet, PosColumns.QUANTITY, i).setValue(lineItem.BilledQuantity, "0.00");
+                new ExcelCell(positionWorksheet, PosColumns.NET_UNIT_PRICE, i).setValue(lineItem.NetUnitPrice, "0.00##");
+                new ExcelCell(positionWorksheet, PosColumns.GROSS_UNIT_PRICE, i).setValue(lineItem.GrossUnitPrice, "0.00##");
+                new ExcelCell(positionWorksheet, PosColumns.QUANTITY, i).setValue(lineItem.BilledQuantity, "0.00##");
                 if (lineItem.LineTotalAmount.HasValue)
                 {
                     new ExcelCell(positionWorksheet, PosColumns.LINE_TOTAL_AMOUNT, i).setValue(lineItem.LineTotalAmount.Value, "0.00");
@@ -127,9 +131,9 @@ namespace s2industries.ZUGFeRD.Excel
                 }
 
 
-                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_0, i).setValue(0m, "0.00").formatWithDecimals();
-                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_1, i).setValue(0m, "0.00").formatWithDecimals();
-                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_2, i).setValue(0m, "0.00").formatWithDecimals();
+                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_0, i).setValue(0m, "0.00##").formatWithDecimals();
+                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_1, i).setValue(0m, "0.00##").formatWithDecimals();
+                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_2, i).setValue(0m, "0.00##").formatWithDecimals();
 
                 IList<TradeAllowanceCharge> tradeAllowanceCharges = lineItem.GetTradeAllowanceCharges();
                 for (int j = 0; j < tradeAllowanceCharges.Count; j++)
@@ -146,15 +150,15 @@ namespace s2industries.ZUGFeRD.Excel
                     }
                     if (tac.ChargeIndicator == false) // Allowance
                     {
-                        new ExcelCell(positionWorksheet, column, i).setValue(-tac.ActualAmount, "0.00");
+                        new ExcelCell(positionWorksheet, column, i).setValue(-tac.ActualAmount, "0.00##");
                     }
                     else
                     {
-                        new ExcelCell(positionWorksheet, column, i).setValue(tac.ActualAmount, "0.00");
+                        new ExcelCell(positionWorksheet, column, i).setValue(tac.ActualAmount, "0.00##");
                     }
                 }
 
-                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL, i).setFormula(String.Format("=SUM({0}{3}:{1}{3})*{2}{3}", PosColumns.TRADE_ALLOWANCE_CHARGE_0, PosColumns.TRADE_ALLOWANCE_CHARGE_2, PosColumns.QUANTITY, i))
+                new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL, i).setFormula($"=SUM({PosColumns.TRADE_ALLOWANCE_CHARGE_0}{i}:{PosColumns.TRADE_ALLOWANCE_CHARGE_2}{i})*{PosColumns.QUANTITY}{i}")
                     .formatWithDecimals()
                     .setColor(ExcelColors.Green);
 
@@ -162,11 +166,10 @@ namespace s2industries.ZUGFeRD.Excel
             }
 
             i += 2;
-            ExcelCell cell = new ExcelCell(positionWorksheet, PosColumns.LINE_TOTAL_AMOUNT, i).setFormula(String.Format("=sum({0}2:{0}{1})", PosColumns.LINE_TOTAL_AMOUNT, i - 3)).setColor(ExcelColors.Green).formatWithDecimals();
+            ExcelCell cell = new ExcelCell(positionWorksheet, PosColumns.LINE_TOTAL_AMOUNT, i).setFormula($"=sum({PosColumns.LINE_TOTAL_AMOUNT}2:{PosColumns.LINE_TOTAL_AMOUNT}{i - 3})").setBold(true).setColor(ExcelColors.Green).formatWithDecimals();
             cellForLineTotal = cell.getCellAddress();
 
-            new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL, i + 2).setFormula(String.Format("=sum({0}{1}:{0}{2})", PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL, 2, i)).setColor(ExcelColors.Green).formatWithDecimals();
-
+            new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL, i).setFormula($"=sum({PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL}{2}:{PosColumns.TRADE_ALLOWANCE_CHARGE_TOTAL}{i - 3})").setBold(true).setColor(ExcelColors.Green).formatWithDecimals();
 
             positionWorksheet.Cells[positionWorksheet.Dimension.Address].AutoFilter = true;
             positionWorksheet.View.FreezePanes(2, 1);
@@ -227,7 +230,7 @@ namespace s2industries.ZUGFeRD.Excel
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Tax").setBold().joinColumns("B").setAlignCenter();
             i += 1;
 
-            foreach (Tax tax in descriptor.Taxes)
+            foreach (Tax tax in descriptor.GetApplicableTradeTaxes())
             {
                 new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Base Amount");
                 new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(tax.BasisAmount, "0.00");
