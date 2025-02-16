@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.Language;
 using RazorLight;
 using s2industries.ZUGFeRD;
 using System;
@@ -53,7 +55,10 @@ namespace s2industries.ZUGFeRD.Render
                 })
                 .SetOperatingAssembly(typeof(InvoiceDescriptorHtmlRenderer).GetTypeInfo().Assembly)
                 .Build();
-            Task<string> resultTask = engine.CompileRenderAsync("test", desc);
+
+            var viewModel = new { Model = desc, Html = new HtmlHelper() };
+
+            Task<string> resultTask = engine.CompileRenderStringAsync("test", templateText, viewModel);
             resultTask.Wait();
 
 

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="test.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="test.cshtml" />
   </ItemGroup>
 
