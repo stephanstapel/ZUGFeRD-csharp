@@ -33,19 +33,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         Verzug
     }
-
-
-    internal static class PaymentTermsTypesExtensions
-    {
-        public static PaymentTermsType FromString(this PaymentTermsType _, string s)
-        {
-            return EnumExtensions.StringToEnum<PaymentTermsType>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this PaymentTermsType c)
-        {
-            return EnumExtensions.EnumToString<PaymentTermsType>(c);
-        } // !ToString()
-    }
 }

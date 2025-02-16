@@ -45,6 +45,110 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestAutomaticLineIds()
 
 
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]
+        public void TestNoteContentCodes(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Notes.Clear();
+            desc.AddNote("EEV", SubjectCodes.Unknown, ContentCodes.EEV);
+            desc.AddNote("WEV", SubjectCodes.Unknown, ContentCodes.WEV);
+            desc.AddNote("ST1", SubjectCodes.Unknown, ContentCodes.ST1);
+            desc.AddNote("ST2", SubjectCodes.Unknown, ContentCodes.ST2);
+            desc.AddNote("ST3", SubjectCodes.Unknown, ContentCodes.ST3);
+            desc.AddNote("VEV", SubjectCodes.Unknown, ContentCodes.VEV);
+
+            using MemoryStream ms = new();
+            desc.Save(ms, version, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            List<Note> notes = loadedInvoice.GetNotes();
+            Assert.AreEqual(notes[0].ContentCode, ContentCodes.EEV);
+            Assert.AreEqual(notes[1].ContentCode, ContentCodes.WEV);
+            Assert.AreEqual(notes[2].ContentCode, ContentCodes.ST1);
+            Assert.AreEqual(notes[3].ContentCode, ContentCodes.ST2);
+            Assert.AreEqual(notes[4].ContentCode, ContentCodes.ST3);
+            Assert.AreEqual(notes[5].ContentCode, ContentCodes.VEV);
+        } // !TestNoteContentCodes()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]
+        public void TestNoteSubjectCodes(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Notes.Clear();
+            desc.AddNote("ACB", SubjectCodes.ACB, ContentCodes.Unknown);
+            desc.AddNote("AAI", SubjectCodes.AAI, ContentCodes.Unknown);            
+            desc.AddNote("PRF", SubjectCodes.PRF, ContentCodes.Unknown);
+            desc.AddNote("REG", SubjectCodes.REG, ContentCodes.Unknown);
+            desc.AddNote("SUR", SubjectCodes.SUR, ContentCodes.Unknown);
+            desc.AddNote("TXD", SubjectCodes.TXD, ContentCodes.Unknown);
+
+            using MemoryStream ms = new();
+            desc.Save(ms, version, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            List<Note> notes = loadedInvoice.GetNotes();
+            Assert.AreEqual(notes[0].SubjectCode, SubjectCodes.ACB);
+            Assert.AreEqual(notes[1].SubjectCode, SubjectCodes.AAI);
+            Assert.AreEqual(notes[2].SubjectCode, SubjectCodes.PRF);
+            Assert.AreEqual(notes[3].SubjectCode, SubjectCodes.REG);
+            Assert.AreEqual(notes[4].SubjectCode, SubjectCodes.SUR);
+            Assert.AreEqual(notes[5].SubjectCode, SubjectCodes.TXD);
+        } // !TestNoteSubjectCodes()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]
+        public void TestKosovoCountryCode(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Seller = new Party()
+            {
+                Country = CountryCodes._1A,
+            };
+
+            using MemoryStream ms = new();
+            desc.Save(ms, version, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Seller.Country, CountryCodes._1A);
+        } // !TestKosovoCountryCode()
+
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]
+        public void TestStandardCountryCode(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Seller = new Party()
+            {
+                Country = CountryCodes.US,
+            };
+
+            using MemoryStream ms = new();
+            desc.Save(ms, version, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.Seller.Country, CountryCodes.US);
+        } // !TestStandardCountryCode()
+
 
         [TestMethod]
         public void TestManualLineIds()

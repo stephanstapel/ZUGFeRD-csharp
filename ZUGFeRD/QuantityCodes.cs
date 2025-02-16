@@ -305,7 +305,7 @@ namespace s2industries.ZUGFeRD
         /// A unit of count defining the number of pairs (pair: item described by two's).
         ///
         /// Previously, NPR was used to indicate pairs. This has been removed.
-        /// </remarks>
+        /// </remarks>        
         PR,
 
         /// <summary>
@@ -560,12 +560,14 @@ namespace s2industries.ZUGFeRD
         /// microlitre
         /// Abkürzung: µl
         /// </summary>
+        [EnumStringValue("4G")]
         _4G,
 
         /// <summary>
         /// megabecquerel
         /// Abkürzung: MBq
         /// </summary>
+        [EnumStringValue("4N")]
         _4N,
 
         /// <summary>

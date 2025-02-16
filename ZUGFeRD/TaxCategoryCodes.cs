@@ -197,19 +197,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         Z
     }
-
-
-    internal static class TaxCategoryCodesExtensions
-    {
-        public static TaxCategoryCodes FromString(this TaxCategoryCodes _, string s)
-        {
-            return EnumExtensions.StringToEnum<TaxCategoryCodes>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this TaxCategoryCodes c)
-        {
-            return EnumExtensions.EnumToString<TaxCategoryCodes>(c);
-        } // !ToString()
-    }
 }

@@ -409,19 +409,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         VAT
     }
-
-
-    internal static class TaxTypesExtensions
-    {
-        public static TaxTypes FromString(this TaxTypes _, string s)
-        {
-            return EnumExtensions.StringToEnum<TaxTypes>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this TaxTypes c)
-        {
-            return EnumExtensions.EnumToString<TaxTypes>(c);
-        } // !ToString()
-    }
 }

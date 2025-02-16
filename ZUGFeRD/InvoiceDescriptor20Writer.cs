@@ -136,7 +136,7 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.AssociatedDocument.LineID);
                     if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
                     {
-                        Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumValueToString());
+                        Writer.WriteElementString("ram", "LineStatusCode", EnumExtensions.EnumToString<LineStatusCodes>(tradeLineItem.AssociatedDocument.LineStatusCode));
                     }
                     if (tradeLineItem.AssociatedDocument.LineStatusReasonCode.HasValue)
                     {
@@ -254,7 +254,7 @@ namespace s2industries.ZUGFeRD
 
                     if (document.TypeCode.HasValue)
                     {
-                        Writer.WriteElementString("ram", "TypeCode", document.TypeCode.Value.EnumValueToString());
+                        Writer.WriteElementString("ram", "TypeCode", EnumExtensions.EnumToString<AdditionalReferencedDocumentTypeCode>(document.TypeCode.Value));
                     }
 
                     if (document.ReferenceTypeCode.HasValue)

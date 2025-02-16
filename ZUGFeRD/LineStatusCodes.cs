@@ -752,24 +752,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         Open = 118
     }
-
-    internal static class LineStatusCodesExtensions
-    {
-        public static LineStatusCodes? FromString(this LineStatusCodes _, string s)
-        {
-            if (s == null)
-                return null;
-            return EnumExtensions.StringToEnum<LineStatusCodes>(s);
-        } // !FromString()
-
-        public static string EnumValueToString(this LineStatusCodes t)
-        {
-            return EnumExtensions.EnumToInt(t).ToString();
-        } // !ToString()
-
-        public static string EnumToString(this LineStatusCodes c)
-        {
-            return EnumExtensions.EnumToString<LineStatusCodes>(c);
-        } // !ToString()
-    }
 }

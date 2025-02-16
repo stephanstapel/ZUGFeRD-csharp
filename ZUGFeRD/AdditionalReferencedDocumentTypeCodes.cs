@@ -31,37 +31,19 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// simple reference document
         /// </summary>
+        [EnumStringValue("916")]
         ReferenceDocument = 916,
 
         /// <summary>
         /// an invoice which could contain items
         /// </summary>
+        [EnumStringValue("130")]
         InvoiceDataSheet = 130,
 
         /// <summary>
         /// price and sales catalog
         /// </summary>
+        [EnumStringValue("50")]
         PriceSalesCatalogueResponse = 50,
-    }
-
-
-    internal static class AdditionalReferencedDocumentTypeCodeExtensions
-    {
-        public static AdditionalReferencedDocumentTypeCode FromString(this AdditionalReferencedDocumentTypeCode _, string s)
-        {
-            return EnumExtensions.StringToEnum<AdditionalReferencedDocumentTypeCode>(s);
-        } // !FromString()
-
-
-        public static string EnumValueToString(this AdditionalReferencedDocumentTypeCode t)
-        {
-            return EnumExtensions.EnumToInt(t).ToString();
-        } // !ToString()
-
-
-        public static string EnumToString(this AdditionalReferencedDocumentTypeCode t)
-        {
-            return EnumExtensions.EnumToString<AdditionalReferencedDocumentTypeCode>(t);
-        } // !ToString()
     }
 }

@@ -155,12 +155,12 @@ namespace s2industries.ZUGFeRD
                     // Typ der Rechnungsposition (Code), BT-X-7, Extended
                     if (tradeLineItem.AssociatedDocument.LineStatusCode.HasValue)
                     {
-                        Writer.WriteElementString("ram", "LineStatusCode", tradeLineItem.AssociatedDocument.LineStatusCode.Value.EnumValueToString(), Profile.Extended);
+                        Writer.WriteElementString("ram", "LineStatusCode", EnumExtensions.EnumToString<LineStatusCodes>(tradeLineItem.AssociatedDocument.LineStatusCode), Profile.Extended);
                     }
                     // Untertyp der Rechnungsposition, BT-X-8, Extended
                     if (tradeLineItem.AssociatedDocument.LineStatusReasonCode.HasValue)
                     {
-                        Writer.WriteElementString("ram", "LineStatusReasonCode", tradeLineItem.AssociatedDocument.LineStatusReasonCode.Value.EnumToString(), Profile.Extended);
+                        Writer.WriteElementString("ram", "LineStatusReasonCode", EnumExtensions.EnumToString<LineStatusReasonCodes>(tradeLineItem.AssociatedDocument.LineStatusReasonCode), Profile.Extended);
                     }
                     _writeNotes(Writer, tradeLineItem.AssociatedDocument.Notes, ALL_PROFILES ^ Profile.Minimum ^ Profile.BasicWL);
                     Writer.WriteEndElement(); // ram:AssociatedDocumentLineDocument(Basic|Comfort|Extended|XRechnung)
@@ -1304,7 +1304,7 @@ namespace s2industries.ZUGFeRD
 
             if (document.TypeCode.HasValue)
             {
-                Writer.WriteElementString("ram", "TypeCode", document.TypeCode.Value.EnumValueToString());
+                Writer.WriteElementString("ram", "TypeCode", EnumExtensions.EnumToString<AdditionalReferencedDocumentTypeCode>(document.TypeCode.Value));
             }
 
             if (document.ReferenceTypeCode.HasValue)

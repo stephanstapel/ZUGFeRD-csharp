@@ -26,34 +26,40 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Unknown/ invalid value
         /// </summary>
+        [EnumStringValue("")]
         Unknown = 0,
 
         /// <summary>
         /// Keine Zahlungsart definiert
         /// Available in: Extended
         /// </summary>
+        [EnumStringValue("1")]
         NotDefined = 1,
 
         /// <summary>
         /// Belastung durch automatisierte Clearingstelle, Z.B. bei Abwicklung durch Zahlungsdienstleister wie Online-Bezahlsysteme
         /// </summary>
+        [EnumStringValue("3")]
         AutomatedClearingHouseDebit = 3,
 
         /// <summary>
         /// Bar
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("10")]
         InCash = 10,
 
         /// <summary>
         /// Scheck
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("20")]
         Cheque = 20,
 
         /// <summary>
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("30")]
         CreditTransfer = 30,
 
         /// <summary>
@@ -64,6 +70,7 @@ namespace s2industries.ZUGFeRD
         /// 
         /// Available in: Extended
         /// </summary>
+        [EnumStringValue("31")]
         DebitTransfer = 31,
 
         /// <summary>
@@ -71,12 +78,14 @@ namespace s2industries.ZUGFeRD
         /// Überweisung national, vor SEPA-Umstellung
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("42")]
         PaymentToBankAccount = 42,
 
         /// <summary>
         /// Bankkkarte, Kreditkarte
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("48")]
         BankCard = 48,
 
         /// <summary>
@@ -84,27 +93,32 @@ namespace s2industries.ZUGFeRD
         /// 
         /// Available in: Basic, Extended
         /// /// </summary>
+        [EnumStringValue("49")]
         DirectDebit = 49,
 
         /// <summary>
         /// Available in: Basic, Extended
         /// </summary>        
+        [EnumStringValue("57")]
         StandingAgreement = 57,
 
 
         /// <summary>
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("58")]
         SEPACreditTransfer = 58,
 
         /// <summary>
         /// Available in: Basic, Extended
         /// </summary>        
+        [EnumStringValue("59")]
         SEPADirectDebit = 59,
 
         /// <summary>
         /// Payment will be made or has been made by an online payment service like Paypal, Stripe etc.
         /// </summary>
+        [EnumStringValue("68")]
         OnlinePaymentService = 68,
 
         /// <summary>
@@ -112,37 +126,7 @@ namespace s2industries.ZUGFeRD
         /// Beträge, die zwei Partner sich gegenseitig schulden werden ausgeglichen um unnütze Zahlungen zu vermeiden.
         /// Available in: Basic, Extended
         /// </summary>
+        [EnumStringValue("97")]
         ClearingBetweenPartners = 97
-    }
-
-
-    internal static class PaymentMeansTypeCodesExtensions
-    {
-        public static PaymentMeansTypeCodes FromString(this PaymentMeansTypeCodes _, string s)
-        {
-            switch (s)
-            {
-                case "1": return PaymentMeansTypeCodes.NotDefined;
-                case "3": return PaymentMeansTypeCodes.AutomatedClearingHouseDebit;
-                case "10": return PaymentMeansTypeCodes.InCash;
-                case "20": return PaymentMeansTypeCodes.Cheque;
-                case "30": return PaymentMeansTypeCodes.CreditTransfer;
-                case "31": return PaymentMeansTypeCodes.DebitTransfer;
-                case "42": return PaymentMeansTypeCodes.PaymentToBankAccount;
-                case "48": return PaymentMeansTypeCodes.BankCard;
-                case "49": return PaymentMeansTypeCodes.DirectDebit;
-                case "57": return PaymentMeansTypeCodes.StandingAgreement;
-                case "58": return PaymentMeansTypeCodes.SEPACreditTransfer;
-                case "59": return PaymentMeansTypeCodes.SEPADirectDebit;
-                case "97": return PaymentMeansTypeCodes.ClearingBetweenPartners;
-            }
-            return PaymentMeansTypeCodes.Unknown;
-        } // !FromString()
-
-
-        public static string EnumToString(this PaymentMeansTypeCodes c)
-        {
-            return ((int)c).ToString();
-        } // !ToString()
     }
 }

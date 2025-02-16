@@ -107,20 +107,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         TXD
     }
-
-
-
-    internal static class SubjectCodesExtensions
-    {
-        public static SubjectCodes FromString(this SubjectCodes _, string s)
-        {
-            return EnumExtensions.StringToEnum<SubjectCodes>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this SubjectCodes c)
-        {
-            return EnumExtensions.EnumToString<SubjectCodes>(c);
-        } // !ToString()
-    }
 }

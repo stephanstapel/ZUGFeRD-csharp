@@ -31,45 +31,43 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// The code indicates a financial account
         /// </summary>
+        [EnumStringValue("1")]
         Financial = 1,
+
         /// <summary>
         /// The code indicates a subsidiary account
         /// </summary>
+        [EnumStringValue("2")]
         Subsidiary = 2,
+
         /// <summary>
         /// The code indicates a budget account
         /// </summary>
+        [EnumStringValue("3")]
         Budget = 3,
+
         /// <summary>
         /// The code indicates a cost accounting account
         /// </summary>
+        [EnumStringValue("4")]
         Cost_Accounting = 4,
+
         /// <summary>
         /// The code indicates a receivable account
         /// </summary>
+        [EnumStringValue("5")]
         Receivable = 5,
+
         /// <summary>
         /// The code indicates a payable account
         /// </summary>
+        [EnumStringValue("6")]
         Payable = 6,
+
         /// <summary>
         /// The code indicates a job cost accounting
         /// </summary>
+        [EnumStringValue("7")]
         Job_Cost_Accounting = 7
-    }
-
-
-    internal static class AccountingAccountTypeCodesExtensions
-    {
-        public static AccountingAccountTypeCodes FromString(this AccountingAccountTypeCodes _, string s)
-        {
-            return EnumExtensions.StringToEnum<AccountingAccountTypeCodes>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this AccountingAccountTypeCodes c)
-        {
-            return EnumExtensions.EnumToString<AccountingAccountTypeCodes>(c);
-        } // !ToString()
     }
 }

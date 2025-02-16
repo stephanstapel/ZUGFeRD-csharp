@@ -56,18 +56,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         ZZZ
     }
-
-    internal static class DesignatedProductClassificationClassCodesExtensions
-    {
-        public static DesignatedProductClassificationClassCodes FromString(this DesignatedProductClassificationClassCodes _, string s)
-        {
-            return EnumExtensions.StringToEnum<DesignatedProductClassificationClassCodes>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this DesignatedProductClassificationClassCodes c)
-        {
-            return EnumExtensions.EnumToString<DesignatedProductClassificationClassCodes>(c);
-        } // !EnumToString()
-    }
 }

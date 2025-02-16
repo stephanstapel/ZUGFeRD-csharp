@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -22,33 +22,14 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    /// <summary>
-    /// Used in BT-X-8
-    /// </summary>
-    public enum LineStatusReasonCodes
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class EnumStringValueAttribute : Attribute
     {
-        /// <summary>
-        /// Unknown/ invalid line status code
-        /// </summary>
-        Unknown,
+        public string Value { get; }
 
-        /// <summary>
-        /// Detail
-        /// 
-        /// Regular item position (standard case)
-        /// </summary>
-        DETAIL,
-
-        /// <summary>
-        /// Subtotal
-        /// </summary>
-        GROUP,
-
-        /// <summary>
-        /// Solely information
-        /// 
-        /// For information only
-        /// </summary>
-        INFORMATION
+        public EnumStringValueAttribute(string value)
+        {
+            Value = value;
+        }
     }
 }

@@ -95,7 +95,8 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.TradeLineItems[1].AssociatedDocument.LineStatusReasonCode, null);
             Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.LineStatusCode, LineStatusCodes.DocumentationClaim);
             Assert.AreEqual(loadedInvoice.TradeLineItems[2].AssociatedDocument.LineStatusReasonCode, LineStatusReasonCodes.INFORMATION);
-        }
+        } // !TestLineStatusCode()
+
 
         [TestMethod]
         public void TestExtendedInvoiceWithIncludedItems()
@@ -137,7 +138,8 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].Name, "Test2");
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitQuantity.HasValue, false);
             Assert.AreEqual(loadedInvoice.TradeLineItems[0].IncludedReferencedProducts[1].UnitCode, null);
-        }
+        } // !TestExtendedInvoiceWithIncludedItems()
+
 
         [TestMethod]
         public void TestReferenceEReportingFacturXInvoice()
@@ -156,7 +158,8 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNull(desc.LineTotalAmount); // not present in file
             Assert.AreEqual(desc.TaxBasisAmount, 198.0m);
             Assert.AreEqual(desc.IsTest, false); // not present in file
-        }
+        } // !TestReferenceEReportingFacturXInvoice()
+
 
         [TestMethod]
         public void TestReferenceBasicFacturXInvoice()
@@ -867,7 +870,8 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.AreEqual(new DateTime(2021, 1, 1), secondTradeLineItem.BillingPeriodStart);
                 Assert.AreEqual(new DateTime(2022, 1, 1), secondTradeLineItem.BillingPeriodEnd);
             }
-        }
+        } // !TestWriteTradeLineBillingPeriod()
+
 
         [TestMethod]
         public void TestWriteTradeLineBilledQuantity()
@@ -883,7 +887,7 @@ namespace s2industries.ZUGFeRD.Test
             // Modifiy trade line settlement data
             originalInvoiceDescriptor.AddTradeLineItem(
                 name: String.Empty,
-                billedQuantity: 10,
+                billedQuantity: 10,                
                 netUnitPrice: 1);
 
             originalInvoiceDescriptor.IsTest = false;
@@ -897,7 +901,8 @@ namespace s2industries.ZUGFeRD.Test
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
                 Assert.AreEqual(10, invoiceDescriptor.TradeLineItems[0].BilledQuantity);
             }
-        }
+        } // !TestWriteTradeLineBilledQuantity()
+
 
         [TestMethod]
         public void TestWriteTradeLineChargeFreePackage()
@@ -925,9 +930,13 @@ namespace s2industries.ZUGFeRD.Test
                 // Load Invoice and compare to expected
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
                 Assert.AreEqual(10, invoiceDescriptor.TradeLineItems[0].ChargeFreeQuantity);
+                Assert.AreEqual(QuantityCodes.C62, invoiceDescriptor.TradeLineItems[0].ChargeFreeUnitCode);
                 Assert.AreEqual(20, invoiceDescriptor.TradeLineItems[0].PackageQuantity);
+                Assert.AreEqual(QuantityCodes.C62, invoiceDescriptor.TradeLineItems[0].PackageUnitCode);
             }
-        }
+        } // !TestWriteTradeLineChargeFreePackage()
+
+
         [TestMethod]
         public void TestWriteTradeLineNetUnitPrice()
         {
@@ -953,7 +962,8 @@ namespace s2industries.ZUGFeRD.Test
                 var invoiceDescriptor = InvoiceDescriptor.Load(memoryStream);
                 Assert.AreEqual(25, invoiceDescriptor.TradeLineItems[0].NetUnitPrice);
             }
-        }
+        } // !TestWriteTradeLineNetUnitPrice()
+
 
         [TestMethod]
         public void TestWriteTradeLineLineID()
@@ -1002,6 +1012,7 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual("DE98ZZZ09999999999", invoiceDescriptor.PaymentMeans.SEPACreditorIdentifier);
             Assert.AreEqual("REF A-123", invoiceDescriptor.PaymentMeans.SEPAMandateReference);
+            Assert.AreEqual(PaymentMeansTypeCodes.SEPADirectDebit, invoiceDescriptor.PaymentMeans.TypeCode);                      
             Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
@@ -1108,12 +1119,13 @@ namespace s2industries.ZUGFeRD.Test
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var d2 = InvoiceDescriptor.Load(stream);
+                Assert.AreEqual(d2.Currency, CurrencyCodes.EUR);
                 Assert.AreEqual("DE98ZZZ09999999999", d2.PaymentMeans.SEPACreditorIdentifier);
                 Assert.AreEqual("REF A-123", d2.PaymentMeans.SEPAMandateReference);
                 Assert.AreEqual(1, d2.DebitorBankAccounts.Count);
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
                 Assert.IsTrue(d.Seller.SpecifiedLegalOrganization.ID.SchemeID.HasValue);
-                Assert.AreEqual("0088", d.Seller.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                Assert.AreEqual(GlobalIDSchemeIdentifiers.GLN, d.Seller.SpecifiedLegalOrganization.ID.SchemeID.Value);
                 Assert.AreEqual("4000001123452", d.Seller.SpecifiedLegalOrganization.ID.ID);
                 Assert.AreEqual("Lieferant GmbH", d.Seller.SpecifiedLegalOrganization.TradingBusinessName);
             }
@@ -2252,10 +2264,13 @@ namespace s2industries.ZUGFeRD.Test
             MemoryStream ms = new MemoryStream();
 
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.Invoicee, null);
+            Assert.AreEqual(loadedInvoice.GetNotes().First().SubjectCode, SubjectCodes.ADU);
+            Assert.AreEqual(loadedInvoice.GetNotes().First().ContentCode, ContentCodes.Unknown);
         } // !TestAltteilSteuer()
 
         [TestMethod]
@@ -3178,6 +3193,7 @@ namespace s2industries.ZUGFeRD.Test
 
         } // !TestInvoiceExemptions()
 
+
         [TestMethod]
         public void TestOriginTradeCountry()
         {
@@ -3193,7 +3209,70 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             List<TradeLineItem> items = loadedInvoice.GetTradeLineItems();
 
-            Assert.AreEqual(items[0].OriginTradeCountry.ToString(), "DE");
+            Assert.IsNotNull(items[0].OriginTradeCountry);
+            Assert.AreEqual(items[0].OriginTradeCountry, CountryCodes.DE);
         } // !TestOriginTradeCountry()
+
+
+        [TestMethod]
+        public void TestLoadingCurrency()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Assert.AreEqual(desc.Currency, CurrencyCodes.EUR);
+            Assert.AreEqual(desc.TaxCurrency, null);
+        } // !TestLoadingCurrency()
+
+
+        [TestMethod]
+        public void TestLoadingSellerCountry()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Assert.AreEqual(desc.Seller.Country, CountryCodes.DE);
+        } // !TestLoadingSellerCountry()
+
+
+        [TestMethod]
+        public void TestLoadingBuyerCountry()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            Assert.AreEqual(desc.Buyer.Country, CountryCodes.DE);
+        } // !TestLoadingSellerCountry()
+
+
+        [TestMethod]
+        public void TestLoadingInvoiceType()
+        {
+            // load standrd invoice
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);            
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Type, InvoiceType.Invoice);
+
+            // load correction
+            path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Rechnungskorrektur\factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);            
+            desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Type, InvoiceType.Correction);
+        } // !TestLoadingInvoiceType()
     }
 }

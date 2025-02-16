@@ -1603,19 +1603,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         ZWR = 935
     }
-
-
-    internal static class CurrencyCodesExtensions
-    {
-        public static CurrencyCodes FromString(this CurrencyCodes _, string s)
-        {
-            return EnumExtensions.StringToEnum<CurrencyCodes>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this CurrencyCodes c)
-        {
-            return EnumExtensions.EnumToString<CurrencyCodes>(c);
-        } // !ToString()
-    }
 }

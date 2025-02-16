@@ -60,7 +60,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Andorra
         /// AD = 20
-        /// </summary>
+        /// </summary>        
         AD = 20,
 
         /// <summary>
@@ -1558,6 +1558,7 @@ namespace s2industries.ZUGFeRD
         /// special treatment required as enums
         /// don't like members starting with a number!
         /// </summary>
+        [EnumStringValue("1A")]
         _1A = 999,
 
         /// <summary>
@@ -1566,33 +1567,5 @@ namespace s2industries.ZUGFeRD
         /// Unknown = 0
         /// </summary>
         Unknown = 0
-
-
-    }
-
-
-    public static class CountryCodesExtensions
-    {
-        public static CountryCodes FromString(this CountryCodes _, string s)
-        {
-            // Special treatment for temporary code of Kosovo
-            if ("1A" == s)
-            {
-                return CountryCodes._1A;
-            }
-
-            if (Enum.TryParse(s, true, out CountryCodes result))
-            {
-                return result;
-            }
-
-            return CountryCodes.Unknown;
-        } // !FromString()
-
-        public static string EnumToString(this CountryCodes c)
-        {
-            // Special treatment for temporary code of Kosovo
-            return (CountryCodes._1A == c ? "1A" : c.ToString("g"));
-        } // !ToString()
     }
 }

@@ -28,83 +28,55 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Unknown means, we have a problem ...
         /// </summary>
+        [EnumStringValue("")]
         Unknown = 0,
 
         /// <summary>
         /// SIRENE (System Information et Repertoire des Entreprise et des Etablissements)
         /// </summary>
+        [EnumStringValue("0002")]
         Sirene = 2,
 
         /// <summary>
         /// SIRENE (System Information et Repertoire des Entreprise et des Etablissements)
         /// </summary>
+        [EnumStringValue("0009")]
         SiretCode = 9,
 
         /// <summary>
         /// SWIFT (BIC)
         /// </summary>
+        [EnumStringValue("0021")]
         Swift = 21,
 
         /// <summary>
         /// D-U-N-S Number
         /// </summary>
+        [EnumStringValue("0060")]
         DUNS = 60,
 
         /// <summary>
         /// GS1 Global Location Number (GLN)
         /// </summary>
+        [EnumStringValue("0089")]
         GLN = 88,
 
         /// <summary>
         /// GS1 Global Trade Item Number (GTIN, EAN)
         /// </summary>
+        [EnumStringValue("0160")]
         EAN = 160,
 
         /// <summary>
         /// OSCAR (Odette)
         /// </summary>
+        [EnumStringValue("017")]
         ODETTE = 177,
 
         /// <summary>
         /// Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
         /// </summary>
+        [EnumStringValue("0208")]
         CompanyNumber = 208
-    }
-
-
-    public static class GlobalIDSchemeIdentifiersExtensions
-    {
-        public static GlobalIDSchemeIdentifiers FromString(this GlobalIDSchemeIdentifiers _, string s)
-        {
-            switch (s)
-            {
-                case "0002": return GlobalIDSchemeIdentifiers.Sirene;
-                case "0009": return GlobalIDSchemeIdentifiers.SiretCode;
-                case "0021": return GlobalIDSchemeIdentifiers.Swift;
-                case "0060": return GlobalIDSchemeIdentifiers.DUNS;
-                case "0088": return GlobalIDSchemeIdentifiers.GLN;
-                case "0160": return GlobalIDSchemeIdentifiers.EAN;
-                case "0177": return GlobalIDSchemeIdentifiers.ODETTE;
-                case "0208": return GlobalIDSchemeIdentifiers.CompanyNumber;
-                default: return GlobalIDSchemeIdentifiers.Unknown;
-            }
-        } // !FromString()
-
-
-        public static string EnumToString(this GlobalIDSchemeIdentifiers c)
-        {
-            switch (c)
-            {
-                case GlobalIDSchemeIdentifiers.Sirene: return "0002";
-                case GlobalIDSchemeIdentifiers.SiretCode: return "0009";
-                case GlobalIDSchemeIdentifiers.Swift: return "0021";
-                case GlobalIDSchemeIdentifiers.DUNS: return "0060";
-                case GlobalIDSchemeIdentifiers.GLN: return "0088";
-                case GlobalIDSchemeIdentifiers.EAN: return "0160";
-                case GlobalIDSchemeIdentifiers.ODETTE: return "0177";
-                case GlobalIDSchemeIdentifiers.CompanyNumber: return "0208";
-                default: return "0000";
-            }
-        } // !ToString()
     }
 }

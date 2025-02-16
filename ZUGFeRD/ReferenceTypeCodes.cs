@@ -238,23 +238,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         VN
     }
-
-
-    internal static class ReferenceTypeCodesExtensions
-    {
-        public static ReferenceTypeCodes? FromString(this ReferenceTypeCodes _, string s)
-        {
-            if (Enum.TryParse(s, true, out ReferenceTypeCodes result))
-            {
-                return result;
-            }
-            return null;
-        } // !FromString()
-
-
-        public static string EnumToString(this ReferenceTypeCodes c)
-        {
-            return c.ToString("g");
-        } // !ToString()
-    }
 }

@@ -154,20 +154,4 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         FinalConstructionInvoice = 877
     }
-
-
-    internal static class InvoiceTypeExtensions
-    {
-
-        public static InvoiceType FromString(this InvoiceType _, string s)
-        {
-            return EnumExtensions.StringToEnum<InvoiceType>(s);
-        } // !FromString()
-
-
-        public static string EnumToString(this InvoiceType i)
-        {
-            return EnumExtensions.EnumToString<InvoiceType>(i);
-        } // !ToString()
-    }
 }
