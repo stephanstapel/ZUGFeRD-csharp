@@ -894,7 +894,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="attachmentBinaryObject">Optional binary attachment</param>
         /// <param name="filename">Optional filename for the attachment</param>
         /// <param name="uriID">Optional URI identifier</param>
-        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode,
+        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode? typeCode,
             DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes? referenceTypeCode = null,
             byte[] attachmentBinaryObject = null, string filename = null, string uriID = null)
         {
