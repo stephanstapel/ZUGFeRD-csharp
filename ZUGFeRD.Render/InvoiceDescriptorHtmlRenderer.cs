@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,62 +16,47 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.Language;
-using RazorLight;
-using s2industries.ZUGFeRD;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security;
-using System.Security.Permissions;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
+using Scriban;
 
 namespace s2industries.ZUGFeRD.Render
 {
     public class InvoiceDescriptorHtmlRenderer
     {
-        public static string Render(InvoiceDescriptor desc)
+        public static async Task<string> RenderAsync(InvoiceDescriptor invoice)
+        {
+            string templateContent = _LoadEmbeddedResource("Simple.scriban");
+            var template = Template.Parse(templateContent);
+            var model = new
+            {
+                Invoice = invoice
+            };
+
+            string result = await template.RenderAsync(model, memberRenamer: member => member.Name);
+            return result;
+        } // !RenderAsync()
+
+
+        private static string _LoadEmbeddedResource(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = typeof(InvoiceDescriptorHtmlRenderer).Namespace + ".test.cshtml";
+            var resourcePath = assembly.GetManifestResourceNames()
+                                       .FirstOrDefault(r => r.EndsWith(resourceName, StringComparison.OrdinalIgnoreCase));
 
-            string templateText = "";
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            if (resourcePath == null)
+                throw new FileNotFoundException($"Die eingebettete Ressource '{resourceName}' wurde nicht gefunden.");
+
+            using (var stream = assembly.GetManifestResourceStream(resourcePath))
+            using (var reader = new StreamReader(stream))
             {
-                templateText = reader.ReadToEnd();
+                return reader.ReadToEnd();
             }
-
-            var engine = new RazorLightEngineBuilder()
-                .UseOptions(new RazorLightOptions()
-                {
-                    EnableDebugMode = true
-                })
-                .SetOperatingAssembly(typeof(InvoiceDescriptorHtmlRenderer).GetTypeInfo().Assembly)
-                .Build();
-
-            var viewModel = new { Model = desc, Html = new HtmlHelper() };
-
-            Task<string> resultTask = engine.CompileRenderStringAsync("test", templateText, viewModel);
-            resultTask.Wait();
-
-
-            return resultTask.Result;
-        } // !Render()
-
-
-        public static void Render(InvoiceDescriptor desc, string filename)
-        {
-            string output = Render(desc);
-            StreamWriter writer = File.CreateText(filename);
-            writer.WriteLine(output);
-            writer.Close();
-        } // !Render()
+        } // !_LoadEmbeddedResource()
     }
 }
