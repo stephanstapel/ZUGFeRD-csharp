@@ -116,10 +116,16 @@ namespace s2industries.ZUGFeRD
 		[Description("TC")]
 		TransportCosts = 35, // TC
 
-		/// <summary>
-		/// Miscellaneous service
-		/// </summary>
-		[Description("ZZZ")]
+        /// <summary>
+        /// Testing service
+        /// </summary>
+        [Description("TAC")]
+        TestingService = 36, // TAC
+
+        /// <summary>
+        /// Miscellaneous service
+        /// </summary>
+        [Description("ZZZ")]
 		MiscellaneousService = 99 // ZZZ
 	}
 }
