@@ -2054,9 +2054,9 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018", paymentTerms.Description);
             Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
 
-            Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-            Assert.AreEqual(0m, loadedInvoice.ChargeTotalAmount); // mandatory, even if 0!
-            Assert.AreEqual(0m, loadedInvoice.AllowanceTotalAmount); // mandatory, even if 0!
+            Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);  // mandatory, even if 0!
+            Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount);   // optional
+            Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
             Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
             Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
             Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
