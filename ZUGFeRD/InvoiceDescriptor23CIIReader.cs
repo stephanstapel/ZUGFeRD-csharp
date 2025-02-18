@@ -169,6 +169,16 @@ namespace s2industries.ZUGFeRD
             retval.ShipFrom = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ShipFromTradeParty", nsmgr);
             retval.ActualDeliveryDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString", nsmgr);
 
+            // BT-X-66-00
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
+            {
+                string id = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr);
+                string schemeID = XmlUtils.NodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
+
+                retval.AddShipToTaxRegistration(id, EnumExtensions.StringToEnum<TaxRegistrationSchemeID>(schemeID));
+            }
+
+
             string despatchAdviceNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:IssuerAssignedID", nsmgr);
             DateTime? despatchAdviceDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:FormattedIssueDateTime/udt:DateTimeString", nsmgr);
 
@@ -205,6 +215,15 @@ namespace s2industries.ZUGFeRD
             }
 
             retval.Invoicee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty", nsmgr);
+            //BT-X-242-00
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
+            {
+                string id = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr);
+                string schemeID = XmlUtils.NodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
+
+                retval.AddInvoiceeTaxRegistration(id, EnumExtensions.StringToEnum<TaxRegistrationSchemeID>(schemeID));
+            }
+
             retval.Invoicer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty", nsmgr);
             retval.Payee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty", nsmgr);
 

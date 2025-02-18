@@ -196,6 +196,13 @@ namespace s2industries.ZUGFeRD
         public Party Invoicee { get; set; }
 
         /// <summary>
+        ///     Detailed information on tax information 
+        ///     
+        ///     BT-X-242-00
+        /// </summary>
+        private List<TaxRegistration> _InvoiceeTaxRegistration = new List<TaxRegistration>();
+
+        /// <summary>
         /// This party is optional and only relevant for Extended profile.
         ///
         /// It seems to be used under rate condition only.
@@ -208,6 +215,13 @@ namespace s2industries.ZUGFeRD
         /// BG-13
         /// </summary>
         public Party ShipTo { get; set; }
+
+        /// <summary>
+        ///     Detailed information on tax information of the goods recipient
+        ///     
+        ///     BT-X-66-00
+        /// </summary>
+        private List<TaxRegistration> _ShipToTaxRegistration = new List<TaxRegistration>();
 
         /// <summary>
         /// Detailed contact information of the recipient
@@ -849,6 +863,38 @@ namespace s2industries.ZUGFeRD
                 SchemeID = schemeID
             });
         } // !AddSellerTaxRegistration()
+
+        /// <summary>
+        /// Adds a tax registration number for the ship to trade party.
+        ///
+        /// BT-X-66-00
+        /// </summary>
+        /// <param name="no">The tax registration number.</param>
+        /// <param name="schemeID">The tax registration scheme identifier.</param>
+        public void AddShipToTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
+        {
+            this._ShipToTaxRegistration.Add(new TaxRegistration()
+            {
+                No = no,
+                SchemeID = schemeID
+            });
+        } // !AddShipToTaxRegistration()
+
+        /// <summary>
+        /// Adds a tax registration number for the invoicee party.
+        ///
+        /// BT-X-242-00
+        /// </summary>
+        /// <param name="no">The tax registration number.</param>
+        /// <param name="schemeID">The tax registration scheme identifier.</param>
+        public void AddInvoiceeTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
+        {
+            this._InvoiceeTaxRegistration.Add(new TaxRegistration()
+            {
+                No = no,
+                SchemeID = schemeID
+            });
+        } // !AddInvoiceeTaxRegistration()
 
         /// <summary>
         /// Sets the buyer's electronic address for Peppol
@@ -2018,6 +2064,23 @@ namespace s2industries.ZUGFeRD
             return this.SellerTaxRegistration;
         } // !GetSellerTaxRegistration()
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<TaxRegistration> GetShipToTaxRegistration()
+        {
+            return this._ShipToTaxRegistration;
+        } // !GetShipToTaxRegistration()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<TaxRegistration> GetInvoiceeTaxRegistration()
+        {
+            return this._InvoiceeTaxRegistration;
+        } // !GetInvoiceeTaxRegistration()
 
         /// <summary>
         /// Free text on header level
