@@ -1182,9 +1182,9 @@ namespace s2industries.ZUGFeRD
             #region SpecifiedTradeSettlementHeaderMonetarySummation
             //Gesamtsummen auf Dokumentenebene
             Writer.WriteStartElement("ram", "SpecifiedTradeSettlementHeaderMonetarySummation");
-            _writeOptionalAmount(Writer, "ram", "LineTotalAmount", this.Descriptor.LineTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);   // Summe der Nettobeträge aller Rechnungspositionen
-            _writeAmount(Writer, "ram", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);       // Summe der Zuschläge auf Dokumentenebene, BT-108
-            _writeAmount(Writer, "ram", "AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum); // Summe der Abschläge auf Dokumentenebene, BT-107
+            _writeAmount(Writer, "ram", "LineTotalAmount", this.Descriptor.LineTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);   // Summe der Nettobeträge aller Rechnungspositionen
+            _writeOptionalAmount(Writer, "ram", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);       // Summe der Zuschläge auf Dokumentenebene, BT-108
+            _writeOptionalAmount(Writer, "ram", "AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum); // Summe der Abschläge auf Dokumentenebene, BT-107
                                                                                                                                                 // both fields are mandatory according to BR-FXEXT-CO-11
                                                                                                                                                 // and BR-FXEXT-CO-12
 
