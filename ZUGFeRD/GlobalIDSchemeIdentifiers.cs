@@ -70,7 +70,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// OSCAR (Odette)
         /// </summary>
-        [EnumStringValue("017")]
+        [EnumStringValue("0177")]
         ODETTE = 177,
 
         /// <summary>
