@@ -213,7 +213,7 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ApplicableProductCharacteristic
                     }
                 }
-                
+
                 foreach (var designatedProductClassification in tradeLineItem.GetDesignatedProductClassifications())
                 {
                     if (designatedProductClassification.ListID == default(DesignatedProductClassificationClassCodes))
@@ -772,7 +772,7 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
-            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum, this.Descriptor.ShipToContact);
+            _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum, this.Descriptor.ShipToContact, default, this.Descriptor.GetShipToTaxRegistration());
             _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, this.Descriptor.UltimateShipToContact);
             _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom, Profile.Extended);
 
@@ -884,7 +884,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalParty(Writer, PartyTypes.InvoicerTradeParty, this.Descriptor.Invoicer, Profile.Extended);
 
             //   7. InvoiceeTradeParty (optional), BG-X-36
-            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee, Profile.Extended);
+            _writeOptionalParty(Writer, PartyTypes.InvoiceeTradeParty, this.Descriptor.Invoicee, Profile.Extended, default, default, this.Descriptor.GetInvoiceeTaxRegistration());
 
             //   8. PayeeTradeParty (optional), BG-10
             _writeOptionalParty(Writer, PartyTypes.PayeeTradeParty, this.Descriptor.Payee, ALL_PROFILES ^ Profile.Minimum);
@@ -1421,7 +1421,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
         {
-            this.Descriptor.GetApplicableTradeTaxes()?.ForEach (tax =>
+            this.Descriptor.GetApplicableTradeTaxes()?.ForEach(tax =>
             {
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 
@@ -1466,7 +1466,7 @@ namespace s2industries.ZUGFeRD
 
         private void _writeNotes(ProfileAwareXmlTextWriter writer, List<Note> notes, Profile profile = Profile.Unknown)
         {
-            notes?.ForEach (note =>
+            notes?.ForEach(note =>
             {
                 writer.WriteStartElement("ram", "IncludedNote", profile);
                 if (note.ContentCode != ContentCodes.Unknown)
