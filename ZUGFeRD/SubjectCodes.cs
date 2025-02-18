@@ -34,6 +34,11 @@ namespace s2industries.ZUGFeRD
         Unknown,
 
         /// <summary>
+        /// Dangerous goods additional information
+        /// </summary>
+        /// Additional information concerning dangerous goods.
+        AAC,
+        /// <summary>
         /// Generelle Informationen
         /// </summary>
         /// Generelle Informationen zu diesem Kauf
