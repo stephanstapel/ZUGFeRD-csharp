@@ -1594,6 +1594,53 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.TradeLineItems.First().ShipTo.City, "ShipToCity");
         } // !TestShipToTradePartyOnItemLevel()
 
+        [TestMethod]
+        public void TestParty_WithTaxRegistration()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            desc.ShipTo = new Party()
+            {
+                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.GLN, "MusterGLN"),
+                Name = "AbKunden AG Mitte",
+                Postcode = "12345",
+                ContactName = "Einheit: 5.OG rechts",
+                Street = "Verwaltung Straße 40",
+                City = "Musterstadt",
+                Country = CountryCodes.DE,
+                CountrySubdivisionName = "Hessen"
+            };
+            
+            desc.AddShipToTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
+
+            desc.Invoicee = new Party() 
+            {
+                Name = "Invoicee",
+                ContactName = "Max Mustermann",
+                Postcode = "83022",
+                City = "Rosenheim",
+                Street = "Münchnerstraße 123",
+                AddressLine3 = "EG links",
+                CountrySubdivisionName = "Bayern",
+                Country = CountryCodes.DE
+            };
+
+            desc.AddInvoiceeTaxRegistration("DE987654321", TaxRegistrationSchemeID.VA);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.ShipTo);
+            Assert.AreEqual(1, loadedInvoice.GetShipToTaxRegistration().Count);
+            Assert.AreEqual("DE123456789", loadedInvoice.GetShipToTaxRegistration().First().No);
+
+            Assert.IsNotNull(loadedInvoice.Invoicee);
+            Assert.AreEqual(1, loadedInvoice.GetInvoiceeTaxRegistration().Count);
+            Assert.AreEqual("DE987654321", loadedInvoice.GetInvoiceeTaxRegistration().First().No);
+        }
 
         [TestMethod]
         public void TestUltimateShipToTradePartyOnItemLevel()
