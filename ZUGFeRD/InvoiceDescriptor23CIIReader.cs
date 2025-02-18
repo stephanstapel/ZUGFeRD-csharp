@@ -391,11 +391,14 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
-            retval.SpecifiedProcuringProject = new SpecifiedProcuringProject
+            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject", nsmgr) != null)
             {
-                ID = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:ID", nsmgr),
-                Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
-            };
+                retval.SpecifiedProcuringProject = new SpecifiedProcuringProject
+                {
+                    ID = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:ID", nsmgr),
+                    Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SpecifiedProcuringProject/ram:Name", nsmgr)
+                };
+            }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:IncludedSupplyChainTradeLineItem", nsmgr))
             {
