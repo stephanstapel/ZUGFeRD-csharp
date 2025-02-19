@@ -1144,7 +1144,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="actualAmount">Optional actual amount</param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
             PaymentTermsType? paymentTermsType = null, int? dueDays = null,
-            decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null)
+            decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null, DateTime? maturityDate = null)
         {
             _PaymentTerms.Add(new PaymentTerms()
             {
@@ -1154,7 +1154,8 @@ namespace s2industries.ZUGFeRD
                 DueDays = dueDays,
                 Percentage = percentage,
                 BaseAmount = baseAmount,
-                ActualAmount = actualAmount
+                ActualAmount = actualAmount,
+                MaturityDate = maturityDate
             });
         }
 

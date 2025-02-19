@@ -1138,6 +1138,16 @@ namespace s2industries.ZUGFeRD
                             if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
                             {
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentDiscountTerms");
+                                if (paymentTerms.MaturityDate.HasValue)
+                                {
+                                    Writer.WriteStartElement("ram", "BasisDateTime");
+                                    _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(paymentTerms.MaturityDate.Value));
+                                    Writer.WriteEndElement(); // !ram:BasisDateTime
+                                }
+                                if (paymentTerms.DueDays.HasValue)
+                                {
+                                    _writeElementWithAttribute(Writer, "ram", "BasisPeriodMeasure", "unitCode", "DAY", paymentTerms.DueDays.Value.ToString());
+                                }
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                 Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                 _writeOptionalAmount(Writer, "ram", "ActualDiscountAmount", paymentTerms.ActualAmount, forceCurrency: false);
@@ -1146,6 +1156,16 @@ namespace s2industries.ZUGFeRD
                             if (paymentTerms.PaymentTermsType == PaymentTermsType.Verzug)
                             {
                                 Writer.WriteStartElement("ram", "ApplicableTradePaymentPenaltyTerms");
+                                if (paymentTerms.MaturityDate.HasValue)
+                                {
+                                    Writer.WriteStartElement("ram", "BasisDateTime");
+                                    _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(paymentTerms.MaturityDate.Value));
+                                    Writer.WriteEndElement(); // !ram:BasisDateTime
+                                }
+                                if (paymentTerms.DueDays.HasValue)
+                                {
+                                    _writeElementWithAttribute(Writer, "ram", "BasisPeriodMeasure", "unitCode", "DAY", paymentTerms.DueDays.Value.ToString());
+                                }
                                 _writeOptionalAmount(Writer, "ram", "BasisAmount", paymentTerms.BaseAmount, forceCurrency: false);
                                 Writer.WriteOptionalElementString("ram", "CalculationPercent", _formatDecimal(paymentTerms.Percentage));
                                 _writeOptionalAmount(Writer, "ram", "ActualPenaltyAmount", paymentTerms.ActualAmount, forceCurrency: false);
