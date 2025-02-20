@@ -53,8 +53,8 @@ namespace s2industries.ZUGFeRD
             }
 
             if (writer == null)
-            {
-                throw new UnsupportedException($"Profile {descriptor.Profile.EnumToString()} and format {format.EnumToString()} is not supported.");
+            {                
+                throw new UnsupportedException($"Profile {descriptor.Profile.ToString()} and format {format.EnumToString()} is not supported.");
             }
 
             writer.Save(descriptor, stream, format);
