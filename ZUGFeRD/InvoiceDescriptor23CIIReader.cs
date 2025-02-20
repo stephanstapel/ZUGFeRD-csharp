@@ -349,11 +349,17 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradePaymentTerms", nsmgr))
             {
                 decimal? discountPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:CalculationPercent", nsmgr, null);
-                int? discountDueDays = null; // XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure", nsmgr);
+                int? discountDueDays = null;
+                if (QuantityCodes.DAY == default(QuantityCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
+                  discountDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure", nsmgr);
+                DateTime? discountMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); //BT-X-282-0
                 decimal? discountBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisAmount", nsmgr, null);
                 decimal? discountActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:ActualDiscountAmount", nsmgr, null);
                 decimal? penaltyPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:CalculationPercent", nsmgr, null);
-                int? penaltyDueDays = null; // XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
+                int? penaltyDueDays = null; 
+                if (QuantityCodes.DAY == default(QuantityCodes).FromString(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
+                  discountDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
+                DateTime? penaltyMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); // BT-X-276-0
                 decimal? penaltyBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisAmount", nsmgr, null);
                 decimal? penaltyActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:ActualPenaltyAmount", nsmgr, null);
                 PaymentTermsType? paymentTermsType = discountPercent.HasValue ? PaymentTermsType.Skonto :
@@ -366,7 +372,8 @@ namespace s2industries.ZUGFeRD
                                             discountDueDays ?? penaltyDueDays,
                                             discountPercent ?? penaltyPercent,
                                             discountBaseAmount ?? penaltyBaseAmount,
-                                            discountActualAmount ?? penaltyActualAmount);
+                                            discountActualAmount ?? penaltyActualAmount,
+                                            discountMaturityDate ?? penaltyMaturityDate);
             }
 
             retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount", nsmgr);

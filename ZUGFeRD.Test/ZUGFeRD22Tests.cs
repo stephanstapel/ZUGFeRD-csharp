@@ -2311,7 +2311,7 @@ namespace s2industries.ZUGFeRD.Test
             MemoryStream ms = new MemoryStream();
 
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
-            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
+            desc.Save("output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);

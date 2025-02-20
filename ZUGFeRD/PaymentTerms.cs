@@ -48,6 +48,12 @@ namespace s2industries.ZUGFeRD
         public int? DueDays { get; set; }
 
         /// <summary>
+        /// Fälligkeitsdatum im Kontext der spezifischen Zahlungsbedingung
+        /// </summary>
+        /// BT-X-276-0/BT-X-282-0
+        public DateTime? MaturityDate { get; set; } = null; 
+
+        /// <summary>
         /// Percentage of discount or surcharge
         /// </summary>
         public decimal? Percentage { get; set; }
