@@ -1133,6 +1133,7 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
                             Writer.WriteEndElement(); // !ram:DueDateDateTime
                         }
+                        Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         if (paymentTerms.PaymentTermsType.HasValue)
                         {
                             if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
@@ -1172,7 +1173,6 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
                             }
                         }
-                        Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
                         Writer.WriteEndElement();
                     }
                     if (this.Descriptor.GetTradePaymentTerms().Count == 0 && !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
