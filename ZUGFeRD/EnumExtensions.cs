@@ -27,6 +27,11 @@ namespace s2industries.ZUGFeRD
     {
         internal static string EnumToString<T>(this T value) where T : Enum
         {
+            if (typeof(T) == typeof(Profile))
+            {
+                throw new InvalidOperationException("This method is not allowed for Profile enum. Please use Profile extension functions instead.");
+            }
+
             // eventually use attribute value
             FieldInfo field = value.GetType().GetField(value.ToString());
             if (field != null)
@@ -45,6 +50,11 @@ namespace s2industries.ZUGFeRD
 
         internal static string EnumToString<T>(this T? value) where T : struct, Enum
         {
+            if (typeof(T) == typeof(Profile))
+            {
+                throw new InvalidOperationException("This method is not allowed for Profile enum. Please use Profile extension functions instead.");
+            }
+
             if (!value.HasValue)
             {
                 return String.Empty;
