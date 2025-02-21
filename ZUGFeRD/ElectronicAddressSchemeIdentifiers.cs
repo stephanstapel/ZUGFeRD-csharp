@@ -534,7 +534,7 @@ namespace s2industries.ZUGFeRD
         /// O.F.T.P. (ODETTE File Transfer Protocol)
         /// </summary>
         [EnumStringValue("AN")]
-        AN,  // keine int-Zuweisung, daher kein EnumStringValue
+        AN,
 
         /// <summary>
         /// X.400 address for mail text

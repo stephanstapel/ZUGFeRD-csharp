@@ -658,11 +658,12 @@ namespace s2industries.ZUGFeRD
             return this.DesignatedProductClassifications.Where(c => c.ClassCode.Equals(classCode)).ToList();
         } // !GetDesignatedProductClassificationsByClassCode()
 
+
+        /// <summary>
         /// sets the quantity, at line level, free of charge, in this trade delivery.
         /// </summary>
         /// <param name="chargeFreeQuantity">Quantity of the included charge free product</param>
-        /// <param name="chargeFreeUnitCode">Unit code for the quantity</param>
-        /// </summary>
+        /// <param name="chargeFreeUnitCode">Unit code for the quantity</param>        
         /// <returns></returns>
         public TradeLineItem SetChargeFreeQuantity(decimal chargeFreeQuantity, QuantityCodes chargeFreeUnitCode)
         {
