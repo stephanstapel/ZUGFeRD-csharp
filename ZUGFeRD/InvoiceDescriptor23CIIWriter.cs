@@ -1478,6 +1478,20 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("ram", "ExemptionReasonCode", tax.ExemptionReasonCode?.EnumToString());
                 }
 
+                if (tax.TaxPointDate.HasValue)
+                {
+                    Writer.WriteStartElement("ram", "TaxPointDate");
+                    Writer.WriteStartElement("udt", "DateString");  
+                    Writer.WriteAttributeString("format", "102");
+                    Writer.WriteValue(_formatDate(tax.TaxPointDate.Value));
+                    Writer.WriteEndElement(); // !udt:DateString
+                    Writer.WriteEndElement(); // !TaxPointDate
+                }
+                if (tax.TaxPointDate.HasValue)
+                {
+                    Writer.WriteElementString("ram", "DueDateTypeCode", tax.DueDateTypeCode?.EnumToString());
+                }
+
                 writer.WriteElementString("ram", "RateApplicablePercent", _formatDecimal(tax.Percent));
                 writer.WriteEndElement(); // !RateApplicablePercent
             });
