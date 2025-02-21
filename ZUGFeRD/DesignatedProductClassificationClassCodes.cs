@@ -49,6 +49,11 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         HS,
 
+        /// <summary>
+        /// ISBN (International Standard Book Number)
+        ///  A unique number identifying a book.
+        /// </summary>
+        IB,
 
         /// <summary>
         /// Mutually defined

@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
+// see http://iso6523.info/icd_list.pdf
+//
 namespace s2industries.ZUGFeRD
 {
     public enum GlobalIDSchemeIdentifiers
@@ -77,6 +79,12 @@ namespace s2industries.ZUGFeRD
         /// Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
         /// </summary>
         [EnumStringValue("0208")]
-        CompanyNumber = 208
+        CompanyNumber = 208,
+
+        /// <summary>
+        /// Leitweg-ID
+        /// </summary>
+        [EnumStringValue("0204")]
+        LeitwegID = 204
     }
 }
