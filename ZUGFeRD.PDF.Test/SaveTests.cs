@@ -235,7 +235,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"<fx:DocumentFileName>{designatedFilename}</fx:DocumentFileName>"));
-        } // !TestFileWithPassword()
+        } // !TestSaveFilenameVersion23()
 
 
         [TestMethod]

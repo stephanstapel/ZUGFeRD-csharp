@@ -96,13 +96,15 @@ namespace s2industries.ZUGFeRD.PDF.Test
 			desc.AddApplicableTradeTax(basisAmount: 275.0m,
 								 percent: 7m,
 								 typeCode: TaxTypes.VAT,
-								 categoryCode: TaxCategoryCodes.S
+                                 taxAmount: 19.25m,
+                                 categoryCode: TaxCategoryCodes.S
 								 );
 
 			desc.AddApplicableTradeTax(basisAmount: 198.0m,
 									   percent: 19m,
 									   typeCode: TaxTypes.VAT,
-									   categoryCode: TaxCategoryCodes.S
+                                       taxAmount: 37.62m,
+                                       categoryCode: TaxCategoryCodes.S
 									   );
 
 			desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018, 3% Skonto innerhalb 10 Tagen bis 15.03.2018");
