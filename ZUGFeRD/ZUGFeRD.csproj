@@ -22,48 +22,33 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2024</Copyright>
-    <AssemblyVersion>17.0.0</AssemblyVersion>
+    <AssemblyVersion>17.1.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>17.0.0</FileVersion>
+    <FileVersion>17.1.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>17.0.0
+    <PackageReleaseNotes>17.1.0
+* Tax registration details
+* Tax Point Date
+* Maturity Date
+* Origin trade country
+* New quantity codes
+* Fixes
+
+Full release notes here:
+https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/17.1.0
+Thanks to all contributors!
+
+17.0.0
 * Added ApplicableTradeDeliveryTermsCode 
 * Allowing for max 4 decimals in unit prices
 * Added PaymentMeansTypeCodes
 * Various fixes
 * Added new quantity codes
-* Prepared to make getters of lists private, please use Get() functions instead
-Full release notes here:
-https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/170.0
-Thanks to all contributors!
-
-16.1.0
-* New codes
-* Bugfixes
-* Minor new features
-For details see:
-https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/16.1.0
-
-
-16.0.3
-* Bugfix for ApplicableTradeTax
-* Bugfix for Comments
-
-
-16.0.1
-* Bugfix
-
-16.0.0
-* Almost complete support for UBL format
-* Sub invoice line support by @HenriSHS
-* UTF-8 Encoding without BOM
-* Dozens of bugfixes
-For details see:
-https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/16.0.0</PackageReleaseNotes>
+* Prepared to make getters of lists private, please use Get() functions instead</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>ZUGFeRD-csharp</PackageId>
     <PackageReadmeFile>README.md</PackageReadmeFile>
