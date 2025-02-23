@@ -1258,9 +1258,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="exemptionReasonCode">Tax exemption reason code</param>
         /// <param name="exemptionReason">Tax exemption reason text</param>
         /// <param name="lineTotalBasisAmount">Line total base amount for tax calculation</param>
-        /// <param name="taxPointDate">Value added tax point date</param>
-        /// <param name="dueDateTypeCode">Value added tax point date code</param>
-        public void AddApplicableTradeTax(decimal basisAmount,
+        public Tax AddApplicableTradeTax(decimal basisAmount,
             decimal percent,
             decimal taxAmount,
             TaxTypes typeCode,
@@ -1268,9 +1266,7 @@ namespace s2industries.ZUGFeRD
             decimal? allowanceChargeBasisAmount = null,
             TaxExemptionReasonCodes? exemptionReasonCode = null,
             string exemptionReason = null,
-            decimal? lineTotalBasisAmount = null,
-            DateTime? taxPointDate = null,
-            DateTypeCodes? dueDateTypeCode = null)
+            decimal? lineTotalBasisAmount = null)
         {
             Tax tax = new Tax()
             {
@@ -1281,9 +1277,7 @@ namespace s2industries.ZUGFeRD
                 AllowanceChargeBasisAmount = allowanceChargeBasisAmount,
                 LineTotalBasisAmount = lineTotalBasisAmount,
                 ExemptionReasonCode = exemptionReasonCode,
-                ExemptionReason = exemptionReason,
-                TaxPointDate = taxPointDate,
-                DueDateTypeCode = dueDateTypeCode
+                ExemptionReason = exemptionReason
             };
 
             if ((categoryCode != null) && (categoryCode.Value != TaxCategoryCodes.Unknown))
@@ -1292,6 +1286,7 @@ namespace s2industries.ZUGFeRD
             }
 
             this.Taxes.Add(tax);
+            return tax;
         } // !AddApplicableTradeTax()
 
 

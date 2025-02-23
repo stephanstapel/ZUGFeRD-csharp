@@ -17,6 +17,10 @@
  * under the License.
  */
 using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD
 {
@@ -87,5 +91,25 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public DateTypeCodes? DueDateTypeCode { get; set; }
 
+
+        /// <summary>
+        /// The tax point is usually the date goods were supplied or services completed (the 'basic tax point'). There are
+        /// some variations.Please refer to Article 226 (7) of the Council Directive 2006/112/EC[2] for more information.
+        /// This element is required if the Value added tax point date is different from the Invoice issue date.
+        /// Both Buyer and Seller should use the Tax Point Date when provided by the Seller.The use of BT-7 and BT-8 is
+        /// mutually exclusive.
+        ///
+        /// BT-7
+        /// 
+        /// Use: The date when the VAT becomes accountable for the Seller and for the Buyer in so far as that date can be
+        /// determined and differs from the date of issue of the invoice, according to the VAT directive.
+        /// </summary>
+        /// <param name="taxPointDate">Value added tax point date</param>
+        /// <param name="dueDateTypeCode">Value added tax point date code</param>
+        public void SetTaxPointDate(DateTime? taxPointDate = null, DateTypeCodes? dueDateTypeCode = null)
+        {
+            TaxPointDate = taxPointDate;
+            DueDateTypeCode = dueDateTypeCode;
+        } // !SetTaxPointDate()
     }
 }

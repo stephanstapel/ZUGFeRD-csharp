@@ -1493,7 +1493,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 writer.WriteElementString("ram", "RateApplicablePercent", _formatDecimal(tax.Percent));
-                writer.WriteEndElement(); // !RateApplicablePercent
+                writer.WriteEndElement(); // !ApplicableTradeTax
             });
         } // !_writeOptionalTaxes()
 

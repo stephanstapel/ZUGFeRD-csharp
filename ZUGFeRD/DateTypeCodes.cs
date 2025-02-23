@@ -28,12 +28,6 @@ namespace s2industries.ZUGFeRD
     public enum DateTypeCodes
     {
         /// <summary>
-        /// Unknown means, we have a problem ...
-        /// </summary>
-        [EnumStringValue("")]
-        Unknown = 0,
-
-        /// <summary>
         /// Date of invoice
         /// </summary>
         [EnumStringValue("5")]
