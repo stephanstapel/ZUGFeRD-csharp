@@ -312,7 +312,9 @@ namespace s2industries.ZUGFeRD
                                              XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr),
                                              EnumExtensions.StringToNullableEnum<TaxExemptionReasonCodes>(XmlUtils.NodeAsString(node, ".//ram:ExemptionReasonCode", nsmgr)),
                                              XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr),
-                                             XmlUtils.NodeAsDecimal(node, ".//ram:LineTotalBasisAmount", nsmgr));
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:LineTotalBasisAmount", nsmgr),
+                                             XmlUtils.NodeAsDateTime(node, ".//ram:TaxPointDate/udt:DateString", nsmgr),
+                                             EnumExtensions.StringToNullableEnum<DateTypeCodes>(XmlUtils.NodeAsString(node, ".//ram:DueDateTypeCode", nsmgr)));
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))

@@ -74,5 +74,18 @@ namespace s2industries.ZUGFeRD
         /// Exemption Reason Text for no Tax
         /// </summary>
         public string ExemptionReason { get; set; }
+
+        /// <summary>
+        /// Value added tax point date
+        /// The date when the VAT becomes accountable for the Seller and for the Buyer in so far as that date can be determined and differs from the date of issue of the invoice, according to the VAT directive.
+        /// </summary>
+        public DateTime? TaxPointDate { get; set; }
+
+        /// <summary>
+        /// Value added tax point date code
+        /// The code of the date when the VAT becomes accountable for the Seller and for the Buyer.
+        /// </summary>
+        public DateTypeCodes? DueDateTypeCode { get; set; }
+
     }
 }
