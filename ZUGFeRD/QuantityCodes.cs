@@ -339,6 +339,12 @@ namespace s2industries.ZUGFeRD
         ANN,
 
         /// <summary>
+        /// Quartal
+        /// Abkürzung: Quartal(e)
+        /// </summary>
+        QAN,
+
+        /// <summary>
         /// Sekunde
         /// Abkürzung: Sekunde(n)
         /// </summary>
