@@ -1647,6 +1647,12 @@
             Abkürzung: Sekunde(n) 
             </summary>
         </member>
+		<member name="F:s2industries.ZUGFeRD.QuantityCodes.QAN">
+			<summary>
+				Quartal
+				Abkürzung: Quartal(e)
+			</summary>
+		</member>
         <member name="T:s2industries.ZUGFeRD.ReferenceTypeCodes">
             <summary>
             http://www.unece.org/trade/untdid/d13b/tred/tred1153.htm
