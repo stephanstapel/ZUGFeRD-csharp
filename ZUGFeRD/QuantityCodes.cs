@@ -341,6 +341,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Quartal
         /// Abkürzung: Quartal(e)
+        ///
+        /// Quarter (of a year)
         /// </summary>
         QAN,
 
