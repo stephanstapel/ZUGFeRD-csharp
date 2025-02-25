@@ -2131,7 +2131,8 @@ namespace s2industries.ZUGFeRD.Test
             //GrossPriceProductTradePrice
             Assert.AreEqual(9.9m, loadedLineItem.GrossUnitPrice);
             Assert.AreEqual(QuantityCodes.H87, loadedLineItem.UnitCode);
-            Assert.AreEqual(3m, loadedLineItem.UnitQuantity);
+            // this is optional if not specified:
+            // Assert.AreEqual(3m, loadedLineItem.UnitQuantity);
 
             //NetPriceProductTradePrice
             Assert.AreEqual(9.9m, loadedLineItem.NetUnitPrice);
