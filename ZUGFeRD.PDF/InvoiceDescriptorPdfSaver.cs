@@ -108,7 +108,7 @@ namespace s2industries.ZUGFeRD.PDF
             }
             catch (Exception ex)
             {
-                throw new SaveFailedException();
+                throw new SaveFailedException(ex);
             }
 
             string safeDocumentTitle = "Invoice";
@@ -288,9 +288,9 @@ namespace s2industries.ZUGFeRD.PDF
             {
                 outputDocument.Save(memoryStream);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new SaveFailedException();
+                throw new SaveFailedException(ex);
             }
             memoryStream.Seek(0, SeekOrigin.Begin);
             return memoryStream;
