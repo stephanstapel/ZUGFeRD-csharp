@@ -33,9 +33,9 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class InvoiceValidator
     {
-        public static void ValidateAndPrint(InvoiceDescriptor descriptor, string filename = null)
+        public static void ValidateAndPrint(InvoiceDescriptor descriptor, ZUGFeRDVersion version, string filename = null)
         {
-            List<string> output = Validate(descriptor);
+            List<string> output = Validate(descriptor, version);
 
             if (!String.IsNullOrWhiteSpace(filename))
             {
@@ -49,7 +49,7 @@ namespace s2industries.ZUGFeRD
         } // !ValidateAndPrint()
 
 
-        public static List<string> Validate(InvoiceDescriptor descriptor)
+        public static List<string> Validate(InvoiceDescriptor descriptor, ZUGFeRDVersion version)
         {
             List<string> retval = new List<string>();
             if (descriptor == null)
@@ -237,7 +237,51 @@ namespace s2industries.ZUGFeRD
                 retval.Add(String.Format("trade.settlement.monetarySummation.chargeTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", chargesTotalSummedPerTradeAllowanceCharge, chargeTotal));
             }
 
+            // version-specific validation
+            List<string> versionSpecificResults = new List<string>();
+            switch (version)
+            {
+                case ZUGFeRDVersion.Version1:
+                    {
+                        versionSpecificResults = _ValidateAccordingToVersion1(descriptor);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+
+
             return retval;
         } // !Validate()
+
+
+        private static List<string> _ValidateAccordingToVersion1(InvoiceDescriptor descriptor)
+        {
+            List<string> retval = new List<string>();
+
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Buyer?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            {
+                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for buyers in ZUGFeRD 1.0");
+            }
+
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Seller?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            {
+                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for sellers in ZUGFeRD 1.0");
+            }
+
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipFrom?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            {
+                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for senders (ShipFrom) in ZUGFeRD 1.0");
+            }
+
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipTo?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            {
+                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for recipients (ShipTo) in ZUGFeRD 1.0");
+            }
+
+            return retval;
+        } // !_ValidateAccordingToVersion1()
     }
 }
