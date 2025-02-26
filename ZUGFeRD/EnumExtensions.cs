@@ -17,7 +17,9 @@
  * under the License.
  */
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 
@@ -153,5 +155,16 @@ namespace s2industries.ZUGFeRD
             }
             return default;
         } // !FromDescription()
+
+
+        internal static bool In<T>(this T? input, params T[] allowedValues) where T : struct, Enum
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            return allowedValues.Contains(input.Value);
+        } // !In()
     }
 }
