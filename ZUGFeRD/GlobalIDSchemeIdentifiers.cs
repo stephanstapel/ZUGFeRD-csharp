@@ -60,7 +60,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// GS1 Global Location Number (GLN)
         /// </summary>
-        [EnumStringValue("0089")]
+        [EnumStringValue("0088")]
         GLN = 88,
 
         /// <summary>
