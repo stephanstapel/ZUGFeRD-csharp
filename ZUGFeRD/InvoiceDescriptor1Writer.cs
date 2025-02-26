@@ -440,8 +440,8 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("ram", "SpecifiedTradeSettlementMonetarySummation");
             _writeOptionalAmount(Writer, "ram", "LineTotalAmount", this.Descriptor.LineTotalAmount);
-            _writeOptionalAmount(Writer, "ram", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount);
-            _writeOptionalAmount(Writer, "ram", "AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount);
+            _writeOptionalAmount(Writer, "ram", "ChargeTotalAmount", this.Descriptor.ChargeTotalAmount ?? 0m); // must occur exactly 1 time
+            _writeOptionalAmount(Writer, "ram", "AllowanceTotalAmount", this.Descriptor.AllowanceTotalAmount ?? 0m); // must occur exactly 1 time
             _writeOptionalAmount(Writer, "ram", "TaxBasisTotalAmount", this.Descriptor.TaxBasisAmount);
             _writeOptionalAmount(Writer, "ram", "TaxTotalAmount", this.Descriptor.TaxTotalAmount);
             _writeOptionalAmount(Writer, "ram", "GrandTotalAmount", this.Descriptor.GrandTotalAmount);
