@@ -190,7 +190,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             string designatedFilename = "ZUGFeRD-invoice.xml";
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
-            Assert.IsTrue(pdfRawString.Contains($"<fx:DocumentFileName>{designatedFilename}</fx:DocumentFileName>"));
+            Assert.IsTrue(pdfRawString.Contains($"<zf:DocumentFileName>{designatedFilename}</zf:DocumentFileName>"));
         } // !TestFileWithPassword()
 
 
@@ -212,7 +212,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             string designatedFilename = "zugferd-invoice.xml";
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
-            Assert.IsTrue(pdfRawString.Contains($"<fx:DocumentFileName>{designatedFilename}</fx:DocumentFileName>"));
+            Assert.IsTrue(pdfRawString.Contains($"<zf:DocumentFileName>{designatedFilename}</zf:DocumentFileName>"));
         } // !TestFileWithPassword()
 
 
