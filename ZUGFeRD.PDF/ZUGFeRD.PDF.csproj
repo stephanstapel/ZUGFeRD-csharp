@@ -40,12 +40,12 @@ This library allows to load and create PDF/A files.
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\PdfMedatadataTemplate.xml" />
     <None Remove="Resources\sRGB-IEC61966-2.1.icc" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\PdfMedatadataTemplate.xml" />
+    <EmbeddedResource Include="Resources\PdfMetadataTemplate-2.3.xml" />
+    <EmbeddedResource Include="Resources\PdfMetadataTemplate-1.0.xml" />
     <EmbeddedResource Include="Resources\sRGB-IEC61966-2.1.icc" />
   </ItemGroup>
 
