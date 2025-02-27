@@ -38,9 +38,9 @@ namespace s2industries.ZUGFeRD
             {
                 return false;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             };
         } // !NodeExists()
 
@@ -94,9 +94,9 @@ namespace s2industries.ZUGFeRD
             {
                 return defaultValue;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             };
         } // NodeAsString()
 
