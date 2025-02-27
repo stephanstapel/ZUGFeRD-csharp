@@ -24,5 +24,9 @@ namespace s2industries.ZUGFeRD.PDF
 {
     public class SaveFailedException : Exception
     {
+        public SaveFailedException(Exception ex) : base("Save failed", ex)
+        {
+
+        }
     }
 }
