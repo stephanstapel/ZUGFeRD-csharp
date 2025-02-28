@@ -133,7 +133,7 @@ namespace s2industries.ZUGFeRD.PDF
                     {
                         var filename = dict.Elements["/F"] as PdfString;
 
-                        if (!potentialFilenames.Contains(filename.Value))
+                        if (string.IsNullOrWhiteSpace(filename?.Value) || !potentialFilenames.Any(pfn => pfn.IndexOf(filename.Value, StringComparison.OrdinalIgnoreCase) >= 0))
                         {
                             continue;
                         }

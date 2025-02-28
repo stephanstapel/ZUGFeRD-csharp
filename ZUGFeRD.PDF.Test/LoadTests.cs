@@ -46,6 +46,19 @@ namespace s2industries.ZUGFeRD.PDF.Test
 
 
         [TestMethod]
+        public async Task BasicLoadFileWithNonLowerXMLName()
+        {
+            string path = @"..\..\..\..\documentation\zugferd10\Beispiele\ZUGFeRD_1p0_BASIC_Einfach.pdf";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor? desc = await InvoicePdfProcessor.LoadFromPdfAsync(path);
+
+            Assert.IsNotNull(desc);
+            Assert.AreEqual("471102", desc.InvoiceNo);
+        } // !BasicLoadFileWithNonLowerXMLName()
+
+
+        [TestMethod]
         public async Task BasicLoadPdfFileWithPassword()
         {
             string path = @"..\..\..\..\ZUGFeRD.PDF.Test\PDFWithPassword.pdf";
@@ -56,6 +69,6 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsFalse(string.IsNullOrWhiteSpace(ex.Source));
             Assert.IsTrue(ex.Source.Equals("s2industries.ZUGFeRD.PDF"));
             Assert.IsTrue(ex.Message.Trim().Equals("Could not find PDF Element AF containing"));
-        }
+        } // BasicLoadPdfFileWithPassword()
     }
 }
