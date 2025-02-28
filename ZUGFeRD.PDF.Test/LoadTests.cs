@@ -43,5 +43,18 @@ namespace s2industries.ZUGFeRD.PDF.Test
             path = _makeSurePathIsCrossPlatformCompatible(path);
             await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.LoadFromPdfAsync(path));
         } // !BasicLoadNonExistingFile()
+
+
+        [TestMethod]
+        public async Task BasicLoadFileWithNonLowerXMLName()
+        {
+            string path = @"..\..\..\..\documentation\zugferd10\Beispiele\ZUGFeRD_1p0_BASIC_Einfach.pdf";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor? desc = await InvoicePdfProcessor.LoadFromPdfAsync(path);
+
+            Assert.IsNotNull(desc);
+            Assert.AreEqual("471102", desc.InvoiceNo);
+        } // !BasicLoadFileWithNonLowerXMLName()
     }
 }
