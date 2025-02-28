@@ -56,7 +56,8 @@ namespace s2industries.ZUGFeRD
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
 
             if ((firstPartOfDocument.IndexOf("<CreditNote", StringComparison.OrdinalIgnoreCase) > -1) ||
-                (firstPartOfDocument.IndexOf("<ubl:CreditNote", StringComparison.OrdinalIgnoreCase) > -1))
+                (firstPartOfDocument.IndexOf("<ubl:CreditNote", StringComparison.OrdinalIgnoreCase) > -1) ||
+                (firstPartOfDocument.IndexOf("<ns0:CreditNote", StringComparison.OrdinalIgnoreCase) > -1))
             {
                 isInvoice = false;
             }
@@ -92,6 +93,10 @@ namespace s2industries.ZUGFeRD
                 if (baseNode == null)
                 {
                     baseNode = doc.SelectSingleNode("/CreditNote", nsmgr);
+                }
+                if (baseNode == null)
+                {
+                    baseNode = doc.SelectSingleNode("/ns0:CreditNote", nsmgr);
                 }
             }
 
