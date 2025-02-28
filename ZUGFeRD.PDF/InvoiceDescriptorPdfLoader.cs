@@ -33,7 +33,7 @@ namespace s2industries.ZUGFeRD.PDF
     {
         internal static async Task<InvoiceDescriptor> LoadAsync(Stream pdfStream)
         {
-            PdfDocument pdfDocument = PdfReader.Open(pdfStream);
+            PdfDocument pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
             return await _LoadXmlAsync(pdfDocument);
         } // !LoadAsync()
 
@@ -47,7 +47,7 @@ namespace s2industries.ZUGFeRD.PDF
 
             using (var pdfFile = File.OpenRead(pdfPath))
             {
-                PdfDocument pdfDocument = PdfReader.Open(pdfFile);
+                PdfDocument pdfDocument = PdfReader.Open(pdfFile, PdfDocumentOpenMode.Import);
                 return await _LoadXmlAsync(pdfDocument);
             }
         } // !LoadAsync()

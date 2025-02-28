@@ -191,6 +191,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"<zf:DocumentFileName>{designatedFilename}</zf:DocumentFileName>"));
+            Assert.IsTrue(pdfRawString.Contains($"<zf:Version>1.0</zf:Version>"));
         } // !TestFileWithPassword()
 
 
@@ -213,6 +214,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"<zf:DocumentFileName>{designatedFilename}</zf:DocumentFileName>"));
+            Assert.IsTrue(pdfRawString.Contains($"<zf:Version>2p0</zf:Version>"));
         } // !TestFileWithPassword()
 
 
@@ -235,6 +237,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"<fx:DocumentFileName>{designatedFilename}</fx:DocumentFileName>"));
+            Assert.IsTrue(pdfRawString.Contains($"<fx:Version>1.0</fx:Version>"));
         } // !TestSaveFilenameVersion23()
 
 
@@ -257,6 +260,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(pdfRawString.Contains($"/F({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"/UF({designatedFilename})"));
             Assert.IsTrue(pdfRawString.Contains($"<fx:DocumentFileName>{designatedFilename}</fx:DocumentFileName>"));
+            Assert.IsTrue(pdfRawString.Contains($"<fx:Version>3.0</fx:Version>"));
         } // !TestFileWithPassword()
     }
 }

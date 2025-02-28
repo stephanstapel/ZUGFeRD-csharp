@@ -66,6 +66,7 @@
 							<tr>
 								<th>Product</th>
 								<th>No</th>
+								<th>Additional information</th>
 								<th>Quantity</th>
 								<th>Gross Unit Price</th>
 								<th>Net Unit Price</th>
@@ -93,6 +94,12 @@
 									{{ if item.GlobalID.SchemeID != "Unknown" }}
 									<small>{{ item.GlobalID.SchemeID }}: {{ item.GlobalID.Id }}</small>
 									{{ end }}
+									{{ end }}
+								</td>
+								<td>
+									{{ item.DesignatedProductClassifications?.Count }}
+									{{ for classification in item.DesignatedProductClassifications }}
+									{{ classification.ListVersionID }}
 									{{ end }}
 								</td>
 								<td>

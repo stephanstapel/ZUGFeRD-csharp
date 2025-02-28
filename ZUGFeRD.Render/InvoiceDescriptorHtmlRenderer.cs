@@ -50,7 +50,9 @@ namespace s2industries.ZUGFeRD.Render
                                        .FirstOrDefault(r => r.EndsWith(resourceName, StringComparison.OrdinalIgnoreCase));
 
             if (resourcePath == null)
-                throw new FileNotFoundException($"Die eingebettete Ressource '{resourceName}' wurde nicht gefunden.");
+            {
+                throw new FileNotFoundException($"The embedded resource '{resourceName}' was not found.");
+            }
 
             using (var stream = assembly.GetManifestResourceStream(resourcePath))
             using (var reader = new StreamReader(stream))
