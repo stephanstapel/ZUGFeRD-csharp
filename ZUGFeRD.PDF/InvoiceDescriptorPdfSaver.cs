@@ -204,9 +204,17 @@ namespace s2industries.ZUGFeRD.PDF
             var xmpVersion = "";            
             switch (version)
             {
-                case ZUGFeRDVersion.Version1: xmpVersion = "1.0"; break;
-                case ZUGFeRDVersion.Version20: xmpVersion = "2p0"; break;
-                case ZUGFeRDVersion.Version23: xmpVersion = "1.0"; break; // ZUGFeRD 2.3 = Factur-X 1.0
+                case ZUGFeRDVersion.Version1:
+                    xmpVersion = "1.0";
+                    break;
+                case ZUGFeRDVersion.Version20:
+                    xmpVersion = "2p0";
+                    break;
+                case ZUGFeRDVersion.Version23:
+                    xmpVersion = (profile == Profile.XRechnung) ? "3.0" : "1.0"; // ZUGFeRD 2.3 = Factur-X 1.0
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(version), "Unknown version");
             }
 
             var metadataResource = "";
