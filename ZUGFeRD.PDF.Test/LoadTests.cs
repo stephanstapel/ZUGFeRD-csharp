@@ -43,5 +43,19 @@ namespace s2industries.ZUGFeRD.PDF.Test
             path = _makeSurePathIsCrossPlatformCompatible(path);
             await Assert.ThrowsExceptionAsync<FileNotFoundException>(() => InvoicePdfProcessor.LoadFromPdfAsync(path));
         } // !BasicLoadNonExistingFile()
+
+
+        [TestMethod]
+        public async Task BasicLoadPdfFileWithPassword()
+        {
+            string path = @"..\..\..\..\ZUGFeRD.PDF.Test\PDFWithPassword.pdf";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            var ex = await Assert.ThrowsExceptionAsync<Exception>(async () => await InvoicePdfProcessor.LoadFromPdfAsync(path));
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(ex.Source));
+            Assert.IsTrue(ex.Source.Equals("s2industries.ZUGFeRD.PDF"));
+            Assert.IsTrue(ex.Message.Trim().Equals("Could not find PDF Element AF containing"));
+        }
     }
 }
