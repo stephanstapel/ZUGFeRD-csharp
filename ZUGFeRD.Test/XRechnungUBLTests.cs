@@ -1290,5 +1290,21 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.GetTradeLineItems().Last().BilledQuantity, 42);
             Assert.AreEqual(desc.GetTradeLineItems().Last().UnitCode, QuantityCodes.XPP);
         } // !TestBasicCreditNote()
+
+        /// <summary>
+        /// UBL credit notes could have the tag "ns0"
+        /// </summary>
+        [TestMethod]
+        public void TestCreaditNoteTagNS0()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\maxRechnung_creditnote.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.XRechnung);
+            Assert.AreEqual(desc.InvoiceNo, "1234567890");
+            Assert.AreEqual(desc.InvoiceDate, new DateTime(2018, 10, 15));
+        }
     }
 }

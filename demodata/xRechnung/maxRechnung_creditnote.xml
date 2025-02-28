@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:CreditNote
+	xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+	xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+	xmlns:cec="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+	xmlns:ns0="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2">
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>
+	<cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+	<cbc:ID>1234567890</cbc:ID>
+	<cbc:IssueDate>2018-10-15</cbc:IssueDate>
+	<!--<cbc:IssueDate>2018-10-29</cbc:IssueDate>-->
+	<cbc:CreditNoteTypeCode>381</cbc:CreditNoteTypeCode>
+	<cbc:Note>Bemerkung zu der Rechnung gibt es nicht, da dies eine Testrechnung
+		ist.</cbc:Note>
+	<cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+	<cbc:BuyerReference>99000000-01514-29</cbc:BuyerReference>
+	<cac:InvoicePeriod>
+		<cbc:StartDate>2018-10-01</cbc:StartDate>
+		<cbc:EndDate>2018-10-23</cbc:EndDate>
+	</cac:InvoicePeriod>
+	<cac:OrderReference>
+		<cbc:ID>2345678901</cbc:ID>
+		<cbc:SalesOrderID>Auftragsreferenz</cbc:SalesOrderID>
+	</cac:OrderReference>
+	<cac:ContractDocumentReference>
+		<cbc:ID>Vertragsreferenz</cbc:ID>
+	</cac:ContractDocumentReference>
+
+	<cac:AdditionalDocumentReference>
+		<cbc:ID>Dokument Referenz</cbc:ID>
+		<cbc:DocumentDescription>Beschreibung der angehängten JPG-Datei</cbc:DocumentDescription>
+	</cac:AdditionalDocumentReference>
+	<cac:AdditionalDocumentReference>
+		<cbc:ID>Kennung des Objekts</cbc:ID>
+		<cbc:DocumentDescription>ATS</cbc:DocumentDescription>
+	</cac:AdditionalDocumentReference>
+	<cac:OriginatorDocumentReference>
+		<cbc:ID>Vergabe-und Losreferenz</cbc:ID>
+	</cac:OriginatorDocumentReference>
+	<!--
+	<cac:ProjectReference>
+		<cbc:ID>Projektreferenz</cbc:ID>
+	</cac:ProjectReference>-->
+	<cac:AccountingSupplierParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="EM">rechnungsausgang@test.com</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0013">Kennung des Verkäufers</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>EntServDE</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Straße Rechnungssteller 1</cbc:StreetName>
+				<cbc:AdditionalStreetName>Erweiterte Anschrift
+					Rechnungssteller</cbc:AdditionalStreetName>
+				<cbc:CityName>Ort Rechnungssteller</cbc:CityName>
+				<cbc:PostalZone>12345</cbc:PostalZone>
+				<cbc:CountrySubentity>Bundesland Rechnungssteller</cbc:CountrySubentity>
+				<cac:Country>
+					<cbc:IdentificationCode>DK</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>ATU13585627</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>456</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>AAA</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>EntServ Deutschland GmbH</cbc:RegistrationName>
+				<cbc:CompanyID schemeID="0198">123456789</cbc:CompanyID>
+				<cbc:CompanyLegalForm>Weitere rechtliche
+					Informationen</cbc:CompanyLegalForm>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>EntServ Deutschland</cbc:Name>
+				<cbc:Telephone>0123 456789</cbc:Telephone>
+				<cbc:ElectronicMail>kontakt@Rechnungssteller.de</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingSupplierParty>
+	<cac:AccountingCustomerParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="EM">rechnungseingang@test.de</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0094">DPMA-678</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Abweichender Handelsname Rechnungsempfänger</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Straße Rechnungsempfänger 1</cbc:StreetName>
+				<cbc:AdditionalStreetName>Erweitere Adresse
+					Rechnungempfänger</cbc:AdditionalStreetName>
+				<cbc:CityName>Ort Rechnungsempfänger</cbc:CityName>
+				<cbc:PostalZone>67890</cbc:PostalZone>
+				<cbc:CountrySubentity>Bundesland
+					Rechnungsempfänger</cbc:CountrySubentity>
+				<cac:Country>
+					<cbc:IdentificationCode>CN</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>ATU13585627</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Deutsches Patent - und
+					Markenamt</cbc:RegistrationName>
+				<cbc:CompanyID schemeID="0094">90000000-03083-12</cbc:CompanyID>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>Kontakt Rechnungsempfänger</cbc:Name>
+				<cbc:Telephone>0987 654321</cbc:Telephone>
+				<cbc:ElectronicMail>tina@tester.de</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingCustomerParty>
+	<cac:PayeeParty>
+		<cac:PartyIdentification>
+			<cbc:ID schemeID="0118">AZE</cbc:ID>
+		</cac:PartyIdentification>
+		<cac:PartyName>
+			<cbc:Name>Abweichender Zahlungsempfänger</cbc:Name>
+		</cac:PartyName>
+		<cac:PartyLegalEntity>
+			<cbc:CompanyID schemeID="0198">AZE-123</cbc:CompanyID>
+		</cac:PartyLegalEntity>
+	</cac:PayeeParty>
+	<cac:Delivery>
+		<cbc:ActualDeliveryDate>2018-10-22</cbc:ActualDeliveryDate>
+		<cac:DeliveryLocation>
+			<cbc:ID schemeID="0088">AL</cbc:ID>
+			<cac:Address>
+				<cbc:StreetName>Anderer Leistungsempfänger Straße 1</cbc:StreetName>
+				<cbc:AdditionalStreetName>Anderer Leistungsempfänger erweiterte
+					Adresse</cbc:AdditionalStreetName>
+				<cbc:CityName>Anderer Leistungsempfänger Ort</cbc:CityName>
+				<cbc:PostalZone>45678</cbc:PostalZone>
+				<cbc:CountrySubentity>Anderer Leistungempfänger
+					Bundesland</cbc:CountrySubentity>
+				<cac:Country>
+					<cbc:IdentificationCode>BS</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:Address>
+		</cac:DeliveryLocation>
+		<cac:DeliveryParty>
+			<cac:PartyName>
+				<cbc:Name>Anderer Leistungsempfänger</cbc:Name>
+			</cac:PartyName>
+		</cac:DeliveryParty>
+	</cac:Delivery>
+	<cac:PaymentMeans>
+		<cbc:PaymentMeansCode name="Credit transfer">30</cbc:PaymentMeansCode>
+		<cbc:PaymentID>Verwendungszweck</cbc:PaymentID>
+		<cac:PayeeFinancialAccount>
+			<cbc:ID>DE84 6004 0071 0561 5158 01</cbc:ID>
+			<cbc:Name>EntServ Deutschland GmbH</cbc:Name>
+			<cac:FinancialInstitutionBranch>
+				<cbc:ID>XXX0561515801</cbc:ID>
+			</cac:FinancialInstitutionBranch>
+		</cac:PayeeFinancialAccount>
+	</cac:PaymentMeans>
+	<cac:PaymentTerms>
+		<cbc:Note>Zahlungsbedingungen gibt es nicht, da dies eine Testrechnung
+			ist.</cbc:Note>
+	</cac:PaymentTerms>
+	<cac:AllowanceCharge>
+		<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+		<cbc:AllowanceChargeReason>Grund für den Nachlass auf
+			Dokumentenebene</cbc:AllowanceChargeReason>
+		<cbc:MultiplierFactorNumeric>40.00</cbc:MultiplierFactorNumeric>
+		<cbc:Amount currencyID="EUR">1000.00</cbc:Amount>
+		<cbc:BaseAmount currencyID="EUR">2500.00</cbc:BaseAmount>
+		<cac:TaxCategory>
+			<cbc:ID>S</cbc:ID>
+			<cbc:Percent>19</cbc:Percent>
+			<cac:TaxScheme>
+				<cbc:ID>VAT</cbc:ID>
+			</cac:TaxScheme>
+		</cac:TaxCategory>
+	</cac:AllowanceCharge>
+	<cac:AllowanceCharge>
+		<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+		<cbc:AllowanceChargeReason>Grund für den Zuschlag auf
+			Dokumentenenbene</cbc:AllowanceChargeReason>
+		<cbc:MultiplierFactorNumeric>30.00</cbc:MultiplierFactorNumeric>
+		<cbc:Amount currencyID="EUR">400.00</cbc:Amount>
+		<cbc:BaseAmount currencyID="EUR">1333.33</cbc:BaseAmount>
+		<cac:TaxCategory>
+			<cbc:ID>Z</cbc:ID>
+			<cbc:Percent>0</cbc:Percent>
+			<cac:TaxScheme>
+				<cbc:ID>VAT</cbc:ID>
+			</cac:TaxScheme>
+		</cac:TaxCategory>
+	</cac:AllowanceCharge>
+	<cac:AllowanceCharge>
+		<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+		<cbc:AllowanceChargeReason>Grund für Nachlass 2</cbc:AllowanceChargeReason>
+		<cbc:MultiplierFactorNumeric>80.00</cbc:MultiplierFactorNumeric>
+		<cbc:Amount currencyID="EUR">1500.00</cbc:Amount>
+		<cbc:BaseAmount currencyID="EUR">1875.00</cbc:BaseAmount>
+		<cac:TaxCategory>
+			<cbc:ID>E</cbc:ID>
+			<cbc:Percent>0</cbc:Percent>
+			<cac:TaxScheme>
+				<cbc:ID>VAT</cbc:ID>
+			</cac:TaxScheme>
+		</cac:TaxCategory>
+	</cac:AllowanceCharge>
+	<cac:TaxTotal>
+		<cbc:TaxAmount currencyID="EUR">510.00</cbc:TaxAmount>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">400.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">0</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>Z</cbc:ID>
+				<cbc:Percent>0</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">10000.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">700.00</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>7</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">-1000.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">-190.00</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>19</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">-1500.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">0</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>E</cbc:ID>
+				<cbc:Percent>0</cbc:Percent>
+				<cbc:TaxExemptionReason>Grund für die Befreiung</cbc:TaxExemptionReason>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+	</cac:TaxTotal>
+	<cac:LegalMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID="EUR">10000.00</cbc:LineExtensionAmount>
+		<cbc:TaxExclusiveAmount currencyID="EUR">7900.00</cbc:TaxExclusiveAmount>
+		<cbc:TaxInclusiveAmount currencyID="EUR">8410.00</cbc:TaxInclusiveAmount>
+		<cbc:AllowanceTotalAmount currencyID="EUR"
+			>2500.00</cbc:AllowanceTotalAmount>
+		<cbc:ChargeTotalAmount currencyID="EUR">400.00</cbc:ChargeTotalAmount>
+		<cbc:PrepaidAmount currencyID="EUR">500.00</cbc:PrepaidAmount>
+		<cbc:PayableRoundingAmount currencyID="EUR"
+			>210.00</cbc:PayableRoundingAmount>
+		<cbc:PayableAmount currencyID="EUR">8120.00</cbc:PayableAmount>
+	</cac:LegalMonetaryTotal>
+	<cac:CreditNoteLine>
+		<cbc:ID>123</cbc:ID>
+		<cbc:CreditedQuantity unitCode="LTR">10.00</cbc:CreditedQuantity>
+		<cbc:LineExtensionAmount currencyID="EUR">10000.00</cbc:LineExtensionAmount>
+		<cbc:AccountingCost>BRE</cbc:AccountingCost>
+		<cac:InvoicePeriod>
+			<cbc:StartDate>2018-10-05</cbc:StartDate>
+			<cbc:EndDate>2018-10-07</cbc:EndDate>
+		</cac:InvoicePeriod>
+		<cac:OrderLineReference>
+			<cbc:LineID>RPB</cbc:LineID>
+		</cac:OrderLineReference>
+		<cac:DocumentReference>
+			<cbc:ID schemeID="AAD">7362789</cbc:ID>
+			<cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>
+		</cac:DocumentReference>
+		<cac:AllowanceCharge>
+			<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+			<cbc:AllowanceChargeReason>Grund Nachlass 1</cbc:AllowanceChargeReason>
+			<cbc:MultiplierFactorNumeric>50.00</cbc:MultiplierFactorNumeric>
+			<cbc:Amount currencyID="EUR">100.00</cbc:Amount>
+			<cbc:BaseAmount currencyID="EUR">200.00</cbc:BaseAmount>
+		</cac:AllowanceCharge>
+		<cac:AllowanceCharge>
+			<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+			<cbc:AllowanceChargeReason>Grund Nachlass 2</cbc:AllowanceChargeReason>
+			<cbc:MultiplierFactorNumeric>10.00</cbc:MultiplierFactorNumeric>
+			<cbc:Amount currencyID="EUR">10.00</cbc:Amount>
+			<cbc:BaseAmount currencyID="EUR">100.00</cbc:BaseAmount>
+		</cac:AllowanceCharge>
+		<cac:AllowanceCharge>
+			<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+			<cbc:AllowanceChargeReason>Grund Zuschlag 1</cbc:AllowanceChargeReason>
+			<cbc:MultiplierFactorNumeric>10.00</cbc:MultiplierFactorNumeric>
+			<cbc:Amount currencyID="EUR">10.00</cbc:Amount>
+			<cbc:BaseAmount currencyID="EUR">100.00</cbc:BaseAmount>
+		</cac:AllowanceCharge>
+		<cac:AllowanceCharge>
+			<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+			<cbc:AllowanceChargeReason>Grund Zuschlag 2</cbc:AllowanceChargeReason>
+			<cbc:MultiplierFactorNumeric>50.00</cbc:MultiplierFactorNumeric>
+			<cbc:Amount currencyID="EUR">100.00</cbc:Amount>
+			<cbc:BaseAmount currencyID="EUR">200.00</cbc:BaseAmount>
+		</cac:AllowanceCharge>
+		<cac:Item>
+			<cbc:Description>Beschreibung Artikel</cbc:Description>
+			<cbc:Name>Bezeichung Artikel</cbc:Name>
+			<cac:BuyersItemIdentification>
+				<cbc:ID>BB</cbc:ID>
+			</cac:BuyersItemIdentification>
+			<cac:SellersItemIdentification>
+				<cbc:ID>456</cbc:ID>
+			</cac:SellersItemIdentification>
+			<cac:StandardItemIdentification>
+				<cbc:ID schemeID="0088">1234567890128</cbc:ID>
+			</cac:StandardItemIdentification>
+			<cac:CommodityClassification>
+				<cbc:ItemClassificationCode listID="ZZZ" listVersionID="1.0">12344321</cbc:ItemClassificationCode>
+			</cac:CommodityClassification>
+			<cac:ClassifiedTaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>7</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:ClassifiedTaxCategory>
+			<cac:AdditionalItemProperty>
+				<cbc:Name>Farbe</cbc:Name>
+				<cbc:Value>blau</cbc:Value>
+			</cac:AdditionalItemProperty>
+			<cac:AdditionalItemProperty>
+				<cbc:Name>Größe</cbc:Name>
+				<cbc:Value>XL</cbc:Value>
+			</cac:AdditionalItemProperty>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="EUR">1000</cbc:PriceAmount>
+		</cac:Price>
+	</cac:CreditNoteLine>
+</ns0:CreditNote>
