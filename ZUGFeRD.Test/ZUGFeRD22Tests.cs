@@ -3320,5 +3320,33 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual(desc.Type, InvoiceType.Correction);
         } // !TestLoadingInvoiceType()
+
+
+        [TestMethod]
+        public void TestNonRSMInvoice()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\non_rsm_zugferd-invoice.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.Extended);
+            Assert.AreEqual(desc.InvoiceNo, "47110818");
+            Assert.AreEqual(desc.InvoiceDate, new DateTime(2018, 10, 31));
+        } // !TestNonRSMInvoice()
+
+
+        [TestMethod]
+        public void TestRSMInvoice()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\xRechnung CII.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Profile, Profile.XRechnung1);
+            Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
+            Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 06, 21));
+        } // !TestRSMInvoice()
     }
 }
