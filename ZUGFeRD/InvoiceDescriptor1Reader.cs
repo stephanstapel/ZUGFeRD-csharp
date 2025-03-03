@@ -44,6 +44,11 @@ namespace s2industries.ZUGFeRD
             doc.Load(stream);
             XmlNamespaceManager nsmgr = _GenerateNamespaceManagerFromNode(doc.DocumentElement);
 
+            if (!nsmgr.HasNamespace("rsm"))
+            {
+                nsmgr.AddNamespace("rsm", nsmgr.DefaultNamespace);
+            }
+
             InvoiceDescriptor retval = new InvoiceDescriptor
             {
                 IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//rsm:SpecifiedExchangedDocumentContext/ram:TestIndicator", nsmgr, false),

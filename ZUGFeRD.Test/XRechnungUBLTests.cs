@@ -1291,6 +1291,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.GetTradeLineItems().Last().UnitCode, QuantityCodes.XPP);
         } // !TestBasicCreditNote()
 
+
         /// <summary>
         /// UBL credit notes could have the tag "ns0"
         /// </summary>
