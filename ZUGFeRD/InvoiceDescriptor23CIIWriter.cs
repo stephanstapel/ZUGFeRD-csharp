@@ -665,7 +665,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region SellerTradeParty
-            // BT-31: this.Descriptor.SellerTradeParty
+            // BT-31: this.Descriptor.SellerTaxRegistration
             _writeOptionalParty(Writer, PartyTypes.SellerTradeParty, this.Descriptor.Seller, ALL_PROFILES, this.Descriptor.SellerContact, this.Descriptor.SellerElectronicAddress, this.Descriptor.SellerTaxRegistration);
             #endregion
 

@@ -898,16 +898,18 @@ namespace s2industries.ZUGFeRD
                 writer.WriteEndElement(); //!PostalTradeAddress
 
 
-                foreach (var tax in taxRegistrations)
+                if (taxRegistrations != null)
                 {
-                    Writer.WriteStartElement("cac", "PartyTaxScheme");
-                    Writer.WriteElementString("cbc", "CompanyID", tax.No);
-                    Writer.WriteStartElement("cac", "TaxScheme");
-                    Writer.WriteElementString("cbc", "ID", UBLTaxRegistrationSchemeIDMapper.Map(tax.SchemeID));
-                    Writer.WriteEndElement(); //!TaxScheme
-                    Writer.WriteEndElement(); //!PartyTaxScheme
+                    foreach (var tax in taxRegistrations)
+                    {
+                        Writer.WriteStartElement("cac", "PartyTaxScheme");
+                        Writer.WriteElementString("cbc", "CompanyID", tax.No);
+                        Writer.WriteStartElement("cac", "TaxScheme");
+                        Writer.WriteElementString("cbc", "ID", UBLTaxRegistrationSchemeIDMapper.Map(tax.SchemeID));
+                        Writer.WriteEndElement(); //!TaxScheme
+                        Writer.WriteEndElement(); //!PartyTaxScheme
+                    }
                 }
-
 
                 writer.WriteStartElement("cac", "PartyLegalEntity");
                 writer.WriteElementString("cbc", "RegistrationName", party.Name);

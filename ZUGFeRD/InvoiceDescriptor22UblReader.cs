@@ -197,6 +197,8 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
+            retval.SellerTaxRepresentative = _nodeAsParty(doc.DocumentElement, "//cac:TaxRepresentativeParty/cac:Party", nsmgr);
+
             //Get all referenced and embedded documents (BG-24)
             // TODO //XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             //foreach (XmlNode referenceNode in referencedDocNodes)

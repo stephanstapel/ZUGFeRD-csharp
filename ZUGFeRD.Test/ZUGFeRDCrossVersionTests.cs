@@ -85,7 +85,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Notes.Clear();
             desc.AddNote("ACB", SubjectCodes.ACB, ContentCodes.Unknown);
-            desc.AddNote("AAI", SubjectCodes.AAI, ContentCodes.Unknown);            
+            desc.AddNote("AAI", SubjectCodes.AAI, ContentCodes.Unknown);
             desc.AddNote("PRF", SubjectCodes.PRF, ContentCodes.Unknown);
             desc.AddNote("REG", SubjectCodes.REG, ContentCodes.Unknown);
             desc.AddNote("SUR", SubjectCodes.SUR, ContentCodes.Unknown);
@@ -406,5 +406,50 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(items[items.Count - 2].GrossUnitPrice, 123.4567m);
             Assert.AreEqual(items[items.Count - 1].GrossUnitPrice, 123.4568m); // rounded!
         } // !TestLongerDecimalPlacesForGrossUnitPrice()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended, ZUGFeRDFormats.CII)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended, ZUGFeRDFormats.CII)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL)]
+        public void TestSellerTaxRepresentative(ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format)
+        {
+            string name = System.Guid.NewGuid().ToString();
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.SellerTaxRepresentative = new Party()
+            {
+                Name = name
+            };
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format);
+            ms.Position = 0;
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNotNull(loadedInvoice.SellerTaxRepresentative);
+            Assert.AreEqual(name, loadedInvoice.SellerTaxRepresentative.Name);
+        } // !TestSellerTaxRepresentative()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII)]
+        public void TestSellerTaxRepresentativeInNonSupportedVersions(ZUGFeRDVersion version, ZUGFeRDFormats format)
+        {
+            string name = System.Guid.NewGuid().ToString();
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.SellerTaxRepresentative = new Party()
+            {
+                Name = name
+            };
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, Profile.Extended, format);
+            ms.Position = 0;
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNull(loadedInvoice.SellerTaxRepresentative);            
+        } // !TestSellerTaxRepresentativeInNonSupportedVersions()
     }
 }
