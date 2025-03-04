@@ -31,6 +31,7 @@ namespace s2industries.ZUGFeRD
 
 
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
+        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
 
         /// <summary>
@@ -412,8 +413,8 @@ namespace s2industries.ZUGFeRD
 
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeAgreement");
             Writer.WriteOptionalElementString("ram", "BuyerReference", this.Descriptor.ReferenceOrderNo);
-            _writeOptionalParty(Writer, "ram", "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, TaxRegistrations: this.Descriptor.SellerTaxRegistration);
-            _writeOptionalParty(Writer, "ram", "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, TaxRegistrations: this.Descriptor.BuyerTaxRegistration);
+            _writeOptionalParty(Writer, "ram", "SellerTradeParty", this.Descriptor.Seller, this.Descriptor.SellerContact, taxRegistrations: this.Descriptor.SellerTaxRegistration);
+            _writeOptionalParty(Writer, "ram", "BuyerTradeParty", this.Descriptor.Buyer, this.Descriptor.BuyerContact, taxRegistrations: this.Descriptor.BuyerTaxRegistration);
 
             #region ApplicableTradeDeliveryTerms
             if (Descriptor.ApplicableTradeDeliveryTermsCode.HasValue)
@@ -1070,58 +1071,58 @@ namespace s2industries.ZUGFeRD
         } // !_writeNotes()
 
 
-        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string prefix, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null)
+        private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string prefix, string partyTag, Party party, Contact contact = null, List<TaxRegistration> taxRegistrations = null)
         {
-            if (Party != null)
+            if (party != null)
             {
-                writer.WriteStartElement(prefix, PartyTag);
+                writer.WriteStartElement(prefix, partyTag);
 
-                if ((Party.ID != null) && !String.IsNullOrWhiteSpace(Party.ID.ID))
+                if ((party.ID != null) && !String.IsNullOrWhiteSpace(party.ID.ID))
                 {
-                    if (Party.ID.SchemeID.HasValue && (Party.ID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
+                    if (party.ID.SchemeID.HasValue && (party.ID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
                     {
                         writer.WriteStartElement("ram", "ID");
-                        writer.WriteAttributeString("schemeID", Party.ID.SchemeID.Value.EnumToString());
-                        writer.WriteValue(Party.ID.ID);
+                        writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
+                        writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();
                     }
                     else
                     {
-                        writer.WriteElementString("ram", "ID", Party.ID.ID);
+                        writer.WriteElementString("ram", "ID", party.ID.ID);
                     }
                 }
 
-                if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && Party.GlobalID.SchemeID.HasValue && (Party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
+                if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && party.GlobalID.SchemeID.HasValue && (party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
                 {
                     writer.WriteStartElement("ram", "GlobalID");
-                    writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID.Value.EnumToString());
-                    writer.WriteValue(Party.GlobalID.ID);
+                    writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
+                    writer.WriteValue(party.GlobalID.ID);
                     writer.WriteEndElement();
                 }
-                writer.WriteOptionalElementString("ram", "Name", Party.Name);
-                writer.WriteOptionalElementString("ram", "Description", Party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                _writeOptionalContact(writer, "ram", "DefinedTradeContact", Contact);
+                writer.WriteOptionalElementString("ram", "Name", party.Name);
+                writer.WriteOptionalElementString("ram", "Description", party.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG); // BT-33
+                _writeOptionalContact(writer, "ram", "DefinedTradeContact", contact);
 
                 writer.WriteStartElement("ram", "PostalTradeAddress");
-                writer.WriteOptionalElementString("ram", "PostcodeCode", Party.Postcode);
-                writer.WriteOptionalElementString("ram", "LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
-                if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", Party.Street); }
+                writer.WriteOptionalElementString("ram", "PostcodeCode", party.Postcode);
+                writer.WriteOptionalElementString("ram", "LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName);
+                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", party.Street); }
 
-                writer.WriteOptionalElementString("ram", "LineThree", Party.AddressLine3); // BT-163
+                writer.WriteOptionalElementString("ram", "LineThree", party.AddressLine3); // BT-163
 
-                writer.WriteOptionalElementString("ram", "CityName", Party.City);
+                writer.WriteOptionalElementString("ram", "CityName", party.City);
 
-                if (Party.Country != CountryCodes.Unknown)
+                if (party.Country != CountryCodes.Unknown)
                 {
-                    writer.WriteElementString("ram", "CountryID", Party.Country.EnumToString());
+                    writer.WriteElementString("ram", "CountryID", party.Country.EnumToString());
                 }
 
-                writer.WriteOptionalElementString("ram", "CountrySubDivisionName", Party.CountrySubdivisionName); // BT-79
+                writer.WriteOptionalElementString("ram", "CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
                 writer.WriteEndElement(); // !PostalTradeAddress
 
-                if (TaxRegistrations != null)
+                if (taxRegistrations != null)
                 {
-                    foreach (TaxRegistration registration in TaxRegistrations)
+                    foreach (TaxRegistration registration in taxRegistrations)
                     {
                         if (!String.IsNullOrWhiteSpace(registration.No))
                         {

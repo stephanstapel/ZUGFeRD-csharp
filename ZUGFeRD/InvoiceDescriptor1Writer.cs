@@ -29,6 +29,7 @@ namespace s2industries.ZUGFeRD
     {
         private ProfileAwareXmlTextWriter Writer;
         private InvoiceDescriptor Descriptor;
+        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
 
         /// <summary>
@@ -855,7 +856,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 Writer.WriteOptionalElementString("ram", "Name", Party.Name);
-                writer.WriteOptionalElementString("ram", "Description", Party.Description, Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                writer.WriteOptionalElementString("ram", "Description", Party.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG); // BT-33
                 _writeOptionalContact(writer, "ram", "DefinedTradeContact", Contact);
                 writer.WriteStartElement("ram", "PostalTradeAddress");
                 writer.WriteOptionalElementString("ram", "PostcodeCode", Party.Postcode);
