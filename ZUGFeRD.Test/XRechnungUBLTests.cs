@@ -1308,6 +1308,20 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2018, 10, 15));
         }
 
+        /// <summary>
+        /// Test DateTime format "yyyy-mm-dd+hh:mm" / "yyyy-MM-ddXXX"
+        /// </summary>
+        [TestMethod]
+        public void TestNonStandardDateTimeFormat()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\01.01a-INVOICE_ubl.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.InvoiceDate, new DateTime(2016, 04, 04));
+        } // !TestNonStandardDateTimeFormat()
+
 
         [TestMethod]
         public void TestSellerPartyDescription()
