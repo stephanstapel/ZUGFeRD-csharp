@@ -684,8 +684,10 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
-            // TODO: implement SellerTaxRepresentativeTradeParty
+            #region SellerTaxRepresentativeTradeParty
             // BT-63: the tax taxRegistration of the SellerTaxRepresentativeTradeParty
+            _writeOptionalParty(Writer, PartyTypes.SellerTaxRepresentativeTradeParty, this.Descriptor.SellerTaxRepresentative, ALL_PROFILES, null, null, this.Descriptor.SellerTaxRepresentativeTaxRegistration);
+            #endregion
 
             #region 1. SellerOrderReferencedDocument (BT-14-00: Comfort+)
             if (!string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument?.ID))
@@ -1590,6 +1592,9 @@ namespace s2industries.ZUGFeRD
                 case PartyTypes.SellerTradeParty:
                     writer.WriteStartElement("ram", "SellerTradeParty", profile);
                     break;
+                case PartyTypes.SellerTaxRepresentativeTradeParty:
+                    writer.WriteStartElement("ram", "SellerTaxRepresentativeTradeParty", profile);
+                    break;
                 case PartyTypes.BuyerTradeParty:
                     writer.WriteStartElement("ram", "BuyerTradeParty", profile);
                     break;
@@ -1650,7 +1655,7 @@ namespace s2industries.ZUGFeRD
             _writeOptionalContact(writer, "ram", "DefinedTradeContact", contact, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
             // spec 2.3 says: Minimum/BuyerTradeParty does not include PostalTradeAddress
-            if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.BuyerTradeParty, PartyTypes.SellerTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
+            if ((this.Descriptor.Profile == Profile.Extended) || partyType.In(PartyTypes.BuyerTradeParty, PartyTypes.SellerTradeParty, PartyTypes.SellerTaxRepresentativeTradeParty, PartyTypes.BuyerTaxRepresentativeTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.ShipToTradeParty, PartyTypes.UltimateShipToTradeParty, PartyTypes.SalesAgentTradeParty))
             {
                 writer.WriteStartElement("ram", "PostalTradeAddress");
                 writer.WriteOptionalElementString("ram", "PostcodeCode", party.Postcode); // buyer: BT-53
