@@ -1307,5 +1307,17 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.InvoiceNo, "1234567890");
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2018, 10, 15));
         }
+
+
+        [TestMethod]
+        public void TestSellerPartyDescription()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\maxRechnung_creditnote.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Seller.Description, "Weitere rechtliche\r\n\t\t\t\t\tInformationen");
+        } // !TestSellerPartyDescription()
     }
 }
