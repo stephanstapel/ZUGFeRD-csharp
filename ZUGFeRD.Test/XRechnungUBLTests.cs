@@ -1331,7 +1331,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
-            Assert.AreEqual(desc.Seller.Description, "Weitere rechtliche\r\n\t\t\t\t\tInformationen");
+            Assert.AreEqual(desc.Seller.Description, $"Weitere rechtliche" + Environment.NewLine + "\t\t\t\t\tInformationen");
         } // !TestSellerPartyDescription()
     }
 }
