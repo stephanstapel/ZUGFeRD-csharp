@@ -222,7 +222,7 @@ namespace s2industries.ZUGFeRD
             }
 
             // if none of the codes above is present, use fallback approach
-            if (rawValue.Length == 8)
+            if (rawValue.Length == 8) // yyyyMMdd
             {
                 string year = rawValue.Substring(0, 4);
                 string month = rawValue.Substring(4, 2);
@@ -238,7 +238,15 @@ namespace s2industries.ZUGFeRD
 
                 return _safeParseDateTime(year, month, day);
             }
-            else if (rawValue.Length == 19)
+            else if (rawValue.Length == 16 && rawValue[4] == '-' && rawValue[7] == '-' && rawValue[10] == '+') // yyyy-mm-dd+hh:mm
+            {
+                string year = rawValue.Substring(0, 4);
+                string month = rawValue.Substring(5, 2);
+                string day = rawValue.Substring(8, 2);
+
+                return _safeParseDateTime(year, month, day);
+            }
+            else if (rawValue.Length == 19) // yyyy-mm-ddThh:mm:ss
             {
                 string year = rawValue.Substring(0, 4);
                 string month = rawValue.Substring(5, 2);
