@@ -426,6 +426,11 @@ namespace s2industries.ZUGFeRD
             }
             #endregion
 
+            #region SellerTaxRepresentativeTradeParty
+            // BT-63: the tax taxRegistration of the SellerTaxRepresentativeTradeParty
+            _writeOptionalParty(Writer, "ram", "SellerTaxRepresentativeTradeParty", this.Descriptor.SellerTaxRepresentative, taxRegistrations: this.Descriptor.SellerTaxRepresentativeTaxRegistration);
+            #endregion
+
             #region SellerOrderReferencedDocument (BT-14: Comfort, Extended)
             if (null != this.Descriptor.SellerOrderReferencedDocument && !string.IsNullOrWhiteSpace(Descriptor.SellerOrderReferencedDocument.ID))
             {

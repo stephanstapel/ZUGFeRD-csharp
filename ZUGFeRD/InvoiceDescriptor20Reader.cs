@@ -118,6 +118,9 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
+            // SellerTaxRepresentativeTradeParty STEUERBEVOLLMÄCHTIGTER DES VERKÄUFERS, BG-11
+            retval.SellerTaxRepresentative = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty", nsmgr);
+
             //Get all referenced and embedded documents (BG-24)
             XmlNodeList referencedDocNodes = doc.SelectNodes(".//ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referencedDocNodes)
