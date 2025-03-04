@@ -38,7 +38,8 @@ namespace s2industries.ZUGFeRD
         ProductEndUserTradeParty,
         BuyerAgentTradeParty,
         InvoicerTradeParty,
-        PayerTradeParty
+        PayerTradeParty,
+        SellerTaxRepresentativeTradeParty
     }
 
     internal static class PartyTypeExtensions
