@@ -777,6 +777,11 @@ namespace s2industries.ZUGFeRD
                 retval.Name = XmlUtils.NodeAsString(node, "cac:PartyLegalEntity/cbc:RegistrationName", nsmgr);
             }
 
+            if (string.IsNullOrWhiteSpace(retval.Description))
+            {
+                retval.Description = XmlUtils.NodeAsString(node, "cac:PartyLegalEntity/cbc:CompanyLegalForm", nsmgr);
+            }
+
             if (string.IsNullOrWhiteSpace(retval.ContactName))
             {
                 retval.ContactName = null;
