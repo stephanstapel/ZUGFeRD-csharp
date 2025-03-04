@@ -1223,8 +1223,8 @@ namespace s2industries.ZUGFeRD
         /// <param name="grandTotalAmount">Total amount including tax</param>
         /// <param name="totalPrepaidAmount">Amount already paid</param>
         /// <param name="duePayableAmount">Amount due for payment</param>
-        /// <param name="roundingAmount">Rounding adjustment amount</param>
-        public void SetTotals(decimal? lineTotalAmount = null, decimal? chargeTotalAmount = null,
+        /// <param name="roundingAmount">Rounding adjustment amount</param>        
+        public void SetTotals(decimal lineTotalAmount, decimal? chargeTotalAmount = null,
                               decimal? allowanceTotalAmount = null, decimal? taxBasisAmount = null,
                               decimal? taxTotalAmount = null, decimal? grandTotalAmount = null,
                               decimal? totalPrepaidAmount = null, decimal? duePayableAmount = null,
