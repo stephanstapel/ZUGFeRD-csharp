@@ -910,6 +910,12 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteElementString("cbc", "CompanyID", party.GlobalID.ID);
                 }
 
+                if (party.Description != null)
+                {
+                    //Party additional legal information (BT-33)
+                    Writer.WriteElementString("cbc", "CompanyLegalForm", party.Description);
+                }
+
                 writer.WriteEndElement(); //!PartyLegalEntity
 
                 if (contact != null)

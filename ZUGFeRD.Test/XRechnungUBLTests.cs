@@ -1321,5 +1321,17 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2016, 04, 04));
         } // !TestNonStandardDateTimeFormat()
+
+
+        [TestMethod]
+        public void TestSellerPartyDescription()
+        {
+            string path = @"..\..\..\..\demodata\xRechnung\maxRechnung_creditnote.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
+
+            Assert.AreEqual(desc.Seller.Description, "Weitere rechtliche\r\n\t\t\t\t\tInformationen");
+        } // !TestSellerPartyDescription()
     }
 }
