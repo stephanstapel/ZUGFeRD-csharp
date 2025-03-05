@@ -347,6 +347,14 @@ namespace s2industries.ZUGFeRD
         QAN,
 
         /// <summary>
+        /// Halbjahr
+        /// Abkürzung: Halbjahre(e)
+        ///
+        /// Half (of a year)
+        /// </summary>
+        SAN,
+
+        /// <summary>
         /// Sekunde
         /// Abkürzung: Sekunde(n)
         /// </summary>
