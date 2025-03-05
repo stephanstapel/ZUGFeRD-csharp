@@ -676,11 +676,11 @@ namespace s2industries.ZUGFeRD
             Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice.Value, 4));
             Writer.WriteEndElement();
 
-            if (tradeLineItem.UnitQuantity.HasValue)
+            if (tradeLineItem.NetQuantity.HasValue)
             {
                 Writer.WriteStartElement("cbc", "BaseQuantity"); // BT-149
                 Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString()); // BT-150
-                Writer.WriteValue(_formatDecimal(tradeLineItem.UnitQuantity));
+                Writer.WriteValue(_formatDecimal(tradeLineItem.NetQuantity));
                 Writer.WriteEndElement();
             }
 

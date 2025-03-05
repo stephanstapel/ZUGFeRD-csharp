@@ -74,13 +74,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public string Description { get; set; }
 
-        /// <summary>
-        /// Included amount
-        ///
-        /// BT-149
-        /// </summary>
-        public decimal? UnitQuantity { get; set; }
-
+        
         /// <summary>
         /// Invoiced quantity
         ///
@@ -176,6 +170,34 @@ namespace s2industries.ZUGFeRD
         /// BT-148
         /// </summary>
         public decimal? GrossUnitPrice { get; set; }
+
+        /// <summary>
+        /// Net unit price quantity
+        /// optional, if filled and if *Gross*UnitPrice is present then it should be equal to GrossQuantity
+        ///  BT-149
+        /// </summary>
+        public decimal? NetQuantity { get; set; }
+
+        /// <summary>
+        /// Net quantity unit of measure code
+        /// optional and if filled should be equal to Unitcode
+        /// BT-150
+        /// </summary>
+        public QuantityCodes? NetUnitCode { get; set; }
+
+        /// <summary>
+        /// The number of item units to which the gross unit price applies.
+        /// if *Gross*UnitPrice is present and NetQuantity is filled, should be equal to NetQuantity
+        /// BT-149-1
+        /// </summary>
+        public decimal? GrossQuantity { get; set; }
+
+        /// <summary>
+        /// Gross quantity unit of measure code
+        /// optional and if filled should be equal to Unitcode
+        /// BT-150-1
+        /// </summary>
+        public QuantityCodes? GrossUnitCode { get; set; }
 
         /// <summary>
         /// Item Base Quantity Unit Code
