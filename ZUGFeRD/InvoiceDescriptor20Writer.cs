@@ -268,9 +268,15 @@ namespace s2industries.ZUGFeRD
 
                 Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
                 _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);
-                if (tradeLineItem.UnitQuantity.HasValue)
+                if (tradeLineItem.GrossQuantity.HasValue)
                 {
-                    _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                    Writer.WriteStartElement("ram", "BasisQuantity");
+                    if (tradeLineItem.GrossUnitCode.HasValue)
+                    {
+                        Writer.WriteAttributeString("unitCode", tradeLineItem.GrossUnitCode.EnumToString());
+                    }
+                    Writer.WriteValue(_formatDecimal(tradeLineItem.GrossQuantity.Value, 4));
+                    Writer.WriteEndElement(); // !BasisQuantity
                 }
 
                 foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.GetTradeAllowanceCharges())
@@ -302,9 +308,15 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
                 _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4);
 
-                if (tradeLineItem.UnitQuantity.HasValue)
+                if (tradeLineItem.NetQuantity.HasValue)
                 {
-                    _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                    Writer.WriteStartElement("ram", "BasisQuantity");
+                    if (tradeLineItem.NetUnitCode.HasValue)
+                    {
+                        Writer.WriteAttributeString("unitCode", tradeLineItem.NetUnitCode.EnumToString());
+                    }
+                    Writer.WriteValue(_formatDecimal(tradeLineItem.NetQuantity.Value, 4));
+                    Writer.WriteEndElement(); // !BasisQuantity
                 }
                 Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
 
@@ -397,9 +409,9 @@ namespace s2industries.ZUGFeRD
                 else if (tradeLineItem.NetUnitPrice.HasValue)
                 {
                     total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
-                    if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
+                    if (tradeLineItem.NetQuantity.HasValue && (tradeLineItem.NetQuantity.Value != 0))
                     {
-                        total /= tradeLineItem.UnitQuantity.Value;
+                        total /= tradeLineItem.NetQuantity.Value;
                     }
                 }
 
