@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net480;net8.0</TargetFrameworks>
 	<Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -51,7 +51,7 @@ This library allows to load and create PDF/A files.
 
   <ItemGroup>
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
-    <PackageReference Include="SkiaSharp" Version="3.118.0-preview.2.3" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.1" />
     <PackageReference Include="ZUGFeRD-csharp" Version="17.1.0" />
   </ItemGroup>

@@ -29,7 +29,6 @@ using System.Text;
 using System.Threading.Tasks;
 using PdfSharp.Drawing;
 using System.Linq;
-using SkiaSharp;
 
 
 
@@ -51,14 +50,39 @@ namespace s2industries.ZUGFeRD.PDF
 
             string invoiceFilename = _DetermineFilenameBasedOnVersionAndProfile(version, profile);
 
-            MemoryStream xmlSourceStream = new MemoryStream();
-            descriptor.Save(xmlSourceStream, version, profile, format);
-            xmlSourceStream.Seek(0, SeekOrigin.Begin);
+            using (MemoryStream xmlSourceStream = new MemoryStream())
+            {
+                descriptor.Save(xmlSourceStream, version, profile, format);
+                xmlSourceStream.Seek(0, SeekOrigin.Begin);
 
-            Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, invoiceFilename, password: password);
-            await temp.CopyToAsync(targetStream);
+                using (Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, invoiceFilename, password: password))
+                    await temp.CopyToAsync(targetStream);
+            }
+        } // !SaveAsync()
+
+        internal static void Save(Stream targetStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor, string password = null)
+        {
+            if (pdfSourceStream == null)
+            {
+                throw new ArgumentNullException("Invalid pdfSourceStream");
+            }
+
+            if (descriptor == null)
+            {
+                throw new ArgumentNullException("Invalid invoiceDescriptor");
+            }
+
+            string invoiceFilename = _DetermineFilenameBasedOnVersionAndProfile(version, profile);
+
+            using (MemoryStream xmlSourceStream = new MemoryStream())
+            {
+                descriptor.Save(xmlSourceStream, version, profile, format);
+                xmlSourceStream.Seek(0, SeekOrigin.Begin);
+
+                using (Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, invoiceFilename, password: password))
+                    temp.CopyToAsync(targetStream);
+            }
         } // !SaveAsync()        
-
 
         internal static async Task SaveAsync(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
         {
@@ -78,9 +102,29 @@ namespace s2industries.ZUGFeRD.PDF
                 await SaveAsync(targetStream, version, profile, format, pdfSourceStream, descriptor, password);
                 targetStream.Seek(0, SeekOrigin.Begin);
                 System.IO.File.WriteAllBytes(targetPath, targetStream.ToArray());
-            }            
+            }
         } // !SaveAsync()
 
+        internal static void Save(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
+        {
+            if (!File.Exists(pdfSourcePath))
+            {
+                throw new FileNotFoundException("File not found", pdfSourcePath);
+            }
+
+            if (descriptor == null)
+            {
+                throw new ArgumentNullException("Invalid invoiceDescriptor");
+            }
+
+            using (FileStream pdfSourceStream = File.OpenRead(pdfSourcePath))
+            using (MemoryStream targetStream = new MemoryStream())
+            {
+                Save(targetStream, version, profile, format, pdfSourceStream, descriptor, password);
+                targetStream.Seek(0, SeekOrigin.Begin);
+                System.IO.File.WriteAllBytes(targetPath, targetStream.ToArray());
+            }
+        } // !SaveAsync()
 
         private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
         {
@@ -140,7 +184,7 @@ namespace s2industries.ZUGFeRD.PDF
             string xmlChecksum = string.Empty;
             byte[] xmlFileBytes = null;
             using (var md5 = MD5.Create())
-            {                
+            {
                 xmlStream.Seek(0, SeekOrigin.Begin);
                 xmlFileBytes = new byte[xmlStream.Length];
                 xmlStream.Read(xmlFileBytes, 0, (int)xmlStream.Length);
@@ -201,7 +245,7 @@ namespace s2industries.ZUGFeRD.PDF
             var dateTimeNow = DateTime.UtcNow;
             var conformanceLevelName = profile.GetXMPName();
 
-            var xmpVersion = "";            
+            var xmpVersion = "";
             switch (version)
             {
                 case ZUGFeRDVersion.Version1:
@@ -242,14 +286,14 @@ namespace s2industries.ZUGFeRD.PDF
                 Array.Copy(metadataBytes, trimmedMetadataBytes, trimmedMetadataBytes.Length); // remove eol marker
                 metadataBytes = trimmedMetadataBytes;
             }
-            
+
 
             //            var metadataEncodedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(metadataBytes);
 
             PdfDictionary metadataDictionary = new PdfDictionary();
 
             metadataDictionary.CreateStream(metadataBytes);
-        //    metadataDictionary.Elements.Add("/Filter", new PdfName("/FlateDecode"));
+            //    metadataDictionary.Elements.Add("/Filter", new PdfName("/FlateDecode"));
             metadataDictionary.Elements.Add("/Subtype", new PdfName("/XML"));
             metadataDictionary.Elements.Add("/Type", new PdfName("/Metadata"));
 
@@ -272,7 +316,7 @@ namespace s2industries.ZUGFeRD.PDF
 
             // StructureRoot
             PdfDictionary structTreeRoot = new PdfDictionary();
-            structTreeRoot.Elements["/Type"] = new PdfName("/StructTreeRoot");            
+            structTreeRoot.Elements["/Type"] = new PdfName("/StructTreeRoot");
             PdfDictionary structElement = new PdfDictionary();
             structElement.Elements["/Type"] = new PdfName("/StructElem");
             structElement.Elements["/S"] = new PdfName("/Document");
@@ -328,8 +372,8 @@ namespace s2industries.ZUGFeRD.PDF
         {
             List<XFont> retval = new List<XFont>();
 
-            var fontManager = SKFontManager.Default;
-            var availableFamilies = fontManager.FontFamilies;
+            var installedFonts = new System.Drawing.Text.InstalledFontCollection();
+            var availableFamilies = installedFonts.Families.Select(f => f.Name).ToArray();
 
             // Postscript to TrueType mapping as the PDF file contains the Postscript names of the font
             var postScriptToTrueTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -337,8 +381,7 @@ namespace s2industries.ZUGFeRD.PDF
                 { "Arial-BoldMT", "Arial Bold" },
                 { "ArialMT", "Arial" },
                 { "Times-Roman", "Times New Roman" },
-                { "Courier-Bold", "Courier New" }
-                // add more mappings here if needed
+                { "Courier-Bold", "Courier New Bold" }
             };
 
             for (int pageIndex = 0; pageIndex < pdfDocument.PageCount; pageIndex++)
@@ -353,7 +396,6 @@ namespace s2industries.ZUGFeRD.PDF
                 }
 
                 PdfDictionary fonts = resources.Elements.GetDictionary("/Font");
-
                 foreach (var fontNameInPdfFile in fonts.Elements.Keys)
                 {
                     PdfDictionary font = fonts.Elements.GetDictionary(fontNameInPdfFile);
@@ -363,13 +405,10 @@ namespace s2industries.ZUGFeRD.PDF
                     }
 
                     string baseFont = font.Elements.GetString("/BaseFont").Split('+').Last();
-
                     _ExtractFontValues(baseFont, fonts, out string fontFamily, out XFontStyleEx fontStyle);
-
                     bool existsInSystem = availableFamilies.Any(f => f.Equals(fontFamily, StringComparison.OrdinalIgnoreCase));
 
-
-                    if (!existsInSystem && (postScriptToTrueTypeMap.TryGetValue(fontFamily, out string tempFontName)))
+                    if (!existsInSystem && postScriptToTrueTypeMap.TryGetValue(fontFamily, out string tempFontName))
                     {
                         fontFamily = tempFontName;
                     }
@@ -386,7 +425,7 @@ namespace s2industries.ZUGFeRD.PDF
                     }
                     catch (Exception ex)
                     {
-
+                        // Fehlerbehandlung
                     }
                 }
             }
