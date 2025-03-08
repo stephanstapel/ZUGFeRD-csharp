@@ -800,7 +800,7 @@ namespace s2industries.ZUGFeRD
 
                 if (this.Descriptor.DespatchAdviceReferencedDocument.IssueDateTime.HasValue)
                 {
-                    Writer.WriteStartElement("ram", "FormattedIssueDateTime");
+                    Writer.WriteStartElement("ram", "FormattedIssueDateTime", Profile.Extended);
                     Writer.WriteStartElement("qdt", "DateTimeString");
                     Writer.WriteAttributeString("format", "102");
                     Writer.WriteValue(_formatDate(this.Descriptor.DespatchAdviceReferencedDocument.IssueDateTime.Value));
