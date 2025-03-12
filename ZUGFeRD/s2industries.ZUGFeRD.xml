@@ -1655,7 +1655,7 @@
 		</member>
         <member name="T:s2industries.ZUGFeRD.ReferenceTypeCodes">
             <summary>
-            http://www.unece.org/trade/untdid/d13b/tred/tred1153.htm
+            https://service.unece.org/trade/untdid/d21a/tred/tred1153.htm
             </summary>
         </member>
         <member name="F:s2industries.ZUGFeRD.ReferenceTypeCodes.AAA">
@@ -1998,7 +1998,7 @@
         <member name="T:s2industries.ZUGFeRD.TaxRegistrationSchemeID">
             <summary>
             For a reference see:
-            http://www.unece.org/trade/untdid/d00a/tred/tred1153.htm
+            https://service.unece.org/trade/untdid/d21a/tred/tred1153.htm
             </summary>
         </member>
         <member name="F:s2industries.ZUGFeRD.TaxRegistrationSchemeID.FC">
