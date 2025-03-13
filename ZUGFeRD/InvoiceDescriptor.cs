@@ -514,6 +514,12 @@ namespace s2industries.ZUGFeRD
         public SellerOrderReferencedDocument SellerOrderReferencedDocument { get; set; } = new SellerOrderReferencedDocument();
 
         /// <summary>
+        /// The code specifying the mode, such as air, sea, rail, road or inland waterway, for this logistics transport movement.
+        /// BG-X-24 --> BT-X-152
+        /// </summary>
+        public TransportModeCodes? TransportMode { get; set; }
+
+        /// <summary>
         /// Gets the ZUGFeRD version of a ZUGFeRD invoice that is passed via filename
         ///
         /// </summary>
