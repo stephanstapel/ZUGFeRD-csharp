@@ -35,7 +35,7 @@
 				<rdf:Bag>
 					<rdf:li rdf:parseType="Resource">
 						<pdfaSchema:schema>Factur-X PDFA Extension Schema</pdfaSchema:schema>
-						<pdfaSchema:namespaceURI>urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
+						<pdfaSchema:namespaceURI>urn:factur-x:pdfa:CrossIndustryDocument:invoice:2p0#</pdfaSchema:namespaceURI>
 						<pdfaSchema:prefix>fx</pdfaSchema:prefix>
 						<pdfaSchema:property>
 							<rdf:Seq>
@@ -69,7 +69,7 @@
 				</rdf:Bag>
 			</pdfaExtension:schemas>
 		</rdf:Description>
-		<rdf:Description xmlns:fx="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#" rdf:about="">
+		<rdf:Description xmlns:fx="urn:factur-x:pdfa:CrossIndustryDocument:invoice:2p0#" rdf:about="">
 			<fx:DocumentType>INVOICE</fx:DocumentType>
 			<fx:DocumentFileName>{{InvoiceFilename}}</fx:DocumentFileName>
 			<fx:Version>{{Version}}</fx:Version>
