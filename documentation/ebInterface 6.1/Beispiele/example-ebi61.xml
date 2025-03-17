@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2006-2022 BRZ GmbH
+    http://www.brz.gv.at
+
+    All rights reserved
+
+-->
+<Invoice xmlns="http://www.ebinterface.at/schema/6p1/" GeneratingSystem="Demo File" DocumentType="Invoice" InvoiceCurrency="EUR" Language="de">
+  <InvoiceNumber>ERB_EBI61_001</InvoiceNumber>
+  <InvoiceDate>2023-01-01</InvoiceDate>
+  <Delivery>
+    <!-- Details zur Lieferung -->
+    <Date>2023-01-01</Date>
+    <Address>
+      <Name>Mustermann GmbH</Name>
+      <Street>Hauptstraße 10</Street>
+      <Town>Graz</Town>
+      <ZIP>8010</ZIP>
+      <Country CountryCode="AT">Österreich</Country>
+    </Address>
+    <Contact>
+      <Salutation>Firma</Salutation>
+      <Name>Hr. Max Mustermann</Name>
+    </Contact>
+  </Delivery>
+  <Biller>
+    <!-- Rechnungssteller -->
+    <VATIdentificationNumber>ATU13585627</VATIdentificationNumber>
+    <FurtherIdentification IdentificationType="FS">Wien</FurtherIdentification>
+    <FurtherIdentification IdentificationType="FN">12345678</FurtherIdentification>
+    <FurtherIdentification IdentificationType="FBG">Handelsgericht Wien</FurtherIdentification>
+    <Address>
+      <Name>Mustermann GmbH</Name>
+      <Street>Hauptstraße 10</Street>
+      <Town>Graz</Town>
+      <ZIP>8010</ZIP>
+      <Country CountryCode="AT">Österreich</Country>
+      <!-- An die folgende E-Mail-Adresse werden die E-Mails gesendet: -->
+      <Email>kontakt@example.org</Email>
+    </Address>
+    <Contact>
+      <Salutation>Firma</Salutation>
+      <Name>Hr. Max Mustermann</Name>
+    </Contact>
+    <!-- Die Lieferantennummer/Kreditorennummer: -->
+    <InvoiceRecipientsBillerID>0011025781</InvoiceRecipientsBillerID>
+  </Biller>
+  <InvoiceRecipient>
+    <!-- Rechnungsempfänger -->
+    <VATIdentificationNumber>ATU13585627</VATIdentificationNumber>
+    <OrderReference>
+      <!-- Die Auftragsreferenz: -->
+      <OrderID>Z01</OrderID>
+      <ReferenceDate>2012-11-18</ReferenceDate>
+      <Description>Bestellung neuer Bedarfsmittel</Description>
+    </OrderReference>
+    <Address>
+      <Name>BRZ GmbH</Name>
+      <Street>Hintere Zollamtsstraße 4</Street>
+      <Town>Wien</Town>
+      <ZIP>1030</ZIP>
+      <Country CountryCode="AT">Österreich</Country>
+      <Phone>+43 / 1 / 78 56 789</Phone>
+      <Email>support-erb@brz.gv.at; info@brz.gv.at</Email>
+    </Address>
+    <Contact>
+      <Salutation>Frau</Salutation>
+      <Name>Maxime Musterfrau</Name>
+    </Contact>
+  </InvoiceRecipient>
+  <Details>
+    <HeaderDescription>Optionaler Kopftext für alle Details</HeaderDescription>
+    <ItemList>
+      <HeaderDescription>Optionaler Kopftext für diese ItemList</HeaderDescription>
+      <ListLineItem>
+        <Description>Schraubenzieher</Description>
+        <Quantity Unit="STK">100</Quantity>
+        <UnitPrice>10.20</UnitPrice>
+        <InvoiceRecipientsOrderReference>
+          <OrderID>Z01</OrderID>
+          <OrderPositionNumber>1</OrderPositionNumber>
+        </InvoiceRecipientsOrderReference>
+        <TaxItem>
+          <TaxableAmount>1020</TaxableAmount>
+          <TaxPercent TaxCategoryCode="S">20</TaxPercent>
+        </TaxItem>
+        <LineItemAmount>1020.00</LineItemAmount>        
+      </ListLineItem>
+      <ListLineItem>
+        <Description>Schrauben M10x50</Description>
+        <Quantity Unit="STK">1000</Quantity>
+        <UnitPrice>0.10</UnitPrice>
+        <InvoiceRecipientsOrderReference>
+          <OrderID>Z01</OrderID>
+          <OrderPositionNumber>2</OrderPositionNumber>
+        </InvoiceRecipientsOrderReference>
+        <TaxItem>
+          <TaxableAmount>100</TaxableAmount>
+          <TaxPercent TaxCategoryCode="S">20</TaxPercent>
+        </TaxItem>
+        <LineItemAmount>100.00</LineItemAmount>        
+      </ListLineItem>
+      <ListLineItem>
+        <Description>Schraubenmutter M10</Description>
+        <Quantity Unit="STK">1000</Quantity>
+        <UnitPrice>0.01</UnitPrice>
+        <InvoiceRecipientsOrderReference>
+          <OrderID>Z01</OrderID>
+          <OrderPositionNumber>3</OrderPositionNumber>
+        </InvoiceRecipientsOrderReference>
+        <TaxItem>
+          <TaxableAmount>10</TaxableAmount>
+          <TaxPercent TaxCategoryCode="S">20</TaxPercent>
+        </TaxItem>
+        <LineItemAmount>10.00</LineItemAmount>        
+      </ListLineItem>
+      <ListLineItem>
+        <Description>Handbuch "Mit der Schraube auf Du und Du"</Description>
+        <Quantity Unit="STK">1</Quantity>
+        <UnitPrice>5.00</UnitPrice>
+        <InvoiceRecipientsOrderReference>
+          <OrderID>Z01</OrderID>
+          <OrderPositionNumber>4</OrderPositionNumber>
+        </InvoiceRecipientsOrderReference>
+        <TaxItem>
+          <TaxableAmount>5</TaxableAmount>
+          <TaxPercent TaxCategoryCode="S">10</TaxPercent>
+        </TaxItem>
+        <LineItemAmount>5.00</LineItemAmount>        
+      </ListLineItem>
+      <FooterDescription>Optionaler Fusstext für diese ItemList</FooterDescription>
+    </ItemList>
+    <FooterDescription>Optionaler Fusstext für alle Details</FooterDescription>
+  </Details>
+  <Tax>
+    <TaxItem>
+      <TaxableAmount>1130.00</TaxableAmount>
+      <TaxPercent TaxCategoryCode="S">20.00</TaxPercent>
+      <TaxAmount>226.00</TaxAmount>
+    </TaxItem>
+    <TaxItem>
+      <TaxableAmount>5.00</TaxableAmount>
+      <TaxPercent TaxCategoryCode="S">10.00</TaxPercent>
+      <TaxAmount>0.50</TaxAmount>
+    </TaxItem>
+  </Tax>
+  <TotalGrossAmount>1361.50</TotalGrossAmount>
+  <PayableAmount>1361.50</PayableAmount>
+  <PaymentMethod>
+    <Comment>Wir ersuchen um termingerechte Bezahlung.</Comment>
+    <UniversalBankTransaction>
+      <BeneficiaryAccount>
+        <BIC>BKAUATWW</BIC>
+        <IBAN>AT611904300234573201</IBAN>
+        <BankAccountOwner>Max Mustermann</BankAccountOwner>
+      </BeneficiaryAccount>
+    </UniversalBankTransaction>
+  </PaymentMethod>
+  <PaymentConditions>
+    <DueDate>2023-12-30</DueDate>
+    <Discount>
+      <PaymentDate>2023-12-10</PaymentDate>
+      <Percentage>3.00</Percentage>
+    </Discount>
+    <Discount>
+      <PaymentDate>2023-12-20</PaymentDate>
+      <Percentage>1.50</Percentage>
+    </Discount>
+    <Comment>Kommentar zu den Zahlungsbedingungen</Comment>
+  </PaymentConditions>
+  <Comment>Globaler Kommentar zur Rechnung.
+Hier können Sie diverse Informationen unterbringen, für die es kein strukturiertes Feld gibt.</Comment>
+<script xmlns=""/></Invoice>
