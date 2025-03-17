@@ -774,6 +774,17 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
+
+            //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
+            if(this.Descriptor.TransportMode != null)
+            {
+                Writer.WriteStartElement("ram", "RelatedSupplyChainConsignment", Profile.Extended); // BG-X-24
+                Writer.WriteStartElement("ram", "SpecifiedLogisticsTransportMovement", Profile.Extended); // BT-X-152-00
+                Writer.WriteElementString("ram", "ModeCode", String.Format("{0}", EnumExtensions.EnumToInt<TransportModeCodes>(this.Descriptor.TransportMode ?? TransportModeCodes.Unknown))); // BT-X-152
+                Writer.WriteEndElement(); // !ram:SpecifiedLogisticsTransportMovement 
+                Writer.WriteEndElement(); // !ram:RelatedSupplyChainConsignment
+            }
+
             _writeOptionalParty(Writer, PartyTypes.ShipToTradeParty, this.Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum, this.Descriptor.ShipToContact, default, this.Descriptor.GetShipToTaxRegistration());
             _writeOptionalParty(Writer, PartyTypes.UltimateShipToTradeParty, this.Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, this.Descriptor.UltimateShipToContact);
             _writeOptionalParty(Writer, PartyTypes.ShipFromTradeParty, this.Descriptor.ShipFrom, Profile.Extended);
