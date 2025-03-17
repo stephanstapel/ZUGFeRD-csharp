@@ -451,5 +451,43 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.IsNull(loadedInvoice.SellerTaxRepresentative);            
         } // !TestSellerTaxRepresentativeInNonSupportedVersions()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1)]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        public void TestTransportModeWithExtended(ZUGFeRDVersion version)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.TransportMode = TransportModeCodes.Road;
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(loadedInvoice.TransportMode, TransportModeCodes.Road);
+        } // !TestTransportModeWithExtended()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1)]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        public void TestTransportModeWithComfort(ZUGFeRDVersion version)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.TransportMode = TransportModeCodes.Road;
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNull(loadedInvoice.TransportMode); // not supported in comfort profile
+        } // !TestTransportModeWithExtended()
     }
 }

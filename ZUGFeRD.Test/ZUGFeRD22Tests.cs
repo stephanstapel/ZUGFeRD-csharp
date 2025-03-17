@@ -3348,22 +3348,5 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 06, 21));
         } // !TestRSMInvoice()
-
-
-        [TestMethod]
-        public void TestTransportModeWithExtended()
-        {
-            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
-            desc.TransportMode = TransportModeCodes.Road;
-
-            MemoryStream ms = new MemoryStream();
-
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-            ms.Seek(0, SeekOrigin.Begin);
-
-            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual(loadedInvoice.TransportMode, TransportModeCodes.Road);
-        } // !TestTransportModeWithExtended
-
     }
 }
