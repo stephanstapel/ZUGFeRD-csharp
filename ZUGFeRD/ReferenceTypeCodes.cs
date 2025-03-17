@@ -26,7 +26,7 @@ namespace s2industries.ZUGFeRD
 {
     /// <summary>
     /// Sources:
-    /// http://www.unece.org/trade/untdid/d13b/tred/tred1153.htm
+    /// https://service.unece.org/trade/untdid/d21a/tred/tred1153.htm
     /// and
     /// https://www.xrepository.de/details/urn:xoev-de:kosit:codeliste:untdid.1153_3#version
     /// </summary>
