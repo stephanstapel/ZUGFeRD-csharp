@@ -583,7 +583,7 @@ namespace s2industries.ZUGFeRD.Test
 
             lineItem.AddAdditionalReferencedDocument("xyz", AdditionalReferencedDocumentTypeCode.ReferenceDocument, ReferenceTypeCodes.AAB, timestamp);
 
-            lineItem.UnitQuantity = 3m;
+            lineItem.NetQuantity = 3m;
             lineItem.ActualDeliveryDate = timestamp;
 
             lineItem.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic
@@ -774,7 +774,7 @@ namespace s2industries.ZUGFeRD.Test
             //GrossPriceProductTradePrice
             Assert.AreEqual(9.9m, loadedLineItem.GrossUnitPrice);
             Assert.AreEqual(QuantityCodes.H87, loadedLineItem.UnitCode);
-            Assert.AreEqual(3m, loadedLineItem.UnitQuantity);
+            Assert.AreEqual(3m, loadedLineItem.NetQuantity);
 
             //NetPriceProductTradePrice
             Assert.AreEqual(9.9m, loadedLineItem.NetUnitPrice);
