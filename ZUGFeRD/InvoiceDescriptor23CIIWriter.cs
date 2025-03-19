@@ -806,7 +806,7 @@ namespace s2industries.ZUGFeRD
             #region DespatchAdviceReferencedDocument
             if (this.Descriptor.DespatchAdviceReferencedDocument != null)
             {
-                Writer.WriteStartElement("ram", "DespatchAdviceReferencedDocument");
+                Writer.WriteStartElement("ram", "DespatchAdviceReferencedDocument", Profile.Extended);
                 Writer.WriteElementString("ram", "IssuerAssignedID", this.Descriptor.DespatchAdviceReferencedDocument.ID);
 
                 if (this.Descriptor.DespatchAdviceReferencedDocument.IssueDateTime.HasValue)
