@@ -326,9 +326,9 @@ namespace s2industries.ZUGFeRD
         public List<TradeLineItem> TradeLineItems { get; internal set; } = new List<TradeLineItem>();
 
         /// <summary>
-        /// Sum of all invoice line net amounts in the invoice
+        /// Sum of all invoice line net amounts (BT-131) in the invoice
         ///
-        /// BT-131
+        /// BT-106
         /// </summary>
         public decimal? LineTotalAmount { get; set; } = null;
 
