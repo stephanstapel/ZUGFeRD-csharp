@@ -685,5 +685,12 @@ namespace s2industries.ZUGFeRD
             return this;
         } // !SetPackageQuantity()
 
+
+        public TradeLineItem SetBillingPeriod(DateTime? billingPeriodStart, DateTime? billingPeriodEnd)
+        {
+            this.BillingPeriodStart = billingPeriodStart;
+            this.BillingPeriodEnd = billingPeriodEnd;
+            return this;
+        } // !SetBillingPeriod()
     }
 }

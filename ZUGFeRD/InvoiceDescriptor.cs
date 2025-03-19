@@ -1499,6 +1499,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
+        [Obsolete("BillingPeriod parameters will be removed in version 19.0. Use SetBillingPeriod() instead.")]
         public TradeLineItem AddTradeLineItem(string name,
                                     decimal netUnitPrice,
                                     string description = null,
@@ -1572,6 +1573,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Created trade line item</returns>
+        [Obsolete("BillingPeriod parameters will be removed in version 19.0. Use SetBillingPeriod() instead.")]
         public TradeLineItem AddTradeLineItem(string lineID,
                                     string name,
                                     decimal netUnitPrice,
@@ -1673,7 +1675,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
-        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0")]
+        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0. Billing period will be removed in version 19.0. Use SetBillingPeriod() instead.")]        
         public TradeLineItem AddTradeLineItem(string name,
                                     string description = null,
                                     QuantityCodes unitCode = QuantityCodes.Unknown,
@@ -1747,7 +1749,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Created trade line item</returns>
-        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0")]
+        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0. Billing period will be removed in version 19.0. Use SetBillingPeriod() instead.")]
         public TradeLineItem AddTradeLineItem(string lineID,
                                     string name,
                                     string description = null,
@@ -1858,6 +1860,14 @@ namespace s2industries.ZUGFeRD
         {
             return this.TradeLineItems?.Any() == true;
         } // !AnyTradeLineItems()
+
+
+        public InvoiceDescriptor SetBillingPeriod(DateTime? billingPeriodStart, DateTime? billingPeriodEnd)
+        {
+            this.BillingPeriodStart = billingPeriodStart;
+            this.BillingPeriodEnd = billingPeriodEnd;
+            return this;
+        } // !SetBillingPeriod()
 
 
         /// <summary>
