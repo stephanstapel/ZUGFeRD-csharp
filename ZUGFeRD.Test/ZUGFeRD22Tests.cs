@@ -2448,9 +2448,26 @@ namespace s2industries.ZUGFeRD.Test
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
+            Assert.IsNull(loadedInvoice.DespatchAdviceReferencedDocument);
+        } //!TestWriteAndReadDespatchAdviceDocumentReference()
+
+
+        [TestMethod]
+        public void TestWriteAndReadDespatchAdviceDocumentReferenceExtended()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            string despatchAdviceNo = "421567982";
+            DateTime despatchAdviceDate = new DateTime(2024, 5, 14);
+            desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
             Assert.AreEqual(despatchAdviceNo, loadedInvoice.DespatchAdviceReferencedDocument.ID);
             Assert.AreEqual(despatchAdviceDate, loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime);
-        } //!TestWriteAndReadDespatchAdviceDocumentReference
+        } //!TestWriteAndReadDespatchAdviceDocumentReferenceExtended()
 
 
         [TestMethod]
