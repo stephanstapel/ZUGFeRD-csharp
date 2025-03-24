@@ -1103,11 +1103,14 @@ namespace s2industries.ZUGFeRD
                                     sbPaymentNotes.Append(XmlConstants.XmlNewLine);
                                 }
 
-                                sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
-                                sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
-                                sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
-                                sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
-                                sbPaymentNotes.Append("#");
+                                if (paymentTerms.PaymentTermsType.HasValue && paymentTerms.DueDays.HasValue && paymentTerms.Percentage.HasValue)
+                                {
+                                    sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
+                                    sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
+                                    sbPaymentNotes.Append($"#PROZENT={_formatDecimal(paymentTerms.Percentage)}");
+                                    sbPaymentNotes.Append(paymentTerms.BaseAmount.HasValue ? $"#BASISBETRAG={_formatDecimal(paymentTerms.BaseAmount)}" : "");
+                                    sbPaymentNotes.Append("#");
+                                }
                             }
                             else
                             {

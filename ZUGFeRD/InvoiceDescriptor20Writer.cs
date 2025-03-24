@@ -796,7 +796,7 @@ namespace s2industries.ZUGFeRD
                         DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
                         {
-                            if (paymentTerms.PaymentTermsType.HasValue)
+                            if (paymentTerms.PaymentTermsType.HasValue && paymentTerms.DueDays.HasValue && paymentTerms.Percentage.HasValue)
                             {
                                 sbPaymentNotes.Append($"#{((PaymentTermsType)paymentTerms.PaymentTermsType).EnumToString<PaymentTermsType>().ToUpper()}");
                                 sbPaymentNotes.Append($"#TAGE={paymentTerms.DueDays}");
