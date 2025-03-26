@@ -266,38 +266,55 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                 } // !foreach(document)
 
-                Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
-                _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);
-                if (tradeLineItem.UnitQuantity.HasValue)
+                bool needToWriteGrossUnitPrice = false;
+
+                // the PEPPOL business rule for XRechnung is very specific
+                // PEPPOL-EN16931-R046
+                if ((descriptor.Profile == Profile.XRechnung) && tradeLineItem.GrossUnitPrice.HasValue && (tradeLineItem.GetTradeAllowanceCharges().Count > 0))
                 {
-                    _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                    needToWriteGrossUnitPrice = true;
+                }
+                else if ((descriptor.Profile != Profile.XRechnung) && ((tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.GetTradeAllowanceCharges().Count > 0))))
+                {
+                    needToWriteGrossUnitPrice = true;
                 }
 
-                foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.GetTradeAllowanceCharges())
+
+                if (needToWriteGrossUnitPrice)
                 {
-                    Writer.WriteStartElement("ram", "AppliedTradeAllowanceCharge");
-
-                    Writer.WriteStartElement("ram", "ChargeIndicator");
-                    Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
-                    Writer.WriteEndElement(); // !ram:ChargeIndicator
-
-                    if (tradeAllowanceCharge.BasisAmount.HasValue)
+                    Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
+                    _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);
+                    if (tradeLineItem.UnitQuantity.HasValue)
                     {
-                        Writer.WriteStartElement("ram", "BasisAmount");
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4));
-                        Writer.WriteEndElement();
+                        _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
                     }
-                    Writer.WriteStartElement("ram", "ActualAmount");
-                    Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
-                    Writer.WriteEndElement();
 
-                    Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
-                    // "ReasonCode" nicht im 2.0 Standard!
+                    foreach (TradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.GetTradeAllowanceCharges())
+                    {
+                        Writer.WriteStartElement("ram", "AppliedTradeAllowanceCharge");
 
-                    Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
+                        Writer.WriteStartElement("ram", "ChargeIndicator");
+                        Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                        Writer.WriteEndElement(); // !ram:ChargeIndicator
+
+                        if (tradeAllowanceCharge.BasisAmount.HasValue)
+                        {
+                            Writer.WriteStartElement("ram", "BasisAmount");
+                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4));
+                            Writer.WriteEndElement();
+                        }
+                        Writer.WriteStartElement("ram", "ActualAmount");
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                        Writer.WriteEndElement();
+
+                        Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
+                        // "ReasonCode" nicht im 2.0 Standard!
+
+                        Writer.WriteEndElement(); // !AppliedTradeAllowanceCharge
+                    }
+
+                    Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
                 }
-
-                Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
 
                 Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
                 _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4);
