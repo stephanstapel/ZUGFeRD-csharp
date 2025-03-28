@@ -221,7 +221,7 @@ namespace s2industries.ZUGFeRD.PDF
             switch (version)
             {
                 case ZUGFeRDVersion.Version1: metadataResource = "s2industries.ZUGFeRD.PDF.Resources.PdfMetadataTemplate-1.0.xml"; break;
-                case ZUGFeRDVersion.Version20: metadataResource = "s2industries.ZUGFeRD.PDF.Resources.PdfMetadataTemplate-1.0.xml"; break;
+                case ZUGFeRDVersion.Version20: metadataResource = "s2industries.ZUGFeRD.PDF.Resources.PdfMetadataTemplate-2.0.xml"; break;
                 case ZUGFeRDVersion.Version23: metadataResource = "s2industries.ZUGFeRD.PDF.Resources.PdfMetadataTemplate-2.3.xml"; break;
             }
 
