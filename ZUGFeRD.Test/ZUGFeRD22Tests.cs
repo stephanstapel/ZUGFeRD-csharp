@@ -3364,6 +3364,6 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.Profile, Profile.XRechnung1);
             Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 06, 21));
-        } // !TestRSMInvoice()
+        } // !TestRSMInvoice()        
     }
 }
