@@ -267,18 +267,19 @@ namespace s2industries.ZUGFeRD
                 } // !foreach(document)
 
                 bool needToWriteGrossUnitPrice = false;
+                bool hasGrossUnitPrice = tradeLineItem.GrossUnitPrice.HasValue;
+                bool hasAllowanceCharges = tradeLineItem.GetTradeAllowanceCharges().Count > 0;
 
-                // the PEPPOL business rule for XRechnung is very specific
-                // PEPPOL-EN16931-R046
-                if ((descriptor.Profile == Profile.XRechnung) && tradeLineItem.GrossUnitPrice.HasValue && (tradeLineItem.GetTradeAllowanceCharges().Count > 0))
+                if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.XRechnung1) || (descriptor.Profile == Profile.Comfort))
                 {
-                    needToWriteGrossUnitPrice = true;
+                    // PEPPOL-EN16931-R046: For XRechnung, both must be present
+                    needToWriteGrossUnitPrice = hasGrossUnitPrice && hasAllowanceCharges;
                 }
-                else if ((descriptor.Profile != Profile.XRechnung) && ((tradeLineItem.GrossUnitPrice.HasValue || (tradeLineItem.GetTradeAllowanceCharges().Count > 0))))
+                else
                 {
-                    needToWriteGrossUnitPrice = true;
+                    // For other profiles, either is sufficient
+                    needToWriteGrossUnitPrice = hasGrossUnitPrice || hasAllowanceCharges;
                 }
-
 
                 if (needToWriteGrossUnitPrice)
                 {
