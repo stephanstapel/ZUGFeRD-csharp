@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
-    <Version>17.1.0</Version>
+    <Version>17.2.0</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
@@ -22,25 +22,30 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2024</Copyright>
-    <AssemblyVersion>17.1.0</AssemblyVersion>
+    <AssemblyVersion>17.2.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>17.1.0</FileVersion>
+    <FileVersion>17.2.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>17.1.0
+    <PackageReleaseNotes>17.2.0
+* Fixes in various details
+* Added multiple codes
+
+Full release notes here:
+https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/17.2.0
+Thanks to all contributors!
+
+
+17.1.0
 * Tax registration details
 * Tax Point Date
 * Maturity Date
 * Origin trade country
 * New quantity codes
 * Fixes
-
-Full release notes here:
-https://github.com/stephanstapel/ZUGFeRD-csharp/releases/tag/17.1.0
-Thanks to all contributors!
 
 17.0.0
 * Added ApplicableTradeDeliveryTermsCode 

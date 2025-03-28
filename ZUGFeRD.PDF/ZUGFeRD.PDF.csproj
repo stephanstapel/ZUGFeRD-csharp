@@ -16,8 +16,11 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
     <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
-    <Version>17.1.0</Version>	
-    <PackageReleaseNotes>17.1.0:
+    <Version>17.2.0</Version>	
+    <PackageReleaseNotes>17.2.0:
+* Enhanced filename checks
+
+17.1.0:
 * No major change
 
 17.0.0: 
@@ -44,6 +47,7 @@ This library allows to load and create PDF/A files.
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\PdfMetadataTemplate-2.0.xml" />
     <EmbeddedResource Include="Resources\PdfMetadataTemplate-2.3.xml" />
     <EmbeddedResource Include="Resources\PdfMetadataTemplate-1.0.xml" />
     <EmbeddedResource Include="Resources\sRGB-IEC61966-2.1.icc" />
