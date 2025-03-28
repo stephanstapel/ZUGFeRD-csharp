@@ -48,7 +48,6 @@ namespace s2industries.ZUGFeRD
             }
         } // !ValidateAndPrint()
 
-
         public static ValidationResult Validate(InvoiceDescriptor descriptor, ZUGFeRDVersion version)
         {
             ValidationResult retval = new ValidationResult()
@@ -229,7 +228,7 @@ namespace s2industries.ZUGFeRD
             }
 
             if (Math.Abs(chargesTotalSummedPerTradeAllowanceCharge - chargeTotal) < 0.01m)
-            { 
+            {
                 retval.Messages.Add(String.Format("trade.settlement.monetarySummation.chargeTotal  Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", chargesTotalSummedPerTradeAllowanceCharge));
             }
             else
@@ -239,29 +238,26 @@ namespace s2industries.ZUGFeRD
             }
 
             // version-specific validation
-            ValidationResult versionSpecificResults = new ValidationResult();
+            ValidationResult versionSpecificResults;
             switch (version)
             {
                 case ZUGFeRDVersion.Version1:
-                    {
-                        versionSpecificResults = _ValidateAccordingToVersion1(descriptor);
-                        break;
-                    }
+                {
+                    versionSpecificResults = _ValidateAccordingToVersion1(descriptor);
+                    break;
+                }
                 default:
-                    {
-                        break;
-                    }
+                {
+                    versionSpecificResults = new ValidationResult { IsValid = true };
+                    break;
+                }
             }
 
-            if (versionSpecificResults.IsValid == false)
-            {
-                retval.IsValid = false;                
-            }
+            retval.IsValid = retval.IsValid && versionSpecificResults.IsValid;
             retval.Messages.AddRange(versionSpecificResults.Messages);
 
             return retval;
         } // !Validate()
-
 
         private static ValidationResult _ValidateAccordingToVersion1(InvoiceDescriptor descriptor)
         {
@@ -293,7 +289,7 @@ namespace s2industries.ZUGFeRD
                 retval.IsValid = false;
                 retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for recipients (ShipTo) in ZUGFeRD 1.0");
             }
-            
+
             return retval;
         } // !_ValidateAccordingToVersion1()
     }
