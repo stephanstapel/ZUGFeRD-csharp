@@ -23,109 +23,122 @@ using System.ComponentModel;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
-    /// Reason codes according to UN/EDIFACT UNTDID 7161 code list
+    /// Reason codes according to UN/EDIFACT UNCL5189 code list
     /// </summary>
 	public enum AllowanceReasonCodes
 	{
-		/// <summary>
-		/// Unknown
-		/// </summary>
-		Unknown = 0,
-
-		/// <summary>
-		/// Advertising
-		/// </summary>
-		[Description("AA")]
-		Advertising = 1,
-
-		/// <summary>
-		/// Off-premises discount
-		/// </summary>
-		[Description("ABL")]
-		OffPremisesDiscount = 2,
-
-		/// <summary>
-		/// Customer discount
-		/// </summary>
-		[Description("ADR")]
-		CustomerDiscount = 3,
-
-		/// <summary>
-		/// Damaged goods
-		/// </summary>
-		[Description("ADT")]
-		DamagedGoods = 4,
-
-		/// <summary>
-		/// Early payment allowance
-		/// </summary>
-		[Description("FC")]
-		EarlyPaymentAllowance = 66,
-
-		/// <summary>
-		/// Discount
-		/// </summary>
-		[Description("95")]
-		Discount = 95,
-
-		/// <summary>
-		/// Volume discount
-		/// </summary>
-		[Description("100")]
-		VolumeDiscount = 100,
-
-		/// <summary>
-		/// Special agreement
-		/// </summary>
-		[Description("102")]
-		SpecialAgreement = 102,
-
-		/// <summary>
-		/// Freight charge
-		/// </summary>
-		[Description("FC")]
-		FreightCharge = 30, // FC
-
-		/// <summary>
-		/// Insurance
-		/// </summary>
-		[Description("FI")]
-		Insurance = 31, // INS
-
-		/// <summary>
-		/// Packaging
-		/// </summary>
-		[Description("PAC")]
-		Packaging = 32, // PAC
-
-		/// <summary>
-		/// Pallet charge
-		/// </summary>
-		[Description("PC")]
-		PalletCharge = 33, // PC
-
-		/// <summary>
-		/// Handling service
-		/// </summary>
-		[Description("SH")]
-		HandlingService = 34, // SH
-
-		/// <summary>
-		/// Transport costs
-		/// </summary>
-		[Description("TC")]
-		TransportCosts = 35, // TC
+        /// <summary>
+        /// Bonus for works ahead of schedule
+        /// </summary>
+        [EnumStringValue("41")]
+        BonusForWorksAheadOfSchedule,
 
         /// <summary>
-        /// Testing service
+        /// Other bonus
         /// </summary>
-        [Description("TAC")]
-        TestingService = 36, // TAC
+        [EnumStringValue("42")]
+        OtherBonus,
 
         /// <summary>
-        /// Miscellaneous service
+        /// Manufacturer’s consumer discount
         /// </summary>
-        [Description("ZZZ")]
-		MiscellaneousService = 99 // ZZZ
-	}
+        [EnumStringValue("60")]
+        ManufacturersConsumerDiscount,
+
+        /// <summary>
+        /// Due to military status
+        /// </summary>
+        [EnumStringValue("62")]
+        DueToMilitaryStatus,
+
+        /// <summary>
+        /// Due to work accident
+        /// </summary>
+        [EnumStringValue("63")]
+        DueToWorkAccident,
+
+        /// <summary>
+        /// Special agreement
+        /// </summary>
+        [EnumStringValue("64")]
+        SpecialAgreement,
+
+        /// <summary>
+        /// Production error discount
+        /// </summary>
+        [EnumStringValue("65")]
+        ProductionErrorDiscount,
+
+        /// <summary>
+        /// New outlet discount
+        /// </summary>
+        [EnumStringValue("66")]
+        NewOutletDiscount,
+
+        /// <summary>
+        /// Sample discount
+        /// </summary>
+        [EnumStringValue("67")]
+        SampleDiscount,
+
+        /// <summary>
+        /// End-of-range discount
+        /// </summary>
+        [EnumStringValue("68")]
+        EndOfRangeDiscount,
+
+        /// <summary>
+        /// Incoterm discount
+        /// </summary>
+        [EnumStringValue("70")]
+        IncotermDiscount,
+
+        /// <summary>
+        /// Point of sales threshold allowance
+        /// </summary>
+        [EnumStringValue("71")]
+        PointOfSalesThresholdAllowance,
+
+        /// <summary>
+        /// Material surcharge/deduction
+        /// </summary>
+        [EnumStringValue("88")]
+        MaterialSurchargeOrDeduction,
+
+        /// <summary>
+        /// Discount
+        /// </summary>
+        [EnumStringValue("95")]
+        Discount,
+
+        /// <summary>
+        /// Special rebate
+        /// </summary>
+        [EnumStringValue("100")]
+        SpecialRebate,
+
+        /// <summary>
+        /// Fixed long term
+        /// </summary>
+        [EnumStringValue("102")]
+        FixedLongTerm,
+
+        /// <summary>
+        /// Temporary
+        /// </summary>
+        [EnumStringValue("103")]
+        Temporary,
+
+        /// <summary>
+        /// Standard
+        /// </summary>
+        [EnumStringValue("104")]
+        Standard,
+
+        /// <summary>
+        /// Yearly turnover
+        /// </summary>
+        [EnumStringValue("105")]
+        YearlyTurnover
+    }
 }

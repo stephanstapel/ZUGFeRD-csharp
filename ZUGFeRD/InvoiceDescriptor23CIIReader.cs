@@ -341,16 +341,31 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
             {
-                retval.AddTradeAllowanceCharge(!XmlUtils.NodeAsBool(node, ".//ram:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
-                                               XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
-                                               retval.Currency,
-                                               XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
-                                               XmlUtils.NodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr),
-                                               XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
-                                               EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
-                                               EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
-                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
-                                               EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                bool chargeIndicator = XmlUtils.NodeAsBool(node, ".//ram:ChargeIndicator", nsmgr);
+                if (chargeIndicator) // charge
+                {
+                    retval.AddTradeCharge(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
+                                          retval.Currency,
+                                          XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
+                                          XmlUtils.NodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr),
+                                          XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
+                                          EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
+                                          EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
+                                          XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
+                                          EnumExtensions.FromDescription<ChargeReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                }
+                else // allowance
+                {
+                    retval.AddTradeAllowance(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
+                                             retval.Currency,
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr),
+                                             XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
+                                             EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
+                                             EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
+                                             XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
+                                             EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                }                    
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -600,13 +615,26 @@ namespace s2industries.ZUGFeRD
                             decimal? chargePercentage = XmlUtils.NodeAsDecimal(lineTradeSettlementNode, "./ram:CalculationPercent", nsmgr, null);
                             string reasonCode = XmlUtils.NodeAsString(lineTradeSettlementNode, "./ram:ReasonCode", nsmgr);
 
-                            item.AddSpecifiedTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
-                                                        EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
-                                                        basisAmount,
-                                                        actualAmount,
-                                                        chargePercentage,
-                                                        reason,
-                                                        EnumExtensions.FromDescription<AllowanceReasonCodes>(reasonCode));
+                            if (chargeIndicator) // charge
+                            {
+
+                                item.AddSpecifiedTradeCharge(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                                             basisAmount,
+                                                             actualAmount,
+                                                             chargePercentage,
+                                                             reason,
+                                                             EnumExtensions.FromDescription<ChargeReasonCodes>(reasonCode));
+                            }
+                            else // allowance
+                            {
+                                item.AddSpecifiedTradeAllowance(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                                                basisAmount,
+                                                                actualAmount,
+                                                                chargePercentage,
+                                                                reason,
+                                                                EnumExtensions.FromDescription<AllowanceReasonCodes>(reasonCode));
+                            }
+
                             break;
                         case "ram:SpecifiedTradeSettlementLineMonetarySummation":
                             //TODO
@@ -648,12 +676,22 @@ namespace s2industries.ZUGFeRD
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
                 decimal? chargePercentage = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:CalculationPercent", nsmgr, null);
 
-                item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
-                                            EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
-                                            basisAmount,
-                                            actualAmount,
-                                            chargePercentage,
-                                            reason);
+                if (chargeIndicator) // charge
+                {
+                    item.AddTradeCharge(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                        basisAmount,
+                                        actualAmount,
+                                        chargePercentage,
+                                        reason);
+                }
+                else // allowance
+                {
+                    item.AddTradeAllowance(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                           basisAmount,
+                                           actualAmount,
+                                           chargePercentage,
+                                           reason);
+                }                    
             }
 
             if (item.UnitCode == QuantityCodes.Unknown)

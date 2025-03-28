@@ -258,22 +258,17 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            // Test Values
-            bool isDiscount = true;
+            // Test Values            
             decimal? basisAmount = 123.45m;
             CurrencyCodes currency = CurrencyCodes.EUR;
             decimal actualAmount = 12.34m;
-            string reason = "Gutschrift";
-            AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Packaging;
+            string reason = "Besondere Vereinbarung";
+            AllowanceReasonCodes reasonCode = AllowanceReasonCodes.SpecialAgreement;
             TaxTypes taxTypeCode = TaxTypes.VAT;
             TaxCategoryCodes taxCategoryCode = TaxCategoryCodes.AA;
             decimal taxPercent = 19.0m;
 
-            desc.AddTradeAllowanceCharge(isDiscount, basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
-
-            desc.TradeLineItems[0].AddTradeAllowanceCharge(true, CurrencyCodes.EUR, 100, 10, "test", reasonCode);
-
-            TradeAllowanceCharge? testAllowanceCharge = desc.GetTradeAllowanceCharges().FirstOrDefault();
+            desc.AddTradeAllowance(basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
 
             MemoryStream ms = new MemoryStream();
 
@@ -282,18 +277,35 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            TradeAllowanceCharge loadedAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges()[0];
+            TradeAllowance tradeAllowance = loadedInvoice.GetTradeAllowances().FirstOrDefault();
 
-            Assert.AreEqual(loadedInvoice.GetTradeAllowanceCharges().Count(), 1);
-            Assert.AreEqual(loadedAllowanceCharge.ChargeIndicator, !isDiscount, message: "isDiscount");
-            Assert.AreEqual(loadedAllowanceCharge.BasisAmount, basisAmount, message: "basisAmount");
-            Assert.AreEqual(loadedAllowanceCharge.Currency, currency, message: "currency");
-            Assert.AreEqual(loadedAllowanceCharge.Amount, actualAmount, message: "actualAmount");
-            Assert.AreEqual(loadedAllowanceCharge.Reason, reason, message: "reason");
-            Assert.AreEqual(loadedAllowanceCharge.ReasonCode, reasonCode, message: "reasonCode");
-            Assert.AreEqual(loadedAllowanceCharge.Tax.TypeCode, taxTypeCode, message: "taxTypeCode");
-            Assert.AreEqual(loadedAllowanceCharge.Tax.CategoryCode, taxCategoryCode, message: "taxCategoryCode");
-            Assert.AreEqual(loadedAllowanceCharge.Tax.Percent, taxPercent, message: "taxPercent");
+            Assert.IsNotNull(tradeAllowance);
+            Assert.AreEqual(tradeAllowance.ChargeIndicator, false, message: "isDiscount");
+            Assert.AreEqual(tradeAllowance.BasisAmount, basisAmount, message: "basisAmount");
+            Assert.AreEqual(tradeAllowance.Currency, currency, message: "currency");
+            Assert.AreEqual(tradeAllowance.Amount, actualAmount, message: "actualAmount");
+            Assert.AreEqual(tradeAllowance.Reason, reason, message: "reason");
+            Assert.AreEqual(tradeAllowance.ReasonCode, reasonCode, message: "reasonCode");
+            Assert.AreEqual(tradeAllowance.Tax.TypeCode, taxTypeCode, message: "taxTypeCode");
+            Assert.AreEqual(tradeAllowance.Tax.CategoryCode, taxCategoryCode, message: "taxCategoryCode");
+            Assert.AreEqual(tradeAllowance.Tax.Percent, taxPercent, message: "taxPercent");
+
+
+
+
+
+            TradeAllowance loadedAllowance = loadedInvoice.GetTradeAllowances().FirstOrDefault();
+
+            Assert.IsNotNull(loadedAllowance);
+            Assert.AreEqual(loadedAllowance.ChargeIndicator, false, message: "isDiscount");
+            Assert.AreEqual(loadedAllowance.BasisAmount, basisAmount, message: "basisAmount");
+            Assert.AreEqual(loadedAllowance.Currency, currency, message: "currency");
+            Assert.AreEqual(loadedAllowance.Amount, actualAmount, message: "actualAmount");
+            Assert.AreEqual(loadedAllowance.Reason, reason, message: "reason");
+            Assert.AreEqual(loadedAllowance.ReasonCode, reasonCode, message: "reasonCode");
+            Assert.AreEqual(loadedAllowance.Tax.TypeCode, taxTypeCode, message: "taxTypeCode");
+            Assert.AreEqual(loadedAllowance.Tax.CategoryCode, taxCategoryCode, message: "taxCategoryCode");
+            Assert.AreEqual(loadedAllowance.Tax.Percent, taxPercent, message: "taxPercent");
 
         } // !TestAllowanceChargeOnDocumentLevel
 

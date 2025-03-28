@@ -254,23 +254,23 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.TradeLineItems.Count, 6);
             Assert.AreEqual(desc.LineTotalAmount, 457.20m);
 
-            IList<TradeAllowanceCharge> tradeAllowanceCharges = desc.GetTradeAllowanceCharges();
-            foreach (TradeAllowanceCharge charge in tradeAllowanceCharges)
+            IList<TradeAllowance> tradeAllowances = desc.GetTradeAllowances();
+            foreach (TradeAllowance allowance in tradeAllowances)
             {
-                Assert.AreEqual(charge.Tax.TypeCode, TaxTypes.VAT);
-                Assert.AreEqual(charge.Tax.CategoryCode, TaxCategoryCodes.S);
+                Assert.AreEqual(allowance.Tax.TypeCode, TaxTypes.VAT);
+                Assert.AreEqual(allowance.Tax.CategoryCode, TaxCategoryCodes.S);
             }
 
-            Assert.AreEqual(tradeAllowanceCharges.Count, 4);
-            Assert.AreEqual(tradeAllowanceCharges[0].Tax.Percent, 19m);
-            Assert.AreEqual(tradeAllowanceCharges[1].Tax.Percent, 7m);
-            Assert.AreEqual(tradeAllowanceCharges[2].Tax.Percent, 19m);
-            Assert.AreEqual(tradeAllowanceCharges[3].Tax.Percent, 7m);
+            Assert.AreEqual(tradeAllowances.Count, 4);
+            Assert.AreEqual(tradeAllowances[0].Tax.Percent, 19m);
+            Assert.AreEqual(tradeAllowances[1].Tax.Percent, 7m);
+            Assert.AreEqual(tradeAllowances[2].Tax.Percent, 19m);
+            Assert.AreEqual(tradeAllowances[3].Tax.Percent, 7m);
 
-            Assert.AreEqual(desc.ServiceCharges.Count, 1);
-            Assert.AreEqual(desc.ServiceCharges[0].Tax.TypeCode, TaxTypes.VAT);
-            Assert.AreEqual(desc.ServiceCharges[0].Tax.CategoryCode, TaxCategoryCodes.S);
-            Assert.AreEqual(desc.ServiceCharges[0].Tax.Percent, 19m);
+            Assert.AreEqual(desc.GetLogisticsServiceCharges().Count, 1);
+            Assert.AreEqual(desc.GetLogisticsServiceCharges()[0].Tax.TypeCode, TaxTypes.VAT);
+            Assert.AreEqual(desc.GetLogisticsServiceCharges()[0].Tax.CategoryCode, TaxCategoryCodes.S);
+            Assert.AreEqual(desc.GetLogisticsServiceCharges()[0].Tax.Percent, 19m);
         } // !TestReferenceExtendedInvoice()
 
 
@@ -1919,7 +1919,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.BillingPeriodStart = timestamp;
             desc.BillingPeriodEnd = timestamp.AddDays(14);
 
-            desc.AddTradeAllowanceCharge(false, 5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m, AllowanceReasonCodes.Packaging);
+            desc.AddTradeCharge(5m, CurrencyCodes.EUR, 15m, "Reason for charge", TaxTypes.AAB, TaxCategoryCodes.AB, 19m, ChargeReasonCodes.HeatTreatment);
             desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
@@ -1951,7 +1951,7 @@ namespace s2industries.ZUGFeRD.Test
             lineItem.BillingPeriodEnd = timestamp.AddDays(10);
 
             lineItem.AddReceivableSpecifiedTradeAccountingAccount("987654");
-            lineItem.AddTradeAllowanceCharge(false, CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest", AllowanceReasonCodes.Packaging);
+            lineItem.AddTradeAllowance(CurrencyCodes.EUR, 10m, 50m, "Reason: UnitTest", AllowanceReasonCodes.SpecialRebate);
 
 
             MemoryStream ms = new MemoryStream();
@@ -2075,7 +2075,8 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.BillingPeriodEnd);
 
             //TradeAllowanceCharges
-            var tradeAllowanceCharge = loadedInvoice.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
+            Assert.AreEqual(loadedInvoice.GetTradeAllowances().Count, 0);   
+            var tradeAllowanceCharge = loadedInvoice.GetTradeCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
             Assert.IsNotNull(tradeAllowanceCharge);
             Assert.IsTrue(tradeAllowanceCharge.ChargeIndicator);
             Assert.AreEqual("Reason for charge", tradeAllowanceCharge.Reason);
@@ -2176,7 +2177,8 @@ namespace s2industries.ZUGFeRD.Test
 
             var lineItemTradeAllowanceCharge = loadedLineItem.GetTradeAllowanceCharges().FirstOrDefault(i => i.Reason == "Reason: UnitTest");
             Assert.IsNotNull(lineItemTradeAllowanceCharge);
-            Assert.IsTrue(lineItemTradeAllowanceCharge.ChargeIndicator);
+            Assert.IsInstanceOfType<TradeAllowance>(lineItemTradeAllowanceCharge);
+            Assert.IsFalse(lineItemTradeAllowanceCharge.ChargeIndicator);
             Assert.AreEqual(10m, lineItemTradeAllowanceCharge.BasisAmount);
             Assert.AreEqual(50m, lineItemTradeAllowanceCharge.ActualAmount);
             Assert.AreEqual("Reason: UnitTest", lineItemTradeAllowanceCharge.Reason);
@@ -2398,19 +2400,21 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
-            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19, AllowanceReasonCodes.Packaging);
+            invoice.AddTradeCharge(100, CurrencyCodes.EUR, 10, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19, ChargeReasonCodes.Packing);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
+            IList<TradeAllowance> allowances = loadedInvoice.GetTradeAllowances();
+            IList<TradeCharge> charges = loadedInvoice.GetTradeCharges();
 
-            Assert.IsTrue(allowanceCharges.Count == 1);
-            Assert.AreEqual(allowanceCharges[0].BasisAmount, 100m);
-            Assert.AreEqual(allowanceCharges[0].Amount, 10m);
-            Assert.AreEqual(allowanceCharges[0].ChargePercentage, null);
+            Assert.AreEqual(allowances.Count, 0);
+            Assert.AreEqual(charges.Count, 1);
+            Assert.AreEqual(charges[0].BasisAmount, 100m);
+            Assert.AreEqual(charges[0].Amount, 10m);
+            Assert.AreEqual(charges[0].ChargePercentage, null);
         } // !TestTradeAllowanceChargeWithoutExplicitPercentage()
 
 
@@ -2420,18 +2424,20 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
             // fake values, does not matter for our test case
-            invoice.AddTradeAllowanceCharge(true, 100, CurrencyCodes.EUR, 10, 12, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19, AllowanceReasonCodes.Packaging);
+            invoice.AddTradeCharge(100, CurrencyCodes.EUR, 10, 12, String.Empty, TaxTypes.VAT, TaxCategoryCodes.S, 19, ChargeReasonCodes.Packing);
 
             MemoryStream ms = new MemoryStream();
             invoice.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
             ms.Position = 0;
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            IList<TradeAllowanceCharge> allowanceCharges = loadedInvoice.GetTradeAllowanceCharges();
+            IList<TradeAllowance> allowances = loadedInvoice.GetTradeAllowances();
+            IList<TradeCharge> charges = loadedInvoice.GetTradeCharges();
 
-            Assert.IsTrue(allowanceCharges.Count == 1);
-            Assert.AreEqual(allowanceCharges[0].BasisAmount, 100m);
-            Assert.AreEqual(allowanceCharges[0].Amount, 10m);
-            Assert.AreEqual(allowanceCharges[0].ChargePercentage, 12);
+            Assert.AreEqual(allowances.Count, 0);
+            Assert.AreEqual(charges.Count, 1);
+            Assert.AreEqual(charges[0].BasisAmount, 100m);
+            Assert.AreEqual(charges[0].Amount, 10m);
+            Assert.AreEqual(charges[0].ChargePercentage, 12);
         } // !TestTradeAllowanceChargeWithExplicitPercentage()
 
 
@@ -2486,18 +2492,18 @@ namespace s2industries.ZUGFeRD.Test
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            TradeAllowanceCharge allowanceCharge = loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowanceCharges().First();
+            TradeAllowance allowance = loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowances().First();
 
-            Assert.AreEqual(allowanceCharge.ChargeIndicator, false);//false = discount
+            Assert.AreEqual(allowance.ChargeIndicator, false);//false = discount
             //CurrencyCodes are not written bei InvoiceDescriptor22Writer
             //Assert.AreEqual(allowanceCharge.Currency, CurrencyCodes.EUR);
             if (profile != Profile.Basic)
             {
-                Assert.AreEqual(allowanceCharge.BasisAmount, 198m);
-                Assert.AreEqual(allowanceCharge.ChargePercentage, 10m);
+                Assert.AreEqual(allowance.BasisAmount, 198m);
+                Assert.AreEqual(allowance.ChargePercentage, 10m);
             }
-            Assert.AreEqual(allowanceCharge.ActualAmount, 19.8m);
-            Assert.AreEqual(allowanceCharge.Reason, "Discount 10%");
+            Assert.AreEqual(allowance.ActualAmount, 19.8m);
+            Assert.AreEqual(allowance.Reason, "Discount 10%");
         } // !SpecifiedTradeAllowanceCharge()
 
 

@@ -427,7 +427,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-27
         /// </summary>
-        private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
+        private List<AbstractTradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<AbstractTradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information about payment terms
@@ -1090,13 +1090,41 @@ namespace s2industries.ZUGFeRD
         /// <param name="taxCategoryCode">Tax category</param>
         /// <param name="taxPercent">Tax percentage</param>
         /// <param name="reasonCode">Optional reason code</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
+        [Obsolete("Please use AddTradeAllowance() or AddTradeCharge() instead. This function will be removed with version 18.0")]
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,                                            
                                             string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
-                                            AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
+                                            AllowanceReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            if (isDiscount)
             {
-                ChargeIndicator = !isDiscount,
+                AddTradeAllowance(basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
+            }
+            else
+            {
+                AddTradeCharge(basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, null);
+            }
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// Adds an allowance (discount) on document level.
+        ///
+        /// BG-27        
+        /// </summary>
+        /// <param name="basisAmount">Base amount for calculation</param>
+        /// <param name="currency">Currency code</param>
+        /// <param name="actualAmount">Actual amount of allowance/charge</param>
+        /// <param name="reason">Reason for allowance/charge</param>
+        /// <param name="taxTypeCode">Type of tax</param>
+        /// <param name="taxCategoryCode">Tax category</param>
+        /// <param name="taxPercent">Tax percentage</param>
+        /// <param name="reasonCode">Optional reason code</param>
+        public void AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
+                                      string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
+                                      AllowanceReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            {
                 Reason = reason,
                 ReasonCode = reasonCode,
                 BasisAmount = basisAmount,
@@ -1111,7 +1139,81 @@ namespace s2industries.ZUGFeRD
                     Percent = taxPercent
                 }
             });
-        } // !AddTradeAllowanceCharge()
+        } // !AddTradeAllowance()
+
+
+        /// <summary>
+        /// Adds an charge on document level.
+        ///
+        /// BG-27        
+        /// </summary>
+        /// <param name="basisAmount">Base amount for calculation</param>
+        /// <param name="currency">Currency code</param>
+        /// <param name="actualAmount">Actual amount of charge</param>
+        /// <param name="chargePercentage">Actual percentage of charge</param>
+        /// <param name="reason">Reason for charge</param>
+        /// <param name="taxTypeCode">Type of tax</param>
+        /// <param name="taxCategoryCode">Tax category</param>
+        /// <param name="taxPercent">Tax percentage</param>
+        /// <param name="reasonCode">Optional reason code</param>
+        public void AddTradeCharge(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
+                                   decimal? chargePercentage,
+                                   string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
+                                   ChargeReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeCharge()
+            {
+                Reason = reason,
+                ReasonCode = reasonCode,
+                BasisAmount = basisAmount,
+                ActualAmount = actualAmount,
+                Currency = currency,
+                Amount = actualAmount,
+                ChargePercentage = chargePercentage,
+                Tax = new Tax()
+                {
+                    CategoryCode = taxCategoryCode,
+                    TypeCode = taxTypeCode,
+                    Percent = taxPercent
+                }
+            });
+        } // !AddTradeCharge()
+
+
+        /// <summary>
+        /// Adds an charge on document level.
+        ///
+        /// BG-27        
+        /// </summary>
+        /// <param name="basisAmount">Base amount for calculation</param>
+        /// <param name="currency">Currency code</param>
+        /// <param name="actualAmount">Actual amount of allowance/charge</param>
+        /// <param name="reason">Reason for allowance/charge</param>
+        /// <param name="taxTypeCode">Type of tax</param>
+        /// <param name="taxCategoryCode">Tax category</param>
+        /// <param name="taxPercent">Tax percentage</param>
+        /// <param name="reasonCode">Optional reason code</param>
+        public void AddTradeCharge(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
+                                   string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
+                                   ChargeReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeCharge()
+            {
+                Reason = reason,
+                ReasonCode = reasonCode,
+                BasisAmount = basisAmount,
+                ActualAmount = actualAmount,
+                Currency = currency,
+                Amount = actualAmount,
+                ChargePercentage = null,
+                Tax = new Tax()
+                {
+                    CategoryCode = taxCategoryCode,
+                    TypeCode = taxTypeCode,
+                    Percent = taxPercent
+                }
+            });
+        } // !AddTradeCharge()
 
 
         /// <summary>
@@ -1130,11 +1232,38 @@ namespace s2industries.ZUGFeRD
         /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
         /// <param name="reasonCode">Reason code for the allowance</param>
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
+        [Obsolete("Please use AddTradeAllowance() or AddTradeCharge() instead. This function will be removed with version 18.0")]
+        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            if (isDiscount)
             {
-                ChargeIndicator = !isDiscount,
+                AddTradeAllowance(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
+            }
+            else
+            {
+                AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, null);
+            }
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// Adds an allowance (discount) on document level.
+        ///
+        /// BG-27        
+        /// </summary>        
+        /// <param name="basisAmount">Base amount (basis of allowance)</param>
+        /// <param name="currency">Curency of the allowance</param>
+        /// <param name="actualAmount">Actual allowance charge amount</param>
+        /// <param name="chargePercentage">Actual allowance charge percentage</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxPercent">VAT rate for the allowance</param>
+        /// <param name="reasonCode">Reason code for the allowance</param>
+        public void AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            {
                 Reason = reason,
                 ReasonCode = reasonCode,
                 BasisAmount = basisAmount,
@@ -1149,7 +1278,66 @@ namespace s2industries.ZUGFeRD
                     Percent = taxPercent
                 }
             });
-        } // !AddTradeAllowanceCharge()
+        } // !AddTradeAllowance()
+
+
+        /// <summary>
+        /// Adds a charge on document level.
+        ///
+        /// BG-27
+        /// Allowance represents a discount whereas charge represents a surcharge.
+        /// </summary>        
+        /// <param name="basisAmount">Base amount (basis of allowance)</param>
+        /// <param name="currency">Curency of the allowance</param>
+        /// <param name="actualAmount">Actual allowance charge amount</param>
+        /// <param name="chargePercentage">Actual allowance charge percentage</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxPercent">VAT rate for the allowance</param>
+        /// <param name="reasonCode">Reason code for the allowance</param>
+        public void AddTradeeCharge(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, ChargeReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeCharge()
+            {
+                Reason = reason,
+                ReasonCode = reasonCode,
+                BasisAmount = basisAmount,
+                ActualAmount = actualAmount,
+                Currency = currency,
+                Amount = actualAmount,
+                ChargePercentage = chargePercentage,
+                Tax = new Tax()
+                {
+                    CategoryCode = taxCategoryCode,
+                    TypeCode = taxTypeCode,
+                    Percent = taxPercent
+                }
+            });
+        } // !AddTradeCharge()
+
+
+        /// <summary>
+        /// Returns all existing trade allowance charges
+        ///
+        /// BG-27
+        /// </summary>        
+        [Obsolete("Please use GetTradeAllowances() or GetTradeCharges() instead. This function will be removed with version 18.0")]
+        public IList<AbstractTradeAllowanceCharge> GetTradeAllowanceCharges()
+        {
+            return this._TradeAllowanceCharges;
+        } // !GetTradeAllowanceCharges()
+
+
+        /// <summary>
+        /// Returns all existing trade allowances
+        ///
+        /// BG-27
+        /// </summary>
+        public IList<TradeAllowance> GetTradeAllowances()
+        {
+            return this._TradeAllowanceCharges.Where(t => t is TradeAllowance charge && charge.ChargeIndicator == false).Select(t => t as TradeAllowance).ToList();
+        } // !GetTradeAllowances()
 
 
         /// <summary>
@@ -1157,11 +1345,10 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-27
         /// </summary>
-        /// <returns></returns>
-        public IList<TradeAllowanceCharge> GetTradeAllowanceCharges()
+        public IList<TradeCharge> GetTradeCharges()
         {
-            return this._TradeAllowanceCharges;
-        } // !GetTradeAllowanceCharges()
+            return this._TradeAllowanceCharges.Where(t => t is TradeCharge charge && charge.ChargeIndicator == true).Select(t => t as TradeCharge).ToList();
+        } // !GetTradeCharges()
 
 
         /// <summary>
