@@ -674,10 +674,13 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteOptionalElementString("ram", "ProprietaryID", creditorAccount.ID);
                     Writer.WriteEndElement(); // !PayeePartyCreditorFinancialAccount
 
-                    Writer.WriteStartElement("ram", "PayeeSpecifiedCreditorFinancialInstitution");
-                    Writer.WriteElementString("ram", "BICID", creditorAccount.BIC);
-                    Writer.WriteOptionalElementString("ram", "GermanBankleitzahlID", creditorAccount.Bankleitzahl);
-                    Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                    if (!String.IsNullOrWhiteSpace(creditorAccount.BIC))
+                    {
+                        Writer.WriteStartElement("ram", "PayeeSpecifiedCreditorFinancialInstitution");
+                        Writer.WriteElementString("ram", "BICID", creditorAccount.BIC);
+                        Writer.WriteOptionalElementString("ram", "GermanBankleitzahlID", creditorAccount.Bankleitzahl);
+                        Writer.WriteEndElement(); // !PayeeSpecifiedCreditorFinancialInstitution
+                    }
                     Writer.WriteEndElement(); // !SpecifiedTradeSettlementPaymentMeans
                 }
 
