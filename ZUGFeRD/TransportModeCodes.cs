@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Transport mode not specified
         /// </summary>
-        Unknown = 1,
+        Unknown = 0,
 
         /// <summary>
         /// Maritime transport
