@@ -29,51 +29,61 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Transport mode not specified
         /// </summary>
-        Unknown = 0,
+        [EnumStringValue("0")]
+        TransportModeNotSpecified,
 
         /// <summary>
         /// Maritime transport
         /// </summary>
+        [EnumStringValue("1")]
         Maritime,
 
         /// <summary>
         /// Rail Transport
         /// </summary>
+        [EnumStringValue("2")]
         Rail,
 
         /// <summary>
         /// Road Transport
         /// </summary>
+        [EnumStringValue("3")]
         Road,
 
         /// <summary>
         /// Air Transport
         /// </summary>
+        [EnumStringValue("4")]
         Air,
 
         /// <summary>
         /// Via Mail
         /// </summary>
+        [EnumStringValue("5")]
         Mail,
 
         /// <summary>
         /// Multimodal transport
         /// </summary>
+        [EnumStringValue("6")]
         MultiMode,
 
         /// <summary>
         /// Fixed transport installation
         /// </summary>
+        [EnumStringValue("7")]
         FixedTransport,
 
         /// <summary>
         /// Inland water transport
         /// </summary>
+        [EnumStringValue("8")]
         InlandWater,
 
         /// <summary>
         /// Transport mode not applicable
         /// </summary>
+        [EnumStringValue("9")]
         NotApplicable
     }
 }
