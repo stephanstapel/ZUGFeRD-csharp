@@ -469,6 +469,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.TransportMode, TransportModeCodes.Road);
+            Assert.AreEqual(3, (int)TransportModeCodes.Road);
         } // !TestTransportModeWithExtended()
 
 
