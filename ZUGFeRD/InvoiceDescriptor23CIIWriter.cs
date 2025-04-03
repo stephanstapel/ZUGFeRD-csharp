@@ -1349,14 +1349,14 @@ namespace s2industries.ZUGFeRD
             if (tradeAllowanceCharge.BasisAmount.HasValue)
             {
                 Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
-                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 2));
+                Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4)); // BT-148
                 Writer.WriteEndElement();
             }
             #endregion
 
             #region ActualAmount
             Writer.WriteStartElement("ram", "ActualAmount");
-            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
+            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4)); // BT-147
             Writer.WriteEndElement();
             #endregion
 
