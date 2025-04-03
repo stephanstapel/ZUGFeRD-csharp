@@ -637,8 +637,14 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteElementString("cbc", "AllowanceChargeReasonCode", specifiedTradeAllowanceCharge.ReasonCode.EnumToString());
                 Writer.WriteElementString("cbc", "AllowanceChargeReason", specifiedTradeAllowanceCharge.Reason);
                 Writer.WriteOptionalElementString("cbc", "MultiplierFactorNumeric", _formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage));
-                Writer.WriteElementString("cbc", "Amount", _formatDecimal(specifiedTradeAllowanceCharge.ActualAmount));
-                Writer.WriteOptionalElementString("cbc", "BaseAmount", _formatDecimal(specifiedTradeAllowanceCharge.BasisAmount));
+                Writer.WriteStartElement("cbc", "Amount");
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ActualAmount));
+                Writer.WriteEndElement(); // !Amount
+                Writer.WriteStartElement("cbc", "BaseAmount");
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount));
+                Writer.WriteEndElement(); // !BaseAmount
                 Writer.WriteEndElement(); // !AllowanceCharge
             }
 
