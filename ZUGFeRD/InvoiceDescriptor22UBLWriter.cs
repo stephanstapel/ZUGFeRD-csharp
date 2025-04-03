@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD
 {
@@ -654,35 +653,14 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
+            foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowances())
+            {
+                _WriteItemLevelSpecifiedTradeAllowanceCharge(specifiedTradeAllowanceCharge);
+            }
+            
             foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeCharges())
             {
-                Writer.WriteStartElement("cac", "AllowanceCharge");
-                Writer.WriteElementString("cbc", "ChargeIndicator",
-                    specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false"); // BG-28-0
-                Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode",
-                    specifiedTradeAllowanceCharge.ReasonCode.EnumToString()); // BT-140, BT-145
-                Writer.WriteOptionalElementString("cbc", "AllowanceChargeReason",
-                    specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
-
-                if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
-                {
-                    Writer.WriteOptionalElementString("cbc", "MultiplierFactorNumeric",
-                        _formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage));
-                }
-
-                Writer.WriteStartElement("cbc", "Amount");
-                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ActualAmount));
-                Writer.WriteEndElement(); // !Amount
-                if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
-                {
-                    Writer.WriteStartElement("cbc", "BaseAmount"); // BT-137, BT-142
-                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                    Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount));
-                    Writer.WriteEndElement(); // !BaseAmount
-                }
-
-                Writer.WriteEndElement(); // !AllowanceCharge
+                _WriteItemLevelSpecifiedTradeAllowanceCharge(specifiedTradeAllowanceCharge);
             }
 
             Writer.WriteStartElement("cac", "Item");
@@ -783,6 +761,45 @@ namespace s2industries.ZUGFeRD
             }
 
             Writer.WriteEndElement(); //!InvoiceLine
+        }
+
+        private void _WriteItemLevelSpecifiedTradeAllowanceCharge(AbstractTradeAllowanceCharge specifiedTradeAllowanceCharge)
+        {
+            Writer.WriteStartElement("cac", "AllowanceCharge");
+            Writer.WriteElementString("cbc", "ChargeIndicator",
+                specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false"); // BG-28-0
+            switch (specifiedTradeAllowanceCharge)
+            {
+                case TradeAllowance allowance when allowance.ReasonCode != null:
+                    Writer.WriteOptionalElementString("ram", "ReasonCode", allowance.ReasonCode.EnumToString()); // BT-140
+                    break;
+                case TradeCharge charge when charge.ReasonCode != null:
+                    Writer.WriteOptionalElementString("ram", "ReasonCode", charge.ReasonCode.EnumToString()); // BT-145
+                    break;
+            }
+            
+            Writer.WriteOptionalElementString("cbc", "AllowanceChargeReason",
+                specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
+
+            if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
+            {
+                Writer.WriteOptionalElementString("cbc", "MultiplierFactorNumeric",
+                    _formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage));
+            }
+
+            Writer.WriteStartElement("cbc", "Amount");
+            Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+            Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ActualAmount));
+            Writer.WriteEndElement(); // !Amount
+            if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
+            {
+                Writer.WriteStartElement("cbc", "BaseAmount"); // BT-137, BT-142
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount));
+                Writer.WriteEndElement(); // !BaseAmount
+            }
+
+            Writer.WriteEndElement(); // !AllowanceCharge
         }
 
 
