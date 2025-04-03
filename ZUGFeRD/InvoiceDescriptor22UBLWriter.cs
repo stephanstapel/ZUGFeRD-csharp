@@ -38,7 +38,7 @@ namespace s2industries.ZUGFeRD
             {
                 throw new IllegalStreamException("Cannot write to stream");
             }
-            
+
 
             long streamPosition = stream.Position;
 
@@ -66,13 +66,13 @@ namespace s2industries.ZUGFeRD
                 { "ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" },
                 { "xs", "http://www.w3.org/2001/XMLSchema" }
             };
-            
+
             if (isInvoice)
-            {                
+            {
                 namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
             else
-            {                
+            {
                 namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
             this.Writer.SetNamespaces(namespaces);
@@ -467,7 +467,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeAllowanceCharge.ChargePercentage.HasValue && tradeAllowanceCharge.BasisAmount != null)
                 {
-                    Writer.WriteStartElement("cbc", "MultiplierFactorNumeric"); 
+                    Writer.WriteStartElement("cbc", "MultiplierFactorNumeric");
                     Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value, 2));
                     Writer.WriteEndElement();
                 }
@@ -600,7 +600,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
             Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
-            
+
             Writer.WriteStartElement("cbc", "LineExtensionAmount");
             Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.LineTotalAmount));
@@ -628,6 +628,18 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteEndElement(); // !DocumentReference
                 }
+            }
+
+            foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges())
+            {
+                Writer.WriteStartElement("cac", "AllowanceCharge");
+                Writer.WriteElementString("cbc", "ChargeIndicator", specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false");
+                Writer.WriteElementString("cbc", "AllowanceChargeReasonCode", specifiedTradeAllowanceCharge.ReasonCode.EnumToString());
+                Writer.WriteElementString("cbc", "AllowanceChargeReason", specifiedTradeAllowanceCharge.Reason);
+                Writer.WriteOptionalElementString("cbc", "MultiplierFactorNumeric", _formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage));
+                Writer.WriteElementString("cbc", "Amount", _formatDecimal(specifiedTradeAllowanceCharge.ActualAmount));
+                Writer.WriteOptionalElementString("cbc", "BaseAmount", _formatDecimal(specifiedTradeAllowanceCharge.BasisAmount));
+                Writer.WriteEndElement(); // !AllowanceCharge
             }
 
             Writer.WriteStartElement("cac", "Item");
@@ -737,7 +749,7 @@ namespace s2industries.ZUGFeRD
                     continue;
                 }
 
-                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158                
+                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158
                 Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
