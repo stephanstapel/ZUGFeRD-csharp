@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -38,7 +38,7 @@ namespace s2industries.ZUGFeRD
             {
                 throw new IllegalStreamException("Cannot write to stream");
             }
-            
+
 
             long streamPosition = stream.Position;
 
@@ -66,13 +66,13 @@ namespace s2industries.ZUGFeRD
                 { "ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" },
                 { "xs", "http://www.w3.org/2001/XMLSchema" }
             };
-            
+
             if (isInvoice)
-            {                
+            {
                 namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             }
             else
-            {                
+            {
                 namespaces.Add("ubl", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
             }
             this.Writer.SetNamespaces(namespaces);
@@ -624,7 +624,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
             Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
-            
+
             Writer.WriteStartElement("cbc", "LineExtensionAmount");
             Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
             Writer.WriteValue(_formatDecimal(tradeLineItem.LineTotalAmount));
@@ -652,6 +652,37 @@ namespace s2industries.ZUGFeRD
 
                     Writer.WriteEndElement(); // !DocumentReference
                 }
+            }
+
+            foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges())
+            {
+                Writer.WriteStartElement("cac", "AllowanceCharge");
+                Writer.WriteElementString("cbc", "ChargeIndicator",
+                    specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false"); // BG-28-0
+                Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode",
+                    specifiedTradeAllowanceCharge.ReasonCode.GetDescriptionAttribute()); // BT-140, BT-145
+                Writer.WriteOptionalElementString("cbc", "AllowanceChargeReason",
+                    specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
+
+                if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
+                {
+                    Writer.WriteOptionalElementString("cbc", "MultiplierFactorNumeric",
+                        _formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage));
+                }
+
+                Writer.WriteStartElement("cbc", "Amount");
+                Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ActualAmount));
+                Writer.WriteEndElement(); // !Amount
+                if (specifiedTradeAllowanceCharge.BasisAmount.HasValue)
+                {
+                    Writer.WriteStartElement("cbc", "BaseAmount"); // BT-137, BT-142
+                    Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+                    Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.BasisAmount));
+                    Writer.WriteEndElement(); // !BaseAmount
+                }
+
+                Writer.WriteEndElement(); // !AllowanceCharge
             }
 
             Writer.WriteStartElement("cac", "Item");
@@ -771,7 +802,7 @@ namespace s2industries.ZUGFeRD
                     continue;
                 }
 
-                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158                
+                writer.WriteStartElement("cbc", "ItemClassificationCode"); // BT-158
                 Writer.WriteAttributeString("listID", classification.ListID.EnumToString()); // BT-158-1
 
                 if (!String.IsNullOrWhiteSpace(classification.ListVersionID))
