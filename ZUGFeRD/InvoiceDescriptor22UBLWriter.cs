@@ -654,13 +654,13 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeAllowanceCharges())
+            foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeCharges())
             {
                 Writer.WriteStartElement("cac", "AllowanceCharge");
                 Writer.WriteElementString("cbc", "ChargeIndicator",
                     specifiedTradeAllowanceCharge.ChargeIndicator ? "true" : "false"); // BG-28-0
                 Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode",
-                    specifiedTradeAllowanceCharge.ReasonCode.GetDescriptionAttribute()); // BT-140, BT-145
+                    specifiedTradeAllowanceCharge.ReasonCode.EnumToString()); // BT-140, BT-145
                 Writer.WriteOptionalElementString("cbc", "AllowanceChargeReason",
                     specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
 
