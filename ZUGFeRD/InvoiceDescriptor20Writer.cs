@@ -302,11 +302,11 @@ namespace s2industries.ZUGFeRD
                         if (tradeAllowanceCharge.BasisAmount.HasValue)
                         {
                             Writer.WriteStartElement("ram", "BasisAmount");
-                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4));
+                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4)); // BT-148
                             Writer.WriteEndElement();
                         }
                         Writer.WriteStartElement("ram", "ActualAmount");
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4)); // BT-147
                         Writer.WriteEndElement();
 
                         Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
