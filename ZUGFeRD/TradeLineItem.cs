@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
     ///  Structure holding item information
     ///
     /// Please note that you might use the object that is returned from InvoiceDescriptor.AddTradeLineItem(...) and use it
-    /// to e.g. add an allowance charge using lineItem.AddTradeAllowanceCharge(...)
+    /// to e.g. add an allowance charge using lineItem.AddTradeAllowance(...)
     /// </summary>
     public class TradeLineItem
     {
@@ -245,7 +245,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// Now private. Please use GetTradeAllowanceCharges() instead
         /// </summary>
-        private List<TradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
+        private List<AbstractTradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<AbstractTradeAllowanceCharge>();
 
         /// <summary>
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice item
@@ -254,7 +254,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-27 / BG-28
         /// </summary>
-        private List<TradeAllowanceCharge> SpecifiedTradeAllowanceCharges { get; set; } = new List<TradeAllowanceCharge>();
+        private List<AbstractTradeAllowanceCharge> SpecifiedTradeAllowanceCharges { get; set; } = new List<AbstractTradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information on the accounting reference
@@ -326,12 +326,60 @@ namespace s2industries.ZUGFeRD
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
         /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        [Obsolete("Please use AddTradeAllowance() or AddTradeCharge() instead. This function will be removed with version 18.0")]
         public TradeLineItem AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
-                                            string reason, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
+                                                     string reason, AllowanceReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            if (isDiscount)
             {
-                ChargeIndicator = !isDiscount,
+                AddTradeAllowance(currency, basisAmount, actualAmount, reason, reasonCode);
+            }
+            else
+            {
+                AddTradeCharge(currency, basisAmount, actualAmount, reason, null);
+            }
+
+            return this;
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// As an allowance on item level, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        public TradeLineItem AddTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                               string reason, AllowanceReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            {
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                Reason = reason,
+                ReasonCode = reasonCode
+            });
+            return this;
+        } // !AddTradeAllowance()
+
+
+        /// <summary>
+        /// As a charge on item level, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        public TradeLineItem AddTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                            string reason, ChargeReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeCharge()
+            {
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
@@ -352,12 +400,37 @@ namespace s2industries.ZUGFeRD
         /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
         /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        [Obsolete("Please use AddTradeAllowance() or AddTradeCharge() instead. This function will be removed with version 18.0")]
         public TradeLineItem AddTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
-                                            decimal? chargePercentage, string reason, AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
+                                            decimal? chargePercentage, string reason, AllowanceReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            if (isDiscount)
             {
-                ChargeIndicator = !isDiscount,
+                AddTradeAllowance(currency, basisAmount, actualAmount, chargePercentage, reason, reasonCode);
+            }
+            else
+            {
+                AddTradeCharge(currency, basisAmount, actualAmount, chargePercentage, reason, null);
+            }
+
+            return this;
+        } // !AddTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// As an allowance or charge on item level, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        public TradeLineItem AddTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                               decimal? chargePercentage, string reason, AllowanceReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            {
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
@@ -366,14 +439,39 @@ namespace s2industries.ZUGFeRD
                 ReasonCode = reasonCode
             });
             return this;
-        } // !AddTradeAllowanceCharge()
+        } // !AddTradeAllowance()
+
+
+        /// <summary>
+        /// As an allowance or charge on item level, attaching it to the corresponding item.
+        /// </summary>        
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        public TradeLineItem AddTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                            decimal? chargePercentage, string reason, ChargeReasonCodes? reasonCode = null)
+        {
+            this._TradeAllowanceCharges.Add(new TradeCharge()
+            {
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                ChargePercentage = chargePercentage,
+                Reason = reason,
+                ReasonCode = reasonCode
+            });
+            return this;
+        } // !AddTradeCharge()
 
 
         /// <summary>
         /// Returns all trade allowance charges for the trade line item
         /// </summary>
         /// <returns></returns>
-        public IList<TradeAllowanceCharge> GetTradeAllowanceCharges()
+        public IList<AbstractTradeAllowanceCharge> GetTradeAllowanceCharges()
         {
             return this._TradeAllowanceCharges;
         } // !GetTradeAllowanceCharges()
@@ -387,19 +485,20 @@ namespace s2industries.ZUGFeRD
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
+        [Obsolete("Please use AddSpecifiedTradeAllowance() or AddSpecifiedTradeCharge() instead. This function will be removed with version 18.0")]
         public TradeLineItem AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
-                                                     string reason,
-                                                     AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
+                                                              string reason,
+                                                              AllowanceReasonCodes? reasonCode = null)
         {
-            this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            if (isDiscount)
             {
-                ChargeIndicator = !isDiscount,
-                Currency = currency,
-                ActualAmount = actualAmount,
-                BasisAmount = basisAmount,
-                Reason = reason,
-                ReasonCode = reasonCode
-            });
+                AddSpecifiedTradeAllowance(currency, basisAmount, actualAmount, reason, reasonCode);
+            }
+            else
+            {
+                AddSpecifiedTradeCharge(currency, basisAmount, actualAmount, reason, null);
+            }
+
             return this;
         } // !AddSpecifiedTradeAllowanceCharge()
 
@@ -411,15 +510,87 @@ namespace s2industries.ZUGFeRD
         /// <param name="currency">Currency of the allowance or surcharge</param>
         /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
         /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public TradeLineItem AddSpecifiedTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                                        string reason,
+                                                        AllowanceReasonCodes? reasonCode = null)
+        {
+            this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowance()
+            {                
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                Reason = reason,
+                ReasonCode = reasonCode
+            });
+            return this;
+        } // !AddSpecifiedTradeAllowance()
+
+
+        /// <summary>
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// </summary>        
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public TradeLineItem AddSpecifiedTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                                     string reason,
+                                                     ChargeReasonCodes? reasonCode = null)
+        {
+            this.SpecifiedTradeAllowanceCharges.Add(new TradeCharge()
+            {
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                Reason = reason,
+                ReasonCode = reasonCode
+            });
+            return this;
+        } // !AddSpecifiedTradeCharge()
+
+
+        /// <summary>
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
         /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
         /// <param name="reason">Reason for the allowance or surcharge</param>
+        [Obsolete("Please use AddSpecifiedTradeAllowance() or AddSpecifiedTradeCharge() instead. This function will be removed with version 18.0")]
         public TradeLineItem AddSpecifiedTradeAllowanceCharge(bool isDiscount, CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
-                                                     decimal? chargePercentage, string reason,
-                                                     AllowanceReasonCodes reasonCode = AllowanceReasonCodes.Unknown)
+                                                              decimal? chargePercentage, string reason,
+                                                              AllowanceReasonCodes? reasonCode = null)
         {
-            this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowanceCharge()
+            if (isDiscount)
             {
-                ChargeIndicator = !isDiscount,
+                AddSpecifiedTradeAllowance(currency, basisAmount, actualAmount, chargePercentage, reason, reasonCode);
+            }
+            else
+            {
+                AddSpecifiedTradeCharge(currency, basisAmount, actualAmount, chargePercentage, reason, null);
+            }
+
+            return this;
+        } // !AddSpecifiedTradeAllowanceCharge()
+
+
+        /// <summary>
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public TradeLineItem AddSpecifiedTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                                        decimal? chargePercentage, string reason,
+                                                        AllowanceReasonCodes? reasonCode = null)
+        {
+            this.SpecifiedTradeAllowanceCharges.Add(new TradeAllowance()
+            {
                 Currency = currency,
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
@@ -428,16 +599,62 @@ namespace s2industries.ZUGFeRD
                 ReasonCode = reasonCode
             });
             return this;
-        } // !AddSpecifiedTradeAllowanceCharge()
+        } // !AddSpecifiedTradeAllowance()
+
+
+        /// <summary>
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// </summary>
+        /// <param name="currency">Currency of the allowance or surcharge</param>
+        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
+        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
+        /// <param name="reason">Reason for the allowance or surcharge</param>
+        public TradeLineItem AddSpecifiedTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
+                                                     decimal? chargePercentage, string reason,
+                                                     ChargeReasonCodes? reasonCode = null)
+        {
+            this.SpecifiedTradeAllowanceCharges.Add(new TradeCharge()
+            {
+                Currency = currency,
+                ActualAmount = actualAmount,
+                BasisAmount = basisAmount,
+                ChargePercentage = chargePercentage,
+                Reason = reason,
+                ReasonCode = reasonCode
+            });
+            return this;
+        } // !AddSpecifiedTradeCharge()
 
 
         /// <summary>
         /// Returns all specified trade allowance charges for the trade line item
         /// </summary>
         /// <returns></returns>
-        public IList<TradeAllowanceCharge> GetSpecifiedTradeAllowanceCharges()
+        [Obsolete("Please use GetSpecifiedTradeAllowances() and GetSpecifiedTradeCharges() instead. This function will be removed with version 18.0")]
+        public IList<AbstractTradeAllowanceCharge> GetSpecifiedTradeAllowanceCharges()
         {
             return this.SpecifiedTradeAllowanceCharges;
+        } // !GetSpecifiedTradeAllowanceCharges()
+
+
+        /// <summary>
+        /// Returns all specified trade allowances for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<TradeAllowance> GetSpecifiedTradeAllowances()
+        {
+            return this.SpecifiedTradeAllowanceCharges.Where(s => s is TradeAllowance).Select(s => s as TradeAllowance).ToList();
+        } // !GetSpecifiedTradeAllowances()
+
+
+        /// <summary>
+        /// Returns all specified trade charges for the trade line item
+        /// </summary>
+        /// <returns></returns>
+        public IList<TradeCharge> GetSpecifiedTradeCharges()
+        {
+            return this.SpecifiedTradeAllowanceCharges.Where(s => s is TradeCharge).Select(s => s as TradeCharge).ToList();
         } // !GetSpecifiedTradeAllowanceCharges()
 
 
@@ -685,5 +902,12 @@ namespace s2industries.ZUGFeRD
             return this;
         } // !SetPackageQuantity()
 
+
+        public TradeLineItem SetBillingPeriod(DateTime? billingPeriodStart, DateTime? billingPeriodEnd)
+        {
+            this.BillingPeriodStart = billingPeriodStart;
+            this.BillingPeriodEnd = billingPeriodEnd;
+            return this;
+        } // !SetBillingPeriod()
     }
 }

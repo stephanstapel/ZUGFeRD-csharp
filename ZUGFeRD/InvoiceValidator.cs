@@ -35,32 +35,36 @@ namespace s2industries.ZUGFeRD
     {
         public static void ValidateAndPrint(InvoiceDescriptor descriptor, ZUGFeRDVersion version, string filename = null)
         {
-            List<string> output = Validate(descriptor, version);
+            ValidationResult validationResult = Validate(descriptor, version);
 
             if (!String.IsNullOrWhiteSpace(filename))
             {
-                System.IO.File.WriteAllText(filename, string.Join("\n", output));
+                System.IO.File.WriteAllText(filename, string.Join("\n", validationResult.Messages));
             }
 
-            foreach (string line in output)
+            foreach (string line in validationResult.Messages)
             {
                 System.Console.WriteLine(line);
             }
         } // !ValidateAndPrint()
 
-
-        public static List<string> Validate(InvoiceDescriptor descriptor, ZUGFeRDVersion version)
+        public static ValidationResult Validate(InvoiceDescriptor descriptor, ZUGFeRDVersion version)
         {
-            List<string> retval = new List<string>();
+            ValidationResult retval = new ValidationResult()
+            {
+                IsValid = true
+            };
+
             if (descriptor == null)
             {
-                retval.Add("Invalid invoice descriptor");
+                retval.Messages.Add("Invalid invoice descriptor");
+                retval.IsValid = false;
                 return retval;
             }
 
             // line item summation
-            retval.Add("Validating invoice monetary summation");
-            retval.Add(String.Format("Starting recalculating line total from {0} items...", descriptor.GetTradeLineItems().Count));
+            retval.Messages.Add("Validating invoice monetary summation");
+            retval.Messages.Add(String.Format("Starting recalculating line total from {0} items...", descriptor.GetTradeLineItems().Count));
             int lineCounter = 0;
 
             decimal lineTotal = 0m;
@@ -90,57 +94,61 @@ namespace s2industries.ZUGFeRD
                 retval.Add(String.Format("Current monetarySummation.lineTotal = {0:0.0000} EUR(the sum of all line totals)", lineTotal));
                 */
 
-                retval.Add(String.Format("{0};{1};{2}", ++lineCounter, item.Name, total));
+                retval.Messages.Add(String.Format("{0};{1};{2}", ++lineCounter, item.Name, total));
             }
 
-            retval.Add("==> DONE!");
-            retval.Add("Finished recalculating monetarySummation.lineTotal...");
-            retval.Add("Adding tax amounts from invoice allowance charge...");
-
-            decimal allowanceTotal = 0.0m;
+            retval.Messages.Add("==> DONE!");
+            retval.Messages.Add("Finished recalculating monetarySummation.lineTotal...");
+            retval.Messages.Add("Adding tax amounts from invoice allowance charge...");
+            
             decimal chargeTotal = 0.0m;
-            foreach (TradeAllowanceCharge charge in descriptor.GetTradeAllowanceCharges())
+            foreach (TradeCharge charge in descriptor.GetTradeCharges())
             {
-                retval.Add(String.Format("==> added {0:0.00} to {1:0.00}%", -charge.Amount, charge.Tax.Percent));
+                retval.Messages.Add(String.Format("==> added {0:0.00} to {1:0.00}%", -charge.Amount, charge.Tax.Percent));
 
                 if (!lineTotalPerTax.ContainsKey(charge.Tax.Percent))
                 {
                     lineTotalPerTax.Add(charge.Tax.Percent, new decimal());
                 }
                 lineTotalPerTax[charge.Tax.Percent] -= charge.Amount;
-
-                if (charge.ChargeIndicator == false)
-                {
-                    allowanceTotal += charge.Amount;
-                }
-                else
-                {
-                    chargeTotal += charge.Amount;
-                }
+                chargeTotal += charge.Amount;
             }
 
-            retval.Add("Adding tax amounts from invoice service charge...");
+            decimal allowanceTotal = 0.0m;
+            foreach (TradeAllowance allowance in descriptor.GetTradeAllowances())
+            {
+                retval.Messages.Add(String.Format("==> added {0:0.00} to {1:0.00}%", -allowance.Amount, allowance.Tax.Percent));
+
+                if (!lineTotalPerTax.ContainsKey(allowance.Tax.Percent))
+                {
+                    lineTotalPerTax.Add(allowance.Tax.Percent, new decimal());
+                }
+                lineTotalPerTax[allowance.Tax.Percent] -= allowance.Amount;
+                allowanceTotal += allowance.Amount;
+            }
+
+            retval.Messages.Add("Adding tax amounts from invoice service charge...");
             // TODO
 
             // TODO ausgeben: Recalculating tax basis for tax percentages: [Key{percentage=7.00, code=[VAT] Value added tax, category=[S] Standard rate}, Key{percentage=19.00, code=[VAT] Value added tax, category=[S] Standard rate}]
-            retval.Add(String.Format("Recalculated tax basis = {0:0.0000}", lineTotal - allowanceTotal));
-            retval.Add("Calculating tax total...");
+            retval.Messages.Add(String.Format("Recalculated tax basis = {0:0.0000}", lineTotal - allowanceTotal));
+            retval.Messages.Add("Calculating tax total...");
 
             decimal taxTotal = 0.0m;
             foreach (KeyValuePair<decimal, decimal> kv in lineTotalPerTax)
             {
                 decimal taxTotalForLine = Decimal.Divide(Decimal.Multiply(kv.Value, kv.Key), 100.0m);
                 taxTotal += taxTotalForLine;
-                retval.Add(String.Format("===> {0:0.0000} x {1:0.00}% = {2:0.00}", kv.Value, kv.Key, taxTotalForLine));
+                retval.Messages.Add(String.Format("===> {0:0.0000} x {1:0.00}% = {2:0.00}", kv.Value, kv.Key, taxTotalForLine));
             }
 
             decimal grandTotal = lineTotal - allowanceTotal + taxTotal + chargeTotal;
             decimal prepaid = 0m; // TODO: calculcate
 
-            retval.Add(String.Format("Recalculated tax total = {0:0.00}", taxTotal));
-            retval.Add(String.Format("Recalculated grand total = {0:0.0000} EUR(tax basis total + tax total)", grandTotal));
-            retval.Add("Recalculating invoice monetary summation DONE!");
-            retval.Add(String.Format("==> result: MonetarySummation[lineTotal = {0:0.0000} EUR, chargeTotal = {1:0.0000} EUR, allowanceTotal = {2:0.0000} EUR, taxBasisTotal = {3:0.0000} EUR, taxTotal = {4:0.0000} EUR, grandTotal = {5:0.0000} EUR, totalPrepaid = {6:0.0000} EUR, duePayable = {7:0.0000} EUR]",
+            retval.Messages.Add(String.Format("Recalculated tax total = {0:0.00}", taxTotal));
+            retval.Messages.Add(String.Format("Recalculated grand total = {0:0.0000} EUR(tax basis total + tax total)", grandTotal));
+            retval.Messages.Add("Recalculating invoice monetary summation DONE!");
+            retval.Messages.Add(String.Format("==> result: MonetarySummation[lineTotal = {0:0.0000} EUR, chargeTotal = {1:0.0000} EUR, allowanceTotal = {2:0.0000} EUR, taxBasisTotal = {3:0.0000} EUR, taxTotal = {4:0.0000} EUR, grandTotal = {5:0.0000} EUR, totalPrepaid = {6:0.0000} EUR, duePayable = {7:0.0000} EUR]",
                                      lineTotal,
                                      chargeTotal,
                                      allowanceTotal,
@@ -152,59 +160,48 @@ namespace s2industries.ZUGFeRD
                                      ));
 
 
-            decimal taxBasisTotal = 0m;
-            foreach (Tax tax in descriptor.GetApplicableTradeTaxes())
-            {
-                taxBasisTotal += tax.BasisAmount;
-            }
-
-            decimal allowanceTotalSummedPerTradeAllowanceCharge = 0m;
-            decimal chargesTotalSummedPerTradeAllowanceCharge = 0m;
-            foreach (TradeAllowanceCharge allowance in descriptor.GetTradeAllowanceCharges())
-            {
-                if (allowance.ChargeIndicator == true)
-                {
-                    chargesTotalSummedPerTradeAllowanceCharge += allowance.ActualAmount;
-                }
-                else
-                {
-                    allowanceTotalSummedPerTradeAllowanceCharge += allowance.ActualAmount;
-                }
-            }
+            decimal taxBasisTotal = descriptor.GetApplicableTradeTaxes().Sum(t => t.BasisAmount);
+            decimal allowanceTotalSummedPerTradeAllowanceCharge = descriptor.GetTradeAllowances().Sum(a => a.ActualAmount);
+            decimal chargesTotalSummedPerTradeAllowanceCharge = descriptor.GetTradeCharges().Sum(c => c.ActualAmount);
 
             if (!descriptor.TaxTotalAmount.HasValue)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Kein TaxTotalAmount vorhanden"));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Kein TaxTotalAmount vorhanden"));
+                retval.IsValid = false;
             }
             else if (Math.Abs(taxTotal - descriptor.TaxTotalAmount.Value) < 0.01m)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", taxTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", taxTotal));
             }
             else
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", taxTotal, descriptor.TaxTotalAmount));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.taxTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", taxTotal, descriptor.TaxTotalAmount));
+                retval.IsValid = false;
             }
 
             if (Math.Abs(lineTotal - descriptor.LineTotalAmount.Value) < 0.01m)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", lineTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", lineTotal));
             }
             else
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", lineTotal, descriptor.LineTotalAmount));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.lineTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", lineTotal, descriptor.LineTotalAmount));
+                retval.IsValid = false;
             }
 
             if (!descriptor.GrandTotalAmount.HasValue)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Kein GrandTotalAmount vorhanden"));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Kein GrandTotalAmount vorhanden"));
+                retval.IsValid = false;
             }
             else if (Math.Abs(grandTotal - descriptor.GrandTotalAmount.Value) < 0.01m)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", grandTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", grandTotal));
             }
             else
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", grandTotal, descriptor.GrandTotalAmount));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.grandTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", grandTotal, descriptor.GrandTotalAmount));
+                retval.IsValid = false;
             }
 
             /*
@@ -212,73 +209,85 @@ namespace s2industries.ZUGFeRD
              */
             if (Math.Abs(taxBasisTotal - taxBasisTotal) < 0.01m)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", taxBasisTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", taxBasisTotal));
             }
             else
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", taxBasisTotal, taxBasisTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.taxBasisTotal Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", taxBasisTotal, taxBasisTotal));
+                retval.IsValid = false;
             }
 
             if (Math.Abs(allowanceTotalSummedPerTradeAllowanceCharge - allowanceTotal) < 0.01m)
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", allowanceTotalSummedPerTradeAllowanceCharge));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", allowanceTotalSummedPerTradeAllowanceCharge));
             }
             else
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", allowanceTotalSummedPerTradeAllowanceCharge, allowanceTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.allowanceTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", allowanceTotalSummedPerTradeAllowanceCharge, allowanceTotal));
+                retval.IsValid = false;
             }
 
             if (Math.Abs(chargesTotalSummedPerTradeAllowanceCharge - chargeTotal) < 0.01m)
-            { 
-                retval.Add(String.Format("trade.settlement.monetarySummation.chargeTotal  Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", chargesTotalSummedPerTradeAllowanceCharge));
+            {
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.chargeTotal  Message: Berechneter Wert ist wie vorhanden:[{0:0.0000}]", chargesTotalSummedPerTradeAllowanceCharge));
             }
             else
             {
-                retval.Add(String.Format("trade.settlement.monetarySummation.chargeTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", chargesTotalSummedPerTradeAllowanceCharge, chargeTotal));
+                retval.Messages.Add(String.Format("trade.settlement.monetarySummation.chargeTotal  Message: Berechneter Wert ist[{0:0.0000}] aber tatsächliche vorhander Wert ist[{1:0.0000}] | Actual value: {1:0.0000})", chargesTotalSummedPerTradeAllowanceCharge, chargeTotal));
+                retval.IsValid = false;
             }
 
             // version-specific validation
-            List<string> versionSpecificResults = new List<string>();
+            ValidationResult versionSpecificResults;
             switch (version)
             {
                 case ZUGFeRDVersion.Version1:
-                    {
-                        versionSpecificResults = _ValidateAccordingToVersion1(descriptor);
-                        break;
-                    }
+                {
+                    versionSpecificResults = _ValidateAccordingToVersion1(descriptor);
+                    break;
+                }
                 default:
-                    {
-                        break;
-                    }
+                {
+                    versionSpecificResults = new ValidationResult { IsValid = true };
+                    break;
+                }
             }
 
+            retval.IsValid = retval.IsValid && versionSpecificResults.IsValid;
+            retval.Messages.AddRange(versionSpecificResults.Messages);
 
             return retval;
         } // !Validate()
 
-
-        private static List<string> _ValidateAccordingToVersion1(InvoiceDescriptor descriptor)
+        private static ValidationResult _ValidateAccordingToVersion1(InvoiceDescriptor descriptor)
         {
-            List<string> retval = new List<string>();
+            ValidationResult retval = new ValidationResult()
+            {
+                IsValid = true
+            };
 
             if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Buyer?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
             {
-                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for buyers in ZUGFeRD 1.0");
+                retval.IsValid = false;
+                retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for buyers in ZUGFeRD 1.0");
             }
 
             if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Seller?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
             {
-                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for sellers in ZUGFeRD 1.0");
+                retval.IsValid = false;
+                retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for sellers in ZUGFeRD 1.0");
             }
 
             if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipFrom?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
             {
-                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for senders (ShipFrom) in ZUGFeRD 1.0");
+                retval.IsValid = false;
+                retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for senders (ShipFrom) in ZUGFeRD 1.0");
             }
 
             if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipTo?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
             {
-                retval.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for recipients (ShipTo) in ZUGFeRD 1.0");
+                retval.IsValid = false;
+                retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for recipients (ShipTo) in ZUGFeRD 1.0");
             }
 
             return retval;

@@ -341,15 +341,30 @@ namespace s2industries.ZUGFeRD
             // so we specify the node with the parent node
             foreach (XmlNode node in baseNode.SelectNodes("./cac:AllowanceCharge", nsmgr))
             {
-                retval.AddTradeAllowanceCharge(!XmlUtils.NodeAsBool(node, ".//cbc:ChargeIndicator", nsmgr), // wichtig: das not (!) beachten
-                                               XmlUtils.NodeAsDecimal(node, ".//cbc:BaseAmount", nsmgr, 0).Value,
-                                               retval.Currency,
-                                               XmlUtils.NodeAsDecimal(node, ".//cbc:Amount", nsmgr, 0).Value,
-                                               XmlUtils.NodeAsString(node, ".//cbc:AllowanceChargeReason", nsmgr),
-                                               EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cac:TaxScheme/cbc:ID", nsmgr)),
-                                               EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cbc:ID", nsmgr)),
-                                               XmlUtils.NodeAsDecimal(node, ".//cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
-                                               EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./cbc:AllowanceChargeReasonCode", nsmgr)));
+                bool chargeIndicator = XmlUtils.NodeAsBool(node, ".//cbc:ChargeIndicator", nsmgr);
+
+                if (chargeIndicator) // charge
+                {
+                    retval.AddTradeCharge(XmlUtils.NodeAsDecimal(node, ".//cbc:BaseAmount", nsmgr, 0).Value,
+                                          retval.Currency,
+                                          XmlUtils.NodeAsDecimal(node, ".//cbc:Amount", nsmgr, 0).Value,
+                                          XmlUtils.NodeAsString(node, ".//cbc:AllowanceChargeReason", nsmgr),
+                                          EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cac:TaxScheme/cbc:ID", nsmgr)),
+                                          EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cbc:ID", nsmgr)),
+                                          XmlUtils.NodeAsDecimal(node, ".//cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
+                                          EnumExtensions.StringToEnum<ChargeReasonCodes>(XmlUtils.NodeAsString(node, "./cbc:AllowanceChargeReasonCode", nsmgr)));
+                }
+                else // allowance
+                {
+                    retval.AddTradeAllowance(XmlUtils.NodeAsDecimal(node, ".//cbc:BaseAmount", nsmgr, 0).Value,
+                                             retval.Currency,
+                                             XmlUtils.NodeAsDecimal(node, ".//cbc:Amount", nsmgr, 0).Value,
+                                             XmlUtils.NodeAsString(node, ".//cbc:AllowanceChargeReason", nsmgr),
+                                             EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cac:TaxScheme/cbc:ID", nsmgr)),
+                                             EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//cac:TaxCategory/cbc:ID", nsmgr)),
+                                             XmlUtils.NodeAsDecimal(node, ".//cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
+                                             EnumExtensions.StringToEnum<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./cbc:AllowanceChargeReasonCode", nsmgr)));
+                }
             }
 
             // TODO: Find value //foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -664,12 +679,22 @@ namespace s2industries.ZUGFeRD
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:AllowanceChargeReason", nsmgr);
                 string reasonCode = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:AllowanceChargeReasonCode", nsmgr);
 
-                item.AddTradeAllowanceCharge(!chargeIndicator, // wichtig: das not (!) beachten
-                                                EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
-                                                basisAmount,
-                                                actualAmount,
-                                                reason,
-                                                EnumExtensions.FromDescription<AllowanceReasonCodes>(reasonCode));
+                if (chargeIndicator) // charge
+                {
+                    item.AddTradeCharge(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                        basisAmount,
+                                        actualAmount,
+                                        reason,
+                                        EnumExtensions.StringToEnum<ChargeReasonCodes>(reasonCode));
+                }
+                else // allowance
+                {
+                    item.AddTradeAllowance(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                           basisAmount,
+                                           actualAmount,
+                                           reason,
+                                           EnumExtensions.StringToEnum<AllowanceReasonCodes>(reasonCode));
+                }
             }
 
             if (item.UnitCode == QuantityCodes.Unknown)

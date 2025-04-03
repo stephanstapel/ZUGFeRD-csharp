@@ -651,6 +651,14 @@ namespace s2industries.ZUGFeRD
         /// Mutually Defined
         /// </summary>
         ZZ,
+
+        /// <summary>
+        /// Metric Carat
+        /// </summary>
+        /// <remarks>
+        /// Einheit für die Masse von Edelsteinen. Abkürzung Kt oder ct (kein gesetzliches Einheitszeichen)
+        /// </remarks>
+        CTM,
     }
 
 

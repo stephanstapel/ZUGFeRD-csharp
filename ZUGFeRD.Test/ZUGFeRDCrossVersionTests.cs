@@ -469,6 +469,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.TransportMode, TransportModeCodes.Road);
+            Assert.AreEqual(3, (int)TransportModeCodes.Road);
         } // !TestTransportModeWithExtended()
 
 
@@ -489,5 +490,91 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.IsNull(loadedInvoice.TransportMode); // not supported in comfort profile
         } // !TestTransportModeWithExtended()
+
+
+        // Test for rule PEPPOL-EN16931-R046
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        public void TestGrossPriceRepresentationForXRechnungAndNotXRechnungNegativeCase(ZUGFeRDVersion version)
+        {
+            decimal grossPrice = 10.1m;
+            decimal netPrice = 10.0m;
+            decimal discountPercent = 10.0m;
+            decimal discountAmount = 0.1m;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.Clear();
+
+            TradeLineItem item = desc.AddTradeLineItem("Test",
+                                                       netPrice, // net unit price
+                                                       "Test",
+                                                       QuantityCodes.C62,
+                                                       1,
+                                                       grossPrice, // gross unit price
+                                                       1);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            InvoiceDescriptor zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems().Count, 1);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GrossUnitPrice, grossPrice);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges().Count, 0);
+
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            InvoiceDescriptor zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems().Count, 1);
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GrossUnitPrice, null);
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges().Count, 0);
+        } // !TestGrossPriceRepresentationForXRechnungAndNotXRechnungNegativeCase()
+
+
+        // Test for rule PEPPOL-EN16931-R046
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        public void TestGrossPriceRepresentationForXRechnungAndNotXRechnungPositiveCase(ZUGFeRDVersion version)
+        {
+            decimal grossPrice = 10.1m;
+            decimal netPrice = 10.0m;
+            decimal discountPercent = 10.0m;
+            decimal discountAmount = 0.1m;
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.Clear();
+
+            TradeLineItem item = desc.AddTradeLineItem("Test",
+                                                       netPrice, // net unit price
+                                                       "Test",
+                                                       QuantityCodes.C62,
+                                                       1,
+                                                       grossPrice, // gross unit price
+                                                       1);
+
+            item.AddTradeAllowanceCharge(true, CurrencyCodes.EUR, grossPrice, discountAmount, "Discount", AllowanceReasonCodes.Discount);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+
+            InvoiceDescriptor zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems().Count, 1);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GrossUnitPrice, grossPrice);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges().Count, 1);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges()[0].BasisAmount, grossPrice);
+            Assert.AreEqual(zugferd23ExtendedInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges()[0].ActualAmount, discountAmount);
+
+            ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            InvoiceDescriptor zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems().Count, 1);
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GrossUnitPrice, grossPrice);
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges().Count, 1);
+            Assert.IsNull(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges()[0].BasisAmount); // not written in XRechnung
+            Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges()[0].ActualAmount, discountAmount);
+        } // !TestGrossPriceRepresentationForXRechnungAndNotXRechnungPositiveCase()
     }
 }

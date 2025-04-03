@@ -1,0 +1,98 @@
+<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+	<rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="">
+		<pdfaid:part>3</pdfaid:part>
+		<pdfaid:conformance>A</pdfaid:conformance>
+	</rdf:Description>
+	<rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
+		<dc:title>
+			<rdf:Alt>
+				<rdf:li xml:lang="x-default">{{DocumentTitle}}</rdf:li>
+			</rdf:Alt>
+		</dc:title>
+		<dc:creator>
+			<rdf:Seq>
+				<rdf:li>S2 Industries</rdf:li>
+			</rdf:Seq>
+		</dc:creator>
+		<dc:description>
+			<rdf:Alt>
+				<rdf:li xml:lang="x-default">{{DocumentDescription}}</rdf:li>
+			</rdf:Alt>
+		</dc:description>
+	</rdf:Description>
+	<rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
+		<pdf:Producer>S2 Industries</pdf:Producer>
+	</rdf:Description>
+	<rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+		<xmp:CreatorTool>s2industries.ZUGFeRD.PDF</xmp:CreatorTool>
+		<xmp:CreateDate>{{CreationDate}}</xmp:CreateDate>
+		<xmp:ModifyDate>{{ModificationDate}}</xmp:ModifyDate>
+	</rdf:Description>
+
+	<!-- XMP extension schema container for the ZUGFeRD schema -->
+	<rdf:Description rdf:about=""
+        xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
+        xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#"
+        xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#">
+
+		<!-- Container for all embedded extension schema descriptions -->
+		<pdfaExtension:schemas>
+			<rdf:Bag>
+				<rdf:li rdf:parseType="Resource">
+					<!-- Optional description of schema -->
+					<pdfaSchema:schema>ZUGFeRD PDFA Extension Schema</pdfaSchema:schema>
+					<!-- Schema namespace URI -->
+					<pdfaSchema:namespaceURI>urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
+					<!-- Preferred schema namespace prefix -->
+					<pdfaSchema:prefix>zf</pdfaSchema:prefix>
+
+					<!-- Description of schema properties -->
+					<pdfaSchema:property>
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<!-- DocumentFileName: Name of the embedded file; must be equal to the value of the /F tag in the /EF structure -->
+								<pdfaProperty:name>DocumentFileName</pdfaProperty:name>
+								<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+								<pdfaProperty:category>external</pdfaProperty:category>
+								<pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
+							</rdf:li>
+
+							<rdf:li rdf:parseType="Resource">
+								<!-- DocumentType: INVOICE -->
+								<pdfaProperty:name>DocumentType</pdfaProperty:name>
+								<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+								<pdfaProperty:category>external</pdfaProperty:category>
+								<pdfaProperty:description>INVOICE</pdfaProperty:description>
+							</rdf:li>
+
+							<rdf:li rdf:parseType="Resource">
+								<!-- Version: The actual version of the ZUGFeRD XML schema -->
+								<pdfaProperty:name>Version</pdfaProperty:name>
+								<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+								<pdfaProperty:category>external</pdfaProperty:category>
+								<pdfaProperty:description>The actual version of the ZUGFeRD XML schema</pdfaProperty:description>
+							</rdf:li>
+
+							<rdf:li rdf:parseType="Resource">
+								<!-- ConformanceLevel: The actual conformance level (resp. profile) of the embedded ZUGFeRD XML data, e.g. BASIC, COMFORT, EXTENDED -->
+								<pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
+								<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+								<pdfaProperty:category>external</pdfaProperty:category>
+								<pdfaProperty:description>The conformance level of the embedded ZUGFeRD data</pdfaProperty:description>
+							</rdf:li>
+						</rdf:Seq>
+					</pdfaSchema:property>
+				</rdf:li>
+			</rdf:Bag>
+		</pdfaExtension:schemas>
+	</rdf:Description>
+	<rdf:Description rdf:about="" xmlns:zf="urn:zugferd:pdfa:CrossIndustryDocument:invoice:2p0#">
+		<zf:DocumentType>INVOICE</zf:DocumentType>
+		<zf:DocumentFileName>{{InvoiceFilename}}</zf:DocumentFileName>
+		<zf:Version>{{Version}}</zf:Version>
+		<zf:ConformanceLevel>{{ConformanceLevel}}</zf:ConformanceLevel>
+	</rdf:Description>
+</rdf:RDF>
+<?xpacket end="w"?>
