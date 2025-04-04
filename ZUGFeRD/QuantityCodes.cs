@@ -659,6 +659,80 @@ namespace s2industries.ZUGFeRD
         /// Einheit für die Masse von Edelsteinen. Abkürzung Kt oder ct (kein gesetzliches Einheitszeichen)
         /// </remarks>
         CTM,
+
+        /// <summary>
+        /// Ampoule, non-protected
+        /// </summary>
+        XAM,
+
+        /// <summary>
+        /// Ampoule, protected
+        /// </summary>
+        XAP,
+
+        /// <summary>
+        /// Balloon, non-protected
+        /// </summary>
+        XBF,
+
+        /// <summary>
+        /// Can, rectangular
+        /// </summary>
+        XCA,
+
+        /// <summary>
+        /// Cask
+        /// </summary>
+        XCK,
+
+        /// <summary>
+        /// Cartridge
+        /// Package containing a charge such as propelling explosive for firearms or ink toner for a printer.
+        /// </summary>
+        XCQ,
+
+        /// <summary>
+        /// Case
+        /// </summary>
+        XCS,
+
+        /// <summary>
+        /// Can, cylindrical
+        /// </summary>
+        XCX,
+
+        /// <summary>
+        /// Flask
+        /// </summary>
+        XFL,
+
+        /// <summary>
+        /// Receptacle, glass
+        /// Containment vessel made of glass for retaining substances or articles.
+        /// </summary>
+        XGR,
+
+        /// <summary>
+        /// Unpacked or unpackaged
+        /// </summary>
+        XNE,
+
+        /// <summary>
+        /// Container, outer
+        /// A type of containment box that serves as the outer shipping container, not otherwise specified as transport equipment.
+        /// </summary>
+        XOU,
+
+        /// <summary>
+        /// Pouch
+        /// </summary>
+        XPO,
+
+        /// <summary>
+        /// Pot
+        /// </summary>
+        XPT,
+
     }
 
 
