@@ -477,6 +477,18 @@ namespace s2industries.ZUGFeRD
         } // !GetTradeAllowanceCharges()
 
 
+        public IList<TradeAllowance> GetTradeAllowances()
+        {
+            return this._TradeAllowanceCharges.Where(s => s is TradeAllowance).Select(s => s as TradeAllowance).ToList();
+        } // !GetTradeAllowances()
+
+
+        public IList<TradeCharge> GetTradeCharges()
+        {
+            return this._TradeAllowanceCharges.Where(s => s is TradeCharge).Select(s => s as TradeCharge).ToList();
+        } // !GetTradeCharges()
+
+
         /// <summary>
         /// As an allowance or charge on total item price, attaching it to the corresponding item.
         /// </summary>

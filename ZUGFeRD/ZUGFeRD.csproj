@@ -20,7 +20,7 @@ Find more about the library here:
 https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
-    <PackageTags>zugferd xml</PackageTags>
+    <PackageTags>zugferd xml xrechnung pdf invoice</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2025</Copyright>
     <AssemblyVersion>17.2.0</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
