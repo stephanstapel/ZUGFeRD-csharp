@@ -1340,7 +1340,7 @@ namespace s2industries.ZUGFeRD
             if (tradeAllowanceCharge.ChargePercentage.HasValue)
             {
                 Writer.WriteStartElement("ram", "CalculationPercent", profile: Profile.Extended); // not in XRechnung, according to CII-SR-122
-                _writeOptionalAdaptiveValue(writer, tradeAllowanceCharge.ChargePercentage.Value, 2, 4);
+                _writeOptionalAdaptiveValue(writer, tradeAllowanceCharge.ChargePercentage.Value, 2, 4); // BT-X-34
                 Writer.WriteEndElement();
             }
             #endregion
@@ -1349,14 +1349,14 @@ namespace s2industries.ZUGFeRD
             if (tradeAllowanceCharge.BasisAmount.HasValue)
             {
                 Writer.WriteStartElement("ram", "BasisAmount", profile: Profile.Extended); // not in XRechnung, according to CII-SR-123
-                _writeOptionalAdaptiveValue(writer, tradeAllowanceCharge.BasisAmount.Value, 2, 4);
+                _writeOptionalAdaptiveValue(writer, tradeAllowanceCharge.BasisAmount.Value, 2, 4); // BT-X-35
                 Writer.WriteEndElement();
             }
             #endregion
 
             #region ActualAmount
             Writer.WriteStartElement("ram", "ActualAmount");
-            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 2));
+            _writeOptionalAdaptiveValue(writer, tradeAllowanceCharge.ActualAmount, 2, 4); // BT-147
             Writer.WriteEndElement();
             #endregion
 

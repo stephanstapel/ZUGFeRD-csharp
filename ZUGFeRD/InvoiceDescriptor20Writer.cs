@@ -285,7 +285,7 @@ namespace s2industries.ZUGFeRD
                 if (needToWriteGrossUnitPrice)
                 {
                     Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
-                    _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4);
+                    _writeOptionalAdaptiveAmount(Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4); // BT-148
                     if (tradeLineItem.UnitQuantity.HasValue)
                     {
                         _writeElementWithAttribute(Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
@@ -302,11 +302,11 @@ namespace s2industries.ZUGFeRD
                         if (tradeAllowanceCharge.BasisAmount.HasValue)
                         {
                             Writer.WriteStartElement("ram", "BasisAmount");
-                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4));
+                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4)); // BT-X-35
                             Writer.WriteEndElement();
                         }
                         Writer.WriteStartElement("ram", "ActualAmount");
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4));
+                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4)); // BT-147
                         Writer.WriteEndElement();
 
                         Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
