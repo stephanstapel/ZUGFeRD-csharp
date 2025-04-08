@@ -299,15 +299,8 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                         Writer.WriteEndElement(); // !ram:ChargeIndicator
 
-                        if (tradeAllowanceCharge.BasisAmount.HasValue)
-                        {
-                            Writer.WriteStartElement("ram", "BasisAmount");
-                            Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value, 4)); // BT-X-35
-                            Writer.WriteEndElement();
-                        }
-                        Writer.WriteStartElement("ram", "ActualAmount");
-                        Writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ActualAmount, 4)); // BT-147
-                        Writer.WriteEndElement();
+                        _writeOptionalAdaptiveAmount(Writer, "ram", "BasisAmount", tradeAllowanceCharge.BasisAmount, 2, 4, forceCurrency: false); // BT-X-35
+                        _writeOptionalAdaptiveAmount(Writer, "ram", "ActualAmount", tradeAllowanceCharge.ActualAmount, 2, 4, forceCurrency: false); // BT-147
 
                         Writer.WriteOptionalElementString("ram", "Reason", tradeAllowanceCharge.Reason, Profile.Comfort | Profile.Extended);
                         // "ReasonCode" nicht im 2.0 Standard!
