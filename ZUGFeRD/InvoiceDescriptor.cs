@@ -1686,7 +1686,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="billingPeriodStart">Start of billing period</param>
         /// <param name="billingPeriodEnd">End of billing period</param>
         /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
-        [Obsolete("BillingPeriod parameters will be removed in version 19.0. Use SetBillingPeriod() instead.")]
+        [Obsolete("BillingPeriod and DeliveryNote parameters will be removed in version 19.0. Use SetBillingPeriod() instead.")]
         public TradeLineItem AddTradeLineItem(string name,
                                     decimal netUnitPrice,
                                     string description = null,

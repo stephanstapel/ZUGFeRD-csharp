@@ -84,7 +84,7 @@ namespace s2industries.ZUGFeRD
             stream.Position = 0;
             using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true, 1024, true))
             {
-                string data = reader.ReadToEnd().Replace(" ", "");
+                string data = reader.ReadToEnd().Replace(" ", String.Empty);
                 foreach (string validURI in validURIs)
                 {
                     if (data.IndexOf(String.Format(">{0}<", validURI), StringComparison.OrdinalIgnoreCase) >= 0)

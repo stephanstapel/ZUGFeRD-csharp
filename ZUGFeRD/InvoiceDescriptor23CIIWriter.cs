@@ -623,6 +623,7 @@ namespace s2industries.ZUGFeRD
 
             #region SellerTaxRepresentativeTradeParty
             // BT-63: the tax taxRegistration of the SellerTaxRepresentativeTradeParty
+            // BG-11 (SellerTaxRepresentativeTradeParty)
             _writeOptionalParty(Writer, PartyTypes.SellerTaxRepresentativeTradeParty, this.Descriptor.SellerTaxRepresentative, ALL_PROFILES, null, null, this.Descriptor.SellerTaxRepresentativeTaxRegistration);
             #endregion
 
