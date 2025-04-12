@@ -10,7 +10,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
-					<h1>Invoice {{ InvoiceNo }}</h1>
+					<h1>Invoice {{ Invoice.InvoiceNo }}, {{ Invoice.InvoiceDate | date.to_string("%Y-%m-%d") }}</h1>
 				</div>
 			</div>
 			<div class="row">
@@ -58,6 +58,20 @@
 					</div>
 				</div>				
 			</div>
+			
+			{{ if Invoice.DeliveryNoteReferencedDocument }}
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Delivery Note</h5>
+							No: {{ Invoice.DeliveryNoteReferencedDocument?.ID }}<br />
+							Date: {{ Invoice.DeliveryNoteReferencedDocument?.IssueDateTime | date.to_string("%Y-%m-%d") }}
+						</div>
+					</div>
+				</div>
+			</div>
+			{{ end }}
 
 			<div class="row mt-4">
 				<div class="col-12">
@@ -87,12 +101,12 @@
 									{{ item.SellerAssignedID }}									
 									<br />
 									{{ if item.BuyerAssignedID }}
-									<small>Buy assigned id: {{ item.BuyerAssignedID }}</small>
+									<small>Buyer assigned id: {{ item.BuyerAssignedID }}</small>
 									{{ end }}
 									<br />
 									{{ if item.GlobalID }}
 									{{ if item.GlobalID.SchemeID != "Unknown" }}
-									<small>{{ item.GlobalID.SchemeID }}: {{ item.GlobalID.Id }}</small>
+									<small>{{ item.GlobalID.SchemeID }}: {{ item.GlobalID.ID }}</small>
 									{{ end }}
 									{{ end }}
 								</td>
@@ -129,25 +143,57 @@
 			</div>
 
 			<div class="row">
-				<div class="offset-8 col-4">
-					<dl>
-						<dt>Line Total</dt>
-						<dd>{{ Invoice.LineTotalAmount | math.format("N2") }}</dd>
-						<dt>Tax Total</dt>
-						<dd>{{ Invoice.TaxTotalAmount | math.format("N2") }}</dd>
-						<dt>Grand Total</dt>
-						<dd>{{ Invoice.GrandTotalAmount | math.format("N2") }}</dd>
+				<div class="col-6">
+					<div class="card">
+						<div class="card-body">												
+							<h5 class="card-title">Tax</h5>
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Basis amount</th>
+										<th>Percent</th>
+										<th>Tax amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{ for tax in Invoice.Taxes }}
+									<tr>
+										<td>{{ tax.BasisAmount }}</td>
+										<td>{{ tax.Percent }}</td>
+										<td>
+											<b>{{ tax.TaxAmount }}</b>
+										</td>
+									</tr>
+									{{ end }}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="card">
+						<div class="card-body">	
+							<h5 class="card-title">Totals</h5>
+							<dl>
+								<dt>Line Total</dt>
+								<dd>{{ Invoice.LineTotalAmount | math.format("N2") }}</dd>
+								<dt>Tax Total</dt>
+								<dd>{{ Invoice.TaxTotalAmount | math.format("N2") }}</dd>
+								<dt>Grand Total</dt>
+								<dd>{{ Invoice.GrandTotalAmount | math.format("N2") }}</dd>
 
-						{{ if Invoice.TotalPrepaidAmount }}
-						<dt>Prepaid Amount</dt>
-						<dd>{{ Invoice.TotalPrepaidAmount | math.format("N2") }}</dd>
-						{{ end }}
+								{{ if Invoice.TotalPrepaidAmount }}
+								<dt>Prepaid Amount</dt>
+								<dd>{{ Invoice.TotalPrepaidAmount | math.format("N2") }}</dd>
+								{{ end }}
 
-						{{ if Invoice.DuePayableAmount }}
-						<dt>Due Payable</dt>
-						<dd>{{ Invoice.DuePayableAmount | math.format("N2") }}</dd>
-						{{ end }}
-					</dl>
+								{{ if Invoice.DuePayableAmount }}
+								<dt>Due Payable</dt>
+								<dd>{{ Invoice.DuePayableAmount | math.format("N2") }}</dd>
+								{{ end }}
+							</dl>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
