@@ -2875,9 +2875,94 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
         } // !TestPaymentTermsSingleCardinality()
 
+        /**
+        This test ensures that a structured payment term following the XRechnung format 
+        ends with a line break character (`\n`) as required by the specification.
+        **/
+        [TestMethod]
+        public void TestPaymentTermsXRechnungStructuredEndsWithLineBreak()
+        {
+            
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = _InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+            
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(1, paymentTerms.Count);
+            var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(firstPaymentTerm);
+
+            var paymentTermDescriptionLastChar = firstPaymentTerm.Description.Last();
+            Assert.AreEqual('\n', paymentTermDescriptionLastChar);
+        }
+
 
         [TestMethod]
-        public void TestPaymentTermsMultiCardinalityXRechnungStructured()
+        public void TestPaymentTermsSingleCardinalityXRechnungStructured()
+        {
+            var description = "14 Tage 2,25%";
+            DateTime timestamp = DateTime.Now.Date;
+            var desc = _InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms(description, null, PaymentTermsType.Skonto, 14, 2.25m);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(1, paymentTerms.Count);
+
+            var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(firstPaymentTerm);
+            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#\r\n", firstPaymentTerm.Description);
+
+            //If Structured Payment Terms are used, the description should not be written.
+            Assert.IsFalse(firstPaymentTerm.Description.Contains(description));
+        }
+
+
+        /**
+        According to the XRechnung specification, only a single instance of 
+        SpecifiedTradePaymentTerms is allowed per invoice, even if multiple 
+        payment conditions (e.g., multiple discount options) are provided.
+        All payment terms, including discount conditions, must be encoded 
+        as structured unstructured text within the Description element.
+        **/
+        [TestMethod]
+        public void TestPaymentTermsMultiCardinalityXRechnungStructuredOnlyOneSpecifiedTradePaymentTermsPresent()
         {
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
@@ -2904,20 +2989,60 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(2, paymentTerms.Count);
-            var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
-            Assert.IsNotNull(firstPaymentTerm);
-            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#", firstPaymentTerm.Description);
-            Assert.AreEqual(timestamp.AddDays(14), firstPaymentTerm.DueDate);
+            Assert.AreEqual(1, paymentTerms.Count);
+        }
 
+        /**
+        This test checks that multiple payment terms are correctly represented in the XRechnung format.
+        XRechnung only allows one SpecifiedTradePaymentTerms element per invoice.
+        If there are multiple payment conditions (e.g. different discount options),
+        they must be included as separate lines in the Description field using the defined structure.
+        This test ensures that the payment terms are properly combined into a single element
+        and follow the required line-based syntax.
+        **/
+        [TestMethod]
+        public void TestPaymentTermsMultiCardinalityXRechnungStructured()
+        {
+            DateTime timestamp = DateTime.Now.Date;
+            
+            var desc = _InvoiceProvider.CreateInvoice();
+            desc.GetTradePaymentTerms().Clear();
+            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
+            desc.GetTradePaymentTerms().First().DueDate = timestamp.AddDays(14);
+            desc.AddTradePaymentTerms("Description2", null, PaymentTermsType.Skonto, 28, 1m);
 
-            var secondPaymentTerm = loadedInvoice.GetTradePaymentTerms().LastOrDefault();
-            Assert.IsNotNull(secondPaymentTerm);
-            Assert.AreEqual($"Description2{XmlConstants.XmlNewLine}#SKONTO#TAGE=28#PROZENT=1.00#", secondPaymentTerm.Description);
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
 
-            //Assert.AreEqual(PaymentTermsType.Skonto, firstPaymentTerm.PaymentTermsType);
-            //Assert.AreEqual(10, firstPaymentTerm.DueDays);
-            //Assert.AreEqual(3m, firstPaymentTerm.Percentage);
+            ms.Seek(0, SeekOrigin.Begin);
+            StreamReader reader = new StreamReader(ms);
+            string text = reader.ReadToEnd();
+
+            ms.Seek(0, SeekOrigin.Begin);
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
+
+            // Act
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Assert
+            // PaymentTerms
+            var paymentTerms = loadedInvoice.GetTradePaymentTerms();
+            Assert.IsNotNull(paymentTerms);
+            Assert.AreEqual(1, paymentTerms.Count); //Currently only one instance of SpecifiedTradePaymentTerms is allowed, the payment terms are concatenated in the description
+
+            var structuredPaymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
+            Assert.IsNotNull(structuredPaymentTerms);
+
+            var structuredPaymentTermsList = structuredPaymentTerms.Description.Split('\n').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim());
+            Assert.AreEqual(2, structuredPaymentTermsList.Count()); //Spliting the description by line break should give us the two payment terms
+
+            var firstPaymentTerm = structuredPaymentTermsList.ElementAt(0);
+            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#", firstPaymentTerm);
+
+            var secondPaymentTerm = structuredPaymentTermsList.ElementAt(1);
+            Assert.AreEqual($"#SKONTO#TAGE=28#PROZENT=1.00#", secondPaymentTerm);
+
         } // !TestPaymentTermsSingleCardinalityStructured()
 
         [TestMethod]
