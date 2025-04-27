@@ -23,6 +23,7 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
@@ -2877,12 +2878,11 @@ namespace s2industries.ZUGFeRD.Test
 
         /**
         This test ensures that a structured payment term following the XRechnung format 
-        ends with a line break character (`\n`) as required by the specification.
+        ends with a line break character as required by the specification.
         **/
         [TestMethod]
         public void TestPaymentTermsXRechnungStructuredEndsWithLineBreak()
         {
-            
             DateTime timestamp = DateTime.Now.Date;
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
@@ -2912,7 +2912,11 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(firstPaymentTerm);
 
             var paymentTermDescriptionLastChar = firstPaymentTerm.Description.Last();
-            Assert.AreEqual('\n', paymentTermDescriptionLastChar);
+            var lastCharIsNewLine = paymentTermDescriptionLastChar == '\n';
+
+            var lastCharIsXMLNewLine = firstPaymentTerm.Description.LastIndexOf(XmlConstants.XmlNewLine) == firstPaymentTerm.Description.Length - XmlConstants.XmlNewLine.Length;
+
+            Assert.IsTrue(lastCharIsNewLine || lastCharIsXMLNewLine, "The last character of the payment term description should be a line break (\\n) or a XML Line break (&#10;) character.");
         }
 
 
@@ -2947,7 +2951,11 @@ namespace s2industries.ZUGFeRD.Test
 
             var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(firstPaymentTerm);
-            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#\r\n", firstPaymentTerm.Description);
+
+            // Validates that the description contains the expected pattern,
+            // followed either by a real newline (\n or \r\n) or by the XML line break entity (&#10;).
+            var pattern = @$"#SKONTO#TAGE=14#PROZENT=2\.25#(\r?\n|{XmlConstants.XmlNewLine})";
+            Assert.IsTrue(Regex.IsMatch(firstPaymentTerm.Description, pattern));
 
             //If Structured Payment Terms are used, the description should not be written.
             Assert.IsFalse(firstPaymentTerm.Description.Contains(description));
@@ -3034,7 +3042,8 @@ namespace s2industries.ZUGFeRD.Test
             var structuredPaymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(structuredPaymentTerms);
 
-            var structuredPaymentTermsList = structuredPaymentTerms.Description.Split('\n').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim());
+            var separators = new[] { "\n", XmlConstants.XmlNewLine };
+            var structuredPaymentTermsList = structuredPaymentTerms.Description.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Replace("\r",""));
             Assert.AreEqual(2, structuredPaymentTermsList.Count()); //Spliting the description by line break should give us the two payment terms
 
             var firstPaymentTerm = structuredPaymentTermsList.ElementAt(0);
@@ -3044,6 +3053,79 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual($"#SKONTO#TAGE=28#PROZENT=1.00#", secondPaymentTerm);
 
         } // !TestPaymentTermsSingleCardinalityStructured()
+
+
+        /**
+        Tests that the XML serialization of an invoice correctly handles indentation around the <ram:Description> element.
+        Specifically verifies that <ram:Description> appears correctly indented, is followed by a newline,
+        and that the content inside is properly indented relative to its opening tag.
+        **/
+        [TestMethod]
+        public void TestSingleXRechnungStructuredManually()
+        {
+            var desc = _InvoiceProvider.CreateInvoice();
+
+            desc.ClearTradePaymentTerms();
+            desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.CII);
+
+            var lines = new StreamReader(ms).ReadToEnd().Split(new[] { System.Environment.NewLine }, StringSplitOptions.None).ToList();
+
+            bool insidePaymentTerms = false;
+            bool insideDescription = false;
+            int noteIndentation = -1;
+
+            foreach (var line in lines)
+            {
+                // Trim the line to remove leading/trailing whitespace
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.StartsWith("<ram:SpecifiedTradePaymentTerms>", StringComparison.OrdinalIgnoreCase))
+                {
+                    insidePaymentTerms = true;
+                    continue;
+                }
+                else if (!insidePaymentTerms)
+                {
+                    continue;
+                }
+
+                // Check if we found the opening <ram:Description>
+                if (!insideDescription && trimmedLine.StartsWith("<ram:Description>", StringComparison.OrdinalIgnoreCase))
+                {
+                    insideDescription = true;
+                    noteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.IsTrue(noteIndentation >= 0, "Indentation for <ram:Description> should be non-negative.");
+                    Assert.AreEqual("<ram:Description>#SKONTO#TAGE=14#PROZENT=2.25#", trimmedLine);
+
+                    continue;
+                }
+
+                // Check if we found the closing </ram:Description>
+                if (insideDescription && trimmedLine.StartsWith("</ram:Description>", StringComparison.OrdinalIgnoreCase))
+                {
+                    int endNoteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.AreEqual(0, endNoteIndentation); // indentation should be 0 because of the new line
+                    insideDescription = false;
+                    break;
+                }
+
+                // After finding <ram:Description>, check for indentation of the next line
+                if (insideDescription)
+                {
+                    int indention = line.TakeWhile(char.IsWhiteSpace).Count();
+                    Assert.AreEqual(noteIndentation + 2, indention); // Ensure next line is indented one more
+                    continue;
+                }
+            }
+
+            // Assert that we entered and exited the <ram:Description> block
+            Assert.IsFalse(insideDescription, "We should have exited the <ram:Description> block.");
+        }
+
+
 
         [TestMethod]
         public void TestBuyerOrderReferenceLineId()
