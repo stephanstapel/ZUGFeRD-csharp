@@ -146,6 +146,8 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteElementString("cbc", "EndDate", _formatDate(this.Descriptor.BillingPeriodEnd.Value, false, true));
                 }
+
+                Writer.WriteEndElement(); // !InvoicePeriod
             }
 
             // OrderReference is optional
