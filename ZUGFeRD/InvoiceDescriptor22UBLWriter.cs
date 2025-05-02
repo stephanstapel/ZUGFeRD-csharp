@@ -626,10 +626,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
             Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
 
-            Writer.WriteStartElement("cbc", "LineExtensionAmount");
-            Writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-            Writer.WriteValue(_formatDecimal(tradeLineItem.LineTotalAmount));
-            Writer.WriteEndElement(); // !LineExtensionAmount
+            _writeOptionalAmount(Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
 
             if (tradeLineItem._AdditionalReferencedDocuments.Count > 0)
             {
