@@ -613,6 +613,13 @@ namespace s2industries.ZUGFeRD
             }
             Writer.WriteElementString("cbc", "ID", tradeLineItem.AssociatedDocument.LineID);
 
+            if (tradeLineItem.AssociatedDocument?.Notes?.Count > 0)
+            {
+                // BT-127
+                Writer.WriteStartElement("cbc", "Note");
+                String.Join(Environment.NewLine, tradeLineItem.AssociatedDocument.Notes.Select(n => n.Content));
+                Writer.WriteEndElement(); // cbc:Note
+            }
 
             if (isInvoice)
             {
