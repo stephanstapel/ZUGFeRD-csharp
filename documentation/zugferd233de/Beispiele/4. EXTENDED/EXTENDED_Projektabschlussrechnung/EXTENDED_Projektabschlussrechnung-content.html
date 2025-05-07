@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="utf-8"?><html>
+   <head>
+      <title>Visualisierung der Angaben in elektronischen Rechnungen</title>
+      <meta name="DWCmaker" content="DWCmaker"></meta>
+      <style>/*@page {*/
+/*    size: A4 portrait;*/
+/*    margin-left: 2cm;*/
+/*    margin-right: 2cm;*/
+/*    margin-top: 1.5cm;*/
+/*    margin-bottom: 1.5cm;*/
+/*    @top-center {*/
+/*        content: element(header);*/
+/*    }*/
+/*    @bottom-right {*/
+/*        content: element(footer);*/
+/*    }*/
+/*}*/
+
+@page {
+    size: A4 portrait;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    margin-top: 1.5cm;
+    margin-bottom: 1.5cm;
+    @bottom-right {
+        content: "Seite " counter(page) " von " counter(pages);
+        font-family: Calibri;
+        font-size: 50%;
+    }
+    @top-left {
+        content: "Visualisierung eRechnung";
+        font-family: Calibri;
+        font-size: 50%;
+    }
+}
+
+/*div.header {*/
+/*    display: inline;*/
+/*    position: running(header);*/
+/*    text-align: left;*/
+/*    font-style: italic;*/
+/*    font-size: 70%;*/
+/*    border-bottom: 2px solid lightgrey;*/
+/*}*/
+
+/*div.footer {*/
+/*    margin-top: 0.5cm;*/
+/*    display: inline;*/
+/*    position: running(footer);*/
+/*    text-align: right;*/
+/*    font-style: italic;*/
+/*    font-size: 70%;*/
+/*    border-top: 2px solid lightgray;*/
+/*}*/
+
+/*
+div.header, div.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+div.header {
+    !* subtract @page margin *!
+    top: -2cm;
+    height: 2cm
+}
+div.footer {
+    !* subtract @page margin *!
+    bottom: -2cm;
+    height: 2cm;
+}
+*/
+
+
+/*#pagenumber:before {*/
+/*    content: counter(page);*/
+/*}*/
+
+/*#pagecount:before {*/
+/*    content: counter(pages);*/
+/*}*/
+
+/*.page-start {*/
+/*    -fs-page-sequence: start;*/
+/*    page-break-before: always;*/
+/*}*/
+
+
+/* format tables to meet the pagination */
+
+table {
+    /*-fs-table-paginate: paginate;*/
+    page-break-inside: avoid;
+}
+
+
+/* forces a page break, if needed */
+
+.break {
+    page-break-after: always
+}
+
+body {
+    width: 17cm;
+    font-family: Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.17;
+    font-size: 60%;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+.small {
+    font-size: 80%;
+}
+
+.smaller {
+    font-size: 40%;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 1em 40px;
+}
+
+.condensed {
+    line-height: 80%;
+}
+
+.code {
+    /* font-family: monospace, monospace; */
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size: 80%;
+}
+
+.table {
+    border-spacing: 2px;
+    padding: 2px;
+    table-layout: fixed;
+    width: 17cm;
+}
+
+.table-space {
+    margin-top: 1cm;
+}
+
+.table-striped > tbody > tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.table-bordered {
+    border-top: 1px solid #ddd;
+}
+
+.border-strong {
+    border-bottom: 2px solid darkgrey;
+}
+
+.border-light {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    /*   border-top: 1px solid #ddd; */
+    /*   border-bottom: 1px solid #ddd; */
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.massive-header > thead > tr > td {
+    background: #9eb5ff;
+}
+
+.light-header > thead > tr > td {
+    background: #cef1ff;
+}
+
+.text-error {
+    color: red;
+}
+
+.text-success {
+    color: darkgreen;
+}
+
+.text-warning {
+    color: darkorange;
+}
+
+.title {
+    font-size: 140%;
+    font-weight: bold;
+    page-break-after: avoid;
+}
+
+.subtitle {
+    font-size: 120%;
+    font-weight: bold;
+    margin-top: 1cm;
+    margin-bottom: 0cm;
+    page-break-after: avoid;
+}
+
+.header-left {
+    font-size: 100%;
+    font-weight: bold;
+    background: #cef1ff;
+}
+
+.cell-left {
+    text-align: left;
+    font-size: 80%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    padding-right: 2px;
+}
+
+.cell-left-pad {
+    text-align: left;
+    font-size: 80%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    padding: 0.3cm;
+}
+
+.cell-right {
+    text-align: right;
+    font-size: 80%;
+    word-break: normal;
+    white-space: pre-wrap;
+}
+
+.cell-right-pad {
+    text-align: right;
+    font-size: 80%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    padding: 0.3cm;
+}
+
+.cell-light {
+    color: gray;
+    empty-cells: hide;
+}
+
+.text-info {
+    font-style: italic;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.cell-break {
+    word-wrap: break-word;
+    max-width: 1px;
+}
+
+.coloredLabel {
+    background-color: #cef1ff;
+}
+
+.narrow {
+    padding: 0px;
+}</style>
+   </head>
+   <title>eInvoice Daten</title>
+   <h1>Visualisierung eInvoice Daten © DWC 2024</h1>
+   <body>
+      <p></p>
+      <table class="table table-striped table-condensed table-bordered" style="width:100%">
+         <tbody>
+            <tr>
+               <td style="width:70%;"><strong>Element</strong></td>
+               <td style="width:30%;"><strong>Wert</strong></td>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;ExchangedDocumentContext--&gt;GuidelineSpecifiedDocumentContextParameter--&gt;<strong>ID</strong></td>
+               <td>urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</td>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;ExchangedDocument--&gt;<strong>ID</strong></td>
+               <td>47110819</td>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;ExchangedDocument--&gt;<strong>TypeCode</strong></td>
+               <td>380</td>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;ExchangedDocument--&gt;IssueDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20241115</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;ExchangedDocument--&gt;IncludedNote--&gt;<strong>Content</strong></td>
+               <td>Mitglieder der Geschäftsleitung:
+                  				Geschäftsführerin: Johanna Musterfrau
+                  				Prokuristin: Isabell Herrlich
+                  				HRB Berlin 13086</td>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;ExchangedDocument--&gt;IncludedNote--&gt;<strong>SubjectCode</strong></td>
+               <td>REG</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;IncludedSupplyChainTradeLineItem--&gt;AssociatedDocumentLineDocument--&gt;<strong>LineID</strong></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;IncludedSupplyChainTradeLineItem--&gt;SpecifiedTradeProduct--&gt;<strong>Name</strong></td>
+               <td>Lieferung und Montage Bauträger</td>
+            </tr>
+            <tr>
+               <td>IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeAgreement--&gt;NetPriceProductTradePrice--&gt;<strong>ChargeAmount</strong></td>
+               <td>20000.00</td>
+            </tr>
+            <tr>
+               <td>IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeAgreement--&gt;NetPriceProductTradePrice--&gt;<strong>BasisQuantity</strong></td>
+               <td>1</td>
+               <tr>
+                  <td>@unitCode</td>
+                  <td>H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeDelivery--&gt;<strong>BilledQuantity</strong></td>
+               <td>1</td>
+               <tr>
+                  <td>@unitCode</td>
+                  <td>H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>TypeCode</strong></td>
+               <td>VAT</td>
+            </tr>
+            <tr>
+               <td>IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>CategoryCode</strong></td>
+               <td>S</td>
+            </tr>
+            <tr>
+               <td>IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>RateApplicablePercent</strong></td>
+               <td>19</td>
+            </tr>
+            <tr>
+               <td>SpecifiedLineTradeSettlement--&gt;BillingSpecifiedPeriod--&gt;StartDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240601</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SpecifiedLineTradeSettlement--&gt;BillingSpecifiedPeriod--&gt;EndDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20241031</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>IncludedSupplyChainTradeLineItem--&gt;SpecifiedLineTradeSettlement--&gt;SpecifiedTradeSettlementLineMonetarySummation--&gt;<strong>LineTotalAmount</strong></td>
+               <td>20000</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeAgreement--&gt;SellerTradeParty--&gt;<strong>Name</strong></td>
+               <td>Groß und Breit Bau AG</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;SellerTradeParty--&gt;PostalTradeAddress--&gt;<strong>PostcodeCode</strong></td>
+               <td>12345</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;SellerTradeParty--&gt;PostalTradeAddress--&gt;<strong>LineOne</strong></td>
+               <td>Erdkuhl 5</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;SellerTradeParty--&gt;PostalTradeAddress--&gt;<strong>CityName</strong></td>
+               <td>Berlin</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;SellerTradeParty--&gt;PostalTradeAddress--&gt;<strong>CountryID</strong></td>
+               <td>DE</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;SellerTradeParty--&gt;SpecifiedTaxRegistration--&gt;<strong>ID</strong></td>
+               <td>DE999999999</td>
+               <tr>
+                  <td>@schemeID</td>
+                  <td>VA</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;<strong>ID</strong></td>
+               <td>D75969813</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;<strong>Name</strong></td>
+               <td>Metallbau Leipzig GmbH &amp; Co. KG</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;PostalTradeAddress--&gt;<strong>PostcodeCode</strong></td>
+               <td>12345</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;PostalTradeAddress--&gt;<strong>LineOne</strong></td>
+               <td>Pappelallee 15</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;PostalTradeAddress--&gt;<strong>LineTwo</strong></td>
+               <td>Hof 3</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;PostalTradeAddress--&gt;<strong>CityName</strong></td>
+               <td>Leipzig</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;PostalTradeAddress--&gt;<strong>CountryID</strong></td>
+               <td>DE</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeAgreement--&gt;BuyerTradeParty--&gt;SpecifiedTaxRegistration--&gt;<strong>ID</strong></td>
+               <td>DE123456789</td>
+               <tr>
+                  <td>@schemeID</td>
+                  <td>VA</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeDelivery--&gt;ShipToTradeParty--&gt;<strong>Name</strong></td>
+               <td>Baustelle</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeDelivery--&gt;ShipToTradeParty--&gt;PostalTradeAddress--&gt;<strong>PostcodeCode</strong></td>
+               <td>98765</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeDelivery--&gt;ShipToTradeParty--&gt;PostalTradeAddress--&gt;<strong>LineOne</strong></td>
+               <td>Eichenpromenade 37</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeDelivery--&gt;ShipToTradeParty--&gt;PostalTradeAddress--&gt;<strong>LineTwo</strong></td>
+               <td>Tor 1</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeDelivery--&gt;ShipToTradeParty--&gt;PostalTradeAddress--&gt;<strong>CityName</strong></td>
+               <td>Metallstadt</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeDelivery--&gt;ShipToTradeParty--&gt;PostalTradeAddress--&gt;<strong>CountryID</strong></td>
+               <td>DE</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeDelivery--&gt;ActualDeliverySupplyChainEvent--&gt;OccurrenceDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20241031</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>CrossIndustryInvoice--&gt;SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;<strong>InvoiceCurrencyCode</strong></td>
+               <td>EUR</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementPaymentMeans--&gt;<strong>TypeCode</strong></td>
+               <td>58</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementPaymentMeans--&gt;PayeePartyCreditorFinancialAccount--&gt;<strong>IBANID</strong></td>
+               <td>DE77 3707 0060 0321 9870 00</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementPaymentMeans--&gt;PayeePartyCreditorFinancialAccount--&gt;<strong>AccountName</strong></td>
+               <td>Groß und Breit Bau AG</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>CalculatedAmount</strong></td>
+               <td>3800</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>TypeCode</strong></td>
+               <td>VAT</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>BasisAmount</strong></td>
+               <td>20000</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>CategoryCode</strong></td>
+               <td>S</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;ApplicableTradeTax--&gt;<strong>RateApplicablePercent</strong></td>
+               <td>19</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedTradePaymentTerms--&gt;DueDateDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20241129</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementHeaderMonetarySummation--&gt;<strong>LineTotalAmount</strong></td>
+               <td>20000.00</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementHeaderMonetarySummation--&gt;<strong>TaxBasisTotalAmount</strong></td>
+               <td>20000.00</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementHeaderMonetarySummation--&gt;<strong>TaxTotalAmount</strong></td>
+               <td>3800.00</td>
+               <tr>
+                  <td>@currencyID</td>
+                  <td>EUR</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementHeaderMonetarySummation--&gt;<strong>GrandTotalAmount</strong></td>
+               <td>23800.00</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementHeaderMonetarySummation--&gt;<strong>TotalPrepaidAmount</strong></td>
+               <td>11900.00</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedTradeSettlementHeaderMonetarySummation--&gt;<strong>DuePayableAmount</strong></td>
+               <td>11900.00</td>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;<strong>PaidAmount</strong></td>
+               <td>2975.00</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;FormattedReceivedDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240607</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CalculatedAmount</strong></td>
+               <td>1900</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>TypeCode</strong></td>
+               <td>VAT</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CategoryCode</strong></td>
+               <td>S</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>RateApplicablePercent</strong></td>
+               <td>19</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;<strong>IssuerAssignedID</strong></td>
+               <td>R202406-01</td>
+            </tr>
+            <tr>
+               <td>SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;FormattedIssueDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240601</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;<strong>PaidAmount</strong></td>
+               <td>2975.00</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;FormattedReceivedDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240615</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CalculatedAmount</strong></td>
+               <td>1900</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>TypeCode</strong></td>
+               <td>VAT</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CategoryCode</strong></td>
+               <td>S</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>RateApplicablePercent</strong></td>
+               <td>19</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;<strong>IssuerAssignedID</strong></td>
+               <td>R202407-01</td>
+            </tr>
+            <tr>
+               <td>SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;FormattedIssueDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240701</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;<strong>PaidAmount</strong></td>
+               <td>2975.00</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;FormattedReceivedDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240812</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CalculatedAmount</strong></td>
+               <td>1900</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>TypeCode</strong></td>
+               <td>VAT</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CategoryCode</strong></td>
+               <td>S</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>RateApplicablePercent</strong></td>
+               <td>19</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;<strong>IssuerAssignedID</strong></td>
+               <td>R202408-01</td>
+            </tr>
+            <tr>
+               <td>SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;FormattedIssueDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240801</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>SupplyChainTradeTransaction--&gt;ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;<strong>PaidAmount</strong></td>
+               <td>2975.00</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;FormattedReceivedDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240916</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CalculatedAmount</strong></td>
+               <td>1900</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>TypeCode</strong></td>
+               <td>VAT</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>CategoryCode</strong></td>
+               <td>S</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;IncludedTradeTax--&gt;<strong>RateApplicablePercent</strong></td>
+               <td>19</td>
+            </tr>
+            <tr>
+               <td>ApplicableHeaderTradeSettlement--&gt;SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;<strong>IssuerAssignedID</strong></td>
+               <td>R202409-01</td>
+            </tr>
+            <tr>
+               <td>SpecifiedAdvancePayment--&gt;InvoiceSpecifiedReferencedDocument--&gt;FormattedIssueDateTime--&gt;<strong>DateTimeString</strong></td>
+               <td>20240902</td>
+               <tr>
+                  <td>@format</td>
+                  <td>102</td>
+               </tr>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

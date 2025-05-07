@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vr="urn:validool.org:validationreport:2p6" xmlns:xsi="http://www.w3.org/2001/XMLSchema">
+   <head>
+      <title> eInvoice Validation Report</title>
+      <meta name="PDF.producer" content="DWC toolkit 1.0 and valitool"></meta>
+      <style>@page {
+    size: A4 portrait;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    margin-top: 1.5cm;
+    margin-bottom: 1.5cm;
+    @top-center {
+        content: element(header);
+    }
+    @bottom-right {
+        content: element(footer);
+    }
+}
+
+
+/**  
+    @font-face {
+        font-family: 'Open Sans';
+        src: url('OpenSans-Regular.ttf');
+        font-family: sans-serif;
+        -fs-pdf-font-embed: embed;
+        -fs-pdf-font-encoding: Identity-H;
+    }
+*/
+
+
+/**
+ * Header/Footer definition
+ */
+
+div.header {
+    display: inline;
+    position: running(header);
+    text-align: left;
+    border-bottom: 1px solid lightgrey;
+}
+
+div.footer {
+    margin-top: 0.5cm;
+    display: inline;
+    position: running(footer);
+    text-align: right;
+    border-top: 1px solid lightgray;
+}
+
+#pagenumber:before {
+    content: counter(page);
+}
+
+#pagecount:before {
+    content: counter(pages);
+}
+
+
+/**
+ * Page break definition
+ */
+
+.page-start {
+    -fs-page-sequence: start;
+    page-break-before: always;
+}
+
+
+/* format tables to meet the pagination */
+
+table {
+    -fs-table-paginate: paginate;
+    page-break-inside: avoid;
+}
+
+
+/* forces a page break, if needed */
+
+.break {
+    page-break-after: always
+}
+
+body {
+    width: 17cm;
+    font-family: Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.17;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+h1 {
+    margin: .67em 0;
+    font-size: 2em;
+}
+
+.small {
+    font-size: 80%;
+}
+
+img {
+    border: 0;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 1em 40px;
+}
+
+.condensed {
+    line-height: 80%;
+}
+
+.code {
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size: 80%;
+}
+
+.table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 2px;
+    table-layout: fixed;
+    width: 17cm;
+}
+
+.table-striped>tbody>tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+thead {
+    word-break: break-all;
+    background-color: rgb(193, 200, 241) !important;
+}
+
+td {
+    word-break: break-all;
+    padding: 2px;
+}
+
+.table-bordered {
+    border-top: 1px solid #ddd;
+}
+
+.tr-border {
+    border-bottom: 2px solid darkgrey;
+}
+
+.table-bordered>thead>tr>th,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>td,
+.table-bordered>tfoot>tr>td {
+    border-top: 1px solid #ddd;
+}
+
+.text-error {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+
+.text-error-light {
+    background-color: lightgray;
+    color: red;
+    font-weight: bold;
+}
+
+.text-success {
+    color: darkgreen;
+}
+
+.text-warning {
+    color: black;
+    font-weight: bold;
+    background-color: yellow;
+}
+
+.header-fill {
+    background: #f2f2f2;
+}
+</style>
+   </head>
+   <body bgcolor="#ffffff">
+      <div class="header">
+         <p>Validierungsbericht elektronische Rechnung</p>
+      </div>
+      <div class="footer">
+         <p>
+            Seite
+            <span id="pagenumber"></span>
+            von
+            <span id="pagecount"></span></p>
+      </div>
+      <h1>Validierungsbericht elektronische Rechnung</h1>
+      <p>© 2025 DWC and validool UG</p>
+      <h2>Kopfdaten</h2>
+      <table class="table table-striped table-bordered">
+         <tbody>
+            <tr>
+               <td>Prüfdatei</td>
+               <td style="word-wrap: break-word;">/private/tmp/factur-x.xml</td>
+            </tr>
+            <tr>
+               <td>Prüfzeitpunkt</td>
+               <td>05.05.2025-18:30</td>
+            </tr>
+            <tr>
+               <td>Render-Zeitpunkt</td>
+               <td>2025-05-05T18:30:23.538893+02:00</td>
+            </tr>
+            <tr>
+               <td>Überprüfungsumfang</td>
+               <td>XML_ONLY</td>
+            </tr>
+            <tr>
+               <td>Version der PDF/A Validierung</td>
+               <td></td>
+            </tr>
+            <tr>
+               <td>Rendering-Version</td>
+               <td>2025-05-04_11-00</td>
+            </tr>
+            <tr>
+               <td>Version der XML Validierung</td>
+               <td style="word-break: break-all;"></td>
+            </tr>
+         </tbody>
+         <tfoot>
+            <tr>
+               <td><strong>Gesamt-Validierungsergebnis</strong></td>
+               <td><b><span class="text-error-light">FEHLERHAFT</span></b></td>
+            </tr>
+         </tfoot>
+      </table>
+      <h2>Ergebnisse der Validierung</h2>
+      <h3 style="margin-bottom:0px;">3) Validierung der XML-Rechnungsdaten</h3>
+      <table class="table table-striped table-bordered">
+         <tbody>
+            <tr>
+               <td>Korrekte XML-Struktur</td>
+               <td><b><span class="text-error-light">FEHLERHAFT</span></b></td>
+            </tr>
+            <tr>
+               <td>Angewandtes Validierungsprofil</td>
+               <td><b><span class="text-success">ZUGFeRD 2.1/2.1.1/2.2/2.3/Factur-X 1.0 - EXTENDED</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrektes XML-Schema</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrekte XML-Namespaces</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrektes XML-Encoding</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrekte Codelisten</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Liegen Warnungen vor?</td>
+               <td><b><span class="text-success">Nein</span></b></td>
+            </tr>
+         </tbody>
+      </table>
+      <h4 style="margin-bottom:0px;">Detail-Auswertung</h4>
+      <table class="table">
+         <thead>
+            <tr>
+               <td style="width: 10%;">Nr.</td>
+               <td style="width: 15%;">Kategorie</td>
+               <td style="width: 75%;">Wert</td>
+            </tr>
+         </thead>
+         <tbody>
+            <table style="border: 1px solid black;">
+               <tr>
+                  <td class="small" style="width: 10%;" rowspan="5">1</td>
+                  <td class="small" style="width: 15%;">
+                     <div class="text-error">Fehler</div>
+                  </td>
+                  <td class="small" style="width: 75%;">3005</td>
+               </tr>
+               <tr class="header-fill">
+                  <td class="small">
+                     Knoten</td>
+                  <td class="small"><strong></strong></td>
+               </tr>
+               <tr>
+                  <td class="small">Beschreibung</td>
+                  <td class="small" style="padding: 0px 30px 0px 0px;">[VD-Valitool-63]-Rechenfehler (ggf. wegen Rundungsfehler) im Bereich der Zu- und Abschläge
+                     (AllowanceCharge).
+                     Die Rechenvorschrift lautet: ActualAmount = BasisAmount * CalculationPercent.
+                     Die Berechnung ergibt (-5,00 * -0,02 = 0,10.
+                     Dies entspricht nicht dem angegebenen Wert  -0,10).</td>
+               </tr>
+               <tr class="header-fill">
+                  <td class="small">XML-Pfad</td>
+                  <td>
+                     <div class="code"></div>
+                  </td>
+               </tr>
+               <tr class="header-fill">
+                  <td class="small">Business Terms</td>
+                  <td>
+                     <div class="code"></div>
+                  </td>
+               </tr>
+            </table>
+         </tbody>
+      </table>
+   </body>
+</html>

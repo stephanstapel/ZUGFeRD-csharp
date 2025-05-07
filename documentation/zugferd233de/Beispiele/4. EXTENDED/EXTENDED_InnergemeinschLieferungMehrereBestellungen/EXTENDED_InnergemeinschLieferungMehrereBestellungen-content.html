@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="utf-8"?><html>
+   <head>
+      <title>Visualisierung der Angaben in elektronischen Rechnungen</title>
+      <meta name="DWC toolkit" content="DWC toolkit"></meta>
+      <style>/*@page {*/
+/*    size: A4 portrait;*/
+/*    margin-left: 2cm;*/
+/*    margin-right: 2cm;*/
+/*    margin-top: 1.5cm;*/
+/*    margin-bottom: 1.5cm;*/
+/*    @top-center {*/
+/*        content: element(header);*/
+/*    }*/
+/*    @bottom-right {*/
+/*        content: element(footer);*/
+/*    }*/
+/*}*/
+
+@page {
+    size: A4 portrait;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    margin-top: 1.5cm;
+    margin-bottom: 1.5cm;
+    @bottom-right {
+        content: "Seite " counter(page) " von " counter(pages);
+        font-family: Calibri;
+        font-size: 50%;
+    }
+    @top-left {
+        content: "Visualisierung eRechnung";
+        font-family: Calibri;
+        font-size: 50%;
+    }
+}
+
+/*div.header {*/
+/*    display: inline;*/
+/*    position: running(header);*/
+/*    text-align: left;*/
+/*    font-style: italic;*/
+/*    font-size: 70%;*/
+/*    border-bottom: 2px solid lightgrey;*/
+/*}*/
+
+/*div.footer {*/
+/*    margin-top: 0.5cm;*/
+/*    display: inline;*/
+/*    position: running(footer);*/
+/*    text-align: right;*/
+/*    font-style: italic;*/
+/*    font-size: 70%;*/
+/*    border-top: 2px solid lightgray;*/
+/*}*/
+
+/*
+div.header, div.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+div.header {
+    !* subtract @page margin *!
+    top: -2cm;
+    height: 2cm
+}
+div.footer {
+    !* subtract @page margin *!
+    bottom: -2cm;
+    height: 2cm;
+}
+*/
+
+
+/*#pagenumber:before {*/
+/*    content: counter(page);*/
+/*}*/
+
+/*#pagecount:before {*/
+/*    content: counter(pages);*/
+/*}*/
+
+/*.page-start {*/
+/*    -fs-page-sequence: start;*/
+/*    page-break-before: always;*/
+/*}*/
+
+
+/* format tables to meet the pagination */
+
+table {
+    /*-fs-table-paginate: paginate;*/
+    page-break-inside: avoid;
+}
+
+
+/* forces a page break, if needed */
+
+.break {
+    page-break-after: always
+}
+
+body {
+    width: 17cm;
+    font-family: Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.17;
+    font-size: 60%;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+.small {
+    font-size: 80%;
+}
+
+.smaller {
+    font-size: 40%;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 1em 40px;
+}
+
+.condensed {
+    line-height: 80%;
+}
+
+.code {
+    /* font-family: monospace, monospace; */
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size: 80%;
+}
+
+.table {
+    border-spacing: 2px;
+    padding: 2px;
+    table-layout: fixed;
+    width: 17cm;
+}
+
+.table-space {
+    margin-top: 1cm;
+}
+
+.table-striped > tbody > tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.table-bordered {
+    border-top: 1px solid #ddd;
+}
+
+.border-strong {
+    border-bottom: 2px solid darkgrey;
+}
+
+.border-light {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    /*   border-top: 1px solid #ddd; */
+    /*   border-bottom: 1px solid #ddd; */
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.massive-header > thead > tr > td {
+    background: #9eb5ff;
+}
+
+.light-header > thead > tr > td {
+    background: #cef1ff;
+}
+
+.text-error {
+    color: red;
+}
+
+.text-success {
+    color: darkgreen;
+}
+
+.text-warning {
+    color: darkorange;
+}
+
+.title {
+    font-size: 140%;
+    font-weight: bold;
+    page-break-after: avoid;
+}
+
+.subtitle {
+    font-size: 120%;
+    font-weight: bold;
+    margin-top: 1cm;
+    margin-bottom: 0cm;
+    page-break-after: avoid;
+}
+
+.header-left {
+    font-size: 100%;
+    font-weight: bold;
+    background: #cef1ff;
+}
+
+.cell-left {
+    text-align: left;
+    font-size: 80%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    padding-right: 2px;
+}
+
+.cell-left-pad {
+    text-align: left;
+    font-size: 80%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    padding: 0.3cm;
+}
+
+.cell-right {
+    text-align: right;
+    font-size: 80%;
+    word-break: normal;
+    white-space: pre-wrap;
+}
+
+.cell-right-pad {
+    text-align: right;
+    font-size: 80%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    padding: 0.3cm;
+}
+
+.cell-light {
+    color: gray;
+    empty-cells: hide;
+}
+
+.text-info {
+    font-style: italic;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.cell-break {
+    word-wrap: break-word;
+    max-width: 1px;
+}
+
+.coloredLabel {
+    background-color: #cef1ff;
+}
+
+.narrow {
+    padding: 0px;
+}</style>
+   </head>
+   <title>eInvoice Daten</title>
+   <h1>Visualisierung eInvoice Daten © DWC 2025</h1>
+   <body>
+      <p></p>
+      <table class="table table-striped table-condensed table-bordered" style="width:100%">
+         <tbody>
+            <tr>
+               <td style="width:70%;"><strong>Element</strong></td>
+               <td style="width:30%;"><strong>Wert</strong></td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocumentContext<br></br>    BusinessProcessSpecifiedDocumentContextParameter<br></br>      <strong>ID</strong></td>
+               <td class="small">Beispielgeschäftsprozess</td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocumentContext<br></br>    GuidelineSpecifiedDocumentContextParameter<br></br>      <strong>ID</strong></td>
+               <td class="small">urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>    ExchangedDocument<br></br>      <strong>ID</strong></td>
+               <td class="small">47110818</td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>    ExchangedDocument<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">380</td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181031</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Mitglieder der Geschäftsleitung:
+                  				Geschäftsführerin: Johanna Musterfrau
+                  				Prokuristin: Isabell Herrlich
+                  				HRB Berlin 13086
+                  			</td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">REG</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    AssociatedDocumentLineDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">1</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>SellerAssignedID</strong></td>
+               <td class="small">CO-123/V2A</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>BuyerAssignedID</strong></td>
+               <td class="small">Toolbox 0815</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Name</strong></td>
+               <td class="small">Windschutzscheibe</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedTradeProduct<br></br>    OriginTradeCountry<br></br>      <strong>ID</strong></td>
+               <td class="small">DE</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    BuyerOrderReferencedDocument<br></br>      <strong>IssuerAssignedID</strong></td>
+               <td class="small">ORDER84359</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    BuyerOrderReferencedDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">1</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    GrossPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">100</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    GrossPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1</td>
+               <tr>
+                  <td class="code">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">100</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1</td>
+               <tr>
+                  <td class="code">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedLineTradeDelivery<br></br>      <strong>BilledQuantity</strong></td>
+               <td class="small">10</td>
+               <tr>
+                  <td class="code">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>ExemptionReason</strong></td>
+               <td class="small">Kein Ausweis der Umsatzsteuer bei innergemeinschaftlichen Lieferungen
+                  					</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">K</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">0</td>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181001</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181031</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">1000</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    AssociatedDocumentLineDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">2</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>SellerAssignedID</strong></td>
+               <td class="small">IM-712/A2A</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>BuyerAssignedID</strong></td>
+               <td class="small">BR-4529-ZF</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Name</strong></td>
+               <td class="small">Stoßfänger</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedTradeProduct<br></br>    OriginTradeCountry<br></br>      <strong>ID</strong></td>
+               <td class="small">DE</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    BuyerOrderReferencedDocument<br></br>      <strong>IssuerAssignedID</strong></td>
+               <td class="small">ORDER84753</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    BuyerOrderReferencedDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">7</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    GrossPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">100</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    GrossPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1</td>
+               <tr>
+                  <td class="code">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">100</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1</td>
+               <tr>
+                  <td class="code">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedLineTradeDelivery<br></br>      <strong>BilledQuantity</strong></td>
+               <td class="small">10</td>
+               <tr>
+                  <td class="code">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>ExemptionReason</strong></td>
+               <td class="small">Kein Ausweis der Umsatzsteuer bei innergemeinschaftlichen Lieferungen
+                  					</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">K</td>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">0</td>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181001</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181031</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">1000</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    SellerTradeParty<br></br>      <strong>ID</strong></td>
+               <td class="small">12345676</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    SellerTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Global Supplies Ltd.</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">SW1B 3BN</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">153 Victoria Street</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">London</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">GB</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    SpecifiedTaxRegistration<br></br>      <strong>ID</strong></td>
+               <td class="small">GB999999999</td>
+               <tr>
+                  <td class="code">@schemeID</td>
+                  <td class="small">VA</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    BuyerTradeParty<br></br>      <strong>ID</strong></td>
+               <td class="small">75969813</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    BuyerTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Metallbau Leipzig GmbH &amp; Co. KG</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12345</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Pappelallee 15</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineTwo</strong></td>
+               <td class="small">Hof 3</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Leipzig</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    URIUniversalCommunication<br></br>      <strong>URIID</strong></td>
+               <td class="small">04 0 11 000 - 12345 12345 - 35</td>
+               <tr>
+                  <td class="code">@schemeID</td>
+                  <td class="small">0204</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    SpecifiedTaxRegistration<br></br>      <strong>ID</strong></td>
+               <td class="small">DE123456789</td>
+               <tr>
+                  <td class="code">@schemeID</td>
+                  <td class="small">VA</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    SellerTaxRepresentativeTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Global Supplies Financial Services</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTaxRepresentativeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12345</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTaxRepresentativeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Friedrichstraße 165</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTaxRepresentativeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Berlin</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTaxRepresentativeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTaxRepresentativeTradeParty<br></br>    SpecifiedTaxRegistration<br></br>      <strong>ID</strong></td>
+               <td class="small">DE987654321</td>
+               <tr>
+                  <td class="code">@schemeID</td>
+                  <td class="small">VA</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeDelivery<br></br>    ShipToTradeParty<br></br>      <strong>ID</strong></td>
+               <td class="small">75969815</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeDelivery<br></br>    ShipToTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Metallbau Leipzig GmbH &amp; Co. KG</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12347</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Eichenpromenade 37</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineTwo</strong></td>
+               <td class="small">Tor 1</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Metallstadt</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    URIUniversalCommunication<br></br>      <strong>URIID</strong></td>
+               <td class="small">999999999</td>
+               <tr>
+                  <td class="code">@schemeID</td>
+                  <td class="small">0060</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  SupplyChainTradeTransaction<br></br>    ApplicableHeaderTradeSettlement<br></br>      <strong>InvoiceCurrencyCode</strong></td>
+               <td class="small">EUR</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    PayeeTradeParty<br></br>      <strong>GlobalID</strong></td>
+               <td class="small">432156789</td>
+               <tr>
+                  <td class="code">@schemeID</td>
+                  <td class="small">0060</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    PayeeTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Global Supplies Financial Services</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  PayeeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12345</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  PayeeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Friedrichstraße 165</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  PayeeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Berlin</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  PayeeTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementPaymentMeans<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">58</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradeSettlementPaymentMeans<br></br>    PayeePartyCreditorFinancialAccount<br></br>      <strong>IBANID</strong></td>
+               <td class="small">DE12 1234 4321 9876 00</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradeSettlementPaymentMeans<br></br>    PayeePartyCreditorFinancialAccount<br></br>      <strong>AccountName</strong></td>
+               <td class="small">Global Supplies Financial Services</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CalculatedAmount</strong></td>
+               <td class="small">0</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>ExemptionReason</strong></td>
+               <td class="small">Kein Ausweis der Umsatzsteuer bei innergemeinschaftlichen Lieferungen
+                  				</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>BasisAmount</strong></td>
+               <td class="small">2000</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">K</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">0</td>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181001</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181031</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradePaymentTerms<br></br>    DueDateDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20181130</td>
+               <tr>
+                  <td class="code">@format</td>
+                  <td class="small">102</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">2000.00</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>TaxBasisTotalAmount</strong></td>
+               <td class="small">2000.00</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>TaxTotalAmount</strong></td>
+               <td class="small">0.00</td>
+               <tr>
+                  <td class="code">@currencyID</td>
+                  <td class="small">EUR</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>GrandTotalAmount</strong></td>
+               <td class="small">2000.00</td>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>DuePayableAmount</strong></td>
+               <td class="small">2000.00</td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>
