@@ -617,7 +617,7 @@ namespace s2industries.ZUGFeRD
             {
                 // BT-127
                 Writer.WriteStartElement("cbc", "Note");
-                String.Join(Environment.NewLine, tradeLineItem.AssociatedDocument.Notes.Select(n => n.Content));
+                Writer.WriteValue(String.Join(Environment.NewLine, tradeLineItem.AssociatedDocument.Notes.Select(n => n.Content)));
                 Writer.WriteEndElement(); // cbc:Note
             }
 
@@ -1066,19 +1066,21 @@ namespace s2industries.ZUGFeRD
                 }
             }
         } // !_writeNotes()
-
+        
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
-            if (value.HasValue)
+            if (!value.HasValue)
             {
-                writer.WriteStartElement(prefix, tagName, profile);
-                if (forceCurrency)
-                {
-                    writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
-                }
-                writer.WriteValue(_formatDecimal(value.Value, numDecimals));
-                writer.WriteEndElement(); // !tagName
+                return;
             }
+
+            writer.WriteStartElement(prefix, tagName, profile);
+            if (forceCurrency)
+            {
+                writer.WriteAttributeString("currencyID", this.Descriptor.Currency.EnumToString());
+            }
+            writer.WriteValue(_formatDecimal(value.Value, numDecimals));
+            writer.WriteEndElement(); // !tagName
         } // !_writeOptionalAmount()
 
         private int _encodeInvoiceType(InvoiceType type)
