@@ -172,7 +172,7 @@ namespace s2industries.ZUGFeRD
                     {
                         Writer.WriteElementString("cbc", "IssueDate", _formatDate(invoiceReferencedDocument.IssueDateTime.Value, false, true));
                     }
-                    Writer.WriteEndElement(); // !ram:InvoiceDocumentReference
+                    Writer.WriteEndElement(); // !cac:InvoiceDocumentReference
                     break; // only one reference allowed in UBL
                 }
                 Writer.WriteEndElement(); // !cac:BillingReference
@@ -770,10 +770,10 @@ namespace s2industries.ZUGFeRD
             switch (specifiedTradeAllowanceCharge)
             {
                 case TradeAllowance allowance when allowance.ReasonCode != null:
-                    Writer.WriteOptionalElementString("ram", "ReasonCode", allowance.ReasonCode.EnumToString()); // BT-140
+                    Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode", allowance.ReasonCode.EnumToString()); // BT-140
                     break;
                 case TradeCharge charge when charge.ReasonCode != null:
-                    Writer.WriteOptionalElementString("ram", "ReasonCode", charge.ReasonCode.EnumToString()); // BT-145
+                    Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode", charge.ReasonCode.EnumToString()); // BT-145
                     break;
             }
             

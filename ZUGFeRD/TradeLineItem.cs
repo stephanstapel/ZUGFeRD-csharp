@@ -672,6 +672,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// The value given here refers to the superior line. In this way, a hierarchy tree of invoice items can be mapped.
+        /// 
+        /// BT-X-304
         /// </summary>
         public TradeLineItem SetParentLineId(string parentLineId)
         {

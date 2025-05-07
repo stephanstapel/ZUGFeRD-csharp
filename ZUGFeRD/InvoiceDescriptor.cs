@@ -697,7 +697,7 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// Adds a note to the invoice with optional subject and content codes
+        /// Adds a note to the invoice with optional subject and content codes        
         ///
         /// BG-1
         /// </summary>
