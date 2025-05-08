@@ -55,11 +55,11 @@ namespace s2industries.ZUGFeRD
         public GlobalID()
         {
             this.ID = String.Empty;
-            this.SchemeID = GlobalIDSchemeIdentifiers.Unknown;
+            this.SchemeID = null;
         } // !GlobalID()
 
 
-        public GlobalID(GlobalIDSchemeIdentifiers schemeID, string ID)
+        public GlobalID(GlobalIDSchemeIdentifiers? schemeID, string ID)
         {
             this.ID = ID;
             this.SchemeID = schemeID;

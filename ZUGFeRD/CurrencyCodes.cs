@@ -23,1584 +23,1074 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-    // Source: https://raw.githubusercontent.com/datasets/currency-codes/master/data/codes-all.csv
-    //
-    // You can regenerate the codes using:
-    //
-    // import csv
-    //
-    // currencies = {}
-    //
-    // with open('currencies.csv', newline= '') as f:
-    // lines = csv.reader(f, delimiter = ',', quotechar = '"')
-    // for line in lines:
-    //     if len(line) < 4:
-    //         continue
-    //
-    //     country = line[0]
-    //     currency = line[1]
-    //     alphaThree = line[2]
-    //     code = line[3]
-    //
-    //     if len(code) == 0:
-    //         continue
-    //
-    //     # first line
-    //     if country.find('Entity') > -1:
-    //         continue
-    //
-    //     if currency.find('Zimbabwe Dollar (old)') > -1:
-    //         continue
-    //
-    //     if code in currencies:
-    //         continue
-    //
-    //     currencies[code] = { 'country' : country, 'currency' : currency, 'alphaThree' : alphaThree, 'code' : code }
-    //
-    // g = open('currencies.cs', 'w+')
-    //
-    // for currency in currencies.values():
-    //     g.write('/// <summary>\n')
-    //     g.write('/// Country: ' + currency['country'] + '\n')
-    //     g.write('/// Currency: ' + currency['currency'] + '\n')
-    //     g.write('/// </summary>\n')
-    //     g.write(currency['alphaThree'] + ' = ' + currency['code'] + ',\n')
-    //     g.write('\n')
-    //
-    // g.close()
-
-
-    /// <summary>
-    /// Full usage of http://csharpmoney.codeplex.com/ not required here,
-    /// mapping of ISO codes sufficient.
-    ///
-    /// ISO 4217 currency codes
-    ///
-    /// Source: https://raw.githubusercontent.com/datasets/currency-codes/master/data/codes-all.csv
-    /// </summary>
     public enum CurrencyCodes
     {
         /// <summary>
-        /// Fallback value
+        /// UAE Dirham
         /// </summary>
-        Unknown = 0,
+        [EnumStringValue("AED")]
+        AED,
 
         /// <summary>
-        /// Country: AFGHANISTAN
-        /// Currency: Afghani
+        /// Afghani
         /// </summary>
-        AFN = 971,
+        [EnumStringValue("AFN")]
+        AFN,
 
         /// <summary>
-        /// Country: ÅLAND ISLANDS
-        /// Currency: Euro
+        /// Lek
         /// </summary>
-        EUR = 978,
+        [EnumStringValue("ALL")]
+        ALL,
 
         /// <summary>
-        /// Country: ALBANIA
-        /// Currency: Lek
+        /// Armenian Dram
         /// </summary>
-        ALL = 008,
+        [EnumStringValue("AMD")]
+        AMD,
 
         /// <summary>
-        /// Country: ALGERIA
-        /// Currency: Algerian Dinar
+        /// Netherlands Antillean Guilder
         /// </summary>
-        DZD = 012,
+        [EnumStringValue("ANG")]
+        ANG,
 
         /// <summary>
-        /// Country: AMERICAN SAMOA
-        /// Currency: US Dollar
+        /// Kwanza
         /// </summary>
-        USD = 840,
+        [EnumStringValue("AOA")]
+        AOA,
 
         /// <summary>
-        /// Country: ANGOLA
-        /// Currency: Kwanza
+        /// Argentine Peso
         /// </summary>
-        AOA = 973,
+        [EnumStringValue("ARS")]
+        ARS,
 
         /// <summary>
-        /// Country: ANGUILLA
-        /// Currency: East Caribbean Dollar
+        /// Australian Dollar
         /// </summary>
-        XCD = 951,
+        [EnumStringValue("AUD")]
+        AUD,
 
         /// <summary>
-        /// Country: ARGENTINA
-        /// Currency: Argentine Peso
+        /// Aruban Florin
         /// </summary>
-        ARS = 032,
+        [EnumStringValue("AWG")]
+        AWG,
 
         /// <summary>
-        /// Country: ARMENIA
-        /// Currency: Armenian Dram
+        /// Azerbaijan Manat
         /// </summary>
-        AMD = 051,
+        [EnumStringValue("AZN")]
+        AZN,
 
         /// <summary>
-        /// Country: ARUBA
-        /// Currency: Aruban Florin
+        /// Convertible Mark
         /// </summary>
-        AWG = 533,
+        [EnumStringValue("BAM")]
+        BAM,
 
         /// <summary>
-        /// Country: AUSTRALIA
-        /// Currency: Australian Dollar
+        /// Barbados Dollar
         /// </summary>
-        AUD = 036,
+        [EnumStringValue("BBD")]
+        BBD,
 
         /// <summary>
-        /// Country: AZERBAIJAN
-        /// Currency: Azerbaijan Manat
+        /// Taka
         /// </summary>
-        AZN = 944,
+        [EnumStringValue("BDT")]
+        BDT,
 
         /// <summary>
-        /// Country: BAHAMAS (THE)
-        /// Currency: Bahamian Dollar
+        /// Bulgarian Lev
         /// </summary>
-        BSD = 044,
+        [EnumStringValue("BGN")]
+        BGN,
 
         /// <summary>
-        /// Country: BAHRAIN
-        /// Currency: Bahraini Dinar
+        /// Bahraini Dinar
         /// </summary>
-        BHD = 048,
+        [EnumStringValue("BHD")]
+        BHD,
 
         /// <summary>
-        /// Country: BANGLADESH
-        /// Currency: Taka
+        /// Burundi Franc
         /// </summary>
-        BDT = 050,
+        [EnumStringValue("BIF")]
+        BIF,
 
         /// <summary>
-        /// Country: BARBADOS
-        /// Currency: Barbados Dollar
+        /// Bermudian Dollar
         /// </summary>
-        BBD = 052,
+        [EnumStringValue("BMD")]
+        BMD,
 
         /// <summary>
-        /// Country: BELARUS
-        /// Currency: Belarusian Ruble
+        /// Brunei Dollar
         /// </summary>
-        BYN = 933,
+        [EnumStringValue("BND")]
+        BND,
 
         /// <summary>
-        /// Country: BELIZE
-        /// Currency: Belize Dollar
+        /// Boliviano
         /// </summary>
-        BZD = 084,
+        [EnumStringValue("BOB")]
+        BOB,
 
         /// <summary>
-        /// Country: BENIN
-        /// Currency: CFA Franc BCEAO
+        /// Mvdol
         /// </summary>
-        XOF = 952,
+        [EnumStringValue("BOV")]
+        BOV,
 
         /// <summary>
-        /// Country: BERMUDA
-        /// Currency: Bermudian Dollar
+        /// Brazilian Real
         /// </summary>
-        BMD = 060,
+        [EnumStringValue("BRL")]
+        BRL,
 
         /// <summary>
-        /// Country: BHUTAN
-        /// Currency: Indian Rupee
+        /// Bahamian Dollar
         /// </summary>
-        INR = 356,
+        [EnumStringValue("BSD")]
+        BSD,
 
         /// <summary>
-        /// Country: BHUTAN
-        /// Currency: Ngultrum
+        /// Ngultrum
         /// </summary>
-        BTN = 064,
+        [EnumStringValue("BTN")]
+        BTN,
 
         /// <summary>
-        /// Country: BOLIVIA (PLURINATIONAL STATE OF)
-        /// Currency: Boliviano
+        /// Pula
         /// </summary>
-        BOB = 068,
+        [EnumStringValue("BWP")]
+        BWP,
 
         /// <summary>
-        /// Country: BOLIVIA (PLURINATIONAL STATE OF)
-        /// Currency: Mvdol
+        /// Belarusian Ruble
         /// </summary>
-        BOV = 984,
+        [EnumStringValue("BYN")]
+        BYN,
 
         /// <summary>
-        /// Country: BOSNIA AND HERZEGOVINA
-        /// Currency: Convertible Mark
+        /// Belize Dollar
         /// </summary>
-        BAM = 977,
+        [EnumStringValue("BZD")]
+        BZD,
 
         /// <summary>
-        /// Country: BOTSWANA
-        /// Currency: Pula
+        /// Canadian Dollar
         /// </summary>
-        BWP = 072,
+        [EnumStringValue("CAD")]
+        CAD,
 
         /// <summary>
-        /// Country: BOUVET ISLAND
-        /// Currency: Norwegian Krone
+        /// Congolese Franc
         /// </summary>
-        NOK = 578,
+        [EnumStringValue("CDF")]
+        CDF,
 
         /// <summary>
-        /// Country: BRAZIL
-        /// Currency: Brazilian Real
+        /// WIR Euro
         /// </summary>
-        BRL = 986,
+        [EnumStringValue("CHE")]
+        CHE,
 
         /// <summary>
-        /// Country: BRUNEI DARUSSALAM
-        /// Currency: Brunei Dollar
+        /// Swiss Franc
         /// </summary>
-        BND = 096,
+        [EnumStringValue("CHF")]
+        CHF,
 
         /// <summary>
-        /// Country: BULGARIA
-        /// Currency: Bulgarian Lev
+        /// WIR Franc
         /// </summary>
-        BGN = 975,
+        [EnumStringValue("CHW")]
+        CHW,
 
         /// <summary>
-        /// Country: BURUNDI
-        /// Currency: Burundi Franc
+        /// Unidad de Fomento
         /// </summary>
-        BIF = 108,
+        [EnumStringValue("CLF")]
+        CLF,
 
         /// <summary>
-        /// Country: CABO VERDE
-        /// Currency: Cabo Verde Escudo
+        /// Chilean Peso
         /// </summary>
-        CVE = 132,
+        [EnumStringValue("CLP")]
+        CLP,
 
         /// <summary>
-        /// Country: CAMBODIA
-        /// Currency: Riel
+        /// Yuan Renminbi
         /// </summary>
-        KHR = 116,
+        [EnumStringValue("CNY")]
+        CNY,
 
         /// <summary>
-        /// Country: CAMEROON
-        /// Currency: CFA Franc BEAC
+        /// Colombian Peso
         /// </summary>
-        XAF = 950,
+        [EnumStringValue("COP")]
+        COP,
 
         /// <summary>
-        /// Country: CANADA
-        /// Currency: Canadian Dollar
+        /// Unidad de Valor Real
         /// </summary>
-        CAD = 124,
+        [EnumStringValue("COU")]
+        COU,
 
         /// <summary>
-        /// Country: CAYMAN ISLANDS (THE)
-        /// Currency: Cayman Islands Dollar
+        /// Costa Rican Colon
         /// </summary>
-        KYD = 136,
+        [EnumStringValue("CRC")]
+        CRC,
 
         /// <summary>
-        /// Country: CHILE
-        /// Currency: Chilean Peso
+        /// Cuban Peso
         /// </summary>
-        CLP = 152,
+        [EnumStringValue("CUP")]
+        CUP,
 
         /// <summary>
-        /// Country: CHILE
-        /// Currency: Unidad de Fomento
+        /// Cabo Verde Escudo
         /// </summary>
-        CLF = 990,
+        [EnumStringValue("CVE")]
+        CVE,
 
         /// <summary>
-        /// Country: CHINA
-        /// Currency: Yuan Renminbi
+        /// Czech Koruna
         /// </summary>
-        CNY = 156,
+        [EnumStringValue("CZK")]
+        CZK,
 
         /// <summary>
-        /// Country: COLOMBIA
-        /// Currency: Colombian Peso
+        /// Djibouti Franc
         /// </summary>
-        COP = 170,
+        [EnumStringValue("DJF")]
+        DJF,
 
         /// <summary>
-        /// Country: COLOMBIA
-        /// Currency: Unidad de Valor Real
+        /// Danish Krone
         /// </summary>
-        COU = 970,
+        [EnumStringValue("DKK")]
+        DKK,
 
         /// <summary>
-        /// Country: COMOROS (THE)
-        /// Currency: Comorian Franc
+        /// Dominican Peso
         /// </summary>
-        KMF = 174,
+        [EnumStringValue("DOP")]
+        DOP,
 
         /// <summary>
-        /// Country: CONGO (THE DEMOCRATIC REPUBLIC OF THE)
-        /// Currency: Congolese Franc
+        /// Algerian Dinar
         /// </summary>
-        CDF = 976,
+        [EnumStringValue("DZD")]
+        DZD,
 
         /// <summary>
-        /// Country: COOK ISLANDS (THE)
-        /// Currency: New Zealand Dollar
+        /// Egyptian Pound
         /// </summary>
-        NZD = 554,
+        [EnumStringValue("EGP")]
+        EGP,
 
         /// <summary>
-        /// Country: COSTA RICA
-        /// Currency: Costa Rican Colon
+        /// Nakfa
         /// </summary>
-        CRC = 188,
+        [EnumStringValue("ERN")]
+        ERN,
 
         /// <summary>
-        /// Country: CROATIA
-        /// Currency: Kuna
+        /// Ethiopian Birr
         /// </summary>
-        HRK = 191,
+        [EnumStringValue("ETB")]
+        ETB,
 
         /// <summary>
-        /// Country: CUBA
-        /// Currency: Cuban Peso
+        /// Euro
         /// </summary>
-        CUP = 192,
+        [EnumStringValue("EUR")]
+        EUR,
 
         /// <summary>
-        /// Country: CUBA
-        /// Currency: Peso Convertible
+        /// Fiji Dollar
         /// </summary>
-        CUC = 931,
+        [EnumStringValue("FJD")]
+        FJD,
 
         /// <summary>
-        /// Country: CURAÇAO
-        /// Currency: Netherlands Antillean Guilder
+        /// Falkland Islands Pound
         /// </summary>
-        ANG = 532,
+        [EnumStringValue("FKP")]
+        FKP,
 
         /// <summary>
-        /// Country: CZECHIA
-        /// Currency: Czech Koruna
+        /// Pound Sterling
         /// </summary>
-        CZK = 203,
+        [EnumStringValue("GBP")]
+        GBP,
 
         /// <summary>
-        /// Country: DENMARK
-        /// Currency: Danish Krone
+        /// Lari
         /// </summary>
-        DKK = 208,
+        [EnumStringValue("GEL")]
+        GEL,
 
         /// <summary>
-        /// Country: DJIBOUTI
-        /// Currency: Djibouti Franc
+        /// Ghana Cedi
         /// </summary>
-        DJF = 262,
+        [EnumStringValue("GHS")]
+        GHS,
 
         /// <summary>
-        /// Country: DOMINICAN REPUBLIC (THE)
-        /// Currency: Dominican Peso
+        /// Gibraltar Pound
         /// </summary>
-        DOP = 214,
+        [EnumStringValue("GIP")]
+        GIP,
 
         /// <summary>
-        /// Country: EGYPT
-        /// Currency: Egyptian Pound
+        /// Dalasi
         /// </summary>
-        EGP = 818,
+        [EnumStringValue("GMD")]
+        GMD,
 
         /// <summary>
-        /// Country: EL SALVADOR
-        /// Currency: El Salvador Colon
+        /// Guinean Franc
         /// </summary>
-        SVC = 222,
+        [EnumStringValue("GNF")]
+        GNF,
 
         /// <summary>
-        /// Country: ERITREA
-        /// Currency: Nakfa
+        /// Quetzal
         /// </summary>
-        ERN = 232,
+        [EnumStringValue("GTQ")]
+        GTQ,
 
         /// <summary>
-        /// Country: ETHIOPIA
-        /// Currency: Ethiopian Birr
+        /// Guyana Dollar
         /// </summary>
-        ETB = 230,
+        [EnumStringValue("GYD")]
+        GYD,
 
         /// <summary>
-        /// Country: FALKLAND ISLANDS (THE) [MALVINAS]
-        /// Currency: Falkland Islands Pound
+        /// Hong Kong Dollar
         /// </summary>
-        FKP = 238,
+        [EnumStringValue("HKD")]
+        HKD,
 
         /// <summary>
-        /// Country: FIJI
-        /// Currency: Fiji Dollar
+        /// Lempira
         /// </summary>
-        FJD = 242,
+        [EnumStringValue("HNL")]
+        HNL,
 
         /// <summary>
-        /// Country: FRENCH POLYNESIA
-        /// Currency: CFP Franc
+        /// Gourde
         /// </summary>
-        XPF = 953,
+        [EnumStringValue("HTG")]
+        HTG,
 
         /// <summary>
-        /// Country: GAMBIA (THE)
-        /// Currency: Dalasi
+        /// Forint
         /// </summary>
-        GMD = 270,
+        [EnumStringValue("HUF")]
+        HUF,
 
         /// <summary>
-        /// Country: GEORGIA
-        /// Currency: Lari
+        /// Rupiah
         /// </summary>
-        GEL = 981,
+        [EnumStringValue("IDR")]
+        IDR,
 
         /// <summary>
-        /// Country: GHANA
-        /// Currency: Ghana Cedi
+        /// New Israeli Sheqel
         /// </summary>
-        GHS = 936,
+        [EnumStringValue("ILS")]
+        ILS,
 
         /// <summary>
-        /// Country: GIBRALTAR
-        /// Currency: Gibraltar Pound
+        /// Indian Rupee
         /// </summary>
-        GIP = 292,
+        [EnumStringValue("INR")]
+        INR,
 
         /// <summary>
-        /// Country: GUATEMALA
-        /// Currency: Quetzal
+        /// Iraqi Dinar
         /// </summary>
-        GTQ = 320,
+        [EnumStringValue("IQD")]
+        IQD,
 
         /// <summary>
-        /// Country: GUERNSEY
-        /// Currency: Pound Sterling
+        /// Iranian Rial
         /// </summary>
-        GBP = 826,
+        [EnumStringValue("IRR")]
+        IRR,
 
         /// <summary>
-        /// Country: GUINEA
-        /// Currency: Guinean Franc
+        /// Iceland Krona
         /// </summary>
-        GNF = 324,
+        [EnumStringValue("ISK")]
+        ISK,
 
         /// <summary>
-        /// Country: GUYANA
-        /// Currency: Guyana Dollar
+        /// Jamaican Dollar
         /// </summary>
-        GYD = 328,
+        [EnumStringValue("JMD")]
+        JMD,
 
         /// <summary>
-        /// Country: HAITI
-        /// Currency: Gourde
+        /// Jordanian Dinar
         /// </summary>
-        HTG = 332,
+        [EnumStringValue("JOD")]
+        JOD,
 
         /// <summary>
-        /// Country: HONDURAS
-        /// Currency: Lempira
+        /// Yen
         /// </summary>
-        HNL = 340,
+        [EnumStringValue("JPY")]
+        JPY,
 
         /// <summary>
-        /// Country: HONG KONG
-        /// Currency: Hong Kong Dollar
+        /// Kenyan Shilling
         /// </summary>
-        HKD = 344,
+        [EnumStringValue("KES")]
+        KES,
 
         /// <summary>
-        /// Country: HUNGARY
-        /// Currency: Forint
+        /// Som
         /// </summary>
-        HUF = 348,
+        [EnumStringValue("KGS")]
+        KGS,
 
         /// <summary>
-        /// Country: ICELAND
-        /// Currency: Iceland Krona
+        /// Riel
         /// </summary>
-        ISK = 352,
+        [EnumStringValue("KHR")]
+        KHR,
 
         /// <summary>
-        /// Country: INDONESIA
-        /// Currency: Rupiah
+        /// Comorian Franc 
         /// </summary>
-        IDR = 360,
+        [EnumStringValue("KMF")]
+        KMF,
 
         /// <summary>
-        /// Country: INTERNATIONAL MONETARY FUND (IMF)
-        /// Currency: SDR (Special Drawing Right)
+        /// North Korean Won
         /// </summary>
-        XDR = 960,
+        [EnumStringValue("KPW")]
+        KPW,
 
         /// <summary>
-        /// Country: IRAN (ISLAMIC REPUBLIC OF)
-        /// Currency: Iranian Rial
+        /// Won
         /// </summary>
-        IRR = 364,
+        [EnumStringValue("KRW")]
+        KRW,
 
         /// <summary>
-        /// Country: IRAQ
-        /// Currency: Iraqi Dinar
+        /// Kuwaiti Dinar
         /// </summary>
-        IQD = 368,
+        [EnumStringValue("KWD")]
+        KWD,
 
         /// <summary>
-        /// Country: ISRAEL
-        /// Currency: New Israeli Sheqel
+        /// Cayman Islands Dollar
         /// </summary>
-        ILS = 376,
+        [EnumStringValue("KYD")]
+        KYD,
 
         /// <summary>
-        /// Country: JAMAICA
-        /// Currency: Jamaican Dollar
+        /// Tenge
         /// </summary>
-        JMD = 388,
+        [EnumStringValue("KZT")]
+        KZT,
 
         /// <summary>
-        /// Country: JAPAN
-        /// Currency: Yen
+        /// Lao Kip
         /// </summary>
-        JPY = 392,
+        [EnumStringValue("LAK")]
+        LAK,
 
         /// <summary>
-        /// Country: JORDAN
-        /// Currency: Jordanian Dinar
+        /// Lebanese Pound
         /// </summary>
-        JOD = 400,
+        [EnumStringValue("LBP")]
+        LBP,
 
         /// <summary>
-        /// Country: KAZAKHSTAN
-        /// Currency: Tenge
+        /// Sri Lanka Rupee
         /// </summary>
-        KZT = 398,
+        [EnumStringValue("LKR")]
+        LKR,
 
         /// <summary>
-        /// Country: KENYA
-        /// Currency: Kenyan Shilling
+        /// Liberian Dollar
         /// </summary>
-        KES = 404,
+        [EnumStringValue("LRD")]
+        LRD,
 
         /// <summary>
-        /// Country: KOREA (THE DEMOCRATIC PEOPLE’S REPUBLIC OF)
-        /// Currency: North Korean Won
+        /// Loti
         /// </summary>
-        KPW = 408,
+        [EnumStringValue("LSL")]
+        LSL,
 
         /// <summary>
-        /// Country: KOREA (THE REPUBLIC OF)
-        /// Currency: Won
+        /// Libyan Dinar
         /// </summary>
-        KRW = 410,
+        [EnumStringValue("LYD")]
+        LYD,
 
         /// <summary>
-        /// Country: KUWAIT
-        /// Currency: Kuwaiti Dinar
+        /// Moroccan Dirham
         /// </summary>
-        KWD = 414,
+        [EnumStringValue("MAD")]
+        MAD,
 
         /// <summary>
-        /// Country: KYRGYZSTAN
-        /// Currency: Som
+        /// Moldovan Leu
         /// </summary>
-        KGS = 417,
+        [EnumStringValue("MDL")]
+        MDL,
 
         /// <summary>
-        /// Country: LAO PEOPLE’S DEMOCRATIC REPUBLIC (THE)
-        /// Currency: Lao Kip
+        /// Malagasy Ariary
         /// </summary>
-        LAK = 418,
+        [EnumStringValue("MGA")]
+        MGA,
 
         /// <summary>
-        /// Country: LEBANON
-        /// Currency: Lebanese Pound
+        /// Denar
         /// </summary>
-        LBP = 422,
+        [EnumStringValue("MKD")]
+        MKD,
 
         /// <summary>
-        /// Country: LESOTHO
-        /// Currency: Loti
+        /// Kyat
         /// </summary>
-        LSL = 426,
+        [EnumStringValue("MMK")]
+        MMK,
 
         /// <summary>
-        /// Country: LESOTHO
-        /// Currency: Rand
+        /// Tugrik
         /// </summary>
-        ZAR = 710,
+        [EnumStringValue("MNT")]
+        MNT,
 
         /// <summary>
-        /// Country: LIBERIA
-        /// Currency: Liberian Dollar
+        /// Pataca
         /// </summary>
-        LRD = 430,
+        [EnumStringValue("MOP")]
+        MOP,
 
         /// <summary>
-        /// Country: LIBYA
-        /// Currency: Libyan Dinar
+        /// Ouguiya
         /// </summary>
-        LYD = 434,
+        [EnumStringValue("MRU")]
+        MRU,
 
         /// <summary>
-        /// Country: LIECHTENSTEIN
-        /// Currency: Swiss Franc
+        /// Mauritius Rupee
         /// </summary>
-        CHF = 756,
+        [EnumStringValue("MUR")]
+        MUR,
 
         /// <summary>
-        /// Country: MACAO
-        /// Currency: Pataca
+        /// Rufiyaa
         /// </summary>
-        MOP = 446,
+        [EnumStringValue("MVR")]
+        MVR,
 
         /// <summary>
-        /// Country: MACEDONIA (THE FORMER YUGOSLAV REPUBLIC OF)
-        /// Currency: Denar
+        /// Malawi Kwacha
         /// </summary>
-        MKD = 807,
+        [EnumStringValue("MWK")]
+        MWK,
 
         /// <summary>
-        /// Country: MADAGASCAR
-        /// Currency: Malagasy Ariary
+        /// Mexican Peso
         /// </summary>
-        MGA = 969,
+        [EnumStringValue("MXN")]
+        MXN,
 
         /// <summary>
-        /// Country: MALAWI
-        /// Currency: Malawi Kwacha
+        /// Mexican Unidad de Inversion (UDI)
         /// </summary>
-        MWK = 454,
+        [EnumStringValue("MXV")]
+        MXV,
 
         /// <summary>
-        /// Country: MALAYSIA
-        /// Currency: Malaysian Ringgit
+        /// Malaysian Ringgit
         /// </summary>
-        MYR = 458,
+        [EnumStringValue("MYR")]
+        MYR,
 
         /// <summary>
-        /// Country: MALDIVES
-        /// Currency: Rufiyaa
+        /// Mozambique Metical
         /// </summary>
-        MVR = 462,
+        [EnumStringValue("MZN")]
+        MZN,
 
         /// <summary>
-        /// Country: MAURITANIA
-        /// Currency: Ouguiya
+        /// Namibia Dollar
         /// </summary>
-        MRU = 929,
+        [EnumStringValue("NAD")]
+        NAD,
 
         /// <summary>
-        /// Country: MAURITIUS
-        /// Currency: Mauritius Rupee
+        /// Naira
         /// </summary>
-        MUR = 480,
+        [EnumStringValue("NGN")]
+        NGN,
 
         /// <summary>
-        /// Country: MEMBER COUNTRIES OF THE AFRICAN DEVELOPMENT BANK GROUP
-        /// Currency: ADB Unit of Account
+        /// Cordoba Oro
         /// </summary>
-        XUA = 965,
+        [EnumStringValue("NIO")]
+        NIO,
 
         /// <summary>
-        /// Country: MEXICO
-        /// Currency: Mexican Peso
+        /// Norwegian Krone
         /// </summary>
-        MXN = 484,
+        [EnumStringValue("NOK")]
+        NOK,
 
         /// <summary>
-        /// Country: MEXICO
-        /// Currency: Mexican Unidad de Inversion (UDI)
+        /// Nepalese Rupee
         /// </summary>
-        MXV = 979,
+        [EnumStringValue("NPR")]
+        NPR,
 
         /// <summary>
-        /// Country: MOLDOVA (THE REPUBLIC OF)
-        /// Currency: Moldovan Leu
+        /// New Zealand Dollar
         /// </summary>
-        MDL = 498,
+        [EnumStringValue("NZD")]
+        NZD,
 
         /// <summary>
-        /// Country: MONGOLIA
-        /// Currency: Tugrik
+        /// Rial Omani
         /// </summary>
-        MNT = 496,
+        [EnumStringValue("OMR")]
+        OMR,
 
         /// <summary>
-        /// Country: MOROCCO
-        /// Currency: Moroccan Dirham
+        /// Balboa
         /// </summary>
-        MAD = 504,
+        [EnumStringValue("PAB")]
+        PAB,
 
         /// <summary>
-        /// Country: MOZAMBIQUE
-        /// Currency: Mozambique Metical
+        /// Sol
         /// </summary>
-        MZN = 943,
+        [EnumStringValue("PEN")]
+        PEN,
 
         /// <summary>
-        /// Country: MYANMAR
-        /// Currency: Kyat
+        /// Kina
         /// </summary>
-        MMK = 104,
+        [EnumStringValue("PGK")]
+        PGK,
 
         /// <summary>
-        /// Country: NAMIBIA
-        /// Currency: Namibia Dollar
+        /// Philippine Peso
         /// </summary>
-        NAD = 516,
+        [EnumStringValue("PHP")]
+        PHP,
 
         /// <summary>
-        /// Country: NEPAL
-        /// Currency: Nepalese Rupee
+        /// Pakistan Rupee
         /// </summary>
-        NPR = 524,
+        [EnumStringValue("PKR")]
+        PKR,
 
         /// <summary>
-        /// Country: NICARAGUA
-        /// Currency: Cordoba Oro
+        /// Zloty
         /// </summary>
-        NIO = 558,
+        [EnumStringValue("PLN")]
+        PLN,
 
         /// <summary>
-        /// Country: NIGERIA
-        /// Currency: Naira
+        /// Guarani
         /// </summary>
-        NGN = 566,
+        [EnumStringValue("PYG")]
+        PYG,
 
         /// <summary>
-        /// Country: OMAN
-        /// Currency: Rial Omani
+        /// Qatari Rial
         /// </summary>
-        OMR = 512,
+        [EnumStringValue("QAR")]
+        QAR,
 
         /// <summary>
-        /// Country: PAKISTAN
-        /// Currency: Pakistan Rupee
+        /// Romanian Leu
         /// </summary>
-        PKR = 586,
+        [EnumStringValue("RON")]
+        RON,
 
         /// <summary>
-        /// Country: PANAMA
-        /// Currency: Balboa
+        /// Serbian Dinar
         /// </summary>
-        PAB = 590,
+        [EnumStringValue("RSD")]
+        RSD,
 
         /// <summary>
-        /// Country: PAPUA NEW GUINEA
-        /// Currency: Kina
+        /// Russian Ruble
         /// </summary>
-        PGK = 598,
+        [EnumStringValue("RUB")]
+        RUB,
 
         /// <summary>
-        /// Country: PARAGUAY
-        /// Currency: Guarani
+        /// Rwanda Franc
         /// </summary>
-        PYG = 600,
+        [EnumStringValue("RWF")]
+        RWF,
 
         /// <summary>
-        /// Country: PERU
-        /// Currency: Sol
+        /// Saudi Riyal
         /// </summary>
-        PEN = 604,
+        [EnumStringValue("SAR")]
+        SAR,
 
         /// <summary>
-        /// Country: PHILIPPINES (THE)
-        /// Currency: Philippine Peso
+        /// Solomon Islands Dollar
         /// </summary>
-        PHP = 608,
+        [EnumStringValue("SBD")]
+        SBD,
 
         /// <summary>
-        /// Country: POLAND
-        /// Currency: Zloty
+        /// Seychelles Rupee
         /// </summary>
-        PLN = 985,
+        [EnumStringValue("SCR")]
+        SCR,
 
         /// <summary>
-        /// Country: QATAR
-        /// Currency: Qatari Rial
+        /// Sudanese Pound
         /// </summary>
-        QAR = 634,
+        [EnumStringValue("SDG")]
+        SDG,
 
         /// <summary>
-        /// Country: ROMANIA
-        /// Currency: Romanian Leu
+        /// Swedish Krona
         /// </summary>
-        RON = 946,
+        [EnumStringValue("SEK")]
+        SEK,
 
         /// <summary>
-        /// Country: RUSSIAN FEDERATION (THE)
-        /// Currency: Russian Ruble
+        /// Singapore Dollar
         /// </summary>
-        RUB = 643,
+        [EnumStringValue("SGD")]
+        SGD,
 
         /// <summary>
-        /// Country: RWANDA
-        /// Currency: Rwanda Franc
+        /// Saint Helena Pound
         /// </summary>
-        RWF = 646,
+        [EnumStringValue("SHP")]
+        SHP,
 
         /// <summary>
-        /// Country: SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA
-        /// Currency: Saint Helena Pound
+        /// Sierra Leone (new valuation 2022)
         /// </summary>
-        SHP = 654,
+        [EnumStringValue("SLE")]
+        SLE,
 
         /// <summary>
-        /// Country: SAMOA
-        /// Currency: Tala
+        /// Somali Shilling
         /// </summary>
-        WST = 882,
+        [EnumStringValue("SOS")]
+        SOS,
 
         /// <summary>
-        /// Country: SAO TOME AND PRINCIPE
-        /// Currency: Dobra
+        /// Surinam Dollar
         /// </summary>
-        STN = 930,
+        [EnumStringValue("SRD")]
+        SRD,
 
         /// <summary>
-        /// Country: SAUDI ARABIA
-        /// Currency: Saudi Riyal
+        /// South Sudanese Pound
         /// </summary>
-        SAR = 682,
+        [EnumStringValue("SSP")]
+        SSP,
 
         /// <summary>
-        /// Country: SERBIA
-        /// Currency: Serbian Dinar
+        /// Dobra
         /// </summary>
-        RSD = 941,
+        [EnumStringValue("STN")]
+        STN,
 
         /// <summary>
-        /// Country: SEYCHELLES
-        /// Currency: Seychelles Rupee
+        /// El Salvador Colon
         /// </summary>
-        SCR = 690,
+        [EnumStringValue("SVC")]
+        SVC,
 
         /// <summary>
-        /// Country: SIERRA LEONE
-        /// Currency: Leone
+        /// Syrian Pound
         /// </summary>
-        SLL = 694,
+        [EnumStringValue("SYP")]
+        SYP,
 
         /// <summary>
-        /// Country: SINGAPORE
-        /// Currency: Singapore Dollar
+        /// Lilangeni
         /// </summary>
-        SGD = 702,
+        [EnumStringValue("SZL")]
+        SZL,
 
         /// <summary>
-        /// Country: SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS "SUCRE"
-        /// Currency: Sucre
+        /// Baht
         /// </summary>
-        XSU = 994,
+        [EnumStringValue("THB")]
+        THB,
 
         /// <summary>
-        /// Country: SOLOMON ISLANDS
-        /// Currency: Solomon Islands Dollar
+        /// Somoni
         /// </summary>
-        SBD = 090,
+        [EnumStringValue("TJS")]
+        TJS,
 
         /// <summary>
-        /// Country: SOMALIA
-        /// Currency: Somali Shilling
+        /// Turkmenistan New Manat
         /// </summary>
-        SOS = 706,
+        [EnumStringValue("TMT")]
+        TMT,
 
         /// <summary>
-        /// Country: SOUTH SUDAN
-        /// Currency: South Sudanese Pound
+        /// Tunisian Dinar
         /// </summary>
-        SSP = 728,
+        [EnumStringValue("TND")]
+        TND,
 
         /// <summary>
-        /// Country: SRI LANKA
-        /// Currency: Sri Lanka Rupee
+        /// Pa’anga
         /// </summary>
-        LKR = 144,
+        [EnumStringValue("TOP")]
+        TOP,
 
         /// <summary>
-        /// Country: SUDAN (THE)
-        /// Currency: Sudanese Pound
+        /// Turkish Lira
         /// </summary>
-        SDG = 938,
+        [EnumStringValue("TRY")]
+        TRY,
 
         /// <summary>
-        /// Country: SURINAME
-        /// Currency: Surinam Dollar
+        /// Trinidad and Tobago Dollar
         /// </summary>
-        SRD = 968,
+        [EnumStringValue("TTD")]
+        TTD,
 
         /// <summary>
-        /// Country: ESWATINI
-        /// Currency: Lilangeni
+        /// New Taiwan Dollar
         /// </summary>
-        SZL = 748,
+        [EnumStringValue("TWD")]
+        TWD,
 
         /// <summary>
-        /// Country: SWEDEN
-        /// Currency: Swedish Krona
+        /// Tanzanian Shilling
         /// </summary>
-        SEK = 752,
+        [EnumStringValue("TZS")]
+        TZS,
 
         /// <summary>
-        /// Country: SWITZERLAND
-        /// Currency: WIR Euro
+        /// Hryvnia
         /// </summary>
-        CHE = 947,
+        [EnumStringValue("UAH")]
+        UAH,
 
         /// <summary>
-        /// Country: SWITZERLAND
-        /// Currency: WIR Franc
+        /// Uganda Shilling
         /// </summary>
-        CHW = 948,
+        [EnumStringValue("UGX")]
+        UGX,
 
         /// <summary>
-        /// Country: SYRIAN ARAB REPUBLIC
-        /// Currency: Syrian Pound
+        /// US Dollar
         /// </summary>
-        SYP = 760,
+        [EnumStringValue("USD")]
+        USD,
 
         /// <summary>
-        /// Country: TAIWAN (PROVINCE OF CHINA)
-        /// Currency: New Taiwan Dollar
+        /// US Dollar (Next day)
         /// </summary>
-        TWD = 901,
+        [EnumStringValue("USN")]
+        USN,
 
         /// <summary>
-        /// Country: TAJIKISTAN
-        /// Currency: Somoni
+        /// Uruguay Peso en Unidades Indexadas (UI)
         /// </summary>
-        TJS = 972,
+        [EnumStringValue("UYI")]
+        UYI,
 
         /// <summary>
-        /// Country: TANZANIA, UNITED REPUBLIC OF
-        /// Currency: Tanzanian Shilling
+        /// Peso Uruguayo
         /// </summary>
-        TZS = 834,
+        [EnumStringValue("UYU")]
+        UYU,
 
         /// <summary>
-        /// Country: THAILAND
-        /// Currency: Baht
+        /// Unidad Previsional
         /// </summary>
-        THB = 764,
+        [EnumStringValue("UYW")]
+        UYW,
 
         /// <summary>
-        /// Country: TONGA
-        /// Currency: Pa’anga
+        /// Uzbekistan Sum
         /// </summary>
-        TOP = 776,
+        [EnumStringValue("UZS")]
+        UZS,
 
         /// <summary>
-        /// Country: TRINIDAD AND TOBAGO
-        /// Currency: Trinidad and Tobago Dollar
+        /// Bolívar Soberano, new valuation
         /// </summary>
-        TTD = 780,
+        [EnumStringValue("VED")]
+        VED,
 
         /// <summary>
-        /// Country: TUNISIA
-        /// Currency: Tunisian Dinar
+        /// Bolívar Soberano
         /// </summary>
-        TND = 788,
+        [EnumStringValue("VES")]
+        VES,
 
         /// <summary>
-        /// Country: TURKEY
-        /// Currency: Turkish Lira
+        /// Dong
         /// </summary>
-        TRY = 949,
+        [EnumStringValue("VND")]
+        VND,
 
         /// <summary>
-        /// Country: TURKMENISTAN
-        /// Currency: Turkmenistan New Manat
+        /// Vatu
         /// </summary>
-        TMT = 934,
+        [EnumStringValue("VUV")]
+        VUV,
 
         /// <summary>
-        /// Country: UGANDA
-        /// Currency: Uganda Shilling
+        /// Tala
         /// </summary>
-        UGX = 800,
+        [EnumStringValue("WST")]
+        WST,
 
         /// <summary>
-        /// Country: UKRAINE
-        /// Currency: Hryvnia
+        /// CFA Franc BEAC
         /// </summary>
-        UAH = 980,
+        [EnumStringValue("XAF")]
+        XAF,
 
         /// <summary>
-        /// Country: UNITED ARAB EMIRATES (THE)
-        /// Currency: UAE Dirham
+        /// Silver
         /// </summary>
-        AED = 784,
+        [EnumStringValue("XAG")]
+        XAG,
 
         /// <summary>
-        /// Country: UNITED STATES OF AMERICA (THE)
-        /// Currency: US Dollar (Next day)
+        /// Gold
         /// </summary>
-        USN = 997,
+        [EnumStringValue("XAU")]
+        XAU,
 
         /// <summary>
-        /// Country: URUGUAY
-        /// Currency: Peso Uruguayo
+        /// Bond Markets Unit European Composite Unit (EURCO)
         /// </summary>
-        UYU = 858,
+        [EnumStringValue("XBA")]
+        XBA,
 
         /// <summary>
-        /// Country: URUGUAY
-        /// Currency: Uruguay Peso en Unidades Indexadas (UI)
+        /// Bond Markets Unit European Monetary Unit (E.M.U.-6)
         /// </summary>
-        UYI = 940,
+        [EnumStringValue("XBB")]
+        XBB,
 
         /// <summary>
-        /// Country: URUGUAY
-        /// Currency: Unidad Previsional
+        /// Bond Markets Unit European Unit of Account 9 (E.U.A.-9)
         /// </summary>
-        UYW = 927,
+        [EnumStringValue("XBC")]
+        XBC,
 
         /// <summary>
-        /// Country: UZBEKISTAN
-        /// Currency: Uzbekistan Sum
+        /// Bond Markets Unit European Unit of Account 17 (E.U.A.-17)
         /// </summary>
-        UZS = 860,
+        [EnumStringValue("XBD")]
+        XBD,
 
         /// <summary>
-        /// Country: VANUATU
-        /// Currency: Vatu
+        /// East Caribbean Dollar
         /// </summary>
-        VUV = 548,
+        [EnumStringValue("XCD")]
+        XCD,
 
         /// <summary>
-        /// Country: VENEZUELA (BOLIVARIAN REPUBLIC OF)
-        /// Currency: Bolívar Soberano
+        /// SDR (Special Drawing Right)
         /// </summary>
-        VES = 928,
+        [EnumStringValue("XDR")]
+        XDR,
 
         /// <summary>
-        /// Country: VIET NAM
-        /// Currency: Dong
+        /// CFA Franc BCEAO
         /// </summary>
-        VND = 704,
+        [EnumStringValue("XOF")]
+        XOF,
 
         /// <summary>
-        /// Country: YEMEN
-        /// Currency: Yemeni Rial
+        /// Palladium
         /// </summary>
-        YER = 886,
+        [EnumStringValue("XPD")]
+        XPD,
 
         /// <summary>
-        /// Country: ZAMBIA
-        /// Currency: Zambian Kwacha
+        /// CFP Franc
         /// </summary>
-        ZMW = 967,
+        [EnumStringValue("XPF")]
+        XPF,
 
         /// <summary>
-        /// Country: ZIMBABWE
-        /// Currency: Zimbabwe Dollar
+        /// Platinum
         /// </summary>
-        ZWL = 932,
+        [EnumStringValue("XPT")]
+        XPT,
 
         /// <summary>
-        /// Country: ZZ01_Bond Markets Unit European_EURCO
-        /// Currency: Bond Markets Unit European Composite Unit (EURCO)
+        /// Sucre
         /// </summary>
-        XBA = 955,
+        [EnumStringValue("XSU")]
+        XSU,
 
         /// <summary>
-        /// Country: ZZ02_Bond Markets Unit European_EMU-6
-        /// Currency: Bond Markets Unit European Monetary Unit (E.M.U.-6)
+        /// Codes specifically reserved for testing purposes
         /// </summary>
-        XBB = 956,
+        [EnumStringValue("XTS")]
+        XTS,
 
         /// <summary>
-        /// Country: ZZ03_Bond Markets Unit European_EUA-9
-        /// Currency: Bond Markets Unit European Unit of Account 9 (E.U.A.-9)
+        /// ADB Unit of Account
         /// </summary>
-        XBC = 957,
+        [EnumStringValue("XUA")]
+        XUA,
 
         /// <summary>
-        /// Country: ZZ04_Bond Markets Unit European_EUA-17
-        /// Currency: Bond Markets Unit European Unit of Account 17 (E.U.A.-17)
+        /// The codes assigned for transactions where no currency is involved
         /// </summary>
-        XBD = 958,
+        [EnumStringValue("XXX")]
+        XXX,
 
         /// <summary>
-        /// Country: ZZ06_Testing_Code
-        /// Currency: Codes specifically reserved for testing purposes
+        /// Yemeni Rial
         /// </summary>
-        XTS = 963,
+        [EnumStringValue("YER")]
+        YER,
 
         /// <summary>
-        /// Country: ZZ07_No_Currency
-        /// Currency: The codes assigned for transactions where no currency is involved
+        /// Rand
         /// </summary>
-        XXX = 999,
+        [EnumStringValue("ZAR")]
+        ZAR,
 
         /// <summary>
-        /// Country: ZZ08_Gold
-        /// Currency: Gold
+        /// Zambian Kwacha
         /// </summary>
-        XAU = 959,
+        [EnumStringValue("ZMW")]
+        ZMW,
 
         /// <summary>
-        /// Country: ZZ09_Palladium
-        /// Currency: Palladium
+        /// Zimbabwe Gold
         /// </summary>
-        XPD = 964,
-
-        /// <summary>
-        /// Country: ZZ10_Platinum
-        /// Currency: Platinum
-        /// </summary>
-        XPT = 962,
-
-        /// <summary>
-        /// Country: ZZ11_Silver
-        /// Currency: Silver
-        /// </summary>
-        XAG = 961,
-
-        /// <summary>
-        /// Country: AFGHANISTAN
-        /// Currency: Afghani
-        /// </summary>
-        AFA = 004,
-
-        /// <summary>
-        /// Country: ÅLAND ISLANDS
-        /// Currency: Markka
-        /// </summary>
-        FIM = 246,
-
-        /// <summary>
-        /// Country: ANDORRA
-        /// Currency: Andorran Peseta
-        /// </summary>
-        ADP = 020,
-
-        /// <summary>
-        /// Country: ANDORRA
-        /// Currency: Spanish Peseta
-        /// </summary>
-        ESP = 724,
-
-        /// <summary>
-        /// Country: ANDORRA
-        /// Currency: French Franc
-        /// </summary>
-        FRF = 250,
-
-        /// <summary>
-        /// Country: ANGOLA
-        /// Currency: Kwanza
-        /// </summary>
-        AOK = 024,
-
-        /// <summary>
-        /// Country: ANGOLA
-        /// Currency: Kwanza Reajustado
-        /// </summary>
-        AOR = 982,
-
-        /// <summary>
-        /// Country: ARMENIA
-        /// Currency: Russian Ruble
-        /// </summary>
-        RUR = 810,
-
-        /// <summary>
-        /// Country: AUSTRIA
-        /// Currency: Schilling
-        /// </summary>
-        ATS = 040,
-
-        /// <summary>
-        /// Country: AZERBAIJAN
-        /// Currency: Azerbaijan Manat
-        /// </summary>
-        AYM = 945,
-
-        /// <summary>
-        /// Country: AZERBAIJAN
-        /// Currency: Azerbaijanian Manat
-        /// </summary>
-        AZM = 031,
-
-        /// <summary>
-        /// Country: BELARUS
-        /// Currency: Belarusian Ruble
-        /// </summary>
-        BYB = 112,
-
-        /// <summary>
-        /// Country: BELARUS
-        /// Currency: Belarusian Ruble
-        /// </summary>
-        BYR = 974,
-
-        /// <summary>
-        /// Country: BELGIUM
-        /// Currency: Convertible Franc
-        /// </summary>
-        BEC = 993,
-
-        /// <summary>
-        /// Country: BELGIUM
-        /// Currency: Belgian Franc
-        /// </summary>
-        BEF = 056,
-
-        /// <summary>
-        /// Country: BELGIUM
-        /// Currency: Financial Franc
-        /// </summary>
-        BEL = 992,
-
-        /// <summary>
-        /// Country: BOSNIA AND HERZEGOVINA
-        /// Currency: Dinar
-        /// </summary>
-        BAD = 070,
-
-        /// <summary>
-        /// Country: BRAZIL
-        /// Currency: Cruzeiro
-        /// </summary>
-        BRB = 076,
-
-        /// <summary>
-        /// Country: BRAZIL
-        /// Currency: Cruzeiro Real
-        /// </summary>
-        BRR = 987,
-
-        /// <summary>
-        /// Country: BULGARIA
-        /// Currency: Lev A/52
-        /// </summary>
-        BGJ = 100,
-
-        /// <summary>
-        /// Country: CYPRUS
-        /// Currency: Cyprus Pound
-        /// </summary>
-        CYP = 196,
-
-        /// <summary>
-        /// Country: CZECHOSLOVAKIA
-        /// Currency: Koruna
-        /// </summary>
-        CSK = 200,
-
-        /// <summary>
-        /// Country: ECUADOR
-        /// Currency: Sucre
-        /// </summary>
-        ECS = 218,
-
-        /// <summary>
-        /// Country: ECUADOR
-        /// Currency: Unidad de Valor Constante (UVC)
-        /// </summary>
-        ECV = 983,
-
-        /// <summary>
-        /// Country: EQUATORIAL GUINEA
-        /// Currency: Ekwele
-        /// </summary>
-        GQE = 226,
-
-        /// <summary>
-        /// Country: ESTONIA
-        /// Currency: Kroon
-        /// </summary>
-        EEK = 233,
-
-        /// <summary>
-        /// Country: EUROPEAN MONETARY CO-OPERATION FUND (EMCF)
-        /// Currency: European Currency Unit (E.C.U)
-        /// </summary>
-        XEU = 954,
-
-        /// <summary>
-        /// Country: GEORGIA
-        /// Currency: Georgian Coupon
-        /// </summary>
-        GEK = 268,
-
-        /// <summary>
-        /// Country: GERMAN DEMOCRATIC REPUBLIC
-        /// Currency: Mark der DDR
-        /// </summary>
-        DDM = 278,
-
-        /// <summary>
-        /// Country: GERMANY
-        /// Currency: Deutsche Mark
-        /// </summary>
-        DEM = 276,
-
-        /// <summary>
-        /// Country: GHANA
-        /// Currency: Cedi
-        /// </summary>
-        GHC = 288,
-
-        /// <summary>
-        /// Country: GHANA
-        /// Currency: Ghana Cedi
-        /// </summary>
-        GHP = 939,
-
-        /// <summary>
-        /// Country: GREECE
-        /// Currency: Drachma
-        /// </summary>
-        GRD = 300,
-
-        /// <summary>
-        /// Country: GUINEA-BISSAU
-        /// Currency: Guinea Escudo
-        /// </summary>
-        GWE = 624,
-
-        /// <summary>
-        /// Country: HOLY SEE (VATICAN CITY STATE)
-        /// Currency: Italian Lira
-        /// </summary>
-        ITL = 380,
-
-        /// <summary>
-        /// Country: IRELAND
-        /// Currency: Irish Pound
-        /// </summary>
-        IEP = 372,
-
-        /// <summary>
-        /// Country: LATVIA
-        /// Currency: Latvian Lats
-        /// </summary>
-        LVL = 428,
-
-        /// <summary>
-        /// Country: LESOTHO
-        /// Currency: Financial Rand
-        /// </summary>
-        ZAL = 991,
-
-        /// <summary>
-        /// Country: LITHUANIA
-        /// Currency: Lithuanian Litas
-        /// </summary>
-        LTL = 440,
-
-        /// <summary>
-        /// Country: LUXEMBOURG
-        /// Currency: Luxembourg Convertible Franc
-        /// </summary>
-        LUC = 989,
-
-        /// <summary>
-        /// Country: LUXEMBOURG
-        /// Currency: Luxembourg Franc
-        /// </summary>
-        LUF = 442,
-
-        /// <summary>
-        /// Country: LUXEMBOURG
-        /// Currency: Luxembourg Financial Franc
-        /// </summary>
-        LUL = 988,
-
-        /// <summary>
-        /// Country: MADAGASCAR
-        /// Currency: Malagasy Franc
-        /// </summary>
-        MGF = 450,
-
-        /// <summary>
-        /// Country: MALI
-        /// Currency: Mali Franc
-        /// </summary>
-        MLF = 466,
-
-        /// <summary>
-        /// Country: MALTA
-        /// Currency: Maltese Lira
-        /// </summary>
-        MTL = 470,
-
-        /// <summary>
-        /// Country: MAURITANIA
-        /// Currency: Ouguiya
-        /// </summary>
-        MRO = 478,
-
-        /// <summary>
-        /// Country: MOZAMBIQUE
-        /// Currency: Mozambique Escudo
-        /// </summary>
-        MZE = 508,
-
-        /// <summary>
-        /// Country: NETHERLANDS
-        /// Currency: Netherlands Guilder
-        /// </summary>
-        NLG = 528,
-
-        /// <summary>
-        /// Country: POLAND
-        /// Currency: Zloty
-        /// </summary>
-        PLZ = 616,
-
-        /// <summary>
-        /// Country: PORTUGAL
-        /// Currency: Portuguese Escudo
-        /// </summary>
-        PTE = 620,
-
-        /// <summary>
-        /// Country: ROMANIA
-        /// Currency: Leu A/52
-        /// </summary>
-        ROK = 642,
-
-        /// <summary>
-        /// Country: SAO TOME AND PRINCIPE
-        /// Currency: Dobra
-        /// </summary>
-        STD = 678,
-
-        /// <summary>
-        /// Country: SERBIA AND MONTENEGRO
-        /// Currency: Serbian Dinar
-        /// </summary>
-        CSD = 891,
-
-        /// <summary>
-        /// Country: SLOVAKIA
-        /// Currency: Slovak Koruna
-        /// </summary>
-        SKK = 703,
-
-        /// <summary>
-        /// Country: SLOVENIA
-        /// Currency: Tolar
-        /// </summary>
-        SIT = 705,
-
-        /// <summary>
-        /// Country: SOUTHERN RHODESIA
-        /// Currency: Rhodesian Dollar
-        /// </summary>
-        RHD = 716,
-
-        /// <summary>
-        /// Country: SPAIN
-        /// Currency: Spanish Peseta
-        /// </summary>
-        ESA = 996,
-
-        /// <summary>
-        /// Country: SPAIN
-        /// Currency: "A" Account (convertible Peseta Account)
-        /// </summary>
-        ESB = 995,
-
-        /// <summary>
-        /// Country: SUDAN
-        /// Currency: Sudanese Dinar
-        /// </summary>
-        SDD = 736,
-
-        /// <summary>
-        /// Country: SURINAME
-        /// Currency: Surinam Guilder
-        /// </summary>
-        SRG = 740,
-
-        /// <summary>
-        /// Country: TAJIKISTAN
-        /// Currency: Tajik Ruble
-        /// </summary>
-        TJR = 762,
-
-        /// <summary>
-        /// Country: TIMOR-LESTE
-        /// Currency: Timor Escudo
-        /// </summary>
-        TPE = 626,
-
-        /// <summary>
-        /// Country: TURKEY
-        /// Currency: Old Turkish Lira
-        /// </summary>
-        TRL = 792,
-
-        /// <summary>
-        /// Country: TURKMENISTAN
-        /// Currency: Turkmenistan Manat
-        /// </summary>
-        TMM = 795,
-
-        /// <summary>
-        /// Country: UKRAINE
-        /// Currency: Karbovanet
-        /// </summary>
-        UAK = 804,
-
-        /// <summary>
-        /// Country: UNITED STATES
-        /// Currency: US Dollar (Same day)
-        /// </summary>
-        USS = 998,
-
-        /// <summary>
-        /// Country: VENEZUELA
-        /// Currency: Bolivar
-        /// </summary>
-        VEB = 862,
-
-        /// <summary>
-        /// Country: VENEZUELA
-        /// Currency: Bolivar Fuerte
-        /// </summary>
-        VEF = 937,
-
-        /// <summary>
-        /// Country: YEMEN, DEMOCRATIC
-        /// Currency: Yemeni Dinar
-        /// </summary>
-        YDD = 720,
-
-        /// <summary>
-        /// Country: YUGOSLAVIA
-        /// Currency: New Yugoslavian Dinar
-        /// </summary>
-        YUD = 890,
-
-        /// <summary>
-        /// Country: ZAIRE
-        /// Currency: New Zaire
-        /// </summary>
-        ZRN = 180,
-
-        /// <summary>
-        /// Country: ZAMBIA
-        /// Currency: Zambian Kwacha
-        /// </summary>
-        ZMK = 894,
-
-        /// <summary>
-        /// Country: ZIMBABWE
-        /// Currency: Zimbabwe Dollar (new)
-        /// </summary>
-        ZWN = 942,
-
-        /// <summary>
-        /// Country: ZIMBABWE
-        /// Currency: Zimbabwe Dollar
-        /// </summary>
-        ZWR = 935
+        [EnumStringValue("ZWG")]
+        ZWG,
     }
 }

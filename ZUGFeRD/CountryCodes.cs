@@ -19,1553 +19,1517 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
-
-    // You can regenerate the codes using:
-    //
-    // https://cemil.dev/countrieslist
-    //
-    // g = open('output.cs', 'w+')
-    // 
-    // with open('countries.json') as json_file:
-    // data = json.load(json_file)
-    // for p in data:
-    //     alphaTwo = p['alpha-2']
-    //     countryCode = p['country-code']
-    //     name = p['name']
-    //     g.write('/// <summary>\n')
-    //     g.write('/// ' + name + '\n')
-    //     g.write('/// ' + alphaTwo + ' = ' + countryCode + '\n')
-    //     g.write('/// </summary>\n')
-    //     g.write(alphaTwo + ' = ' + countryCode + ',\n')
-    //     g.write('\n')
-    // 
-    // g.close()
-    //
-    // Kosovo needs manual addition and special treatment
-
-    /// <summary>
-    /// Country codes based on ISO 3166 source
-    /// with addition of Kosovo according to ZUGFeRD standard
-    /// 
-    /// English short name
-    /// Alpha-2 code = numeric code
-    /// </summary>
     public enum CountryCodes
     {
-
         /// <summary>
         /// Andorra
-        /// AD = 20
-        /// </summary>        
-        AD = 20,
+        /// </summary>
+        [EnumStringValue("AD")]
+        AD,
 
         /// <summary>
         /// United Arab Emirates (the)
-        /// AE = 784
         /// </summary>
-        AE = 784,
+        [EnumStringValue("AE")]
+        AE,
 
         /// <summary>
         /// Afghanistan
-        /// AF = 4
         /// </summary>
-        AF = 4,
+        [EnumStringValue("AF")]
+        AF,
 
         /// <summary>
         /// Antigua and Barbuda
-        /// AG = 28
         /// </summary>
-        AG = 28,
+        [EnumStringValue("AG")]
+        AG,
 
         /// <summary>
         /// Anguilla
-        /// AI = 660
         /// </summary>
-        AI = 660,
+        [EnumStringValue("AI")]
+        AI,
 
         /// <summary>
         /// Albania
-        /// AL = 8
         /// </summary>
-        AL = 8,
+        [EnumStringValue("AL")]
+        AL,
 
         /// <summary>
         /// Armenia
-        /// AM = 51
         /// </summary>
-        AM = 51,
+        [EnumStringValue("AM")]
+        AM,
 
         /// <summary>
         /// Angola
-        /// AO = 24
         /// </summary>
-        AO = 24,
+        [EnumStringValue("AO")]
+        AO,
 
         /// <summary>
         /// Antarctica
-        /// AQ = 10
         /// </summary>
-        AQ = 10,
+        [EnumStringValue("AQ")]
+        AQ,
 
         /// <summary>
         /// Argentina
-        /// AR = 32
         /// </summary>
-        AR = 32,
+        [EnumStringValue("AR")]
+        AR,
 
         /// <summary>
         /// American Samoa
-        /// AS = 16
         /// </summary>
-        AS = 16,
+        [EnumStringValue("AS")]
+        AS,
 
         /// <summary>
         /// Austria
-        /// AT = 40
         /// </summary>
-        AT = 40,
+        [EnumStringValue("AT")]
+        AT,
 
         /// <summary>
         /// Australia
-        /// AU = 36
         /// </summary>
-        AU = 36,
+        [EnumStringValue("AU")]
+        AU,
 
         /// <summary>
         /// Aruba
-        /// AW = 533
         /// </summary>
-        AW = 533,
+        [EnumStringValue("AW")]
+        AW,
 
         /// <summary>
-        /// �land Islands
-        /// AX = 248
+        /// Åland Islands
         /// </summary>
-        AX = 248,
+        [EnumStringValue("AX")]
+        AX,
 
         /// <summary>
         /// Azerbaijan
-        /// AZ = 31
         /// </summary>
-        AZ = 31,
+        [EnumStringValue("AZ")]
+        AZ,
 
         /// <summary>
         /// Bosnia and Herzegovina
-        /// BA = 70
         /// </summary>
-        BA = 70,
+        [EnumStringValue("BA")]
+        BA,
 
         /// <summary>
         /// Barbados
-        /// BB = 52
         /// </summary>
-        BB = 52,
+        [EnumStringValue("BB")]
+        BB,
 
         /// <summary>
         /// Bangladesh
-        /// BD = 50
         /// </summary>
-        BD = 50,
+        [EnumStringValue("BD")]
+        BD,
 
         /// <summary>
         /// Belgium
-        /// BE = 56
         /// </summary>
-        BE = 56,
+        [EnumStringValue("BE")]
+        BE,
 
         /// <summary>
         /// Burkina Faso
-        /// BF = 854
         /// </summary>
-        BF = 854,
+        [EnumStringValue("BF")]
+        BF,
 
         /// <summary>
         /// Bulgaria
-        /// BG = 100
         /// </summary>
-        BG = 100,
+        [EnumStringValue("BG")]
+        BG,
 
         /// <summary>
         /// Bahrain
-        /// BH = 48
         /// </summary>
-        BH = 48,
+        [EnumStringValue("BH")]
+        BH,
 
         /// <summary>
         /// Burundi
-        /// BI = 108
         /// </summary>
-        BI = 108,
+        [EnumStringValue("BI")]
+        BI,
 
         /// <summary>
         /// Benin
-        /// BJ = 204
         /// </summary>
-        BJ = 204,
+        [EnumStringValue("BJ")]
+        BJ,
 
         /// <summary>
-        /// Saint Barthélem
-        /// BL = 652
+        /// Saint Barthélemy
         /// </summary>
-        BL = 652,
+        [EnumStringValue("BL")]
+        BL,
 
         /// <summary>
         /// Bermuda
-        /// BM = 60
         /// </summary>
-        BM = 60,
+        [EnumStringValue("BM")]
+        BM,
 
         /// <summary>
         /// Brunei Darussalam
-        /// BN = 96
         /// </summary>
-        BN = 96,
+        [EnumStringValue("BN")]
+        BN,
 
         /// <summary>
         /// Bolivia (Plurinational State of)
-        /// BO = 68
         /// </summary>
-        BO = 68,
+        [EnumStringValue("BO")]
+        BO,
 
         /// <summary>
-        /// Bonaire, Sint Eustatius and Saba
-        /// BQ = 535
+        /// Caribbean Netherlands
         /// </summary>
-        BQ = 535,
+        [EnumStringValue("BQ")]
+        BQ,
 
         /// <summary>
         /// Brazil
-        /// BR = 76
         /// </summary>
-        BR = 76,
+        [EnumStringValue("BR")]
+        BR,
 
         /// <summary>
         /// Bahamas (the)
-        /// BS = 44
         /// </summary>
-        BS = 44,
+        [EnumStringValue("BS")]
+        BS,
 
         /// <summary>
         /// Bhutan
-        /// BT = 64
         /// </summary>
-        BT = 64,
+        [EnumStringValue("BT")]
+        BT,
 
         /// <summary>
         /// Bouvet Island
-        /// BV = 74
         /// </summary>
-        BV = 74,
+        [EnumStringValue("BV")]
+        BV,
 
         /// <summary>
         /// Botswana
-        /// BW = 72
         /// </summary>
-        BW = 72,
+        [EnumStringValue("BW")]
+        BW,
 
         /// <summary>
         /// Belarus
-        /// BY = 112
         /// </summary>
-        BY = 112,
+        [EnumStringValue("BY")]
+        BY,
 
         /// <summary>
         /// Belize
-        /// BZ = 84
         /// </summary>
-        BZ = 84,
+        [EnumStringValue("BZ")]
+        BZ,
 
         /// <summary>
         /// Canada
-        /// CA = 124
         /// </summary>
-        CA = 124,
+        [EnumStringValue("CA")]
+        CA,
 
         /// <summary>
         /// Cocos (Keeling) Islands (the)
-        /// CC = 166
         /// </summary>
-        CC = 166,
+        [EnumStringValue("CC")]
+        CC,
 
         /// <summary>
         /// Congo (the Democratic Republic of the)
-        /// CD = 180
         /// </summary>
-        CD = 180,
+        [EnumStringValue("CD")]
+        CD,
 
         /// <summary>
         /// Central African Republic (the)
-        /// CF = 140
         /// </summary>
-        CF = 140,
+        [EnumStringValue("CF")]
+        CF,
 
         /// <summary>
         /// Congo (the)
-        /// CG = 178
         /// </summary>
-        CG = 178,
+        [EnumStringValue("CG")]
+        CG,
 
         /// <summary>
         /// Switzerland
-        /// CH = 756
         /// </summary>
-        CH = 756,
+        [EnumStringValue("CH")]
+        CH,
 
         /// <summary>
-        /// Côte d'Ivoir
-        /// CI = 384
+        /// Côte d'Ivoire
         /// </summary>
-        CI = 384,
+        [EnumStringValue("CI")]
+        CI,
 
         /// <summary>
         /// Cook Islands (the)
-        /// CK = 184
         /// </summary>
-        CK = 184,
+        [EnumStringValue("CK")]
+        CK,
 
         /// <summary>
         /// Chile
-        /// CL = 152
         /// </summary>
-        CL = 152,
+        [EnumStringValue("CL")]
+        CL,
 
         /// <summary>
         /// Cameroon
-        /// CM = 120
         /// </summary>
-        CM = 120,
+        [EnumStringValue("CM")]
+        CM,
 
         /// <summary>
         /// China
-        /// CN = 156
         /// </summary>
-        CN = 156,
+        [EnumStringValue("CN")]
+        CN,
 
         /// <summary>
         /// Colombia
-        /// CO = 170
         /// </summary>
-        CO = 170,
+        [EnumStringValue("CO")]
+        CO,
 
         /// <summary>
         /// Costa Rica
-        /// CR = 188
         /// </summary>
-        CR = 188,
+        [EnumStringValue("CR")]
+        CR,
 
         /// <summary>
         /// Cuba
-        /// CU = 192
         /// </summary>
-        CU = 192,
+        [EnumStringValue("CU")]
+        CU,
 
         /// <summary>
         /// Cabo Verde
-        /// CV = 132
         /// </summary>
-        CV = 132,
+        [EnumStringValue("CV")]
+        CV,
 
         /// <summary>
-        /// Curaça
-        /// CW = 531
+        /// Curaçao
         /// </summary>
-        CW = 531,
+        [EnumStringValue("CW")]
+        CW,
 
         /// <summary>
         /// Christmas Island
-        /// CX = 162
         /// </summary>
-        CX = 162,
+        [EnumStringValue("CX")]
+        CX,
 
         /// <summary>
         /// Cyprus
-        /// CY = 196
         /// </summary>
-        CY = 196,
+        [EnumStringValue("CY")]
+        CY,
 
         /// <summary>
         /// Czechia
-        /// CZ = 203
         /// </summary>
-        CZ = 203,
+        [EnumStringValue("CZ")]
+        CZ,
 
         /// <summary>
         /// Germany
-        /// DE = 276
         /// </summary>
-        DE = 276,
+        [EnumStringValue("DE")]
+        DE,
 
         /// <summary>
         /// Djibouti
-        /// DJ = 262
         /// </summary>
-        DJ = 262,
+        [EnumStringValue("DJ")]
+        DJ,
 
         /// <summary>
         /// Denmark
-        /// DK = 208
         /// </summary>
-        DK = 208,
+        [EnumStringValue("DK")]
+        DK,
 
         /// <summary>
         /// Dominica
-        /// DM = 212
         /// </summary>
-        DM = 212,
+        [EnumStringValue("DM")]
+        DM,
 
         /// <summary>
         /// Dominican Republic (the)
-        /// DO = 214
         /// </summary>
-        DO = 214,
+        [EnumStringValue("DO")]
+        DO,
 
         /// <summary>
         /// Algeria
-        /// DZ = 12
         /// </summary>
-        DZ = 12,
+        [EnumStringValue("DZ")]
+        DZ,
 
         /// <summary>
         /// Ecuador
-        /// EC = 218
         /// </summary>
-        EC = 218,
+        [EnumStringValue("EC")]
+        EC,
 
         /// <summary>
         /// Estonia
-        /// EE = 233
         /// </summary>
-        EE = 233,
+        [EnumStringValue("EE")]
+        EE,
 
         /// <summary>
         /// Egypt
-        /// EG = 818
         /// </summary>
-        EG = 818,
+        [EnumStringValue("EG")]
+        EG,
 
         /// <summary>
-        /// Western Sahara*
-        /// EH = 732
+        /// Western Sahara
         /// </summary>
-        EH = 732,
+        [EnumStringValue("EH")]
+        EH,
 
         /// <summary>
         /// Eritrea
-        /// ER = 232
         /// </summary>
-        ER = 232,
+        [EnumStringValue("ER")]
+        ER,
 
         /// <summary>
         /// Spain
-        /// ES = 724
         /// </summary>
-        ES = 724,
+        [EnumStringValue("ES")]
+        ES,
 
         /// <summary>
         /// Ethiopia
-        /// ET = 231
         /// </summary>
-        ET = 231,
+        [EnumStringValue("ET")]
+        ET,
 
         /// <summary>
         /// Finland
-        /// FI = 246
         /// </summary>
-        FI = 246,
+        [EnumStringValue("FI")]
+        FI,
 
         /// <summary>
         /// Fiji
-        /// FJ = 242
         /// </summary>
-        FJ = 242,
+        [EnumStringValue("FJ")]
+        FJ,
 
         /// <summary>
         /// Falkland Islands (the) [Malvinas]
-        /// FK = 238
         /// </summary>
-        FK = 238,
+        [EnumStringValue("FK")]
+        FK,
 
         /// <summary>
         /// Micronesia (Federated States of)
-        /// FM = 583
         /// </summary>
-        FM = 583,
+        [EnumStringValue("FM")]
+        FM,
 
         /// <summary>
         /// Faroe Islands (the)
-        /// FO = 234
         /// </summary>
-        FO = 234,
+        [EnumStringValue("FO")]
+        FO,
 
         /// <summary>
         /// France
-        /// FR = 250
         /// </summary>
-        FR = 250,
+        [EnumStringValue("FR")]
+        FR,
 
         /// <summary>
         /// Gabon
-        /// GA = 266
         /// </summary>
-        GA = 266,
+        [EnumStringValue("GA")]
+        GA,
 
         /// <summary>
         /// United Kingdom of Great Britain and Northern Ireland (the)
-        /// GB = 826
         /// </summary>
-        GB = 826,
+        [EnumStringValue("GB")]
+        GB,
 
         /// <summary>
         /// Grenada
-        /// GD = 308
         /// </summary>
-        GD = 308,
+        [EnumStringValue("GD")]
+        GD,
 
         /// <summary>
         /// Georgia
-        /// GE = 268
         /// </summary>
-        GE = 268,
+        [EnumStringValue("GE")]
+        GE,
+
+        /// <summary>
+        /// French Guiana
+        /// </summary>
+        [EnumStringValue("GF")]
+        GF,
 
         /// <summary>
         /// Guernsey
-        /// GG = 831
         /// </summary>
-        GF = 254,
-
-        /// <summary>
-        /// Guernsey
-        /// GG = 831
-        /// </summary>
-        GG = 831,
+        [EnumStringValue("GG")]
+        GG,
 
         /// <summary>
         /// Ghana
-        /// GH = 288
         /// </summary>
-        GH = 288,
+        [EnumStringValue("GH")]
+        GH,
 
         /// <summary>
         /// Gibraltar
-        /// GI = 292
         /// </summary>
-        GI = 292,
+        [EnumStringValue("GI")]
+        GI,
 
         /// <summary>
         /// Greenland
-        /// GL = 304
         /// </summary>
-        GL = 304,
+        [EnumStringValue("GL")]
+        GL,
 
         /// <summary>
         /// Gambia (the)
-        /// GM = 270
         /// </summary>
-        GM = 270,
+        [EnumStringValue("GM")]
+        GM,
 
         /// <summary>
         /// Guinea
-        /// GN = 324
         /// </summary>
-        GN = 324,
+        [EnumStringValue("GN")]
+        GN,
 
         /// <summary>
         /// Guadeloupe
-        /// GP = 312
         /// </summary>
-        GP = 312,
+        [EnumStringValue("GP")]
+        GP,
 
         /// <summary>
         /// Equatorial Guinea
-        /// GQ = 226
         /// </summary>
-        GQ = 226,
+        [EnumStringValue("GQ")]
+        GQ,
 
         /// <summary>
         /// Greece
-        /// GR = 300
         /// </summary>
-        GR = 300,
+        [EnumStringValue("GR")]
+        GR,
 
         /// <summary>
         /// South Georgia and the South Sandwich Islands
-        /// GS = 239
         /// </summary>
-        GS = 239,
+        [EnumStringValue("GS")]
+        GS,
 
         /// <summary>
         /// Guatemala
-        /// GT = 320
         /// </summary>
-        GT = 320,
+        [EnumStringValue("GT")]
+        GT,
 
         /// <summary>
         /// Guam
-        /// GU = 316
         /// </summary>
-        GU = 316,
+        [EnumStringValue("GU")]
+        GU,
 
         /// <summary>
         /// Guinea-Bissau
-        /// GW = 624
         /// </summary>
-        GW = 624,
+        [EnumStringValue("GW")]
+        GW,
 
         /// <summary>
         /// Guyana
-        /// GY = 328
         /// </summary>
-        GY = 328,
+        [EnumStringValue("GY")]
+        GY,
 
         /// <summary>
         /// Hong Kong
-        /// HK = 344
         /// </summary>
-        HK = 344,
+        [EnumStringValue("HK")]
+        HK,
 
         /// <summary>
         /// Heard Island and McDonald Islands
-        /// HM = 334
         /// </summary>
-        HM = 334,
+        [EnumStringValue("HM")]
+        HM,
 
         /// <summary>
         /// Honduras
-        /// HN = 340
         /// </summary>
-        HN = 340,
+        [EnumStringValue("HN")]
+        HN,
 
         /// <summary>
         /// Croatia
-        /// HR = 191
         /// </summary>
-        HR = 191,
+        [EnumStringValue("HR")]
+        HR,
 
         /// <summary>
         /// Haiti
-        /// HT = 332
         /// </summary>
-        HT = 332,
+        [EnumStringValue("HT")]
+        HT,
 
         /// <summary>
         /// Hungary
-        /// HU = 348
         /// </summary>
-        HU = 348,
+        [EnumStringValue("HU")]
+        HU,
 
         /// <summary>
         /// Indonesia
-        /// ID = 360
         /// </summary>
-        ID = 360,
+        [EnumStringValue("ID")]
+        ID,
 
         /// <summary>
         /// Ireland
-        /// IE = 372
         /// </summary>
-        IE = 372,
+        [EnumStringValue("IE")]
+        IE,
 
         /// <summary>
         /// Israel
-        /// IL = 376
         /// </summary>
-        IL = 376,
+        [EnumStringValue("IL")]
+        IL,
 
         /// <summary>
         /// Isle of Man
-        /// IM = 833
         /// </summary>
-        IM = 833,
+        [EnumStringValue("IM")]
+        IM,
 
         /// <summary>
         /// India
-        /// IN = 356
         /// </summary>
-        IN = 356,
+        [EnumStringValue("IN")]
+        IN,
 
         /// <summary>
         /// British Indian Ocean Territory (the)
-        /// IO = 86
         /// </summary>
-        IO = 86,
+        [EnumStringValue("IO")]
+        IO,
 
         /// <summary>
         /// Iraq
-        /// IQ = 368
         /// </summary>
-        IQ = 368,
+        [EnumStringValue("IQ")]
+        IQ,
 
         /// <summary>
         /// Iran (Islamic Republic of)
-        /// IR = 364
         /// </summary>
-        IR = 364,
+        [EnumStringValue("IR")]
+        IR,
 
         /// <summary>
         /// Iceland
-        /// IS = 352
         /// </summary>
-        IS = 352,
+        [EnumStringValue("IS")]
+        IS,
 
         /// <summary>
         /// Italy
-        /// IT = 380
         /// </summary>
-        IT = 380,
+        [EnumStringValue("IT")]
+        IT,
 
         /// <summary>
         /// Jersey
-        /// JE = 832
         /// </summary>
-        JE = 832,
+        [EnumStringValue("JE")]
+        JE,
 
         /// <summary>
         /// Jamaica
-        /// JM = 388
         /// </summary>
-        JM = 388,
+        [EnumStringValue("JM")]
+        JM,
 
         /// <summary>
         /// Jordan
-        /// JO = 400
         /// </summary>
-        JO = 400,
+        [EnumStringValue("JO")]
+        JO,
 
         /// <summary>
         /// Japan
-        /// JP = 392
         /// </summary>
-        JP = 392,
+        [EnumStringValue("JP")]
+        JP,
 
         /// <summary>
         /// Kenya
-        /// KE = 404
         /// </summary>
-        KE = 404,
+        [EnumStringValue("KE")]
+        KE,
 
         /// <summary>
         /// Kyrgyzstan
-        /// KG = 417
         /// </summary>
-        KG = 417,
+        [EnumStringValue("KG")]
+        KG,
 
         /// <summary>
         /// Cambodia
-        /// KH = 116
         /// </summary>
-        KH = 116,
+        [EnumStringValue("KH")]
+        KH,
 
         /// <summary>
         /// Kiribati
-        /// KI = 296
         /// </summary>
-        KI = 296,
+        [EnumStringValue("KI")]
+        KI,
 
         /// <summary>
         /// Comoros (the)
-        /// KM = 174
         /// </summary>
-        KM = 174,
+        [EnumStringValue("KM")]
+        KM,
 
         /// <summary>
         /// Saint Kitts and Nevis
-        /// KN = 659
         /// </summary>
-        KN = 659,
+        [EnumStringValue("KN")]
+        KN,
 
         /// <summary>
         /// Korea (the Democratic People's Republic of)
-        /// KP = 408
         /// </summary>
-        KP = 408,
+        [EnumStringValue("KP")]
+        KP,
 
         /// <summary>
         /// Korea (the Republic of)
-        /// KR = 410
         /// </summary>
-        KR = 410,
+        [EnumStringValue("KR")]
+        KR,
 
         /// <summary>
         /// Kuwait
-        /// KW = 414
         /// </summary>
-        KW = 414,
+        [EnumStringValue("KW")]
+        KW,
 
         /// <summary>
         /// Cayman Islands (the)
-        /// KY = 136
         /// </summary>
-        KY = 136,
+        [EnumStringValue("KY")]
+        KY,
 
         /// <summary>
         /// Kazakhstan
-        /// KZ = 398
         /// </summary>
-        KZ = 398,
+        [EnumStringValue("KZ")]
+        KZ,
 
         /// <summary>
         /// Lao People's Democratic Republic (the)
-        /// LA = 418
         /// </summary>
-        LA = 418,
+        [EnumStringValue("LA")]
+        LA,
 
         /// <summary>
         /// Lebanon
-        /// LB = 422
         /// </summary>
-        LB = 422,
+        [EnumStringValue("LB")]
+        LB,
 
         /// <summary>
         /// Saint Lucia
-        /// LC = 662
         /// </summary>
-        LC = 662,
+        [EnumStringValue("LC")]
+        LC,
 
         /// <summary>
         /// Liechtenstein
-        /// LI = 438
         /// </summary>
-        LI = 438,
+        [EnumStringValue("LI")]
+        LI,
 
         /// <summary>
         /// Sri Lanka
-        /// LK = 144
         /// </summary>
-        LK = 144,
+        [EnumStringValue("LK")]
+        LK,
 
         /// <summary>
         /// Liberia
-        /// LR = 430
         /// </summary>
-        LR = 430,
+        [EnumStringValue("LR")]
+        LR,
 
         /// <summary>
         /// Lesotho
-        /// LS = 426
         /// </summary>
-        LS = 426,
+        [EnumStringValue("LS")]
+        LS,
 
         /// <summary>
         /// Lithuania
-        /// LT = 440
         /// </summary>
-        LT = 440,
+        [EnumStringValue("LT")]
+        LT,
 
         /// <summary>
         /// Luxembourg
-        /// LU = 442
         /// </summary>
-        LU = 442,
+        [EnumStringValue("LU")]
+        LU,
 
         /// <summary>
         /// Latvia
-        /// LV = 428
         /// </summary>
-        LV = 428,
+        [EnumStringValue("LV")]
+        LV,
 
         /// <summary>
         /// Libya
-        /// LY = 434
         /// </summary>
-        LY = 434,
+        [EnumStringValue("LY")]
+        LY,
 
         /// <summary>
         /// Morocco
-        /// MA = 504
         /// </summary>
-        MA = 504,
+        [EnumStringValue("MA")]
+        MA,
 
         /// <summary>
         /// Monaco
-        /// MC = 492
         /// </summary>
-        MC = 492,
+        [EnumStringValue("MC")]
+        MC,
 
         /// <summary>
         /// Moldova (the Republic of)
-        /// MD = 498
         /// </summary>
-        MD = 498,
+        [EnumStringValue("MD")]
+        MD,
 
         /// <summary>
         /// Montenegro
-        /// ME = 499
         /// </summary>
-        ME = 499,
+        [EnumStringValue("ME")]
+        ME,
 
         /// <summary>
         /// Saint Martin (French part)
-        /// MF = 663
         /// </summary>
-        MF = 663,
+        [EnumStringValue("MF")]
+        MF,
 
         /// <summary>
         /// Madagascar
-        /// MG = 450
         /// </summary>
-        MG = 450,
+        [EnumStringValue("MG")]
+        MG,
 
         /// <summary>
         /// Marshall Islands (the)
-        /// MH = 584
         /// </summary>
-        MH = 584,
+        [EnumStringValue("MH")]
+        MH,
 
         /// <summary>
         /// North Macedonia
-        /// MK = 807
         /// </summary>
-        MK = 807,
+        [EnumStringValue("MK")]
+        MK,
 
         /// <summary>
         /// Mali
-        /// ML = 466
         /// </summary>
-        ML = 466,
+        [EnumStringValue("ML")]
+        ML,
 
         /// <summary>
         /// Myanmar
-        /// MM = 104
         /// </summary>
-        MM = 104,
+        [EnumStringValue("MM")]
+        MM,
 
         /// <summary>
         /// Mongolia
-        /// MN = 496
         /// </summary>
-        MN = 496,
+        [EnumStringValue("MN")]
+        MN,
 
         /// <summary>
         /// Macao
-        /// MO = 446
         /// </summary>
-        MO = 446,
+        [EnumStringValue("MO")]
+        MO,
 
         /// <summary>
         /// Northern Mariana Islands (the)
-        /// MP = 580
         /// </summary>
-        MP = 580,
+        [EnumStringValue("MP")]
+        MP,
 
         /// <summary>
         /// Martinique
-        /// MQ = 474
         /// </summary>
-        MQ = 474,
+        [EnumStringValue("MQ")]
+        MQ,
 
         /// <summary>
         /// Mauritania
-        /// MR = 478
         /// </summary>
-        MR = 478,
+        [EnumStringValue("MR")]
+        MR,
 
         /// <summary>
         /// Montserrat
-        /// MS = 500
         /// </summary>
-        MS = 500,
+        [EnumStringValue("MS")]
+        MS,
 
         /// <summary>
         /// Malta
-        /// MT = 470
         /// </summary>
-        MT = 470,
+        [EnumStringValue("MT")]
+        MT,
 
         /// <summary>
         /// Mauritius
-        /// MU = 480
         /// </summary>
-        MU = 480,
+        [EnumStringValue("MU")]
+        MU,
 
         /// <summary>
         /// Maldives
-        /// MV = 462
         /// </summary>
-        MV = 462,
+        [EnumStringValue("MV")]
+        MV,
 
         /// <summary>
         /// Malawi
-        /// MW = 454
         /// </summary>
-        MW = 454,
+        [EnumStringValue("MW")]
+        MW,
+
+        /// <summary>
+        /// Mexico
+        /// </summary>
+        [EnumStringValue("MX")]
+        MX,
 
         /// <summary>
         /// Malaysia
-        /// MY = 458
         /// </summary>
-        MX = 484,
-
-        /// <summary>
-        /// Malaysia
-        /// MY = 458
-        /// </summary>
-        MY = 458,
+        [EnumStringValue("MY")]
+        MY,
 
         /// <summary>
         /// Mozambique
-        /// MZ = 508
         /// </summary>
-        MZ = 508,
+        [EnumStringValue("MZ")]
+        MZ,
 
         /// <summary>
         /// Namibia
-        /// NA = 516
         /// </summary>
-        NA = 516,
+        [EnumStringValue("NA")]
+        NA,
 
         /// <summary>
         /// New Caledonia
-        /// NC = 540
         /// </summary>
-        NC = 540,
+        [EnumStringValue("NC")]
+        NC,
 
         /// <summary>
         /// Niger (the)
-        /// NE = 562
         /// </summary>
-        NE = 562,
+        [EnumStringValue("NE")]
+        NE,
 
         /// <summary>
         /// Norfolk Island
-        /// NF = 574
         /// </summary>
-        NF = 574,
+        [EnumStringValue("NF")]
+        NF,
 
         /// <summary>
         /// Nigeria
-        /// NG = 566
         /// </summary>
-        NG = 566,
+        [EnumStringValue("NG")]
+        NG,
 
         /// <summary>
         /// Nicaragua
-        /// NI = 558
         /// </summary>
-        NI = 558,
+        [EnumStringValue("NI")]
+        NI,
 
         /// <summary>
         /// Netherlands (the)
-        /// NL = 528
         /// </summary>
-        NL = 528,
+        [EnumStringValue("NL")]
+        NL,
 
         /// <summary>
         /// Norway
-        /// NO = 578
         /// </summary>
-        NO = 578,
+        [EnumStringValue("NO")]
+        NO,
 
         /// <summary>
         /// Nepal
-        /// NP = 524
         /// </summary>
-        NP = 524,
+        [EnumStringValue("NP")]
+        NP,
 
         /// <summary>
         /// Nauru
-        /// NR = 520
         /// </summary>
-        NR = 520,
+        [EnumStringValue("NR")]
+        NR,
 
         /// <summary>
         /// Niue
-        /// NU = 570
         /// </summary>
-        NU = 570,
+        [EnumStringValue("NU")]
+        NU,
 
         /// <summary>
         /// New Zealand
-        /// NZ = 554
         /// </summary>
-        NZ = 554,
+        [EnumStringValue("NZ")]
+        NZ,
 
         /// <summary>
         /// Oman
-        /// OM = 512
         /// </summary>
-        OM = 512,
+        [EnumStringValue("OM")]
+        OM,
 
         /// <summary>
         /// Panama
-        /// PA = 591
         /// </summary>
-        PA = 591,
+        [EnumStringValue("PA")]
+        PA,
 
         /// <summary>
         /// Peru
-        /// PE = 604
         /// </summary>
-        PE = 604,
+        [EnumStringValue("PE")]
+        PE,
 
         /// <summary>
         /// French Polynesia
-        /// PF = 258
         /// </summary>
-        PF = 258,
+        [EnumStringValue("PF")]
+        PF,
 
         /// <summary>
         /// Papua New Guinea
-        /// PG = 598
         /// </summary>
-        PG = 598,
+        [EnumStringValue("PG")]
+        PG,
 
         /// <summary>
         /// Philippines (the)
-        /// PH = 608
         /// </summary>
-        PH = 608,
+        [EnumStringValue("PH")]
+        PH,
 
         /// <summary>
         /// Pakistan
-        /// PK = 586
         /// </summary>
-        PK = 586,
+        [EnumStringValue("PK")]
+        PK,
 
         /// <summary>
         /// Poland
-        /// PL = 616
         /// </summary>
-        PL = 616,
+        [EnumStringValue("PL")]
+        PL,
 
         /// <summary>
         /// Saint Pierre and Miquelon
-        /// PM = 666
         /// </summary>
-        PM = 666,
+        [EnumStringValue("PM")]
+        PM,
 
         /// <summary>
         /// Pitcairn
-        /// PN = 612
         /// </summary>
-        PN = 612,
+        [EnumStringValue("PN")]
+        PN,
 
         /// <summary>
         /// Puerto Rico
-        /// PR = 630
         /// </summary>
-        PR = 630,
+        [EnumStringValue("PR")]
+        PR,
 
         /// <summary>
         /// Palestine, State of
-        /// PS = 275
         /// </summary>
-        PS = 275,
+        [EnumStringValue("PS")]
+        PS,
 
         /// <summary>
         /// Portugal
-        /// PT = 620
         /// </summary>
-        PT = 620,
+        [EnumStringValue("PT")]
+        PT,
 
         /// <summary>
         /// Palau
-        /// PW = 585
         /// </summary>
-        PW = 585,
+        [EnumStringValue("PW")]
+        PW,
 
         /// <summary>
         /// Paraguay
-        /// PY = 600
         /// </summary>
-        PY = 600,
+        [EnumStringValue("PY")]
+        PY,
 
         /// <summary>
         /// Qatar
-        /// QA = 634
         /// </summary>
-        QA = 634,
+        [EnumStringValue("QA")]
+        QA,
 
         /// <summary>
-        /// Réunio
-        /// RE = 638
+        /// Réunion
         /// </summary>
-        RE = 638,
+        [EnumStringValue("RE")]
+        RE,
 
         /// <summary>
         /// Romania
-        /// RO = 642
         /// </summary>
-        RO = 642,
+        [EnumStringValue("RO")]
+        RO,
 
         /// <summary>
         /// Serbia
-        /// RS = 688
         /// </summary>
-        RS = 688,
+        [EnumStringValue("RS")]
+        RS,
 
         /// <summary>
-        /// Russian Federation (the)
-        /// RU = 643
+        /// Russia (the Federation)
         /// </summary>
-        RU = 643,
+        [EnumStringValue("RU")]
+        RU,
 
         /// <summary>
         /// Rwanda
-        /// RW = 646
         /// </summary>
-        RW = 646,
+        [EnumStringValue("RW")]
+        RW,
 
         /// <summary>
         /// Saudi Arabia
-        /// SA = 682
         /// </summary>
-        SA = 682,
+        [EnumStringValue("SA")]
+        SA,
 
         /// <summary>
         /// Solomon Islands
-        /// SB = 90
         /// </summary>
-        SB = 90,
+        [EnumStringValue("SB")]
+        SB,
 
         /// <summary>
         /// Seychelles
-        /// SC = 690
         /// </summary>
-        SC = 690,
+        [EnumStringValue("SC")]
+        SC,
 
         /// <summary>
         /// Sudan (the)
-        /// SD = 729
         /// </summary>
-        SD = 729,
+        [EnumStringValue("SD")]
+        SD,
 
         /// <summary>
         /// Sweden
-        /// SE = 752
         /// </summary>
-        SE = 752,
+        [EnumStringValue("SE")]
+        SE,
 
         /// <summary>
         /// Singapore
-        /// SG = 702
         /// </summary>
-        SG = 702,
+        [EnumStringValue("SG")]
+        SG,
 
         /// <summary>
         /// Saint Helena, Ascension and Tristan da Cunha
-        /// SH = 654
         /// </summary>
-        SH = 654,
+        [EnumStringValue("SH")]
+        SH,
 
         /// <summary>
         /// Slovenia
-        /// SI = 705
         /// </summary>
-        SI = 705,
+        [EnumStringValue("SI")]
+        SI,
 
         /// <summary>
         /// Svalbard and Jan Mayen
-        /// SJ = 744
         /// </summary>
-        SJ = 744,
+        [EnumStringValue("SJ")]
+        SJ,
 
         /// <summary>
         /// Slovakia
-        /// SK = 703
         /// </summary>
-        SK = 703,
+        [EnumStringValue("SK")]
+        SK,
 
         /// <summary>
         /// Sierra Leone
-        /// SL = 694
         /// </summary>
-        SL = 694,
+        [EnumStringValue("SL")]
+        SL,
 
         /// <summary>
         /// San Marino
-        /// SM = 674
         /// </summary>
-        SM = 674,
+        [EnumStringValue("SM")]
+        SM,
 
         /// <summary>
         /// Senegal
-        /// SN = 686
         /// </summary>
-        SN = 686,
+        [EnumStringValue("SN")]
+        SN,
 
         /// <summary>
         /// Somalia
-        /// SO = 706
         /// </summary>
-        SO = 706,
+        [EnumStringValue("SO")]
+        SO,
 
         /// <summary>
         /// Suriname
-        /// SR = 740
         /// </summary>
-        SR = 740,
+        [EnumStringValue("SR")]
+        SR,
 
         /// <summary>
         /// South Sudan
-        /// SS = 728
         /// </summary>
-        SS = 728,
+        [EnumStringValue("SS")]
+        SS,
 
         /// <summary>
         /// Sao Tome and Principe
-        /// ST = 678
         /// </summary>
-        ST = 678,
+        [EnumStringValue("ST")]
+        ST,
 
         /// <summary>
         /// El Salvador
-        /// SV = 222
         /// </summary>
-        SV = 222,
+        [EnumStringValue("SV")]
+        SV,
 
         /// <summary>
         /// Sint Maarten (Dutch part)
-        /// SX = 534
         /// </summary>
-        SX = 534,
+        [EnumStringValue("SX")]
+        SX,
 
         /// <summary>
-        /// Syrian Arab Republic (the)
-        /// SY = 760
+        /// Syrian Arab Republic
         /// </summary>
-        SY = 760,
+        [EnumStringValue("SY")]
+        SY,
 
         /// <summary>
         /// Eswatini
-        /// SZ = 748
         /// </summary>
-        SZ = 748,
+        [EnumStringValue("SZ")]
+        SZ,
 
         /// <summary>
         /// Turks and Caicos Islands (the)
-        /// TC = 796
         /// </summary>
-        TC = 796,
+        [EnumStringValue("TC")]
+        TC,
 
         /// <summary>
         /// Chad
-        /// TD = 148
         /// </summary>
-        TD = 148,
+        [EnumStringValue("TD")]
+        TD,
 
         /// <summary>
         /// French Southern Territories (the)
-        /// TF = 260
         /// </summary>
-        TF = 260,
+        [EnumStringValue("TF")]
+        TF,
 
         /// <summary>
         /// Togo
-        /// TG = 768
         /// </summary>
-        TG = 768,
+        [EnumStringValue("TG")]
+        TG,
 
         /// <summary>
         /// Thailand
-        /// TH = 764
         /// </summary>
-        TH = 764,
+        [EnumStringValue("TH")]
+        TH,
 
         /// <summary>
         /// Tajikistan
-        /// TJ = 762
         /// </summary>
-        TJ = 762,
+        [EnumStringValue("TJ")]
+        TJ,
 
         /// <summary>
         /// Tokelau
-        /// TK = 772
         /// </summary>
-        TK = 772,
+        [EnumStringValue("TK")]
+        TK,
 
         /// <summary>
         /// Timor-Leste
-        /// TL = 626
         /// </summary>
-        TL = 626,
+        [EnumStringValue("TL")]
+        TL,
 
         /// <summary>
         /// Turkmenistan
-        /// TM = 795
         /// </summary>
-        TM = 795,
+        [EnumStringValue("TM")]
+        TM,
 
         /// <summary>
         /// Tunisia
-        /// TN = 788
         /// </summary>
-        TN = 788,
+        [EnumStringValue("TN")]
+        TN,
 
         /// <summary>
         /// Tonga
-        /// TO = 776
         /// </summary>
-        TO = 776,
+        [EnumStringValue("TO")]
+        TO,
 
         /// <summary>
         /// Turkey
-        /// TR = 792
         /// </summary>
-        TR = 792,
+        [EnumStringValue("TR")]
+        TR,
 
         /// <summary>
         /// Trinidad and Tobago
-        /// TT = 780
         /// </summary>
-        TT = 780,
+        [EnumStringValue("TT")]
+        TT,
 
         /// <summary>
         /// Tuvalu
-        /// TV = 798
         /// </summary>
-        TV = 798,
+        [EnumStringValue("TV")]
+        TV,
 
         /// <summary>
         /// Taiwan (Province of China)
-        /// TW = 158
         /// </summary>
-        TW = 158,
+        [EnumStringValue("TW")]
+        TW,
 
         /// <summary>
-        /// Tanzania, the United Republic of
-        /// TZ = 834
+        /// Tanzania, United Republic of
         /// </summary>
-        TZ = 834,
+        [EnumStringValue("TZ")]
+        TZ,
 
         /// <summary>
         /// Ukraine
-        /// UA = 804
         /// </summary>
-        UA = 804,
+        [EnumStringValue("UA")]
+        UA,
 
         /// <summary>
         /// Uganda
-        /// UG = 800
         /// </summary>
-        UG = 800,
+        [EnumStringValue("UG")]
+        UG,
 
         /// <summary>
         /// United States Minor Outlying Islands (the)
-        /// UM = 581
         /// </summary>
-        UM = 581,
+        [EnumStringValue("UM")]
+        UM,
 
         /// <summary>
         /// United States of America (the)
-        /// US = 840
         /// </summary>
-        US = 840,
+        [EnumStringValue("US")]
+        US,
 
         /// <summary>
         /// Uruguay
-        /// UY = 858
         /// </summary>
-        UY = 858,
+        [EnumStringValue("UY")]
+        UY,
 
         /// <summary>
         /// Uzbekistan
-        /// UZ = 860
         /// </summary>
-        UZ = 860,
+        [EnumStringValue("UZ")]
+        UZ,
 
         /// <summary>
         /// Holy See (the)
-        /// VA = 336
         /// </summary>
-        VA = 336,
+        [EnumStringValue("VA")]
+        VA,
 
         /// <summary>
         /// Saint Vincent and the Grenadines
-        /// VC = 670
         /// </summary>
-        VC = 670,
+        [EnumStringValue("VC")]
+        VC,
 
         /// <summary>
         /// Venezuela (Bolivarian Republic of)
-        /// VE = 862
         /// </summary>
-        VE = 862,
+        [EnumStringValue("VE")]
+        VE,
 
         /// <summary>
         /// Virgin Islands (British)
-        /// VG = 92
         /// </summary>
-        VG = 92,
+        [EnumStringValue("VG")]
+        VG,
 
         /// <summary>
         /// Virgin Islands (U.S.)
-        /// VI = 850
         /// </summary>
-        VI = 850,
+        [EnumStringValue("VI")]
+        VI,
 
         /// <summary>
-        /// Viet Nam
-        /// VN = 704
+        /// Vietnam
         /// </summary>
-        VN = 704,
+        [EnumStringValue("VN")]
+        VN,
 
         /// <summary>
         /// Vanuatu
-        /// VU = 548
         /// </summary>
-        VU = 548,
+        [EnumStringValue("VU")]
+        VU,
 
         /// <summary>
         /// Wallis and Futuna
-        /// WF = 876
         /// </summary>
-        WF = 876,
+        [EnumStringValue("WF")]
+        WF,
 
         /// <summary>
         /// Samoa
-        /// WS = 882
         /// </summary>
-        WS = 882,
+        [EnumStringValue("WS")]
+        WS,
 
         /// <summary>
         /// Yemen
-        /// YE = 887
         /// </summary>
-        YE = 887,
+        [EnumStringValue("YE")]
+        YE,
 
         /// <summary>
         /// Mayotte
-        /// YT = 175
         /// </summary>
-        YT = 175,
+        [EnumStringValue("YT")]
+        YT,
 
         /// <summary>
         /// South Africa
-        /// ZA = 710
         /// </summary>
-        ZA = 710,
+        [EnumStringValue("ZA")]
+        ZA,
 
         /// <summary>
         /// Zambia
-        /// ZM = 894
         /// </summary>
-        ZM = 894,
+        [EnumStringValue("ZM")]
+        ZM,
 
         /// <summary>
         /// Zimbabwe
-        /// ZW = 716
         /// </summary>
-        ZW = 716,
+        [EnumStringValue("ZW")]
+        ZW,
 
         /// <summary>
         /// Kosovo
-        /// 1A = 999
-        /// This is a temporary code,
-        /// special treatment required as enums
-        /// don't like members starting with a number!
         /// </summary>
         [EnumStringValue("1A")]
-        _1A = 999,
+        _1A,
 
         /// <summary>
-        /// Fall back for unsupported
-        /// Country Codes
-        /// Unknown = 0
+        /// United Kingdom (Northern Ireland)
         /// </summary>
-        Unknown = 0
+        [EnumStringValue("XI")]
+        XI
     }
 }

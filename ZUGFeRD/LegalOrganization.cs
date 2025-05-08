@@ -39,7 +39,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="id"></param>
         /// <param name="schemeID"></param>
         /// <param name="tradingBusinessName"></param>
-        public LegalOrganization(GlobalIDSchemeIdentifiers schemeID = GlobalIDSchemeIdentifiers.Unknown, string id = "", string tradingBusinessName = "")
+        public LegalOrganization(GlobalIDSchemeIdentifiers? schemeID = null, string id = "", string tradingBusinessName = "")
         {
             ID = new GlobalID(schemeID, id);
             TradingBusinessName = tradingBusinessName;

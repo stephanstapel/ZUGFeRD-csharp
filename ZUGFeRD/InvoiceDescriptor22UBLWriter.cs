@@ -292,9 +292,9 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteOptionalElementString("cbc", "PostalZone", this.Descriptor.ShipTo.Postcode);
                     Writer.WriteOptionalElementString("cbc", "CountrySubentity", this.Descriptor.ShipTo.CountrySubdivisionName);
                     Writer.WriteStartElement("cac", "Country");
-                    if (this.Descriptor.ShipTo.Country != CountryCodes.Unknown)
+                    if (this.Descriptor.ShipTo.Country.HasValue)
                     {
-                        Writer.WriteElementString("cbc", "IdentificationCode", this.Descriptor.ShipTo.Country.ToString());
+                        Writer.WriteElementString("cbc", "IdentificationCode", this.Descriptor.ShipTo.Country.Value.EnumToString());
                     }
                     Writer.WriteEndElement(); // !Country
                     Writer.WriteEndElement(); // !Address
@@ -977,9 +977,9 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteOptionalElementString("cbc", "CountrySubentity", party.CountrySubdivisionName);
 
                 writer.WriteStartElement("cac", "Country");
-                if (party.Country != CountryCodes.Unknown)
+                if (party.Country.HasValue)
                 {
-                    Writer.WriteElementString("cbc", "IdentificationCode", party.Country.ToString());
+                    Writer.WriteElementString("cbc", "IdentificationCode", party.Country.Value.EnumToString());
                 }
                 writer.WriteEndElement(); //!Country
 

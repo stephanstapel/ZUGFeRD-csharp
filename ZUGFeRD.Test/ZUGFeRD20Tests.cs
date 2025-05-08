@@ -510,7 +510,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.ShipTo = new Party
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                ID = new GlobalID(null, "123"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ship To",
                 ContactName = "Max Mustermann",
@@ -522,7 +522,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.ShipFrom = new Party
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                ID = new GlobalID(null, "123"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ship From",
                 ContactName = "Eva Musterfrau",

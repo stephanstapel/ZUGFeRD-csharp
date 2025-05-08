@@ -451,14 +451,14 @@ namespace s2industries.ZUGFeRD
 
             Party retval = new Party()
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, XmlUtils.NodeAsString(node, "ram:ID", nsmgr)),
+                ID = new GlobalID(null, XmlUtils.NodeAsString(node, "ram:ID", nsmgr)),
                 GlobalID = new GlobalID(EnumExtensions.StringToEnum<GlobalIDSchemeIdentifiers>(XmlUtils.NodeAsString(node, "ram:GlobalID/@schemeID", nsmgr)),
                                         XmlUtils.NodeAsString(node, "ram:GlobalID", nsmgr)),
                 Name = XmlUtils.NodeAsString(node, "ram:Name", nsmgr),
                 Description = XmlUtils.NodeAsString(node, "ram:Description", nsmgr), // BT-33 Seller only
                 Postcode = XmlUtils.NodeAsString(node, "ram:PostalTradeAddress/ram:PostcodeCode", nsmgr),
                 City = XmlUtils.NodeAsString(node, "ram:PostalTradeAddress/ram:CityName", nsmgr),
-                Country = EnumExtensions.StringToEnum<CountryCodes>(XmlUtils.NodeAsString(node, "ram:PostalTradeAddress/ram:CountryID", nsmgr))
+                Country = EnumExtensions.StringToNullableEnum<CountryCodes>(XmlUtils.NodeAsString(node, "ram:PostalTradeAddress/ram:CountryID", nsmgr))
             };
 
             string lineOne = XmlUtils.NodeAsString(node, "ram:PostalTradeAddress/ram:LineOne", nsmgr);

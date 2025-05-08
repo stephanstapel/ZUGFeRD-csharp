@@ -56,7 +56,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Party country
         /// </summary>
-        public CountryCodes Country { get; set; }
+        public CountryCodes? Country { get; set; }
 
         /// <summary>
         /// Street name and number

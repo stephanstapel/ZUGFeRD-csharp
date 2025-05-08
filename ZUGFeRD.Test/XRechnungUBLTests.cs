@@ -1126,7 +1126,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.Buyer.Name, "Rechnungs Roulette GmbH & Co KG");
             Assert.AreEqual(desc.Buyer.City, "Klein Schlappstadt a.d. Lusche");
             Assert.AreEqual(desc.Buyer.Postcode, "12345");
-            Assert.AreEqual(desc.Buyer.Country, (CountryCodes)276);
+            Assert.AreEqual(desc.Buyer.Country, CountryCodes.DE);
             Assert.AreEqual(desc.Buyer.Street, "Beispielgasse 17b");
             Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette GmbH & Co KG");
 
@@ -1137,7 +1137,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.Seller.Name, "Harry Hirsch Holz- und Trockenbau");
             Assert.AreEqual(desc.Seller.City, "Klein Schlappstadt a.d. Lusche");
             Assert.AreEqual(desc.Seller.Postcode, "12345");
-            Assert.AreEqual(desc.Seller.Country, (CountryCodes)276);
+            Assert.AreEqual(desc.Seller.Country, CountryCodes.DE);
             Assert.AreEqual(desc.Seller.Street, "Beispielgasse 17a");
             Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch Holz- und Trockenbau");
 

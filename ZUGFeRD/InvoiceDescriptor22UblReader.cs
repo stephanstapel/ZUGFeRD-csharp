@@ -280,7 +280,7 @@ namespace s2industries.ZUGFeRD
             retval.Currency = EnumExtensions.StringToEnum<CurrencyCodes>(XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:DocumentCurrencyCode", nsmgr));
 
             CurrencyCodes optionalTaxCurrency = EnumExtensions.StringToEnum<CurrencyCodes>(XmlUtils.NodeAsString(doc.DocumentElement, "//cbc:TaxCurrencyCode", nsmgr)); // BT-6
-            if (optionalTaxCurrency != CurrencyCodes.Unknown)
+            if (optionalTaxCurrency != default)
             {
                 retval.TaxCurrency = optionalTaxCurrency;
             }
@@ -861,7 +861,7 @@ namespace s2industries.ZUGFeRD
                 City = XmlUtils.NodeAsString(node, "cbc:CityName", nsmgr),
                 Postcode = XmlUtils.NodeAsString(node, "cbc:PostalZone", nsmgr),
                 CountrySubdivisionName = XmlUtils.NodeAsString(node, "cbc:CountrySubentity", nsmgr),
-                Country = EnumExtensions.StringToEnum<CountryCodes>(XmlUtils.NodeAsString(node, "cac:Country/cbc:IdentificationCode", nsmgr)),
+                Country = EnumExtensions.StringToNullableEnum<CountryCodes>(XmlUtils.NodeAsString(node, "cac:Country/cbc:IdentificationCode", nsmgr)),
             };
             string addressLine2 = XmlUtils.NodeAsString(node, "cac:AddressLine/cbc:Line", nsmgr);
             if (!string.IsNullOrWhiteSpace(addressLine2))

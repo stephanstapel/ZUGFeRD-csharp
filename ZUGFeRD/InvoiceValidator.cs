@@ -266,25 +266,25 @@ namespace s2industries.ZUGFeRD
                 IsValid = true
             };
 
-            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Buyer?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Buyer?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.Odette))
             {
                 retval.IsValid = false;
                 retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for buyers in ZUGFeRD 1.0");
             }
 
-            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Seller?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.Seller?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.Odette))
             {
                 retval.IsValid = false;
                 retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for sellers in ZUGFeRD 1.0");
             }
 
-            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipFrom?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipFrom?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.Odette))
             {
                 retval.IsValid = false;
                 retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for senders (ShipFrom) in ZUGFeRD 1.0");
             }
 
-            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipTo?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.ODETTE))
+            if (!EnumExtensions.In<GlobalIDSchemeIdentifiers>(descriptor.ShipTo?.GlobalID?.SchemeID, GlobalIDSchemeIdentifiers.Swift, GlobalIDSchemeIdentifiers.DUNS, GlobalIDSchemeIdentifiers.GLN, GlobalIDSchemeIdentifiers.EAN, GlobalIDSchemeIdentifiers.Odette))
             {
                 retval.IsValid = false;
                 retval.Messages.Add($"Global identifier scheme {descriptor.Buyer?.GlobalID?.SchemeID} is not supported for recipients (ShipTo) in ZUGFeRD 1.0");

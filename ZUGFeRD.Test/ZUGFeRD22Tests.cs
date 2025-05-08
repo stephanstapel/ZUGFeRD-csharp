@@ -41,6 +41,38 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
+        public void TestComment()
+        {
+            InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
+            desc.TradeLineItems.Clear();
+            desc.AddTradeLineItem(
+                name: "Trennblätter A4",
+                billedQuantity: 1m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 9.9m,
+                grossUnitPrice: 9.9m,
+                lineTotalAmount: 9.9m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            desc.AddTradeLineCommentItem(comment: "Dies ist ein Kommentar", name: "Note");
+
+            desc.Taxes.Clear();
+            desc.AddApplicableTradeTax(9.9m, 19, 9.9m * 0.19m, TaxTypes.VAT, TaxCategoryCodes.S);
+
+            desc.LineTotalAmount = 9.9m;
+            desc.TaxBasisAmount = 9.9m;
+            desc.TaxTotalAmount = 9.9m * 0.19m;
+            desc.GrandTotalAmount = 9.9m * 1.19m;
+            desc.DuePayableAmount = 9.9m * 1.19m;
+
+            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+        }
+
+
+
+        [TestMethod]
         public void TestLineStatusCode()
         {
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
@@ -1373,7 +1405,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.Payee.Street, String.Empty);
             Assert.AreEqual(loadedInvoice.Payee.AddressLine3, String.Empty);
             Assert.AreEqual(loadedInvoice.Payee.CountrySubdivisionName, String.Empty);
-            Assert.AreEqual(loadedInvoice.Payee.Country, CountryCodes.Unknown);
+            Assert.IsNull(loadedInvoice.Payee.Country);
 
 
             // test with Extended
@@ -1410,7 +1442,7 @@ namespace s2industries.ZUGFeRD.Test
             // REM: In Comfort only ID, GlobalID, Name, and SpecifiedLegalOrganization are allowed.
 
             desc.Payee = new Party() {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
+                ID = new GlobalID(null, "SL1001"),
                 Name = "Max Mustermann"
                 // Country is not set and should not be written into the XML
             };
@@ -1448,7 +1480,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
             desc.ShipTo = new Party() {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
+                ID = new GlobalID(null, "SL1001"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.GLN, "MusterGLN"),
                 Name = "AbKunden AG Mitte",
                 Postcode = "12345",
@@ -1602,7 +1634,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.ShipTo = new Party()
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "SL1001"),
+                ID = new GlobalID(null, "SL1001"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.GLN, "MusterGLN"),
                 Name = "AbKunden AG Mitte",
                 Postcode = "12345",
@@ -1852,7 +1884,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.ShipTo = new Party
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                ID = new GlobalID(null, "123"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ship To",
                 ContactName = "Max Mustermann",
@@ -1864,7 +1896,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.UltimateShipTo = new Party
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                ID = new GlobalID(null, "123"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ultimate Ship To",
                 ContactName = "Max Mustermann",
@@ -1876,7 +1908,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.ShipFrom = new Party
             {
-                ID = new GlobalID(GlobalIDSchemeIdentifiers.Unknown, "123"),
+                ID = new GlobalID(null, "123"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "789"),
                 Name = "Ship From",
                 ContactName = "Eva Musterfrau",
@@ -2876,10 +2908,11 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(timestamp.AddDays(14), paymentTerm.DueDate);
         } // !TestPaymentTermsSingleCardinality()
 
-        /**
-        This test ensures that a structured payment term following the XRechnung format 
-        ends with a line break character as required by the specification.
-        **/
+
+        /*
+         * This test ensures that a structured payment term following the XRechnung format 
+         * ends with a line break character as required by the specification.
+         */
         [TestMethod]
         public void TestPaymentTermsXRechnungStructuredEndsWithLineBreak()
         {

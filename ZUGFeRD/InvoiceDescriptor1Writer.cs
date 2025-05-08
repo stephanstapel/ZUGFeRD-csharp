@@ -646,7 +646,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
 
                 Writer.WriteStartElement("ram", "SpecifiedTradeProduct");
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && (tradeLineItem.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && tradeLineItem.GlobalID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
                     _writeElementWithAttribute(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID);
                 }
@@ -867,7 +867,7 @@ namespace s2industries.ZUGFeRD
 
                 if ((Party.ID != null) && !String.IsNullOrWhiteSpace(Party.ID.ID))
                 {
-                    if ((Party.ID.SchemeID.HasValue) && (Party.ID.SchemeID != GlobalIDSchemeIdentifiers.Unknown))
+                    if ((Party.ID.SchemeID.HasValue) && Party.ID.SchemeID.HasValue)
                     {
                         writer.WriteStartElement("ram", "ID");
                         writer.WriteAttributeString("schemeID", Party.ID.SchemeID.Value.EnumToString());
@@ -880,7 +880,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && (Party.GlobalID.SchemeID.HasValue) && (Party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
+                if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && (Party.GlobalID.SchemeID.HasValue) && Party.GlobalID.SchemeID.HasValue)
                 {
                     writer.WriteStartElement("ram", "GlobalID");
                     writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID.Value.EnumToString());
@@ -897,9 +897,9 @@ namespace s2industries.ZUGFeRD
                 if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", Party.Street); }
                 writer.WriteOptionalElementString("ram", "CityName", Party.City);
 
-                if (Party.Country != CountryCodes.Unknown)
+                if (Party.Country.HasValue)
                 {
-                    writer.WriteElementString("ram", "CountryID", Party.Country.EnumToString());
+                    writer.WriteElementString("ram", "CountryID", Party.Country.Value.EnumToString());
                 }
 
                 writer.WriteEndElement(); // !PostalTradeAddress
@@ -991,8 +991,7 @@ namespace s2industries.ZUGFeRD
             switch (type)
             {
                 case InvoiceType.SelfBilledInvoice: return (int)InvoiceType.SelfBilledInvoice;
-                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return (int)InvoiceType.DebitnoteRelatedToFinancialAdjustments;
-                case InvoiceType.Unknown: return (int)InvoiceType.Unknown;
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: return (int)InvoiceType.DebitnoteRelatedToFinancialAdjustments;                
                 default: return (int)InvoiceType.Invoice;
             }
         } // !_translateInvoiceType()

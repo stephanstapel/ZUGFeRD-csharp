@@ -179,7 +179,7 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
                 Writer.WriteStartElement("ram", "SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && (tradeLineItem.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && tradeLineItem.GlobalID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
                     _writeElementWithAttributeWithPrefix(Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
@@ -1733,7 +1733,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram", "ID", party.ID.ID);
             }
 
-            if (!String.IsNullOrWhiteSpace(party.GlobalID?.ID) && party.GlobalID.SchemeID.HasValue && (party.GlobalID.SchemeID.Value != GlobalIDSchemeIdentifiers.Unknown))
+            if (!String.IsNullOrWhiteSpace(party.GlobalID?.ID) && party.GlobalID.SchemeID.HasValue && party.GlobalID.SchemeID.HasValue)
             {
                 writer.WriteStartElement("ram", "GlobalID");
                 writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
@@ -1760,9 +1760,9 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram", "LineThree", party.AddressLine3); // buyer: BT-163
                 writer.WriteOptionalElementString("ram", "CityName", party.City); // buyer: BT-52
 
-                if (party.Country != CountryCodes.Unknown)
+                if (party.Country != null)
                 {
-                    writer.WriteElementString("ram", "CountryID", party.Country.EnumToString()); // buyer: BT-55
+                    writer.WriteElementString("ram", "CountryID", party.Country.Value.EnumToString()); // buyer: BT-55
                 }
 
                 writer.WriteOptionalElementString("ram", "CountrySubDivisionName", party.CountrySubdivisionName); // BT-79
@@ -1903,7 +1903,6 @@ namespace s2industries.ZUGFeRD
                 case InvoiceType.PrepaymentInvoice: return "VORAUSZAHLUNGSRECHNUNG";
                 case InvoiceType.InvoiceInformation: return "KEINERECHNUNG";
                 case InvoiceType.Correction: return "KORREKTURRECHNUNG";
-                case InvoiceType.Unknown: return String.Empty;
                 default: return String.Empty;
             }
         } // !_translateInvoiceType()
