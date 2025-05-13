@@ -288,19 +288,19 @@ namespace s2industries.ZUGFeRD
             XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount", nsmgr);
             XmlNodeList creditorFinancialInstitutions = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution", nsmgr);
 
-            int numberOfAccounts = Math.Min(creditorFinancialAccountNodes.Count, creditorFinancialInstitutions.Count);
+            int numberOfAccounts = Math.Max(creditorFinancialAccountNodes.Count, creditorFinancialInstitutions.Count);
 
             for (int i = 0; i < numberOfAccounts; i++)
             {
                 retval.AddCreditorFinancialAccount(
-                    iban: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr),
-                    bic: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr),
-                    id: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr),
-                    bankleitzahl: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr),
-                    bankName: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr),
-                    name: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:AccountName", nsmgr)
-                );
-            } // !for(i)
+                    iban: i < creditorFinancialAccountNodes.Count ? XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr) : string.Empty,
+                    bic: i < creditorFinancialInstitutions.Count ? XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr) : string.Empty,
+                    id: i < creditorFinancialAccountNodes.Count ? XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr) : string.Empty,
+                    bankleitzahl: i < creditorFinancialInstitutions.Count ? XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr) : string.Empty,
+                    bankName: i < creditorFinancialInstitutions.Count ? XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr) : string.Empty,
+                    name: i < creditorFinancialAccountNodes.Count ? XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:AccountName", nsmgr) : string.Empty);
+            } // !for(i) 
+
 
             var specifiedTradeSettlementPaymentMeansNodes = doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans", nsmgr);
 
