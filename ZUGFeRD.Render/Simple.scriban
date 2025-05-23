@@ -143,7 +143,7 @@
 			</div>
 
 			<div class="row">
-				<div class="col-6">
+				<div class="col-8">
 					<div class="card">
 						<div class="card-body">												
 							<h5 class="card-title">Tax</h5>
@@ -170,13 +170,17 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-4">
 					<div class="card">
 						<div class="card-body">	
 							<h5 class="card-title">Totals</h5>
-							<dl>
+							<dl>								
 								<dt>Line Total</dt>
 								<dd>{{ Invoice.LineTotalAmount | math.format("N2") }}</dd>
+								<dt>Allowance Total</dt>
+								<dd>{{ Invoice.AllowanceTotalAmount | math.format("N2") }}</dd>
+								<dt>Charge Total</dt>
+								<dd>{{ Invoice.ChargeTotalAmount | math.format("N2") }}</dd>
 								<dt>Tax Total</dt>
 								<dd>{{ Invoice.TaxTotalAmount | math.format("N2") }}</dd>
 								<dt>Grand Total</dt>
