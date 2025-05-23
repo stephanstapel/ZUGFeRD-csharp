@@ -2189,6 +2189,10 @@ namespace s2industries.ZUGFeRD
         } // !AddDebitorFinancialAccount()
 
 
+        /// <summary>
+        /// BT-91
+        /// </summary>
+        /// <param name="bankAccount"></param>
         internal void _AddDebitorFinancialAccount(BankAccount bankAccount)
         {
             this.DebitorBankAccounts.Add(bankAccount);
@@ -2197,6 +2201,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets all debitor financial accounts
+        ///
+        /// BT-91
         /// </summary>
         /// <returns>List of debitor financial accounts</returns>
         public List<BankAccount> GetDebitorFinancialAccounts()
