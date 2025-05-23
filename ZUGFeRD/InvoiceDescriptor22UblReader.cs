@@ -323,7 +323,7 @@ namespace s2industries.ZUGFeRD
                 retval._AddDebitorFinancialAccount(_nodeAsBankAccount(node, ".", nsmgr));
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//cac:TaxTotal/cac:TaxSubtotal", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("/*/cac:TaxTotal/cac:TaxSubtotal", nsmgr))
             {
                 retval.AddApplicableTradeTax(XmlUtils.NodeAsDecimal(node, "cbc:TaxableAmount", nsmgr, 0).Value,
                                              XmlUtils.NodeAsDecimal(node, "cac:TaxCategory/cbc:Percent", nsmgr, 0).Value,
