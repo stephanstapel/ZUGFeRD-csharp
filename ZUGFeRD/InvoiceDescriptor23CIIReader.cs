@@ -54,16 +54,16 @@ namespace s2industries.ZUGFeRD
 
             InvoiceDescriptor retval = new InvoiceDescriptor
             {
-                IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "//rsm:ExchangedDocumentContext/ram:TestIndicator/udt:Indicator", nsmgr, false),
-                BusinessProcess = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID", nsmgr),
-                Profile = default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
-                Name = XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:Name", nsmgr),
-                Type = EnumExtensions.StringToEnum<InvoiceType>(XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:TypeCode", nsmgr)),
-                InvoiceNo = XmlUtils.NodeAsString(doc.DocumentElement, "//rsm:ExchangedDocument/ram:ID", nsmgr),
-                InvoiceDate = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "//rsm:ExchangedDocument/ram:IssueDateTime", nsmgr)
+                IsTest = XmlUtils.NodeAsBool(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:TestIndicator/udt:Indicator", nsmgr, false),
+                BusinessProcess = XmlUtils.NodeAsString(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID", nsmgr),
+                Profile = default(Profile).FromString(XmlUtils.NodeAsString(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter/ram:ID", nsmgr)),
+                Name = XmlUtils.NodeAsString(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:Name", nsmgr),
+                Type = EnumExtensions.StringToEnum<InvoiceType>(XmlUtils.NodeAsString(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:TypeCode", nsmgr)),
+                InvoiceNo = XmlUtils.NodeAsString(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:ID", nsmgr),
+                InvoiceDate = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IssueDateTime", nsmgr)
             };
 
-            foreach (XmlNode node in doc.SelectNodes("//rsm:ExchangedDocument/ram:IncludedNote", nsmgr))
+            foreach (XmlNode node in doc.SelectNodes("/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote", nsmgr))
             {
                 string content = XmlUtils.NodeAsString(node, ".//ram:Content", nsmgr);
                 string parsedSubjectCode = XmlUtils.NodeAsString(node, ".//ram:SubjectCode", nsmgr);
@@ -581,7 +581,7 @@ namespace s2industries.ZUGFeRD
                 item.BuyerOrderReferencedDocument = new BuyerOrderReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, "//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr),
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr),
                     LineID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument/ram:LineID", nsmgr)
                 };
             }
@@ -591,7 +591,7 @@ namespace s2industries.ZUGFeRD
                 item.ContractReferencedDocument = new ContractReferencedDocument()
                 {
                     ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID", nsmgr),
-                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, "//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime", nsmgr),
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime", nsmgr),
                     LineID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument/ram:LineID", nsmgr)
                 };
             }
