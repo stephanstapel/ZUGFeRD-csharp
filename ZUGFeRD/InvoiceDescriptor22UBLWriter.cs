@@ -630,7 +630,7 @@ namespace s2industries.ZUGFeRD
                 Writer.WriteStartElement("cbc", "CreditedQuantity");
             }
             Writer.WriteAttributeString("unitCode", tradeLineItem.UnitCode.EnumToString());
-            Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity));
+            Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity, 4));
             Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
 
             _writeOptionalAmount(Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
