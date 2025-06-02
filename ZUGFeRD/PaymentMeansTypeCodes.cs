@@ -24,12 +24,6 @@ namespace s2industries.ZUGFeRD
     public enum PaymentMeansTypeCodes
     {
         /// <summary>
-        /// Unknown/ invalid value
-        /// </summary>
-        [EnumStringValue("")]
-        Unknown = 0,
-
-        /// <summary>
         /// Keine Zahlungsart definiert
         /// Available in: Extended
         /// </summary>

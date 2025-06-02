@@ -29,11 +29,6 @@ namespace s2industries.ZUGFeRD
     public enum SubjectCodes
     {
         /// <summary>
-        /// Unknon/ invalid subject code
-        /// </summary>
-        Unknown,
-
-        /// <summary>
         /// Dangerous goods additional information
         /// </summary>
         /// Additional information concerning dangerous goods.

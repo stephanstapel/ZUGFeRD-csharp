@@ -68,9 +68,9 @@ namespace s2industries.ZUGFeRD
             {
                 string content = XmlUtils.NodeAsString(node, ".//ram:Content", nsmgr);
                 string subjectCodeAsString = XmlUtils.NodeAsString(node, ".//ram:SubjectCode", nsmgr);
-                SubjectCodes subjectCode = EnumExtensions.StringToEnum<SubjectCodes>(subjectCodeAsString);
+                SubjectCodes? subjectCode = EnumExtensions.StringToNullableEnum<SubjectCodes>(subjectCodeAsString);
                 string contentCodeAsString = XmlUtils.NodeAsString(node, ".//ram:ContentCode", nsmgr);
-                ContentCodes contentCode = EnumExtensions.StringToEnum<ContentCodes>(contentCodeAsString);
+                ContentCodes? contentCode = EnumExtensions.StringToNullableEnum<ContentCodes>(contentCodeAsString);
                 retval.AddNote(content, subjectCode, contentCode);
             }
 
@@ -173,7 +173,7 @@ namespace s2industries.ZUGFeRD
             // TODO: Multiple SpecifiedTradeSettlementPaymentMeans can exist for each account/institution (with different SEPA?)
             PaymentMeans tempPaymentMeans = new PaymentMeans()
             {
-                TypeCode = EnumExtensions.StringToEnum<PaymentMeansTypeCodes>(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
+                TypeCode = EnumExtensions.StringToNullableEnum<PaymentMeansTypeCodes>(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode", nsmgr)),
                 Information = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:Information", nsmgr),
                 SEPACreditorIdentifier = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:CreditorReferenceID", nsmgr),
                 SEPAMandateReference = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:SpecifiedTradePaymentTerms/ram:DirectDebitMandateID", nsmgr),
@@ -255,11 +255,11 @@ namespace s2industries.ZUGFeRD
 
             foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax", nsmgr))
             {
-                retval.AddApplicableTradeTax(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
+                retval._AddApplicableTradeTax(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
                                              XmlUtils.NodeAsDecimal(node, ".//ram:RateApplicablePercent", nsmgr, 0).Value,
                                              XmlUtils.NodeAsDecimal(node, ".//ram:CalculatedAmount", nsmgr, 0).Value,
-                                             EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:TypeCode", nsmgr)),
-                                             EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)),
+                                             EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:TypeCode", nsmgr)),
+                                             EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryCode", nsmgr)),
                                              XmlUtils.NodeAsDecimal(node, ".//ram:AllowanceChargeBasisAmount", nsmgr),
                                              EnumExtensions.StringToNullableEnum<TaxExemptionReasonCodes>(XmlUtils.NodeAsString(node, ".//ram:ExemptionReasonCode", nsmgr)),
                                              XmlUtils.NodeAsString(node, ".//ram:ExemptionReason", nsmgr),
@@ -273,35 +273,35 @@ namespace s2industries.ZUGFeRD
                 bool chargeIndicator = XmlUtils.NodeAsBool(node, ".//ram:ChargeIndicator", nsmgr);
                 if (chargeIndicator) // charge
                 {
-                    retval.AddTradeCharge(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
-                                          retval.Currency,
-                                          XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
-                                          XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
-                                          EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
-                                          EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
-                                          XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
-                                          EnumExtensions.StringToEnum<ChargeReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                    retval._AddTradeCharge(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
+                                           retval.Currency,
+                                           XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
+                                           XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
+                                           EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
+                                           EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
+                                           XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
+                                           EnumExtensions.StringToEnum<ChargeReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
                 }
                 else // allowance
                 {
-                    retval.AddTradeAllowance(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
-                                             retval.Currency,
-                                             XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
-                                             XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
-                                             EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
-                                             EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
-                                             XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
-                                             EnumExtensions.StringToEnum<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                    retval._AddTradeAllowance(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
+                                              retval.Currency,
+                                              XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
+                                              XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
+                                              EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
+                                              EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
+                                              XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
+                                              EnumExtensions.StringToEnum<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
                 }
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
             {
-                retval.AddLogisticsServiceCharge(XmlUtils.NodeAsDecimal(node, ".//ram:AppliedAmount", nsmgr, 0).Value,
-                                                 XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
-                                                 EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:AppliedTradeTax/ram:TypeCode", nsmgr)),
-                                                 EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:AppliedTradeTax/ram:CategoryCode", nsmgr)),
-                                                 XmlUtils.NodeAsDecimal(node, ".//ram:AppliedTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value);
+                retval._AddLogisticsServiceCharge(XmlUtils.NodeAsDecimal(node, ".//ram:AppliedAmount", nsmgr, 0).Value,
+                                                  XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
+                                                  EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:AppliedTradeTax/ram:TypeCode", nsmgr)),
+                                                  EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:AppliedTradeTax/ram:CategoryCode", nsmgr)),
+                                                  XmlUtils.NodeAsDecimal(node, ".//ram:AppliedTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value);
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradePaymentTerms", nsmgr))
@@ -427,12 +427,12 @@ namespace s2industries.ZUGFeRD
                 UnitQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BasisQuantity", nsmgr),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
                 LineTotalAmount = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:LineTotalAmount", nsmgr),
-                TaxCategoryCode = EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
-                TaxType = EnumExtensions.StringToEnum<TaxTypes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),
+                TaxCategoryCode = EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
+                TaxType = EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),
                 TaxPercent = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:ApplicableTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
                 NetUnitPrice = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:NetPriceProductTradePrice/ram:ChargeAmount", nsmgr),
                 GrossUnitPrice = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:GrossPriceProductTradePrice/ram:ChargeAmount", nsmgr),
-                UnitCode = default(QuantityCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr)),
+                UnitCode = EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr)),
                 BillingPeriodStart = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString", nsmgr),
                 BillingPeriodEnd = XmlUtils.NodeAsDateTime(tradeLineItem, ".//ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString", nsmgr),
             };
@@ -461,7 +461,7 @@ namespace s2industries.ZUGFeRD
 
                 if (!String.IsNullOrWhiteSpace(unitCodeAsString))
                 {
-                    unitCode = default(QuantityCodes).FromString(unitCodeAsString);
+                    unitCode = EnumExtensions.StringToNullableEnum<QuantityCodes>(unitCodeAsString);
                 }
 
                 item.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
@@ -479,8 +479,8 @@ namespace s2industries.ZUGFeRD
                 {
                     item.AssociatedDocument.Notes.Add(new Note(
                                 content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
-                                subjectCode: EnumExtensions.StringToEnum<SubjectCodes>(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
-                                contentCode: EnumExtensions.StringToEnum<ContentCodes>(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
+                                subjectCode: EnumExtensions.StringToNullableEnum<SubjectCodes>(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
+                                contentCode: EnumExtensions.StringToNullableEnum<ContentCodes>(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
                     ));
                 }
 
@@ -511,10 +511,10 @@ namespace s2industries.ZUGFeRD
                 }                    
             }
 
-            if (item.UnitCode == QuantityCodes.Unknown)
+            if (!item.UnitCode.HasValue)
             {
                 // UnitCode alternativ aus BilledQuantity extrahieren
-                item.UnitCode = default(QuantityCodes).FromString(XmlUtils.NodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr));
+                item.UnitCode = EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:BilledQuantity/@unitCode", nsmgr));
             }
 
             XmlNode buyerOrderReferencedDocumentNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:BuyerOrderReferencedDocument", nsmgr);
@@ -559,7 +559,7 @@ namespace s2industries.ZUGFeRD
             XmlNodeList referenceNodes = tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeAgreement/ram:AdditionalReferencedDocument", nsmgr);
             foreach (XmlNode referenceNode in referenceNodes)
             {
-                item._AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
+                item.AdditionalReferencedDocuments.Add(_getAdditionalReferencedDocument(referenceNode, nsmgr));
             }
 
             return item;

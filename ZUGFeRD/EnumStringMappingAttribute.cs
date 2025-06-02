@@ -26,10 +26,12 @@ namespace s2industries.ZUGFeRD
     public class EnumStringValueAttribute : Attribute
     {
         public string Value { get; }
+        public string[] LegacyValues { get; }
 
-        public EnumStringValueAttribute(string value)
+        public EnumStringValueAttribute(string value, params string[] legacyValues)
         {
             Value = value;
+            LegacyValues = legacyValues ?? Array.Empty<string>();
         }
     }
 }

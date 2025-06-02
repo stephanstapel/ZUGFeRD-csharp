@@ -325,7 +325,7 @@ namespace s2industries.ZUGFeRD
                     #region AdditionalReferencedDocument (Extended)
 
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz
-                    foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
+                    foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                     {
                         _writeAdditionalReferencedDocument(document, Profile.Extended, "BG-X-3");
                     } // !foreach(document)
@@ -447,7 +447,7 @@ namespace s2industries.ZUGFeRD
                 #region ApplicableTradeTax
                 Writer.WriteStartElement("ram", "ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); // BG-30
                 Writer.WriteElementString("ram", "TypeCode", tradeLineItem.TaxType.EnumToString()); // BT-151-0
-                Writer.WriteOptionalElementString("ram", "ExemptionReason", string.IsNullOrEmpty(tradeLineItem.TaxExemptionReason) ? _translateTaxCategoryCode(tradeLineItem.TaxCategoryCode) : tradeLineItem.TaxExemptionReason, Profile.Extended); // BT-X-96
+                Writer.WriteOptionalElementString("ram", "ExemptionReason", string.IsNullOrEmpty(tradeLineItem.TaxExemptionReason) ? _TranslateTaxCategoryCode(tradeLineItem.TaxCategoryCode) : tradeLineItem.TaxExemptionReason, Profile.Extended); // BT-X-96
                 Writer.WriteElementString("ram", "CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString()); // BT-151
                 if (tradeLineItem.TaxExemptionReasonCode.HasValue)
                 {
@@ -845,7 +845,7 @@ namespace s2industries.ZUGFeRD
 
             if (!this.Descriptor.AnyCreditorFinancialAccount() && !this.Descriptor.AnyDebitorFinancialAccount())
             {
-                if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
                     Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
@@ -867,7 +867,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum);
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
@@ -901,7 +901,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
@@ -1598,12 +1598,12 @@ namespace s2industries.ZUGFeRD
             notes?.ForEach(note =>
             {
                 writer.WriteStartElement("ram", "IncludedNote", profile);
-                if (note.ContentCode != ContentCodes.Unknown)
+                if (note.ContentCode.HasValue)
                 {
                     writer.WriteElementString("ram", "ContentCode", note.ContentCode.EnumToString());
                 }
                 writer.WriteOptionalElementString("ram", "Content", note.Content);
-                if (note.SubjectCode != SubjectCodes.Unknown)
+                if (note.SubjectCode.HasValue)
                 {
                     writer.WriteElementString("ram", "SubjectCode", note.SubjectCode.EnumToString());
                 }
@@ -1835,8 +1835,13 @@ namespace s2industries.ZUGFeRD
         } // !_writeOptionalContact()
 
 
-        private string _translateTaxCategoryCode(TaxCategoryCodes taxCategoryCode)
+        private string _TranslateTaxCategoryCode(TaxCategoryCodes? taxCategoryCode)
         {
+            if (!taxCategoryCode.HasValue)
+            {
+                return null;
+            }
+
             switch (taxCategoryCode)
             {
                 case TaxCategoryCodes.A:
@@ -1866,9 +1871,7 @@ namespace s2industries.ZUGFeRD
                 case TaxCategoryCodes.S:
                     return "Normalsatz";
                 case TaxCategoryCodes.Z:
-                    return "nach dem Nullsatz zu versteuernde Waren";
-                case TaxCategoryCodes.Unknown:
-                    break;
+                    return "nach dem Nullsatz zu versteuernde Waren";                
                 case TaxCategoryCodes.D:
                     break;
                 case TaxCategoryCodes.F:

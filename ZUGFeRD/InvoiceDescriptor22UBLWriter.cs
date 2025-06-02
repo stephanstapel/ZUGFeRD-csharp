@@ -321,7 +321,7 @@ namespace s2industries.ZUGFeRD
                 if (this.Descriptor.PaymentMeans != null)
                 {
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
@@ -344,7 +344,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
@@ -386,7 +386,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("cbc", "PaymentMeansCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("cbc", "PaymentID", this.Descriptor.PaymentReference);
@@ -635,9 +635,9 @@ namespace s2industries.ZUGFeRD
 
             _writeOptionalAmount(Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
 
-            if (tradeLineItem._AdditionalReferencedDocuments.Count > 0)
+            if (tradeLineItem.AdditionalReferencedDocuments.Count > 0)
             {
-                foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
+                foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                 {
                     Writer.WriteStartElement("cac", "DocumentReference");
                     Writer.WriteStartElement("cbc", "ID"); // BT-18, BT-22
@@ -820,7 +820,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (DesignatedProductClassification classification in designatedProductClassifications)
             {
-                if (classification.ListID == default(DesignatedProductClassificationClassCodes))
+                if (classification.ListID == null)
                 {
                     continue;
                 }

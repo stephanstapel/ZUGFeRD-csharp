@@ -39,7 +39,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Product classification name
         /// </summary>
-        public DesignatedProductClassificationClassCodes ListID { get; set; }
+        public DesignatedProductClassificationClassCodes? ListID { get; set; }
 
         /// <summary>
         /// Version of product classification

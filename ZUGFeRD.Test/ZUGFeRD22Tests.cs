@@ -809,35 +809,14 @@ namespace s2industries.ZUGFeRD.Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            TradeLineItem item0 = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
-            item0.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
-            {
-                new ApplicableProductCharacteristic()
-                {
-                    Description = "Description_1_1",
-                    Value = "Value_1_1"
-                },
-                new ApplicableProductCharacteristic()
-                {
-                    Description = "Description_1_2",
-                    Value = "Value_1_2"
-                }
-            };
+            TradeLineItem item0 = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty, QuantityCodes.C62);
 
-            TradeLineItem item1 = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty);
-            item1.ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>()
-            {
-                new ApplicableProductCharacteristic()
-                {
-                    Description = "Description_2_1",
-                    Value = "Value_2_1"
-                },
-                new ApplicableProductCharacteristic()
-                {
-                    Description = "Description_2_2",
-                    Value = "Value_2_2"
-                }
-            };
+            item0.AddApplicableProductCharacteristic("Description_1_1", "Value_1_1");
+            item0.AddApplicableProductCharacteristic("Description_1_2", "Value_1_2");
+
+            TradeLineItem item1 = originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty, QuantityCodes.C62);
+            item1.AddApplicableProductCharacteristic("Description_2_1", "Value_2_1");
+            item1.AddApplicableProductCharacteristic("Description_2_2", "Value_2_2");
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -877,11 +856,13 @@ namespace s2industries.ZUGFeRD.Test
             // Modifiy trade line settlement data
             originalInvoiceDescriptor.AddTradeLineItem(
                 name: String.Empty,
+                QuantityCodes.C62,
                 billingPeriodStart: new DateTime(2020, 1, 1),
                 billingPeriodEnd: new DateTime(2021, 1, 1));
 
             originalInvoiceDescriptor.AddTradeLineItem(
                 name: String.Empty,
+                QuantityCodes.C62,
                 billingPeriodStart: new DateTime(2021, 1, 1),
                 billingPeriodEnd: new DateTime(2022, 1, 1));
 
@@ -920,6 +901,7 @@ namespace s2industries.ZUGFeRD.Test
             // Modifiy trade line settlement data
             originalInvoiceDescriptor.AddTradeLineItem(
                 name: String.Empty,
+                QuantityCodes.C62,
                 billedQuantity: 10,                
                 netUnitPrice: 1);
 
@@ -949,7 +931,7 @@ namespace s2industries.ZUGFeRD.Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty)
+            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty, QuantityCodes.C62)
                 .SetChargeFreeQuantity(10, QuantityCodes.C62)
                 .SetPackageQuantity(20, QuantityCodes.C62);
 
@@ -982,7 +964,7 @@ namespace s2industries.ZUGFeRD.Test
             fileStream.Close();
 
             // Modifiy trade line settlement data
-            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty, netUnitPrice: 25);
+            originalInvoiceDescriptor.AddTradeLineItem(name: String.Empty, netUnitPrice: 25, QuantityCodes.C62);
 
             originalInvoiceDescriptor.IsTest = false;
 
@@ -2300,7 +2282,7 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("112233", new DateTime(2021, 04, 23), CurrencyCodes.EUR);
             desc.Notes.Clear();
-            desc.Notes.Add(new Note("Rechnung enthält 100 EUR (Umsatz)Steuer auf Altteile gem. Abschn. 10.5 Abs. 3 UStAE", SubjectCodes.ADU, ContentCodes.Unknown));
+            desc.Notes.Add(new Note("Rechnung enthält 100 EUR (Umsatz)Steuer auf Altteile gem. Abschn. 10.5 Abs. 3 UStAE", SubjectCodes.ADU));
 
             desc.TradeLineItems.Clear();
             desc.AddTradeLineItem(name: "Neumotor",
@@ -2351,7 +2333,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
             Assert.AreEqual(loadedInvoice.Invoicee, null);
             Assert.AreEqual(loadedInvoice.GetNotes().First().SubjectCode, SubjectCodes.ADU);
-            Assert.AreEqual(loadedInvoice.GetNotes().First().ContentCode, ContentCodes.Unknown);
+            Assert.IsNull(loadedInvoice.GetNotes().First().ContentCode);
         } // !TestAltteilSteuer()
 
         [TestMethod]

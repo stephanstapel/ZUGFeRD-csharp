@@ -37,8 +37,8 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
 
-            desc.AddTradeLineItem("Item1");
-            desc.AddTradeLineItem("Item2");
+            desc.AddTradeLineItem("Item1", QuantityCodes.C62);
+            desc.AddTradeLineItem("Item2", QuantityCodes.C62);
 
             Assert.AreEqual(desc.TradeLineItems[0].AssociatedDocument.LineID, "1");
             Assert.AreEqual(desc.TradeLineItems[1].AssociatedDocument.LineID, "2");
@@ -53,12 +53,12 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Notes.Clear();
-            desc.AddNote("EEV", SubjectCodes.Unknown, ContentCodes.EEV);
-            desc.AddNote("WEV", SubjectCodes.Unknown, ContentCodes.WEV);
-            desc.AddNote("ST1", SubjectCodes.Unknown, ContentCodes.ST1);
-            desc.AddNote("ST2", SubjectCodes.Unknown, ContentCodes.ST2);
-            desc.AddNote("ST3", SubjectCodes.Unknown, ContentCodes.ST3);
-            desc.AddNote("VEV", SubjectCodes.Unknown, ContentCodes.VEV);
+            desc.AddNote("EEV", contentCode: ContentCodes.EEV);
+            desc.AddNote("WEV", contentCode: ContentCodes.WEV);
+            desc.AddNote("ST1", contentCode: ContentCodes.ST1);
+            desc.AddNote("ST2", contentCode: ContentCodes.ST2);
+            desc.AddNote("ST3", contentCode: ContentCodes.ST3);
+            desc.AddNote("VEV", contentCode: ContentCodes.VEV);
 
             using MemoryStream ms = new();
             desc.Save(ms, version, profile);
@@ -84,12 +84,12 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Notes.Clear();
-            desc.AddNote("ACB", SubjectCodes.ACB, ContentCodes.Unknown);
-            desc.AddNote("AAI", SubjectCodes.AAI, ContentCodes.Unknown);
-            desc.AddNote("PRF", SubjectCodes.PRF, ContentCodes.Unknown);
-            desc.AddNote("REG", SubjectCodes.REG, ContentCodes.Unknown);
-            desc.AddNote("SUR", SubjectCodes.SUR, ContentCodes.Unknown);
-            desc.AddNote("TXD", SubjectCodes.TXD, ContentCodes.Unknown);
+            desc.AddNote("ACB", SubjectCodes.ACB);
+            desc.AddNote("AAI", SubjectCodes.AAI);
+            desc.AddNote("PRF", SubjectCodes.PRF);
+            desc.AddNote("REG", SubjectCodes.REG);
+            desc.AddNote("SUR", SubjectCodes.SUR);
+            desc.AddNote("TXD", SubjectCodes.TXD);
 
             using MemoryStream ms = new();
             desc.Save(ms, version, profile);
@@ -155,8 +155,8 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
-            desc.AddTradeLineItem(lineID: "item-01", "Item1");
-            desc.AddTradeLineItem(lineID: "item-02", "Item2");
+            desc.AddTradeLineItem(lineID: "item-01", "Item1", QuantityCodes.C62);
+            desc.AddTradeLineItem(lineID: "item-02", "Item2", QuantityCodes.C62);
 
             Assert.AreEqual(desc.TradeLineItems[0].AssociatedDocument.LineID, "item-01");
             Assert.AreEqual(desc.TradeLineItems[1].AssociatedDocument.LineID, "item-02");
@@ -251,6 +251,7 @@ namespace s2industries.ZUGFeRD.Test
             var lineItem = expected.AddTradeLineItem(name: "Something",
                 grossUnitPrice: 9.9m,
                 netUnitPrice: 9.9m,
+                unitCode: QuantityCodes.C62,
                 billedQuantity: 20m,
                 taxType: TaxTypes.VAT,
                 categoryCode: TaxCategoryCodes.S,
@@ -303,7 +304,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            TradeLineItem line = desc.AddTradeLineItem("DeliveryNoteReferencedDocument-Text");
+            TradeLineItem line = desc.AddTradeLineItem("DeliveryNoteReferencedDocument-Text", QuantityCodes.C62);
             line.SetDeliveryNoteReferencedDocument(deliveryNoteNumber, deliveryNoteDate, deliveryNoteLineID);
 
             MemoryStream ms = new MemoryStream();
@@ -333,7 +334,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            TradeLineItem line = desc.AddTradeLineItem("ContractReferencedDocument-Text");
+            TradeLineItem line = desc.AddTradeLineItem("ContractReferencedDocument-Text", QuantityCodes.C62);
             line.SetContractReferencedDocument(contractNumber, contractDate, contractLineID);
 
             MemoryStream ms = new MemoryStream();
@@ -360,10 +361,10 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
 
-            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45m);
-            desc.AddTradeLineItem("Item with 3 decimal places", netUnitPrice: 123.456m);
-            desc.AddTradeLineItem("Item with 4 decimal places", netUnitPrice: 123.4567m);
-            desc.AddTradeLineItem("Item with 5 decimal places", netUnitPrice: 123.45678m);
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45m, unitCode: QuantityCodes.C62);
+            desc.AddTradeLineItem("Item with 3 decimal places", netUnitPrice: 123.456m, unitCode: QuantityCodes.C62);
+            desc.AddTradeLineItem("Item with 4 decimal places", netUnitPrice: 123.4567m, unitCode: QuantityCodes.C62);
+            desc.AddTradeLineItem("Item with 5 decimal places", netUnitPrice: 123.45678m, unitCode: QuantityCodes.C62);
 
             MemoryStream ms = new MemoryStream();
 
@@ -388,10 +389,10 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
 
-            desc.AddTradeLineItem("Item with 2 decimal places", grossUnitPrice: 123.45m);
-            desc.AddTradeLineItem("Item with 3 decimal places", grossUnitPrice: 123.456m);
-            desc.AddTradeLineItem("Item with 4 decimal places", grossUnitPrice: 123.4567m);
-            desc.AddTradeLineItem("Item with 5 decimal places", grossUnitPrice: 123.45678m);
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.45m);
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.456m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.456m);
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.4567m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.4567m);
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45678m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.45678m);            
 
             MemoryStream ms = new MemoryStream();
 
@@ -405,6 +406,11 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(items[items.Count - 3].GrossUnitPrice, 123.456m);
             Assert.AreEqual(items[items.Count - 2].GrossUnitPrice, 123.4567m);
             Assert.AreEqual(items[items.Count - 1].GrossUnitPrice, 123.4568m); // rounded!
+
+            Assert.AreEqual(items[items.Count - 4].NetUnitPrice, 123.45m);
+            Assert.AreEqual(items[items.Count - 3].NetUnitPrice, 123.456m);
+            Assert.AreEqual(items[items.Count - 2].NetUnitPrice, 123.4567m);
+            Assert.AreEqual(items[items.Count - 1].NetUnitPrice, 123.4568m); // rounded!
         } // !TestLongerDecimalPlacesForGrossUnitPrice()
 
 
@@ -508,8 +514,8 @@ namespace s2industries.ZUGFeRD.Test
 
             TradeLineItem item = desc.AddTradeLineItem("Test",
                                                        netPrice, // net unit price
-                                                       "Test",
                                                        QuantityCodes.C62,
+                                                       "Test",                                                       
                                                        1,
                                                        grossPrice, // gross unit price
                                                        1);
@@ -548,8 +554,8 @@ namespace s2industries.ZUGFeRD.Test
 
             TradeLineItem item = desc.AddTradeLineItem("Test",
                                                        netPrice, // net unit price
-                                                       "Test",
                                                        QuantityCodes.C62,
+                                                       "Test",                                                       
                                                        1,
                                                        grossPrice, // gross unit price
                                                        1);

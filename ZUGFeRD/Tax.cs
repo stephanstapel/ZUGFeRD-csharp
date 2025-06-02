@@ -51,7 +51,7 @@ namespace s2industries.ZUGFeRD
         /// 
         /// Generally, the fixed value is: "VAT"
         /// </summary>
-        public TaxTypes TypeCode { get; set; } = TaxTypes.VAT;
+        public TaxTypes? TypeCode { get; set; } = TaxTypes.VAT;
 
         /// <summary>
         /// The code valid for the invoiced goods sales tax category.

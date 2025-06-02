@@ -132,7 +132,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BT-151
         /// </summary>
-        public TaxCategoryCodes TaxCategoryCode { get; set; }
+        public TaxCategoryCodes? TaxCategoryCode { get; set; }
 
         /// <summary>
         /// Tax rate
@@ -146,7 +146,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BT-151-0
         /// </summary>
-        public TaxTypes TaxType { get; set; } = TaxTypes.VAT;
+        public TaxTypes? TaxType { get; set; } = TaxTypes.VAT;
 
         /// <summary>
         /// Exemption Reason Text for no Tax
@@ -182,21 +182,21 @@ namespace s2industries.ZUGFeRD
         ///
         /// BT-130
         /// </summary>
-        public QuantityCodes UnitCode { get; set; }
+        public QuantityCodes? UnitCode { get; set; }
 
         /// <summary>
         /// Charge Free Quantity Unit Code
         /// 
         /// BT-X-46-0
         /// </summary>
-        public QuantityCodes ChargeFreeUnitCode { get; set; }
+        public QuantityCodes? ChargeFreeUnitCode { get; set; }
 
         /// <summary>
         /// Package Quantity Unit Code
         /// 
         /// BT-X-47-0
         /// </summary>
-        public QuantityCodes PackageUnitCode { get; set; }
+        public QuantityCodes? PackageUnitCode { get; set; }
         
         /// <summary>
         /// Identifier of the invoice line item
@@ -238,14 +238,14 @@ namespace s2industries.ZUGFeRD
         ///
         /// Marked as internal so it can be accessed by the readers and writers
         /// </summary>
-        internal List<AdditionalReferencedDocument> _AdditionalReferencedDocuments { get; set; } = new List<AdditionalReferencedDocument>();
+        public List<AdditionalReferencedDocument> AdditionalReferencedDocuments { get; internal set; } = new List<AdditionalReferencedDocument>();
 
         /// <summary>
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice
         ///
         /// Now private. Please use GetTradeAllowanceCharges() instead
         /// </summary>
-        private List<AbstractTradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<AbstractTradeAllowanceCharge>();
+        public List<AbstractTradeAllowanceCharge> TradeAllowanceCharges { get; internal set; } = new List<AbstractTradeAllowanceCharge>();
 
         /// <summary>
         /// A group of business terms providing information about the applicable surcharges or discounts on the total amount of the invoice item
@@ -254,7 +254,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-27 / BG-28
         /// </summary>
-        private List<AbstractTradeAllowanceCharge> SpecifiedTradeAllowanceCharges { get; set; } = new List<AbstractTradeAllowanceCharge>();
+        public List<AbstractTradeAllowanceCharge> SpecifiedTradeAllowanceCharges { get; internal set; } = new List<AbstractTradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information on the accounting reference
@@ -275,7 +275,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-32
         /// </summary>
-        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; set; } = new List<ApplicableProductCharacteristic>();
+        public List<ApplicableProductCharacteristic> ApplicableProductCharacteristics { get; internal set; } = new List<ApplicableProductCharacteristic>();
 
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-158
         /// </summary>
-        private List<DesignatedProductClassification> DesignatedProductClassifications { get; set; } = new List<DesignatedProductClassification>();
+        public List<DesignatedProductClassification> DesignatedProductClassifications { get; internal set; } = new List<DesignatedProductClassification>();
 
         /// <summary>
         /// Detailed information on the item origin country
@@ -354,7 +354,7 @@ namespace s2industries.ZUGFeRD
         public TradeLineItem AddTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                string reason, AllowanceReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Currency = currency,
                 ActualAmount = actualAmount,
@@ -378,7 +378,7 @@ namespace s2industries.ZUGFeRD
         public TradeLineItem AddTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                             string reason, ChargeReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeCharge()
+            this.TradeAllowanceCharges.Add(new TradeCharge()
             {
                 Currency = currency,
                 ActualAmount = actualAmount,
@@ -429,7 +429,7 @@ namespace s2industries.ZUGFeRD
         public TradeLineItem AddTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                decimal? chargePercentage, string reason, AllowanceReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Currency = currency,
                 ActualAmount = actualAmount,
@@ -454,7 +454,7 @@ namespace s2industries.ZUGFeRD
         public TradeLineItem AddTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                             decimal? chargePercentage, string reason, ChargeReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeCharge()
+            this.TradeAllowanceCharges.Add(new TradeCharge()
             {
                 Currency = currency,
                 ActualAmount = actualAmount,
@@ -473,19 +473,19 @@ namespace s2industries.ZUGFeRD
         /// <returns></returns>
         public IList<AbstractTradeAllowanceCharge> GetTradeAllowanceCharges()
         {
-            return this._TradeAllowanceCharges;
+            return this.TradeAllowanceCharges;
         } // !GetTradeAllowanceCharges()
 
 
         public IList<TradeAllowance> GetTradeAllowances()
         {
-            return this._TradeAllowanceCharges.Where(s => s is TradeAllowance).Select(s => s as TradeAllowance).ToList();
+            return this.TradeAllowanceCharges.Where(s => s is TradeAllowance).Select(s => s as TradeAllowance).ToList();
         } // !GetTradeAllowances()
 
 
         public IList<TradeCharge> GetTradeCharges()
         {
-            return this._TradeAllowanceCharges.Where(s => s is TradeCharge).Select(s => s as TradeCharge).ToList();
+            return this.TradeAllowanceCharges.Where(s => s is TradeCharge).Select(s => s as TradeCharge).ToList();
         } // !GetTradeCharges()
 
 
@@ -722,7 +722,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="issueDateTime">Issue date and time of the document</param>
         public TradeLineItem AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, ReferenceTypeCodes? code = null, DateTime? issueDateTime = null)
         {
-            this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
                 ID = id,
                 IssueDateTime = issueDateTime,
@@ -767,7 +767,7 @@ namespace s2industries.ZUGFeRD
             string name = null, ReferenceTypeCodes? referenceTypeCode = null, byte[] attachmentBinaryObject = null,
             string filename = null, string uriID = null, string lineID = null)
         {
-            this._AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
+            this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
                 ReferenceTypeCode = referenceTypeCode,
                 ID = id,
@@ -789,7 +789,7 @@ namespace s2industries.ZUGFeRD
         /// <returns></returns>
         public IList<AdditionalReferencedDocument> GetAdditionalReferencedDocuments()
         {
-            return this._AdditionalReferencedDocuments;
+            return this.AdditionalReferencedDocuments;
         } // !GetAdditionalReferencedDocuments()
 
 
@@ -854,6 +854,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="listVersionID">Version of product classification (optional)</param>
         public void AddDesignatedProductClassification(DesignatedProductClassificationClassCodes listID, string listVersionID = null, string classCode = null, string className = null)
         {
+            _AddDesignatedProductClassification(listID, listVersionID, classCode, className);
+        } // !AddDesignatedProductClassification()
+
+
+        internal void _AddDesignatedProductClassification(DesignatedProductClassificationClassCodes? listID, string listVersionID = null, string classCode = null, string className = null)
+        { 
             this.DesignatedProductClassifications.Add(new DesignatedProductClassification()
             {
                 ClassCode = classCode,
@@ -923,5 +929,15 @@ namespace s2industries.ZUGFeRD
             this.BillingPeriodEnd = billingPeriodEnd;
             return this;
         } // !SetBillingPeriod()
+
+
+        public void AddApplicableProductCharacteristic(string description, string value)
+        {
+            this.ApplicableProductCharacteristics.Add(new ApplicableProductCharacteristic()
+            {
+                Description = description,
+                Value = value
+            });
+        } // !AddApplicableProductCharacteristic()
     }
 }

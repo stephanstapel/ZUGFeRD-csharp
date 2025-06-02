@@ -31,11 +31,6 @@ namespace s2industries.ZUGFeRD
     public enum TaxCategoryCodes
     {
         /// <summary>
-        /// Default value, not specified
-        /// </summary>
-        Unknown,
-
-        /// <summary>
         /// Mixed tax rate
         ///
         /// Code specifying that the rate is based on mixed tax.

@@ -41,21 +41,18 @@ namespace s2industries.ZUGFeRD
     public enum QuantityCodes
     {
         /// <summary>
-        /// Unknown/ invalid quantity code
-        /// </summary>
-        Unknown = 0,
-
-        /// <summary>
         /// Eins (Stück)
         /// Abkürzung: Stk.
         ///
         /// Previously, PCE was also used. This has been removed.
         /// </summary>
+        [EnumStringValue("C62", "PCE")]
         C62,
 
         /// <summary>
         /// centigram; Zentigramm
         /// </summary>
+        [EnumStringValue("CGM")]
         CGM,
 
         /// <summary>
@@ -126,6 +123,7 @@ namespace s2industries.ZUGFeRD
         /// square hectometre
         /// Abbreviation: ha
         /// </summary>
+        [EnumStringValue("H18", "HAR")]
         H18,
 
         /// <summary>
@@ -166,6 +164,7 @@ namespace s2industries.ZUGFeRD
         /// Kilometer
         /// Abkürzung: km (Rec20r13) für XRechnung
         /// </summary>
+        [EnumStringValue("KMT", "KTM")]
         KMT,
 
         /// <summary>
@@ -305,7 +304,8 @@ namespace s2industries.ZUGFeRD
         /// A unit of count defining the number of pairs (pair: item described by two's).
         ///
         /// Previously, NPR was used to indicate pairs. This has been removed.
-        /// </remarks>        
+        /// </remarks>
+        [EnumStringValue("PR")]
         PR,
 
         /// <summary>
@@ -527,6 +527,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Block
         /// </summary>
+        [EnumStringValue("XOK", "D64")]
         XOK,
 
         /// <summary>
@@ -731,47 +732,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Pot
         /// </summary>
-        XPT,
-
-    }
-
-
-    internal static class QuantityCodesExtensions
-    {
-        public static QuantityCodes FromString(this QuantityCodes _, string s)
-        {
-            if (!string.IsNullOrWhiteSpace(s) && char.IsDigit(s[0]))
-            {
-                s = "_" + s;
-            }
-
-            if (Enum.TryParse(s, true, out QuantityCodes result))
-            {
-                return result;
-            }
-
-            // mapping of legacy unit codes
-            switch (s)
-            {
-                case "NPR":
-                    return QuantityCodes.PR;
-                case "PCE":
-                    return QuantityCodes.C62;
-                case "KTM":
-                    return QuantityCodes.KMT;
-                case "HAR":
-                    return QuantityCodes.H18;
-                case "D64":
-                    return QuantityCodes.XOK;
-                default:
-                    return QuantityCodes.Unknown;
-            }
-        } // !FromString()
-
-
-        public static string EnumToString(this QuantityCodes c)
-        {
-            return c == QuantityCodes.Unknown ? "ZZ" : c.ToString("g").Replace("_", "");
-        } // !ToString()
+        XPT
     }
 }

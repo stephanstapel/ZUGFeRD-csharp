@@ -28,7 +28,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// The means expressed as code, for how a payment is expected to be or has been settled.
         /// </summary>
-        public PaymentMeansTypeCodes TypeCode { get; set; }
+        public PaymentMeansTypeCodes? TypeCode { get; set; }
 
         /// <summary>
         /// The means expressed as code, for how a payment is expected to be or has been settled.

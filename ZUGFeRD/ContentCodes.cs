@@ -29,11 +29,6 @@ namespace s2industries.ZUGFeRD
     public enum ContentCodes
     {
         /// <summary>
-        /// Unbekannter Wert
-        /// </summary>
-        Unknown,
-
-        /// <summary>
         ///  Die Ware bleibt bis zur vollständigen Bezahlung
         ///  unser Eigentum. 
         /// </summary>

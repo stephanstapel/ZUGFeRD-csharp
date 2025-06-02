@@ -32,11 +32,6 @@ namespace s2industries.ZUGFeRD
     public enum TaxTypes
     {
         /// <summary>
-        /// Invalid tax type
-        /// </summary>
-        Unknown,
-
-        /// <summary>
         /// Petroleum tax
         ///
         ///A tax levied on the volume of petroleum being

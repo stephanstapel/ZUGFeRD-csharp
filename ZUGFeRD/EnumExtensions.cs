@@ -103,9 +103,13 @@ namespace s2industries.ZUGFeRD
             foreach (var field in typeof(T).GetFields())
             {
                 var attribute = field.GetCustomAttribute<EnumStringValueAttribute>();
-                if (attribute != null && attribute.Value.Equals(value, StringComparison.OrdinalIgnoreCase))
+                if (attribute != null)
                 {
-                    return (T)field.GetValue(null);
+                    if (attribute.Value.Equals(value, StringComparison.OrdinalIgnoreCase) ||
+                        attribute.LegacyValues.Any(v => v.Equals(value, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return (T)field.GetValue(null);
+                    }
                 }
             }
 

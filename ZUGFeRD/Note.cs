@@ -37,12 +37,12 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// The qualification of the free text of an invoice of BT-22
         /// </summary>
-        public SubjectCodes SubjectCode { get; set; } = SubjectCodes.Unknown;
+        public SubjectCodes? SubjectCode { get; set; }
 
         /// <summary>
         /// Bilaterally agreed text blocks which, here, are transferred as code.
         /// </summary>
-        public ContentCodes ContentCode { get; set; } = ContentCodes.Unknown;
+        public ContentCodes? ContentCode { get; set; }
 
         /// <summary>
         /// Initialize a new node
@@ -50,7 +50,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="content"></param>
         /// <param name="subjectCode"></param>
         /// <param name="contentCode"></param>
-        public Note(string content, SubjectCodes subjectCode, ContentCodes contentCode)
+        public Note(string content, SubjectCodes? subjectCode = null, ContentCodes? contentCode = null)
         {
             this.Content = content;
             this.SubjectCode = subjectCode;

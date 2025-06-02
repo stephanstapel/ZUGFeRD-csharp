@@ -32,6 +32,8 @@ namespace s2industries.ZUGFeRD.Test
         private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
         private ZUGFeRDVersion _Version = ZUGFeRDVersion.Version23;
 
+
+        
         [TestMethod]
         public void TestParentLineId()
         {
@@ -150,19 +152,8 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            desc.TradeLineItems[0].ApplicableProductCharacteristics = new ApplicableProductCharacteristic[]
-                    {
-                        new ApplicableProductCharacteristic()
-                        {
-                            Description = "Test Description",
-                            Value = "1.5 kg"
-                        },
-                        new ApplicableProductCharacteristic()
-                        {
-                            Description = "UBL Characterstics 2",
-                            Value = "3 kg"
-                        },
-                    }.ToList();
+            desc.TradeLineItems[0].AddApplicableProductCharacteristic("Test Description", "1.5 kg");
+            desc.TradeLineItems[0].AddApplicableProductCharacteristic("UBL Characterstics 2", "3 kg");
 
             MemoryStream ms = new MemoryStream();
 

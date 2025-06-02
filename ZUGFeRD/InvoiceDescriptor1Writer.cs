@@ -240,7 +240,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information);
@@ -262,7 +262,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information);
@@ -297,7 +297,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
-                    if ((this.Descriptor.PaymentMeans != null) && (this.Descriptor.PaymentMeans.TypeCode != PaymentMeansTypeCodes.Unknown))
+                    if ((this.Descriptor.PaymentMeans != null) && this.Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
                         Writer.WriteElementString("ram", "TypeCode", this.Descriptor.PaymentMeans.TypeCode.EnumToString());
                         Writer.WriteOptionalElementString("ram", "Information", this.Descriptor.PaymentMeans.Information);
@@ -487,9 +487,9 @@ namespace s2industries.ZUGFeRD
                         Writer.WriteEndElement(); // !ram:ContractReferencedDocument
                     }
 
-                    if (tradeLineItem._AdditionalReferencedDocuments != null)
+                    if (tradeLineItem.AdditionalReferencedDocuments != null)
                     {
-                        foreach (AdditionalReferencedDocument document in tradeLineItem._AdditionalReferencedDocuments)
+                        foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
                         {
                             Writer.WriteStartElement("ram", "AdditionalReferencedDocument");
                             if (document.IssueDateTime.HasValue)
@@ -733,7 +733,7 @@ namespace s2industries.ZUGFeRD
 
             if (descriptor.Profile != Profile.Extended) // check tax types, only extended profile allows tax types other than vat
             {
-                if (!descriptor.GetTradeLineItems().All(l => l.TaxType.Equals(TaxTypes.VAT) || l.TaxType.Equals(TaxTypes.Unknown)))
+                if (!descriptor.GetTradeLineItems().All(l => !l.TaxType.HasValue || l.TaxType.Value.Equals(TaxTypes.VAT)))
                 {
                     if (throwExceptions) { throw new UnsupportedException("Tax types other than VAT only possible with extended profile."); }
                     return false;
@@ -844,12 +844,12 @@ namespace s2industries.ZUGFeRD
                 foreach (Note note in notes)
                 {
                     writer.WriteStartElement("ram", "IncludedNote");
-                    if (note.ContentCode != ContentCodes.Unknown)
+                    if (note.ContentCode.HasValue)
                     {
                         writer.WriteElementString("ram", "ContentCode", note.ContentCode.EnumToString());
                     }
                     writer.WriteElementString("ram", "Content", note.Content);
-                    if (note.SubjectCode != SubjectCodes.Unknown)
+                    if (note.SubjectCode.HasValue)
                     {
                         writer.WriteElementString("ram", "SubjectCode", note.SubjectCode.EnumToString());
                     }

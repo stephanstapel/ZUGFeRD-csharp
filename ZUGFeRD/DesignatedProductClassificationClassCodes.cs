@@ -35,8 +35,6 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public enum DesignatedProductClassificationClassCodes
     {
-        Unknown = 0,
-
         /// <summary>
         /// Product version number
         /// Number assigned by manufacturer or seller to identify the release of a product.
