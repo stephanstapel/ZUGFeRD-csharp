@@ -100,7 +100,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("rsm", "HeaderExchangedDocument");
             Writer.WriteElementString("ram", "ID", this.Descriptor.InvoiceNo);
             Writer.WriteElementString("ram", "Name", this.Descriptor.Name);
-            Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type)));
+            Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", EnumExtensions.EnumToString<InvoiceType>(this.Descriptor.Type))); //Code für den Rechnungstyp
 
             if (this.Descriptor.InvoiceDate.HasValue)
             {

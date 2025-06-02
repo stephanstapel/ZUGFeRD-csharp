@@ -105,7 +105,7 @@ namespace s2industries.ZUGFeRD
             Writer.WriteStartElement("rsm", "ExchangedDocument");
             Writer.WriteElementString("ram", "ID", this.Descriptor.InvoiceNo); //Rechnungsnummer
             Writer.WriteOptionalElementString("ram", "Name", this.Descriptor.Name, Profile.Extended); //Dokumentenart (Freitext), ISO 15000-5:2014, Anhang B
-            Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
+            Writer.WriteElementString("ram", "TypeCode", String.Format("{0}", EnumExtensions.EnumToString<InvoiceType>(this.Descriptor.Type))); //Code für den Rechnungstyp
 
             if (this.Descriptor.InvoiceDate.HasValue)
             {
@@ -984,17 +984,18 @@ namespace s2industries.ZUGFeRD
                 case Profile.XRechnung:
                     if (Descriptor.GetTradePaymentTerms().Count > 0 || !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
                     {
+                        Writer.WriteStartElement("ram", "SpecifiedTradePaymentTerms");
+
+                        var sbPaymentNotes = new StringBuilder();
+                        DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this.Descriptor.GetTradePaymentTerms())
-                        {
-                            Writer.WriteStartElement("ram", "SpecifiedTradePaymentTerms");
-                            var sbPaymentNotes = new StringBuilder();
-                            DateTime? dueDate = null;
+                        {                                                        
 
                             // every line break must be a valid xml line break.
                             // if a note already exists, append a valid line break.
                             if (sbPaymentNotes.Length > 0)
                             {
-                                sbPaymentNotes.Append(XmlConstants.XmlNewLine);
+                                sbPaymentNotes.Append("\n");
                             }
 
                             if (paymentTerms.PaymentTermsType.HasValue)
@@ -1003,7 +1004,7 @@ namespace s2industries.ZUGFeRD
                                 if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
                                 {
                                     sbPaymentNotes.Append(paymentTerms.Description);
-                                    sbPaymentNotes.Append(XmlConstants.XmlNewLine);
+                                    sbPaymentNotes.Append("\n");
                                 }
 
                                 if (paymentTerms.PaymentTermsType.HasValue && paymentTerms.DueDays.HasValue && paymentTerms.Percentage.HasValue)
@@ -1019,26 +1020,30 @@ namespace s2industries.ZUGFeRD
                             {
                                 if (!string.IsNullOrWhiteSpace(paymentTerms.Description))
                                 {
-                                    sbPaymentNotes.Append(paymentTerms.Description);
+                                    sbPaymentNotes.Append(paymentTerms.Description.Trim());
                                 }
                             }
-                            dueDate = dueDate ?? paymentTerms.DueDate;
-
-                            Writer.WriteOptionalElementString("ram", "Description", sbPaymentNotes.ToString());
-                            if (dueDate.HasValue)
-                            {
-                                Writer.WriteStartElement("ram", "DueDateDateTime");
-                                _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(dueDate.Value));
-                                Writer.WriteEndElement(); // !ram:DueDateDateTime
-                            }
-
-                            // BT-89 is only required/allowed on DirectDebit (BR-DE-29)
-                            if (this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
-                            {
-                                Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
-                            }
-                            Writer.WriteEndElement();
+                            dueDate = dueDate ?? paymentTerms.DueDate;                            
                         }
+
+                        Writer.WriteStartElement("ram", "Description");
+                        Writer.WriteRawString(sbPaymentNotes.ToString().TrimEnd()); // BT-20
+                        Writer.WriteRawString("\n");
+                        Writer.WriteEndElement(); // !ram:Description
+                        if (dueDate.HasValue)
+                        {
+                            Writer.WriteStartElement("ram", "DueDateDateTime");
+                            _writeElementWithAttributeWithPrefix(Writer, "udt", "DateTimeString", "format", "102", _formatDate(dueDate.Value));
+                            Writer.WriteEndElement(); // !ram:DueDateDateTime
+                        }
+
+                        // BT-89 is only required/allowed on DirectDebit (BR-DE-29)
+                        if (this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.DirectDebit || this.Descriptor.PaymentMeans?.TypeCode == PaymentMeansTypeCodes.SEPADirectDebit)
+                        {
+                            Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", Descriptor.PaymentMeans?.SEPAMandateReference);
+                        }
+
+                        Writer.WriteEndElement(); // !ram:SpecifiedTradePaymentTerms
                     }
                     break;
                 case Profile.Extended:
@@ -1092,7 +1097,7 @@ namespace s2industries.ZUGFeRD
                                 Writer.WriteEndElement(); // !ram:ApplicableTradePaymentPenaltyTerms
                             }
                         }
-                        Writer.WriteEndElement();
+                        Writer.WriteEndElement(); // !ram:SpecifiedTradePaymentTerms
                     }
                     if (this.Descriptor.GetTradePaymentTerms().Count == 0 && !string.IsNullOrWhiteSpace(Descriptor.PaymentMeans?.SEPAMandateReference))
                     {

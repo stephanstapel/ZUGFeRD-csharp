@@ -408,7 +408,8 @@ namespace s2industries.ZUGFeRD
                     penaltyPercent.HasValue ? PaymentTermsType.Verzug :
                     (PaymentTermsType?)null;
 
-                retval.AddTradePaymentTerms(XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr),
+                string description = XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr).TrimEnd(' '); // remove trailing spaces before </ram:Description> tag
+                retval.AddTradePaymentTerms(description,
                                             XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime/udt:DateTimeString", nsmgr),
                                             paymentTermsType,
                                             discountDueDays ?? penaltyDueDays,

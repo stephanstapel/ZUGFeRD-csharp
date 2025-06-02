@@ -419,14 +419,14 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-27
         /// </summary>
-        private List<AbstractTradeAllowanceCharge> _TradeAllowanceCharges { get; set; } = new List<AbstractTradeAllowanceCharge>();
+        public List<AbstractTradeAllowanceCharge> TradeAllowanceCharges { get; internal set; } = new List<AbstractTradeAllowanceCharge>();
 
         /// <summary>
         /// Detailed information about payment terms
         ///
         /// BT-20
         /// </summary>
-        private List<PaymentTerms> _PaymentTerms { get; set; } = new List<PaymentTerms>();
+        public List<PaymentTerms> PaymentTerms { get; internal set; } = new List<PaymentTerms>();
 
         /// <summary>
         /// A group of business terms providing information about a preceding invoices.
@@ -438,7 +438,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-3
         /// </summary>
-        private List<InvoiceReferencedDocument> _InvoiceReferencedDocuments { get; set; } = new List<InvoiceReferencedDocument>();
+        public List<InvoiceReferencedDocument> _InvoiceReferencedDocuments { get; internal set; } = new List<InvoiceReferencedDocument>();
 
         /// <summary>
         /// Detailed information about the accounting reference
@@ -1128,7 +1128,7 @@ namespace s2industries.ZUGFeRD
                                          string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                          AllowanceReasonCodes? reasonCode = null)
         { 
-            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Reason = reason,
                 ReasonCode = reasonCode,
@@ -1175,7 +1175,7 @@ namespace s2industries.ZUGFeRD
                                       string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                       ChargeReasonCodes? reasonCode = null)
         { 
-            this._TradeAllowanceCharges.Add(new TradeCharge()
+            this.TradeAllowanceCharges.Add(new TradeCharge()
             {
                 Reason = reason,
                 ReasonCode = reasonCode,
@@ -1219,7 +1219,7 @@ namespace s2industries.ZUGFeRD
                                       string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                       ChargeReasonCodes? reasonCode = null)
         {
-            this._TradeAllowanceCharges.Add(new TradeCharge()
+            this.TradeAllowanceCharges.Add(new TradeCharge()
             {
                 Reason = reason,
                 ReasonCode = reasonCode,
@@ -1290,7 +1290,7 @@ namespace s2industries.ZUGFeRD
 
         internal void _AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
         { 
-            this._TradeAllowanceCharges.Add(new TradeAllowance()
+            this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Reason = reason,
                 ReasonCode = reasonCode,
@@ -1338,7 +1338,7 @@ namespace s2industries.ZUGFeRD
         [Obsolete("Please use GetTradeAllowances() or GetTradeCharges() instead. This function will be removed with version 18.0")]
         public IList<AbstractTradeAllowanceCharge> GetTradeAllowanceCharges()
         {
-            return this._TradeAllowanceCharges;
+            return this.TradeAllowanceCharges;
         } // !GetTradeAllowanceCharges()
 
 
@@ -1349,7 +1349,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public IList<TradeAllowance> GetTradeAllowances()
         {
-            return this._TradeAllowanceCharges.Where(t => t is TradeAllowance charge && charge.ChargeIndicator == false).Select(t => t as TradeAllowance).ToList();
+            return this.TradeAllowanceCharges.Where(t => t is TradeAllowance charge && charge.ChargeIndicator == false).Select(t => t as TradeAllowance).ToList();
         } // !GetTradeAllowances()
 
 
@@ -1360,7 +1360,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public IList<TradeCharge> GetTradeCharges()
         {
-            return this._TradeAllowanceCharges.Where(t => t is TradeCharge charge && charge.ChargeIndicator == true).Select(t => t as TradeCharge).ToList();
+            return this.TradeAllowanceCharges.Where(t => t is TradeCharge charge && charge.ChargeIndicator == true).Select(t => t as TradeCharge).ToList();
         } // !GetTradeCharges()
 
 
@@ -1380,7 +1380,7 @@ namespace s2industries.ZUGFeRD
             PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null, DateTime? maturityDate = null)
         {
-            _PaymentTerms.Add(new PaymentTerms()
+            PaymentTerms.Add(new PaymentTerms()
             {
                 Description = description,
                 DueDate = dueDate,
@@ -1401,7 +1401,7 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         public void ClearTradePaymentTerms()
         {
-            _PaymentTerms.Clear();
+            PaymentTerms.Clear();
         } // !ClearTradePaymentTerms()
 
 
@@ -1413,7 +1413,7 @@ namespace s2industries.ZUGFeRD
         /// <returns>List of payment terms</returns>
         public IList<PaymentTerms> GetTradePaymentTerms()
         {
-            return _PaymentTerms;
+            return PaymentTerms;
         }
 
         /// <summary>

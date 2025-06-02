@@ -114,11 +114,11 @@ namespace s2industries.ZUGFeRD
 
             if (isInvoice)
             {
-                Writer.WriteElementString("cbc", "InvoiceTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
+                Writer.WriteElementString("cbc", "InvoiceTypeCode", String.Format("{0}", EnumExtensions.EnumToString<InvoiceType>(this.Descriptor.Type))); //Code für den Rechnungstyp
             }
             else
             {
-                Writer.WriteElementString("cbc", "CreditNoteTypeCode", String.Format("{0}", _encodeInvoiceType(this.Descriptor.Type))); //Code für den Rechnungstyp
+                Writer.WriteElementString("cbc", "CreditNoteTypeCode", String.Format("{0}", EnumExtensions.EnumToString<InvoiceType>(this.Descriptor.Type))); //Code für den Rechnungstyp
             }
 
 
@@ -1083,15 +1083,6 @@ namespace s2industries.ZUGFeRD
             writer.WriteEndElement(); // !tagName
         } // !_writeOptionalAmount()
 
-        private int _encodeInvoiceType(InvoiceType type)
-        {
-            if ((int)type > 1000)
-            {
-                type -= 1000;
-            }
-
-            return (int)type;
-        } // !_translateInvoiceType()
 
         internal override bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true)
         {
