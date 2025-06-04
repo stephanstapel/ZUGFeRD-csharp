@@ -224,7 +224,12 @@ namespace s2industries.ZUGFeRD
                     Writer.WriteStartElement("ram", "DesignatedProductClassification", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                     Writer.WriteStartElement("ram", "ClassCode");
                     Writer.WriteAttributeString("listID", designatedProductClassification.ListID.EnumToString());
-                    Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
+
+                    if (!String.IsNullOrWhiteSpace(designatedProductClassification.ListVersionID))
+                    {
+                        Writer.WriteAttributeString("listVersionID", designatedProductClassification.ListVersionID);
+                    }
+
                     Writer.WriteValue(designatedProductClassification.ClassCode);
                     Writer.WriteEndElement(); // !ram::ClassCode
                     Writer.WriteOptionalElementString("ram", "ClassName", designatedProductClassification.ClassName);
