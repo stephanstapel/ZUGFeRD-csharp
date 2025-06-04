@@ -16,8 +16,11 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
     <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
-    <Version>17.2.1</Version>	
-    <PackageReleaseNotes>17.2.1:
+    <Version>17.3.0</Version>	
+    <PackageReleaseNotes>17.3.0:
+* Require ZUGFeRD-csharp 17.3.0
+
+17.2.1:
 * Enhanced filename checks
 * PDF Metadata enhancements
 
@@ -58,7 +61,7 @@ This library allows to load and create PDF/A files.
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
     <PackageReference Include="SkiaSharp" Version="3.119.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.0-preview.4.25258.110" />
-    <PackageReference Include="ZUGFeRD-csharp" Version="17.2.0" />
+    <PackageReference Include="ZUGFeRD-csharp" Version="17.3.0" />
   </ItemGroup>
 
 </Project>

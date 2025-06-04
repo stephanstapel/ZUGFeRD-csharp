@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>s2industries.ZUGFeRD.Render</RootNamespace>
 	<PreserveCompilationContext>true</PreserveCompilationContext>
+	<Version>17.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="5.12.1" />
+    <PackageReference Include="Scriban" Version="6.2.1" />
   </ItemGroup>
 
   <ItemGroup>
