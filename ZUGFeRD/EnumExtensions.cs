@@ -142,7 +142,7 @@ namespace s2industries.ZUGFeRD
             return attribute?.Description;
         } // !GetDescriptionAttribute()
 
-
+        /*
         internal static T FromDescription<T>(string code) where T : Enum
         {
             if (string.IsNullOrEmpty(code))
@@ -159,6 +159,7 @@ namespace s2industries.ZUGFeRD
             }
             return default;
         } // !FromDescription()
+        */
 
 
         internal static bool In<T>(this T? input, params T[] allowedValues) where T : struct, Enum

@@ -164,7 +164,7 @@ namespace s2industries.ZUGFeRD
             var deliveryCodeStr = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode", nsmgr);
             if (!string.IsNullOrWhiteSpace(deliveryCodeStr))
             {
-                TradeDeliveryTermCodes? tradeCode = EnumExtensions.FromDescription<TradeDeliveryTermCodes>(deliveryCodeStr);
+                TradeDeliveryTermCodes? tradeCode = EnumExtensions.StringToEnum<TradeDeliveryTermCodes>(deliveryCodeStr);
                 if (tradeCode != null)
                 {
                     retval.ApplicableTradeDeliveryTermsCode = tradeCode;
@@ -352,7 +352,7 @@ namespace s2industries.ZUGFeRD
                                            EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                            EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
                                            XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
-                                           EnumExtensions.FromDescription<ChargeReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                                           EnumExtensions.StringToEnum<ChargeReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
                 }
                 else // allowance
                 {
@@ -364,7 +364,7 @@ namespace s2industries.ZUGFeRD
                                               EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                               EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
-                                              EnumExtensions.FromDescription<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
+                                              EnumExtensions.StringToEnum<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
                 }                    
             }
 
@@ -627,7 +627,7 @@ namespace s2industries.ZUGFeRD
                                                              actualAmount,
                                                              chargePercentage,
                                                              reason,
-                                                             EnumExtensions.FromDescription<ChargeReasonCodes>(reasonCode));
+                                                             EnumExtensions.StringToEnum<ChargeReasonCodes>(reasonCode));
                             }
                             else // allowance
                             {
@@ -636,7 +636,7 @@ namespace s2industries.ZUGFeRD
                                                                 actualAmount,
                                                                 chargePercentage,
                                                                 reason,
-                                                                EnumExtensions.FromDescription<AllowanceReasonCodes>(reasonCode));
+                                                                EnumExtensions.StringToEnum<AllowanceReasonCodes>(reasonCode));
                             }
 
                             break;

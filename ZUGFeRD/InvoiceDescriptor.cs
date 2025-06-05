@@ -414,10 +414,9 @@ namespace s2industries.ZUGFeRD
         public List<ServiceCharge> ServiceCharges { get; internal set; } = new List<ServiceCharge>();
 
         /// <summary>
-        /// Detailed information on discounts and charges.
-        /// This field is marked as private now, please use GetTradeAllowanceCharges() to retrieve all trade allowance charges
+        /// Detailed information on discounts and charges.        
         ///
-        /// BG-27
+        /// BG-21
         /// </summary>
         public List<AbstractTradeAllowanceCharge> TradeAllowanceCharges { get; internal set; } = new List<AbstractTradeAllowanceCharge>();
 
@@ -1075,7 +1074,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an allowance or charge on document level.
         ///
-        /// BG-27
+        /// BG-21
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>
         /// <param name="isDiscount">True if this is a discount, false if it's a charge</param>
@@ -1106,7 +1105,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an allowance (discount) on document level.
         ///
-        /// BG-27        
+        /// BG-21
         /// </summary>
         /// <param name="basisAmount">Base amount for calculation</param>
         /// <param name="currency">Currency code</param>
@@ -1150,7 +1149,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an charge on document level.
         ///
-        /// BG-27        
+        /// BG-21       
         /// </summary>
         /// <param name="basisAmount">Base amount for calculation</param>
         /// <param name="currency">Currency code</param>
@@ -1197,7 +1196,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an charge on document level.
         ///
-        /// BG-27        
+        /// BG-21
         /// </summary>
         /// <param name="basisAmount">Base amount for calculation</param>
         /// <param name="currency">Currency code</param>
@@ -1241,7 +1240,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an allowance or charge on document level.
         ///
-        /// BG-27
+        /// BG-21
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>
         /// <param name="isDiscount">Marks if the allowance charge is a discount. Please note that in contrary to this function, the xml file indicated a surcharge, not a discount (value will be inverted)</param>
@@ -1271,7 +1270,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds an allowance (discount) on document level.
         ///
-        /// BG-27        
+        /// BG-21
         /// </summary>        
         /// <param name="basisAmount">Base amount (basis of allowance)</param>
         /// <param name="currency">Curency of the allowance</param>
@@ -1312,7 +1311,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Adds a charge on document level.
         ///
-        /// BG-27
+        /// BG-21
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>        
         /// <param name="basisAmount">Base amount (basis of allowance)</param>
@@ -1333,7 +1332,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Returns all existing trade allowance charges
         ///
-        /// BG-27
+        /// BG-21
         /// </summary>        
         [Obsolete("Please use GetTradeAllowances() or GetTradeCharges() instead. This function will be removed with version 18.0")]
         public IList<AbstractTradeAllowanceCharge> GetTradeAllowanceCharges()
@@ -1345,7 +1344,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Returns all existing trade allowances
         ///
-        /// BG-27
+        /// BG-21
         /// </summary>
         public IList<TradeAllowance> GetTradeAllowances()
         {
@@ -1356,7 +1355,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Returns all existing trade allowance charges
         ///
-        /// BG-27
+        /// BG-21
         /// </summary>
         public IList<TradeCharge> GetTradeCharges()
         {

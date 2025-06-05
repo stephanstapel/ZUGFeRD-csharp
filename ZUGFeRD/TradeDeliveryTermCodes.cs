@@ -34,7 +34,7 @@ namespace s2industries.ZUGFeRD
 		///
 		/// Indicates that the supplier will arrange delivery of the goods.
 		/// </summary>
-		[Description("1")]
+		[EnumStringValue("1")]
 		_1,
 
 		/// <summary>
@@ -44,77 +44,77 @@ namespace s2industries.ZUGFeRD
 		/// Code indicating that the logistic service provider has
 		/// arranged the delivery of goods.
 		/// </summary>
-		[Description("2")]
+		[EnumStringValue("2")]
 		_2,
 
         /// <summary>
         /// CFR
         /// Kosten und Fracht
         /// </summary>
-        [Description("CFR")]
+        [EnumStringValue("CFR")]
         CFR,
 
         /// <summary>
         /// CIF
         /// Kosten, Versicherung und Fracht
         /// </summary>
-        [Description("CIF")]
+        [EnumStringValue("CIF")]
         CIF,
 
         /// <summary>
         /// CIP
         /// Transport und Versicherung bezahlt nach (benannten Bestimmungsort einfügen)
         /// </summary>
-        [Description("CIP")]
+        [EnumStringValue("CIP")]
         CIP,
 
         /// <summary>
         /// CPT
         /// Frachtfrei nach (benannten Bestimmungsort einfügen)
         /// </summary>
-        [Description("CPT")]
+        [EnumStringValue("CPT")]
         CPT,
 
         /// <summary>
         /// DAP
         /// Geliefert am Ort (benannten Bestimmungsort einfügen)
         /// </summary>
-        [Description("DAP")]
+        [EnumStringValue("DAP")]
         DAP,
 
         /// <summary>
         /// DDP
         /// Geliefert verzollt (benannten Bestimmungsort einfügen)
         /// </summary>
-        [Description("DDP")]
+        [EnumStringValue("DDP")]
         DDP,
 
         /// <summary>
         /// DPU
         /// Geliefert am Ort der Entladung (benannten Ort der Entladung einfügen)
         /// </summary>
-        [Description("DPU")]
+        [EnumStringValue("DPU")]
         DPU,
 
         /// <summary>
         /// EXW
         /// Ab Werk (benannten Ort der Lieferung einfügen)
         /// </summary>
-        [Description("EXW")]
+        [EnumStringValue("EXW")]
         EXW,
 
         /// <summary>
         /// FAS
         /// Frei Längsseite Schiff (benannten Verschiffungshafen einfügen)
         /// </summary>
-        [Description("FAS")]
+        [EnumStringValue("FAS")]
         FAS,
 
         /// <summary>
         /// FCA
         /// Frei Frachtführer (benannten Ort der Zustellung einfügen)
         /// </summary>
-        [Description("FCA")]
+        [EnumStringValue("FCA")]
         FCA,
 
         /// <summary>
