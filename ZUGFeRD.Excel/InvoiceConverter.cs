@@ -135,10 +135,10 @@ namespace s2industries.ZUGFeRD.Excel
                 new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_1, i).setValue(0m, "0.00##").formatWithDecimals();
                 new ExcelCell(positionWorksheet, PosColumns.TRADE_ALLOWANCE_CHARGE_2, i).setValue(0m, "0.00##").formatWithDecimals();
 
-                IList<TradeAllowanceCharge> tradeAllowanceCharges = lineItem.GetTradeAllowanceCharges();
+                IList<AbstractTradeAllowanceCharge> tradeAllowanceCharges = lineItem.GetTradeAllowanceCharges();
                 for (int j = 0; j < tradeAllowanceCharges.Count; j++)
                 {
-                    TradeAllowanceCharge tac = tradeAllowanceCharges[j];
+                    AbstractTradeAllowanceCharge tac = tradeAllowanceCharges[j];
                     string column = PosColumns.TRADE_ALLOWANCE_CHARGE_0;
                     if (j == 1)
                     {
@@ -187,7 +187,7 @@ namespace s2industries.ZUGFeRD.Excel
             new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Allowances and charges").setBold().joinColumns("B").setAlignCenter();
 
             i += 1;
-            foreach (TradeAllowanceCharge tac in descriptor.GetTradeAllowanceCharges())
+            foreach (AbstractTradeAllowanceCharge tac in descriptor.GetTradeAllowanceCharges())
             {
                 new ExcelCell(headWorksheet, HeadColumns.DESCRIPTION, i).setText("Base amount");
                 new ExcelCell(headWorksheet, HeadColumns.VALUE, i).setValue(tac.BasisAmount, "0.00");
