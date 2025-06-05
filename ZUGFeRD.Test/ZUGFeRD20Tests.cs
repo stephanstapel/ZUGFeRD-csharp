@@ -838,7 +838,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.ApplicableTradeDeliveryTermsCode = TradeDeliveryTermCodes.CFR;
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            desc.Save(ms, ZUGFeRDVersion.Version20, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);

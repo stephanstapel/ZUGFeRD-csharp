@@ -131,6 +131,7 @@ namespace s2industries.ZUGFeRD
         } // !EnumToInt()
 
 
+/*
         internal static string GetDescriptionAttribute<T>(this T value) where T : Enum
         {
             FieldInfo field = value.GetType().GetField(value.ToString());
@@ -142,7 +143,7 @@ namespace s2industries.ZUGFeRD
             return attribute?.Description;
         } // !GetDescriptionAttribute()
 
-        /*
+
         internal static T FromDescription<T>(string code) where T : Enum
         {
             if (string.IsNullOrEmpty(code))

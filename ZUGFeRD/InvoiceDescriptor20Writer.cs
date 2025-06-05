@@ -433,7 +433,7 @@ namespace s2industries.ZUGFeRD
             {
                 // BG-X-22, BT-X-145
                 Writer.WriteStartElement("ram", "ApplicableTradeDeliveryTerms", Profile.Extended);
-                Writer.WriteElementString("ram", "DeliveryTypeCode", this.Descriptor.ApplicableTradeDeliveryTermsCode.Value.GetDescriptionAttribute());
+                Writer.WriteElementString("ram", "DeliveryTypeCode", EnumExtensions.EnumToString<TradeDeliveryTermCodes>(this.Descriptor.ApplicableTradeDeliveryTermsCode));
                 Writer.WriteEndElement(); // !ApplicableTradeDeliveryTerms
             }
             #endregion
