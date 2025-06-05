@@ -363,7 +363,7 @@ namespace s2industries.ZUGFeRD
             var deliveryCodeStr = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode", nsmgr);
             if (!string.IsNullOrWhiteSpace(deliveryCodeStr))
             {
-                TradeDeliveryTermCodes? tradeCode = EnumExtensions.FromDescription<TradeDeliveryTermCodes>(deliveryCodeStr);
+                TradeDeliveryTermCodes? tradeCode = EnumExtensions.StringToEnum<TradeDeliveryTermCodes>(deliveryCodeStr);
                 if (tradeCode != null)
                 {
                     retval.ApplicableTradeDeliveryTermsCode = tradeCode;
