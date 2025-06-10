@@ -326,10 +326,12 @@ namespace s2industries.ZUGFeRD.PDF
 
         private static List<XFont> _LoadFonts(PdfDocument pdfDocument)
         {
+            IEnumerable<InstalledFont> availableFontFamilies = FontInfoProvider.GetInstalledFonts();
+
             List<XFont> retval = new List<XFont>();
 
-            var fontManager = SKFontManager.Default;
-            var availableFamilies = fontManager.FontFamilies;
+         //   var fontManager = SKFontManager.Default;
+          //  var availableFamilies = fontManager.FontFamilies;
 
             // Postscript to TrueType mapping as the PDF file contains the Postscript names of the font
             var postScriptToTrueTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -366,7 +368,8 @@ namespace s2industries.ZUGFeRD.PDF
 
                     _ExtractFontValues(baseFont, fonts, out string fontFamily, out XFontStyleEx fontStyle);
 
-                    bool existsInSystem = availableFamilies.Any(f => f.Equals(fontFamily, StringComparison.OrdinalIgnoreCase));
+                    // bool existsInSystem = availableFamilies.Any(f => f.Equals(fontFamily, StringComparison.OrdinalIgnoreCase));
+                    bool existsInSystem = availableFontFamilies.Any(f => f.FamilyName.Equals(fontFamily, StringComparison.OrdinalIgnoreCase));                                          
 
 
                     if (!existsInSystem && (postScriptToTrueTypeMap.TryGetValue(fontFamily, out string tempFontName)))
