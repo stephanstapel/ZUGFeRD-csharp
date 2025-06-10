@@ -105,6 +105,17 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Grund der Steuerbefreiung
         /// </summary>
-        TXD
+        TXD,
+
+        /// <summary>
+        /// Instructions to the paying and/or accepting and/or negotiating bank
+        /// </summary>
+        AET,
+
+        /// <summary>
+        /// Order information
+        /// </summary>
+        COI
+        
     }
 }
