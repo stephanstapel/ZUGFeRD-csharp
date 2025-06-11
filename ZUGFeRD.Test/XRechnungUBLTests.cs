@@ -32,7 +32,6 @@ namespace s2industries.ZUGFeRD.Test
         private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
         private ZUGFeRDVersion _Version = ZUGFeRDVersion.Version23;
 
-
         
         [TestMethod]
         public void TestParentLineId()
