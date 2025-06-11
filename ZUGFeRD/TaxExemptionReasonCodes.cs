@@ -121,14 +121,20 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Exempt based on article 132, section 1 (k) of Council Directive 2006/112/EC
-        /// The supply of staff by religious or philosophical institutions for the purpose of the activities referred to in points (b), (g), (h) and (i) and with a view to spiritual welfare.
+        /// The supply of staff by religious or philosophical institutions for the purpose
+        /// of the activities referred to in points (b), (g), (h) and (i) and with a view
+        /// to spiritual welfare.
         /// </summary>
         [EnumStringValue("VATEX-EU-132-1K")]
         VATEX_EU_132_1K,
 
         /// <summary>
         /// Exempt based on article 132, section 1 (l) of Council Directive 2006/112/EC
-        /// The supply of services, and the supply of goods closely linked thereto, to their members in their common interest in return for a subscription fixed in accordance with their rules by non-profitmaking organisations with aims of a political, trade-union, religious, patriotic, philosophical, philanthropic or civic nature, provided that this exemption is not likely to cause distortion of competition.
+        /// The supply of services, and the supply of goods closely linked thereto, to their
+        /// members in their common interest in return for a subscription fixed in accordance
+        /// with their rules by non-profitmaking organisations with aims of a political, trade-union,
+        /// religious, patriotic, philosophical, philanthropic or civic nature, provided that this
+        /// exemption is not likely to cause distortion of competition.
         /// </summary>
         [EnumStringValue("VATEX-EU-132-1L")]
         VATEX_EU_132_1L,
@@ -142,7 +148,8 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Exempt based on article 143, section 1 (a) of Council Directive 2006/112/EC
-        /// The final importation of goods of which the supply by a taxable person would in all circumstances be exempt within their respective territory.
+        /// The final importation of goods of which the supply by a taxable person would in all
+        /// circumstances be exempt within their respective territory.
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1A")]
         VATEX_EU_143_1A,
@@ -156,56 +163,68 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Exempt based on article 143, section 1 (c) of Council Directive 2006/112/EC
-        /// The final importation of goods, in free circulation from a third territory forming part of the Community customs territory, which would be entitled to exemption under point(b) if they had been imported within the meaning of the first paragraph of Article 30.
+        /// The final importation of goods, in free circulation from a third territory
+        /// forming part of the Community customs territory, which would be entitled to exemption
+        /// under point(b) if they had been imported within the meaning of the first paragraph of Article 30.
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1C")]
         VATEX_EU_143_1C,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (d) of Council Directive 2006/112/EC
-        /// The importation of goods dispatched or transported from a third territory or a third country into a Member State other than that in which the dispatch or transport of the goods ends, where the supply of such goods by the importer designated or recognised under Article 201 as liable for payment of VAT is exempt under Article 138.
+        /// The importation of goods dispatched or transported from a third territory or a
+        /// third country into a Member State other than that in which the dispatch or transport
+        /// of the goods ends, where the supply of such goods by the importer designated or
+        /// recognised under Article 201 as liable for payment of VAT is exempt under Article 138.
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1D")]
         VATEX_EU_143_1D,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (e) of Council Directive 2006/112/EC
-        /// The reimportation, by the person who exported them, of goods in the state in which they were exported, where those goods are exempt from customs duties.
+        /// The reimportation, by the person who exported them, of goods in the state in
+        /// which they were exported, where those goods are exempt from customs duties.
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1E")]
         VATEX_EU_143_1E,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (f) of Council Directive 2006/112/EC
-        /// The importation, under diplomatic and consular arrangements, of goods which are exempt from customs duties.
+        /// The importation, under diplomatic and consular arrangements, of goods which are
+        /// exempt from customs duties.
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1F")]
         VATEX_EU_143_1F,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (fa) of Council Directive 2006/112/EC
-        /// The importation of goods by the European Community, the European Atomic Energy Community, the European Central Bank or the European Investment Bank, or by the bodies set up by the Communities ... (etc.)
+        /// The importation of goods by the European Community, the European Atomic Energy
+        /// Community, the European Central Bank or the European Investment Bank, or by
+        /// the bodies set up by the Communities ... (etc.)
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1FA")]
         VATEX_EU_143_1FA,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (g) of Council Directive 2006/112/EC
-        /// The importation of goods by international bodies, other than those referred to in point (fa), recognised as such...
+        /// The importation of goods by international bodies, other than those referred
+        /// to in point (fa), recognised as such...
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1G")]
         VATEX_EU_143_1G,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (h) of Council Directive 2006/112/EC
-        /// The importation of goods, into Member States party to the North Atlantic Treaty, by the armed forces...
+        /// The importation of goods, into Member States party to the North Atlantic Treaty,
+        /// by the armed forces...
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1H")]
         VATEX_EU_143_1H,
 
         /// <summary>
         /// Exempt based on article 143, section 1 (i) of Council Directive 2006/112/EC
-        /// The importation of goods by the armed forces of the United Kingdom stationed in the island of Cyprus...
+        /// The importation of goods by the armed forces of the United Kingdom
+        /// stationed in the island of Cyprus...
         /// </summary>
         [EnumStringValue("VATEX-EU-143-1I")]
         VATEX_EU_143_1I,
