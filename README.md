@@ -335,15 +335,21 @@ The component makes loading the invoice from a pdf as easy as this:
 
 ```csharp
 InvoiceDescriptor desc = await InvoicePdfProcessor.LoadFromPdfAsync("invoice.pdf");
+
+// alternatively, you can invoke the function in synchronous manner:
+InvoiceDescriptor desc = InvoicePdfProcessor.LoadFromPdf("invoice.pdf");
 ```
 
 Converting a PDF file to a ZUGFeRD PDF/A is almost as simple:
 
 ```csharp
 InvoiceDescriptor descriptor = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2018, 03, 05), CurrencyCodes.EUR);
-...
+// ... fill the descriptor
 
 await InvoicePdfProcessor.SaveToPdfAsync("zugferd-invoice.pdf", ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, "input-invoice.pdf", descriptor);
+
+// alternatively, you can invoke the function in synchronous manner:
+InvoicePdfProcessor.SaveToPdf("zugferd-invoice.pdf", ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, "input-invoice.pdf", descriptor);
 ```
 
 
