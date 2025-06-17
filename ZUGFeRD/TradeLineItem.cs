@@ -208,7 +208,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Detailed information about the actual Delivery
         ///
-        /// BT-72
+        /// BT-X-85
         /// </summary>
         public DateTime? ActualDeliveryDate { get; set; }
 
