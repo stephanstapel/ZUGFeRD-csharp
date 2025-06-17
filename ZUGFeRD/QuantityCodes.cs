@@ -732,7 +732,31 @@ namespace s2industries.ZUGFeRD
         /// Pot
         /// </summary>
         XPT,
+        
+        /// <summary>
+        /// Pallet, wooden
+        /// </summary>
+        X8A,
 
+        /// <summary>
+        /// Crate, multiple layer, cardboard
+        /// </summary>
+        XDC,
+
+        /// <summary>
+        /// Cage, roll
+        /// </summary>
+        XCW,
+
+        /// <summary>
+        /// Sack, multi-wall
+        /// </summary>
+        XMS
+
+        /// <summary>
+        /// ton-force (US short)
+        /// </summary>
+        L94
     }
 
 
