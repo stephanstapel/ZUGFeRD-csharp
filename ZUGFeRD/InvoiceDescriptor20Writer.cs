@@ -763,8 +763,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "AppliedTradeTax");
                     Writer.WriteElementString("ram", "TypeCode", serviceCharge.Tax.TypeCode.EnumToString());
-                    if (serviceCharge.Tax.CategoryCode.HasValue)
-                        Writer.WriteElementString("ram", "CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString());
+                    Writer.WriteElementString("ram", "CategoryCode", serviceCharge.Tax.CategoryCode.EnumToString());
                     Writer.WriteElementString("ram", "RateApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent));
                     Writer.WriteEndElement();
                 }
@@ -984,8 +983,7 @@ namespace s2industries.ZUGFeRD
             {
                 Writer.WriteStartElement("ram", "CategoryTradeTax");
                 Writer.WriteElementString("ram", "TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString());
-                if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
-                    Writer.WriteElementString("ram", "CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString());
+                Writer.WriteElementString("ram", "CategoryCode", tradeAllowanceCharge.Tax.CategoryCode.EnumToString());
                 Writer.WriteElementString("ram", "RateApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
                 Writer.WriteEndElement();
             }
@@ -1073,10 +1071,7 @@ namespace s2industries.ZUGFeRD
                     writer.WriteEndElement(); // !AllowanceChargeBasisAmount
                 }
 
-                if (tax.CategoryCode.HasValue)
-                {
-                    writer.WriteElementString("ram", "CategoryCode", tax.CategoryCode?.EnumToString());
-                }
+                writer.WriteElementString("ram", "CategoryCode", tax.CategoryCode.EnumToString());
 
                 if (tax.ExemptionReasonCode.HasValue)
                 {

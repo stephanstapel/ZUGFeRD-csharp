@@ -346,8 +346,7 @@ namespace s2industries.ZUGFeRD
                 {
                     Writer.WriteStartElement("ram", "AppliedTradeTax");
                     Writer.WriteElementString("ram", "TypeCode", serviceCharge.Tax.TypeCode.EnumToString(), Profile.Comfort | Profile.Extended);
-                    if (serviceCharge.Tax.CategoryCode.HasValue)
-                        Writer.WriteElementString("ram", "CategoryCode", serviceCharge.Tax.CategoryCode?.EnumToString(), Profile.Comfort | Profile.Extended);
+                    Writer.WriteElementString("ram", "CategoryCode", serviceCharge.Tax.CategoryCode.EnumToString(), Profile.Comfort | Profile.Extended);
                     Writer.WriteElementString("ram", "ApplicablePercent", _formatDecimal(serviceCharge.Tax.Percent), Profile.Comfort | Profile.Extended);
                     Writer.WriteEndElement();
                 }
@@ -711,8 +710,7 @@ namespace s2industries.ZUGFeRD
             {
                 Writer.WriteStartElement("ram", "CategoryTradeTax");
                 Writer.WriteElementString("ram", "TypeCode", tradeAllowanceCharge.Tax.TypeCode.EnumToString(), Profile.Comfort | Profile.Extended);
-                if (tradeAllowanceCharge.Tax.CategoryCode.HasValue)
-                    Writer.WriteElementString("ram", "CategoryCode", tradeAllowanceCharge.Tax.CategoryCode?.EnumToString(), Profile.Comfort | Profile.Extended);
+                Writer.WriteElementString("ram", "CategoryCode", tradeAllowanceCharge.Tax.CategoryCode.EnumToString(), Profile.Comfort | Profile.Extended);
                 Writer.WriteElementString("ram", "ApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent), Profile.Comfort | Profile.Extended);
                 Writer.WriteEndElement();
             }
@@ -827,10 +825,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if (tax.CategoryCode.HasValue)
-                {
-                    writer.WriteElementString("ram", "CategoryCode", tax.CategoryCode?.EnumToString());
-                }
+                writer.WriteElementString("ram", "CategoryCode", tax.CategoryCode.EnumToString());
                 writer.WriteElementString("ram", "ApplicablePercent", _formatDecimal(tax.Percent));
                 writer.WriteEndElement(); // !ApplicableTradeTax
             }

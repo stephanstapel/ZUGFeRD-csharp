@@ -1162,7 +1162,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="reasonCode">Optional reason code</param>
         public void AddTradeCharge(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
                                    decimal? chargePercentage,
-                                   string reason, TaxTypes taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
+                                   string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
                                    ChargeReasonCodes? reasonCode = null)
         {
             _AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
