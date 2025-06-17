@@ -751,7 +751,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Sack, multi-wall
         /// </summary>
-        XMS
+        XMS,
 
         /// <summary>
         /// ton-force (US short)
