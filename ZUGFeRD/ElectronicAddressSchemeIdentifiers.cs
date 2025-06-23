@@ -21,546 +21,633 @@ using System;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
-    /// Payment means codes according to PEPPOL/UN/EDIFACT standard (UNCL4461).
-    /// Defines how the payment for an invoice should be executed.
-    /// 
-    /// <para><strong>Most frequently used codes in practice:</strong></para>
-    /// <para>• <see cref="CreditTransferNonSepa"/> (30) - Standard bank transfer, most common worldwide</para>
-    /// <para>• <see cref="SepaCreditTransfer"/> (58) - SEPA credit transfer, dominant in Eurozone</para>
-    /// <para>• <see cref="SepaDirectDebit"/> (59) - SEPA direct debit for agreed debit transactions</para>
-    /// 
-    /// <para><strong>Additional common codes:</strong></para>
-    /// <para>• <see cref="DirectDebit"/> (49) - Direct debit for recurring payments</para>
-    /// <para>• <see cref="BankCard"/> (48) - Payment cards (credit/debit), mainly B2C usage</para>
-    /// <para>• <see cref="PaymentToBankAccount"/> (42) - General bank account payment</para>
-    /// 
-    /// <para><strong>Regional usage patterns:</strong></para>
-    /// <para>In German/European XRechnung implementations, codes 30 and 58 are predominantly used.</para>
-    /// <para>SEPA codes (58, 59) dominate in the Eurozone, while code 30 serves as fallback for non-SEPA transfers.</para>
-    /// <para>Card payments (48, 54, 55) are typically used only when explicitly agreed and stated on the invoice.</para>
-    /// <para>Other codes like <see cref="DebitTransferNonSepa"/> (31) are rarely seen in German/European invoices.</para>
-    /// 
-    /// <para><strong>B2B vs B2C:</strong></para>
-    /// <para>B2B transactions primarily use bank transfers (30, 58), while B2C may include card payments (48, 54, 55).</para>
+    /// Represents standardized Electronic Address Scheme (EAS) identifiers used in electronic business documents.
+    /// These identifiers define the format and issuing authority for electronic addresses and business identifiers
+    /// in B2B communications, particularly in e-invoicing and electronic data interchange (EDI) systems.
     /// </summary>
-    public enum ElectronicAddressSchemeIdentifiers    
+    /// <remarks>
+    /// <para>
+    /// The Electronic Address Scheme identifiers are standardized codes that specify how to interpret
+    /// electronic addresses and business identifiers in electronic documents. Each identifier consists
+    /// of a unique code that references a specific numbering scheme or authority.
+    /// </para>
+    /// <para>
+    /// This enumeration includes:
+    /// - International business registration numbers (DUNS, GLEIF, etc.)
+    /// - National business identifiers (SIRET, ABN, etc.)
+    /// - VAT identification numbers for European and international jurisdictions
+    /// - Electronic communication protocol identifiers (AS2, SMTP, FTP, etc.)
+    /// </para>
+    /// <para>
+    /// The codes are categorized as follows:
+    /// - 0002-0240: International and national business identifiers
+    /// - 9910-9959: VAT numbers and tax identification schemes
+    /// - AN, AQ, AS, AU, EM: Electronic communication protocols
+    /// </para>
+    /// <para>
+    /// These identifiers are commonly used in:
+    /// - PEPPOL e-invoicing infrastructure
+    /// - UN/CEFACT Cross Industry Invoice (CII) format
+    /// - UBL (Universal Business Language) documents
+    /// - Electronic procurement systems
+    /// - B2B integration platforms
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Usage example for electronic address identification
+    /// var scheme = ElectronicAddressSchemeIdentifiers.DunsNumber;
+    /// var schemeCode = scheme.GetEnumStringValue(); // Returns "0060"
+    /// 
+    /// // For VAT number identification
+    /// var vatScheme = ElectronicAddressSchemeIdentifiers.GermanyVatNumber;
+    /// var vatCode = vatScheme.GetEnumStringValue(); // Returns "9930"
+    /// </code>
+    /// </example>
+    /// <seealso href="https://docs.peppol.eu/poacc/billing/3.0/syntax/ubl-invoice/cac-AccountingSupplierParty/cac-Party/cbc-EndpointID/">PEPPOL BIS Billing 3.0 Endpoint ID</seealso>
+    /// <seealso href="https://unece.org/trade/uncefact/cl-recommendations">UN/CEFACT Code List Recommendations</seealso>
+    public enum ElectronicAddressSchemeIdentifiers
     {
         /// <summary>
-        /// Instrument not defined
+        /// System Information et Repertoire des Entreprise et des Etablissements: SIRENE
         /// </summary>
-        [EnumStringValue("1")]
-        InstrumentNotDefined,
+        [EnumStringValue("0002")]
+        Sirene,
 
         /// <summary>
-        /// Automated clearing house (ACH) credit
+        /// Organisationsnummer
         /// </summary>
-        [EnumStringValue("2")]
-        AchCredit,
+        [EnumStringValue("0007")]
+        Organisationsnummer,
 
         /// <summary>
-        /// Automated clearing house (ACH) debit
+        /// SIRET-CODE
         /// </summary>
-        [EnumStringValue("3")]
-        AchDebit,
+        [EnumStringValue("0009")]
+        SiretCode,
 
         /// <summary>
-        /// Automated clearing house (ACH) demand debit reversal
+        /// LY-tunnus
         /// </summary>
-        [EnumStringValue("4")]
-        AchDemandDebitReversal,
+        [EnumStringValue("0037")]
+        LyTunnus,
 
         /// <summary>
-        /// Automated clearing house (ACH) demand credit reversal
+        /// Data Universal Numbering System (D-U-N-S Number)
         /// </summary>
-        [EnumStringValue("5")]
-        AchDemandCreditReversal,
+        [EnumStringValue("0060")]
+        DunsNumber,
 
         /// <summary>
-        /// Automated clearing house (ACH) demand credit
+        /// EAN Location Code
         /// </summary>
-        [EnumStringValue("6")]
-        AchDemandCredit,
+        [EnumStringValue("0088")]
+        EanLocationCode,
 
         /// <summary>
-        /// Automated clearing house (ACH) demand debit
+        /// The Danish Business Authority - P-number (DK:P)
         /// </summary>
-        [EnumStringValue("7")]
-        AchDemandDebit,
+        [EnumStringValue("0096")]
+        DanishBusinessAuthorityPNumber,
 
         /// <summary>
-        /// Hold
+        /// FTI - Ediforum Italia, (EDIRA compliant)
         /// </summary>
-        [EnumStringValue("8")]
-        Hold,
+        [EnumStringValue("0097")]
+        FtiEdiforumItalia,
 
         /// <summary>
-        /// National or regional clearing
+        /// Vereniging van Kamers van Koophandel en Fabrieken in Nederland (Association of Chambers of Commerce and Industry in the Netherlands), Scheme (EDIRA compliant)
         /// </summary>
-        [EnumStringValue("9")]
-        NationalOrRegionalClearing,
+        [EnumStringValue("0106")]
+        DutchChamberOfCommerce,
 
         /// <summary>
-        /// In cash
+        /// Directorates of the European Commission
         /// </summary>
-        [EnumStringValue("10")]
-        InCash,
+        [EnumStringValue("0130")]
+        EuropeanCommissionDirectorates,
 
         /// <summary>
-        /// ACH savings credit reversal
+        /// SIA Object Identifiers
         /// </summary>
-        [EnumStringValue("11")]
-        AchSavingsCreditReversal,
+        [EnumStringValue("0135")]
+        SiaObjectIdentifiers,
 
         /// <summary>
-        /// ACH savings debit reversal
+        /// SECETI Object Identifiers
         /// </summary>
-        [EnumStringValue("12")]
-        AchSavingsDebitReversal,
+        [EnumStringValue("0142")]
+        SecetiObjectIdentifiers,
 
         /// <summary>
-        /// ACH savings credit
+        /// Standard Company Code
         /// </summary>
-        [EnumStringValue("13")]
-        AchSavingsCredit,
+        [EnumStringValue("0147")]
+        StandardCompanyCode,
 
         /// <summary>
-        /// ACH savings debit
+        /// Australian Business Number (ABN) Scheme
         /// </summary>
-        [EnumStringValue("14")]
-        AchSavingsDebit,
+        [EnumStringValue("0151")]
+        AustralianBusinessNumberAbn,
 
         /// <summary>
-        /// Bookentry credit
+        /// Identification number of economic subjects: (ICO)
         /// </summary>
-        [EnumStringValue("15")]
-        BookentryCredit,
+        [EnumStringValue("0154")]
+        EconomicSubjectNumberIco,
 
         /// <summary>
-        /// Bookentry debit
+        /// Identification number of economic subject (ICO) Act on State Statistics of 29 November 2001, § 27
         /// </summary>
-        [EnumStringValue("16")]
-        BookentryDebit,
+        [EnumStringValue("0158")]
+        EconomicSubjectNumberAct,
 
         /// <summary>
-        /// ACH demand cash concentration/disbursement (CCD) credit
+        /// Teikoku Company Code
         /// </summary>
-        [EnumStringValue("17")]
-        AchDemandCcdCredit,
+        [EnumStringValue("0170")]
+        TeikokuCompanyCode,
 
         /// <summary>
-        /// ACH demand cash concentration/disbursement (CCD) debit
+        /// Odette International Limited
         /// </summary>
-        [EnumStringValue("18")]
-        AchDemandCcdDebit,
+        [EnumStringValue("0177")]
+        OdetteInternationalLimited,
 
         /// <summary>
-        /// ACH demand corporate trade payment (CTP) credit
+        /// Numéro d'identification suisse des enterprises (IDE), Swiss Unique Business Identification Number (UIDB)
         /// </summary>
-        [EnumStringValue("19")]
-        AchDemandCtpCredit,
+        [EnumStringValue("0183")]
+        SwissUidb,
 
         /// <summary>
-        /// Cheque
+        /// DIGSTORG
         /// </summary>
-        [EnumStringValue("20")]
-        Cheque,
+        [EnumStringValue("0184")]
+        Digstorg,
 
         /// <summary>
-        /// Banker's draft
+        /// Corporate Number of The Social Security and Tax Number System
         /// </summary>
-        [EnumStringValue("21")]
-        BankersDraft,
+        [EnumStringValue("0188")]
+        SocialSecurityTaxNumberSystem,
 
         /// <summary>
-        /// Certified banker's draft
+        /// Dutch Originator's Identification Number
         /// </summary>
-        [EnumStringValue("22")]
-        CertifiedBankersDraft,
+        [EnumStringValue("0190")]
+        DutchOriginatorsIdentificationNumber,
 
         /// <summary>
-        /// Bank cheque (issued by a banking or similar establishment)
+        /// Centre of Registers and Information Systems of the Ministry of Justice
         /// </summary>
-        [EnumStringValue("23")]
-        BankCheque,
+        [EnumStringValue("0191")]
+        JusticeRegister,
 
         /// <summary>
-        /// Bill of exchange awaiting acceptance
+        /// Enhetsregisteret ved Bronnoysundregisterne
         /// </summary>
-        [EnumStringValue("24")]
-        BillOfExchangeAwaitingAcceptance,
+        [EnumStringValue("0192")]
+        Bronnoysundregisterne,
 
         /// <summary>
-        /// Certified cheque
+        /// UBL.BE party identifier
         /// </summary>
-        [EnumStringValue("25")]
-        CertifiedCheque,
+        [EnumStringValue("0193")]
+        UblBePartyIdentifier,
 
         /// <summary>
-        /// Local cheque
+        /// KOIOS Open Technical Dictionary
         /// </summary>
-        [EnumStringValue("26")]
-        LocalCheque,
+        [EnumStringValue("0194")]
+        KoiosOpenTechnicalDictionary,
 
         /// <summary>
-        /// ACH demand corporate trade payment (CTP) debit
+        /// Singapore UEN identifier
         /// </summary>
-        [EnumStringValue("27")]
-        AchDemandCtpDebit,
+        [EnumStringValue("0195")]
+        SingaporeUenIdentifier,
 
         /// <summary>
-        /// ACH demand corporate trade exchange (CTX) credit
+        /// Kennitala - Iceland legal id for individuals and legal entities
         /// </summary>
-        [EnumStringValue("28")]
-        AchDemandCtxCredit,
+        [EnumStringValue("0196")]
+        KennitalaIceland,
 
         /// <summary>
-        /// ACH demand corporate trade exchange (CTX) debit
+        /// ERSTORG
         /// </summary>
-        [EnumStringValue("29")]
-        AchDemandCtxDebit,
+        [EnumStringValue("0198")]
+        Erstorg,
 
         /// <summary>
-        /// Credit transfer (non-SEPA)
+        /// Global legal entity identifier (GLEIF)
         /// </summary>
-        [EnumStringValue("30")]
-        CreditTransferNonSepa,
+        [EnumStringValue("0199")]
+        GlobalLegalEntityIdentifierGleif,
 
         /// <summary>
-        /// Debit transfer (non-SEPA)
+        /// Legal entity code (Lithuania)
         /// </summary>
-        [EnumStringValue("31")]
-        DebitTransferNonSepa,
+        [EnumStringValue("0200")]
+        LegalEntityCodeLithuania,
 
         /// <summary>
-        /// ACH demand cash concentration/disbursement plus (CCD+)
+        /// Codice Univoco Unità Organizzativa iPA
         /// </summary>
-        [EnumStringValue("32")]
-        AchDemandCcdPlus,
+        [EnumStringValue("0201")]
+        CodiceUnivocoIpa,
 
         /// <summary>
-        /// ACH demand cash concentration/disbursement plus (CCD+)
+        /// Indirizzo di Posta Elettronica Certificata
         /// </summary>
-        [EnumStringValue("33")]
-        AchDemandCcdPlusDuplicate,
+        [EnumStringValue("0202")]
+        PostaElettronicaCertificata,
 
         /// <summary>
-        /// ACH prearranged payment and deposit (PPD)
+        /// eDelivery Network Participant identifier
         /// </summary>
-        [EnumStringValue("34")]
-        AchPrearrangedPaymentDepositPpd,
+        [EnumStringValue("0203")]
+        EDeliveryNetworkParticipant,
 
         /// <summary>
-        /// ACH savings cash concentration/disbursement (CCD) credit
+        /// Leitweg-ID
         /// </summary>
-        [EnumStringValue("35")]
-        AchSavingsCcdCredit,
+        [EnumStringValue("0204")]
+        LeitwegId,
 
         /// <summary>
-        /// ACH savings cash concentration/disbursement (CCD) debit
+        /// CODDEST
         /// </summary>
-        [EnumStringValue("36")]
-        AchSavingsCcdDebit,
+        [EnumStringValue("0205")]
+        Coddest,
 
         /// <summary>
-        /// ACH savings corporate trade payment (CTP) credit
+        /// Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
         /// </summary>
-        [EnumStringValue("37")]
-        AchSavingsCtpCredit,
+        [EnumStringValue("0208")]
+        Unternehmensnummer,
 
         /// <summary>
-        /// ACH savings corporate trade payment (CTP) debit
+        /// GS1 identification keys
         /// </summary>
-        [EnumStringValue("38")]
-        AchSavingsCtpDebit,
+        [EnumStringValue("0209")]
+        Gs1IdentificationKeys,
 
         /// <summary>
-        /// ACH savings corporate trade exchange (CTX) credit
+        /// CODICE FISCALE
         /// </summary>
-        [EnumStringValue("39")]
-        AchSavingsCtxCredit,
+        [EnumStringValue("0210")]
+        CodiceFiscale,
 
         /// <summary>
-        /// ACH savings corporate trade exchange (CTX) debit
+        /// PARTITA IVA
         /// </summary>
-        [EnumStringValue("40")]
-        AchSavingsCtxDebit,
+        [EnumStringValue("0211")]
+        PartitaIva,
 
         /// <summary>
-        /// ACH savings cash concentration/disbursement plus (CCD+)
+        /// Finnish Organization Identifier
         /// </summary>
-        [EnumStringValue("41")]
-        AchSavingsCcdPlus,
+        [EnumStringValue("0212")]
+        FinnishOrganizationIdentifier,
 
         /// <summary>
-        /// Payment to bank account
+        /// Finnish Organization Value Add Tax Identifier
         /// </summary>
-        [EnumStringValue("42")]
-        PaymentToBankAccount,
+        [EnumStringValue("0213")]
+        FinnishOrganizationVatIdentifier,
 
         /// <summary>
-        /// ACH savings cash concentration/disbursement plus (CCD+)
+        /// Net service ID
         /// </summary>
-        [EnumStringValue("43")]
-        AchSavingsCcdPlusDuplicate,
+        [EnumStringValue("0215")]
+        NetServiceId,
 
         /// <summary>
-        /// Accepted bill of exchange
+        /// OVTCode
         /// </summary>
-        [EnumStringValue("44")]
-        AcceptedBillOfExchange,
+        [EnumStringValue("0216")]
+        OvtCode,
 
         /// <summary>
-        /// Referenced home-banking credit transfer
+        /// The Netherlands Chamber of Commerce and Industry establishment number
         /// </summary>
-        [EnumStringValue("45")]
-        ReferencedHomeBankingCreditTransfer,
+        [EnumStringValue("0217")]
+        NetherlandsChamberOfCommerceNumber,
 
         /// <summary>
-        /// Interbank debit transfer
+        /// Unified registration number (Latvia)
         /// </summary>
-        [EnumStringValue("46")]
-        InterbankDebitTransfer,
+        [EnumStringValue("0218")]
+        UnifiedRegistrationNumberLatvia,
 
         /// <summary>
-        /// Home-banking debit transfer
+        /// The registered number of the qualified invoice issuer
         /// </summary>
-        [EnumStringValue("47")]
-        HomeBankingDebitTransfer,
+        [EnumStringValue("0221")]
+        QualifiedInvoiceIssuerNumber,
 
         /// <summary>
-        /// Bank card (Use for all payment cards)
+        /// FRCTC ELECTRONIC ADDRESS
         /// </summary>
-        [EnumStringValue("48")]
-        BankCard,
+        [EnumStringValue("0225")]
+        FrctcElectronicAddress,
 
         /// <summary>
-        /// Direct debit
+        /// National e-Invoicing Framework
         /// </summary>
-        [EnumStringValue("49")]
-        DirectDebit,
+        [EnumStringValue("0230")]
+        NationalEInvoicingFramework,
 
         /// <summary>
-        /// Payment by postgiro
+        /// UAE Tax Identification Number (TIN)
         /// </summary>
-        [EnumStringValue("50")]
-        PaymentByPostgiro,
+        [EnumStringValue("0235")]
+        UaeTaxIdentificationNumberTin,
 
         /// <summary>
-        /// FR, norme 6 97-Telereglement CFONB (French Organisation for Banking Standards) -
-        /// Option A A French standard procedure that allows a debtor to pay an amount
-        /// due to a creditor. The creditor will forward it to its bank, which
-        /// will collect the money on the bank account of the debtor.
+        /// Register of legal persons (in French : Répertoire des personnes morales)
         /// </summary>
-        [EnumStringValue("51")]
-        FrCfonb,
+        [EnumStringValue("0240")]
+        RegisterOfLegalPersons,
 
         /// <summary>
-        /// Urgent commercial payment
+        /// Hungary VAT number
         /// </summary>
-        [EnumStringValue("52")]
-        UrgentCommercialPayment,
+        [EnumStringValue("9910")]
+        HungaryVatNumber,
 
         /// <summary>
-        /// Urgent Treasury Payment
+        /// Business Registers Network
         /// </summary>
-        [EnumStringValue("53")]
-        UrgentTreasuryPayment,
+        [EnumStringValue("9913")]
+        BusinessRegistersNetwork,
 
         /// <summary>
-        /// Credit card
+        /// Österreichische Umsatzsteuer-Identifikationsnummer
         /// </summary>
-        [EnumStringValue("54")]
-        CreditCard,
+        [EnumStringValue("9914")]
+        AustrianVatNumber,
 
         /// <summary>
-        /// Debit card
+        /// Österreichisches Verwaltungs bzw. Organisationskennzeichen
         /// </summary>
-        [EnumStringValue("55")]
-        DebitCard,
+        [EnumStringValue("9915")]
+        AustrianAdministrativeCode,
 
         /// <summary>
-        /// Bankgiro
+        /// SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T
         /// </summary>
-        [EnumStringValue("56")]
-        Bankgiro,
+        [EnumStringValue("9918")]
+        Swift,
 
         /// <summary>
-        /// Standing agreement (Contractual payment means)
+        /// Kennziffer des Unternehmensregisters
         /// </summary>
-        [EnumStringValue("57")]
-        StandingAgreement,
+        [EnumStringValue("9919")]
+        CompanyRegisterNumber,
 
         /// <summary>
-        /// SEPA credit transfer (SEPA)
+        /// Agencia Española de Administración Tributaria
         /// </summary>
-        [EnumStringValue("58")]
-        SepaCreditTransfer,
+        [EnumStringValue("9920")]
+        SpanishTaxAgency,
 
         /// <summary>
-        /// SEPA direct debit (SEPA)
+        /// Andorra VAT number
         /// </summary>
-        [EnumStringValue("59")]
-        SepaDirectDebit,
+        [EnumStringValue("9922")]
+        AndorraVatNumber,
 
         /// <summary>
-        /// Promissory note
+        /// Albania VAT number
         /// </summary>
-        [EnumStringValue("60")]
-        PromissoryNote,
+        [EnumStringValue("9923")]
+        AlbaniaVatNumber,
 
         /// <summary>
-        /// Promissory note signed by the debtor
+        /// Bosnia and Herzegovina VAT number
         /// </summary>
-        [EnumStringValue("61")]
-        PromissoryNoteSignedByDebtor,
+        [EnumStringValue("9924")]
+        BosniaAndHerzegovinaVatNumber,
 
         /// <summary>
-        /// Promissory note signed by the debtor and endorsed by a bank
+        /// Belgium VAT number
         /// </summary>
-        [EnumStringValue("62")]
-        PromissoryNoteSignedByDebtorEndorsedByBank,
+        [EnumStringValue("9925")]
+        BelgiumVatNumber,
 
         /// <summary>
-        /// Payment by an unconditional promise in writing made by the debtor
-        /// to another person, signed by the debtor and endorsed by
-        /// a third party, engaging to pay on demand or at a fixed
-        /// or determinable future time a sum certain in money, to order
-        /// or to bearer.
+        /// Bulgaria VAT number
         /// </summary>
-        [EnumStringValue("63")]
-        PromissoryNoteSignedByDebtorEndorsedByOther,
+        [EnumStringValue("9926")]
+        BulgariaVatNumber,
 
         /// <summary>
-        /// Promissory note signed by a bank
+        /// Switzerland VAT number
         /// </summary>
-        [EnumStringValue("64")]
-        PromissoryNoteSignedByBank,
+        [EnumStringValue("9927")]
+        SwitzerlandVatNumber,
 
         /// <summary>
-        /// Payment by an unconditional promise in writing made by the bank
-        /// to another person, signed by the bank and endorsed by another
-        /// bank, engaging to pay on demand or at a fixed or determinable
-        /// future time a sum certain in money, to order or to bearer.
+        /// Cyprus VAT number
         /// </summary>
-        [EnumStringValue("65")]
-        PromissoryNoteSignedByBankEndorsedByOther,
+        [EnumStringValue("9928")]
+        CyprusVatNumber,
 
         /// <summary>
-        /// Promissory note signed by a third party
+        /// Czech Republic VAT number
         /// </summary>
-        [EnumStringValue("66")]
-        PromissoryNoteSignedByThirdParty,
+        [EnumStringValue("9929")]
+        CzechRepublicVatNumber,
 
         /// <summary>
-        /// Payment by an unconditional promise in writing made by a
-        /// third party to another person, signed by the third party
-        /// and endorsed by a bank, engaging to pay on demand or at
-        /// a fixed or determinable future time a sum certain in money,
-        /// to order or to bearer.
+        /// Germany VAT number
         /// </summary>
-        [EnumStringValue("67")]
-        PromissoryNoteSignedByThirdPartyEndorsedByOther,
+        [EnumStringValue("9930")]
+        GermanyVatNumber,
 
         /// <summary>
-        /// Online payment service
+        /// Estonia VAT number
         /// </summary>
-        [EnumStringValue("68")]
-        OnlinePaymentService,
+        [EnumStringValue("9931")]
+        EstoniaVatNumber,
 
         /// <summary>
-        /// Transfer Advice
+        /// United Kingdom VAT number
         /// </summary>
-        [EnumStringValue("69")]
-        TransferAdvice,
+        [EnumStringValue("9932")]
+        UnitedKingdomVatNumber,
 
         /// <summary>
-        /// Bill drawn by the creditor on the debtor
+        /// Greece VAT number
         /// </summary>
-        [EnumStringValue("70")]
-        BillDrawnByCreditorOnDebtor,
+        [EnumStringValue("9933")]
+        GreeceVatNumber,
 
         /// <summary>
-        /// Bill drawn by the creditor on a bank
+        /// Croatia VAT number
         /// </summary>
-        [EnumStringValue("74")]
-        BillDrawnByCreditorOnBank,
+        [EnumStringValue("9934")]
+        CroatiaVatNumber,
 
         /// <summary>
-        /// Bill drawn by the creditor, endorsed by another bank
+        /// Ireland VAT number
         /// </summary>
-        [EnumStringValue("75")]
-        BillDrawnByCreditorEndorsedByAnotherBank,
+        [EnumStringValue("9935")]
+        IrelandVatNumber,
 
         /// <summary>
-        /// Bill drawn by the creditor on a bank and endorsed by a third party.
+        /// Liechtenstein VAT number
         /// </summary>
-        [EnumStringValue("76")]
-        BillDrawnByCreditorOnBankEndorsedByOther,
+        [EnumStringValue("9936")]
+        LiechtensteinVatNumber,
 
         /// <summary>
-        /// Bill drawn by the creditor on a third party
+        /// Lithuania VAT number
         /// </summary>
-        [EnumStringValue("77")]
-        BillDrawnByCreditorOnThirdParty,
+        [EnumStringValue("9937")]
+        LithuaniaVatNumber,
 
         /// <summary>
-        /// Bill drawn by creditor on third party, accepted and endorsed by bank.
+        /// Luxemburg VAT number
         /// </summary>
-        [EnumStringValue("78")]
-        BillDrawnByCreditorOnThirdPartyAccepted,
+        [EnumStringValue("9938")]
+        LuxemburgVatNumber,
 
         /// <summary>
-        /// Not transferable banker's draft
+        /// Latvia VAT number
         /// </summary>
-        [EnumStringValue("91")]
-        NotTransferableBankersDraft,
+        [EnumStringValue("9939")]
+        LatviaVatNumber,
 
         /// <summary>
-        /// Not transferable local cheque
+        /// Monaco VAT number
         /// </summary>
-        [EnumStringValue("92")]
-        NotTransferableLocalCheque,
+        [EnumStringValue("9940")]
+        MonacoVatNumber,
 
         /// <summary>
-        /// Reference giro
+        /// Montenegro VAT number
         /// </summary>
-        [EnumStringValue("93")]
-        ReferenceGiro,
+        [EnumStringValue("9941")]
+        MontenegroVatNumber,
 
         /// <summary>
-        /// Urgent giro
+        /// Macedonia, the former Yugoslav Republic of VAT number
         /// </summary>
-        [EnumStringValue("94")]
-        UrgentGiro,
+        [EnumStringValue("9942")]
+        MacedoniaVatNumber,
 
         /// <summary>
-        /// Free format giro
+        /// Malta VAT number
         /// </summary>
-        [EnumStringValue("95")]
-        FreeFormatGiro,
+        [EnumStringValue("9943")]
+        MaltaVatNumber,
 
         /// <summary>
-        /// Requested method for payment was not used
+        /// Netherlands VAT number
         /// </summary>
-        [EnumStringValue("96")]
-        RequestedMethodForPaymentNotUsed,
+        [EnumStringValue("9944")]
+        NetherlandsVatNumber,
 
         /// <summary>
-        /// Clearing between partners
+        /// Poland VAT number
         /// </summary>
-        [EnumStringValue("97")]
-        ClearingBetweenPartners,
+        [EnumStringValue("9945")]
+        PolandVatNumber,
 
         /// <summary>
-        /// JP, Electronically Recorded Monetary Claims
+        /// Portugal VAT number
         /// </summary>
-        [EnumStringValue("98")]
-        ElectronicallyRecordedMonetaryClaimsJP,
+        [EnumStringValue("9946")]
+        PortugalVatNumber,
 
         /// <summary>
-        /// Mutually defined
+        /// Romania VAT number
         /// </summary>
-        [EnumStringValue("ZZZ")]
-        MutuallyDefined
+        [EnumStringValue("9947")]
+        RomaniaVatNumber,
+
+        /// <summary>
+        /// Serbia VAT number
+        /// </summary>
+        [EnumStringValue("9948")]
+        SerbiaVatNumber,
+
+        /// <summary>
+        /// Slovenia VAT number
+        /// </summary>
+        [EnumStringValue("9949")]
+        SloveniaVatNumber,
+
+        /// <summary>
+        /// Slovakia VAT number
+        /// </summary>
+        [EnumStringValue("9950")]
+        SlovakiaVatNumber,
+
+        /// <summary>
+        /// San Marino VAT number
+        /// </summary>
+        [EnumStringValue("9951")]
+        SanMarinoVatNumber,
+
+        /// <summary>
+        /// Turkey VAT number
+        /// </summary>
+        [EnumStringValue("9952")]
+        TurkeyVatNumber,
+
+        /// <summary>
+        /// Holy See (Vatican City State) VAT number
+        /// </summary>
+        [EnumStringValue("9953")]
+        VaticanVatNumber,
+
+        /// <summary>
+        /// French VAT number
+        /// </summary>
+        [EnumStringValue("9957")]
+        FrenchVatNumber,
+
+        /// <summary>
+        /// Employer Identification Number (EIN, USA)
+        /// </summary>
+        [EnumStringValue("9959")]
+        EmployerIdentificationNumber,
+
+        /// <summary>
+        /// O.F.T.P. (ODETTE File Transfer Protocol)
+        /// </summary>
+        [EnumStringValue("AN")]
+        OdetteFileTransferProtocol,
+
+        /// <summary>
+        /// X.400 address for mail text
+        /// </summary>
+        [EnumStringValue("AQ")]
+        X400AddressForMailText,
+
+        /// <summary>
+        /// AS2 exchange
+        /// </summary>
+        [EnumStringValue("AS")]
+        As2Exchange,
+
+        /// <summary>
+        /// File Transfer Protocol
+        /// </summary>
+        [EnumStringValue("AU")]
+        FileTransferProtocol,
+
+        /// <summary>
+        /// Electronic mail (SMTP)
+        /// </summary>
+        [EnumStringValue("EM")]
+        ElectronicMailSmtp,
     }
 }
