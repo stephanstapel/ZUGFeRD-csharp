@@ -1054,7 +1054,7 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// The logistics service charge (ram:SpecifiedLogisticsServiceCharge) is part of the ZUGFeRD specification.
         /// Please note that it is not part of the XRechnung specification, thus, everything passed to this function will not
-        /// be written when writing XRechnung format.
+        /// be written when using XRechnung format.
         ///
         /// You might use AddTradeAllowanceCharge() instead.
         /// </summary>
@@ -2127,10 +2127,14 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Sets up payment means information
+        ///
+        /// In case of direct debit or SEPA direct debit (Lastschrift), you have to pass 'identifkationsnummer
+        /// (in German: Gläubiger ID, formatted as DE98ZZZxxxxxxxxxxx)
+        /// and mandatsnummer (sometimes called Mandatsreferenz).        
         /// </summary>
         /// <param name="paymentCode">Payment means type</param>
         /// <param name="information">Additional payment information</param>
-        /// <param name="identifikationsnummer">SEPA creditor identifier</param>
+        /// <param name="identifikationsnummer">SEPA creditor identifier (in German: Gläubiger ID, formatted as DE98ZZZxxxxxxxxxxx)</param>
         /// <param name="mandatsnummer">SEPA mandate reference</param>
         public void SetPaymentMeans(PaymentMeansTypeCodes paymentCode, string information = "", string identifikationsnummer = null, string mandatsnummer = null)
         {
