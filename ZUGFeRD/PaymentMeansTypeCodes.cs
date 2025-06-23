@@ -25,9 +25,9 @@ namespace s2industries.ZUGFeRD
     /// Defines how the payment for an invoice should be executed.
     /// 
     /// <para><strong>Most frequently used codes in practice:</strong></para>
-    /// <para>• <see cref="CreditTransferNonSepa"/> (30) - Standard bank transfer, most common worldwide</para>
-    /// <para>• <see cref="SepaCreditTransfer"/> (58) - SEPA credit transfer, dominant in Eurozone</para>
-    /// <para>• <see cref="SepaDirectDebit"/> (59) - SEPA direct debit for agreed debit transactions</para>
+    /// <para>• <see cref="CreditTransferNonSEPA"/> (30) - Standard bank transfer, most common worldwide</para>
+    /// <para>• <see cref="SEPACreditTransfer"/> (58) - SEPA credit transfer, dominant in Eurozone</para>
+    /// <para>• <see cref="SEPADirectDebit"/> (59) - SEPA direct debit for agreed debit transactions</para>
     /// 
     /// <para><strong>Additional common codes:</strong></para>
     /// <para>• <see cref="DirectDebit"/> (49) - Direct debit for recurring payments</para>
@@ -38,12 +38,12 @@ namespace s2industries.ZUGFeRD
     /// <para>In German/European XRechnung implementations, codes 30 and 58 are predominantly used.</para>
     /// <para>SEPA codes (58, 59) dominate in the Eurozone, while code 30 serves as fallback for non-SEPA transfers.</para>
     /// <para>Card payments (48, 54, 55) are typically used only when explicitly agreed and stated on the invoice.</para>
-    /// <para>Other codes like <see cref="DebitTransferNonSepa"/> (31) are rarely seen in German/European invoices.</para>
+    /// <para>Other codes like <see cref="DebitTransferNonSEPA"/> (31) are rarely seen in German/European invoices.</para>
     /// 
     /// <para><strong>B2B vs B2C:</strong></para>
     /// <para>B2B transactions primarily use bank transfers (30, 58), while B2C may include card payments (48, 54, 55).</para>
     /// </summary>
-    public enum ElectronicAddressSchemeIdentifiers
+    public enum PaymentMeansTypeCodes
     {
         /// <summary>
         /// Instrument not defined
@@ -223,13 +223,13 @@ namespace s2industries.ZUGFeRD
         /// Credit transfer (non-SEPA)
         /// </summary>
         [EnumStringValue("30")]
-        CreditTransferNonSepa,
+        CreditTransferNonSEPA,
 
         /// <summary>
         /// Debit transfer (non-SEPA)
         /// </summary>
         [EnumStringValue("31")]
-        DebitTransferNonSepa,
+        DebitTransferNonSEPA,
 
         /// <summary>
         /// ACH demand cash concentration/disbursement plus (CCD+)
@@ -394,13 +394,13 @@ namespace s2industries.ZUGFeRD
         /// SEPA credit transfer (SEPA)
         /// </summary>
         [EnumStringValue("58")]
-        SepaCreditTransfer,
+        SEPACreditTransfer,
 
         /// <summary>
         /// SEPA direct debit (SEPA)
         /// </summary>
         [EnumStringValue("59")]
-        SepaDirectDebit,
+        SEPADirectDebit,
 
         /// <summary>
         /// Promissory note

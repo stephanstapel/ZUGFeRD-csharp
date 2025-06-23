@@ -1174,7 +1174,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.CreditorBankAccounts[0].BIC, "INGDDEFFXXX");
             Assert.AreEqual(desc.CreditorBankAccounts[0].Name, "Harry Hirsch");
 
-            Assert.AreEqual(desc.PaymentMeans.TypeCode, (PaymentMeansTypeCodes)30);
+            Assert.AreEqual(desc.PaymentMeans.TypeCode, PaymentMeansTypeCodes.CreditTransferNonSEPA);
         } // !TestReferenceXRechnung21UBL()
 
 
