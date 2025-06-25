@@ -63,7 +63,6 @@ This library allows to load and create PDF/A files.
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FontInfo" Version="1.2.0" />
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.0-preview.5.25277.114" />
     <PackageReference Include="ZUGFeRD-csharp" Version="17.4.0" />
