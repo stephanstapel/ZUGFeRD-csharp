@@ -41,6 +41,12 @@ namespace s2industries.ZUGFeRD
     public enum QuantityCodes
     {
         /// <summary>
+        /// megajoule
+        /// </summary>
+        [EnumStringValue("3B")]
+        _3B,
+
+        /// <summary>
         /// Eins (Stück)
         /// Abkürzung: Stk.
         ///
@@ -144,10 +150,26 @@ namespace s2industries.ZUGFeRD
         IE,
 
         /// <summary>
+        /// kilowatt demand
+        /// A unit of measure defining the power load measured at predetermined intervals.
+        /// </summary>
+        K1,
+
+        /// <summary>
+        /// standard acceleration of free fall
+        /// </summary>
+        K40,
+
+        /// <summary>
         /// Kilogramm
         /// Abkürzung: kg
         /// </summary>
         KGM,
+
+        /// <summary>
+        /// kilojoule
+        /// </summary>
+        KJO,
 
         /// <summary>
         /// Hundred
