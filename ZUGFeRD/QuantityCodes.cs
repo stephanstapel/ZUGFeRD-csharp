@@ -41,6 +41,23 @@ namespace s2industries.ZUGFeRD
     public enum QuantityCodes
     {
         /// <summary>
+        /// megajoule
+        /// </summary>
+        [EnumStringValue("3B")]
+        _3B,
+
+        /// <summary>
+        /// part per million
+        /// </summary>
+        [EnumStringValue("59")]
+        _59,
+
+        /// <summary>
+        /// millisecond
+        /// </summary>
+        C26,
+
+        /// <summary>
         /// Eins (Stück)
         /// Abkürzung: Stk.
         ///
@@ -48,6 +65,11 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         [EnumStringValue("C62", "PCE")]
         C62,
+
+        /// <summary>
+        /// degree Celsius
+        /// </summary>
+        CEL,
 
         /// <summary>
         /// centigram; Zentigramm
@@ -83,6 +105,11 @@ namespace s2industries.ZUGFeRD
         CNP,
 
         /// <summary>
+        /// volt - ampere
+        /// </summary>
+        D46,
+
+        /// <summary>
         /// Tag
         /// Abkürzung: Tag(e)
         /// </summary>
@@ -112,6 +139,11 @@ namespace s2industries.ZUGFeRD
         /// each: A unit of count defining the number of items regarded as separate units.
         /// </summary>
         EA,
+
+        /// <summary>
+        /// gigajoule
+        /// </summary>
+        GV,
 
         /// <summary>
         /// Piece: A unit of count defining the number of pieces (piece: a single item, article or exemplar).
@@ -144,10 +176,43 @@ namespace s2industries.ZUGFeRD
         IE,
 
         /// <summary>
+        /// lux
+        /// </summary>
+        LUX,
+
+        /// <summary>
+        /// kilowatt demand
+        /// A unit of measure defining the power load measured at predetermined intervals.
+        /// </summary>
+        K1,
+
+        /// <summary>
+        /// kilovolt ampere reactive hour
+        /// A unit of measure defining the accumulated reactive energy equal to one kilovolt ampere of reactive power per hour.
+        /// </summary>
+        K3,
+
+        /// <summary>
+        /// standard acceleration of free fall
+        /// </summary>
+        K40,
+
+        /// <summary>
         /// Kilogramm
         /// Abkürzung: kg
         /// </summary>
         KGM,
+
+        /// <summary>
+        /// kilojoule
+        /// </summary>
+        KJO,
+
+        /// <summary>
+        /// kilovar
+        /// Abkürzung: kVAR
+        /// </summary>
+        KVR,
 
         /// <summary>
         /// Hundred
@@ -190,6 +255,23 @@ namespace s2industries.ZUGFeRD
         /// Abkürzung: l
         /// </summary>
         LTR,
+
+        /// <summary>
+        /// megavolt ampere reactive hour
+        /// A unit of electrical reactive power defining the total amount of reactive power across a power system.
+        /// </summary>
+        MAH,
+
+        /// <summary>
+        /// megawatt
+        /// A unit of power defining the rate of energy transferred or consumed when a current of 1000 amperes flows due to a potential of 1000 volts at unity power factor.
+        /// </summary>
+        MAW,
+
+        /// <summary>
+        /// millibar
+        /// </summary>
+        MBR,
 
         /// <summary>
         /// Minute
@@ -732,6 +814,31 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Pot
         /// </summary>
-        XPT
+        XPT,
+
+        /// <summary>
+        /// Pallet, wooden
+        /// </summary>
+        X8A,
+
+        /// <summary>
+        /// Crate, multiple layer, cardboard
+        /// </summary>
+        XDC,
+
+        /// <summary>
+        /// Cage, roll
+        /// </summary>
+        XCW,
+
+        /// <summary>
+        /// Sack, multi-wall
+        /// </summary>
+        XMS,
+
+        /// <summary>
+        /// ton-force (US short)
+        /// </summary>
+        L94
     }
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -929,9 +929,23 @@ namespace s2industries.ZUGFeRD
                     if (!string.IsNullOrWhiteSpace(this._Descriptor.PaymentMeans?.SEPACreditorIdentifier))
                     {
                         writer.WriteStartElement("cac", "PartyIdentification");
-                        writer.WriteStartElement("cbc", "ID");
+                        writer.WriteStartElement("cbc", "ID"); // BT-90
                         writer.WriteAttributeString("schemeID", "SEPA");
                         writer.WriteValue(this._Descriptor.PaymentMeans.SEPACreditorIdentifier);
+                        writer.WriteEndElement();//!ID
+                        writer.WriteEndElement();//!PartyIdentification
+                    }
+                    // no 'else' because the cardinality is 0..n
+                    if ((party.ID != null) && (!String.IsNullOrWhiteSpace(party.ID.ID)))
+                    {
+                        writer.WriteStartElement("cac", "PartyIdentification");
+                        writer.WriteStartElement("cbc", "ID"); // BT-29
+                        // 'SchemeID' is optional
+                        if (party.ID.SchemeID.HasValue)
+                        {
+                            writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
+                        }
+                        writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();//!ID
                         writer.WriteEndElement();//!PartyIdentification
                     }
