@@ -69,7 +69,7 @@ namespace s2industries.ZUGFeRD
 
         protected void _WriteComment(ProfileAwareXmlTextWriter writer, InvoiceFormatOptions options, string comment)
         {
-            if (writer == null || String.IsNullOrEmpty(comment))
+            if ((writer == null) || (options == null) || String.IsNullOrEmpty(comment))
             {
                 return;
             }
