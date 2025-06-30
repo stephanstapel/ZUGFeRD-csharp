@@ -236,6 +236,19 @@ namespace s2industries.ZUGFeRD
         } // !WriteAttributeString()
 
 
+        public void WriteComment(string comment, Profile profile = Profile.Unknown)
+        {
+            StackInfo infoForCurrentNode = this.XmlStack.FirstOrDefault();
+            if ((infoForCurrentNode != null) && !infoForCurrentNode.IsVisible)
+            {
+                return;
+            }
+
+            // write value
+            this.TextWriter?.WriteComment(comment);
+        } // !WriteComment()
+
+
         public void WriteRawString(string value, Profile profile = Profile.Unknown)
         {
             StackInfo infoForCurrentNode = this.XmlStack.First();

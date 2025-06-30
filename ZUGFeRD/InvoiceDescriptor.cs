@@ -1588,11 +1588,11 @@ namespace s2industries.ZUGFeRD
         /// <param name="version">ZUGFeRD version to use</param>
         /// <param name="profile">ZUGFeRD profile to use</param>
         /// <param name="format">Output format (CII or UBL)</param>
-        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
+        public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             this.Profile = profile;
             IInvoiceDescriptorWriter writer = _SelectInvoiceDescriptorWriter(version);
-            writer.Save(this, stream, format);
+            writer.Save(this, stream, format, options);
         } // !Save()
 
 
@@ -1603,11 +1603,11 @@ namespace s2industries.ZUGFeRD
         /// <param name="version">ZUGFeRD version to use</param>
         /// <param name="profile">ZUGFeRD profile to use</param>
         /// <param name="format">Output format (CII or UBL)</param>
-        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
+        public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             this.Profile = profile;
             IInvoiceDescriptorWriter writer = _SelectInvoiceDescriptorWriter(version);
-            writer.Save(this, filename, format);
+            writer.Save(this, filename, format, options);
         } // !Save()
 
 

@@ -42,16 +42,40 @@ namespace s2industries.ZUGFeRD.PDF
         } // !LoadFromPdfAsync()
 
 
+        public static InvoiceDescriptor LoadFromPdf(Stream pdfStream)
+        {
+            return InvoiceDescriptorPdfLoader.LoadAsync(pdfStream)
+                .GetAwaiter()
+                .GetResult();
+        } // !LoadFromPdf()
+
+
         public static async Task<InvoiceDescriptor> LoadFromPdfAsync(string pdfPath)
         {
             return await InvoiceDescriptorPdfLoader.LoadAsync(pdfPath);
         } // !LoadFromPdfAsync()
 
 
+        public static InvoiceDescriptor LoadFromPdf(string pdfPath)
+        {
+            return InvoiceDescriptorPdfLoader.LoadAsync(pdfPath)
+                .GetAwaiter()
+                .GetResult();
+        } // !LoadFromPdf()
+
+
         public static async Task SaveToPdfAsync(Stream targetPdfStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor, string password = null)
         {
             await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfStream, version, profile, format, pdfSourceStream, descriptor, password);
         } // !SaveToPdfAsync()
+
+
+        public static void SaveToPdf(Stream targetPdfStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor, string password = null)
+        {
+            InvoiceDescriptorPdfSaver.SaveAsync(targetPdfStream, version, profile, format, pdfSourceStream, descriptor, password)
+                .GetAwaiter()
+                .GetResult();
+        } // !SaveToPdf()
 
 
         /// <summary>
@@ -73,5 +97,28 @@ namespace s2industries.ZUGFeRD.PDF
         {
             await InvoiceDescriptorPdfSaver.SaveAsync(targetPdfPath, version, profile, format, pdfSourcePath, descriptor, password);
         } // !SaveToPdfAsync()
+
+
+        /// <summary>
+        /// Saves the invoice to a file.
+        ///
+        /// The invoice PDF is saved to the targetPath. The ZUGFeRD/ Factur-X or XRechnung invoice is embedded into the source PDF file.
+        /// 
+        /// Optionally, you can pass a password. This password is used for securing the output file.
+        /// </summary>
+        /// <param name="targetPdfPath"></param>
+        /// <param name="version"></param>
+        /// <param name="profile"></param>
+        /// <param name="format"></param>
+        /// <param name="pdfSourcePath"></param>
+        /// <param name="descriptor"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static void SaveToPdf(string targetPdfPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
+        {
+            InvoiceDescriptorPdfSaver.SaveAsync(targetPdfPath, version, profile, format, pdfSourcePath, descriptor, password)
+                .GetAwaiter()
+                .GetResult();
+        } // !SaveToPdf()
     }
 }

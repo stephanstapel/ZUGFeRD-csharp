@@ -38,14 +38,6 @@ namespace s2industries.ZUGFeRD.PDF
         } // !LoadAsync()
 
 
-        internal static InvoiceDescriptor Load(Stream pdfStream)
-        {
-            return LoadAsync(pdfStream)
-                .GetAwaiter()
-                .GetResult();
-        } // !Load()
-
-
         internal static async Task<InvoiceDescriptor> LoadAsync(string pdfPath)
         {
             if (!File.Exists(pdfPath))
@@ -59,12 +51,6 @@ namespace s2industries.ZUGFeRD.PDF
                 return await _LoadXmlAsync(pdfDocument);
             }
         } // !LoadAsync()
-
-
-        internal static InvoiceDescriptor Load(string pdfPath)
-        {
-            return LoadAsync(pdfPath).GetAwaiter().GetResult();
-        } // !Load()
 
 
         private static async Task<InvoiceDescriptor> _LoadXmlAsync(PdfDocument document)

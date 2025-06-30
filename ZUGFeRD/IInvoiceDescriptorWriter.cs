@@ -27,15 +27,15 @@ namespace s2industries.ZUGFeRD
 {
     internal abstract class IInvoiceDescriptorWriter
     {
-        public abstract void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII);
+        public abstract void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null);
 
 
-        public void Save(InvoiceDescriptor descriptor, string filename, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
+        public void Save(InvoiceDescriptor descriptor, string filename, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             if (Validate(descriptor, true))
             {
                 FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-                Save(descriptor, fs, format);
+                Save(descriptor, fs, format, options);
                 fs.Flush();
                 fs.Close();
             }
@@ -43,6 +43,44 @@ namespace s2industries.ZUGFeRD
 
 
         internal abstract bool Validate(InvoiceDescriptor descriptor, bool throwExceptions = true);
+
+
+        protected void _WriteHeaderComments(ProfileAwareXmlTextWriter writer, InvoiceFormatOptions options)
+        {
+            if (options == null || writer == null)
+            {
+                return;
+            }
+
+            if (!options.IncludeXmlComments || options.XmlHeaderComments?.Count == 0)
+            {
+                return;
+            }
+
+            foreach (string comment in options.XmlHeaderComments)
+            {
+                if (!String.IsNullOrEmpty(comment))
+                {
+                    writer.WriteComment(comment);
+                }
+            }
+        } // !_WriteHeaderComments()
+
+
+        protected void _WriteComment(ProfileAwareXmlTextWriter writer, InvoiceFormatOptions options, string comment)
+        {
+            if (writer == null || String.IsNullOrEmpty(comment))
+            {
+                return;
+            }
+
+            if (!options.IncludeXmlComments)
+            {
+                return;
+            }
+
+            writer.WriteComment(comment);
+        } // !_WriteComment()
 
 
         protected string _formatDecimal(decimal? value, int numDecimals = 2)

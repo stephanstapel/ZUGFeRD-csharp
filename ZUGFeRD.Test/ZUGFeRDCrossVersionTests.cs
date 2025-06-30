@@ -16,12 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -582,5 +583,94 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNull(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges()[0].BasisAmount); // not written in XRechnung
             Assert.AreEqual(zugferd23XRechnungInvoiceWithGrossWithoutAllowanceCharge.GetTradeLineItems()[0].GetTradeAllowanceCharges()[0].ActualAmount, discountAmount);
         } // !TestGrossPriceRepresentationForXRechnungAndNotXRechnungPositiveCase()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestHeaderComment(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceProvider provider = new InvoiceProvider();
+            InvoiceDescriptor desc = provider.CreateInvoice();
+
+            string headerComment = System.Guid.NewGuid().ToString();
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format, InvoiceOptionsBuilder.Create().AddHeaderXmlComment(headerComment).EnableXmlComments().Build());
+
+            string content = Encoding.UTF8.GetString(ms.ToArray());
+
+            Assert.IsTrue(content.Contains(headerComment));
+        } // !TestHeaderComment()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestWihoutHeaderComment(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceProvider provider = new InvoiceProvider();
+            InvoiceDescriptor desc = provider.CreateInvoice();
+
+            string headerComment = System.Guid.NewGuid().ToString();
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format, InvoiceOptionsBuilder.Create().AddHeaderXmlComment(headerComment).EnableXmlComments(false).Build());
+
+            string content = Encoding.UTF8.GetString(ms.ToArray());
+            Assert.IsFalse(content.Contains(headerComment));
+        } // !TestWihoutHeaderComment()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        public void TestZUGFeRDElementComments(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceProvider provider = new InvoiceProvider();
+            InvoiceDescriptor desc = provider.CreateInvoice();
+
+            string headerComment = System.Guid.NewGuid().ToString();
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format, InvoiceOptionsBuilder.Create().EnableXmlComments(true).Build());
+
+            List<string> lines = Encoding.UTF8.GetString(ms.ToArray()).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            for (int i = 1; i < lines.Count; i++)
+            {
+                if (lines[i].Contains("<ram:IncludedSupplyChainTradeLineItem>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+            }
+
+        } // !TestZUGFeRDElementComments()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.Extended)]
+        public void TestXRechnungElementComments(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceProvider provider = new InvoiceProvider();
+            InvoiceDescriptor desc = provider.CreateInvoice();
+
+            string headerComment = System.Guid.NewGuid().ToString();
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format, InvoiceOptionsBuilder.Create().EnableXmlComments(true).Build());
+
+            List<string> lines = Encoding.UTF8.GetString(ms.ToArray()).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            for (int i = 1; i < lines.Count; i++)
+            {
+                if (lines[i].Contains("<ram:IncludedSupplyChainTradeLineItem>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+            }
+
+        } // !TestXRechnungElementComments()
     }
 }

@@ -39,7 +39,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="descriptor">The invoice object that should be saved</param>
         /// <param name="stream">The target stream for saving the invoice</param>
         /// <param name="format">Format of the target file</param>
-        public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII)
+        public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             IInvoiceDescriptorWriter writer = null;
 
@@ -57,7 +57,7 @@ namespace s2industries.ZUGFeRD
                 throw new UnsupportedException($"Profile {descriptor.Profile.ToString()} and format {format.EnumToString()} is not supported.");
             }
 
-            writer.Save(descriptor, stream, format);
+            writer.Save(descriptor, stream, format, options);
         } // !Save()
 
 

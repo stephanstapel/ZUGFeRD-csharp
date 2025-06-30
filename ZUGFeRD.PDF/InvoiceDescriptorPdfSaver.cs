@@ -59,14 +59,6 @@ namespace s2industries.ZUGFeRD.PDF
         } // !SaveAsync()
 
 
-        internal static void Save(Stream targetStream, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, Stream pdfSourceStream, InvoiceDescriptor descriptor, string password = null)
-        {
-            SaveAsync(targetStream, version, profile, format, pdfSourceStream, descriptor, password)
-                .GetAwaiter()
-                .GetResult();
-        } // !Save()
-
-
         internal static async Task SaveAsync(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
         {
             if (!File.Exists(pdfSourcePath))
@@ -87,14 +79,6 @@ namespace s2industries.ZUGFeRD.PDF
                 System.IO.File.WriteAllBytes(targetPath, targetStream.ToArray());
             }            
         } // !SaveAsync()
-
-
-        internal static void Save(string targetPath, ZUGFeRDVersion version, Profile profile, ZUGFeRDFormats format, string pdfSourcePath, InvoiceDescriptor descriptor, string password = null)
-        {
-            SaveAsync(targetPath, version, profile, format, pdfSourcePath, descriptor, password)
-                .GetAwaiter()
-                .GetResult();
-        } // !Save()
 
 
         private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
