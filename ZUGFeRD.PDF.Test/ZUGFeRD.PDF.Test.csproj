@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>s2industries.ZUGFeRD.PDF.Test</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>ZUGFeRD.PDF.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
