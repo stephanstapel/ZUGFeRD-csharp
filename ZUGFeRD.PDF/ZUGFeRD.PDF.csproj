@@ -2,52 +2,54 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
-	<Authors>Stephan Stapel</Authors>
+    <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>ZUGFeRD.PDF-csharp</PackageId>
     <PackageReadmeFile></PackageReadmeFile>
     <RepositoryUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</RepositoryUrl>
     <UserSecretsId>ceeaa3c6-7c48-4061-b8f6-da26a9de5879</UserSecretsId>
     <RepositoryType>git</RepositoryType>
     <IncludeSymbols>True</IncludeSymbols>
-	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	<PublishRepositoryUrl>true</PublishRepositoryUrl>
-	<EmbedUntrackedSources>true</EmbedUntrackedSources>
-	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
-    <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
-    <Version>17.4.0</Version>	
-    <PackageReleaseNotes>17.4.0
-* Synchronous PDF loading and saving
-* Replaced SkiaSharp towards minimalistic custom font reading
-* Require ZUGFERD-csharp 17.4.0
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>
+    <Version>17.4.0</Version>
+    <PackageReleaseNotes>
+      17.4.0
+      * Synchronous PDF loading and saving
+      * Replaced SkiaSharp towards minimalistic custom font reading
+      * Require ZUGFERD-csharp 17.4.0
 
-17.3.0:
-* Require ZUGFeRD-csharp 17.3.0
+      17.3.0:
+      * Require ZUGFeRD-csharp 17.3.0
 
-17.2.1:
-* Enhanced filename checks
-* PDF Metadata enhancements
+      17.2.1:
+      * Enhanced filename checks
+      * PDF Metadata enhancements
 
-17.1.0:
-* No major change
+      17.1.0:
+      * No major change
 
-17.0.0: 
-* added font embedding
-* fully compliant XMP metadata
-</PackageReleaseNotes>	
-    <AssemblyName>s2industries.ZUGFeRD.PDF</AssemblyName>	
-    <AssemblyVersion>17.4.0</AssemblyVersion>	
-    <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
-It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
-A special favor is the so-called XRechnung which is also supported by this library.
+      17.0.0:
+      * added font embedding
+      * fully compliant XMP metadata
+    </PackageReleaseNotes>
+    <AssemblyName>s2industries.ZUGFeRD.PDF</AssemblyName>
+    <AssemblyVersion>17.4.0</AssemblyVersion>
+    <Description>
+      ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
+      It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
+      A special favor is the so-called XRechnung which is also supported by this library.
 
-This library allows to load and create PDF/A files.
-</Description>	
-    <Copyright>Stephan Stapel, s2 industries, 2024</Copyright>	
-    <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>	
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>	
-    <SignAssembly>True</SignAssembly>	
+      This library allows to load and create PDF/A files.
+    </Description>
+    <Copyright>Stephan Stapel, s2 industries, 2024</Copyright>
+    <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.PDF.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
@@ -66,6 +68,19 @@ This library allows to load and create PDF/A files.
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.0-preview.5.25277.114" />
     <PackageReference Include="ZUGFeRD-csharp" Version="17.4.0" />
+  </ItemGroup>
+
+  <ItemGroup
+    Condition="'$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netstandard2.0'">
+    <InternalsVisibleTo Include="ZUGFeRD.PDF.Test"
+                        PublicKey="002400000480000094000000060200000024000052534131000400000100010081c1f498ffd755d92e3d0514c50e62fc59ca4a448c7d718564117c51e406b92035e0b2651f3cdf29a1207fcd85ab8a6be0d66e1b0fe3d9a1cbd1882dd7569c8320e17752bd835e74ef6a13c79592b864fcfb8507de5de60f470ea3b0ed8bf49ab0f09bd5b4be081a5964ab16791dd1f3b46e78ef5a355e783998b9be92a938f3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net480'">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>
+        ZUGFeRD.PDF.Test, PublicKey=002400000480000094000000060200000024000052534131000400000100010081c1f498ffd755d92e3d0514c50e62fc59ca4a448c7d718564117c51e406b92035e0b2651f3cdf29a1207fcd85ab8a6be0d66e1b0fe3d9a1cbd1882dd7569c8320e17752bd835e74ef6a13c79592b864fcfb8507de5de60f470ea3b0ed8bf49ab0f09bd5b4be081a5964ab16791dd1f3b46e78ef5a355e783998b9be92a938f3</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

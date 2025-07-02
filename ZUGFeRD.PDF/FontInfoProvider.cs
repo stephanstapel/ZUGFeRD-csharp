@@ -82,7 +82,7 @@ namespace s2industries.ZUGFeRD.PDF
             return installedFonts.ToList();
         }
 
-        private static IEnumerable<string> GetDefaultFontDirectories()
+        internal static IEnumerable<string> GetDefaultFontDirectories()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
