@@ -1152,6 +1152,7 @@ namespace s2industries.ZUGFeRD
 
             #region SpecifiedTradeSettlementHeaderMonetarySummation
             //Gesamtsummen auf Dokumentenebene
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementHeaderMonetarySummationComment);
             _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementHeaderMonetarySummation");
             _writeAmount(_Writer, "ram", "LineTotalAmount", this._Descriptor.LineTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);   // Summe der Nettobeträge aller Rechnungspositionen
             _writeOptionalAmount(_Writer, "ram", "ChargeTotalAmount", this._Descriptor.ChargeTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);       // Summe der Zuschläge auf Dokumentenebene, BT-108

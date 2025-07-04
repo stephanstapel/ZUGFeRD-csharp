@@ -490,6 +490,7 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteEndElement(); // !TaxTotal
             }
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementHeaderMonetarySummationComment);
             _Writer.WriteStartElement("cac", "LegalMonetaryTotal");
             _writeOptionalAmount(_Writer, "cbc", "LineExtensionAmount", this._Descriptor.LineTotalAmount, forceCurrency: true);
             _writeOptionalAmount(_Writer, "cbc", "TaxExclusiveAmount", this._Descriptor.TaxBasisAmount, forceCurrency: true);
@@ -500,15 +501,15 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(_Writer, "cbc", "PrepaidAmount", this._Descriptor.TotalPrepaidAmount, forceCurrency: true);
             _writeOptionalAmount(_Writer, "cbc", "PayableAmount", this._Descriptor.DuePayableAmount, forceCurrency: true);
             //_writeOptionalAmount(_Writer, "cbc", "PayableAlternativeAmount", this._Descriptor.RoundingAmount, forceCurrency: true);
-            _Writer.WriteEndElement(); //!LegalMonetaryTotal
-
+            _Writer.WriteEndElement(); //!LegalMonetaryTotal            
 
             foreach (TradeLineItem tradeLineItem in this._Descriptor.GetTradeLineItems())
             {
                 //Skip items with parent line id because these are written recursively in the _WriteTradeLineItem method
                 if (String.IsNullOrEmpty(tradeLineItem.AssociatedDocument.ParentLineID))
                 {
-                    _WriteTradeLineItem(tradeLineItem, isInvoice);
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.IncludedSupplyChainTradeLineItemComment);
+                    _WriteTradeLineItem(tradeLineItem, isInvoice, options);
                 }
             }
 
@@ -588,7 +589,7 @@ namespace s2industries.ZUGFeRD
         } // !_WriteDocumentLevelAllowanceCharges()
 
 
-        private void _WriteTradeLineItem(TradeLineItem tradeLineItem, bool isInvoice = true)
+        private void _WriteTradeLineItem(TradeLineItem tradeLineItem, bool isInvoice = true, InvoiceFormatOptions options = null)
         {
             if (String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.ParentLineID))
             {
@@ -634,6 +635,7 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteValue(_formatDecimal(tradeLineItem.BilledQuantity, 4));
             _Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
             _writeOptionalAmount(_Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
 
             if (tradeLineItem.AdditionalReferencedDocuments.Count > 0)
@@ -709,6 +711,7 @@ namespace s2industries.ZUGFeRD
 
             _Writer.WriteStartElement("cac", "Price");  // BG-29
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.NetPriceProductTradePriceComment);
             _Writer.WriteStartElement("cbc", "PriceAmount");
             _Writer.WriteAttributeString("currencyID", this._Descriptor.Currency.EnumToString());
 			// UBL-DT-01 explicitly excempts the price amount from the 2 decimal rule for amount elements,
@@ -764,7 +767,7 @@ namespace s2industries.ZUGFeRD
             //Write sub invoice lines recursively
             foreach (TradeLineItem subTradeLineItem in this._Descriptor.GetTradeLineItems().Where(t => t.AssociatedDocument.ParentLineID == tradeLineItem.AssociatedDocument.LineID))
             {
-                _WriteTradeLineItem(subTradeLineItem, isInvoice);
+                _WriteTradeLineItem(subTradeLineItem, isInvoice, options);
             }
 
             _Writer.WriteEndElement(); //!InvoiceLine

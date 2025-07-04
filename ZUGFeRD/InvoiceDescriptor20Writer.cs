@@ -131,6 +131,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (TradeLineItem tradeLineItem in this._Descriptor.GetTradeLineItems())
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.IncludedSupplyChainTradeLineItemComment);
                 _Writer.WriteStartElement("ram", "IncludedSupplyChainTradeLineItem");
 
                 if (tradeLineItem.AssociatedDocument != null)
@@ -312,6 +313,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
                 }
 
+                _WriteComment(_Writer, options, InvoiceCommentConstants.NetPriceProductTradePriceComment);
                 _Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
                 _writeOptionalAdaptiveAmount(_Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4);
 
@@ -408,6 +410,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteEndElement(); // !BillingSpecifiedPeriod
                 }
 
+                _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
                 _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementLineMonetarySummation");
 
                 decimal total = 0m;
@@ -914,6 +917,7 @@ namespace s2industries.ZUGFeRD
             }
 
             //  16. SpecifiedTradeSettlementHeaderMonetarySummation
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementHeaderMonetarySummationComment);
             _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementHeaderMonetarySummation");
             _writeOptionalAmount(_Writer, "ram", "LineTotalAmount", this._Descriptor.LineTotalAmount);
             _writeOptionalAmount(_Writer, "ram", "ChargeTotalAmount", this._Descriptor.ChargeTotalAmount);

@@ -432,6 +432,7 @@ namespace s2industries.ZUGFeRD
                     break;
             }
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementHeaderMonetarySummationComment);
             _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementMonetarySummation");
             _writeOptionalAmount(_Writer, "ram", "LineTotalAmount", this._Descriptor.LineTotalAmount);
             _writeOptionalAmount(_Writer, "ram", "ChargeTotalAmount", this._Descriptor.ChargeTotalAmount ?? 0m); // must occur exactly 1 time
@@ -447,6 +448,7 @@ namespace s2industries.ZUGFeRD
 
             foreach (TradeLineItem tradeLineItem in this._Descriptor.GetTradeLineItems())
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.IncludedSupplyChainTradeLineItemComment);
                 _Writer.WriteStartElement("ram", "IncludedSupplyChainTradeLineItem");
 
                 if (tradeLineItem.AssociatedDocument != null)
@@ -554,6 +556,7 @@ namespace s2industries.ZUGFeRD
 
                     _Writer.WriteEndElement(); // ram:GrossPriceProductTradePrice
 
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.NetPriceProductTradePriceComment);
                     _Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
                     _writeOptionalAdaptiveAmount(_Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4, true);
 
@@ -642,6 +645,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteEndElement(); // !BillingSpecifiedPeriod
                 }
 
+                _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
                 _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementMonetarySummation");
 
                 decimal total = 0m;

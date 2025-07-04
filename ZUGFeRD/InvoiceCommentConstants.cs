@@ -18,14 +18,27 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
+
 namespace s2industries.ZUGFeRD
-{
+{    
     internal class InvoiceCommentConstants
     {
         internal static string IncludedSupplyChainTradeLineItemComment = "Artikelposition";
         internal static string NetPriceProductTradePriceComment = "Nettopreis";
         internal static string SpecifiedTradeSettlementLineMonetarySummationComment = "Gesamtsummierung pro Position";
+        internal static string ApplicableHeaderTradeAgreementComment = "Formulardaten wie Käufer, Verkäufer etc.";
+        internal static string BuyerReferenceComment = "Ihr Zeichen bzw. Leitweg-Id";
+        internal static string SellerTradePartyComment = "Verkäufer";
+        internal static string BuyerTradePartyComment = "Käufer";
+        internal static string BuyerOrderReferencedDocumentComment = "Bestelldokument";
+        internal static string ApplicableHeaderTradeDeliveryComment = "Lieferdaten samt abw. Lieferadresse";
+        internal static string DespatchAdviceReferencedDocumentComment = "Lieferschein";
+        internal static string ApplicableHeaderTradeSettlementComment = "Dokumentdaten";
+        internal static string SpecifiedTradeSettlementPaymentMeansComment = "Zahlungsart mit Zahlungsinfo";
+        internal static string ApplicableTradeTaxComment = "Steuerposition pro Steuersatz für Dokument";
+        internal static string SpecifiedTradeSettlementHeaderMonetarySummationComment = "Gesamtsummierung des Dokumentes";
     }
 }

@@ -645,13 +645,50 @@ namespace s2industries.ZUGFeRD.Test
                 {
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }
+
+                if (lines[i].Contains("<ram:NetPriceProductTradePrice>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // totals per item
+                if (version == ZUGFeRDVersion.Version1)
+                {
+                    if (lines[i].Contains("<ram:SpecifiedTradeSettlementMonetarySummation>"))
+                    {
+                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    }
+                }
+                else
+                {
+                    if (lines[i].Contains("<ram:SpecifiedTradeSettlementLineMonetarySummation>"))
+                    {
+                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    }
+                }                               
+
+                // totals on header level
+                if (version == ZUGFeRDVersion.Version1)
+                {
+                    if (lines[i].Contains("<ram:SpecifiedTradeSettlementMonetarySummation>"))
+                    {
+                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    }
+                }
+                else
+                {
+                    if (lines[i].Contains("<ram:SpecifiedTradeSettlementHeaderMonetarySummation>"))
+                    {
+                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    }
+                }
             }
 
         } // !TestZUGFeRDElementComments()
 
 
         [TestMethod]
-        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
         public void TestXRechnungElementComments(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
         {
             InvoiceProvider provider = new InvoiceProvider();
@@ -665,7 +702,30 @@ namespace s2industries.ZUGFeRD.Test
 
             for (int i = 1; i < lines.Count; i++)
             {
-                if (lines[i].Contains("<ram:IncludedSupplyChainTradeLineItem>"))
+                if (lines[i].Contains("<cac:InvoiceLine>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+
+                if (lines[i].Contains("<cbc:PriceAmount>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                if (lines[i].Contains("<cac:InvoiceLine>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // totals on item level
+                if (lines[i].Contains("<cbc:LineExtensionAmount>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // totals on header level
+                if (lines[i].Contains("<cac:LegalMonetaryTotal>"))
                 {
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }
