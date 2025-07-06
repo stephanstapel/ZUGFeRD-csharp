@@ -154,6 +154,7 @@ namespace s2industries.ZUGFeRD
             // OrderReference is optional
             if (!string.IsNullOrWhiteSpace(this._Descriptor.OrderNo))
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerOrderReferencedDocumentComment);
                 _Writer.WriteStartElement("cac", "OrderReference");
                 _Writer.WriteElementString("cbc", "ID", this._Descriptor.OrderNo);
                 _Writer.WriteOptionalElementString("cbc", "SalesOrderID",
@@ -182,6 +183,7 @@ namespace s2industries.ZUGFeRD
             // DespatchDocumentReference
             if (this._Descriptor.DespatchAdviceReferencedDocument != null)
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.DespatchAdviceReferencedDocumentComment);
                 _Writer.WriteStartElement("cac", "DespatchDocumentReference");
                 _Writer.WriteOptionalElementString("cbc", "ID", this._Descriptor.DespatchAdviceReferencedDocument.ID);
                 _Writer.WriteEndElement(); // !DespatchDocumentReference
@@ -253,11 +255,13 @@ namespace s2industries.ZUGFeRD
             #region SellerTradeParty
 
             // AccountingSupplierParty = PartyTypes.SellerTradeParty
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SellerTradePartyComment);
             _writeOptionalParty(_Writer, PartyTypes.SellerTradeParty, this._Descriptor.Seller, this._Descriptor.SellerContact, this._Descriptor.SellerElectronicAddress, this._Descriptor.SellerTaxRegistration);
             #endregion
 
             #region BuyerTradeParty
             //AccountingCustomerParty = PartyTypes.BuyerTradeParty
+            _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerTradePartyComment);
             _writeOptionalParty(_Writer, PartyTypes.BuyerTradeParty, this._Descriptor.Buyer, this._Descriptor.BuyerContact, this._Descriptor.BuyerElectronicAddress, this._Descriptor.BuyerTaxRegistration);
             #endregion
 
@@ -317,6 +321,7 @@ namespace s2industries.ZUGFeRD
             }
 
             // PaymentMeans
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeSettlementComment);
             if (!this._Descriptor.AnyCreditorFinancialAccount() && !this._Descriptor.AnyDebitorFinancialAccount())
             {
                 if (this._Descriptor.PaymentMeans != null)
@@ -324,6 +329,7 @@ namespace s2industries.ZUGFeRD
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
                     {
+                        _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                         _Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                         _Writer.WriteElementString("cbc", "PaymentMeansCode", this._Descriptor.PaymentMeans.TypeCode.EnumToString());
                         _Writer.WriteOptionalElementString("cbc", "PaymentID", this._Descriptor.PaymentReference);
@@ -343,6 +349,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (BankAccount account in this._Descriptor.GetCreditorFinancialAccounts())
                 {
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("cac", "PaymentMeans", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
@@ -466,6 +473,7 @@ namespace s2industries.ZUGFeRD
 
                 foreach (Tax tax in this._Descriptor.GetApplicableTradeTaxes())
                 {
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableTradeTaxComment);
                     _Writer.WriteStartElement("cac", "TaxSubtotal");
                     _writeOptionalAmount(_Writer, "cbc", "TaxableAmount", tax.BasisAmount, forceCurrency: true);
                     _writeOptionalAmount(_Writer, "cbc", "TaxAmount", tax.TaxAmount, forceCurrency: true);
@@ -872,7 +880,7 @@ namespace s2industries.ZUGFeRD
             {
                 switch (partyType)
                 {
-                    case PartyTypes.SellerTradeParty:
+                    case PartyTypes.SellerTradeParty:                        
                         writer.WriteStartElement("cac", "AccountingSupplierParty", this._Descriptor.Profile);
                         break;
                     case PartyTypes.BuyerTradeParty:

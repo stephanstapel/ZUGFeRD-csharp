@@ -639,11 +639,17 @@ namespace s2industries.ZUGFeRD.Test
 
             List<string> lines = Encoding.UTF8.GetString(ms.ToArray()).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
+            bool onItemLevel = false;
             for (int i = 1; i < lines.Count; i++)
             {
                 if (lines[i].Contains("<ram:IncludedSupplyChainTradeLineItem>"))
                 {
+                    onItemLevel = true;
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+                else if (lines[i].Contains("</ram:IncludedSupplyChainTradeLineItem>"))
+                {
+                    onItemLevel = false;
                 }
 
                 if (lines[i].Contains("<ram:NetPriceProductTradePrice>"))
@@ -682,6 +688,66 @@ namespace s2industries.ZUGFeRD.Test
                         Assert.IsTrue(lines[i - 1].Contains("<!--"));
                     }
                 }
+
+                // header trade agreement (buyer, seller, ...)
+                if (lines[i].Contains("<ram:ApplicableHeaderTradeAgreement>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // buyer reference
+                if (lines[i].Contains("<ram:BuyerReference>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // seller
+                if (lines[i].Contains("<ram:SellerTradeParty>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // buyer
+                if (lines[i].Contains("<ram:BuyerTradeParty>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // buyer order information
+                if (lines[i].Contains("<ram:BuyerOrderReferencedDocument>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // delivery information
+                if (lines[i].Contains("<ram:ApplicableHeaderTradeDelivery>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // delivery note information
+                if (lines[i].Contains("<ram:DespatchAdviceReferencedDocument>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // document information
+                if (lines[i].Contains("<ram:ApplicableHeaderTradeSettlement>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // payment means
+                if (lines[i].Contains("<ram:SpecifiedTradeSettlementPaymentMeans>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // tax
+                if (!onItemLevel && lines[i].Contains("<ram:ApplicableTradeTax>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
             }
 
         } // !TestZUGFeRDElementComments()
@@ -702,30 +768,72 @@ namespace s2industries.ZUGFeRD.Test
 
             for (int i = 1; i < lines.Count; i++)
             {
+                // invoice line
+                // test: IncludedSupplyChainTradeLineItemComment
                 if (lines[i].Contains("<cac:InvoiceLine>"))
                 {
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }
 
-
+                // item price
+                // test: NetPriceProductTradePriceComment
                 if (lines[i].Contains("<cbc:PriceAmount>"))
                 {
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }
 
-                if (lines[i].Contains("<cac:InvoiceLine>"))
-                {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
-                }
-
                 // totals on item level
+                // test: SpecifiedTradeSettlementLineMonetarySummationComment
                 if (lines[i].Contains("<cbc:LineExtensionAmount>"))
                 {
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }
 
                 // totals on header level
+                // test: SpecifiedTradeSettlementHeaderMonetarySummationComment
                 if (lines[i].Contains("<cac:LegalMonetaryTotal>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // buyer
+                // test: BuyerTradePartyComment
+                if (lines[i].Contains("<cac:AccountingSupplierParty>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // seller
+                // test: SellerTradePartyComment
+                if (lines[i].Contains("<cac:AccountingSupplierParty>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // buyer, seller information etc.
+                // test: BuyerOrderReferencedDocumentComment
+                if (lines[i].Contains("<cac:OrderReference>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // delivery note information
+                // test: DespatchAdviceReferencedDocumentComment
+                if (lines[i].Contains("<cac:DespatchDocumentReference>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // payment means
+                // test: SpecifiedTradeSettlementPaymentMeansComment
+                if (lines[i].Contains("<cac:PaymentMeans>"))
+                {
+                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                }
+
+                // tax information
+                // test: ApplicableTradeTaxComment
+                if (lines[i].Contains("<cac:TaxSubtotal>"))
                 {
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }

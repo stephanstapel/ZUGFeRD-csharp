@@ -118,17 +118,23 @@ namespace s2industries.ZUGFeRD
 
             #region SpecifiedSupplyChainTradeTransaction
             _Writer.WriteStartElement("rsm", "SpecifiedSupplyChainTradeTransaction");
+
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeAgreementComment);
             _Writer.WriteStartElement("ram", "ApplicableSupplyChainTradeAgreement");
             if (!String.IsNullOrWhiteSpace(this._Descriptor.ReferenceOrderNo))
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerReferenceComment);
                 _Writer.WriteElementString("ram", "BuyerReference", this._Descriptor.ReferenceOrderNo);
             }
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SellerTradePartyComment);
             _writeOptionalParty(_Writer, "ram", "SellerTradeParty", this._Descriptor.Seller, this._Descriptor.SellerContact, TaxRegistrations: this._Descriptor.SellerTaxRegistration);
+            _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerTradePartyComment);
             _writeOptionalParty(_Writer, "ram", "BuyerTradeParty", this._Descriptor.Buyer, this._Descriptor.BuyerContact, TaxRegistrations: this._Descriptor.BuyerTaxRegistration);
 
             if (!String.IsNullOrWhiteSpace(this._Descriptor.OrderNo))
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerOrderReferencedDocumentComment);
                 _Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument");
                 if (this._Descriptor.OrderDate.HasValue)
                 {
@@ -192,6 +198,7 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalParty(_Writer, "ram", "ShipFromTradeParty", this._Descriptor.ShipFrom);
             }
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
             if (this._Descriptor.ActualDeliveryDate.HasValue)
             {
                 _Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent");
@@ -206,6 +213,7 @@ namespace s2industries.ZUGFeRD
 
             if (this._Descriptor.DeliveryNoteReferencedDocument != null)
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.DespatchAdviceReferencedDocumentComment);
                 _Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument");
 
                 if (this._Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
@@ -239,6 +247,7 @@ namespace s2industries.ZUGFeRD
             {
                 if (this._Descriptor.PaymentMeans != null)
                 {
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
@@ -261,6 +270,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (BankAccount creditorBankAccount in this._Descriptor.GetCreditorFinancialAccounts())
                 {
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
@@ -326,7 +336,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            _writeOptionalTaxes(_Writer);
+            _writeOptionalTaxes(_Writer, options);
 
             foreach (TradeAllowance tradeAllowance in this._Descriptor.GetTradeAllowances())
             {
@@ -612,7 +622,7 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteStartElement("ram", "SpecifiedSupplyChainTradeSettlement");
 
                 if (_Descriptor.Profile != Profile.Basic)
-                {
+                {                    
                     _Writer.WriteStartElement("ram", "ApplicableTradeTax");
 
                     if (tradeLineItem.TaxType.HasValue)
@@ -822,10 +832,11 @@ namespace s2industries.ZUGFeRD
         } // !_writeElementWithAttribute()
 
 
-        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
+        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer, InvoiceFormatOptions options)
         {
             foreach (Tax tax in this._Descriptor.GetApplicableTradeTaxes())
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableTradeTaxComment);
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 
                 writer.WriteStartElement("ram", "CalculatedAmount");

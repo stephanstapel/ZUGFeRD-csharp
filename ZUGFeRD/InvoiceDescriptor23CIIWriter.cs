@@ -613,20 +613,24 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeAgreement
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeAgreementComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeAgreement");
 
             #region BuyerReference
             // BT-10
+            _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerReferenceComment);
             _Writer.WriteOptionalElementString("ram", "BuyerReference", this._Descriptor.ReferenceOrderNo);
             #endregion
 
             #region SellerTradeParty
             // BT-31: this._Descriptor.SellerTaxRegistration
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SellerTradePartyComment);
             _writeOptionalParty(_Writer, PartyTypes.SellerTradeParty, this._Descriptor.Seller, ALL_PROFILES, this._Descriptor.SellerContact, this._Descriptor.SellerElectronicAddress, this._Descriptor.SellerTaxRegistration);
             #endregion
 
             #region BuyerTradeParty
             // BT-48: this._Descriptor.BuyerTaxRegistration
+            _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerTradePartyComment);
             _writeOptionalParty(_Writer, PartyTypes.BuyerTradeParty, this._Descriptor.Buyer, ALL_PROFILES, this._Descriptor.BuyerContact, this._Descriptor.BuyerElectronicAddress, this._Descriptor.BuyerTaxRegistration);
             #endregion
 
@@ -668,6 +672,7 @@ namespace s2industries.ZUGFeRD
             #region 2. BuyerOrderReferencedDocument
             if (!String.IsNullOrWhiteSpace(this._Descriptor.OrderNo))
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerOrderReferencedDocumentComment);
                 _Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument");
                 _Writer.WriteElementString("ram", "IssuerAssignedID", this._Descriptor.OrderNo);
                 if (this._Descriptor.OrderDate.HasValue)
@@ -730,6 +735,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeDelivery
+            _Writer.WriteComment(InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
 
             //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
@@ -763,6 +769,7 @@ namespace s2industries.ZUGFeRD
             #region DespatchAdviceReferencedDocument
             if (this._Descriptor.DespatchAdviceReferencedDocument != null)
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.DespatchAdviceReferencedDocumentComment);
                 _Writer.WriteStartElement("ram", "DespatchAdviceReferencedDocument", Profile.Extended);
                 _Writer.WriteElementString("ram", "IssuerAssignedID", this._Descriptor.DespatchAdviceReferencedDocument.ID);
 
@@ -805,6 +812,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeSettlement
+            _Writer.WriteComment(InvoiceCommentConstants.ApplicableHeaderTradeSettlementComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeSettlement");
             // order of sub-elements of ApplicableHeaderTradeSettlement:
             //   1. CreditorReferenceID (BT-90) is only required/allowed on DirectDebit (BR-DE-30)
@@ -866,6 +874,7 @@ namespace s2industries.ZUGFeRD
             {
                 if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
                 {
+                    _Writer.WriteComment(InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
                     _Writer.WriteElementString("ram", "TypeCode", this._Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
                     _Writer.WriteOptionalElementString("ram", "Information", this._Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
@@ -884,6 +893,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (BankAccount account in this._Descriptor.GetCreditorFinancialAccounts())
                 {
+                    _Writer.WriteComment(InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum);
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
@@ -939,7 +949,8 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableTradeTax
             //  11. ApplicableTradeTax (optional)
-            _writeOptionalTaxes(_Writer);
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableTradeTaxComment);
+            _writeOptionalTaxes(_Writer ,options);
             #endregion
 
             #region BillingSpecifiedPeriod
@@ -1575,10 +1586,11 @@ namespace s2industries.ZUGFeRD
         } // !_writeElementWithAttribute()
 
 
-        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
+        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer, InvoiceFormatOptions options)
         {
             this._Descriptor.GetApplicableTradeTaxes()?.ForEach(tax =>
             {
+                _WriteComment(writer, options, InvoiceCommentConstants.ApplicableTradeTaxComment);
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 
                 writer.WriteStartElement("ram", "CalculatedAmount");

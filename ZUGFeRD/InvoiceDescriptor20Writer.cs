@@ -436,9 +436,16 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteEndElement(); // !ram:IncludedSupplyChainTradeLineItemComment
             } // !foreach(tradeLineItem)
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeAgreementComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeAgreement");
+
+            _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerReferenceComment);
             _Writer.WriteOptionalElementString("ram", "BuyerReference", this._Descriptor.ReferenceOrderNo);
+
+            _WriteComment(_Writer, options, InvoiceCommentConstants.SellerTradePartyComment);
             _writeOptionalParty(_Writer, "ram", "SellerTradeParty", this._Descriptor.Seller, this._Descriptor.SellerContact, taxRegistrations: this._Descriptor.SellerTaxRegistration);
+
+            _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerTradePartyComment);
             _writeOptionalParty(_Writer, "ram", "BuyerTradeParty", this._Descriptor.Buyer, this._Descriptor.BuyerContact, taxRegistrations: this._Descriptor.BuyerTaxRegistration);
 
             #region ApplicableTradeDeliveryTerms
@@ -478,6 +485,7 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrWhiteSpace(this._Descriptor.OrderNo))
             {
+                _WriteComment(_Writer, options, InvoiceCommentConstants.BuyerOrderReferencedDocumentComment);
                 _Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument");
                 _Writer.WriteElementString("ram", "IssuerAssignedID", this._Descriptor.OrderNo);
                 if (this._Descriptor.OrderDate.HasValue)
@@ -525,6 +533,7 @@ namespace s2industries.ZUGFeRD
 
             _Writer.WriteEndElement(); // !ApplicableHeaderTradeAgreement
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
 
             //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
@@ -572,6 +581,7 @@ namespace s2industries.ZUGFeRD
 
             _Writer.WriteEndElement(); // !ApplicableHeaderTradeDelivery
 
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeSettlementComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeSettlement");
             // order of sub-elements of ApplicableHeaderTradeSettlement:
             //   1. CreditorReferenceID (optional)
@@ -636,6 +646,7 @@ namespace s2industries.ZUGFeRD
             {
                 if (this._Descriptor.PaymentMeans != null)
                 {
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
@@ -658,6 +669,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (BankAccount creditorAccount in this._Descriptor.GetCreditorFinancialAccounts())
                 {
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
@@ -728,7 +740,7 @@ namespace s2industries.ZUGFeRD
              */
 
             //  11. ApplicableTradeTax (optional)
-            _writeOptionalTaxes(_Writer);
+            _writeOptionalTaxes(_Writer, options);
 
             #region BillingSpecifiedPeriod
             //  12. BillingSpecifiedPeriod (optional)
@@ -1074,10 +1086,11 @@ namespace s2industries.ZUGFeRD
         } // !_writeElementWithAttribute()
 
 
-        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer)
+        private void _writeOptionalTaxes(ProfileAwareXmlTextWriter writer, InvoiceFormatOptions options)
         {
             foreach (Tax tax in this._Descriptor.GetApplicableTradeTaxes())
             {
+                _WriteComment(writer, options, InvoiceCommentConstants.ApplicableTradeTaxComment);
                 writer.WriteStartElement("ram", "ApplicableTradeTax");
 
                 writer.WriteStartElement("ram", "CalculatedAmount");
