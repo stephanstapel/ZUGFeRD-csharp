@@ -323,6 +323,18 @@ descriptor.Save("zugferd-v23.xml", ZUGFeRDVersion.Version23, Profile.Basic); // 
 descriptor.Save("zugferd-v23-xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung); // save as version 2.3, profile XRechnung
 ```
 
+# Configuration
+In order to make the xml more readable for humans, you can optionally add comments to the xml file (currently available only in German).
+If you like to enable these comments, you can use the options builder and pass the resulting options to the Save() command:
+
+```csharp
+InvoiceFormatOptions options = InvoiceOptionsBuilder.Create().EnableXmlComments(true).Build();
+desc.Save(ms, version, profile, format, options);
+```
+
+This will work with all ZUGFeRD versions and also with XRechnung UBL files.
+
+
 
 # Working with ZUGFeRD PDF files
 The ZUGFeRD-csharp component has a sister component which relies on [PDFSharp](https://github.com/empira/PDFsharp) to read and write PDF files.
