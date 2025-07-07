@@ -391,6 +391,11 @@ namespace s2industries.ZUGFeRD
 
         private bool _IsValidXmlString(string input)
         {
+            if (String.IsNullOrWhiteSpace(input))
+            {
+                return true; // empty strings are valid
+            }
+
             foreach (char c in input)
             {
                 if (!_IsValidXmlChar(c))
