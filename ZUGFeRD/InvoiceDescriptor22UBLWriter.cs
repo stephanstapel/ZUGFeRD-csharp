@@ -105,12 +105,16 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteElementString("cbc", "ID", this._Descriptor.InvoiceNo); //Rechnungsnummer
             _Writer.WriteElementString("cbc", "IssueDate", _formatDate(this._Descriptor.InvoiceDate.Value, false, true));
 
-            // DueDate (BT-9)
-            // has cardinality 0..1
-            DateTime? dueDate = this._Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
-            if (dueDate != null)
+
+            if (isInvoice)
             {
-                _Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
+                // DueDate (BT-9)
+                // has cardinality 0..1
+                DateTime? dueDate = this._Descriptor.GetTradePaymentTerms().FirstOrDefault(x => x.DueDate != null)?.DueDate;
+                if (dueDate != null)
+                {
+                    _Writer.WriteElementString("cbc", "DueDate", _formatDate(dueDate.Value, false, true));
+                }
             }
 
             if (isInvoice)
