@@ -141,15 +141,27 @@ namespace s2industries.ZUGFeRD
 
         public void WriteOptionalElementString(string prefix, string tagName, string value, Profile profile = Profile.Unknown)
         {
-            if (!String.IsNullOrWhiteSpace(value))
+            if (String.IsNullOrWhiteSpace(value))
             {
-                WriteElementString(prefix, tagName, value, profile);
+                return;
             }
+
+            if (!_IsValidXmlString(value))
+            {
+                throw new IllegalCharacterException($"'{value}' contains illegal characters for xml.");
+            }
+
+            WriteElementString(prefix, tagName, value, profile);
         } // !WriteOptionalElementString()
 
 
         public void WriteElementString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
         {
+            if (!_IsValidXmlString(value))
+            {
+                throw new IllegalCharacterException($"'{value}' contains illegal characters for xml.");
+            }
+
             Profile safeProfile = profile;
             if (profile == Profile.Unknown)
             {
@@ -225,6 +237,11 @@ namespace s2industries.ZUGFeRD
 
         public void WriteValue(string value, Profile profile = Profile.Unknown)
         {
+            if (!_IsValidXmlString(value))
+            {
+                throw new IllegalCharacterException($"'{value}' contains illegal characters for xml.");
+            }
+
             StackInfo infoForCurrentNode = this.XmlStack.First();
             if (!infoForCurrentNode.IsVisible)
             {
@@ -238,6 +255,11 @@ namespace s2industries.ZUGFeRD
 
         public void WriteComment(string comment, Profile profile = Profile.Unknown)
         {
+            if (!_IsValidXmlString(comment))
+            {
+                throw new IllegalCharacterException($"'{comment}' contains illegal characters for xml.");
+            }
+
             StackInfo infoForCurrentNode = this.XmlStack.FirstOrDefault();
             if ((infoForCurrentNode != null) && !infoForCurrentNode.IsVisible)
             {
@@ -251,6 +273,11 @@ namespace s2industries.ZUGFeRD
 
         public void WriteRawString(string value, Profile profile = Profile.Unknown)
         {
+            if (!_IsValidXmlString(value))
+            {
+                throw new IllegalCharacterException($"'{value}' contains illegal characters for xml.");
+            }
+
             StackInfo infoForCurrentNode = this.XmlStack.First();
             if (!infoForCurrentNode.IsVisible)
             {
@@ -339,5 +366,50 @@ namespace s2industries.ZUGFeRD
             this.Namespaces = namespaces;
         }
         #endregion // !Convenience functions
+
+
+        #region Cleanúp functions
+        /// <summary>
+        /// Make sure that the given string does not contain invalid xml characters.
+        /// The invalid characters are removed from the string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string _CleanInvalidXmlChars(string input)
+        {
+            var output = new StringBuilder(input.Length);
+            foreach (char c in input)
+            {
+                if (_IsValidXmlChar(c))
+                {
+                    output.Append(c);
+                }
+            }
+            return output.ToString();
+        } // !_CleanInvalidXmlChars()
+
+
+        private bool _IsValidXmlString(string input)
+        {
+            foreach (char c in input)
+            {
+                if (!_IsValidXmlChar(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        } // !_IsValidXmlString()
+        
+
+        private bool _IsValidXmlChar(char c)
+        {
+            return
+                c == 0x9 || c == 0xA || c == 0xD ||
+                (c >= 0x20 && c <= 0xD7FF) ||
+                (c >= 0xE000 && c <= 0xFFFD);
+        } // !_IsValidXmlChar()
+
+        #endregion // !Cleanup function
     }
 }
