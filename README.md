@@ -328,7 +328,10 @@ In order to make the xml more readable for humans, you can optionally add commen
 If you like to enable these comments, you can use the options builder and pass the resulting options to the Save() command:
 
 ```csharp
-InvoiceFormatOptions options = InvoiceOptionsBuilder.Create().EnableXmlComments(true).Build();
+InvoiceFormatOptions options = InvoiceOptionsBuilder
+.Create()
+.EnableXmlComments(true)
+.Build();
 desc.Save(ms, version, profile, format, options);
 ```
 
