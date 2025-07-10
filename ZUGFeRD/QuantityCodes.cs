@@ -53,6 +53,12 @@ namespace s2industries.ZUGFeRD
         _59,
 
         /// <summary>
+        /// Bulk pack
+        /// </summary>
+        [EnumStringValue("AB")]
+        AB,
+
+        /// <summary>
         /// millisecond
         /// </summary>
         C26,
