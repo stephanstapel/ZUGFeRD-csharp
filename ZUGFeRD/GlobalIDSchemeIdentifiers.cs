@@ -196,7 +196,7 @@ namespace s2industries.ZUGFeRD
         AllUnionClassifier,
 
         /// <summary>
-        /// AT&T/OSI Network
+        /// AT&amp;T/OSI Network
         /// </summary>
         [EnumStringValue("0030")]
         AttOsiNetwork,
@@ -520,7 +520,7 @@ namespace s2industries.ZUGFeRD
         AdvancedTelecomModules,
 
         /// <summary>
-        /// Athens Chamber of Commerce & Industry Scheme (EDIRA compliant)
+        /// Athens Chamber of Commerce &amp; Industry Scheme (EDIRA compliant)
         /// </summary>
         [EnumStringValue("0084")]
         AthensChamberScheme,
@@ -538,7 +538,7 @@ namespace s2industries.ZUGFeRD
         UscibScheme,
 
         /// <summary>
-        /// National Federation of Chambers of Commerce & Industry of Belgium, Scheme (EDIRA compliant)
+        /// National Federation of Chambers of Commerce &amp; Industry of Belgium, Scheme (EDIRA compliant)
         /// </summary>
         [EnumStringValue("0087")]
         BelgianChambersFederation,
@@ -820,7 +820,7 @@ namespace s2industries.ZUGFeRD
         SiaObjectIdentifiers,
 
         /// <summary>
-        /// Cable & Wireless Global ATM End-System Address Plan
+        /// Cable &amp; Wireless Global ATM End-System Address Plan
         /// </summary>
         [EnumStringValue("0136")]
         CableWirelessAesa,
@@ -1030,7 +1030,7 @@ namespace s2industries.ZUGFeRD
         TeikokuCompanyCode,
 
         /// <summary>
-        /// Luxembourg CP & CPS (Certification Policy and Certification Practice Statement) Index
+        /// Luxembourg CP &amp; CPS (Certification Policy and Certification Practice Statement) Index
         /// </summary>
         [EnumStringValue("0171")]
         LuxembourgCpsIndex,

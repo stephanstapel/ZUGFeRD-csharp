@@ -447,16 +447,16 @@ namespace s2industries.ZUGFeRD
         {
             return this.TradeAllowanceCharges.Where(s => s is TradeCharge).Select(s => s as TradeCharge).ToList();
         } // !GetTradeCharges()
-       
+
 
         /// <summary>
-        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// As an allowance or charge on total item price, attaching it to the corresponding item.                
+        /// <param name="currency">Currency of the allowance</param>
+        /// <param name="basisAmount">Basis aount for the allowance, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance amount</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="reasonCode">Reason code for the allowance</param>
         /// </summary>
-        /// <param name="isDiscount">Marks if its an allowance (true) or charge (false). Please note that the xml will present inversed values</param>
-        /// <param name="currency">Currency of the allowance or surcharge</param>
-        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
-        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
-        /// <param name="reason">Reason for the allowance or surcharge</param>
         public TradeLineItem AddSpecifiedTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                         string reason,
                                                         AllowanceReasonCodes? reasonCode = null)
@@ -793,11 +793,11 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// sets the quantity, at line level, free of charge, in this trade delivery.
-        /// </summary>
+        /// Sets the quantity, at line level, free of charge, in this trade delivery.        
         /// <param name="chargeFreeQuantity">Quantity of the included charge free product</param>
         /// <param name="chargeFreeUnitCode">Unit code for the quantity</param>        
         /// <returns></returns>
+        /// </summary>
         public TradeLineItem SetChargeFreeQuantity(decimal chargeFreeQuantity, QuantityCodes chargeFreeUnitCode)
         {
             ChargeFreeQuantity = chargeFreeQuantity;
@@ -805,12 +805,12 @@ namespace s2industries.ZUGFeRD
             return this;
         } // !SetChargeFreeQuantity()
 
-        /// sets the number of packages, at line level, in this trade delivery.
-        /// </summary>
+
+        /// <summary>
+        /// Sets the number of packages, at line level, in this trade delivery.        
         /// <param name="packageQuantity">Quantity of the included charge free product</param>
         /// <param name="packageUnitCode">Unit code for the quantity</param>
         /// </summary>
-        /// <returns></returns>
         public TradeLineItem SetPackageQuantity(decimal packageQuantity, QuantityCodes packageUnitCode)
         {
             PackageQuantity = packageQuantity;

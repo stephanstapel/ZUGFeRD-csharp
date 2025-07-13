@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
-    <Version>17.5.0</Version>
+    <Version>18.0.0-rc</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>s2 industries</Company>
     <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
@@ -22,15 +22,20 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml xrechnung pdf invoice</PackageTags>
     <Copyright>Stephan Stapel, s2 industries, 2025</Copyright>
-    <AssemblyVersion>17.5.0</AssemblyVersion>
+    <AssemblyVersion>18.0.0-rc</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>17.5.0</FileVersion>
+    <FileVersion>18.0.0-rc</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>17.5.0
+    <PackageReleaseNotes>18.0.0
+* Removed obsolete functions
+* Added optional GrossQuantity, renaming normal quantity to NetQuantity
+* Replaced some ElectronicAddressSchemeIdentifiers values for more readable alternatives
+
+17.5.0
 * Added options API
 * Optional xml comments
 * Fix for XRechnung credit memos

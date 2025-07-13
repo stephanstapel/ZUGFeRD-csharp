@@ -887,12 +887,14 @@ namespace s2industries.ZUGFeRD
                 SchemeID = schemeID
             });
         } // !AddSellerTaxRepresentativeTaxRegistration()
+
+        /// <summary>
         /// Adds a tax registration number for the ship to trade party.
         ///
         /// BT-X-66-00
-        /// </summary>
         /// <param name="no">The tax registration number.</param>
         /// <param name="schemeID">The tax registration scheme identifier.</param>
+        /// </summary>
         public void AddShipToTaxRegistration(string no, TaxRegistrationSchemeID schemeID)
         {
             this._ShipToTaxRegistration.Add(new TaxRegistration()
@@ -2116,9 +2118,8 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// List of tax registration numbers for the seller.
         ///
-        // BT-31
+        /// BT-31
         /// </summary>
-        /// <returns></returns>
         public List<TaxRegistration> GetSellerTaxRegistration()
         {
             return this.SellerTaxRegistration;
@@ -2127,16 +2128,19 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// List of tax registration numbers for the seller's Tax representative.
         ///
-        // BT-63
-        /// </summary>
-        /// <returns></returns>
+        /// BT-63
+        /// </summary>        
         public List<TaxRegistration> GetSellerTaxRepresentativeTaxRegistration()
         {
             return this.SellerTaxRepresentativeTaxRegistration;
         } // !GetSellerTaxRepresentativeTaxRegistration()
-        /// 
-        /// </summary>
-        /// <returns></returns>
+
+
+        /// <summary>
+        /// List of tax registration numbers for the ship-to party.
+        ///
+        /// BT-63
+        /// </summary>        
         public List<TaxRegistration> GetShipToTaxRegistration()
         {
             return this._ShipToTaxRegistration;

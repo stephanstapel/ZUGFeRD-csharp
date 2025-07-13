@@ -942,7 +942,6 @@ namespace s2industries.ZUGFeRD.Test
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, version, profile, format);
-            desc.Save($"e:\\output_{version}.xml", version, profile, format);
 
             InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
             foreach (TradeLineItem item in loadedDescriptor.TradeLineItems)
