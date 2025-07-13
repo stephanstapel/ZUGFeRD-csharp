@@ -288,9 +288,9 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteStartElement("ram", "GrossPriceProductTradePrice");
                     _writeOptionalAdaptiveAmount(_Writer, "ram", "ChargeAmount", tradeLineItem.GrossUnitPrice, 2, 4); // BT-148
-                    if (tradeLineItem.UnitQuantity.HasValue)
+                    if (tradeLineItem.GrossQuantity.HasValue)
                     {
-                        _writeElementWithAttribute(_Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                        _writeElementWithAttribute(_Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.GrossQuantity.Value, 4));
                     }
 
                     foreach (AbstractTradeAllowanceCharge tradeAllowanceCharge in tradeLineItem.GetTradeAllowanceCharges())
@@ -317,9 +317,9 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteStartElement("ram", "NetPriceProductTradePrice");
                 _writeOptionalAdaptiveAmount(_Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4);
 
-                if (tradeLineItem.UnitQuantity.HasValue)
+                if (tradeLineItem.NetQuantity.HasValue)
                 {
-                    _writeElementWithAttribute(_Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.UnitQuantity.Value, 4));
+                    _writeElementWithAttribute(_Writer, "ram", "BasisQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.NetQuantity.Value, 4));
                 }
                 _Writer.WriteEndElement(); // ram:NetPriceProductTradePrice
 
@@ -422,9 +422,9 @@ namespace s2industries.ZUGFeRD
                 else
                 {
                     total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
-                    if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
+                    if (tradeLineItem.NetQuantity.HasValue && (tradeLineItem.NetQuantity.Value != 0))
                     {
-                        total /= tradeLineItem.UnitQuantity.Value;
+                        total /= tradeLineItem.NetQuantity.Value;
                     }
                 }
 

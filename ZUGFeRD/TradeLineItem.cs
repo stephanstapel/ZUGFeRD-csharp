@@ -72,14 +72,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BT-154
         /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Included amount
-        ///
-        /// BT-149
-        /// </summary>
-        public decimal? UnitQuantity { get; set; }
+        public string Description { get; set; }        
 
         /// <summary>
         /// Invoiced quantity
@@ -163,11 +156,25 @@ namespace s2industries.ZUGFeRD
         public TaxExemptionReasonCodes? TaxExemptionReasonCode { get; set; }
 
         /// <summary>
+        /// Included amount
+        ///
+        /// BT-149
+        /// </summary>
+        public decimal? NetQuantity { get; set; }
+
+        /// <summary>
         /// Net unit price of the item
         ///
         /// BT-146
         /// </summary>        
         public decimal NetUnitPrice { get; set; }
+
+        /// <summary>
+        /// The number of item units to which the gross unit price applies.
+        /// if *Gross*UnitPrice is present and NetQuantity is filled, should be equal to NetQuantity
+        /// BT-149-1
+        /// </summary>
+        public decimal? GrossQuantity { get; set; }
 
         /// <summary>
         /// Gross unit price of the item

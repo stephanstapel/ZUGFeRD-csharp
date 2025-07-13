@@ -1794,7 +1794,7 @@ namespace s2industries.ZUGFeRD
                 Name = name,
                 Description = description,
                 UnitCode = unitCode,
-                UnitQuantity = unitQuantity,
+                NetQuantity = unitQuantity,
                 GrossUnitPrice = grossUnitPrice,
                 NetUnitPrice = netUnitPrice,
                 BilledQuantity = billedQuantity,
