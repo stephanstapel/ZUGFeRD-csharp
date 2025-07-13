@@ -1066,40 +1066,7 @@ namespace s2industries.ZUGFeRD
         public void AddLogisticsServiceCharge(decimal amount, string description, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent)
         {
             _AddLogisticsServiceCharge(amount, description, taxTypeCode, taxCategoryCode, taxPercent);
-        } // !AddLogisticsServiceCharge()
-
-
-
-
-        /// <summary>
-        /// Adds an allowance or charge on document level.
-        ///
-        /// BG-21
-        /// Allowance represents a discount whereas charge represents a surcharge.
-        /// </summary>
-        /// <param name="isDiscount">True if this is a discount, false if it's a charge</param>
-        /// <param name="basisAmount">Base amount for calculation</param>
-        /// <param name="currency">Currency code</param>
-        /// <param name="actualAmount">Actual amount of allowance/charge</param>
-        /// <param name="reason">Reason for allowance/charge</param>
-        /// <param name="taxTypeCode">Type of tax</param>
-        /// <param name="taxCategoryCode">Tax category</param>
-        /// <param name="taxPercent">Tax percentage</param>
-        /// <param name="reasonCode">Optional reason code</param>
-        [Obsolete("Please use AddTradeAllowance() or AddTradeCharge() instead. This function will be removed with version 18.0")]
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,                                            
-                                            string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent,
-                                            AllowanceReasonCodes? reasonCode = null)
-        {
-            if (isDiscount)
-            {
-                AddTradeAllowance(basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
-            }
-            else
-            {
-                AddTradeCharge(basisAmount, currency, actualAmount, reason, taxTypeCode, taxCategoryCode, taxPercent, null);
-            }
-        } // !AddTradeAllowanceCharge()
+        } // !AddLogisticsServiceCharge()        
 
 
         /// <summary>
@@ -1234,37 +1201,7 @@ namespace s2industries.ZUGFeRD
                     Percent = taxPercent
                 }
             });
-        } // !AddTradeCharge()
-
-
-        /// <summary>
-        /// Adds an allowance or charge on document level.
-        ///
-        /// BG-21
-        /// Allowance represents a discount whereas charge represents a surcharge.
-        /// </summary>
-        /// <param name="isDiscount">Marks if the allowance charge is a discount. Please note that in contrary to this function, the xml file indicated a surcharge, not a discount (value will be inverted)</param>
-        /// <param name="basisAmount">Base amount (basis of allowance)</param>
-        /// <param name="currency">Curency of the allowance</param>
-        /// <param name="actualAmount">Actual allowance charge amount</param>
-        /// <param name="chargePercentage">Actual allowance charge percentage</param>
-        /// <param name="reason">Reason for the allowance</param>
-        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxPercent">VAT rate for the allowance</param>
-        /// <param name="reasonCode">Reason code for the allowance</param>
-        [Obsolete("Please use AddTradeAllowance() or AddTradeCharge() instead. This function will be removed with version 18.0")]
-        public void AddTradeAllowanceCharge(bool isDiscount, decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
-        {
-            if (isDiscount)
-            {
-                AddTradeAllowance(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
-            }
-            else
-            {
-                AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, null);
-            }
-        } // !AddTradeAllowanceCharge()
+        } // !AddTradeCharge()        
 
 
         /// <summary>
@@ -1327,19 +1264,7 @@ namespace s2industries.ZUGFeRD
         {
             _AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
         } // !AddTradeCharge()
-
-
-        /// <summary>
-        /// Returns all existing trade allowance charges
-        ///
-        /// BG-21
-        /// </summary>        
-        [Obsolete("Please use GetTradeAllowances() or GetTradeCharges() instead. This function will be removed with version 18.0")]
-        public IList<AbstractTradeAllowanceCharge> GetTradeAllowanceCharges()
-        {
-            return this.TradeAllowanceCharges;
-        } // !GetTradeAllowanceCharges()
-
+          
 
         /// <summary>
         /// Returns all existing trade allowances
@@ -1849,182 +1774,6 @@ namespace s2industries.ZUGFeRD
                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
                                     )
         { 
-            if (String.IsNullOrWhiteSpace(lineID))
-            {
-                throw new ArgumentException("LineID cannot be Null or Empty");
-            }
-            else
-            {
-                if (this.GetTradeLineItems()?.Any(p => p.AssociatedDocument.LineID.Equals(lineID, StringComparison.OrdinalIgnoreCase)) == true)
-                {
-                    throw new ArgumentException("LineID must be unique");
-                }
-            }
-
-            TradeLineItem newItem = new TradeLineItem(lineID)
-            {
-                GlobalID = id,
-                SellerAssignedID = sellerAssignedID,
-                BuyerAssignedID = buyerAssignedID,
-                Name = name,
-                Description = description,
-                UnitCode = unitCode,
-                UnitQuantity = unitQuantity,
-                GrossUnitPrice = grossUnitPrice,
-                NetUnitPrice = netUnitPrice,
-                BilledQuantity = billedQuantity,
-                LineTotalAmount = lineTotalAmount,
-                TaxType = taxType,
-                TaxCategoryCode = categoryCode,
-                TaxPercent = taxPercent,
-                BillingPeriodStart = billingPeriodStart,
-                BillingPeriodEnd = billingPeriodEnd
-            };
-
-            if (!String.IsNullOrWhiteSpace(comment))
-            {
-                newItem.AssociatedDocument.Notes.Add(new Note(comment));
-            }
-
-            if (!String.IsNullOrWhiteSpace(deliveryNoteID) || deliveryNoteDate.HasValue)
-            {
-                newItem.SetDeliveryNoteReferencedDocument(deliveryNoteID, deliveryNoteDate);
-            }
-
-            if (!String.IsNullOrWhiteSpace(buyerOrderLineID) || buyerOrderDate.HasValue || !String.IsNullOrWhiteSpace(buyerOrderID))
-            {
-                newItem.SetOrderReferencedDocument(buyerOrderID, buyerOrderDate, buyerOrderLineID);
-            }
-
-            this.TradeLineItems.Add(newItem);
-            return newItem;
-        } // !AddTradeLineItem()        
-
-
-        /// <summary>
-        /// Adds a new line to the invoice. The line id is generated automatically.
-        ///
-        /// Please note that this function returns the new trade line item object that you might use
-        /// in your code to add more detailed information to the trade line item.
-        /// </summary>
-        /// <param name="name">Item name</param>
-        /// <param name="description">Item description</param>
-        /// <param name="unitCode">Unit of measure code</param>
-        /// <param name="unitQuantity">Quantity per unit</param>
-        /// <param name="grossUnitPrice">Gross price per unit</param>
-        /// <param name="netUnitPrice">Net price per unit</param>
-        /// <param name="billedQuantity">Quantity being invoiced</param>
-        /// <param name="lineTotalAmount">net total including discounts and surcharges. This parameter is optional. If it is not filled, the line total amount is automatically calculated based on netUnitPrice and billedQuantity</param>
-        /// <param name="taxType">Type of tax</param>
-        /// <param name="categoryCode">Tax category</param>
-        /// <param name="taxPercent">Tax percentage</param>
-        /// <param name="comment">Optional comment</param>
-        /// <param name="id">Optional global ID</param>
-        /// <param name="sellerAssignedID">Seller's reference ID</param>
-        /// <param name="buyerAssignedID">Buyer's reference ID</param>
-        /// <param name="deliveryNoteID">Delivery note reference</param>
-        /// <param name="deliveryNoteDate">Delivery note date</param>
-        /// <param name="buyerOrderLineID">Buyer's order line reference</param>
-        /// <param name="buyerOrderID">Buyer's order reference</param>
-        /// <param name="buyerOrderDate">Order date</param>
-        /// <param name="billingPeriodStart">Start of billing period</param>
-        /// <param name="billingPeriodEnd">End of billing period</param>
-        /// <returns>Returns the instance of the trade line item. You might use this object to add details such as trade allowance charges</returns>
-        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0. Billing period will be removed in version 19.0. Use SetBillingPeriod() instead.")]        
-        public TradeLineItem AddTradeLineItem(string name,
-                                    QuantityCodes unitCode,
-                                    string description = null,                                    
-                                    decimal? unitQuantity = null,
-                                    decimal? grossUnitPrice = null,
-                                    decimal? netUnitPrice = null,
-                                    decimal billedQuantity = 0,
-                                    decimal? lineTotalAmount = null,
-                                    TaxTypes? taxType = null,
-                                    TaxCategoryCodes? categoryCode = null,
-                                    decimal taxPercent = 0,
-                                    string comment = null,
-                                    GlobalID id = null,
-                                    string sellerAssignedID = "", string buyerAssignedID = "",
-                                    string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                    string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                    DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
-                                    )
-        {
-            return AddTradeLineItem(lineID: _getNextLineId(),
-                            name: name,
-                            description: description,
-                            unitCode: unitCode,
-                            unitQuantity: unitQuantity,
-                            grossUnitPrice: grossUnitPrice,
-                            netUnitPrice: netUnitPrice,
-                            billedQuantity: billedQuantity,
-                            lineTotalAmount: lineTotalAmount,
-                            taxType: taxType,
-                            categoryCode: categoryCode,
-                            taxPercent: taxPercent,
-                            comment: comment,
-                            id: id,
-                            sellerAssignedID: sellerAssignedID,
-                            buyerAssignedID: buyerAssignedID,
-                            deliveryNoteID: deliveryNoteID,
-                            deliveryNoteDate: deliveryNoteDate,
-                            buyerOrderLineID: buyerOrderLineID,
-                            buyerOrderID: buyerOrderID, // Extended!
-                            buyerOrderDate: buyerOrderDate,
-                            billingPeriodStart: billingPeriodStart,
-                            billingPeriodEnd: billingPeriodEnd
-                            );
-        } // !AddTradeLineItem()
-
-
-        /// <summary>
-        /// Adds a new line to the invoice. The line id is passed as a parameter.
-        /// </summary>
-        /// <param name="lineID">Line identifier</param>
-        /// <param name="name">Item name</param>
-        /// <param name="description">Item description</param>
-        /// <param name="unitCode">Unit of measure code</param>
-        /// <param name="unitQuantity">Quantity per unit</param>
-        /// <param name="grossUnitPrice">Gross price per unit</param>
-        /// <param name="netUnitPrice">Net price per unit</param>
-        /// <param name="billedQuantity">Quantity being invoiced</param>
-        /// <param name="lineTotalAmount">Total line amount</param>
-        /// <param name="taxType">Type of tax</param>
-        /// <param name="categoryCode">Tax category</param>
-        /// <param name="taxPercent">Tax percentage</param>
-        /// <param name="comment">Optional comment</param>
-        /// <param name="id">Optional global ID</param>
-        /// <param name="sellerAssignedID">Seller's reference ID</param>
-        /// <param name="buyerAssignedID">Buyer's reference ID</param>
-        /// <param name="deliveryNoteID">Delivery note reference</param>
-        /// <param name="deliveryNoteDate">Delivery note date</param>
-        /// <param name="buyerOrderLineID">Buyer's order line reference</param>
-        /// <param name="buyerOrderID">Buyer's order reference</param>
-        /// <param name="buyerOrderDate">Order date</param>
-        /// <param name="billingPeriodStart">Start of billing period</param>
-        /// <param name="billingPeriodEnd">End of billing period</param>
-        /// <returns>Created trade line item</returns>
-        [Obsolete("Please note that netUnitPrice is mandatory. This function with optional netUnitPrice parameter will be removed in version 18.0. Billing period will be removed in version 19.0. Use SetBillingPeriod() instead.")]
-        public TradeLineItem AddTradeLineItem(string lineID,
-                                    string name,
-                                    QuantityCodes unitCode,
-                                    string description = null,                                    
-                                    decimal? unitQuantity = null,
-                                    decimal? grossUnitPrice = null,
-                                    decimal? netUnitPrice = null,
-                                    decimal billedQuantity = 0,
-                                    decimal? lineTotalAmount = null,
-                                    TaxTypes? taxType = null,
-                                    TaxCategoryCodes? categoryCode = null,
-                                    decimal taxPercent = 0,
-                                    string comment = null,
-                                    GlobalID id = null,
-                                    string sellerAssignedID = "", string buyerAssignedID = "",
-                                    string deliveryNoteID = "", DateTime? deliveryNoteDate = null,
-                                    string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
-                                    DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
-                                    )
-        {
             if (String.IsNullOrWhiteSpace(lineID))
             {
                 throw new ArgumentException("LineID cannot be Null or Empty");

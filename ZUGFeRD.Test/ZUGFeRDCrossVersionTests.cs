@@ -38,8 +38,8 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
 
-            desc.AddTradeLineItem("Item1", QuantityCodes.C62);
-            desc.AddTradeLineItem("Item2", QuantityCodes.C62);
+            desc.AddTradeLineItem("Item1", 0m, QuantityCodes.C62);
+            desc.AddTradeLineItem("Item2", 0m, QuantityCodes.C62);
 
             Assert.AreEqual(desc.TradeLineItems[0].AssociatedDocument.LineID, "1");
             Assert.AreEqual(desc.TradeLineItems[1].AssociatedDocument.LineID, "2");
@@ -156,8 +156,8 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
-            desc.AddTradeLineItem(lineID: "item-01", "Item1", QuantityCodes.C62);
-            desc.AddTradeLineItem(lineID: "item-02", "Item2", QuantityCodes.C62);
+            desc.AddTradeLineItem(lineID: "item-01", "Item1", 0m, QuantityCodes.C62);
+            desc.AddTradeLineItem(lineID: "item-02", "Item2", 0m, QuantityCodes.C62);
 
             Assert.AreEqual(desc.TradeLineItems[0].AssociatedDocument.LineID, "item-01");
             Assert.AreEqual(desc.TradeLineItems[1].AssociatedDocument.LineID, "item-02");
@@ -305,7 +305,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            TradeLineItem line = desc.AddTradeLineItem("DeliveryNoteReferencedDocument-Text", QuantityCodes.C62);
+            TradeLineItem line = desc.AddTradeLineItem("DeliveryNoteReferencedDocument-Text", 0m, QuantityCodes.C62);
             line.SetDeliveryNoteReferencedDocument(deliveryNoteNumber, deliveryNoteDate, deliveryNoteLineID);
 
             MemoryStream ms = new MemoryStream();
@@ -335,7 +335,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            TradeLineItem line = desc.AddTradeLineItem("ContractReferencedDocument-Text", QuantityCodes.C62);
+            TradeLineItem line = desc.AddTradeLineItem("ContractReferencedDocument-Text", 0m, QuantityCodes.C62);
             line.SetContractReferencedDocument(contractNumber, contractDate, contractLineID);
 
             MemoryStream ms = new MemoryStream();
@@ -561,7 +561,7 @@ namespace s2industries.ZUGFeRD.Test
                                                        grossPrice, // gross unit price
                                                        1);
 
-            item.AddTradeAllowanceCharge(true, CurrencyCodes.EUR, grossPrice, discountAmount, "Discount", AllowanceReasonCodes.Discount);
+            item.AddTradeAllowance(CurrencyCodes.EUR, grossPrice, discountAmount, "Discount", AllowanceReasonCodes.Discount);
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);

@@ -505,17 +505,14 @@ namespace s2industries.ZUGFeRD
                 //Abschläge auf Ebene der Rechnungsposition (Basic, Comfort, Extended, XRechnung)
                 if (descriptor.Profile.In(Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung1, Profile.XRechnung))
                 {
-                    if (tradeLineItem.GetSpecifiedTradeAllowanceCharges().Count > 0)
+                    foreach (TradeAllowance specifiedTradeAllowance in tradeLineItem.GetSpecifiedTradeAllowances()) // BG-28
                     {
-                        foreach (TradeAllowance specifiedTradeAllowance in tradeLineItem.GetSpecifiedTradeAllowances()) // BG-28
-                        {
-                            _WriteItemLevelSpecifiedTradeAllowanceCharge(_Writer, specifiedTradeAllowance);
-                        }
+                        _WriteItemLevelSpecifiedTradeAllowanceCharge(_Writer, specifiedTradeAllowance);
+                    }
 
-                        foreach (TradeCharge specifiedTradeCharge in tradeLineItem.GetSpecifiedTradeCharges()) // BG-28
-                        {
-                            _WriteItemLevelSpecifiedTradeAllowanceCharge(_Writer, specifiedTradeCharge);
-                        }
+                    foreach (TradeCharge specifiedTradeCharge in tradeLineItem.GetSpecifiedTradeCharges()) // BG-28
+                    {
+                        _WriteItemLevelSpecifiedTradeAllowanceCharge(_Writer, specifiedTradeCharge);
                     }
                 }
                 #endregion
@@ -529,9 +526,9 @@ namespace s2industries.ZUGFeRD
                 {
                     total = tradeLineItem.LineTotalAmount.Value;
                 }
-                else if (tradeLineItem.NetUnitPrice.HasValue)
+                else
                 {
-                    total = tradeLineItem.NetUnitPrice.Value * tradeLineItem.BilledQuantity;
+                    total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                     if (tradeLineItem.UnitQuantity.HasValue && (tradeLineItem.UnitQuantity.Value != 0))
                     {
                         total /= tradeLineItem.UnitQuantity.Value;

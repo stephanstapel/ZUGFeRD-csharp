@@ -71,12 +71,8 @@ namespace s2industries.ZUGFeRD
             Dictionary<decimal, decimal> lineTotalPerTax = new Dictionary<decimal, decimal>();
             foreach (TradeLineItem item in descriptor.GetTradeLineItems())
             {
-                decimal total = 0m;
-                if (item.NetUnitPrice.HasValue)
-                {
-                    total = decimal.Multiply(item.NetUnitPrice.Value, item.BilledQuantity);
-                    lineTotal += total;
-                }
+                decimal total = decimal.Multiply(item.NetUnitPrice, item.BilledQuantity);
+                lineTotal += total;
 
                 if (!lineTotalPerTax.ContainsKey(item.TaxPercent))
                 {
