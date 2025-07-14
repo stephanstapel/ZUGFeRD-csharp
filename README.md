@@ -337,7 +337,18 @@ desc.Save(ms, version, profile, format, options);
 
 This will work with all ZUGFeRD versions and also with XRechnung UBL files.
 
+Another new feature in version 18.0.0 of the library is cleaning of invalid xml characters or throwing an exception when invalid xml characters are found.
+Can you enable automatic cleaning of xml files using:
 
+```csharp
+InvoiceFormatOptions options = InvoiceOptionsBuilder
+.Create()
+.AutomaticallyCleanInvalidCharacters()
+.Build();
+desc.Save(ms, version, profile, format, options);
+```
+
+Otherweise, an exception will be thrown once an invalid character is written to the xml file.
 
 # Working with ZUGFeRD PDF files
 The ZUGFeRD-csharp component has a sister component which relies on [PDFSharp](https://github.com/empira/PDFsharp) to read and write PDF files.
