@@ -945,8 +945,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableTradeTax
-            //  11. ApplicableTradeTax (optional)
-            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableTradeTaxComment);
+            //  11. ApplicableTradeTax (optional)            
             _writeOptionalTaxes(_Writer ,options);
             #endregion
 
