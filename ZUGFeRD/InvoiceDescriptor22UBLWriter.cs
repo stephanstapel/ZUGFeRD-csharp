@@ -42,7 +42,7 @@ namespace s2industries.ZUGFeRD
             long streamPosition = stream.Position;
 
             this._Descriptor = descriptor;
-            this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
+            this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
             bool isInvoice = true;
             if (this._Descriptor.Type == InvoiceType.Invoice || this._Descriptor.Type == InvoiceType.Correction)
             {

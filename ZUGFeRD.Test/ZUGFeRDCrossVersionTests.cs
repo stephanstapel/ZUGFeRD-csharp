@@ -846,14 +846,36 @@ namespace s2industries.ZUGFeRD.Test
         [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
         [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
         [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
-        public void TestInvalidXml(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        public void TestInvalidXmlWithException(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
         {
             InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
             desc.InvoiceNo = "\u001b";
             var invoiceStream = new MemoryStream();
 
             Assert.ThrowsException<IllegalCharacterException>(() => desc.Save(invoiceStream, version, profile, format));
-        } // !TestInvalidXml()
+        } // !TestInvalidXmlWithException()
+
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestInvalidXmlWithCleaning(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
+            desc.InvoiceNo = "ABC\u001bDEF";
+
+            InvoiceFormatOptions options = InvoiceOptionsBuilder.Create()
+                .AutomaticallyCleanInvalidCharacters()
+                .Build();
+            var invoiceStream = new MemoryStream();
+            desc.Save(invoiceStream, version, profile, format, options);
+            string result = Encoding.UTF8.GetString(invoiceStream.ToArray());
+
+            Assert.IsTrue(result.Contains("ABCDEF"), "The illegal character should be removed from the invoice number.");
+        } // !TestInvalidXmlWithCleaning()
 
 
 

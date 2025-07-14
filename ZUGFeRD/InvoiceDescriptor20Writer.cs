@@ -58,7 +58,7 @@ namespace s2industries.ZUGFeRD
             long streamPosition = stream.Position;
 
             this._Descriptor = descriptor;
-            this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile);
+            this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
             this._Writer.SetNamespaces(new Dictionary<string, string>()
             {
                 { "a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },

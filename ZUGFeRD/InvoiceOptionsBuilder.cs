@@ -90,6 +90,13 @@ namespace s2industries.ZUGFeRD
         public InvoiceOptionsBuilder UseRecommendedDefaults()
         {
             return EnableXmlComments(false);
-        } // !UseRecommendedDefaults()  
+        } // !UseRecommendedDefaults()
+
+
+        public InvoiceOptionsBuilder AutomaticallyCleanInvalidCharacters()
+        {
+            _options.AutomaticallyCleanInvalidCharacters = true;
+            return this;
+        } // !AutomaticallyCleanInvalidCharacters()
     }
 }
