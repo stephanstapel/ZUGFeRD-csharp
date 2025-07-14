@@ -116,7 +116,7 @@ To let the library create line ids, you can use:
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem("Item name", 23.99m, QuantityCodes.C62, "Detail description", ....);
+desc.AddTradeLineItem("Item name", 23.99m, QuantityCodes.H87, "Detail description", ....);
 ```
 
 This will generate an invoice with trade line item numbered as '1'.
@@ -125,8 +125,8 @@ To pass pre-defined line ids, this is the way to go:
 
 ```csharp
 InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice("471102", new DateTime(2013, 6, 5), CurrencyCodes.EUR, "GE2020211-471102");
-desc.AddTradeLineItem(lineID: "0001", 23.99m, QuantityCodes.C62, "Item name", "Detail description", ....);
-desc.AddTradeLineItem(lineID: "0002", 49.99m, QuantityCodes.C62, "Item name", "Detail description", ....);
+desc.AddTradeLineItem(lineID: "0001", 23.99m, QuantityCodes.H87, "Item name", "Detail description", ....);
+desc.AddTradeLineItem(lineID: "0002", 49.99m, QuantityCodes.H87, "Item name", "Detail description", ....);
 ```
 
 which will generate an invoice with two trade line items, with the first one as number '0001' and the second one as number '0002'.
@@ -168,7 +168,7 @@ The library supports setting a status code and a reason for each line item. This
 TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
     name: "Abschlagsrechnung vom 01.01.2024",
     netUnitPrice: 500,
-    unitCode: QuantityCodes.C62,
+    unitCode: QuantityCodes.H87,
     billedQuantity: -1m,
     categoryCode: TaxCategoryCodes.S,
     taxPercent: 19.0m,
