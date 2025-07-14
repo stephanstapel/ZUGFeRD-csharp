@@ -16,8 +16,11 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
     <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
-    <Version>17.5.0</Version>	
-    <PackageReleaseNotes>17.5.0
+    <Version>18.0.0-beta1</Version>	
+    <PackageReleaseNotes>18.0.0
+* Updated dependency on ZUGFeRD-chsarp 18.0.0-beta1
+
+17.5.0
 * No changes
 * Updated dependency on ZUGFeRD-chsarp 17.5.0
 
@@ -47,7 +50,7 @@
 * fully compliant XMP metadata
 </PackageReleaseNotes>	
     <AssemblyName>s2industries.ZUGFeRD.PDF</AssemblyName>	
-    <AssemblyVersion>17.5.0</AssemblyVersion>	
+    <AssemblyVersion>18.0.0</AssemblyVersion>	
     <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
 It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
 A special favor is the so-called XRechnung which is also supported by this library.
@@ -75,7 +78,7 @@ A special favor is the so-called XRechnung which is also supported by this libra
   <ItemGroup>
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.0-preview.5.25277.114" />
-    <PackageReference Include="ZUGFeRD-csharp" Version="17.5.0" />
+    <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0-beta1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netstandard2.0'">
