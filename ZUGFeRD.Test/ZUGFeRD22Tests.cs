@@ -2284,7 +2284,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.TradeLineItems.Clear();
             desc.AddTradeLineItem(name: "Neumotor",
-                                  unitCode: QuantityCodes.C62,
+                                  unitCode: QuantityCodes.H87,
                                   unitQuantity: 1,
                                   billedQuantity: 1,
                                   netUnitPrice: 1000,
