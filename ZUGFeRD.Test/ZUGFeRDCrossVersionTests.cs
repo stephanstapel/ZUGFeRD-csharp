@@ -897,8 +897,7 @@ namespace s2industries.ZUGFeRD.Test
             }
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, version, profile, format);
-            desc.Save($"e:\\output_{version}.xml", version, profile, format);
+            desc.Save(ms, version, profile, format);            
 
             InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
             foreach (TradeLineItem item in loadedDescriptor.TradeLineItems)
@@ -929,8 +928,7 @@ namespace s2industries.ZUGFeRD.Test
             }
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, version, profile, format);
-            desc.Save($"e:\\output_{version}.xml", version, profile, format);
+            desc.Save(ms, version, profile, format);            
 
             InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
             foreach (TradeLineItem item in loadedDescriptor.TradeLineItems)
@@ -974,5 +972,38 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsNull(item.GrossQuantity);
             }
         } // !TestWithoutGrossQuantity()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        public void TestNulledGlobalIDScheme(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            decimal? desiredNetUnitQuantity = 20.0m;
+            decimal? desiredGrossUnitQuantity = 23.0m;
+
+            InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
+
+            desc.Seller.GlobalID = new GlobalID() { ID = "123" };
+            desc.Buyer.GlobalID = new GlobalID() { ID = "213" };
+
+            foreach(TradeLineItem item in desc.GetTradeLineItems())
+            {
+                item.GlobalID.SchemeID = null;
+            }
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format);            
+
+            InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
+            Assert.IsNull(loadedDescriptor.Seller.GlobalID.SchemeID);
+            Assert.IsNull(loadedDescriptor.Buyer.GlobalID.SchemeID);
+
+            foreach (TradeLineItem item in loadedDescriptor.TradeLineItems)
+            {
+                Assert.IsNull(item.GlobalID.SchemeID);
+            }
+        } // !TestNulledGlobalIDScheme()
     }
 }
