@@ -730,7 +730,7 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region ApplicableHeaderTradeDelivery
-            _Writer.WriteComment(InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
 
             //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
@@ -806,8 +806,8 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteEndElement(); // !ApplicableHeaderTradeDelivery
             #endregion
 
-            #region ApplicableHeaderTradeSettlement
-            _Writer.WriteComment(InvoiceCommentConstants.ApplicableHeaderTradeSettlementComment);
+            #region ApplicableHeaderTradeSettlement            
+            _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeSettlementComment);
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeSettlement");
             // order of sub-elements of ApplicableHeaderTradeSettlement:
             //   1. CreditorReferenceID (BT-90) is only required/allowed on DirectDebit (BR-DE-30)
@@ -869,7 +869,7 @@ namespace s2industries.ZUGFeRD
             {
                 if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
                 {
-                    _Writer.WriteComment(InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum); // BG-16
                     _Writer.WriteElementString("ram", "TypeCode", this._Descriptor.PaymentMeans.TypeCode.EnumToString(), ALL_PROFILES ^ Profile.Minimum);
                     _Writer.WriteOptionalElementString("ram", "Information", this._Descriptor.PaymentMeans.Information, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
@@ -888,7 +888,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (BankAccount account in this._Descriptor.GetCreditorFinancialAccounts())
                 {
-                    _Writer.WriteComment(InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
+                    _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans", ALL_PROFILES ^ Profile.Minimum);
 
                     if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)

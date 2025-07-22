@@ -40,6 +40,7 @@ namespace s2industries.ZUGFeRD.Test
         private InvoiceProvider _InvoiceProvider = new InvoiceProvider();
 
 
+
         [TestMethod]
         public void TestComment()
         {
@@ -3147,7 +3148,7 @@ namespace s2industries.ZUGFeRD.Test
         public void TestOfficialXRechnungFileForPaymentTerms()
         {
             string path = @"..\..\..\..\documentation\xRechnung\XRechnung 3.0.1\xrechnung-3.0.1-schematron-2.0.1\generated\cii-br-de-18-freespace-test-869-identity.xml";
-            path = _makeSurePathIsCrossPlatformCompatible(path);
+            path = _makeSurePathIsCrossPlatformCompatible(path);            
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
