@@ -94,6 +94,32 @@ namespace s2industries.ZUGFeRD
         } // !_formatDecimal()
 
 
+        private int _getDecimalPlaces(decimal n)
+        {
+            n = Math.Abs(n);
+            n -= (int)n;
+            var bits = decimal.GetBits(n);
+            var scale = (bits[3] >> 16) & 0xFF;
+            return scale;
+        }
+
+
+        protected string _formatDecimalFlexible(decimal? value, int minDecimals, int maxDecimals)
+        {
+            if (!value.HasValue)
+            {
+                return String.Empty;
+            }
+
+            decimal roundedValue = Math.Round(value.Value, maxDecimals, MidpointRounding.AwayFromZero);
+            int actualPlaces = _getDecimalPlaces(roundedValue);
+            int formatPlaces = Math.Max(minDecimals, actualPlaces);
+            formatPlaces = Math.Min(maxDecimals, formatPlaces);
+
+            return roundedValue.ToString($"F{formatPlaces}", CultureInfo.InvariantCulture);
+        }
+
+
         protected string _formatDate(DateTime date, bool formatAs102 = true, bool toUBLDate = false)
         {
             if (formatAs102)

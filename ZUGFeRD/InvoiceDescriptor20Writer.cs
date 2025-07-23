@@ -387,7 +387,7 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteElementString("ram", "CategoryCode", tradeLineItem.TaxCategoryCode.EnumToString());
                 }
-                
+
                 _Writer.WriteElementString("ram", "RateApplicablePercent", _formatDecimal(tradeLineItem.TaxPercent));
                 _Writer.WriteEndElement(); // !ram:ApplicableTradeTax
 
@@ -428,7 +428,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                _Writer.WriteElementString("ram", "LineTotalAmount", _formatDecimal(total));
+                _Writer.WriteElementString("ram", "LineTotalAmount", _formatDecimalFlexible(total, options?.LineTotalAmountMinDecimalPlaces ?? 2, options?.LineTotalAmountMaxDecimalPlaces ?? 2));
 
                 _Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementLineMonetarySummation
                 _Writer.WriteEndElement(); // !ram:SpecifiedLineTradeSettlement
@@ -1027,7 +1027,7 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteElementString("ram", "CategoryCode", tradeAllowanceCharge.Tax.CategoryCode.EnumToString());
                 }
-                
+
                 _Writer.WriteElementString("ram", "RateApplicablePercent", _formatDecimal(tradeAllowanceCharge.Tax.Percent));
                 _Writer.WriteEndElement();
             }

@@ -62,7 +62,7 @@ namespace s2industries.ZUGFeRD
                 { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" },
                 { "xs", "http://www.w3.org/2001/XMLSchema" },
                 { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" }
-            });            
+            });
 
             _Writer.WriteStartDocument();
             _WriteHeaderComments(_Writer, options);
@@ -536,7 +536,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 _Writer.WriteStartElement("ram", "LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                _Writer.WriteValue(_formatDecimal(total));
+                _Writer.WriteValue(_formatDecimalFlexible(total, options?.LineTotalAmountMinDecimalPlaces ?? 2, options?.LineTotalAmountMaxDecimalPlaces ?? 2));
                 _Writer.WriteEndElement(); // !ram:LineTotalAmount
 
                 // TODO: TotalAllowanceChargeAmount
@@ -1021,7 +1021,7 @@ namespace s2industries.ZUGFeRD
                         var sbPaymentNotes = new StringBuilder();
                         DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this._Descriptor.GetTradePaymentTerms())
-                        {                                                        
+                        {
 
                             // every line break must be a valid xml line break.
                             // if a note already exists, append a valid line break.
@@ -1055,7 +1055,7 @@ namespace s2industries.ZUGFeRD
                                     sbPaymentNotes.Append(paymentTerms.Description.Trim());
                                 }
                             }
-                            dueDate = dueDate ?? paymentTerms.DueDate;                            
+                            dueDate = dueDate ?? paymentTerms.DueDate;
                         }
 
                         _Writer.WriteStartElement("ram", "Description");
@@ -1162,8 +1162,8 @@ namespace s2industries.ZUGFeRD
             _writeAmount(_Writer, "ram", "LineTotalAmount", this._Descriptor.LineTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);   // Summe der Nettobeträge aller Rechnungspositionen
             _writeOptionalAmount(_Writer, "ram", "ChargeTotalAmount", this._Descriptor.ChargeTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum);       // Summe der Zuschläge auf Dokumentenebene, BT-108
             _writeOptionalAmount(_Writer, "ram", "AllowanceTotalAmount", this._Descriptor.AllowanceTotalAmount, profile: ALL_PROFILES ^ Profile.Minimum); // Summe der Abschläge auf Dokumentenebene, BT-107
-                                                                                                                                                // both fields are mandatory according to BR-FXEXT-CO-11
-                                                                                                                                                // and BR-FXEXT-CO-12
+                                                                                                                                                          // both fields are mandatory according to BR-FXEXT-CO-11
+                                                                                                                                                          // and BR-FXEXT-CO-12
 
             if (this._Descriptor.Profile == Profile.Extended)
             {
@@ -1623,7 +1623,7 @@ namespace s2industries.ZUGFeRD
                 if (tax.TaxPointDate.HasValue)
                 {
                     _Writer.WriteStartElement("ram", "TaxPointDate");
-                    _Writer.WriteStartElement("udt", "DateString");  
+                    _Writer.WriteStartElement("udt", "DateString");
                     _Writer.WriteAttributeString("format", "102");
                     _Writer.WriteValue(_formatDate(tax.TaxPointDate.Value));
                     _Writer.WriteEndElement(); // !udt:DateString
@@ -1918,7 +1918,7 @@ namespace s2industries.ZUGFeRD
                 case TaxCategoryCodes.S:
                     return "Normalsatz";
                 case TaxCategoryCodes.Z:
-                    return "nach dem Nullsatz zu versteuernde Waren";                
+                    return "nach dem Nullsatz zu versteuernde Waren";
                 case TaxCategoryCodes.D:
                     break;
                 case TaxCategoryCodes.F:

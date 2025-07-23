@@ -673,7 +673,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                _writeElementWithAttribute(_Writer, "ram", "LineTotalAmount", "currencyID", this._Descriptor.Currency.EnumToString(), _formatDecimal(total));
+                _writeElementWithAttribute(_Writer, "ram", "LineTotalAmount", "currencyID", this._Descriptor.Currency.EnumToString(), _formatDecimalFlexible(total, options?.LineTotalAmountMinDecimalPlaces ?? 2, options?.LineTotalAmountMaxDecimalPlaces ?? 2));
                 _Writer.WriteEndElement(); // ram:SpecifiedTradeSettlementMonetarySummation
                 _Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
 
