@@ -30,13 +30,13 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Gets or sets the minimum number of decimal places for line total amounts.
-        /// If not set (null), the library's default (usually 2) will be used.
+        /// If not set (null), the library's default (2) will be used.
         /// </summary>
         public int? LineTotalAmountMinDecimalPlaces { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum number of decimal places for line total amounts.
-        /// If not set (null), the library's default (e.g., 4) will be used.
+        /// If not set (null), the library's default (2) will be used.
         /// The value will be rounded to this number of places if it has more.
         /// </summary>
         public int? LineTotalAmountMaxDecimalPlaces { get; set; }
