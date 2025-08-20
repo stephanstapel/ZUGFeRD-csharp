@@ -62,7 +62,7 @@ namespace s2industries.ZUGFeRD
                 { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" },
                 { "xs", "http://www.w3.org/2001/XMLSchema" },
                 { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" }
-            });            
+            });
 
             _Writer.WriteStartDocument();
             _WriteHeaderComments(_Writer, options);
@@ -734,7 +734,7 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
 
             //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
-            if(this._Descriptor.TransportMode != null)
+            if (this._Descriptor.TransportMode != null)
             {
                 _Writer.WriteStartElement("ram", "RelatedSupplyChainConsignment", Profile.Extended); // BG-X-24
                 _Writer.WriteStartElement("ram", "SpecifiedLogisticsTransportMovement", Profile.Extended); // BT-X-152-00
@@ -944,7 +944,7 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableTradeTax
             //  11. ApplicableTradeTax (optional)            
-            _writeOptionalTaxes(_Writer ,options);
+            _writeOptionalTaxes(_Writer, options);
             #endregion
 
             #region BillingSpecifiedPeriod
@@ -1021,7 +1021,7 @@ namespace s2industries.ZUGFeRD
                         var sbPaymentNotes = new StringBuilder();
                         DateTime? dueDate = null;
                         foreach (PaymentTerms paymentTerms in this._Descriptor.GetTradePaymentTerms())
-                        {                                                        
+                        {
 
                             // every line break must be a valid xml line break.
                             // if a note already exists, append a valid line break.
@@ -1055,7 +1055,7 @@ namespace s2industries.ZUGFeRD
                                     sbPaymentNotes.Append(paymentTerms.Description.Trim());
                                 }
                             }
-                            dueDate = dueDate ?? paymentTerms.DueDate;                            
+                            dueDate = dueDate ?? paymentTerms.DueDate;
                         }
 
                         _Writer.WriteStartElement("ram", "Description");
@@ -1188,6 +1188,7 @@ namespace s2industries.ZUGFeRD
             {
                 _Writer.WriteStartElement("ram", "InvoiceReferencedDocument", ALL_PROFILES ^ Profile.Minimum);
                 _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", invoiceReferencedDocument.ID);
+                _Writer.WriteOptionalElementString("ram", "TypeCode", EnumExtensions.EnumToString(invoiceReferencedDocument.TypeCode), profile: Profile.Extended); // BT-X-332 
                 if (invoiceReferencedDocument.IssueDateTime.HasValue)
                 {
                     _Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -1623,7 +1624,7 @@ namespace s2industries.ZUGFeRD
                 if (tax.TaxPointDate.HasValue)
                 {
                     _Writer.WriteStartElement("ram", "TaxPointDate");
-                    _Writer.WriteStartElement("udt", "DateString");  
+                    _Writer.WriteStartElement("udt", "DateString");
                     _Writer.WriteAttributeString("format", "102");
                     _Writer.WriteValue(_formatDate(tax.TaxPointDate.Value));
                     _Writer.WriteEndElement(); // !udt:DateString
@@ -1918,7 +1919,7 @@ namespace s2industries.ZUGFeRD
                 case TaxCategoryCodes.S:
                     return "Normalsatz";
                 case TaxCategoryCodes.Z:
-                    return "nach dem Nullsatz zu versteuernde Waren";                
+                    return "nach dem Nullsatz zu versteuernde Waren";
                 case TaxCategoryCodes.D:
                     break;
                 case TaxCategoryCodes.F:

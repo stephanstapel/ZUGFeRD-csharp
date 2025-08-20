@@ -27,5 +27,10 @@ namespace s2industries.ZUGFeRD
     /// </summary>
     public class InvoiceReferencedDocument : BaseReferencedDocument
     {
+        /// <summary>
+        /// BT-X-332 - Can be used in the case of a final invoice following a prepaid invoice to refer to the previous prepaid invoices.
+        /// Code list UNCL 1001 restricted as BT-3.
+        /// </summary>
+        public InvoiceType? TypeCode { get; set; }
     }
 }
