@@ -1917,7 +1917,7 @@ namespace s2industries.ZUGFeRD
                 case TaxCategoryCodes.O:
                     return "Dienstleistungen außerhalb des Steueranwendungsbereichs";
                 case TaxCategoryCodes.S:
-                    return "Normalsatz";
+                    return null; // don't write exemption reason for standard tax category code
                 case TaxCategoryCodes.Z:
                     return "nach dem Nullsatz zu versteuernde Waren";
                 case TaxCategoryCodes.D:
@@ -1979,3 +1979,4 @@ namespace s2industries.ZUGFeRD
         } // !Validate()
     }
 }
+
