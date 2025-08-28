@@ -1,0 +1,2 @@
+# set the handling of line endings for this repository, for people who don't have core.autocrlf set.
+text=auto
