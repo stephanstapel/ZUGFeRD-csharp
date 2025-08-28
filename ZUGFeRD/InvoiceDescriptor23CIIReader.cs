@@ -365,7 +365,7 @@ namespace s2industries.ZUGFeRD
                                               EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
                                               XmlUtils.NodeAsDecimal(node, ".//ram:CategoryTradeTax/ram:RateApplicablePercent", nsmgr, 0).Value,
                                               EnumExtensions.StringToEnum<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
-                }                    
+                }
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -380,8 +380,9 @@ namespace s2industries.ZUGFeRD
             foreach (XmlNode invoiceReferencedDocumentNodes in doc.DocumentElement.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument", nsmgr))
             {
                 retval.AddInvoiceReferencedDocument(
-                    XmlUtils.NodeAsString(invoiceReferencedDocumentNodes, "./ram:IssuerAssignedID", nsmgr),
-                     XmlUtils.NodeAsDateTime(invoiceReferencedDocumentNodes, "./ram:FormattedIssueDateTime", nsmgr)
+                     XmlUtils.NodeAsString(invoiceReferencedDocumentNodes, "./ram:IssuerAssignedID", nsmgr),
+                     XmlUtils.NodeAsDateTime(invoiceReferencedDocumentNodes, "./ram:FormattedIssueDateTime", nsmgr),
+                     EnumExtensions.StringToNullableEnum<InvoiceType>(XmlUtils.NodeAsString(invoiceReferencedDocumentNodes, "./ram:TypeCode", nsmgr))
                 );
             }
 
@@ -398,9 +399,9 @@ namespace s2industries.ZUGFeRD
                 decimal? discountBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisAmount", nsmgr, null);
                 decimal? discountActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:ActualDiscountAmount", nsmgr, null);
                 decimal? penaltyPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:CalculationPercent", nsmgr, null);
-                int? penaltyDueDays = null; 
+                int? penaltyDueDays = null;
                 if (QuantityCodes.DAY == EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
-                  discountDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
+                    discountDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
                 DateTime? penaltyMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); // BT-X-276-0
                 decimal? penaltyBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisAmount", nsmgr, null);
                 decimal? penaltyActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:ActualPenaltyAmount", nsmgr, null);
@@ -520,7 +521,7 @@ namespace s2industries.ZUGFeRD
                 SellerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
                 BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BuyerAssignedID", nsmgr),
                 Name = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Name", nsmgr),
-                Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),                
+                Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
                 ShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty", nsmgr),
                 UltimateShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty", nsmgr),
@@ -666,7 +667,7 @@ namespace s2industries.ZUGFeRD
                     item.AssociatedDocument.Notes.Add(new Note(
                         content: XmlUtils.NodeAsString(noteNode, ".//ram:Content", nsmgr),
                         subjectCode: EnumExtensions.StringToNullableEnum<SubjectCodes>(XmlUtils.NodeAsString(noteNode, ".//ram:SubjectCode", nsmgr)),
-                        contentCode: EnumExtensions.StringToNullableEnum<ContentCodes > (XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
+                        contentCode: EnumExtensions.StringToNullableEnum<ContentCodes>(XmlUtils.NodeAsString(noteNode, ".//ram:ContentCode", nsmgr))
                     ));
                 }
             }
@@ -696,7 +697,7 @@ namespace s2industries.ZUGFeRD
                                            actualAmount,
                                            chargePercentage,
                                            reason);
-                }                    
+                }
             }
 
             if (!item.UnitCode.HasValue)
@@ -779,13 +780,13 @@ namespace s2industries.ZUGFeRD
             }
 
             Contact retval = new Contact()
-                {
-                    Name = XmlUtils.NodeAsString(node, "./ram:PersonName", nsmgr),
-                    OrgUnit = XmlUtils.NodeAsString(node, "./ram:DepartmentName", nsmgr),
-                    PhoneNo = XmlUtils.NodeAsString(node, "./ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
-                    FaxNo = XmlUtils.NodeAsString(node, "./ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
-                    EmailAddress = XmlUtils.NodeAsString(node, "./ram:EmailURIUniversalCommunication/ram:URIID", nsmgr)
-                };
+            {
+                Name = XmlUtils.NodeAsString(node, "./ram:PersonName", nsmgr),
+                OrgUnit = XmlUtils.NodeAsString(node, "./ram:DepartmentName", nsmgr),
+                PhoneNo = XmlUtils.NodeAsString(node, "./ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
+                FaxNo = XmlUtils.NodeAsString(node, "./ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
+                EmailAddress = XmlUtils.NodeAsString(node, "./ram:EmailURIUniversalCommunication/ram:URIID", nsmgr)
+            };
             return retval;
         }
 

@@ -16,6 +16,7 @@ insert_final_newline = true
 # C# specific rules
 dotnet_style_require_accessibility_modifiers = always:error
 dotnet_sort_system_directives_first = true:error
+dotnet_remove_unnecessary_imports_on_save = false
 
 dotnet_naming_rule.interface_should_be_begins_with_i.severity = error
 dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
@@ -37,3 +38,6 @@ dotnet_naming_style.camel_case_style.capitalization = camel_case
 dotnet_naming_rule.local_variables_must_be_camel_case.severity = error
 dotnet_naming_rule.local_variables_must_be_camel_case.symbols = local_variables
 dotnet_naming_rule.local_variables_must_be_camel_case.style = camel_case_style
+
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_new_line_before_open_brace = all

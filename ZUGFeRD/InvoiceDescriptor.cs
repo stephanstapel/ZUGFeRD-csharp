@@ -405,7 +405,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-23
         /// </summary>        
-        public  List<Tax> Taxes { get; internal set; } = new List<Tax>();
+        public List<Tax> Taxes { get; internal set; } = new List<Tax>();
 
 
         /// <summary>
@@ -1036,7 +1036,7 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetContractReferencedDocument()
 
-        
+
         internal void _AddLogisticsServiceCharge(decimal amount, string description, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent)
         {
             this.ServiceCharges.Add(new ServiceCharge()
@@ -1095,7 +1095,7 @@ namespace s2industries.ZUGFeRD
         internal void _AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
                                          string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                          AllowanceReasonCodes? reasonCode = null)
-        { 
+        {
             this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Reason = reason,
@@ -1142,7 +1142,7 @@ namespace s2industries.ZUGFeRD
                                       decimal? chargePercentage,
                                       string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                       ChargeReasonCodes? reasonCode = null)
-        { 
+        {
             this.TradeAllowanceCharges.Add(new TradeCharge()
             {
                 Reason = reason,
@@ -1227,7 +1227,7 @@ namespace s2industries.ZUGFeRD
 
 
         internal void _AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
-        { 
+        {
             this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Reason = reason,
@@ -1266,7 +1266,7 @@ namespace s2industries.ZUGFeRD
         {
             _AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
         } // !AddTradeCharge()
-          
+
 
         /// <summary>
         /// Returns all existing trade allowances
@@ -1350,12 +1350,14 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="id">Preceding invoice number</param>
         /// <param name="IssueDateTime">Preceding invoice date</param>
-        public void AddInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null)
+        /// <param name="TypeCode">Preceding invoice Type</param>
+        public void AddInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null, InvoiceType? TypeCode = null)
         {
             this._InvoiceReferencedDocuments.Add(new InvoiceReferencedDocument()
             {
                 ID = id,
-                IssueDateTime = IssueDateTime
+                IssueDateTime = IssueDateTime,
+                TypeCode = TypeCode
             });
         }
 
@@ -1597,8 +1599,8 @@ namespace s2industries.ZUGFeRD
 
             item.AssociatedDocument.Notes.Add(new Note(
                 content: comment
-                // no subjectcode
-                // no contentcode
+            // no subjectcode
+            // no contentcode
             ));
 
             this.TradeLineItems.Add(item);
@@ -1638,7 +1640,7 @@ namespace s2industries.ZUGFeRD
         public TradeLineItem AddTradeLineItem(string name,
                                     decimal netUnitPrice,
                                     QuantityCodes unitCode,
-                                    string description = null,                                    
+                                    string description = null,
                                     decimal? unitQuantity = null,
                                     decimal? grossUnitPrice = null,
                                     decimal billedQuantity = 0,
@@ -1713,7 +1715,7 @@ namespace s2industries.ZUGFeRD
                                     string name,
                                     decimal netUnitPrice,
                                     QuantityCodes unitCode,
-                                    string description = null,                                    
+                                    string description = null,
                                     decimal? unitQuantity = null,
                                     decimal? grossUnitPrice = null,
                                     decimal billedQuantity = 0,
@@ -1775,7 +1777,7 @@ namespace s2industries.ZUGFeRD
                                     string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
                                     )
-        { 
+        {
             if (String.IsNullOrWhiteSpace(lineID))
             {
                 throw new ArgumentException("LineID cannot be Null or Empty");
@@ -2045,7 +2047,7 @@ namespace s2industries.ZUGFeRD
             return this.DebitorBankAccounts?.Any() == true;
         } // !AnyDebitorFinancialAccount()
 
-        
+
         /// <summary>
         /// Adds a receivable specified trade accounting account with ID and type code
         ///
@@ -2169,10 +2171,12 @@ namespace s2industries.ZUGFeRD
 
         private string _getNextLineId()
         {
-            int? highestLineId = this.GetTradeLineItems()?.Select(i => {
+            int? highestLineId = this.GetTradeLineItems()?.Select(i =>
+            {
                 if (Int32.TryParse(i.AssociatedDocument?.LineID, out int id) == true)
                     return id;
-                else return 0; }
+                else return 0;
+            }
                 ).DefaultIfEmpty(0).Max() ?? 0;
             return highestLineId == null ? "1" : (highestLineId + 1).ToString();
         } // !_getNextLineId()
