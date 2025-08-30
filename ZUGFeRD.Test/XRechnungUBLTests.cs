@@ -235,7 +235,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
-            Tax tax = loadedInvoice.Taxes.FirstOrDefault(t => t.TypeCode == TaxTypes.LOC);
+            Tax? tax = loadedInvoice.Taxes.FirstOrDefault(t => t.TypeCode == TaxTypes.LOC);
             Assert.IsNotNull(tax);
             Assert.AreEqual(basisAmount, tax.BasisAmount);
             Assert.AreEqual(percent, tax.Percent);

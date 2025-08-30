@@ -1169,8 +1169,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="basisAmount">Base amount for calculation</param>
         /// <param name="currency">Currency code</param>
-        /// <param name="actualAmount">Actual amount of allowance/charge</param>
-        /// <param name="reason">Reason for allowance/charge</param>
+        /// <param name="actualAmount">Actual amount of charge</param>
+        /// <param name="reason">Reason for charge</param>
         /// <param name="taxTypeCode">Type of tax</param>
         /// <param name="taxCategoryCode">Tax category</param>
         /// <param name="taxPercent">Tax percentage</param>
@@ -1213,11 +1213,11 @@ namespace s2industries.ZUGFeRD
         /// </summary>        
         /// <param name="basisAmount">Base amount (basis of allowance)</param>
         /// <param name="currency">Curency of the allowance</param>
-        /// <param name="actualAmount">Actual allowance charge amount</param>
-        /// <param name="chargePercentage">Actual allowance charge percentage</param>
+        /// <param name="actualAmount">Actual allowance amount</param>
+        /// <param name="chargePercentage">Actual allowance percentage</param>
         /// <param name="reason">Reason for the allowance</param>
-        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
         /// <param name="reasonCode">Reason code for the allowance</param>
         public void AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
@@ -1253,15 +1253,16 @@ namespace s2industries.ZUGFeRD
         /// BG-21
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>        
-        /// <param name="basisAmount">Base amount (basis of allowance)</param>
-        /// <param name="currency">Curency of the allowance</param>
-        /// <param name="actualAmount">Actual allowance charge amount</param>
-        /// <param name="chargePercentage">Actual allowance charge percentage</param>
-        /// <param name="reason">Reason for the allowance</param>
-        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxPercent">VAT rate for the allowance</param>
-        /// <param name="reasonCode">Reason code for the allowance</param>
+        /// <param name="basisAmount">Base amount (basis of charge)</param>
+        /// <param name="currency">Curency of the charge</param>
+        /// <param name="actualAmount">Actual charge amount</param>
+        /// <param name="chargePercentage">Actual charge percentage</param>
+        /// <param name="reason">Reason for the charge</param>
+        /// <param name="taxTypeCode">VAT type code for document level charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level charge</param>
+        /// <param name="taxPercent">VAT rate for the charge</param>
+        /// <param name="reasonCode">Reason code for the chargee/param>
+        [Obsolete("This function has a typo in the function name. Please use `AddTradeCharge` instead.", true)]
         public void AddTradeeCharge(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, ChargeReasonCodes? reasonCode = null)
         {
             _AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
@@ -1302,6 +1303,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="percentage">Optional percentage</param>
         /// <param name="baseAmount">Optional base amount</param>
         /// <param name="actualAmount">Optional actual amount</param>
+        /// <param name="maturityDate">Optional `DateTime?`</param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
             PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null, DateTime? maturityDate = null)
@@ -1517,6 +1519,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="version">ZUGFeRD version to use</param>
         /// <param name="profile">ZUGFeRD profile to use</param>
         /// <param name="format">Output format (CII or UBL)</param>
+        /// <param name="options">Optional `InvoiceFormatOptions`</param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             this.Profile = profile;
@@ -1532,6 +1535,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="version">ZUGFeRD version to use</param>
         /// <param name="profile">ZUGFeRD profile to use</param>
         /// <param name="format">Output format (CII or UBL)</param>
+        /// <param name="options">Optional `InvoiceFormatOptions`</param>
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             this.Profile = profile;

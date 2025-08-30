@@ -49,6 +49,12 @@ namespace s2industries.ZUGFeRD
         public DateTime? ConversionRateTimestamp { get; private set; }
 
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="sourceCurrency"></param>
+        /// <param name="targetCurrency"></param>
+        /// <param name="conversionRate"></param>
         public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate)
         {
             SourceCurrency = sourceCurrency;
@@ -57,6 +63,13 @@ namespace s2industries.ZUGFeRD
         } // !TradeCurrencyExchange()
 
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="sourceCurrency"></param>
+        /// <param name="targetCurrency"></param>
+        /// <param name="conversionRate"></param>
+        /// <param name="conversionRateTimestamp"></param>
         public TradeCurrencyExchange(CurrencyCodes sourceCurrency, CurrencyCodes targetCurrency, decimal conversionRate, DateTime conversionRateTimestamp)
         {
             SourceCurrency = sourceCurrency;
