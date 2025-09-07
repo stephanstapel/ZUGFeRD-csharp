@@ -42,6 +42,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="descriptor">The invoice object that should be saved</param>
         /// <param name="stream">The target stream for saving the invoice</param>
         /// <param name="format">Format of the target file</param>
+        /// <param name="options">Optional `InvoiceFormatOptions` for custom formatting of invoice file</param>
         public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             if (!stream.CanWrite || !stream.CanSeek)

@@ -328,11 +328,11 @@ namespace s2industries.ZUGFeRD
         ///
         /// The amounts are per unit, not for the whole item.
         /// </summary>
-        /// <param name="currency">Currency of the allowance or surcharge</param>
-        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
-        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
-        /// <param name="reason">Reason for the allowance or surcharge</param>
-        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        /// <param name="currency">Currency of the allowance</param>
+        /// <param name="basisAmount">Basis aount for the allowance, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance amount</param>
+        /// <param name="reason">Reason for the allowance </param>
+        /// <param name="reasonCode">Reason code for the allowance</param>
         public TradeLineItem AddTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                string reason, AllowanceReasonCodes? reasonCode = null)
         {
@@ -353,11 +353,11 @@ namespace s2industries.ZUGFeRD
         ///
         /// The amounts are per unit, not for the whole item.
         /// </summary>
-        /// <param name="currency">Currency of the allowance or surcharge</param>
-        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
-        /// <param name="actualAmount">The actual allowance or surcharge amount</param>        
-        /// <param name="reason">Reason for the allowance or surcharge</param>
-        /// <param name="reasonCode">Reason code for the allowance or surcharge</param>
+        /// <param name="currency">Currency of the surcharge</param>
+        /// <param name="basisAmount">Basis aount for the surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual surcharge amount</param>        
+        /// <param name="reason">Reason for the surcharge</param>
+        /// <param name="reasonCode">Optional reason code for the surcharge</param>
         public TradeLineItem AddTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                             string reason, ChargeReasonCodes? reasonCode = null)
         {
@@ -474,12 +474,13 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// Adds a charge on total item price, attaching it to the corresponding item.
         /// </summary>        
-        /// <param name="currency">Currency of the allowance or surcharge</param>
-        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
-        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
-        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="currency">Currency of the surcharge</param>
+        /// <param name="basisAmount">Basis aount for the surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual surcharge amount</param>
+        /// <param name="reason">Reason for the surcharge</param>
+        /// <param name="reasonCode">Optional reason code for the surcharge</param>
         public TradeLineItem AddSpecifiedTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                      string reason,
                                                      ChargeReasonCodes? reasonCode = null)
@@ -497,13 +498,14 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// Adds an allowance on total item price, attaching it to the corresponding item.
         /// </summary>
-        /// <param name="currency">Currency of the allowance or surcharge</param>
-        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
-        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
-        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
-        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="currency">Currency of the allowance</param>
+        /// <param name="basisAmount">Basis aount for the allowance, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual allowance amount</param>
+        /// <param name="chargePercentage">Actual allowance charge percentage</param>
+        /// <param name="reason">Reason for the allowance</param>
+        /// <param name="reasonCode">Optional reason code for the allowance</param>
         public TradeLineItem AddSpecifiedTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                         decimal? chargePercentage, string reason,
                                                         AllowanceReasonCodes? reasonCode = null)
@@ -522,13 +524,14 @@ namespace s2industries.ZUGFeRD
 
 
         /// <summary>
-        /// As an allowance or charge on total item price, attaching it to the corresponding item.
+        /// Adds a charge on total item price, attaching it to the corresponding item.
         /// </summary>
-        /// <param name="currency">Currency of the allowance or surcharge</param>
-        /// <param name="basisAmount">Basis aount for the allowance or surcharge, typicalls the net amount of the item</param>
-        /// <param name="actualAmount">The actual allowance or surcharge amount</param>
-        /// <param name="chargePercentage">Actual allowance or surcharge charge percentage</param>
-        /// <param name="reason">Reason for the allowance or surcharge</param>
+        /// <param name="currency">Currency of the surcharge</param>
+        /// <param name="basisAmount">Basis aount for the surcharge, typicalls the net amount of the item</param>
+        /// <param name="actualAmount">The actual surcharge amount</param>
+        /// <param name="chargePercentage">Actual surcharge charge percentage</param>
+        /// <param name="reason">Reason for the surcharge</param>
+        /// <param name="reasonCode">Optional reason code for the surcharge</param>
         public TradeLineItem AddSpecifiedTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
                                                      decimal? chargePercentage, string reason,
                                                      ChargeReasonCodes? reasonCode = null)
@@ -730,6 +733,7 @@ namespace s2industries.ZUGFeRD
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference
         /// </summary>
         /// <param name="AccountID">The accounting reference identifier</param>
+        /// <param name="AccountTypeCode">Type of the account - optional</param>
         public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes? AccountTypeCode = null)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()

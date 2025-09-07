@@ -545,7 +545,8 @@ namespace s2industries.ZUGFeRD.Test
         {
             decimal grossPrice = 10.1m;
             decimal netPrice = 10.0m;
-            decimal discountPercent = 10.0m;
+            // Is currently unused, therefore commented out.
+            //decimal discountPercent = 10.0m;
             decimal discountAmount = 0.1m;
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
@@ -980,8 +981,9 @@ namespace s2industries.ZUGFeRD.Test
         [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
         public void TestNulledGlobalIDScheme(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
         {
-            decimal? desiredNetUnitQuantity = 20.0m;
-            decimal? desiredGrossUnitQuantity = 23.0m;
+            // Is currently unused, therefore commented out.
+            //decimal? desiredNetUnitQuantity = 20.0m;
+            //decimal? desiredGrossUnitQuantity = 23.0m;
 
             InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
 
