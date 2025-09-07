@@ -733,7 +733,7 @@ namespace s2industries.ZUGFeRD
         /// Please note that XRechnung/ FacturX allows a maximum of one such reference
         /// </summary>
         /// <param name="AccountID">The accounting reference identifier</param>
-        /// <param name="AccountTypeCode">Optional `AccountingAccountTypeCodes?`</param>
+        /// <param name="AccountTypeCode">Type of the account - optional</param>
         public TradeLineItem AddReceivableSpecifiedTradeAccountingAccount(string AccountID, AccountingAccountTypeCodes? AccountTypeCode = null)
         {
             this.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
