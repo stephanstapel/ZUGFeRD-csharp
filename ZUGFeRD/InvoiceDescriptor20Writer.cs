@@ -624,8 +624,8 @@ namespace s2industries.ZUGFeRD
             //   4. InvoiceCurrencyCode (optional)
             _Writer.WriteElementString("ram", "InvoiceCurrencyCode", this._Descriptor.Currency.EnumToString());
 
-            //   5. InvoiceIssuerReference (optional)
-            _Writer.WriteElementString("ram", "InvoiceIssuerReference", this._Descriptor.SellerReferenceNo, profile: Profile.Extended);
+            //   5. InvoiceIssuerReference (optional), BT-X-204
+            _Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this._Descriptor.SellerReferenceNo, Profile.Extended);
 
             //   6. InvoicerTradeParty (optional)
             _writeOptionalParty(_Writer, "ram", "InvoicerTradeParty", this._Descriptor.Invoicer);
