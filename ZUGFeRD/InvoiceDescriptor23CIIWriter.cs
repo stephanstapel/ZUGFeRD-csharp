@@ -522,22 +522,22 @@ namespace s2industries.ZUGFeRD
                 //Detailinformationen zu Positionssummen
                 _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
                 _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementLineMonetarySummation");
-                decimal total = 0m;
+                decimal lineTotalAmount = 0m;
                 if (tradeLineItem.LineTotalAmount.HasValue)
                 {
-                    total = tradeLineItem.LineTotalAmount.Value;
+                    lineTotalAmount = tradeLineItem.LineTotalAmount.Value;
                 }
                 else
                 {
-                    total = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
+                    lineTotalAmount = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
                     if (tradeLineItem.NetQuantity.HasValue && (tradeLineItem.NetQuantity.Value != 0))
                     {
-                        total /= tradeLineItem.NetQuantity.Value;
+                        lineTotalAmount /= tradeLineItem.NetQuantity.Value;
                     }
                 }
 
                 _Writer.WriteStartElement("ram", "LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                _Writer.WriteValue(_formatDecimal(total));
+                _Writer.WriteValue(_formatDecimal(lineTotalAmount));
                 _Writer.WriteEndElement(); // !ram:LineTotalAmount
 
                 // TODO: TotalAllowanceChargeAmount
