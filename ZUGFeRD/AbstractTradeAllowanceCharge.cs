@@ -82,6 +82,7 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Surcharges/discounts at invoice level - percentage rate
+        /// BT-94, BT-101
         /// </summary>
         public decimal? MultiplierFactor { get; internal set; }
     }
