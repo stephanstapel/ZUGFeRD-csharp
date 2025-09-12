@@ -313,6 +313,8 @@ namespace s2industries.ZUGFeRD
                     {
                         _Writer.WriteStartElement("ram", "ContractReferencedDocument", Profile.Extended);
 
+                        _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
+
                         // reference to the contract position
                         _Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.ContractReferencedDocument.LineID);
 
@@ -325,7 +327,6 @@ namespace s2industries.ZUGFeRD
                             _Writer.WriteEndElement(); // !udt:DateTimeString
                             _Writer.WriteEndElement(); // !ram:IssueDateTime
                         }
-                        _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
                         _Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
                     }
                     #endregion
