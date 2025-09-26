@@ -220,6 +220,12 @@ namespace s2industries.ZUGFeRD
         public Party Invoicer { get; set; }
 
         /// <summary>
+        /// Optional contact only used in Extended profile.
+        /// Detailed contact information of the invoicer BG-X-34
+        /// </summary>
+        public Contact InvoicerContact { get; set; }
+
+        /// <summary>
         /// This party is optional and is written in most profiles except Minimum profile
         ///
         /// BG-13
