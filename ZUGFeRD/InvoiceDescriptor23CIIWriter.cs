@@ -856,7 +856,7 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this._Descriptor.SellerReferenceNo, Profile.Extended);
 
             //   6. InvoicerTradeParty (optional), BG-X-33
-            _writeOptionalParty(_Writer, PartyTypes.InvoicerTradeParty, this._Descriptor.Invoicer, Profile.Extended);
+            _writeOptionalParty(_Writer, PartyTypes.InvoicerTradeParty, this._Descriptor.Invoicer, Profile.Extended, this._Descriptor.InvoicerContact);
 
             //   7. InvoiceeTradeParty (optional), BG-X-36
             _writeOptionalParty(_Writer, PartyTypes.InvoiceeTradeParty, this._Descriptor.Invoicee, Profile.Extended, default, default, this._Descriptor.GetInvoiceeTaxRegistration());
