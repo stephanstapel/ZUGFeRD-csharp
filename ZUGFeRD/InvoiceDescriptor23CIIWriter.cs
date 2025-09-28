@@ -1268,14 +1268,14 @@ namespace s2industries.ZUGFeRD
 
             if (tradeAllowanceCharge.ChargePercentage.HasValue)
             {
-                writer.WriteStartElement("ram", "CalculationPercent"); // BT-101
+                writer.WriteStartElement("ram", "CalculationPercent"); // allowance: BT-94, charge: BT-101
                 writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value));
                 writer.WriteEndElement();
             }
 
             if (tradeAllowanceCharge.BasisAmount.HasValue)
             {
-                writer.WriteStartElement("ram", "BasisAmount"); // BT-100
+                writer.WriteStartElement("ram", "BasisAmount"); // allowance: BT-137, charge: BT-100
                 writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value));
                 writer.WriteEndElement();
             }
@@ -1335,7 +1335,7 @@ namespace s2industries.ZUGFeRD
             #region ChargePercentage
             if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
             {
-                _Writer.WriteStartElement("ram", "CalculationPercent"); // BT-138, BT-143
+                _Writer.WriteStartElement("ram", "CalculationPercent"); // allowance: BT-138, charge: BT-143
                 _Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage.Value, 2));
                 _Writer.WriteEndElement();
             }
