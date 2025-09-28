@@ -629,7 +629,7 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this._Descriptor.SellerReferenceNo, Profile.Extended);
 
             //   6. InvoicerTradeParty (optional)
-            _writeOptionalParty(_Writer, "ram", "InvoicerTradeParty", this._Descriptor.Invoicer);
+            _writeOptionalParty(_Writer, "ram", "InvoicerTradeParty", this._Descriptor.Invoicer, this._Descriptor.InvoicerContact);
 
             //   7. InvoiceeTradeParty (optional)
             if (_Descriptor.Profile == Profile.Extended)

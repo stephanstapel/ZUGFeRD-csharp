@@ -164,6 +164,28 @@ namespace s2industries.ZUGFeRD
             }
 
             retval.Invoicee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty", nsmgr);
+            //BT-X-242-00
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
+            {
+                string id = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr);
+                string schemeID = XmlUtils.NodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
+
+                retval.AddInvoiceeTaxRegistration(id, EnumExtensions.StringToEnum<TaxRegistrationSchemeID>(schemeID));
+            }
+
+            retval.Invoicer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty", nsmgr);
+            if (doc.SelectSingleNode("//ram:InvoicerTradeParty/ram:DefinedTradeContact", nsmgr) != null)
+            {
+                retval.InvoicerContact = new Contact()
+                {
+                    Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:PersonName", nsmgr),
+                    OrgUnit = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    PhoneNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    FaxNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    EmailAddress = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:EmailURIUniversalCommunication/ram:URIID", nsmgr)
+                };
+            }
+
             retval.Payee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty", nsmgr);
 
             retval.PaymentReference = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:PaymentReference", nsmgr);
