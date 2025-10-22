@@ -648,7 +648,23 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteEndElement(); // !InvoicedQuantity || CreditedQuantity
 
             _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
-            _writeOptionalAmount(_Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
+            decimal lineTotalAmount = 0m;
+            if (tradeLineItem.LineTotalAmount.HasValue)
+            {
+                lineTotalAmount = tradeLineItem.LineTotalAmount.Value;
+            }
+            else
+            {
+                lineTotalAmount = tradeLineItem.NetUnitPrice * tradeLineItem.BilledQuantity;
+                if (tradeLineItem.NetQuantity.HasValue && (tradeLineItem.NetQuantity.Value != 0))
+                {
+                    lineTotalAmount /= tradeLineItem.NetQuantity.Value;
+                }
+            }
+            _Writer.WriteStartElement("cbc", "LineExtensionAmount");
+            _Writer.WriteAttributeString("currencyID", this._Descriptor.Currency.EnumToString());
+            _Writer.WriteValue(_formatDecimal(lineTotalAmount));
+            _Writer.WriteEndElement(); // cbc:LineExtensionAmount
 
             if (tradeLineItem.AdditionalReferencedDocuments.Count > 0)
             {
