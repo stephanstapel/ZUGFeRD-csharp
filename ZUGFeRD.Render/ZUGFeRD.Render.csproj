@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>s2industries.ZUGFeRD.Render</RootNamespace>
 	<PreserveCompilationContext>true</PreserveCompilationContext>
 	<Version>17.3.0</Version>
@@ -12,11 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="6.2.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
+    <PackageReference Include="Scriban" Version="6.4.0" />
+    <PackageReference Include="ZUGFeRD-csharp" Version="17.4.0" />
   </ItemGroup>
 
 </Project>
