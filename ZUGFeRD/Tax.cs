@@ -82,12 +82,16 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Value added tax point date
         /// The date when the VAT becomes accountable for the Seller and for the Buyer in so far as that date can be determined and differs from the date of issue of the invoice, according to the VAT directive.
+        ///
+        /// Please note that TaxPointDate and <see cref="DueDateTypeCode"/> are mutually exclusive. In case both are set, only TaxPointDate is serialized.
         /// </summary>
         public DateTime? TaxPointDate { get; set; }
 
         /// <summary>
         /// Value added tax point date code
         /// The code of the date when the VAT becomes accountable for the Seller and for the Buyer.
+        ///
+        /// Please note that DueDateTypeCode and <see cref="TaxPointDate"/> are mutually exclusive. In case both are set, only TaxPointDate is serialized.
         /// </summary>
         public DateTypeCodes? DueDateTypeCode { get; set; }
 
@@ -103,6 +107,8 @@ namespace s2industries.ZUGFeRD
         /// 
         /// Use: The date when the VAT becomes accountable for the Seller and for the Buyer in so far as that date can be
         /// determined and differs from the date of issue of the invoice, according to the VAT directive.
+        ///
+        /// Please note that taxPointDate and dueDateTypeCode are mutually exclusive. In case both are set, only TaxPointDate is serialized.
         /// </summary>
         /// <param name="taxPointDate">Value added tax point date</param>
         /// <param name="dueDateTypeCode">Value added tax point date code</param>

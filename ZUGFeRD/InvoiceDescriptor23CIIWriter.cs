@@ -1632,7 +1632,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteEndElement(); // !udt:DateString
                     _Writer.WriteEndElement(); // !TaxPointDate
                 }
-                if (tax.TaxPointDate.HasValue)
+                else if (tax.DueDateTypeCode.HasValue) // TaxPointDate and DueDateTypeCode are mutually exclusive
                 {
                     _Writer.WriteElementString("ram", "DueDateTypeCode", tax.DueDateTypeCode?.EnumToString());
                 }
