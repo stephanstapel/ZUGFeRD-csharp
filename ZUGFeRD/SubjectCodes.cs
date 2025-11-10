@@ -24,7 +24,7 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
-    /// http://www.stylusstudio.com/edifact/D02A/4451.htm
+    /// https://service.unece.org/trade/untdid/d23a/tred/tred4451.htm
     /// </summary>
     public enum SubjectCodes
     {
@@ -73,6 +73,12 @@ namespace s2industries.ZUGFeRD
         ABN,
 
         /// <summary>
+        /// Factor assignment clause
+        /// </summary>
+        /// Assignment based on an agreement between seller and factor.
+        ACC,
+
+        /// <summary>
         /// Zusätzliche Angaben
         /// </summary>
         /// Zusaätzliche Angaben zu diesem Kauf
@@ -87,6 +93,12 @@ namespace s2industries.ZUGFeRD
         /// Instructions to the paying and/or accepting and/or negotiating bank
         /// </summary>
         AET,
+
+        /// <summary>
+        /// Waste information
+        /// </summary>
+        /// Text describing waste related information.
+        BLU,
 
         /// <summary>
         /// Order information
