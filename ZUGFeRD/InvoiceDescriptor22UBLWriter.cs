@@ -137,6 +137,22 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteElementString("cbc", "TaxCurrencyCode", this._Descriptor.TaxCurrency.Value.EnumToString());
             }
 
+            //   BT-19
+            if (this._Descriptor.AnyReceivableSpecifiedTradeAccountingAccounts())
+            {
+                foreach (ReceivableSpecifiedTradeAccountingAccount traceAccountingAccount in this._Descriptor.GetReceivableSpecifiedTradeAccountingAccounts())
+                {
+                    if (string.IsNullOrWhiteSpace(traceAccountingAccount.TradeAccountID))
+                    {
+                        continue;
+                    }
+
+                    _Writer.WriteOptionalElementString("cbc", "AccountingCost", traceAccountingAccount.TradeAccountID);
+
+                    break; // Cardinality 0..1
+                }
+            }
+
             _Writer.WriteOptionalElementString("cbc", "BuyerReference", this._Descriptor.ReferenceOrderNo);
 
             if (this._Descriptor.BillingPeriodEnd.HasValue || this._Descriptor.BillingPeriodEnd.HasValue)
@@ -458,7 +474,7 @@ namespace s2industries.ZUGFeRD
             }
 
             #region AllowanceCharge
-            foreach(TradeAllowance allowance in descriptor.GetTradeAllowances())
+            foreach (TradeAllowance allowance in descriptor.GetTradeAllowances())
             {
                 _WriteDocumentLevelAllowanceCharges(_Writer, allowance);
             } // !foreach(allowance)
@@ -678,7 +694,7 @@ namespace s2industries.ZUGFeRD
             {
                 _WriteItemLevelSpecifiedTradeAllowanceCharge(specifiedTradeAllowanceCharge);
             }
-            
+
             foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeCharges())
             {
                 _WriteItemLevelSpecifiedTradeAllowanceCharge(specifiedTradeAllowanceCharge);
@@ -726,8 +742,8 @@ namespace s2industries.ZUGFeRD
             _WriteComment(_Writer, options, InvoiceCommentConstants.NetPriceProductTradePriceComment);
             _Writer.WriteStartElement("cbc", "PriceAmount");
             _Writer.WriteAttributeString("currencyID", this._Descriptor.Currency.EnumToString());
-			// UBL-DT-01 explicitly excempts the price amount from the 2 decimal rule for amount elements,
-			// thus allowing for 4 decimal places (needed for e.g. fuel prices)
+            // UBL-DT-01 explicitly excempts the price amount from the 2 decimal rule for amount elements,
+            // thus allowing for 4 decimal places (needed for e.g. fuel prices)
             _Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice, 4));
             _Writer.WriteEndElement();
 
@@ -753,7 +769,7 @@ namespace s2industries.ZUGFeRD
                     else
                     {
                         _Writer.WriteElementString("cbc", "ChargeIndicator", "true");
-                    }                    
+                    }
 
                     _Writer.WriteStartElement("cbc", "Amount"); // BT-147
                     _Writer.WriteAttributeString("currencyID", this._Descriptor.Currency.EnumToString());
@@ -799,7 +815,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode", charge.ReasonCode.EnumToString()); // BT-145
                     break;
             }
-            
+
             _Writer.WriteOptionalElementString("cbc", "AllowanceChargeReason",
                 specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
 
@@ -884,7 +900,7 @@ namespace s2industries.ZUGFeRD
             {
                 switch (partyType)
                 {
-                    case PartyTypes.SellerTradeParty:                        
+                    case PartyTypes.SellerTradeParty:
                         writer.WriteStartElement("cac", "AccountingSupplierParty", this._Descriptor.Profile);
                         break;
                     case PartyTypes.BuyerTradeParty:
@@ -1096,7 +1112,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
         } // !_writeNotes()
-        
+
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
             if (!value.HasValue)
