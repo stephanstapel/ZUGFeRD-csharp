@@ -24,15 +24,22 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     /// <summary>
-    /// http://www.stylusstudio.com/edifact/D02A/4451.htm
+    /// https://service.unece.org/trade/untdid/d23a/tred/tred4451.htm
     /// </summary>
     public enum SubjectCodes
     {
+        /// <summary>
+        /// Terms of payments
+        /// </summary>
+        /// [4276] Conditions of payment between the parties to a transaction(generic term).
+        AAB,
+
         /// <summary>
         /// Dangerous goods additional information
         /// </summary>
         /// Additional information concerning dangerous goods.
         AAC,
+
         /// <summary>
         /// Generelle Informationen
         /// </summary>
@@ -47,17 +54,29 @@ namespace s2industries.ZUGFeRD
         AAJ,
 
         /// <summary>
+        /// Preiskonditionen
+        ///
+        /// Angaben zu Entgeltminderungen
+        /// </summary>
+        AAK,
+
+        /// <summary>
+        /// Government information
+        /// </summary>
+        /// Self explanatory.
+        ABL,
+
+        /// <summary>
         /// Buchhaltungsinformationen
         /// </summary>
         /// Informationen für die Buchaltung zu diesem Kauf
         ABN,
 
         /// <summary>
-        /// Preiskonditionen
-        ///
-        /// Angaben zu Entgeltminderungen
+        /// Factor assignment clause
         /// </summary>
-        AAK,
+        /// Assignment based on an agreement between seller and factor.
+        ACC,
 
         /// <summary>
         /// Zusätzliche Angaben
@@ -69,6 +88,34 @@ namespace s2industries.ZUGFeRD
         /// Text subject is note.
         /// </summary>
         ADU,
+
+        /// <summary>
+        /// Instructions to the paying and/or accepting and/or negotiating bank
+        /// </summary>
+        AET,
+
+        /// <summary>
+        /// Waste information
+        /// </summary>
+        /// Text describing waste related information.
+        BLU,
+
+        /// <summary>
+        /// Order information
+        /// </summary>
+        COI,
+
+        /// <summary>
+        /// Customs declaration information
+        /// </summary>
+        /// Note contains customs declaration information.
+        CUS,
+
+        /// <summary>
+        /// Payment detail/remittance information
+        /// </summary>
+        /// The free text contains payment details.
+        PMD,
 
         /// <summary>
         /// Zahlungsinformation
@@ -105,17 +152,6 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Grund der Steuerbefreiung
         /// </summary>
-        TXD,
-
-        /// <summary>
-        /// Instructions to the paying and/or accepting and/or negotiating bank
-        /// </summary>
-        AET,
-
-        /// <summary>
-        /// Order information
-        /// </summary>
-        COI
-        
+        TXD
     }
 }
