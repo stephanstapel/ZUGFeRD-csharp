@@ -3623,5 +3623,26 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 06, 21));
         } // !TestRSMInvoice()        
+        
+        [TestMethod]
+        public void TestAccountingCost()
+        {
+            var d = new InvoiceDescriptor();
+            d.Type = InvoiceType.Invoice;
+            d.InvoiceNo = "471103";
+            d.Currency = CurrencyCodes.EUR;
+            d.InvoiceDate = new DateTime(2025, 11, 11);
+            d.AddReceivableSpecifiedTradeAccountingAccount("BRE");
+
+            using (var stream = new MemoryStream())
+            {
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var d2 = InvoiceDescriptor.Load(stream);
+                Assert.IsTrue(d2.GetReceivableSpecifiedTradeAccountingAccounts().Any(account => account.TradeAccountID == "BRE"));
+            }
+        } // !TestAccountingCost()
     }
 }
