@@ -23,7 +23,10 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+
     /// <summary>
+    /// UNTDID 4451 — Text subject qualifier
+    /// Version 24A
     /// https://service.unece.org/trade/untdid/d23a/tred/tred4451.htm
     /// </summary>
     public enum SubjectCodes
@@ -41,6 +44,8 @@ namespace s2industries.ZUGFeRD
         AAC,
 
         /// <summary>
+        /// General information
+        ///
         /// Generelle Informationen
         /// </summary>
         /// Generelle Informationen zu diesem Kauf
@@ -54,6 +59,8 @@ namespace s2industries.ZUGFeRD
         AAJ,
 
         /// <summary>
+        /// Price conditions
+        /// 
         /// Preiskonditionen
         ///
         /// Angaben zu Entgeltminderungen
@@ -67,6 +74,8 @@ namespace s2industries.ZUGFeRD
         ABL,
 
         /// <summary>
+        /// Accounting information
+        ///
         /// Buchhaltungsinformationen
         /// </summary>
         /// Informationen für die Buchaltung zu diesem Kauf
@@ -79,6 +88,8 @@ namespace s2industries.ZUGFeRD
         ACC,
 
         /// <summary>
+        /// Additional information
+        ///
         /// Zusätzliche Angaben
         /// </summary>
         /// Zusaätzliche Angaben zu diesem Kauf
@@ -118,6 +129,8 @@ namespace s2industries.ZUGFeRD
         PMD,
 
         /// <summary>
+        /// Payment information
+        ///
         /// Zahlungsinformation
         ///
         /// Bekanntgabe der Abtretung der
@@ -126,6 +139,8 @@ namespace s2industries.ZUGFeRD
         PMT,
 
         /// <summary>
+        /// Price calculation formula
+        ///
         /// Preiskalkulationsschema
         ///
         /// Zum Beispiel Angabe Zählerstand,
@@ -135,6 +150,8 @@ namespace s2industries.ZUGFeRD
         PRF,
 
         /// <summary>
+        /// Regulatory information
+        ///
         /// Regulatorische Informationen
         ///
         /// Angaben zum leistenden Unternehmen
@@ -150,6 +167,8 @@ namespace s2industries.ZUGFeRD
         SUR,
 
         /// <summary>
+        /// Tax declaration
+        ///
         /// Grund der Steuerbefreiung
         /// </summary>
         TXD
