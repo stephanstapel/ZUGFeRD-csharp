@@ -1007,5 +1007,55 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsNull(item.GlobalID.SchemeID);
             }
         } // !TestNulledGlobalIDScheme()
+
+
+        [TestMethod]        
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        public void TestInvoicerContactWriteAndRead(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            var desc = new InvoiceProvider().CreateInvoice();
+            desc.Invoicer = new Party
+            {
+                Name = "Invoicer Name",
+                Street = "Straße 1",
+                Postcode = "01234",
+                City = "Musterstadt",
+                Country = CountryCodes.DE,
+            };
+
+            desc.InvoicerContact = new Contact
+            {
+                EmailAddress = "invoiceremail@example.com",
+                FaxNo = "+49 12345",
+                PhoneNo = "+49 54321"
+            };
+
+            using var invoiceStream = new MemoryStream();
+            desc.Save(invoiceStream, version, profile);
+
+            var invoiceString = Encoding.UTF8.GetString(invoiceStream.ToArray());
+
+            const string expectedInvoicePart = """
+                                               <ram:DefinedTradeContact>
+                                                         <ram:TelephoneUniversalCommunication>
+                                                           <ram:CompleteNumber>+49 54321</ram:CompleteNumber>
+                                                         </ram:TelephoneUniversalCommunication>
+                                                         <ram:FaxUniversalCommunication>
+                                                           <ram:CompleteNumber>+49 12345</ram:CompleteNumber>
+                                                         </ram:FaxUniversalCommunication>
+                                                         <ram:EmailURIUniversalCommunication>
+                                                           <ram:URIID>invoiceremail@example.com</ram:URIID>
+                                                         </ram:EmailURIUniversalCommunication>
+                                                       </ram:DefinedTradeContact>
+                                               """;
+            StringAssert.Contains(invoiceString, expectedInvoicePart);
+
+            var loadedInvoice = InvoiceDescriptor.Load(invoiceStream);
+
+            Assert.AreEqual("invoiceremail@example.com", loadedInvoice.InvoicerContact.EmailAddress);
+            Assert.AreEqual("+49 12345", loadedInvoice.InvoicerContact.FaxNo);
+            Assert.AreEqual("+49 54321", loadedInvoice.InvoicerContact.PhoneNo);
+        } // !TestInvoicerContactWriteAndRead()
     }
 }

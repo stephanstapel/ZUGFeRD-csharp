@@ -406,7 +406,7 @@ namespace s2industries.ZUGFeRD
         #endregion // !Convenience functions
 
 
-        #region Cleanúp functions
+        #region Cleanup functions
         /// <summary>
         /// Make sure that the given string does not contain invalid xml characters.
         /// The invalid characters are removed from the string

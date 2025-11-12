@@ -225,6 +225,8 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteStartElement("ram", "ContractReferencedDocument", Profile.Extended);
 
+                    _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
+
                     // reference to the contract position
                     _Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.ContractReferencedDocument.LineID);
 
@@ -236,8 +238,7 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteValue(_formatDate(tradeLineItem.ContractReferencedDocument.IssueDateTime.Value));
                         _Writer.WriteEndElement(); // !udt:DateTimeString
                         _Writer.WriteEndElement(); // !ram:IssueDateTime
-                    }
-                    _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
+                    }                    
 
                     _Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
                 }
@@ -628,7 +629,7 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this._Descriptor.SellerReferenceNo, Profile.Extended);
 
             //   6. InvoicerTradeParty (optional)
-            _writeOptionalParty(_Writer, "ram", "InvoicerTradeParty", this._Descriptor.Invoicer);
+            _writeOptionalParty(_Writer, "ram", "InvoicerTradeParty", this._Descriptor.Invoicer, this._Descriptor.InvoicerContact);
 
             //   7. InvoiceeTradeParty (optional)
             if (_Descriptor.Profile == Profile.Extended)
@@ -1136,7 +1137,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteEndElement(); // !udt:DateString
                     _Writer.WriteEndElement(); // !TaxPointDate
                 }
-                if (tax.TaxPointDate.HasValue)
+                else if (tax.DueDateTypeCode.HasValue) // TaxPointDate and DueDateTypeCode are mutually exclusive
                 {
                     _Writer.WriteElementString("ram", "DueDateTypeCode", tax.DueDateTypeCode?.EnumToString());
                 }

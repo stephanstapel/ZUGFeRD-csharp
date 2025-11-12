@@ -313,6 +313,8 @@ namespace s2industries.ZUGFeRD
                     {
                         _Writer.WriteStartElement("ram", "ContractReferencedDocument", Profile.Extended);
 
+                        _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
+
                         // reference to the contract position
                         _Writer.WriteOptionalElementString("ram", "LineID", tradeLineItem.ContractReferencedDocument.LineID);
 
@@ -325,7 +327,6 @@ namespace s2industries.ZUGFeRD
                             _Writer.WriteEndElement(); // !udt:DateTimeString
                             _Writer.WriteEndElement(); // !ram:IssueDateTime
                         }
-                        _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.ContractReferencedDocument.ID);
                         _Writer.WriteEndElement(); // !ram:ContractReferencedDocument(Extended)
                     }
                     #endregion
@@ -855,7 +856,7 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteOptionalElementString("ram", "InvoiceIssuerReference", this._Descriptor.SellerReferenceNo, Profile.Extended);
 
             //   6. InvoicerTradeParty (optional), BG-X-33
-            _writeOptionalParty(_Writer, PartyTypes.InvoicerTradeParty, this._Descriptor.Invoicer, Profile.Extended);
+            _writeOptionalParty(_Writer, PartyTypes.InvoicerTradeParty, this._Descriptor.Invoicer, Profile.Extended, this._Descriptor.InvoicerContact);
 
             //   7. InvoiceeTradeParty (optional), BG-X-36
             _writeOptionalParty(_Writer, PartyTypes.InvoiceeTradeParty, this._Descriptor.Invoicee, Profile.Extended, default, default, this._Descriptor.GetInvoiceeTaxRegistration());
@@ -1267,14 +1268,14 @@ namespace s2industries.ZUGFeRD
 
             if (tradeAllowanceCharge.ChargePercentage.HasValue)
             {
-                writer.WriteStartElement("ram", "CalculationPercent"); // BT-101
+                writer.WriteStartElement("ram", "CalculationPercent"); // allowance: BT-94, charge: BT-101
                 writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value));
                 writer.WriteEndElement();
             }
 
             if (tradeAllowanceCharge.BasisAmount.HasValue)
             {
-                writer.WriteStartElement("ram", "BasisAmount"); // BT-100
+                writer.WriteStartElement("ram", "BasisAmount"); // allowance: BT-137, charge: BT-100
                 writer.WriteValue(_formatDecimal(tradeAllowanceCharge.BasisAmount.Value));
                 writer.WriteEndElement();
             }
@@ -1334,7 +1335,7 @@ namespace s2industries.ZUGFeRD
             #region ChargePercentage
             if (specifiedTradeAllowanceCharge.ChargePercentage.HasValue)
             {
-                _Writer.WriteStartElement("ram", "CalculationPercent"); // BT-138, BT-143
+                _Writer.WriteStartElement("ram", "CalculationPercent"); // allowance: BT-138, charge: BT-143
                 _Writer.WriteValue(_formatDecimal(specifiedTradeAllowanceCharge.ChargePercentage.Value, 2));
                 _Writer.WriteEndElement();
             }
@@ -1631,7 +1632,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteEndElement(); // !udt:DateString
                     _Writer.WriteEndElement(); // !TaxPointDate
                 }
-                if (tax.TaxPointDate.HasValue)
+                else if (tax.DueDateTypeCode.HasValue) // TaxPointDate and DueDateTypeCode are mutually exclusive
                 {
                     _Writer.WriteElementString("ram", "DueDateTypeCode", tax.DueDateTypeCode?.EnumToString());
                 }
