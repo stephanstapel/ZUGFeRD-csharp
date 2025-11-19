@@ -121,7 +121,7 @@ namespace s2industries.ZUGFeRD
         /// FOB
         /// Frei an Bord (benannten Verschiffungshafen einfügen)
         /// </summary>
-        [Description("FOB")]
+        [EnumStringValue("FOB")]
         FOB
 	}
 }
