@@ -417,7 +417,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.ActualDeliveryDate.HasValue)
                 {
-                    _Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-170 for XRechnung 3
+                    _Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung | Profile.Comfort | Profile.Basic)); // this violates CII-SR-170 for XRechnung 3
                     _Writer.WriteStartElement("ram", "OccurrenceDateTime");
                     _Writer.WriteStartElement("udt", "DateTimeString");
                     _Writer.WriteAttributeString("format", "102");
