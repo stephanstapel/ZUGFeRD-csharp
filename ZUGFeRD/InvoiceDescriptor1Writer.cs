@@ -32,6 +32,18 @@ namespace s2industries.ZUGFeRD
         private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
 
+        public InvoiceDescriptor1Writer()
+        {
+            _Namespaces = new Dictionary<string, string>
+            {
+                { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
+                { "rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0" },
+                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" },
+                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15" }
+            };
+        } // !InvoiceDescriptor1Writer()
+
+
         /// <summary>
         /// Saves the given invoice to the given stream.
         /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
@@ -63,13 +75,7 @@ namespace s2industries.ZUGFeRD
 
             this._Descriptor = descriptor;
             this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
-            this._Writer.SetNamespaces(new Dictionary<string, string>()
-            {
-                { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
-                { "rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0" },
-                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" },
-                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15" }
-            });
+            this._Writer.SetNamespaces(_Namespaces);
             _Writer.WriteStartDocument();
             _WriteHeaderComments(_Writer, options);
 

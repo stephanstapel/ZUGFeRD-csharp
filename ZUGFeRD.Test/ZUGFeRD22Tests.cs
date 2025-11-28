@@ -3644,5 +3644,17 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsTrue(d2.GetReceivableSpecifiedTradeAccountingAccounts().Any(account => account.TradeAccountID == "BRE"));
             }
         } // !TestAccountingCost()
+
+
+        [TestMethod]
+        public void TestAlternateNamespace()
+        {
+            string path = @"..\..\..\..\demodata\zugferd22\zugferd_23_namespace.xml";
+            InvoiceDescriptor invoice = InvoiceDescriptor.Load(path);
+
+            // test random fields
+            Assert.AreEqual(invoice.InvoiceDate, new DateTime(2025, 10, 24));
+            Assert.AreEqual(invoice.InvoiceNo, "0000000016");
+        } // !TestAlternateNamespace()
     }
 }

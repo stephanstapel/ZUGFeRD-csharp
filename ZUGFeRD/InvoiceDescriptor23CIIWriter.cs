@@ -27,13 +27,28 @@ using System.Text;
 namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor23CIIWriter : IInvoiceDescriptorWriter
-    {
+    {        
         private ProfileAwareXmlTextWriter _Writer;
         private InvoiceDescriptor _Descriptor;
 
 
         private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
+
+
+
+        internal InvoiceDescriptor23CIIWriter()
+        {
+            _Namespaces = new Dictionary<string, string>
+            {
+                { "rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" },
+                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" },
+                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" },
+                { "qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
+                { "a",   "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
+                { "xs",  "http://www.w3.org/2001/XMLSchema" }
+            };
+        } // !InvoiceDescriptor23CIIWriter()
 
 
         /// <summary>
@@ -55,15 +70,7 @@ namespace s2industries.ZUGFeRD
 
             this._Descriptor = descriptor;
             this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
-            this._Writer.SetNamespaces(new Dictionary<string, string>()
-            {
-                { "a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
-                { "rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" },
-                { "qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
-                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" },
-                { "xs", "http://www.w3.org/2001/XMLSchema" },
-                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" }
-            });
+            this._Writer.SetNamespaces(_Namespaces);
 
             _Writer.WriteStartDocument();
             _WriteHeaderComments(_Writer, options);

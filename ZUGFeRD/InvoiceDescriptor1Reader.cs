@@ -25,6 +25,18 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor1Reader : IInvoiceDescriptorReader
     {
+        public InvoiceDescriptor1Reader()
+        {
+            _Namespaces = new Dictionary<string, string>
+            {
+                { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
+                { "rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0" },
+                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" },
+                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15" }
+            };
+        } // !InvoiceDescriptor1Reader()
+
+
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
         ///
@@ -42,7 +54,7 @@ namespace s2industries.ZUGFeRD
 
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
-            XmlNamespaceManager nsmgr = _GenerateNamespaceManagerFromNode(doc.DocumentElement);
+            XmlNamespaceManager nsmgr = _CreateFixedNamespaceManager(doc);
 
             if (!nsmgr.HasNamespace("rsm"))
             {

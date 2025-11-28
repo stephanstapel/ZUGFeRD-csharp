@@ -27,6 +27,7 @@ namespace s2industries.ZUGFeRD
 {
     internal abstract class IInvoiceDescriptorWriter
     {
+        protected Dictionary<string, string> _Namespaces = new Dictionary<string, string>();
         public abstract void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null);
 
 

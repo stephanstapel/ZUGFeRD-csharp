@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -38,14 +39,7 @@ namespace s2industries.ZUGFeRD
                     return defaultValue;
                 }
 
-                if (selectedNode.InnerXml.Contains("<qdt:"))
-                {
-                    return XmlUtils.NodeAsDateTime(selectedNode, "./qdt:DateTimeString", nsmgr);
-                }
-                else if (selectedNode.InnerXml.Contains("<udt:"))
-                {
-                    return XmlUtils.NodeAsDateTime(selectedNode, "./udt:DateTimeString", nsmgr);
-                }
+                return XmlUtils.NodeAsDateTime(selectedNode, "./*[local-name()='DateTimeString']", nsmgr, defaultValue);
             }
             catch
             {

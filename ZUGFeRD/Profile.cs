@@ -192,9 +192,9 @@ namespace s2industries.ZUGFeRD
             switch (profile)
             {
                 case Profile.BasicWL: return "BASIC WL";
-                case Profile.Comfort:
+                case Profile.Comfort: return "EN 16931";
                 case Profile.XRechnung1:
-                case Profile.XRechnung: return "EN 16931";
+                case Profile.XRechnung: return "XRECHNUNG";
                 default: return profile.ToString().ToUpper();
             }
         } // !GetXMPName()
