@@ -59,6 +59,11 @@ namespace s2industries.ZUGFeRD
         AB,
 
         /// <summary>
+        /// activity
+        /// </summary>
+        ACT,
+
+        /// <summary>
         /// millisecond
         /// </summary>
         C26,

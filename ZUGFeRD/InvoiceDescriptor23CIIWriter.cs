@@ -189,7 +189,7 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
                 _Writer.WriteStartElement("ram", "SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && tradeLineItem.GlobalID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
                     _writeElementWithAttributeWithPrefix(_Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
                 }
@@ -424,7 +424,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.ActualDeliveryDate.HasValue)
                 {
-                    _Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung)); // this violates CII-SR-170 for XRechnung 3
+                    _Writer.WriteStartElement("ram", "ActualDeliverySupplyChainEvent", Profile.Extended); // Delivery date in line item level should only be added in the extended profile. 
                     _Writer.WriteStartElement("ram", "OccurrenceDateTime");
                     _Writer.WriteStartElement("udt", "DateTimeString");
                     _Writer.WriteAttributeString("format", "102");
@@ -1790,7 +1790,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteOptionalElementString("ram", "ID", party.ID.ID);
             }
 
-            if (!String.IsNullOrWhiteSpace(party.GlobalID?.ID) && party.GlobalID.SchemeID.HasValue && party.GlobalID.SchemeID.HasValue)
+            if (!String.IsNullOrWhiteSpace(party.GlobalID?.ID) && party.GlobalID.SchemeID.HasValue)
             {
                 writer.WriteStartElement("ram", "GlobalID");
                 writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());

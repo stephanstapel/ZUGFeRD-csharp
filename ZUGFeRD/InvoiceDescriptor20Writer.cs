@@ -165,7 +165,7 @@ namespace s2industries.ZUGFeRD
                 }
 
                 _Writer.WriteStartElement("ram", "SpecifiedTradeProduct");
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && tradeLineItem.GlobalID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
                     _writeElementWithAttribute(_Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID);
                 }
@@ -1197,7 +1197,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && party.GlobalID.SchemeID.HasValue && party.GlobalID.SchemeID.HasValue)
+                if ((party.GlobalID != null) && !String.IsNullOrWhiteSpace(party.GlobalID.ID) && party.GlobalID.SchemeID.HasValue)
                 {
                     writer.WriteStartElement("ram", "GlobalID");
                     writer.WriteAttributeString("schemeID", party.GlobalID.SchemeID.Value.EnumToString());
