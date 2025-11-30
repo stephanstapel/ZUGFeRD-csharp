@@ -378,6 +378,12 @@ await InvoicePdfProcessor.SaveToPdfAsync("zugferd-invoice.pdf", ZUGFeRDVersion.V
 InvoicePdfProcessor.SaveToPdf("zugferd-invoice.pdf", ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, "input-invoice.pdf", descriptor);
 ```
 
+# FacturX and UBL overview
+Both formats yield quite complicated xml structures.
+If you like to dig into the structure, you find cure here:
+
+* FacturX: http://doc.factoorsharp.com/
+* UBL: https://docs.peppol.eu/poacc/billing/3.0/syntax/ubl-invoice/
 
 # Thanks
 
