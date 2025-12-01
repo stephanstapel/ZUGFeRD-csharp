@@ -774,7 +774,7 @@ namespace s2industries.ZUGFeRD
             if (this._Descriptor.DespatchAdviceReferencedDocument != null)
             {
                 _WriteComment(_Writer, options, InvoiceCommentConstants.DespatchAdviceReferencedDocumentComment);
-                _Writer.WriteStartElement("ram", "DespatchAdviceReferencedDocument", Profile.Extended);
+                _Writer.WriteStartElement("ram", "DespatchAdviceReferencedDocument", ALL_PROFILES ^ Profile.Minimum);
                 _Writer.WriteElementString("ram", "IssuerAssignedID", this._Descriptor.DespatchAdviceReferencedDocument.ID);
 
                 if (this._Descriptor.DespatchAdviceReferencedDocument.IssueDateTime.HasValue)
