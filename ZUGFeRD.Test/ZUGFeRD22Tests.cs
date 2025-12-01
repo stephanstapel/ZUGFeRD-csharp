@@ -3681,6 +3681,8 @@ namespace s2industries.ZUGFeRD.Test
         public void TestAlternateNamespace()
         {
             string path = @"..\..\..\..\demodata\zugferd22\zugferd_23_namespace.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
             InvoiceDescriptor invoice = InvoiceDescriptor.Load(path);
 
             // test random fields
