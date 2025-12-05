@@ -78,7 +78,7 @@ A special favor is the so-called XRechnung which is also supported by this libra
   <ItemGroup>
     <PackageReference Include="PDFsharp-extended" Version="1.2.0-preview-1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.9" />
-    <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0-beta1" />
+    <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0-beta3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netstandard2.0'">
