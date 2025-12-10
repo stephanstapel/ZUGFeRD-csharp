@@ -16,9 +16,9 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
     <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
-    <Version>18.0.0-beta1</Version>	
+    <Version>18.0.0-beta3</Version>	
     <PackageReleaseNotes>18.0.0
-* Updated dependency on ZUGFeRD-chsarp 18.0.0-beta1
+* Updated dependency on ZUGFeRD-chsarp 18.0.0-beta3
 
 17.5.0
 * No changes
