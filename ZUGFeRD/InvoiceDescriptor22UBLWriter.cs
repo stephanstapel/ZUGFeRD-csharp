@@ -666,6 +666,23 @@ namespace s2industries.ZUGFeRD
             _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
             _writeOptionalAmount(_Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
 
+            if (tradeLineItem.BillingPeriodStart.HasValue || tradeLineItem.BillingPeriodEnd.HasValue)
+            {
+                _Writer.WriteStartElement("cac", "InvoicePeriod");
+
+                if (tradeLineItem.BillingPeriodStart.HasValue)
+                {
+                    _Writer.WriteElementString("cbc", "StartDate", _formatDate(tradeLineItem.BillingPeriodStart.Value, false, true));
+                }
+
+                if (tradeLineItem.BillingPeriodEnd.HasValue)
+                {
+                    _Writer.WriteElementString("cbc", "EndDate", _formatDate(tradeLineItem.BillingPeriodEnd.Value, false, true));
+                }
+
+                _Writer.WriteEndElement(); // !InvoicePeriod
+            }
+
             if (tradeLineItem.AdditionalReferencedDocuments.Count > 0)
             {
                 foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
