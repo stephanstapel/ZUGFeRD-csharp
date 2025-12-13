@@ -43,20 +43,7 @@ namespace s2industries.ZUGFeRD
 
             this._Descriptor = descriptor;
             this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
-            bool isInvoice = true;
-            if (this._Descriptor.Type == InvoiceType.Invoice || this._Descriptor.Type == InvoiceType.Correction)
-            {
-                // this is a duplicate, just to make sure: also a Correction is regarded as an Invoice
-                isInvoice = true;
-            }
-            else if (this._Descriptor.Type == InvoiceType.CreditNote)
-            {
-                isInvoice = false;
-            }
-            else
-            {
-                throw new NotImplementedException("Not implemented yet.");
-            }
+            bool isInvoice = _IsInvoiceAccordingToEn16931(this._Descriptor.Type);
 
             Dictionary<string, string> namespaces = new Dictionary<string, string>()
             {
@@ -1151,5 +1138,29 @@ namespace s2industries.ZUGFeRD
         {
             throw new NotImplementedException();
         }
+
+
+        private bool _IsInvoiceAccordingToEn16931(InvoiceType type)
+        {
+            switch (type)
+            {
+                case InvoiceType.CreditNoteRelatedToGoodsOrServices:
+                case InvoiceType.CreditNoteRelatedToFinancialAdjustments:
+                case InvoiceType.SelfBilledCreditNote:
+                case InvoiceType.ConsolidatedCreditNoteGoodsAndServices:
+                case InvoiceType.CreditNoteForPriceVariation:
+                case InvoiceType.DelcredereCreditNote:
+                case InvoiceType.CreditNote:
+                case InvoiceType.FactoredCreditNote:
+                case InvoiceType.OcrPaymentCreditNote:
+                case InvoiceType.ReversalOfCredit:
+                case InvoiceType.SelfBilledFactoredCreditNote:
+                case InvoiceType.PrepaymentCreditNoteCorrected:
+                case InvoiceType.ForwardersCreditNote:
+                    return false;
+                default:
+                    return true;
+            }
+        } // !_IsInvoiceAccordingToEn16931()
     }
 }
