@@ -1111,9 +1111,6 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.AreEqual(billingPeriodStart, item.BillingPeriodStart);
                 Assert.AreEqual(billingPeriodEnd, item.BillingPeriodEnd);
             }
-        } // !TestBillingPeriod()
-
-
-        
+        } // !TestBillingPeriodOnItemLevel()
     }
 }
