@@ -1057,5 +1057,63 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("+49 12345", loadedInvoice.InvoicerContact.FaxNo);
             Assert.AreEqual("+49 54321", loadedInvoice.InvoicerContact.PhoneNo);
         } // !TestInvoicerContactWriteAndRead()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.XRechnung)]        
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestBillingPeriod(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            DateTime billingPeriodStart = DateTime.Today.AddDays(-10);
+            DateTime billingPeriodEnd = DateTime.Today.AddDays(20);
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.BillingPeriodStart = billingPeriodStart;
+            desc.BillingPeriodEnd = billingPeriodEnd;
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, profile, format);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedDesc = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(billingPeriodStart, loadedDesc.BillingPeriodStart);
+            Assert.AreEqual(billingPeriodEnd, loadedDesc.BillingPeriodEnd);
+        } // !TestBillingPeriod()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.XRechnung)]        
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestBillingPeriodOnItemLevel(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();            
+            MemoryStream ms = new MemoryStream();
+
+            DateTime billingPeriodStart = DateTime.Today.AddDays(-10);
+            DateTime billingPeriodEnd = DateTime.Today.AddDays(20);
+
+            foreach (TradeLineItem item in desc.TradeLineItems)
+            {
+                item.SetBillingPeriod(billingPeriodStart, billingPeriodEnd);
+            }
+
+            desc.Save(ms, version, profile, format);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedDesc = InvoiceDescriptor.Load(ms);
+
+            foreach (TradeLineItem item in loadedDesc.TradeLineItems)
+            {
+                Assert.AreEqual(billingPeriodStart, item.BillingPeriodStart);
+                Assert.AreEqual(billingPeriodEnd, item.BillingPeriodEnd);
+            }
+        } // !TestBillingPeriod()
+
+
+        
     }
 }

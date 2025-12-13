@@ -1334,21 +1334,6 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Seller.Description, $"Weitere rechtliche" + Environment.NewLine + "\t\t\t\t\tInformationen");
-        } // !TestSellerPartyDescription()
-
-
-        [TestMethod]
-        public void TestBillingPeriod()
-        {
-            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
-            desc.BillingPeriodStart = DateTime.Today;
-            desc.BillingPeriodEnd = DateTime.Today.AddDays(30);
-            MemoryStream ms = new MemoryStream();
-
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
-            ms.Seek(0, SeekOrigin.Begin);
-
-            InvoiceDescriptor loadedDesc = InvoiceDescriptor.Load(ms);
-        } // !TestBillingPeriod()
+        } // !TestSellerPartyDescription()        
     }
 }
