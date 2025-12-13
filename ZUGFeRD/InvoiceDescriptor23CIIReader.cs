@@ -60,7 +60,6 @@ namespace s2industries.ZUGFeRD
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
             XmlNamespaceManager nsmgr = _CreateFixedNamespaceManager(doc);
-            nsmgr = _CreateFixedNamespaceManager(doc);
 
             if (!nsmgr.HasNamespace("rsm"))
             {
