@@ -144,7 +144,15 @@ namespace s2industries.ZUGFeRD.PDF
 
 
             PdfDocument outputDocument = new PdfDocument();
-            outputDocument.Options.ManualXmpGeneration = true;
+
+            try
+            {
+                outputDocument.Options.ManualXmpGeneration = true;
+            }
+            catch (MissingMethodException ex)
+            {
+                throw new SaveFailedException("Please reference PDFsharp-extended. This fork of PDFsharp is required for PDF/A generation", ex);
+            }
 
             if (!String.IsNullOrWhiteSpace(password))
             {
