@@ -487,7 +487,11 @@ namespace s2industries.ZUGFeRD
 
                     _Writer.WriteStartElement("cac", "TaxCategory");
                     _Writer.WriteElementString("cbc", "ID", tax.CategoryCode.ToString());
-                    _Writer.WriteElementString("cbc", "Percent", _formatDecimal(tax.Percent));
+
+                    if (tax.CategoryCode != TaxCategoryCodes.O) // BR-O-05
+                    {
+                        _Writer.WriteElementString("cbc", "Percent", _formatDecimal(tax.Percent));
+                    }
 
                     if (tax.ExemptionReasonCode.HasValue)
                     {
@@ -1004,6 +1008,12 @@ namespace s2industries.ZUGFeRD
                     {
                         writer.WriteStartElement("cac", "PartyIdentification");
                         writer.WriteStartElement("cbc", "ID");
+
+                        if (party.ID.SchemeID.HasValue)
+                        {
+                            writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
+                        }
+
                         writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();//!ID
                         writer.WriteEndElement();//!PartyIdentification
@@ -1043,28 +1053,40 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteStartElement("cac", "PartyTaxScheme");
                         _Writer.WriteElementString("cbc", "CompanyID", tax.No);
                         _Writer.WriteStartElement("cac", "TaxScheme");
+                        
                         _Writer.WriteElementString("cbc", "ID", UBLTaxRegistrationSchemeIDMapper.Map(tax.SchemeID));
                         _Writer.WriteEndElement(); //!TaxScheme
                         _Writer.WriteEndElement(); //!PartyTaxScheme
                     }
                 }
 
-                writer.WriteStartElement("cac", "PartyLegalEntity");
-                writer.WriteElementString("cbc", "RegistrationName", party.Name);
-
-                if (party.GlobalID != null)
+                if ((party.SpecifiedLegalOrganization != null) || !String.IsNullOrWhiteSpace(party.Description))
                 {
-                    //Party legal registration identifier (BT-30)
-                    _Writer.WriteElementString("cbc", "CompanyID", party.GlobalID.ID);
-                }
+                    writer.WriteStartElement("cac", "PartyLegalEntity");
 
-                if (party.Description != null)
-                {
-                    //Party additional legal information (BT-33)
-                    _Writer.WriteElementString("cbc", "CompanyLegalForm", party.Description);
-                }
+                    if (party.SpecifiedLegalOrganization != null)
+                    {
+                        writer.WriteElementString("cbc", "RegistrationName", party.SpecifiedLegalOrganization.TradingBusinessName);
 
-                writer.WriteEndElement(); //!PartyLegalEntity
+                        //Party legal registration identifier (BT-30)
+                        _Writer.WriteStartElement("cbc", "CompanyID");
+
+                        if (party.SpecifiedLegalOrganization.ID.SchemeID.HasValue)
+                        {
+                            _Writer.WriteAttributeString("schemeID", party.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                        }
+                        _Writer.WriteValue(party.SpecifiedLegalOrganization.ID.ID);
+                        _Writer.WriteEndElement(); // !CompanyID
+                    }
+
+                    if (!String.IsNullOrWhiteSpace(party.Description))
+                    {
+                        //Party additional legal information (BT-33)
+                        _Writer.WriteElementString("cbc", "CompanyLegalForm", party.Description);
+                    }
+
+                    writer.WriteEndElement(); //!PartyLegalEntity
+                }
 
                 if (contact != null)
                 {

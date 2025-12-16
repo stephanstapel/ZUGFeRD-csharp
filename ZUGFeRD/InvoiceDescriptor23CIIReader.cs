@@ -626,48 +626,51 @@ namespace s2industries.ZUGFeRD
             }
 
             // read SpecifiedLineTradeSettlement
-            XmlNode applicableTradeTaxNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax", nsmgr);
-            // TODO: process
-
-            XmlNode billingSpecifiedPeriodNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement/ram:BillingSpecifiedPeriod", nsmgr);
-            // TODO: process
-
-            foreach (XmlNode specifiedTradeAllowanceChargeNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
+            if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement", nsmgr) != null)
             {
-                bool chargeIndicator = XmlUtils.NodeAsBool(specifiedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
-                decimal? basisAmount = XmlUtils.NodeAsDecimal(specifiedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, null);
-                string basisAmountCurrency = XmlUtils.NodeAsString(specifiedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
-                decimal actualAmount = XmlUtils.NodeAsDecimal(specifiedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;
-                string reason = XmlUtils.NodeAsString(specifiedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
-                decimal? chargePercentage = XmlUtils.NodeAsDecimal(specifiedTradeAllowanceChargeNode, "./ram:CalculationPercent", nsmgr, null);
-                string reasonCode = XmlUtils.NodeAsString(specifiedTradeAllowanceChargeNode, "./ram:ReasonCode", nsmgr);
-
-                if (chargeIndicator) // charge
-                {
-                    item.AddSpecifiedTradeCharge(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
-                                                 basisAmount,
-                                                 actualAmount,
-                                                 chargePercentage,
-                                                 reason,
-                                                 EnumExtensions.StringToEnum<ChargeReasonCodes>(reasonCode));
-                }
-                else // allowance
-                {
-                    item.AddSpecifiedTradeAllowance(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
-                                                    basisAmount,
-                                                    actualAmount,
-                                                    chargePercentage,
-                                                    reason,
-                                                    EnumExtensions.StringToEnum<AllowanceReasonCodes>(reasonCode));
-                }
-            }
-
-            XmlNode specifiedTradeSettlementLineMonetarySummationNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation", nsmgr);
-            // TODO: process
-
-            foreach (XmlNode invoiceReferencedDocumentNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:InvoiceReferencedDocument", nsmgr))
-            {
+                XmlNode applicableTradeTaxNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax", nsmgr);
                 // TODO: process
+
+                XmlNode billingSpecifiedPeriodNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement/ram:BillingSpecifiedPeriod", nsmgr);
+                // TODO: process
+
+                foreach (XmlNode specifiedTradeAllowanceChargeNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge", nsmgr))
+                {
+                    bool chargeIndicator = XmlUtils.NodeAsBool(specifiedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
+                    decimal? basisAmount = XmlUtils.NodeAsDecimal(specifiedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, null);
+                    string basisAmountCurrency = XmlUtils.NodeAsString(specifiedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
+                    decimal actualAmount = XmlUtils.NodeAsDecimal(specifiedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;
+                    string reason = XmlUtils.NodeAsString(specifiedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
+                    decimal? chargePercentage = XmlUtils.NodeAsDecimal(specifiedTradeAllowanceChargeNode, "./ram:CalculationPercent", nsmgr, null);
+                    string reasonCode = XmlUtils.NodeAsString(specifiedTradeAllowanceChargeNode, "./ram:ReasonCode", nsmgr);
+
+                    if (chargeIndicator) // charge
+                    {
+                        item.AddSpecifiedTradeCharge(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                                     basisAmount,
+                                                     actualAmount,
+                                                     chargePercentage,
+                                                     reason,
+                                                     EnumExtensions.StringToEnum<ChargeReasonCodes>(reasonCode));
+                    }
+                    else // allowance
+                    {
+                        item.AddSpecifiedTradeAllowance(EnumExtensions.StringToEnum<CurrencyCodes>(basisAmountCurrency),
+                                                        basisAmount,
+                                                        actualAmount,
+                                                        chargePercentage,
+                                                        reason,
+                                                        EnumExtensions.StringToEnum<AllowanceReasonCodes>(reasonCode));
+                    }
+                }
+
+                XmlNode specifiedTradeSettlementLineMonetarySummationNode = tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation", nsmgr);
+                // TODO: process
+
+                foreach (XmlNode invoiceReferencedDocumentNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:InvoiceReferencedDocument", nsmgr))
+                {
+                    // TODO: process
+                }
             }
 
             foreach (XmlNode additionalReferencedDocumentNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:AdditionalReferencedDocument", nsmgr))
@@ -675,7 +678,7 @@ namespace s2industries.ZUGFeRD
                 item.AdditionalReferencedDocuments.Add(_readAdditionalReferencedDocument(additionalReferencedDocumentNode, nsmgr));
             }
 
-            foreach(XmlNode receivableSpecifiedTradeAccountingAccountNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount", nsmgr))
+            foreach (XmlNode receivableSpecifiedTradeAccountingAccountNode in tradeLineItem.SelectNodes(".//ram:SpecifiedLineTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount", nsmgr))
             {
                 item.ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
                 {
