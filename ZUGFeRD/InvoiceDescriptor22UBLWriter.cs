@@ -1053,7 +1053,6 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteStartElement("cac", "PartyTaxScheme");
                         _Writer.WriteElementString("cbc", "CompanyID", tax.No);
                         _Writer.WriteStartElement("cac", "TaxScheme");
-                        
                         _Writer.WriteElementString("cbc", "ID", UBLTaxRegistrationSchemeIDMapper.Map(tax.SchemeID));
                         _Writer.WriteEndElement(); //!TaxScheme
                         _Writer.WriteEndElement(); //!PartyTaxScheme
