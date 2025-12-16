@@ -273,7 +273,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestReferenceExtendedInvoice()
         {
-            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            string path = @"..\..\..\..\documentation\zugferd240en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\EXTENDED_Warenrechnung.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
