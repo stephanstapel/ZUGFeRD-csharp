@@ -1347,7 +1347,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.Buyer.SpecifiedLegalOrganization = new LegalOrganization(
                 GlobalIDSchemeIdentifiers.DUNS,
                 "123456789",
-                "Buyer Company Ltd.");            
+                "Buyer Company Ltd.");
             desc.Seller.SpecifiedLegalOrganization = new LegalOrganization(
                 GlobalIDSchemeIdentifiers.AbnScheme,
                 "987654321",
