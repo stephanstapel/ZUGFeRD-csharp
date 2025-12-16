@@ -514,8 +514,8 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(_Writer, "cbc", "ChargeTotalAmount", this._Descriptor.ChargeTotalAmount, forceCurrency: true);
             //_writeOptionalAmount(_Writer, "cbc", "TaxAmount", this._Descriptor.TaxTotalAmount, forceCurrency: true);
             _writeOptionalAmount(_Writer, "cbc", "PrepaidAmount", this._Descriptor.TotalPrepaidAmount, forceCurrency: true);
-            _writeOptionalAmount(_Writer, "cbc", "PayableAmount", this._Descriptor.DuePayableAmount, forceCurrency: true);
-            //_writeOptionalAmount(_Writer, "cbc", "PayableAlternativeAmount", this._Descriptor.RoundingAmount, forceCurrency: true);
+            _writeOptionalAmount(_Writer, "cbc", "PayableRoundingAmount", this._Descriptor.RoundingAmount, forceCurrency: true);
+            _writeOptionalAmount(_Writer, "cbc", "PayableAmount", this._Descriptor.DuePayableAmount, forceCurrency: true);            
             _Writer.WriteEndElement(); //!LegalMonetaryTotal            
 
             foreach (TradeLineItem tradeLineItem in this._Descriptor.GetTradeLineItems())
