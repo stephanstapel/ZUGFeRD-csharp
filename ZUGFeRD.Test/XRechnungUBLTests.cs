@@ -1351,8 +1351,6 @@ namespace s2industries.ZUGFeRD.Test
                 GlobalIDSchemeIdentifiers.AbnScheme,
                 "987654321",
                 "Seller Company Ltd.");
-            
-
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
             ms.Seek(0, SeekOrigin.Begin);
