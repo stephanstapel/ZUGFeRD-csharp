@@ -1062,11 +1062,10 @@ namespace s2industries.ZUGFeRD
                 if ((party.SpecifiedLegalOrganization != null) || !String.IsNullOrWhiteSpace(party.Description))
                 {
                     writer.WriteStartElement("cac", "PartyLegalEntity");
+                    writer.WriteOptionalElementString("cbc", "RegistrationName", party.SpecifiedLegalOrganization.TradingBusinessName);                    
 
-                    if (party.SpecifiedLegalOrganization != null)
-                    {
-                        writer.WriteElementString("cbc", "RegistrationName", party.SpecifiedLegalOrganization.TradingBusinessName);
-
+                    if (party.SpecifiedLegalOrganization?.ID != null && !String.IsNullOrWhiteSpace(party.SpecifiedLegalOrganization.ID.ID))
+                    { 
                         //Party legal registration identifier (BT-30)
                         _Writer.WriteStartElement("cbc", "CompanyID");
 
