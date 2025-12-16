@@ -1068,14 +1068,17 @@ namespace s2industries.ZUGFeRD
                         writer.WriteElementString("cbc", "RegistrationName", party.SpecifiedLegalOrganization.TradingBusinessName);
 
                         //Party legal registration identifier (BT-30)
-                        _Writer.WriteStartElement("cbc", "CompanyID");
-
-                        if (party.SpecifiedLegalOrganization.ID.SchemeID.HasValue)
+                        if (party.SpecifiedLegalOrganization.ID != null)
                         {
-                            _Writer.WriteAttributeString("schemeID", party.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                            _Writer.WriteStartElement("cbc", "CompanyID");
+
+                            if (party.SpecifiedLegalOrganization.ID.SchemeID.HasValue)
+                            {
+                                _Writer.WriteAttributeString("schemeID", party.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                            }
+                            _Writer.WriteValue(party.SpecifiedLegalOrganization.ID.ID);
+                            _Writer.WriteEndElement(); // !CompanyID
                         }
-                        _Writer.WriteValue(party.SpecifiedLegalOrganization.ID.ID);
-                        _Writer.WriteEndElement(); // !CompanyID
                     }
 
                     if (!String.IsNullOrWhiteSpace(party.Description))
