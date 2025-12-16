@@ -1343,7 +1343,6 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             desc.Buyer.ID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "123456789");
             desc.Seller.ID = new GlobalID(GlobalIDSchemeIdentifiers.AbnScheme, "987654321");
-            
             desc.Buyer.SpecifiedLegalOrganization = new LegalOrganization(
                 GlobalIDSchemeIdentifiers.DUNS,
                 "123456789",
