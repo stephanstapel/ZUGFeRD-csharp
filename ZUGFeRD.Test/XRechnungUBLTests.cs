@@ -1334,6 +1334,37 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Seller.Description, $"Weitere rechtliche" + Environment.NewLine + "\t\t\t\t\tInformationen");
-        } // !TestSellerPartyDescription()        
+        } // !TestSellerPartyDescription()
+
+
+        [TestMethod]
+        public void TestBuyerSellerSchemeIds()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Buyer.ID = new GlobalID(GlobalIDSchemeIdentifiers.DUNS, "123456789");
+            desc.Seller.ID = new GlobalID(GlobalIDSchemeIdentifiers.AbnScheme, "987654321");
+            desc.Buyer.SpecifiedLegalOrganization = new LegalOrganization(
+                GlobalIDSchemeIdentifiers.DUNS,
+                "123456789",
+                "Buyer Company Ltd.");
+            desc.Seller.SpecifiedLegalOrganization = new LegalOrganization(
+                GlobalIDSchemeIdentifiers.AbnScheme,
+                "987654321",
+                "Seller Company Ltd.");
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            
+            Assert.AreEqual(loadedInvoice.Buyer.ID.SchemeID, GlobalIDSchemeIdentifiers.DUNS);
+            Assert.AreEqual(loadedInvoice.Buyer.ID.ID, "123456789");            
+            Assert.AreEqual(loadedInvoice.Seller.ID.SchemeID, GlobalIDSchemeIdentifiers.AbnScheme);
+            Assert.AreEqual(loadedInvoice.Seller.ID.ID, "987654321");
+            
+            Assert.AreEqual(loadedInvoice.Buyer.SpecifiedLegalOrganization.ID.SchemeID, GlobalIDSchemeIdentifiers.DUNS);
+            Assert.AreEqual(loadedInvoice.Buyer.SpecifiedLegalOrganization.ID.ID, "123456789");
+            Assert.AreEqual(loadedInvoice.Seller.SpecifiedLegalOrganization.ID.SchemeID, GlobalIDSchemeIdentifiers.AbnScheme);
+            Assert.AreEqual(loadedInvoice.Seller.SpecifiedLegalOrganization.ID.ID, "987654321");
+        } // !TestBuyerSellerSchemeId()
     }
 }
