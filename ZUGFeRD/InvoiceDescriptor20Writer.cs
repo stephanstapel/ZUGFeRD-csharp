@@ -1,4 +1,3 @@
-/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -652,7 +651,7 @@ namespace s2industries.ZUGFeRD
             //  10. SpecifiedTradeSettlementPaymentMeans (optional)
             if (!this._Descriptor.AnyCreditorFinancialAccount() && !this._Descriptor.AnyDebitorFinancialAccount())
             {
-                if (this._Descriptor.PaymentMeans != null)
+                if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
                 {
                     _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
@@ -999,6 +998,13 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteEndElement(); // !ram:ChargeIndicator
 
             // TODO: SequenceNumeric
+
+            if (tradeAllowanceCharge.ChargePercentage.HasValue)
+            {
+                writer.WriteStartElement("ram", "CalculationPercent"); // allowance: BT-94, charge: BT-101
+                writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value));
+                writer.WriteEndElement();
+            }
 
             if (tradeAllowanceCharge.BasisAmount.HasValue)
             {
