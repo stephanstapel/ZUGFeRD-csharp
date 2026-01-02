@@ -369,7 +369,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.AddAdditionalReferencedDocument(
                 id: "My-File-BIN",
-                issueDateTime: timestamp,
+                issueDateTime: timestamp.AddDays(-2),
                 typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
                 name: "EmbeddedPdf",
                 attachmentBinaryObject: data,

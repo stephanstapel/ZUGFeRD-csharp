@@ -543,6 +543,15 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.Value.EnumToString());
                     }
 
+                    if (document.AttachmentBinaryObject != null)
+                    {
+                        _Writer.WriteStartElement("ram", "AttachmentBinaryObject", Profile.Comfort | Profile.Extended); // BT-125, BT-X-31
+                        _Writer.WriteAttributeString("filename", document.Filename);
+                        _Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                        _Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+                        _Writer.WriteEndElement(); // !AttachmentBinaryObject()
+                    }
+
                     _Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                 } // !foreach(document)
             }
