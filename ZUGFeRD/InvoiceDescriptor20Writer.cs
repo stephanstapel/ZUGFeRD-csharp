@@ -337,6 +337,14 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery");
                     _writeElementWithAttribute(_Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
+                    if ((tradeLineItem.ChargeFreeQuantity.HasValue) && (descriptor.Profile == Profile.Extended))
+                    {
+                        _writeElementWithAttribute(_Writer, "ram", "ChargeFreeQuantity", "unitCode", tradeLineItem.ChargeFreeUnitCode.EnumToString(), _formatDecimal(tradeLineItem.ChargeFreeQuantity, 4));
+                    }
+                    if ((tradeLineItem.PackageQuantity.HasValue) && (descriptor.Profile == Profile.Extended))
+                    {
+                        _writeElementWithAttribute(_Writer, "ram", "PackageQuantity", "unitCode", tradeLineItem.PackageUnitCode.EnumToString(), _formatDecimal(tradeLineItem.PackageQuantity, 4));
+                    }
 
                     if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                     {
@@ -514,6 +522,7 @@ namespace s2industries.ZUGFeRD
                 foreach (AdditionalReferencedDocument document in this._Descriptor.AdditionalReferencedDocuments)
                 {
                     _Writer.WriteStartElement("ram", "AdditionalReferencedDocument");
+                    _Writer.WriteElementString("ram", "IssuerAssignedID", document.ID);
                     if (document.IssueDateTime.HasValue)
                     {
                         _Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -534,7 +543,6 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.Value.EnumToString());
                     }
 
-                    _Writer.WriteElementString("ram", "ID", document.ID);
                     _Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                 } // !foreach(document)
             }
