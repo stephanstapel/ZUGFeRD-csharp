@@ -239,7 +239,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(tax);
             Assert.AreEqual(basisAmount, tax.BasisAmount);
             Assert.AreEqual(percent, tax.Percent);
-            Assert.AreEqual(null, tax.AllowanceChargeBasisAmount);
+            Assert.IsNull(tax.AllowanceChargeBasisAmount);
         } // !TestInvoiceCreation()
 
 
@@ -502,7 +502,7 @@ namespace s2industries.ZUGFeRD.Test
                 {
                     insideCbcNote = true;
                     noteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
-                    Assert.IsTrue(noteIndentation >= 0, "Indentation for <cbc:Note> should be non-negative.");
+                    Assert.IsGreaterThanOrEqualTo(0, noteIndentation, "Indentation for <cbc:Note> should be non-negative.");
                     continue;
                 }
 
@@ -576,7 +576,7 @@ namespace s2industries.ZUGFeRD.Test
                 {
                     insideCbcNote = true;
                     noteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
-                    Assert.IsTrue(noteIndentation >= 0, "Indentation for <cbc:Note> should be non-negative.");
+                    Assert.IsGreaterThanOrEqualTo(0, noteIndentation, "Indentation for <cbc:Note> should be non-negative.");
                     continue;
                 }
 
@@ -1216,25 +1216,25 @@ namespace s2industries.ZUGFeRD.Test
             string invoiceAsString = Encoding.UTF8.GetString(ms.ToArray());
 
             // PriceAmount might have 4 decimals
-            Assert.IsFalse(invoiceAsString.Contains($">{Math.Round(netUnitPrice, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<"));
-            Assert.IsTrue(invoiceAsString.Contains($">{Math.Round(netUnitPrice, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<"));
+            Assert.DoesNotContain($">{Math.Round(netUnitPrice, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<", invoiceAsString);
+            Assert.Contains($">{Math.Round(netUnitPrice, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<", invoiceAsString);
             Assert.AreEqual(desc.TradeLineItems.First().NetUnitPrice, Math.Round(netUnitPrice, 4, MidpointRounding.AwayFromZero));
 
             // Grand total, due payable etc. must have two decimals max
-            Assert.IsTrue(invoiceAsString.Contains($">{Math.Round(lineTotalTotalAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<"));
-            Assert.IsFalse(invoiceAsString.Contains($">{Math.Round(lineTotalTotalAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<"));
+            Assert.Contains($">{Math.Round(lineTotalTotalAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<", invoiceAsString);
+            Assert.DoesNotContain($">{Math.Round(lineTotalTotalAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<", invoiceAsString);
             Assert.AreEqual(desc.LineTotalAmount, Math.Round(lineTotalTotalAmount, 2, MidpointRounding.AwayFromZero));
 
-            Assert.IsTrue(invoiceAsString.Contains($">{Math.Round(taxBasisAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<"));
-            Assert.IsFalse(invoiceAsString.Contains($">{Math.Round(taxBasisAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<"));
+            Assert.Contains($">{Math.Round(taxBasisAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<", invoiceAsString);
+            Assert.DoesNotContain($">{Math.Round(taxBasisAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<", invoiceAsString);
             Assert.AreEqual(desc.TaxBasisAmount, Math.Round(taxBasisAmount, 2, MidpointRounding.AwayFromZero));
 
-            Assert.IsTrue(invoiceAsString.Contains($">{Math.Round(grandTotalAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<"));
-            Assert.IsFalse(invoiceAsString.Contains($">{Math.Round(grandTotalAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<"));
+            Assert.Contains($">{Math.Round(grandTotalAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<", invoiceAsString);
+            Assert.DoesNotContain($">{Math.Round(grandTotalAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<", invoiceAsString);
             Assert.AreEqual(desc.GrandTotalAmount, Math.Round(grandTotalAmount, 2, MidpointRounding.AwayFromZero));
 
-            Assert.IsTrue(invoiceAsString.Contains($">{Math.Round(duePayableAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<"));
-            Assert.IsFalse(invoiceAsString.Contains($">{Math.Round(duePayableAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<"));
+            Assert.Contains($">{Math.Round(duePayableAmount, 2, MidpointRounding.AwayFromZero).ToString("F2", CultureInfo.InvariantCulture)}<", invoiceAsString);
+            Assert.DoesNotContain($">{Math.Round(duePayableAmount, 4, MidpointRounding.AwayFromZero).ToString("F4", CultureInfo.InvariantCulture)}<", invoiceAsString);
             Assert.AreEqual(desc.DuePayableAmount, Math.Round(duePayableAmount, 2, MidpointRounding.AwayFromZero));
         } // !TestDecimals()
 
@@ -1260,9 +1260,9 @@ namespace s2industries.ZUGFeRD.Test
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
             string content = reader.ReadToEnd();
-            Assert.IsTrue(content.Contains("<cac:CommodityClassification>"));
-            Assert.IsTrue(content.Contains("<cbc:ItemClassificationCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</cbc:ItemClassificationCode>"));
-            Assert.IsTrue(content.Contains("</cac:CommodityClassification>"));
+            Assert.Contains("<cac:CommodityClassification>", content);
+            Assert.Contains("<cbc:ItemClassificationCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</cbc:ItemClassificationCode>", content);
+            Assert.Contains("</cac:CommodityClassification>", content);
 
             // structure comparison
             ms.Seek(0, SeekOrigin.Begin);
