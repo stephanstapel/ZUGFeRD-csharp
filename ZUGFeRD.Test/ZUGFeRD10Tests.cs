@@ -16,10 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using s2industries.ZUGFeRD;
-using System.IO;
-using System.Runtime.Intrinsics.Arm;
 using System.Xml;
 
 namespace s2industries.ZUGFeRD.Test
