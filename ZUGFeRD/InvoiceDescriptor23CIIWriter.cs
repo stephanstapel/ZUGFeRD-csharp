@@ -196,9 +196,8 @@ namespace s2industries.ZUGFeRD
 
                 _Writer.WriteOptionalElementString("ram", "SellerAssignedID", tradeLineItem.SellerAssignedID, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
                 _Writer.WriteOptionalElementString("ram", "BuyerAssignedID", tradeLineItem.BuyerAssignedID, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
-
-                // TODO: IndustryAssignedID     // BT-X-532, Von der Industrie zugewiesene Produktkennung
-                // TODO: ModelID                // BT-X-533, Modelkennung des Artikels
+                _Writer.WriteOptionalElementString("ram", "IndustryAssignedID", tradeLineItem.IndustryAssignedID, Profile.Extended); // BT-X-532, Von der Industrie zugewiesene Produktkennung
+                _Writer.WriteOptionalElementString("ram", "ModelID", tradeLineItem.ModelID, Profile.Extended); // BT-X-533, Modelkennung des Artikels
 
                 // BT-153
                 _Writer.WriteOptionalElementString("ram", "Name", tradeLineItem.Name, Profile.Basic | Profile.Comfort | Profile.Extended);
@@ -206,9 +205,10 @@ namespace s2industries.ZUGFeRD
 
                 _Writer.WriteOptionalElementString("ram", "Description", tradeLineItem.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
-                // TODO: BatchID                // BT-X-534, Kennung der Charge (des Loses) des Artikels
-                // TODO: BrandName              // BT-X-535, Markenname des Artikels
-                // TODO: ModelName              // BT-X-536, Modellbezeichnung des Artikels
+                // TODO: BatchID cardinality=0..n
+                _Writer.WriteOptionalElementString("ram", "BatchID", tradeLineItem.BatchID, Profile.Extended); // BT-X-534, Kennung der Charge (des Loses) des Artikels
+                _Writer.WriteOptionalElementString("ram", "BrandName", tradeLineItem.BrandName, Profile.Extended); // BT-X-535, Markenname des Artikels
+                _Writer.WriteOptionalElementString("ram", "ModelName", tradeLineItem.ModelName, Profile.Extended); // BT-X-536, Modellbezeichnung des Artikels
 
                 // BG-32, Artikelattribute
                 if (tradeLineItem.ApplicableProductCharacteristics?.Any() == true)
@@ -261,9 +261,17 @@ namespace s2industries.ZUGFeRD
                     foreach (var includedItem in tradeLineItem.IncludedReferencedProducts)
                     {
                         _Writer.WriteStartElement("ram", "IncludedReferencedProduct");
-                        // TODO: GlobalID, SellerAssignedID, BuyerAssignedID, IndustryAssignedID, Description
-                        _Writer.WriteOptionalElementString("ram", "Name", includedItem.Name); // BT-X-18
+                        if ((includedItem.GlobalID != null) && (includedItem.GlobalID.SchemeID.HasValue) && !String.IsNullOrWhiteSpace(includedItem.GlobalID.ID))
+                        {
+                            _writeElementWithAttributeWithPrefix(_Writer, "ram", "GlobalID", "schemeID", includedItem.GlobalID.SchemeID.Value.EnumToString(), includedItem.GlobalID.ID);
+                        }
 
+                        _Writer.WriteOptionalElementString("ram", "SellerAssignedID", includedItem.SellerAssignedID);
+                        _Writer.WriteOptionalElementString("ram", "BuyerAssignedID", includedItem.BuyerAssignedID);
+                        _Writer.WriteOptionalElementString("ram", "IndustryAssignedID", includedItem.IndustryAssignedID); 
+                        _Writer.WriteOptionalElementString("ram", "Name", includedItem.Name); // BT-X-18
+                        _Writer.WriteOptionalElementString("ram", "Description", includedItem.Description);
+                        
                         if (includedItem.UnitQuantity.HasValue)
                         {
                             _writeElementWithAttributeWithPrefix(_Writer, "ram", "UnitQuantity", "unitCode", includedItem.UnitCode.Value.EnumToString(), _formatDecimal(includedItem.UnitQuantity, 4));

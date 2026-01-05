@@ -58,6 +58,31 @@ namespace s2industries.ZUGFeRD
         public string BuyerAssignedID { get; set; }
 
         /// <summary>
+        /// An identifier, assigned by the Industry, for the item.
+        /// </summary>
+        public string IndustryAssignedID { get; set; }
+
+        /// <summary>
+        /// A unique model identifier for this item.
+        /// </summary>
+        public string ModelID { get; set; }
+
+        /// <summary>
+        /// A batch identifier for this item.
+        /// </summary>
+        public string BatchID { get; set; }
+        
+        /// <summary>
+        /// The brand name, expressed as text, for this item.
+        /// </summary>
+        public string BrandName { get; set; }
+        
+        /// <summary>
+        /// A group of business terms providing information about properties of the goods and services ordered.
+        /// </summary>
+        public string ModelName { get; set; }
+
+        /// <summary>
         /// An item’s name
         ///
         /// BT-153
