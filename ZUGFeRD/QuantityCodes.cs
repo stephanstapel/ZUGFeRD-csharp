@@ -467,26 +467,32 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Flasche
         /// Abkürzung: Fl
+        /// Previously, BO was also used. This has been removed.
         /// </summary>
         /// <remarks>
         /// Bottle, non-protected, cylindrical
         /// A narrow-necked cylindrical shaped vessel without external protective packing material
         /// </remarks>
+        [EnumStringValue("XBO", "BO")]
         XBO,
 
         /// <summary>
         /// Karton
         /// Abkürzung: Kt
+        /// Previously, CT was also used. This has been removed.
         /// </summary>
+        [EnumStringValue("XCT", "CT")]
         XCT,
 
         /// <summary>
         /// Palette
         /// Abkürzung: Pal
+        /// Previously, PX was also used. This has been removed.
         /// </summary>
         /// <remarks>
         /// Platform or open-ended box, usually made of wood, on which goods are retained for ease of mechanical handling during transport and storage.
         /// </remarks>
+        [EnumStringValue("XPX", "PX")]
         XPX,
 
         /// <summary>
@@ -498,7 +504,9 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Kiste oder ein Gestell, das mehrere Flaschen sicher hält
         /// Bottlecrate / bottlerack
+        /// Previously, BC was also used. This has been removed.
         /// </summary>
+        [EnumStringValue("XBC", "BC")]
         XBC,
 
         /// <summary>

@@ -1,4 +1,4 @@
-/*
+/* 
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -337,6 +337,14 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery");
                     _writeElementWithAttribute(_Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
+                    if ((tradeLineItem.ChargeFreeQuantity.HasValue) && (descriptor.Profile == Profile.Extended))
+                    {
+                        _writeElementWithAttribute(_Writer, "ram", "ChargeFreeQuantity", "unitCode", tradeLineItem.ChargeFreeUnitCode.EnumToString(), _formatDecimal(tradeLineItem.ChargeFreeQuantity, 4));
+                    }
+                    if ((tradeLineItem.PackageQuantity.HasValue) && (descriptor.Profile == Profile.Extended))
+                    {
+                        _writeElementWithAttribute(_Writer, "ram", "PackageQuantity", "unitCode", tradeLineItem.PackageUnitCode.EnumToString(), _formatDecimal(tradeLineItem.PackageQuantity, 4));
+                    }
 
                     if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                     {
@@ -514,6 +522,7 @@ namespace s2industries.ZUGFeRD
                 foreach (AdditionalReferencedDocument document in this._Descriptor.AdditionalReferencedDocuments)
                 {
                     _Writer.WriteStartElement("ram", "AdditionalReferencedDocument");
+                    _Writer.WriteElementString("ram", "IssuerAssignedID", document.ID);
                     if (document.IssueDateTime.HasValue)
                     {
                         _Writer.WriteStartElement("ram", "FormattedIssueDateTime");
@@ -534,7 +543,15 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteElementString("ram", "ReferenceTypeCode", document.ReferenceTypeCode.Value.EnumToString());
                     }
 
-                    _Writer.WriteElementString("ram", "ID", document.ID);
+                    if (document.AttachmentBinaryObject != null)
+                    {
+                        _Writer.WriteStartElement("ram", "AttachmentBinaryObject", Profile.Comfort | Profile.Extended); // BT-125, BT-X-31
+                        _Writer.WriteAttributeString("filename", document.Filename);
+                        _Writer.WriteAttributeString("mimeCode", MimeTypeMapper.GetMimeType(document.Filename));
+                        _Writer.WriteValue(Convert.ToBase64String(document.AttachmentBinaryObject));
+                        _Writer.WriteEndElement(); // !AttachmentBinaryObject()
+                    }
+
                     _Writer.WriteEndElement(); // !ram:AdditionalReferencedDocument
                 } // !foreach(document)
             }
@@ -652,7 +669,7 @@ namespace s2industries.ZUGFeRD
             //  10. SpecifiedTradeSettlementPaymentMeans (optional)
             if (!this._Descriptor.AnyCreditorFinancialAccount() && !this._Descriptor.AnyDebitorFinancialAccount())
             {
-                if (this._Descriptor.PaymentMeans != null)
+                if ((this._Descriptor.PaymentMeans != null) && this._Descriptor.PaymentMeans.TypeCode.HasValue)
                 {
                     _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementPaymentMeansComment);
                     _Writer.WriteStartElement("ram", "SpecifiedTradeSettlementPaymentMeans");
@@ -999,6 +1016,13 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteEndElement(); // !ram:ChargeIndicator
 
             // TODO: SequenceNumeric
+
+            if (tradeAllowanceCharge.ChargePercentage.HasValue)
+            {
+                writer.WriteStartElement("ram", "CalculationPercent"); // allowance: BT-94, charge: BT-101
+                writer.WriteValue(_formatDecimal(tradeAllowanceCharge.ChargePercentage.Value));
+                writer.WriteEndElement();
+            }
 
             if (tradeAllowanceCharge.BasisAmount.HasValue)
             {

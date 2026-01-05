@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,6 @@ namespace s2industries.ZUGFeRD
         public bool IsVisible;
     }
 
-
     internal class ProfileAwareXmlTextWriter
     {
         private XmlWriter TextWriter;
@@ -47,7 +47,6 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         private bool _NeedToIndentEndElement = false;
 
-
         public ProfileAwareXmlTextWriter(string filename, System.Text.Encoding encoding, Profile profile, bool automaticallyCleanInvalicXmlCharacters = false)
         {
             this.TextWriter = XmlWriter.Create(filename, new XmlWriterSettings()
@@ -60,7 +59,6 @@ namespace s2industries.ZUGFeRD
             this._AutomaticallyCleanInvalidXmlCharacters = automaticallyCleanInvalicXmlCharacters;
         } // !ProfileAwareXmlTextWriter()
 
-
         public ProfileAwareXmlTextWriter(System.IO.Stream w, Profile profile, bool automaticallyCleanInvalicXmlCharacters = false)
         {
             this.TextWriter = XmlWriter.Create(w, new XmlWriterSettings()
@@ -72,18 +70,15 @@ namespace s2industries.ZUGFeRD
             this._AutomaticallyCleanInvalidXmlCharacters = automaticallyCleanInvalicXmlCharacters;
         } // !ProfileAwareXmlTextWriter()
 
-
         public void Close()
         {
             this.TextWriter?.Close();
         } // !Close()
 
-
         public void Flush()
         {
             this.TextWriter?.Flush();
         } // !Flush()
-
 
         public void WriteStartElement(string prefix, string localName, Profile profile = Profile.Unknown)
         {
@@ -125,7 +120,6 @@ namespace s2industries.ZUGFeRD
             }
         } // !WriteStartElement()
 
-
         public void WriteEndElement()
         {
             StackInfo infoForCurrentXmlLevel = this.XmlStack.Pop();
@@ -141,7 +135,6 @@ namespace s2industries.ZUGFeRD
             }
         } // !WriteEndElement()
 
-
         public void WriteOptionalElementString(string prefix, string tagName, string value, Profile profile = Profile.Unknown)
         {
             if (String.IsNullOrWhiteSpace(value))
@@ -153,7 +146,7 @@ namespace s2industries.ZUGFeRD
             {
                 if (_AutomaticallyCleanInvalidXmlCharacters == true)
                 {
-                    value = _CleanInvalidXmlChars(value);                    
+                    value = _CleanInvalidXmlChars(value);
                 }
                 else
                 {
@@ -163,7 +156,6 @@ namespace s2industries.ZUGFeRD
 
             WriteElementString(prefix, tagName, value, profile);
         } // !WriteOptionalElementString()
-
 
         public void WriteElementString(string prefix, string localName, string ns, string value, Profile profile = Profile.Unknown)
         {
@@ -205,12 +197,10 @@ namespace s2industries.ZUGFeRD
             }
         } // !WriteElementString()
 
-
         public void WriteStartDocument()
         {
             this.TextWriter?.WriteStartDocument();
         }
-
 
         public void WriteStartDocument(bool standalone)
         {
@@ -221,7 +211,6 @@ namespace s2industries.ZUGFeRD
         {
             this.TextWriter?.WriteEndDocument();
         }
-
 
         public void WriteAttributeString(string prefix, string localName, string value, Profile profile = Profile.Unknown)
         {
@@ -251,7 +240,6 @@ namespace s2industries.ZUGFeRD
             }
         } // !WriteAttributeString()
 
-
         public void WriteValue(string value, Profile profile = Profile.Unknown)
         {
             if (!_IsValidXmlString(value))
@@ -276,7 +264,6 @@ namespace s2industries.ZUGFeRD
             this.TextWriter?.WriteValue(value);
         } // !WriteAttributeString()
 
-
         public void WriteComment(string comment, Profile profile = Profile.Unknown)
         {
             if (!_IsValidXmlString(comment))
@@ -300,7 +287,6 @@ namespace s2industries.ZUGFeRD
             // write value
             this.TextWriter?.WriteComment(comment);
         } // !WriteComment()
-
 
         public void WriteRawString(string value, Profile profile = Profile.Unknown)
         {
@@ -328,7 +314,6 @@ namespace s2industries.ZUGFeRD
             this.TextWriter?.WriteString(value);
         } // !WriteRawString()
 
-
         /// <summary>
         /// Writes the raw indention using IndentChars according to the current xml tree position.
         /// </summary>
@@ -354,7 +339,6 @@ namespace s2industries.ZUGFeRD
             }
         } // !WriteRawIndention()
 
-
         #region Stack Management
         private bool _DoesProfileFitToCurrentProfile(Profile profile)
         {
@@ -370,7 +354,6 @@ namespace s2industries.ZUGFeRD
             return true;
         } // !_DoesProfileFitToCurrentProfile()
 
-
         private bool _IsNodeVisible()
         {
             foreach (StackInfo stackInfo in this.XmlStack)
@@ -385,19 +368,16 @@ namespace s2industries.ZUGFeRD
         } // !_IsNodeVisible()
         #endregion // !Stack Management
 
-
         #region Convenience functions
         public void WriteElementString(string prefix, string localName, string value, Profile profile = Profile.Unknown)
         {
             this.WriteElementString(prefix, localName, null, value, profile);
         } // !WriteElementString()
 
-
         public void WriteAttributeString(string localName, string value, Profile profile = Profile.Unknown)
         {
             this.WriteAttributeString(null, localName, value, profile);
         } // !WriteAttributeString(
-
 
         internal void SetNamespaces(Dictionary<string, string> namespaces)
         {
@@ -405,55 +385,62 @@ namespace s2industries.ZUGFeRD
         }
         #endregion // !Convenience functions
 
-
         #region Cleanup functions
-        /// <summary>
-        /// Make sure that the given string does not contain invalid xml characters.
-        /// The invalid characters are removed from the string
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        private static bool ScanXmlString(string input, bool cleanInvalidCharacters, out string cleaned)
+        {
+            cleaned = input;
+
+            if (string.IsNullOrEmpty(input))
+                return true;
+
+            StringBuilder sb = cleanInvalidCharacters ? new StringBuilder(input.Length) : null;
+
+            int len = input.Length;
+            for (int i = 0; i < len; i++)
+            {
+                char current = input[i];
+
+                // 1) Normal BMP XML char
+                if (XmlConvert.IsXmlChar(current))
+                {
+                    sb?.Append(current);
+                    continue;
+                }
+
+                // 2) Surrogate pair (supplementary plane)
+                if (char.IsHighSurrogate(current) && i + 1 < len)
+                {
+                    char next = input[i + 1];
+                    if (char.IsLowSurrogate(next) && XmlConvert.IsXmlSurrogatePair(next, current))
+                    {
+                        sb?.Append(current);
+                        sb?.Append(next);
+                        i++; // consume low surrogate
+                        continue;
+                    }
+                }
+
+                // 3) Invalid XML char
+                if (!cleanInvalidCharacters)
+                    return false;
+            }
+
+            if (sb != null)
+                cleaned = sb.ToString();
+
+            return true;
+        }
+
         private string _CleanInvalidXmlChars(string input)
         {
-            var output = new StringBuilder(input.Length);
-            foreach (char c in input)
-            {
-                if (_IsValidXmlChar(c))
-                {
-                    output.Append(c);
-                }
-            }
-            return output.ToString();
-        } // !_CleanInvalidXmlChars()
-
+            ScanXmlString(input, true, out var cleaned);
+            return cleaned;
+        }
 
         private bool _IsValidXmlString(string input)
         {
-            if (String.IsNullOrWhiteSpace(input))
-            {
-                return true; // empty strings are valid
-            }
-
-            foreach (char c in input)
-            {
-                if (!_IsValidXmlChar(c))
-                {
-                    return false;
-                }
-            }
-            return true;
-        } // !_IsValidXmlString()
-        
-
-        private bool _IsValidXmlChar(char c)
-        {
-            return
-                c == 0x9 || c == 0xA || c == 0xD ||
-                (c >= 0x20 && c <= 0xD7FF) ||
-                (c >= 0xE000 && c <= 0xFFFD) ||
-                (c >= 0x10000 && c <= 0x10FFFF);
-        } // !_IsValidXmlChar()
-
+            return ScanXmlString(input, false, out _);
+        }
         #endregion // !Cleanup function
     }
 }
