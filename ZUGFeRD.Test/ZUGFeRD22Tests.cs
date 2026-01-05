@@ -3689,5 +3689,16 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(invoice.InvoiceDate, new DateTime(2025, 10, 24));
             Assert.AreEqual(invoice.InvoiceNo, "0000000016");
         } // !TestAlternateNamespace()
+
+
+        [TestMethod]
+        public void TestLocalNamespace()
+        {
+            string path = @"..\..\..\..\demodata\zugferd22\zugferd_23_local_namespaces.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor invoice = InvoiceDescriptor.Load(path);
+            Assert.AreEqual(invoice.Profile, Profile.Extended);
+        } // !TestLocalNamespace()
     }
 }

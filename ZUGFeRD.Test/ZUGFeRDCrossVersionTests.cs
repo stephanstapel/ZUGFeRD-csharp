@@ -837,7 +837,6 @@ namespace s2industries.ZUGFeRD.Test
                     Assert.IsTrue(lines[i - 1].Contains("<!--"));
                 }
             }
-
         } // !TestXRechnungElementComments()
 
 
