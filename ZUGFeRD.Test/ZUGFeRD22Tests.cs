@@ -3122,7 +3122,7 @@ namespace s2industries.ZUGFeRD.Test
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.CII);
-            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
+            // desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
 
             var lines = new StreamReader(ms).ReadToEnd().Split(new[] { System.Environment.NewLine }, StringSplitOptions.None).ToList();
 
