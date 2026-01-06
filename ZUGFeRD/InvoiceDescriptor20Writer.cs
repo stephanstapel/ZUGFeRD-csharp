@@ -191,7 +191,15 @@ namespace s2industries.ZUGFeRD
                     foreach (var includedItem in tradeLineItem.IncludedReferencedProducts)
                     {
                         _Writer.WriteStartElement("ram", "IncludedReferencedProduct");
-                        _Writer.WriteOptionalElementString("ram", "Name", includedItem.Name);
+                        if ((includedItem.GlobalID != null) && (includedItem.GlobalID.SchemeID.HasValue) && !String.IsNullOrWhiteSpace(includedItem.GlobalID.ID))
+                        {
+                            _writeElementWithAttribute(_Writer, "ram", "GlobalID", "schemeID", includedItem.GlobalID.SchemeID.Value.EnumToString(), includedItem.GlobalID.ID);
+                        }
+
+                        _Writer.WriteOptionalElementString("ram", "SellerAssignedID", includedItem.SellerAssignedID);
+                        _Writer.WriteOptionalElementString("ram", "BuyerAssignedID", includedItem.BuyerAssignedID);
+                        _Writer.WriteOptionalElementString("ram", "Name", includedItem.Name); // BT-X-18
+                        _Writer.WriteOptionalElementString("ram", "Description", includedItem.Description);
 
                         if (includedItem.UnitQuantity.HasValue)
                         {

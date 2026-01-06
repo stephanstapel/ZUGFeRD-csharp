@@ -549,8 +549,13 @@ namespace s2industries.ZUGFeRD
                                         XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:GlobalID", nsmgr)),
                 SellerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
                 BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BuyerAssignedID", nsmgr),
+                IndustryAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:IndustryAssignedID", nsmgr),
+                ModelID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:ModelID", nsmgr),
                 Name = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Name", nsmgr),
                 Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),
+                BatchID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BatchID", nsmgr),
+                BrandName = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BrandName", nsmgr),
+                ModelName = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:ModelName", nsmgr),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
                 ShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:ShipToTradeParty", nsmgr),
                 UltimateShipTo = _nodeAsParty(tradeLineItem, ".//ram:SpecifiedLineTradeDelivery/ram:UltimateShipToTradeParty", nsmgr),
@@ -602,7 +607,13 @@ namespace s2industries.ZUGFeRD
 
                 item.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
                 {
+                    GlobalID = new GlobalID(EnumExtensions.StringToNullableEnum<GlobalIDSchemeIdentifiers>(XmlUtils.NodeAsString(includedItem, ".//ram:GlobalID/@schemeID", nsmgr)),
+                                        XmlUtils.NodeAsString(includedItem, ".//ram:GlobalID", nsmgr)),
+                    SellerAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:SellerAssignedID", nsmgr),
+                    BuyerAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:BuyerAssignedID", nsmgr),
+                    IndustryAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:IndustryAssignedID", nsmgr),
                     Name = XmlUtils.NodeAsString(includedItem, ".//ram:Name", nsmgr),
+                    Description = XmlUtils.NodeAsString(includedItem, ".//ram:Description", nsmgr),
                     UnitQuantity = XmlUtils.NodeAsDecimal(includedItem, ".//ram:UnitQuantity", nsmgr, null),
                     UnitCode = EnumExtensions.StringToNullableEnum<QuantityCodes>(unitCode)
                 });

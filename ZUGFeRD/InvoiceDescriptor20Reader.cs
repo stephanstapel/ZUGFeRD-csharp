@@ -507,7 +507,12 @@ namespace s2industries.ZUGFeRD
 
                 item.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
                 {
+                    GlobalID = new GlobalID(EnumExtensions.StringToNullableEnum<GlobalIDSchemeIdentifiers>(XmlUtils.NodeAsString(includedItem, ".//ram:GlobalID/@schemeID", nsmgr)),
+                                        XmlUtils.NodeAsString(includedItem, ".//ram:GlobalID", nsmgr)),
+                    SellerAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:SellerAssignedID", nsmgr),
+                    BuyerAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:BuyerAssignedID", nsmgr),
                     Name = XmlUtils.NodeAsString(includedItem, ".//ram:Name", nsmgr),
+                    Description = XmlUtils.NodeAsString(includedItem, ".//ram:Description", nsmgr),
                     UnitQuantity = XmlUtils.NodeAsDecimal(includedItem, ".//ram:UnitQuantity", nsmgr, null),
                     UnitCode = unitCode
                 });
