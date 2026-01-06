@@ -77,6 +77,9 @@ namespace s2industries.ZUGFeRD
                 InvoiceDate = DataTypeReader.ReadFormattedIssueDateTime(doc.DocumentElement, "/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IssueDateTime", nsmgr)
             };
 
+            // list namespaces in nsmgr
+
+
             foreach (XmlNode node in doc.SelectNodes("/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote", nsmgr))
             {
                 string content = XmlUtils.NodeAsString(node, ".//ram:Content", nsmgr);

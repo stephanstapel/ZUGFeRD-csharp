@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:CrossIndustryInvoice xmlns:ns0="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100">
+	<ns0:ExchangedDocumentContext>
+		<ns1:BusinessProcessSpecifiedDocumentContextParameter xmlns:ns1="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100">
+			<ns1:ID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</ns1:ID>
+		</ns1:BusinessProcessSpecifiedDocumentContextParameter>
+		<ns1:GuidelineSpecifiedDocumentContextParameter xmlns:ns1="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100">
+			<ns1:ID>urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</ns1:ID>
+		</ns1:GuidelineSpecifiedDocumentContextParameter>
+	</ns0:ExchangedDocumentContext>
+</ns0:CrossIndustryInvoice>

@@ -101,7 +101,7 @@ namespace s2industries.ZUGFeRD.PDF
         } // !SaveAsync()
 
 
-        private static byte[] _CreateFacturXBytes(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
+        private static byte[] _CreateFacturXBytes(Stream pdfStream, MemoryStream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
         {
             if (pdfStream == null)
             {
@@ -113,7 +113,7 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new ArgumentNullException(nameof(xmlStream));
             }
 
-            PdfDocument inputDocument = null;
+            PdfDocument inputDocument;
             try
             {
                 if (!String.IsNullOrWhiteSpace(password))
@@ -195,7 +195,7 @@ namespace s2industries.ZUGFeRD.PDF
             outputDocument.Internals.AddObject(fStreamDict);
 
 
-            string relationship = "";
+            string relationship;
             switch (profile)
             {
                 case Profile.Minimum:
@@ -229,7 +229,7 @@ namespace s2industries.ZUGFeRD.PDF
             var dateTimeNow = DateTime.UtcNow;
             var conformanceLevelName = profile.GetXMPName();
 
-            var xmpVersion = "";            
+            string xmpVersion;            
             switch (version)
             {
                 case ZUGFeRDVersion.Version1:
@@ -349,7 +349,7 @@ namespace s2industries.ZUGFeRD.PDF
             foreach (XFont usedFont in loadedFonts)
             {
                 // Use the embedded font
-                XFont xFont = new XFont(usedFont.Name, 1, usedFont.Style, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
+                XFont xFont = new XFont(usedFont.Name2, 1, usedFont.Style, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
                 gfx.DrawString(" ", xFont, XBrushes.Transparent, new XPoint(1, 1));
             }
             gfx.Dispose();
@@ -511,9 +511,6 @@ namespace s2industries.ZUGFeRD.PDF
         private static byte[] _LoadEmbeddedResource(string path)
         {
             var assembly = Assembly.GetExecutingAssembly();
-
-            string[] data = assembly.GetManifestResourceNames();
-
             using (Stream stream = assembly.GetManifestResourceStream(path))
             {
                 if (stream == null)
