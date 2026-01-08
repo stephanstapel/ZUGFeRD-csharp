@@ -431,6 +431,9 @@ namespace s2industries.ZUGFeRD
         /// France domestic Credit Notes without VAT, due to supplier forfeit of VAT for discount
         /// </summary>
         [EnumStringValue("VATEX-FR-CNWVAT")]
-        VATEX_FR_CNWVAT
+        VATEX_FR_CNWVAT,
+
+        [EnumStringValue("VATEX-FR-TOTO")]
+        VATEX_FR_TOTO,
     }
 }
