@@ -750,6 +750,16 @@ namespace s2industries.ZUGFeRD
         E48,
 
         /// <summary>
+        /// page - hardcopy
+        /// </summary>
+        QB,
+
+        /// <summary>
+        /// page
+        /// </summary>
+        ZP,
+
+        /// <summary>
         /// Mutually Defined
         /// </summary>
         ZZ,

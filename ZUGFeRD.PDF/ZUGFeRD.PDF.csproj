@@ -76,10 +76,26 @@ A special favor is the so-called XRechnung which is also supported by this libra
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PDFsharp-extended" Version="1.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.1" />
-    <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0-beta3" />
+    <PackageReference Include="PDFsharp-extended" Version="1.3.0" />	  
+	  <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0-beta3" />
   </ItemGroup>
+
+	<!-- netstandard: minimal & stabil -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' 
+                      Or '$(TargetFramework)' == 'netstandard2.1'">
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+	</ItemGroup>
+
+	<!-- .NET Framework -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462' 
+                      Or '$(TargetFramework)' == 'net480'">
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+	</ItemGroup>
+
+	<!-- .NET -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+	</ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netstandard2.0'">
     <InternalsVisibleTo Include="ZUGFeRD.PDF.Test" PublicKey="002400000480000094000000060200000024000052534131000400000100010081c1f498ffd755d92e3d0514c50e62fc59ca4a448c7d718564117c51e406b92035e0b2651f3cdf29a1207fcd85ab8a6be0d66e1b0fe3d9a1cbd1882dd7569c8320e17752bd835e74ef6a13c79592b864fcfb8507de5de60f470ea3b0ed8bf49ab0f09bd5b4be081a5964ab16791dd1f3b46e78ef5a355e783998b9be92a938f3" />
