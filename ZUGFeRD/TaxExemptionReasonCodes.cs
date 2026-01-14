@@ -31,7 +31,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 79, point c of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Exemptions relating to repayment of expenditures. Repayment of expenditure is not an exemption in the sense of the VAT Directive but may be handled as such in the context of the EN16931.
+        /// Exemptions relating to repayment of expenditures. Remark, Repayment of expenditure is not an exemption in the sense of the VAT Directive but may be handled as such in the context of the EN16931.
         /// </remarks>
         [EnumStringValue("VATEX-EU-79-C")]
         VATEX_EU_79_C,
@@ -58,7 +58,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 132, section 1 (b) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Hospital and medical care and closely related activities undertaken by bodies governed by public law or, under social conditions comparable with those applicable to bodies governed by public law, by hospitals, centres for medical treatment or diagnosis and other duly recognised establishments of a similar nature.
+        /// Hospital and medical care and closely related activities undertaken by bodies governed by public law or, under social conditions comparable with those applicable to bodies governed by public law, by hospitals, centres for medical treatment or diagnosis and other duly recognised establishments of a similar nature
         /// </remarks>
         [EnumStringValue("VATEX-EU-132-1B")]
         VATEX_EU_132_1B,
@@ -112,7 +112,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 132, section 1 (h) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// The supply of services and of goods closely linked to the protection of children and young persons by bodies governed by public law or by other organisations recognised by the Member State concerned as being devoted to social wellbeing.
+        /// The supply of services and of goods closely linked to the protection of children and young persons by bodies governed by public law or by other organisations recognised by the Member State concerned as being devoted to social wellbeing
         /// </remarks>
         [EnumStringValue("VATEX-EU-132-1H")]
         VATEX_EU_132_1H,
@@ -220,7 +220,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 143, section 1 (b) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// The final importation of goods governed by Council Directives 69/169/EEC, 83/181/EEC and 2006/79/EC.
+        /// The final importation of goods governed by Council Directives 69/169/EEC (1), 83/181/EEC (2) and 2006/79/EC (3).
         /// </remarks>
         [EnumStringValue("VATEX-EU-143-1B")]
         VATEX_EU_143_1B,
@@ -229,7 +229,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 143, section 1 (c) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// The final importation of goods, in free circulation from a third territory forming part of the Community customs territory, which would be entitled to exemption under point (b) if they had been imported within the meaning of the first paragraph of Article 30.
+        /// The final importation of goods, in free circulation from a third territory forming part of the Community customs territory, which would be entitled to exemption under point (b) if they had been imported within the meaning of the first paragraph of Article 30
         /// </remarks>
         [EnumStringValue("VATEX-EU-143-1C")]
         VATEX_EU_143_1C,
@@ -265,7 +265,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 143, section 1 (fa) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// The importation of goods by the European Community, the European Atomic Energy Community, the European Central Bank or the European Investment Bank, or by the bodies set up by the Communities to which the Protocol of 8 April 1965 on the privileges and immunities of the European Communities applies, within the limits and under the conditions of that Protocol and the agreements for its implementation or the headquarters agreements, in so far as it does not lead to distortion of competition.
+        /// The importation of goods by the European Community, the European Atomic Energy Community, the European Central Bank or the European Investment Bank, or by the bodies set up by the Communities to which the Protocol of 8 April 1965 on the privileges and immunities of the European Communities applies, within the limits and under the conditions of that Protocol and the agreements for its implementation or the headquarters agreements, in so far as it does not lead to distortion of competition
         /// </remarks>
         [EnumStringValue("VATEX-EU-143-1FA")]
         VATEX_EU_143_1FA,
@@ -274,7 +274,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 143, section 1 (g) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// The importation of goods by international bodies, other than those referred to in point (fa), recognised as such by the public authorities of the host Member State, or by members of such bodies, within the limits and under the conditions laid down by the international conventions establishing the bodies or by headquarters agreements.
+        /// The importation of goods by international bodies, other than those referred to in point (fa), recognised as such by the public authorities of the host Member State, or by members of such bodies, within the limits and under the conditions laid down by the international conventions establishing the bodies or by headquarters agreements
         /// </remarks>
         [EnumStringValue("VATEX-EU-143-1G")]
         VATEX_EU_143_1G,
@@ -328,7 +328,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 144 of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Exemptions for services linked to the import of goods.
+        /// Exemptions for services linked to the import of goods
         /// </remarks>
         [EnumStringValue("VATEX-EU-144")]
         VATEX_EU_144,
@@ -337,7 +337,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 146 section 1 (e) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Exemptions for services linked to the export of goods.
+        /// Exempt Exemptions for services linked to the export of goods
         /// </remarks>
         [EnumStringValue("VATEX-EU-146-1E")]
         VATEX_EU_146_1E,
@@ -345,6 +345,9 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Exempt based on article 148 of Council Directive 2006/112/EC
         /// </summary>
+        /// <remarks>
+        /// Exemptions related to international transport.
+        /// </remarks>
         [EnumStringValue("VATEX-EU-148")]
         VATEX_EU_148,
 
@@ -352,7 +355,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 148, section (a) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Fuel supplies for commercial international transport vessels.
+        /// Fuel supplies for commercial international transport vessels
         /// </remarks>
         [EnumStringValue("VATEX-EU-148-A")]
         VATEX_EU_148_A,
@@ -379,7 +382,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 148, section (d) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Supply of other services to commercial international transport vessels.
+        /// Supply to of other services to commercial international transport vessels.
         /// </remarks>
         [EnumStringValue("VATEX-EU-148-D")]
         VATEX_EU_148_D,
@@ -406,7 +409,7 @@ namespace s2industries.ZUGFeRD
         /// Exempt based on article 148, section (g) of Council Directive 2006/112/EC
         /// </summary>
         /// <remarks>
-        /// Supply of other services to aircraft on international routes.
+        /// Supply to of other services to aircraft on international routes.
         /// </remarks>
         [EnumStringValue("VATEX-EU-148-G")]
         VATEX_EU_148_G,
@@ -414,213 +417,321 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// Exempt based on article 151 of Council Directive 2006/112/EC
         /// </summary>
+        /// <remarks>
+        /// Exemptions relating to certain Transactions treated as exports.
+        /// </remarks>
         [EnumStringValue("VATEX-EU-151")]
         VATEX_EU_151,
 
         /// <summary>
-        /// Export outside the EU
+        /// Exempt based on article 151, section 1 (a) of Council Directive 2006/112/EC
         /// </summary>
-        /// <remarks>Only to be used with VAT category code G</remarks>
-        [EnumStringValue("VATEX-EU-G")]
-        VATEX_EU_G,
+        /// <remarks>
+        /// The supply of goods or services under diplomatic and consular arrangements.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-151-1A")]
+        VATEX_EU_151_1A,
 
         /// <summary>
-        /// Exempt (général / other)
+        /// Exempt based on article 151, section 1 (aa) of Council Directive 2006/112/EC
         /// </summary>
-        [EnumStringValue("VATEX-EU-O")]
-        VATEX_EU_O,
+        /// <remarks>
+        /// The supply of goods or services to the European Community, the European Atomic Energy Community, the European Central Bank or the European Investment Bank, or to the bodies set up by the Communities to which the Protocol of 8 April 1965 on the privileges and immunities of the European Communities applies, within the limits and under the conditions of that Protocol and the agreements for its implementation or the headquarters agreements, in so far as it does not lead to distortion of competition.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-151-1AA")]
+        VATEX_EU_151_1AA,
 
         /// <summary>
-        /// Intra-Community supply
+        /// Exempt based on article 151, section 1 (b) of Council Directive 2006/112/EC
         /// </summary>
-        [EnumStringValue("VATEX-EU-IC")]
-        VATEX_EU_IC,
+        /// <remarks>
+        /// The supply of goods or services to international bodies, other than those referred to in point (aa), recognised as such by the public authorities of the host Member States, and to members of such bodies, within the limits and under the conditions laid down by the international conventions establishing the bodies or by headquarters agreements.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-151-1B")]
+        VATEX_EU_151_1B,
+
+        /// <summary>
+        /// Exempt based on article 151, section 1 (c) of Council Directive 2006/112/EC
+        /// </summary>
+        /// <remarks>
+        /// The supply of goods or services within a Member State which is a party to the North Atlantic Treaty, intended either for the armed forces of other States party to that Treaty for the use of those forces, or of the civilian staff accompanying them, or for supplying their messes or canteens when such forces take part in the common defence effort.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-151-1C")]
+        VATEX_EU_151_1C,
+
+        /// <summary>
+        /// Exempt based on article 151, section 1 (d) of Council Directive 2006/112/EC
+        /// </summary>
+        /// <remarks>
+        /// The supply of goods or services to another Member State, intended for the armed forces of any State which is a party to the North Atlantic Treaty, other than the Member State of destination itself, for the use of those forces, or of the civilian staff accompanying them, or for supplying their messes or canteens when such forces take part in the common defence effort.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-151-1D")]
+        VATEX_EU_151_1D,
+
+        /// <summary>
+        /// Exempt based on article 151, section 1 (e) of Council Directive 2006/112/EC
+        /// </summary>
+        /// <remarks>
+        /// The supply of goods or services to the armed forces of the United Kingdom stationed in the island of Cyprus pursuant to the Treaty of Establishment concerning the Republic of Cyprus, dated 16 August 1960, which are for the use of those forces, or of the civilian staff accompanying them, or for supplying their messes or canteens.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-151-1E")]
+        VATEX_EU_151_1E,
+
+        /// <summary>
+        /// Exempt based on article 159 of Council Directive 2006/112/EC
+        /// </summary>
+        /// <remarks>
+        /// Exemptions for services linked to supplies of goods intended to be placed under customs warehouses, warehouses other than customs warehouses and similar arrangements.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-159")]
+        VATEX_EU_159,
+
+        /// <summary>
+        /// Exempt based on article 309 of Council Directive 2006/112/EC
+        /// </summary>
+        /// <remarks>
+        /// Travel agents performed outside of EU.
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-309")]
+        VATEX_EU_309,
 
         /// <summary>
         /// Reverse charge
         /// </summary>
+        /// <remarks>
+        /// Supports EN 16931-1 rule BR-AE-10 - Only use with VAT category code AE
+        /// </remarks>
         [EnumStringValue("VATEX-EU-AE")]
         VATEX_EU_AE,
 
         /// <summary>
-        /// Not subject to VAT / Hors champ de la TVA
+        /// Intra-Community acquisition from second hand means of transport
         /// </summary>
+        /// <remarks>
+        /// Second-hand means of transport - Indication that VAT has been paid according to the relevant transitional arrangements - Only use with VAT category code E
+        /// </remarks>
         [EnumStringValue("VATEX-EU-D")]
         VATEX_EU_D,
 
         /// <summary>
-        /// Travel agents VAT scheme (marge – régime de la marge)
+        /// Intra-Community acquisition of second hand goods
         /// </summary>
+        /// <remarks>
+        /// Second-hand goods - Indication that the VAT margin scheme for second-hand goods has been applied. - Only use with VAT category code E
+        /// </remarks>
         [EnumStringValue("VATEX-EU-F")]
         VATEX_EU_F,
 
         /// <summary>
-        /// Second hand goods VAT scheme (marge – biens d'occasion)
+        /// Export outside the EU
         /// </summary>
+        /// <remarks>
+        /// Supports EN 16931-1 rule BR-G-10 - Only use with VAT category code G
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-G")]
+        VATEX_EU_G,
+
+        /// <summary>
+        /// Intra-Community acquisition of works of art
+        /// </summary>
+        /// <remarks>
+        /// Works of art - Indication that the VAT margin scheme for works of art has been applied. - Only use with VAT category code E
+        /// </remarks>
         [EnumStringValue("VATEX-EU-I")]
         VATEX_EU_I,
 
         /// <summary>
-        /// Investment gold scheme
+        /// Intra-Community supply
         /// </summary>
+        /// <remarks>
+        /// Supports EN 16931-1 rule BR-IC-10 - Only use with VAT category code K
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-IC")]
+        VATEX_EU_IC,
+
+        /// <summary>
+        /// Not subject to VAT
+        /// </summary>
+        /// <remarks>
+        /// Supports EN 16931-1 rule BR-O-10 - Only use with VAT category code O
+        /// </remarks>
+        [EnumStringValue("VATEX-EU-O")]
+        VATEX_EU_O,
+
+        /// <summary>
+        /// Intra-Community acquisition of collectors items and antiques
+        /// </summary>
+        /// <remarks>
+        /// Collectors' items and antiques - Indication that the VAT margin scheme for collector's items and antiques has been applied. - Only use with VAT category code E
+        /// </remarks>
         [EnumStringValue("VATEX-EU-J")]
         VATEX_EU_J,
 
-        // Codes nationaux FR (utilisés en facturation domestique France / Chorus Pro / Factur-X)
         /// <summary>
         /// France domestic VAT franchise in base
         /// </summary>
-        /// <remarks>Franchise en base de TVA – Only to be used for domestic invoicing in France</remarks>
+        /// <remarks>
+        /// For domestic invoicing in France
+        /// </remarks>
         [EnumStringValue("VATEX-FR-FRANCHISE")]
         VATEX_FR_FRANCHISE,
 
         /// <summary>
         /// France domestic Credit Notes without VAT, due to supplier forfeit of VAT for discount
         /// </summary>
-        /// <remarks>Avoir sans TVA suite à abandon d'escompte ou forfait de TVA par le fournisseur</remarks>
+        /// <remarks>
+        /// For domestic Credit Notes only in France
+        /// </remarks>
         [EnumStringValue("VATEX-FR-CNWVAT")]
         VATEX_FR_CNWVAT,
 
         /// <summary>
-        /// Exempt based on 1° of article 261 of the Code Général des Impôts (CGI ; General tax code)
+        /// Exempt based on article 153 of Council Directive 2006/112/EC
+        /// </summary>
+        [EnumStringValue("VATEX-EU-153")]
+        VATEX_EU_153,
+
+        /// <summary>
+        /// Exempt based on 1 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-1")]
         VATEX_FR_CGI261_1,
 
         /// <summary>
-        /// Exempt based on 2° of article 261 of the Code Général des Impôts (CGI)
+        /// Exempt based on 2 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-2")]
         VATEX_FR_CGI261_2,
 
         /// <summary>
-        /// Exempt based on 3° of article 261 of the Code Général des Impôts (CGI)
+        /// Exempt based on 3 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-3")]
         VATEX_FR_CGI261_3,
 
         /// <summary>
-        /// Exempt based on 4° of article 261 of the Code Général des Impôts (CGI)
+        /// Exempt based on 4 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-4")]
         VATEX_FR_CGI261_4,
 
         /// <summary>
-        /// Exempt based on 5° of article 261 of the Code Général des Impôts (CGI)
+        /// Exempt based on 5 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-5")]
         VATEX_FR_CGI261_5,
 
         /// <summary>
-        /// Exempt based on 7° of article 261 of the Code Général des Impôts (CGI)
+        /// Exempt based on 7 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-7")]
         VATEX_FR_CGI261_7,
 
         /// <summary>
-        /// Exempt based on 8° of article 261 of the Code Général des Impôts (CGI)
+        /// Exempt based on 8 of article 261 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261-8")]
         VATEX_FR_CGI261_8,
 
         /// <summary>
-        /// Exempt based on article 261 A of the Code Général des Impôts (CGI)
+        /// Exempt based on article 261 A of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261A")]
         VATEX_FR_CGI261A,
 
         /// <summary>
-        /// Exempt based on article 261 B of the Code Général des Impôts (CGI)
+        /// Exempt based on article 261 B of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261B")]
         VATEX_FR_CGI261B,
 
         /// <summary>
-        /// Exempt based on 1° of article 261 C of the Code Général des Impôts (CGI)
+        /// Exempt based on 1° of article 261 C of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261C-1")]
         VATEX_FR_CGI261C_1,
 
         /// <summary>
-        /// Exempt based on 2° of article 261 C of the Code Général des Impôts (CGI)
+        /// Exempt based on 2° of article 261 C of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261C-2")]
         VATEX_FR_CGI261C_2,
 
         /// <summary>
-        /// Exempt based on 3° of article 261 C of the Code Général des Impôts (CGI)
+        /// Exempt based on 3° of article 261 C of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261C-3")]
         VATEX_FR_CGI261C_3,
 
         /// <summary>
-        /// Exempt based on 1 of article 261 D of the Code Général des Impôts (CGI)
+        /// Exempt based on 1° of article 261 D of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261D-1")]
         VATEX_FR_CGI261D_1,
 
         /// <summary>
-        /// Exempt based on 1 bis of article 261 D of the Code Général des Impôts (CGI)
+        /// Exempt based on 1°bis of article 261 D of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261D-1BIS")]
         VATEX_FR_CGI261D_1BIS,
 
         /// <summary>
-        /// Exempt based on 2 of article 261 D of the Code Général des Impôts (CGI)
+        /// Exempt based on 2° of article 261 D of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261D-2")]
         VATEX_FR_CGI261D_2,
 
         /// <summary>
-        /// Exempt based on 3 of article 261 D of the Code Général des Impôts (CGI)
+        /// Exempt based on 3° of article 261 D of the Code Général des Impôts (CGI ; General tax code)
+        /// Exonération de TVA - Article 261 D-3° du Code Général des Impôts
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261D-3")]
         VATEX_FR_CGI261D_3,
 
         /// <summary>
-        /// Exempt based on 4 of article 261 D of the Code Général des Impôts (CGI)
+        /// Exempt based on 4° of article 261 D of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261D-4")]
         VATEX_FR_CGI261D_4,
 
         /// <summary>
-        /// Exempt based on 1 of article 261 E of the Code Général des Impôts (CGI)
+        /// Exempt based on 1° of article 261 E of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261E-1")]
         VATEX_FR_CGI261E_1,
 
         /// <summary>
-        /// Exempt based on 2 of article 261 E of the Code Général des Impôts (CGI)
+        /// Exempt based on 2° of article 261 E of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI261E-2")]
         VATEX_FR_CGI261E_2,
 
         /// <summary>
-        /// Exempt based on article 277 A of the Code Général des Impôts (CGI)
+        /// Exempt based on article 277 A of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI277A")]
         VATEX_FR_CGI277A,
 
         /// <summary>
-        /// Exempt based on article 275 of the Code Général des Impôts (CGI)
+        /// Exempt based on article 275 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI275")]
         VATEX_FR_CGI275,
 
         /// <summary>
-        /// Exempt based on article 298 sexdecies A of the Code Général des Impôts (CGI)
+        /// Exempt based on article 298 sexdecies A of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-298SEXDECIESA")]
         VATEX_FR_298SEXDECIESA,
 
         /// <summary>
-        /// Exempt based on article 295 of the Code Général des Impôts (CGI)
+        /// Exempt based on article 295 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-CGI295")]
         VATEX_FR_CGI295,
 
         /// <summary>
-        /// Auto-liquidation (reverse charge) spécifique France
+        /// Exempt based on 2 of article 283 of the Code Général des Impôts (CGI ; General tax code)
         /// </summary>
         [EnumStringValue("VATEX-FR-AE")]
         VATEX_FR_AE
