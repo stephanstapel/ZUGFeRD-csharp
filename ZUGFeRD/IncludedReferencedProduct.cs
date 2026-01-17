@@ -47,5 +47,33 @@ namespace s2industries.ZUGFeRD
         /// BT-X-20-1
         /// </summary>
         public QuantityCodes? UnitCode { get; set; }
+
+        /// <summary>
+        /// The identification of articles based on a registered scheme
+        ///
+        /// GlobalID of Included Item
+        /// </summary>
+        public GlobalID GlobalID { get; set; } = new GlobalID();
+
+        /// <summary>
+        /// Included Item Seller's identifier
+        /// </summary>
+        public string SellerAssignedID { get; set; }
+
+        /// <summary>
+        /// Included Item Buyer's identifier
+        /// </summary>
+        public string BuyerAssignedID { get; set; }
+
+        /// <summary>
+        /// Industry AssignedID of Included Item
+        /// </summary>
+        public string IndustryAssignedID { get; set; }
+
+        /// <summary>
+        /// Description of Included Item
+        /// </summary>
+        public string Description { get; set; }
+
     }
 }
