@@ -16,13 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -175,7 +169,7 @@ namespace s2industries.ZUGFeRD.Test
             int numberOfTradeLineItems = desc.TradeLineItems.Count;
             desc.AddTradeLineCommentItem(expectedComment);
 
-            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);
+            Assert.HasCount(numberOfTradeLineItems + 1, desc.TradeLineItems);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
             Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes.Count, 1);
@@ -187,7 +181,7 @@ namespace s2industries.ZUGFeRD.Test
             numberOfTradeLineItems = desc.TradeLineItems.Count;
             desc.AddTradeLineCommentItem(lineID: expectedCustomLineId, comment: expectedComment);
 
-            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);
+            Assert.HasCount(numberOfTradeLineItems + 1, desc.TradeLineItems);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.LineID, expectedCustomLineId);
             Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
@@ -229,7 +223,7 @@ namespace s2industries.ZUGFeRD.Test
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             MemoryStream ms = new MemoryStream();
-            Assert.ThrowsException<UnsupportedException>(() => desc.Save(ms, version, profile, ZUGFeRDFormats.UBL));
+            Assert.Throws<UnsupportedException>(() => desc.Save(ms, version, profile, ZUGFeRDFormats.UBL));
         } // !UBLNonAvailability()
 
 
@@ -280,8 +274,8 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor actual = InvoiceDescriptor.Load(ms);
 
-            Assert.AreEqual(expected.Taxes.Count, actual.Taxes.Count);
-            Assert.AreEqual(1, actual.Taxes.Count);
+            Assert.HasCount(expected.Taxes.Count, actual.Taxes);
+            Assert.HasCount(1, actual.Taxes);
             Tax actualTax = actual.Taxes[0];
             Assert.AreEqual(198m, actualTax.BasisAmount);
             Assert.AreEqual(19m, actualTax.Percent);
@@ -393,7 +387,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.45m);
             desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.456m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.456m);
             desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.4567m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.4567m);
-            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45678m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.45678m);            
+            desc.AddTradeLineItem("Item with 2 decimal places", netUnitPrice: 123.45678m, unitCode: QuantityCodes.C62, grossUnitPrice: 123.45678m);
 
             MemoryStream ms = new MemoryStream();
 
@@ -456,7 +450,7 @@ namespace s2industries.ZUGFeRD.Test
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.IsNull(loadedInvoice.SellerTaxRepresentative);            
+            Assert.IsNull(loadedInvoice.SellerTaxRepresentative);
         } // !TestSellerTaxRepresentativeInNonSupportedVersions()
 
 
@@ -514,7 +508,7 @@ namespace s2industries.ZUGFeRD.Test
             TradeLineItem item = desc.AddTradeLineItem("Test",
                                                        netPrice, // net unit price
                                                        QuantityCodes.C62,
-                                                       "Test",                                                       
+                                                       "Test",
                                                        1,
                                                        grossPrice, // gross unit price
                                                        1);
@@ -545,7 +539,8 @@ namespace s2industries.ZUGFeRD.Test
         {
             decimal grossPrice = 10.1m;
             decimal netPrice = 10.0m;
-            decimal discountPercent = 10.0m;
+            // Is currently unused, therefore commented out.
+            //decimal discountPercent = 10.0m;
             decimal discountAmount = 0.1m;
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
@@ -554,7 +549,7 @@ namespace s2industries.ZUGFeRD.Test
             TradeLineItem item = desc.AddTradeLineItem("Test",
                                                        netPrice, // net unit price
                                                        QuantityCodes.C62,
-                                                       "Test",                                                       
+                                                       "Test",
                                                        1,
                                                        grossPrice, // gross unit price
                                                        1);
@@ -599,7 +594,7 @@ namespace s2industries.ZUGFeRD.Test
 
             string content = Encoding.UTF8.GetString(ms.ToArray());
 
-            Assert.IsTrue(content.Contains(headerComment));
+            Assert.Contains(headerComment, content);
         } // !TestHeaderComment()
 
 
@@ -618,7 +613,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.Save(ms, version, profile, format, InvoiceOptionsBuilder.Create().AddHeaderXmlComment(headerComment).EnableXmlComments(false).Build());
 
             string content = Encoding.UTF8.GetString(ms.ToArray());
-            Assert.IsFalse(content.Contains(headerComment));
+            Assert.DoesNotContain(headerComment, content);
         } // !TestWihoutHeaderComment()
 
 
@@ -643,7 +638,7 @@ namespace s2industries.ZUGFeRD.Test
                 if (lines[i].Contains("<ram:IncludedSupplyChainTradeLineItem>"))
                 {
                     onItemLevel = true;
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
                 else if (lines[i].Contains("</ram:IncludedSupplyChainTradeLineItem>"))
                 {
@@ -652,7 +647,7 @@ namespace s2industries.ZUGFeRD.Test
 
                 if (lines[i].Contains("<ram:NetPriceProductTradePrice>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // totals per item
@@ -660,91 +655,91 @@ namespace s2industries.ZUGFeRD.Test
                 {
                     if (lines[i].Contains("<ram:SpecifiedTradeSettlementMonetarySummation>"))
                     {
-                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                        Assert.Contains("<!--", lines[i - 1]);
                     }
                 }
                 else
                 {
                     if (lines[i].Contains("<ram:SpecifiedTradeSettlementLineMonetarySummation>"))
                     {
-                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                        Assert.Contains("<!--", lines[i - 1]);
                     }
-                }                               
+                }
 
                 // totals on header level
                 if (version == ZUGFeRDVersion.Version1)
                 {
                     if (lines[i].Contains("<ram:SpecifiedTradeSettlementMonetarySummation>"))
                     {
-                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                        Assert.Contains("<!--", lines[i - 1]);
                     }
                 }
                 else
                 {
                     if (lines[i].Contains("<ram:SpecifiedTradeSettlementHeaderMonetarySummation>"))
                     {
-                        Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                        Assert.Contains("<!--", lines[i - 1]);
                     }
                 }
 
                 // header trade agreement (buyer, seller, ...)
                 if (lines[i].Contains("<ram:ApplicableHeaderTradeAgreement>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // buyer reference
                 if (lines[i].Contains("<ram:BuyerReference>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // seller
                 if (lines[i].Contains("<ram:SellerTradeParty>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // buyer
                 if (lines[i].Contains("<ram:BuyerTradeParty>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // buyer order information
                 if (lines[i].Contains("<ram:BuyerOrderReferencedDocument>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // delivery information
                 if (lines[i].Contains("<ram:ApplicableHeaderTradeDelivery>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // delivery note information
                 if (lines[i].Contains("<ram:DespatchAdviceReferencedDocument>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // document information
                 if (lines[i].Contains("<ram:ApplicableHeaderTradeSettlement>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // payment means
                 if (lines[i].Contains("<ram:SpecifiedTradeSettlementPaymentMeans>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // tax
                 if (!onItemLevel && lines[i].Contains("<ram:ApplicableTradeTax>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
             }
 
@@ -770,73 +765,72 @@ namespace s2industries.ZUGFeRD.Test
                 // test: IncludedSupplyChainTradeLineItemComment
                 if (lines[i].Contains("<cac:InvoiceLine>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // item price
                 // test: NetPriceProductTradePriceComment
                 if (lines[i].Contains("<cbc:PriceAmount>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // totals on item level
                 // test: SpecifiedTradeSettlementLineMonetarySummationComment
                 if (lines[i].Contains("<cbc:LineExtensionAmount>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // totals on header level
                 // test: SpecifiedTradeSettlementHeaderMonetarySummationComment
                 if (lines[i].Contains("<cac:LegalMonetaryTotal>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // buyer
                 // test: BuyerTradePartyComment
                 if (lines[i].Contains("<cac:AccountingSupplierParty>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // seller
                 // test: SellerTradePartyComment
                 if (lines[i].Contains("<cac:AccountingSupplierParty>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // buyer, seller information etc.
                 // test: BuyerOrderReferencedDocumentComment
                 if (lines[i].Contains("<cac:OrderReference>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // delivery note information
                 // test: DespatchAdviceReferencedDocumentComment
                 if (lines[i].Contains("<cac:DespatchDocumentReference>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // payment means
                 // test: SpecifiedTradeSettlementPaymentMeansComment
                 if (lines[i].Contains("<cac:PaymentMeans>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
 
                 // tax information
                 // test: ApplicableTradeTaxComment
                 if (lines[i].Contains("<cac:TaxSubtotal>"))
                 {
-                    Assert.IsTrue(lines[i - 1].Contains("<!--"));
+                    Assert.Contains("<!--", lines[i - 1]);
                 }
             }
-
         } // !TestXRechnungElementComments()
 
 
@@ -852,7 +846,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.InvoiceNo = "\u001b";
             var invoiceStream = new MemoryStream();
 
-            Assert.ThrowsException<IllegalCharacterException>(() => desc.Save(invoiceStream, version, profile, format));
+            Assert.Throws<IllegalCharacterException>(() => desc.Save(invoiceStream, version, profile, format));
         } // !TestInvalidXmlWithException()
 
 
@@ -874,8 +868,30 @@ namespace s2industries.ZUGFeRD.Test
             desc.Save(invoiceStream, version, profile, format, options);
             string result = Encoding.UTF8.GetString(invoiceStream.ToArray());
 
-            Assert.IsTrue(result.Contains("ABCDEF"), "The illegal character should be removed from the invoice number.");
+            Assert.Contains("ABCDEF", result, "The illegal character should be removed from the invoice number.");
         } // !TestInvalidXmlWithCleaning()
+
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestValidXml(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
+            desc.InvoiceNo = "😀";
+
+            InvoiceFormatOptions options = InvoiceOptionsBuilder.Create()
+                .AutomaticallyCleanInvalidCharacters()
+                .Build();
+            var invoiceStream = new MemoryStream();
+            desc.Save(invoiceStream, version, profile, format, options);
+            string result = Encoding.UTF8.GetString(invoiceStream.ToArray());
+
+            Assert.Contains("😀", result);
+        } // !TestValidXml()
 
 
 
@@ -890,14 +906,14 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
 
-            foreach(TradeLineItem item in desc.TradeLineItems)
+            foreach (TradeLineItem item in desc.TradeLineItems)
             {
                 item.NetQuantity = desiredNetUnitQuantity;
                 item.GrossQuantity = desiredGrossUnitQuantity;
             }
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, version, profile, format);            
+            desc.Save(ms, version, profile, format);
 
             InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
             foreach (TradeLineItem item in loadedDescriptor.TradeLineItems)
@@ -921,14 +937,14 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
 
-            foreach(TradeLineItem item in desc.TradeLineItems)
+            foreach (TradeLineItem item in desc.TradeLineItems)
             {
                 item.NetQuantity = desiredNetUnitQuantity;
                 item.GrossQuantity = desiredGrossUnitQuantity;
             }
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, version, profile, format);            
+            desc.Save(ms, version, profile, format);
 
             InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
             foreach (TradeLineItem item in loadedDescriptor.TradeLineItems)
@@ -954,7 +970,7 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
 
-            foreach(TradeLineItem item in desc.TradeLineItems)
+            foreach (TradeLineItem item in desc.TradeLineItems)
             {
                 item.NetQuantity = desiredNetUnitQuantity;
                 item.GrossQuantity = desiredGrossUnitQuantity;
@@ -980,21 +996,22 @@ namespace s2industries.ZUGFeRD.Test
         [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
         public void TestNulledGlobalIDScheme(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
         {
-            decimal? desiredNetUnitQuantity = 20.0m;
-            decimal? desiredGrossUnitQuantity = 23.0m;
+            // Is currently unused, therefore commented out.
+            //decimal? desiredNetUnitQuantity = 20.0m;
+            //decimal? desiredGrossUnitQuantity = 23.0m;
 
             InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
 
             desc.Seller.GlobalID = new GlobalID() { ID = "123" };
             desc.Buyer.GlobalID = new GlobalID() { ID = "213" };
 
-            foreach(TradeLineItem item in desc.GetTradeLineItems())
+            foreach (TradeLineItem item in desc.GetTradeLineItems())
             {
                 item.GlobalID.SchemeID = null;
             }
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, version, profile, format);            
+            desc.Save(ms, version, profile, format);
 
             InvoiceDescriptor loadedDescriptor = InvoiceDescriptor.Load(ms);
             Assert.IsNull(loadedDescriptor.Seller.GlobalID.SchemeID);
@@ -1005,5 +1022,110 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.IsNull(item.GlobalID.SchemeID);
             }
         } // !TestNulledGlobalIDScheme()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        public void TestInvoicerContactWriteAndRead(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            var desc = new InvoiceProvider().CreateInvoice();
+            desc.Invoicer = new Party
+            {
+                Name = "Invoicer Name",
+                Street = "Straße 1",
+                Postcode = "01234",
+                City = "Musterstadt",
+                Country = CountryCodes.DE,
+            };
+
+            desc.InvoicerContact = new Contact
+            {
+                EmailAddress = "invoiceremail@example.com",
+                FaxNo = "+49 12345",
+                PhoneNo = "+49 54321"
+            };
+
+            using var invoiceStream = new MemoryStream();
+            desc.Save(invoiceStream, version, profile);
+
+            var invoiceString = Encoding.UTF8.GetString(invoiceStream.ToArray());
+
+            const string expectedInvoicePart = """
+                                               <ram:DefinedTradeContact>
+                                                         <ram:TelephoneUniversalCommunication>
+                                                           <ram:CompleteNumber>+49 54321</ram:CompleteNumber>
+                                                         </ram:TelephoneUniversalCommunication>
+                                                         <ram:FaxUniversalCommunication>
+                                                           <ram:CompleteNumber>+49 12345</ram:CompleteNumber>
+                                                         </ram:FaxUniversalCommunication>
+                                                         <ram:EmailURIUniversalCommunication>
+                                                           <ram:URIID>invoiceremail@example.com</ram:URIID>
+                                                         </ram:EmailURIUniversalCommunication>
+                                                       </ram:DefinedTradeContact>
+                                               """;
+            StringAssert.Contains(invoiceString, expectedInvoicePart);
+
+            var loadedInvoice = InvoiceDescriptor.Load(invoiceStream);
+
+            Assert.AreEqual("invoiceremail@example.com", loadedInvoice.InvoicerContact.EmailAddress);
+            Assert.AreEqual("+49 12345", loadedInvoice.InvoicerContact.FaxNo);
+            Assert.AreEqual("+49 54321", loadedInvoice.InvoicerContact.PhoneNo);
+        } // !TestInvoicerContactWriteAndRead()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.XRechnung)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestBillingPeriod(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            DateTime billingPeriodStart = DateTime.Today.AddDays(-10);
+            DateTime billingPeriodEnd = DateTime.Today.AddDays(20);
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.BillingPeriodStart = billingPeriodStart;
+            desc.BillingPeriodEnd = billingPeriodEnd;
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, version, profile, format);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedDesc = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(billingPeriodStart, loadedDesc.BillingPeriodStart);
+            Assert.AreEqual(billingPeriodEnd, loadedDesc.BillingPeriodEnd);
+        } // !TestBillingPeriod()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.XRechnung)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestBillingPeriodOnItemLevel(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            MemoryStream ms = new MemoryStream();
+
+            DateTime billingPeriodStart = DateTime.Today.AddDays(-10);
+            DateTime billingPeriodEnd = DateTime.Today.AddDays(20);
+
+            foreach (TradeLineItem item in desc.TradeLineItems)
+            {
+                item.SetBillingPeriod(billingPeriodStart, billingPeriodEnd);
+            }
+
+            desc.Save(ms, version, profile, format);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedDesc = InvoiceDescriptor.Load(ms);
+
+            foreach (TradeLineItem item in loadedDesc.TradeLineItems)
+            {
+                Assert.AreEqual(billingPeriodStart, item.BillingPeriodStart);
+                Assert.AreEqual(billingPeriodEnd, item.BillingPeriodEnd);
+            }
+        } // !TestBillingPeriodOnItemLevel()
     }
 }

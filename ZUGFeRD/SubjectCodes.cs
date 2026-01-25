@@ -23,17 +23,29 @@ using System.Text;
 
 namespace s2industries.ZUGFeRD
 {
+
     /// <summary>
-    /// http://www.stylusstudio.com/edifact/D02A/4451.htm
+    /// UNTDID 4451 — Text subject qualifier
+    /// Version 24A
+    /// https://service.unece.org/trade/untdid/d23a/tred/tred4451.htm
     /// </summary>
     public enum SubjectCodes
     {
+        /// <summary>
+        /// Terms of payments
+        /// </summary>
+        /// [4276] Conditions of payment between the parties to a transaction(generic term).
+        AAB,
+
         /// <summary>
         /// Dangerous goods additional information
         /// </summary>
         /// Additional information concerning dangerous goods.
         AAC,
+
         /// <summary>
+        /// General information
+        ///
         /// Generelle Informationen
         /// </summary>
         /// Generelle Informationen zu diesem Kauf
@@ -47,12 +59,8 @@ namespace s2industries.ZUGFeRD
         AAJ,
 
         /// <summary>
-        /// Buchhaltungsinformationen
-        /// </summary>
-        /// Informationen für die Buchaltung zu diesem Kauf
-        ABN,
-
-        /// <summary>
+        /// Price conditions
+        /// 
         /// Preiskonditionen
         ///
         /// Angaben zu Entgeltminderungen
@@ -60,6 +68,28 @@ namespace s2industries.ZUGFeRD
         AAK,
 
         /// <summary>
+        /// Government information
+        /// </summary>
+        /// Self explanatory.
+        ABL,
+
+        /// <summary>
+        /// Accounting information
+        ///
+        /// Buchhaltungsinformationen
+        /// </summary>
+        /// Informationen für die Buchaltung zu diesem Kauf
+        ABN,
+
+        /// <summary>
+        /// Factor assignment clause
+        /// </summary>
+        /// Assignment based on an agreement between seller and factor.
+        ACC,
+
+        /// <summary>
+        /// Additional information
+        ///
         /// Zusätzliche Angaben
         /// </summary>
         /// Zusaätzliche Angaben zu diesem Kauf
@@ -71,6 +101,36 @@ namespace s2industries.ZUGFeRD
         ADU,
 
         /// <summary>
+        /// Instructions to the paying and/or accepting and/or negotiating bank
+        /// </summary>
+        AET,
+
+        /// <summary>
+        /// Waste information
+        /// </summary>
+        /// Text describing waste related information.
+        BLU,
+
+        /// <summary>
+        /// Order information
+        /// </summary>
+        COI,
+
+        /// <summary>
+        /// Customs declaration information
+        /// </summary>
+        /// Note contains customs declaration information.
+        CUS,
+
+        /// <summary>
+        /// Payment detail/remittance information
+        /// </summary>
+        /// The free text contains payment details.
+        PMD,
+
+        /// <summary>
+        /// Payment information
+        ///
         /// Zahlungsinformation
         ///
         /// Bekanntgabe der Abtretung der
@@ -79,6 +139,8 @@ namespace s2industries.ZUGFeRD
         PMT,
 
         /// <summary>
+        /// Price calculation formula
+        ///
         /// Preiskalkulationsschema
         ///
         /// Zum Beispiel Angabe Zählerstand,
@@ -88,6 +150,8 @@ namespace s2industries.ZUGFeRD
         PRF,
 
         /// <summary>
+        /// Regulatory information
+        ///
         /// Regulatorische Informationen
         ///
         /// Angaben zum leistenden Unternehmen
@@ -103,19 +167,10 @@ namespace s2industries.ZUGFeRD
         SUR,
 
         /// <summary>
+        /// Tax declaration
+        ///
         /// Grund der Steuerbefreiung
         /// </summary>
-        TXD,
-
-        /// <summary>
-        /// Instructions to the paying and/or accepting and/or negotiating bank
-        /// </summary>
-        AET,
-
-        /// <summary>
-        /// Order information
-        /// </summary>
-        COI
-        
+        TXD
     }
 }

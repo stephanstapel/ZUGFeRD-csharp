@@ -31,29 +31,38 @@ namespace s2industries.ZUGFeRD.PDF
 {
     internal class InvoiceDescriptorPdfLoader
     {
-        internal static async Task<InvoiceDescriptor> LoadAsync(Stream pdfStream)
+        internal static Task<InvoiceDescriptor> LoadAsync(Stream pdfStream)
         {
-            PdfDocument pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
-            return await _LoadXmlAsync(pdfDocument);
+            InvoiceDescriptor result = _Load(pdfStream);
+            return Task.FromResult(result);
         } // !LoadAsync()
 
 
-        internal static async Task<InvoiceDescriptor> LoadAsync(string pdfPath)
+        internal static Task<InvoiceDescriptor> LoadAsync(string pdfPath)
         {
             if (!File.Exists(pdfPath))
             {
                 throw new FileNotFoundException("File not found", pdfPath);
             }
 
-            using (var pdfFile = File.OpenRead(pdfPath))
-            {
-                PdfDocument pdfDocument = PdfReader.Open(pdfFile, PdfDocumentOpenMode.Import);
-                return await _LoadXmlAsync(pdfDocument);
+            using (var pdfStream = File.OpenRead(pdfPath))
+            {                
+                InvoiceDescriptor result = _Load(pdfStream);
+                return Task.FromResult(result);
             }
         } // !LoadAsync()
 
 
-        private static async Task<InvoiceDescriptor> _LoadXmlAsync(PdfDocument document)
+        private static InvoiceDescriptor _Load(Stream pdfStream)
+        {
+            using (var pdfDocument = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import))
+            {                
+                return _LoadXml(pdfDocument);
+            }
+        } // !_Load()
+
+
+        private static InvoiceDescriptor _LoadXml(PdfDocument document)
         {
             PdfStream stream = _GetEmbeddedXmlStream(document);
             if (stream == null)
@@ -72,21 +81,20 @@ namespace s2industries.ZUGFeRD.PDF
                 bytes = flate.Decode(stream.Value, new PdfSharp.Pdf.Filters.FilterParms(null));
             }
 
-            UTF8Encoding uTF8Encoding = new UTF8Encoding();
-            string text = uTF8Encoding.GetString(bytes);
-            if ((bytes.Length > 3) & (bytes[0] == 239) & (bytes[1] == 187) & (bytes[2] == 191))
+            // UTF-8 BOM sauber entfernen
+            if (bytes.Length >= 3 &&
+                bytes[0] == 0xEF &&
+                bytes[1] == 0xBB &&
+                bytes[2] == 0xBF)
             {
-                text = text.Substring(1);
+                byte[] trimmed = new byte[bytes.Length - 3];
+                Buffer.BlockCopy(bytes, 3, trimmed, 0, trimmed.Length);
+                bytes = trimmed;
             }
 
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms);
-            await sw.WriteAsync(text);
-            await sw.FlushAsync();
-            ms.Position = 0;
-
+            MemoryStream ms = new MemoryStream(bytes, writable: false);
             return InvoiceDescriptor.Load(ms);
-        } // !_LoadXmlAsync()
+        } // !_LoadXml()
 
 
         private static PdfStream _GetEmbeddedXmlStream(PdfDocument document, string xmlFileName = null)

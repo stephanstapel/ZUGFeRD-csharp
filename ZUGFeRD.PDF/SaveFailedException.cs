@@ -28,5 +28,11 @@ namespace s2industries.ZUGFeRD.PDF
         {
 
         }
+
+
+        public SaveFailedException(string message, Exception ex) : base(message, ex)
+        {
+
+        }
     }
 }

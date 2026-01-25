@@ -29,6 +29,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PdfSharp.Drawing;
 using System.Linq;
+using System.Diagnostics;
 
 
 
@@ -54,8 +55,27 @@ namespace s2industries.ZUGFeRD.PDF
             descriptor.Save(xmlSourceStream, version, profile, format);
             xmlSourceStream.Seek(0, SeekOrigin.Begin);
 
-            Stream temp = _CreateFacturXStream(pdfSourceStream, xmlSourceStream, version, profile, invoiceFilename, password: password);
-            await temp.CopyToAsync(targetStream);
+            byte[] outputDocumentBytes;
+
+            try
+            {
+                outputDocumentBytes = _CreateFacturXBytes(pdfSourceStream, xmlSourceStream, version, profile, invoiceFilename, password: password);
+            }
+            catch (Exception ex)
+            {
+                throw new SaveFailedException(ex);
+            }
+
+            try
+            {
+                await targetStream
+                    .WriteAsync(outputDocumentBytes, 0, outputDocumentBytes.Length)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new SaveFailedException(ex);
+            }
         } // !SaveAsync()
 
 
@@ -81,7 +101,7 @@ namespace s2industries.ZUGFeRD.PDF
         } // !SaveAsync()
 
 
-        private static Stream _CreateFacturXStream(Stream pdfStream, Stream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
+        private static byte[] _CreateFacturXBytes(Stream pdfStream, MemoryStream xmlStream, ZUGFeRDVersion version, Profile profile, string invoiceFilename, string documentTitle = null, string documentDescription = null, string password = null)
         {
             if (pdfStream == null)
             {
@@ -93,7 +113,7 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new ArgumentNullException(nameof(xmlStream));
             }
 
-            PdfDocument inputDocument = null;
+            PdfDocument inputDocument;
             try
             {
                 if (!String.IsNullOrWhiteSpace(password))
@@ -124,7 +144,15 @@ namespace s2industries.ZUGFeRD.PDF
 
 
             PdfDocument outputDocument = new PdfDocument();
-            outputDocument.Options.ManualXmpGeneration = true;
+
+            try
+            {
+                outputDocument.Options.ManualXmpGeneration = true;
+            }
+            catch (MissingMethodException ex)
+            {
+                throw new SaveFailedException("Please reference PDFsharp-extended. This fork of PDFsharp is required for PDF/A generation", ex);
+            }
 
             if (!String.IsNullOrWhiteSpace(password))
             {
@@ -144,6 +172,7 @@ namespace s2industries.ZUGFeRD.PDF
                 xmlFileBytes = new byte[xmlStream.Length];
                 xmlStream.Read(xmlFileBytes, 0, (int)xmlStream.Length);
 
+                xmlStream.Seek(0, SeekOrigin.Begin);
                 var hashBytes = md5.ComputeHash(xmlStream);
                 xmlChecksum = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
             }
@@ -166,7 +195,7 @@ namespace s2industries.ZUGFeRD.PDF
             outputDocument.Internals.AddObject(fStreamDict);
 
 
-            string relationship = "";
+            string relationship;
             switch (profile)
             {
                 case Profile.Minimum:
@@ -200,7 +229,7 @@ namespace s2industries.ZUGFeRD.PDF
             var dateTimeNow = DateTime.UtcNow;
             var conformanceLevelName = profile.GetXMPName();
 
-            var xmpVersion = "";            
+            string xmpVersion;            
             switch (version)
             {
                 case ZUGFeRDVersion.Version1:
@@ -308,16 +337,19 @@ namespace s2industries.ZUGFeRD.PDF
                 throw new SaveFailedException(ex);
             }
             memoryStream.Seek(0, SeekOrigin.Begin);
-            return memoryStream;
-        } // !_CreateFacturXStream()
+            return memoryStream.ToArray();
+        } // !_CreateFacturXBytes()
+
 
         private static void _EmbedFonts(PdfDocument pdfDocument)
         {
             XGraphics gfx = XGraphics.FromPdfPage(pdfDocument.Pages[0]);
-            foreach (XFont usedFont in _LoadFonts(pdfDocument))
+            List<XFont> loadedFonts = _LoadFonts(pdfDocument);
+
+            foreach (XFont usedFont in loadedFonts)
             {
                 // Use the embedded font
-                XFont xFont = new XFont(usedFont.Name, 1, usedFont.Style, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
+                XFont xFont = new XFont(usedFont.Name2, 1, usedFont.Style, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
                 gfx.DrawString(" ", xFont, XBrushes.Transparent, new XPoint(1, 1));
             }
             gfx.Dispose();
@@ -388,7 +420,7 @@ namespace s2industries.ZUGFeRD.PDF
                     }
                     catch (Exception ex)
                     {
-
+                        Debug.WriteLine($"Could not load font '{fontFamily}' with style '{fontStyle}'. Exception: {ex}");
                     }
                 }
             }
@@ -479,9 +511,6 @@ namespace s2industries.ZUGFeRD.PDF
         private static byte[] _LoadEmbeddedResource(string path)
         {
             var assembly = Assembly.GetExecutingAssembly();
-
-            string[] data = assembly.GetManifestResourceNames();
-
             using (Stream stream = assembly.GetManifestResourceStream(path))
             {
                 if (stream == null)

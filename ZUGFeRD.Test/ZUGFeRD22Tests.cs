@@ -16,21 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using System;
-using System.Diagnostics.Metrics;
-using System.IO;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NuGet.Frameworks;
-using s2industries.ZUGFeRD;
-
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -66,7 +55,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.TaxBasisAmount = 9.9m;
             desc.TaxTotalAmount = 9.9m * 0.19m;
             desc.GrandTotalAmount = 9.9m * 1.19m;
-            desc.DuePayableAmount = 9.9m * 1.19m;            
+            desc.DuePayableAmount = 9.9m * 1.19m;
         }
 
 
@@ -273,7 +262,7 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void TestReferenceExtendedInvoice()
         {
-            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            string path = @"..\..\..\..\documentation\zugferd240en\Examples\4. EXTENDED\EXTENDED_Warenrechnung\EXTENDED_Warenrechnung.xml";
             path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
@@ -1028,8 +1017,8 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual("DE98ZZZ09999999999", invoiceDescriptor.PaymentMeans.SEPACreditorIdentifier);
             Assert.AreEqual("REF A-123", invoiceDescriptor.PaymentMeans.SEPAMandateReference);
-            Assert.AreEqual(PaymentMeansTypeCodes.SEPADirectDebit, invoiceDescriptor.PaymentMeans.TypeCode);                      
-            Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
+            Assert.AreEqual(PaymentMeansTypeCodes.SEPADirectDebit, invoiceDescriptor.PaymentMeans.TypeCode);
+            Assert.HasCount(1, invoiceDescriptor.DebitorBankAccounts);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
             Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.",
@@ -1138,7 +1127,7 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.AreEqual(d2.Currency, CurrencyCodes.EUR);
                 Assert.AreEqual("DE98ZZZ09999999999", d2.PaymentMeans.SEPACreditorIdentifier);
                 Assert.AreEqual("REF A-123", d2.PaymentMeans.SEPAMandateReference);
-                Assert.AreEqual(1, d2.DebitorBankAccounts.Count);
+                Assert.HasCount(1, d2.DebitorBankAccounts);
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
                 Assert.IsTrue(d.Seller.SpecifiedLegalOrganization.ID.SchemeID.HasValue);
                 Assert.AreEqual(GlobalIDSchemeIdentifiers.GLN, d.Seller.SpecifiedLegalOrganization.ID.SchemeID.Value);
@@ -1304,7 +1293,7 @@ namespace s2industries.ZUGFeRD.Test
                 name: "Invoice Data Sheet",
                 uriID: uriID);
             desc.AddAdditionalReferencedDocument(
-                id: id+"2",
+                id: id + "2",
                 typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
                 referenceTypeCode: ReferenceTypeCodes.PP,
                 issueDateTime: issueDateTime);
@@ -1318,7 +1307,7 @@ namespace s2industries.ZUGFeRD.Test
 
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual(2, loadedInvoice.AdditionalReferencedDocuments.Count);
+            Assert.HasCount(2, loadedInvoice.AdditionalReferencedDocuments);
             // checks for 1st document
             Assert.AreEqual("Invoice Data Sheet", loadedInvoice.AdditionalReferencedDocuments[0].Name);
             Assert.AreEqual(issueDateTime, loadedInvoice.AdditionalReferencedDocuments[0].IssueDateTime);
@@ -1330,7 +1319,7 @@ namespace s2industries.ZUGFeRD.Test
             // checks for 2nd document
             Assert.AreEqual("", loadedInvoice.AdditionalReferencedDocuments[1].Name);
             Assert.AreEqual(issueDateTime, loadedInvoice.AdditionalReferencedDocuments[1].IssueDateTime);
-            Assert.AreEqual(id+"2", loadedInvoice.AdditionalReferencedDocuments[1].ID);
+            Assert.AreEqual(id + "2", loadedInvoice.AdditionalReferencedDocuments[1].ID);
             Assert.IsNull(loadedInvoice.AdditionalReferencedDocuments[1].URIID);
             Assert.IsNull(loadedInvoice.AdditionalReferencedDocuments[1].LineID);
             Assert.IsNull(loadedInvoice.AdditionalReferencedDocuments[1].ReferenceTypeCode);
@@ -1424,7 +1413,8 @@ namespace s2industries.ZUGFeRD.Test
             // Check the output in the XML for Comfort.
             // REM: In Comfort only ID, GlobalID, Name, and SpecifiedLegalOrganization are allowed.
 
-            desc.Payee = new Party() {
+            desc.Payee = new Party()
+            {
                 ID = new GlobalID(null, "SL1001"),
                 Name = "Max Mustermann"
                 // Country is not set and should not be written into the XML
@@ -1458,11 +1448,13 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestShipTo() {
+        public void TestShipTo()
+        {
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
 
-            desc.ShipTo = new Party() {
+            desc.ShipTo = new Party()
+            {
                 ID = new GlobalID(null, "SL1001"),
                 GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.GLN, "MusterGLN"),
                 Name = "AbKunden AG Mitte",
@@ -1627,10 +1619,10 @@ namespace s2industries.ZUGFeRD.Test
                 Country = CountryCodes.DE,
                 CountrySubdivisionName = "Hessen"
             };
-            
+
             desc.AddShipToTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
 
-            desc.Invoicee = new Party() 
+            desc.Invoicee = new Party()
             {
                 Name = "Invoicee",
                 ContactName = "Max Mustermann",
@@ -1650,11 +1642,11 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.IsNotNull(loadedInvoice.ShipTo);
-            Assert.AreEqual(1, loadedInvoice.GetShipToTaxRegistration().Count);
+            Assert.HasCount(1, loadedInvoice.GetShipToTaxRegistration());
             Assert.AreEqual("DE123456789", loadedInvoice.GetShipToTaxRegistration().First().No);
 
             Assert.IsNotNull(loadedInvoice.Invoicee);
-            Assert.AreEqual(1, loadedInvoice.GetInvoiceeTaxRegistration().Count);
+            Assert.HasCount(1, loadedInvoice.GetInvoiceeTaxRegistration());
             Assert.AreEqual("DE987654321", loadedInvoice.GetInvoiceeTaxRegistration().First().No);
         }
 
@@ -1781,7 +1773,7 @@ namespace s2industries.ZUGFeRD.Test
             s.Close();
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);            
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
@@ -1937,7 +1929,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.AddLogisticsServiceCharge(10m, "Logistics service charge", TaxTypes.AAC, TaxCategoryCodes.AC, 7m);
 
             desc.GetTradePaymentTerms().FirstOrDefault().DueDate = timestamp.AddDays(14);
-            desc.AddInvoiceReferencedDocument("RE-12345", timestamp);
+            desc.AddInvoiceReferencedDocument("RE-12344", timestamp, InvoiceType.PartialInvoice);
 
 
             //set additional LineItem data
@@ -2089,7 +2081,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(timestamp.AddDays(14), loadedInvoice.BillingPeriodEnd);
 
             //TradeAllowanceCharges
-            Assert.AreEqual(loadedInvoice.GetTradeAllowances().Count, 0);   
+            Assert.AreEqual(loadedInvoice.GetTradeAllowances().Count, 0);
             var tradeAllowanceCharge = loadedInvoice.GetTradeCharges().FirstOrDefault(i => i.Reason == "Reason for charge");
             Assert.IsNotNull(tradeAllowanceCharge);
             Assert.IsTrue(tradeAllowanceCharge.ChargeIndicator);
@@ -2117,23 +2109,24 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
 
             Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);  // mandatory, even if 0!
-            Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount);   // optional
-            Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
+            Assert.IsNull(loadedInvoice.ChargeTotalAmount);   // optional
+            Assert.IsNull(loadedInvoice.AllowanceTotalAmount); // optional
             Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
             Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
             Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
-            Assert.AreEqual(null, loadedInvoice.TotalPrepaidAmount); // optional
+            Assert.IsNull(loadedInvoice.TotalPrepaidAmount); // optional
             Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
 
             //InvoiceReferencedDocument
-            Assert.AreEqual("RE-12345", loadedInvoice.GetInvoiceReferencedDocuments().First().ID);
+            Assert.AreEqual("RE-12344", loadedInvoice.GetInvoiceReferencedDocuments().First().ID);
             Assert.AreEqual(timestamp, loadedInvoice.GetInvoiceReferencedDocuments().First().IssueDateTime);
+            Assert.AreEqual(InvoiceType.PartialInvoice, loadedInvoice.GetInvoiceReferencedDocuments().First().TypeCode);
 
 
             //Line items
             var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
             Assert.IsNotNull(loadedLineItem);
-            Assert.IsTrue(!string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
+            Assert.IsFalse(string.IsNullOrEmpty(loadedLineItem.AssociatedDocument.LineID));
             Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
 
             Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);
@@ -2166,7 +2159,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("12345", loadedLineItem.ContractReferencedDocument.ID);
             Assert.AreEqual(timestamp, loadedLineItem.ContractReferencedDocument.IssueDateTime);
 
-            Assert.IsTrue(loadedLineItem.GetAdditionalReferencedDocuments().Count == 1);
+            Assert.HasCount(1, loadedLineItem.GetAdditionalReferencedDocuments());
             var lineItemReferencedDoc = loadedLineItem.GetAdditionalReferencedDocuments().FirstOrDefault();
             Assert.IsNotNull(lineItemReferencedDoc);
             Assert.AreEqual("abc", lineItemReferencedDoc.ID);
@@ -2246,7 +2239,7 @@ namespace s2industries.ZUGFeRD.Test
         {
             DateTime issueDateTime = DateTime.Today;
 
-            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();            
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             //PayerSpecifiedDebtorFinancialInstitution
             desc.AddDebitorFinancialAccount("DE02120300000000202051", "MYBIC");
 
@@ -2455,8 +2448,13 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestTradeAllowanceChargeWithExplicitPercentage()
 
 
-        [TestMethod]
-        public void TestWriteAndReadDespatchAdviceDocumentReferenceXRechnung()
+        [TestMethod]        
+        [DataRow(Profile.Basic)]
+        [DataRow(Profile.BasicWL)]
+        [DataRow(Profile.Comfort)]
+        [DataRow(Profile.Extended)]
+        [DataRow(Profile.XRechnung)]
+        public void TestWriteAndReadDespatchAdviceDocumentReferenceAllProfilesButMinimum(Profile profile)
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
             string despatchAdviceNo = "421567982";
@@ -2464,12 +2462,38 @@ namespace s2industries.ZUGFeRD.Test
             desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
+            desc.Save(ms, ZUGFeRDVersion.Version23, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.DespatchAdviceReferencedDocument);
+
+            if (profile == Profile.Extended)
+            {
+                Assert.IsNotNull(loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime);
+            }
+            else
+            {
+                Assert.IsNull(loadedInvoice.DespatchAdviceReferencedDocument.IssueDateTime);
+            }
+        } //!TestWriteAndReadDespatchAdviceDocumentReferenceAllProfilesButMinimum()
+
+
+        [TestMethod]                
+        public void TestWriteAndReadDespatchAdviceDocumentReferenceMinimum()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            string despatchAdviceNo = "421567982";
+            DateTime despatchAdviceDate = new DateTime(2024, 5, 14);
+            desc.SetDespatchAdviceReferencedDocument(despatchAdviceNo, despatchAdviceDate);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
             ms.Seek(0, SeekOrigin.Begin);
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.IsNull(loadedInvoice.DespatchAdviceReferencedDocument);
-        } //!TestWriteAndReadDespatchAdviceDocumentReference()
+        } //!TestWriteAndReadDespatchAdviceDocumentReferenceAllProfilesButMinimum()
 
 
         [TestMethod]
@@ -2533,8 +2557,8 @@ namespace s2industries.ZUGFeRD.Test
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual(0, loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowances().Count);
-            Assert.AreEqual(0, loadedInvoice.TradeLineItems[0].GetSpecifiedTradeCharges().Count);
+            Assert.IsEmpty(loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowances());
+            Assert.IsEmpty(loadedInvoice.TradeLineItems[0].GetSpecifiedTradeCharges());
         } // !TestSpecifiedTradeAllowanceChargeNotWrittenInMinimum()
 
 
@@ -2640,9 +2664,9 @@ namespace s2industries.ZUGFeRD.Test
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
             string content = reader.ReadToEnd();
-            Assert.IsTrue(content.Contains("<ram:DesignatedProductClassification>"));
-            Assert.IsTrue(content.Contains("<ram:ClassCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</ram:ClassCode>"));
-            Assert.IsTrue(content.Contains("<ram:ClassName>Class Name</ram:ClassName>"));
+            Assert.Contains("<ram:DesignatedProductClassification>", content);
+            Assert.Contains("<ram:ClassCode listID=\"HS\" listVersionID=\"List Version ID Value\">Class Code</ram:ClassCode>", content);
+            Assert.Contains("<ram:ClassName>Class Name</ram:ClassName>", content);
 
             // structure comparison
             ms.Seek(0, SeekOrigin.Begin);
@@ -2762,7 +2786,7 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(2, paymentTerms.Count);
+            Assert.HasCount(2, paymentTerms);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual("Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
@@ -2807,7 +2831,7 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(2, paymentTerms.Count);
+            Assert.HasCount(2, paymentTerms);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault(i => i.Description.StartsWith("Zahlbar"));
             Assert.IsNotNull(paymentTerm);
             Assert.IsNull(paymentTerm.PaymentTermsType);
@@ -2851,7 +2875,7 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(0, paymentTerms.Count);
+            Assert.IsEmpty(paymentTerms);
         } // !TestPaymentTermsMultiCardinalityWithMinimum()
 
 
@@ -2883,7 +2907,7 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(1, paymentTerms.Count);
+            Assert.HasCount(1, paymentTerms);
             var paymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(paymentTerm);
             Assert.AreEqual($"Zahlbar innerhalb 30 Tagen netto bis 04.04.2018", paymentTerm.Description);
@@ -2912,7 +2936,7 @@ namespace s2industries.ZUGFeRD.Test
 
             ms.Seek(0, SeekOrigin.Begin);
             Assert.AreEqual(InvoiceDescriptor.GetVersion(ms), ZUGFeRDVersion.Version23);
-            
+
 
             // Act
             ms.Seek(0, SeekOrigin.Begin);
@@ -2922,7 +2946,7 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(1, paymentTerms.Count);
+            Assert.HasCount(1, paymentTerms);
             var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(firstPaymentTerm);
 
@@ -2947,7 +2971,7 @@ namespace s2industries.ZUGFeRD.Test
             desc.AddTradePaymentTerms(description, null, PaymentTermsType.Skonto, 14, 2.25m);
 
             MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);            
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung);
 
             ms.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader(ms);
@@ -2964,13 +2988,13 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(1, paymentTerms.Count);
+            Assert.HasCount(1, paymentTerms);
 
             var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(firstPaymentTerm);
 
             var lines = firstPaymentTerm.Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            Assert.AreEqual(lines.Count(), 2);
+            Assert.AreEqual(lines.Length, 2);
 
             Assert.AreEqual(lines[0].Trim(), description); // Trim() to remove trailing line break
 
@@ -2983,7 +3007,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsTrue(match.Success);
             Assert.AreEqual(match.Groups[1].Value, "SKONTO");
             Assert.AreEqual(match.Groups[2].Value, "14");
-            Assert.AreEqual(match.Groups[3].Value, "2.25");                      
+            Assert.AreEqual(match.Groups[3].Value, "2.25");
         }
 
 
@@ -3022,7 +3046,7 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(1, paymentTerms.Count);
+            Assert.HasCount(1, paymentTerms);
         }
 
         /**
@@ -3037,7 +3061,7 @@ namespace s2industries.ZUGFeRD.Test
         public void TestPaymentTermsMultiCardinalityXRechnungStructured()
         {
             DateTime timestamp = DateTime.Now.Date;
-            
+
             var desc = _InvoiceProvider.CreateInvoice();
             desc.GetTradePaymentTerms().Clear();
             desc.AddTradePaymentTerms(String.Empty, null, PaymentTermsType.Skonto, 14, 2.25m);
@@ -3062,13 +3086,13 @@ namespace s2industries.ZUGFeRD.Test
             // PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.AreEqual(1, paymentTerms.Count); //Currently only one instance of SpecifiedTradePaymentTerms is allowed, the payment terms are concatenated in the description
+            Assert.HasCount(1, paymentTerms); //Currently only one instance of SpecifiedTradePaymentTerms is allowed, the payment terms are concatenated in the description
 
             var structuredPaymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(structuredPaymentTerms);
 
             var separators = new[] { "\n", XmlConstants.XmlNewLine };
-            var structuredPaymentTermsList = structuredPaymentTerms.Description.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Replace("\r",""));
+            var structuredPaymentTermsList = structuredPaymentTerms.Description.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Replace("\r", ""));
             Assert.AreEqual(3, structuredPaymentTermsList.Count()); //Spliting the description by line break should give us the two payment terms + one description line
 
             var firstPaymentTerm = structuredPaymentTermsList.ElementAt(0);
@@ -3098,7 +3122,7 @@ namespace s2industries.ZUGFeRD.Test
 
             MemoryStream ms = new MemoryStream();
             desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.CII);
-            desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
+            // desc.Save("e:\\output.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
 
             var lines = new StreamReader(ms).ReadToEnd().Split(new[] { System.Environment.NewLine }, StringSplitOptions.None).ToList();
 
@@ -3126,7 +3150,7 @@ namespace s2industries.ZUGFeRD.Test
                 {
                     insideDescription = true;
                     noteIndentation = line.TakeWhile(char.IsWhiteSpace).Count();
-                    Assert.IsTrue(noteIndentation >= 0, "Indentation for <ram:Description> should be non-negative.");
+                    Assert.IsGreaterThanOrEqualTo(0, noteIndentation, "Indentation for <ram:Description> should be non-negative.");
                     Assert.AreEqual("<ram:Description>#SKONTO#TAGE=14#PROZENT=2.25#", trimmedLine);
 
                     continue;
@@ -3148,16 +3172,16 @@ namespace s2industries.ZUGFeRD.Test
         public void TestOfficialXRechnungFileForPaymentTerms()
         {
             string path = @"..\..\..\..\documentation\xRechnung\XRechnung 3.0.1\xrechnung-3.0.1-schematron-2.0.1\generated\cii-br-de-18-freespace-test-869-identity.xml";
-            path = _makeSurePathIsCrossPlatformCompatible(path);            
+            path = _makeSurePathIsCrossPlatformCompatible(path);
 
             Stream s = File.Open(path, FileMode.Open);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
             s.Close();
 
-            Assert.AreEqual(1, desc.PaymentTerms.Count);
+            Assert.HasCount(1, desc.PaymentTerms);
 
             var paymentTermsLines = desc.PaymentTerms[0].Description.Split("\n");
-            Assert.AreEqual(paymentTermsLines.Count(), 7);
+            Assert.AreEqual(paymentTermsLines.Length, 7);
             Assert.AreEqual(paymentTermsLines[0].Trim(), "testentry");
             Assert.AreEqual(paymentTermsLines[1].Trim(), "#SKONTO#TAGE=7#PROZENT=2.00#");
             Assert.AreEqual(paymentTermsLines[2].Trim(), "testentry");
@@ -3263,8 +3287,8 @@ namespace s2industries.ZUGFeRD.Test
                 // test the raw xml file
                 string content = Encoding.UTF8.GetString(stream.ToArray());
 
-                Assert.IsTrue(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
-                Assert.IsTrue(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
+                Assert.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>", content);
+                Assert.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>", content);
             }
         } // !TestRequiredDirectDebitFieldsShouldExist()
 
@@ -3350,8 +3374,8 @@ namespace s2industries.ZUGFeRD.Test
                 // test the raw xml file
                 string content = Encoding.UTF8.GetString(stream.ToArray());
 
-                Assert.IsFalse(content.Contains($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>"));
-                Assert.IsFalse(content.Contains($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>"));
+                Assert.DoesNotContain($"<ram:CreditorReferenceID>DE98ZZZ09999999999</ram:CreditorReferenceID>", content);
+                Assert.DoesNotContain($"<ram:DirectDebitMandateID>REF A-123</ram:DirectDebitMandateID>", content);
             }
         } // !TestInNonDebitInvoiceTheDirectDebitFieldsShouldNotExist()
 
@@ -3448,7 +3472,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNull(loadedInvoice.ApplicableTradeDeliveryTermsCode);
         } // !TestSellerOrderReferencedDocument()
 
-       
+
         [TestMethod]
         public void TestInvoiceExemptions()
         {
@@ -3579,14 +3603,14 @@ namespace s2industries.ZUGFeRD.Test
         {
             // load standrd invoice
             string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
-            path = _makeSurePathIsCrossPlatformCompatible(path);            
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Type, InvoiceType.Invoice);
 
             // load correction
             path = @"..\..\..\..\documentation\zugferd23en\Examples\4. EXTENDED\EXTENDED_Rechnungskorrektur\factur-x.xml";
-            path = _makeSurePathIsCrossPlatformCompatible(path);            
+            path = _makeSurePathIsCrossPlatformCompatible(path);
             desc = InvoiceDescriptor.Load(path);
 
             Assert.AreEqual(desc.Type, InvoiceType.Correction);
@@ -3619,5 +3643,51 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 06, 21));
         } // !TestRSMInvoice()        
+        
+        [TestMethod]
+        public void TestAccountingCost()
+        {
+            var d = new InvoiceDescriptor();
+            d.Type = InvoiceType.Invoice;
+            d.InvoiceNo = "471103";
+            d.Currency = CurrencyCodes.EUR;
+            d.InvoiceDate = new DateTime(2025, 11, 11);
+            d.AddReceivableSpecifiedTradeAccountingAccount("BRE");
+
+            using (var stream = new MemoryStream())
+            {
+                d.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var d2 = InvoiceDescriptor.Load(stream);
+                Assert.IsTrue(d2.GetReceivableSpecifiedTradeAccountingAccounts().Any(account => account.TradeAccountID == "BRE"));
+            }
+        } // !TestAccountingCost()
+
+
+        [TestMethod]
+        public void TestAlternateNamespace()
+        {
+            string path = @"..\..\..\..\demodata\zugferd22\zugferd_23_namespace.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor invoice = InvoiceDescriptor.Load(path);
+
+            // test random fields
+            Assert.AreEqual(invoice.InvoiceDate, new DateTime(2025, 10, 24));
+            Assert.AreEqual(invoice.InvoiceNo, "0000000016");
+        } // !TestAlternateNamespace()
+
+
+        [TestMethod]
+        public void TestLocalNamespace()
+        {
+            string path = @"..\..\..\..\demodata\zugferd22\zugferd_23_local_namespaces.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            InvoiceDescriptor invoice = InvoiceDescriptor.Load(path);
+            Assert.AreEqual(invoice.Profile, Profile.Extended);
+        } // !TestLocalNamespace()
     }
 }

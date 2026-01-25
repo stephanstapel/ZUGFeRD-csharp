@@ -55,7 +55,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
             string sourcePath = @"..\..\..\not-embedded.pdf";
             sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
 
-            string targetPath = @"output-not-embedded.pdf";
+            string targetPath = @"output-embedded.pdf";
             targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
 
             InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
@@ -121,6 +121,77 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(fontFileOccurs.Values.All(x => x));
             Assert.IsTrue(fontAppeareanceCount.Values.All(x => x == 2));
         } // !BasicSaveFileAndEmbedFonts()
+
+
+        [TestMethod]
+        public async Task VeraPdfLikeFontEmbeddingTest()
+        {
+            // --- Arrange ---
+            string sourcePath = @"..\..\..\not-embedded.pdf";
+            sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
+
+            string targetPath = @"output-embedded.pdf";
+            targetPath = _makeSurePathIsCrossPlatformCompatible(targetPath);
+
+            InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
+
+            // --- Act ---
+            await InvoicePdfProcessor.SaveToPdfAsync(
+                targetPath,
+                ZUGFeRDVersion.Version23,
+                Profile.Comfort,
+                ZUGFeRDFormats.CII,
+                sourcePath,
+                descriptor
+            );
+
+            Assert.IsTrue(File.Exists(targetPath), "Output PDF was not created.");
+
+            // --- Assert: open pdf and analyse ---
+            PdfDocument document = PdfReader.Open(targetPath);
+            Assert.IsTrue(document.Pages.Count > 0);
+
+            HashSet<string> usedFonts = new HashSet<string>();
+            Dictionary<string, bool> embeddedStatus = new Dictionary<string, bool>();
+
+            foreach (var page in document.Pages.Cast<PdfPage>())
+            {
+                var resources = page.Elements.GetDictionary("/Resources");
+                if (resources == null) continue;
+
+                var fonts = resources.Elements.GetDictionary("/Font");
+                if (fonts == null) continue;
+
+                foreach (var entry in fonts.Elements)
+                {
+                    var reference = entry.Value as PdfReference;
+                    if (reference == null) continue;
+
+                    var fontDict = document.Internals.GetObject(reference.ObjectID) as PdfDictionary;
+                    if (fontDict == null) continue;
+
+                    var fontDescriptor = fontDict.Elements.GetDictionary("/FontDescriptor");
+                    Assert.IsNotNull(fontDescriptor, $"FontDescriptor missing for {entry.Key}.");
+
+                    string fontName = fontDescriptor.Elements.GetString("/FontName")?.TrimStart('/');
+                    usedFonts.Add(fontName);
+
+                    bool embedded =
+                        fontDescriptor.Elements.ContainsKey("/FontFile") ||
+                        fontDescriptor.Elements.ContainsKey("/FontFile2") ||
+                        fontDescriptor.Elements.ContainsKey("/FontFile3");
+
+                    embeddedStatus[fontName] = embedded;
+                }
+            }
+
+            // not embedded fonts
+            var notEmbedded = embeddedStatus.Where(x => !x.Value).Select(x => x.Key).ToList();
+
+            Assert.IsFalse(
+                notEmbedded.Any(),
+                "These fonts that are not embedded in PDF: " + string.Join(", ", notEmbedded));
+        } // !VeraPdfLikeFontEmbeddingTest()
 
 
         [TestMethod]

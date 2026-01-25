@@ -16,10 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using s2industries.ZUGFeRD;
-using System.Text;
-
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -193,7 +189,7 @@ namespace s2industries.ZUGFeRD.Test
 
             Assert.AreEqual("DE98ZZZ09999999999", invoiceDescriptor.PaymentMeans.SEPACreditorIdentifier);
             Assert.AreEqual("REF A-123", invoiceDescriptor.PaymentMeans.SEPAMandateReference);
-            Assert.AreEqual(1, invoiceDescriptor.DebitorBankAccounts.Count);
+            Assert.HasCount(1, invoiceDescriptor.DebitorBankAccounts);
             Assert.AreEqual("DE21860000000086001055", invoiceDescriptor.DebitorBankAccounts[0].IBAN);
 
             Assert.AreEqual("Der Betrag in Höhe von EUR 529,87 wird am 20.03.2018 von Ihrem Konto per SEPA-Lastschrift eingezogen.",
@@ -300,7 +296,7 @@ namespace s2industries.ZUGFeRD.Test
                 var d2 = InvoiceDescriptor.Load(stream);
                 Assert.AreEqual("DE98ZZZ09999999999", d2.PaymentMeans.SEPACreditorIdentifier);
                 Assert.AreEqual("REF A-123", d2.PaymentMeans.SEPAMandateReference);
-                Assert.AreEqual(1, d2.DebitorBankAccounts.Count);
+                Assert.HasCount(1, d2.DebitorBankAccounts);
                 Assert.AreEqual("DE21860000000086001055", d2.DebitorBankAccounts[0].IBAN);
             }
         } // !TestStoringSepaPreNotification()
@@ -369,7 +365,7 @@ namespace s2industries.ZUGFeRD.Test
 
             desc.AddAdditionalReferencedDocument(
                 id: "My-File-BIN",
-                issueDateTime: timestamp,
+                issueDateTime: timestamp.AddDays(-2),
                 typeCode: AdditionalReferencedDocumentTypeCode.ReferenceDocument,
                 name: "EmbeddedPdf",
                 attachmentBinaryObject: data,
@@ -747,12 +743,12 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(timestamp.AddDays(14), paymentTerms.DueDate);
 
             Assert.AreEqual(473.0m, loadedInvoice.LineTotalAmount);
-            Assert.AreEqual(null, loadedInvoice.ChargeTotalAmount); // optional
-            Assert.AreEqual(null, loadedInvoice.AllowanceTotalAmount); // optional
+            Assert.IsNull(loadedInvoice.ChargeTotalAmount); // optional
+            Assert.IsNull(loadedInvoice.AllowanceTotalAmount); // optional
             Assert.AreEqual(473.0m, loadedInvoice.TaxBasisAmount);
             Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount);
             Assert.AreEqual(529.87m, loadedInvoice.GrandTotalAmount);
-            Assert.AreEqual(null, loadedInvoice.TotalPrepaidAmount); // optional
+            Assert.IsNull(loadedInvoice.TotalPrepaidAmount); // optional
             Assert.AreEqual(529.87m, loadedInvoice.DuePayableAmount);
 
             //InvoiceReferencedDocument
@@ -763,7 +759,7 @@ namespace s2industries.ZUGFeRD.Test
             //Line items
             var loadedLineItem = loadedInvoice.TradeLineItems.FirstOrDefault(i => i.SellerAssignedID == "TB100A4");
             Assert.IsNotNull(loadedLineItem);
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(loadedLineItem.AssociatedDocument.LineID));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(loadedLineItem.AssociatedDocument.LineID));
             Assert.AreEqual("This is line item TB100A4", loadedLineItem.Description);
 
             Assert.AreEqual("Trennblätter A4", loadedLineItem.Name);

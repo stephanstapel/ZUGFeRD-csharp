@@ -1,0 +1,229 @@
+﻿
+<!--Sample file Order-x.xml - COMFORT Profile, created by Cyrille Sautereau, Admarel-->
+<rsm:SCRDMCCBDACIOMessageStructure
+xmlns:rsm="urn:un:unece:uncefact:data:SCRDMCCBDACIOMessageStructure:100"
+xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:128"
+xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:128"
+xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:128"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+     <rsm:ExchangedDocumentContext>
+          <ram:TestIndicator>
+               <udt:Indicator>false</udt:Indicator>
+          </ram:TestIndicator>
+          <ram:BusinessProcessSpecifiedDocumentContextParameter>
+               <ram:ID>A1</ram:ID>
+          </ram:BusinessProcessSpecifiedDocumentContextParameter>
+          <ram:GuidelineSpecifiedDocumentContextParameter>
+               <ram:ID>urn:order-x.eu:1p0:comfort</ram:ID>
+          </ram:GuidelineSpecifiedDocumentContextParameter>
+     </rsm:ExchangedDocumentContext>
+     <rsm:ExchangedDocument>
+          <ram:ID>1861727</ram:ID>
+          <ram:TypeCode>220</ram:TypeCode>
+          <ram:IssueDateTime>
+               <udt:DateTimeString format="102">20200109</udt:DateTimeString>
+          </ram:IssueDateTime>
+          <ram:CopyIndicator>
+               <udt:Indicator>false</udt:Indicator>
+          </ram:CopyIndicator>
+          <ram:PurposeCode>9</ram:PurposeCode>
+          <ram:RequestedResponseTypeCode>AC</ram:RequestedResponseTypeCode>
+          <ram:IncludedNote>
+               <ram:Content>ARC 0142038529 LIVRAISON SUR RDV AU 02.40.32.40.12 RECEPTION DE 8H30 A 12H</ram:Content>
+               <ram:SubjectCode>DEL</ram:SubjectCode>
+          </ram:IncludedNote>
+     </rsm:ExchangedDocument>
+     <rsm:SupplyChainTradeTransaction>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>1</ram:LineID>
+                    <ram:IncludedNote>
+                         <ram:Content>certifiés  PEFC mini 90% PEFC/10-34-97 </ram:Content>
+                         <ram:SubjectCode>PRD</ram:SubjectCode>
+                    </ram:IncludedNote>
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:GlobalID schemeID="0160">3607765426686</ram:GlobalID>
+                    <ram:SellerAssignedID>542668</ram:SellerAssignedID>
+                    <ram:BuyerAssignedID>198765</ram:BuyerAssignedID>
+                    <ram:Name>HPL 0.8 mm  3070x1320</ram:Name>
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                    <ram:QuotationReferencedDocument>
+                         <ram:IssuerAssignedID>Q351528</ram:IssuerAssignedID>
+                         <ram:LineID>6</ram:LineID>
+                    </ram:QuotationReferencedDocument>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>18.74</ram:ChargeAmount>
+                         <ram:BasisQuantity unitCode="MTK">1</ram:BasisQuantity>
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:PartialDeliveryAllowedIndicator>
+                         <udt:Indicator>false</udt:Indicator>
+                    </ram:PartialDeliveryAllowedIndicator>
+                    <ram:RequestedQuantity unitCode="MTK">4.052</ram:RequestedQuantity>
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>75.93</ram:LineTotalAmount>
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>2</ram:LineID>
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:GlobalID schemeID="0160">4024125000178</ram:GlobalID>
+                    <ram:SellerAssignedID>73796000</ram:SellerAssignedID>
+                    <ram:BuyerAssignedID>186954</ram:BuyerAssignedID>
+                    <ram:Name>wedi Kit d'étanchéité Fundo</ram:Name>
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>89.03</ram:ChargeAmount>
+                         <ram:BasisQuantity unitCode="C62">1</ram:BasisQuantity>
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:PartialDeliveryAllowedIndicator>
+                         <udt:Indicator>true</udt:Indicator>
+                    </ram:PartialDeliveryAllowedIndicator>
+                    <ram:RequestedQuantity unitCode="C62">5</ram:RequestedQuantity>
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>445.15</ram:LineTotalAmount>
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>3</ram:LineID>
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:GlobalID schemeID="0160">3546335717048</ram:GlobalID>
+                    <ram:SellerAssignedID>571704</ram:SellerAssignedID>
+                    <ram:BuyerAssignedID>125965</ram:BuyerAssignedID>
+                    <ram:Name>RSS SCD CHROME 0500W</ram:Name>
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>208.02</ram:ChargeAmount>
+                         <ram:BasisQuantity unitCode="C62">1</ram:BasisQuantity>
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:PartialDeliveryAllowedIndicator>
+                         <udt:Indicator>true</udt:Indicator>
+                    </ram:PartialDeliveryAllowedIndicator>
+                    <ram:RequestedQuantity unitCode="C62">5</ram:RequestedQuantity>
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>1040.1</ram:LineTotalAmount>
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:ApplicableHeaderTradeAgreement>
+               <ram:SellerTradeParty>
+                    <ram:GlobalID schemeID="0088">3020816001302</ram:GlobalID>
+                    <ram:Name>DMBP NANTES DISPANO ROUX - 1535</ram:Name>
+                    <ram:Description>50810215900334</ram:Description>
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">50810215900334</ram:ID>
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>44100</ram:PostcodeCode>
+                         <ram:LineOne>12 RUE DE LA FONTAINE SALEE</ram:LineOne>
+                         <ram:CityName>NANTES</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR86508102159</ram:ID>
+                    </ram:SpecifiedTaxRegistration>
+               </ram:SellerTradeParty>
+               <ram:BuyerTradeParty>
+                    <ram:GlobalID schemeID="0088">3306949923804</ram:GlobalID>
+                    <ram:Name>AMBERIEU EN BUGEY CEDEO</ram:Name>
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">57214188502180</ram:ID>
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:DefinedTradeContact>
+                         <ram:PersonName>ALAIN DUPOND</ram:PersonName>
+                         <ram:TelephoneUniversalCommunication>
+                              <ram:CompleteNumber>06 78 56 23 00</ram:CompleteNumber>
+                         </ram:TelephoneUniversalCommunication>
+                         <ram:EmailURIUniversalCommunication>
+                              <ram:URIID>alain.dupond@saint-gobain.com</ram:URIID>
+                         </ram:EmailURIUniversalCommunication>
+                    </ram:DefinedTradeContact>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>01500</ram:PostcodeCode>
+                         <ram:LineOne>Avenue Leon Blum</ram:LineOne>
+                         <ram:CityName>Amberieu en bugey</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID schemeID="EM">alain.dupond@saint-gobain.com</ram:URIID>
+                    </ram:URIUniversalCommunication>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR94572141885</ram:ID>
+                    </ram:SpecifiedTaxRegistration>
+               </ram:BuyerTradeParty>
+          </ram:ApplicableHeaderTradeAgreement>
+          <ram:ApplicableHeaderTradeDelivery>
+               <ram:ShipToTradeParty>
+                    <ram:GlobalID schemeID="0088">3306949923804</ram:GlobalID>
+                    <ram:Name>AMBERIEU EN BUGEY CEDEO</ram:Name>
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">57214188502180</ram:ID>
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:DefinedTradeContact>
+                         <ram:PersonName>ALAIN DUPOND</ram:PersonName>
+                         <ram:TelephoneUniversalCommunication>
+                              <ram:CompleteNumber>06 78 56 23 00</ram:CompleteNumber>
+                         </ram:TelephoneUniversalCommunication>
+                         <ram:EmailURIUniversalCommunication>
+                              <ram:URIID>alain.dupond@saint-gobain.com</ram:URIID>
+                         </ram:EmailURIUniversalCommunication>
+                    </ram:DefinedTradeContact>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>01500</ram:PostcodeCode>
+                         <ram:LineOne>Avenue Leon Blum</ram:LineOne>
+                         <ram:CityName>Amberieu en bugey</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+               </ram:ShipToTradeParty>
+               <ram:RequestedDeliverySupplyChainEvent>
+                    <ram:OccurrenceDateTime>
+                         <udt:DateTimeString format="102">20200115</udt:DateTimeString>
+                    </ram:OccurrenceDateTime>
+               </ram:RequestedDeliverySupplyChainEvent>
+          </ram:ApplicableHeaderTradeDelivery>
+          <ram:ApplicableHeaderTradeSettlement>
+               <ram:OrderCurrencyCode>EUR</ram:OrderCurrencyCode>
+               <ram:InvoiceeTradeParty>
+                    <ram:GlobalID schemeID="0088">3306949923804</ram:GlobalID>
+                    <ram:Name>DISTRIB. SANITAIRE CHAUFFAGE</ram:Name>
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">57214188502180</ram:ID>
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>60550</ram:PostcodeCode>
+                         <ram:LineOne>ZAC du Parc ALATA</ram:LineOne>
+                         <ram:CityName>VERNEUIL EN HALATTE</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR94572141885</ram:ID>
+                    </ram:SpecifiedTaxRegistration>
+               </ram:InvoiceeTradeParty>
+               <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                    <ram:LineTotalAmount>1561.18</ram:LineTotalAmount>
+                    <ram:TaxBasisTotalAmount>1561.18</ram:TaxBasisTotalAmount>
+               </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+          </ram:ApplicableHeaderTradeSettlement>
+     </rsm:SupplyChainTradeTransaction>
+</rsm:SCRDMCCBDACIOMessageStructure>

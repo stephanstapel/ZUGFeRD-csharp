@@ -1,0 +1,203 @@
+﻿
+<!--Sample file Order-x.xml - BASIC Profile, created by Cyrille Sautereau, Admarel-->
+<rsm:SCRDMCCBDACIOMessageStructure
+xmlns:rsm="urn:un:unece:uncefact:data:SCRDMCCBDACIOMessageStructure:100"
+xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:128"
+xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:128"
+xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:128"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+     <rsm:ExchangedDocumentContext>
+          <ram:TestIndicator>
+               <udt:Indicator>false</udt:Indicator>
+          </ram:TestIndicator>
+          <ram:BusinessProcessSpecifiedDocumentContextParameter>
+               <ram:ID>A1</ram:ID>
+          </ram:BusinessProcessSpecifiedDocumentContextParameter>
+          <ram:GuidelineSpecifiedDocumentContextParameter>
+               <ram:ID>urn:order-x.eu:1p0:basic</ram:ID>
+          </ram:GuidelineSpecifiedDocumentContextParameter>
+     </rsm:ExchangedDocumentContext>
+     <rsm:ExchangedDocument>
+          <ram:ID>PO123456789-R01</ram:ID>
+          <ram:Name>Doc Name</ram:Name>
+          <ram:TypeCode>231</ram:TypeCode>
+          <ram:StatusCode>8</ram:StatusCode>
+          <ram:IssueDateTime>
+               <udt:DateTimeString format="102">20200331</udt:DateTimeString>
+          </ram:IssueDateTime>
+          <ram:CopyIndicator>
+               <udt:Indicator>false</udt:Indicator>
+          </ram:CopyIndicator>
+          <ram:PurposeCode>9</ram:PurposeCode>
+          <ram:RequestedResponseTypeCode>AC</ram:RequestedResponseTypeCode>
+          <ram:IncludedNote>
+               <ram:Content>Content of Note</ram:Content>
+               <ram:SubjectCode>AAI</ram:SubjectCode>
+          </ram:IncludedNote>
+     </rsm:ExchangedDocument>
+     <rsm:SupplyChainTradeTransaction>
+          <ram:ApplicableHeaderTradeAgreement>
+               <ram:BuyerReference>BUYER_REF_BU123</ram:BuyerReference>
+               <ram:SellerTradeParty>
+                    <ram:ID>SUPPLIER_ID_321654</ram:ID>
+                    <ram:GlobalID schemeID="0088">123654879</ram:GlobalID>
+                    <ram:Name>SELLER_NAME</ram:Name>
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">123456789</ram:ID>
+                         <ram:TradingBusinessName>SELLER_TRADING_NAME</ram:TradingBusinessName>
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:DefinedTradeContact>
+                         <ram:PersonName>SELLER_CONTACT_NAME</ram:PersonName>
+                         <ram:DepartmentName>SELLER_CONTACT_DEP</ram:DepartmentName>
+                         <ram:TelephoneUniversalCommunication>
+                              <ram:CompleteNumber>+33 6 25 64 98 75</ram:CompleteNumber>
+                         </ram:TelephoneUniversalCommunication>
+                         <ram:EmailURIUniversalCommunication>
+                              <ram:URIID>contact@seller.com</ram:URIID>
+                         </ram:EmailURIUniversalCommunication>
+                    </ram:DefinedTradeContact>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>75001</ram:PostcodeCode>
+                         <ram:LineOne>SELLER_ADDR_1</ram:LineOne>
+                         <ram:LineTwo>SELLER_ADDR_2</ram:LineTwo>
+                         <ram:LineThree>SELLER_ADDR_3</ram:LineThree>
+                         <ram:CityName>SELLER_CITY</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID schemeID="EM">sales@seller.com</ram:URIID>
+                    </ram:URIUniversalCommunication>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR 32 123 456 789</ram:ID>
+                    </ram:SpecifiedTaxRegistration>
+               </ram:SellerTradeParty>
+               <ram:BuyerTradeParty>
+                    <ram:ID>BY_ID_9587456</ram:ID>
+                    <ram:GlobalID schemeID="0088">98765432179</ram:GlobalID>
+                    <ram:Name>BUYER_NAME</ram:Name>
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">987654321</ram:ID>
+                         <ram:TradingBusinessName>BUYER_TRADING_NAME</ram:TradingBusinessName>
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:DefinedTradeContact>
+                         <ram:PersonName>BUYER_CONTACT_NAME</ram:PersonName>
+                         <ram:DepartmentName>BUYER_CONTACT_DEP</ram:DepartmentName>
+                         <ram:TelephoneUniversalCommunication>
+                              <ram:CompleteNumber>+33 6 65 98 75 32</ram:CompleteNumber>
+                         </ram:TelephoneUniversalCommunication>
+                         <ram:EmailURIUniversalCommunication>
+                              <ram:URIID>contact@buyer.com</ram:URIID>
+                         </ram:EmailURIUniversalCommunication>
+                    </ram:DefinedTradeContact>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>69001</ram:PostcodeCode>
+                         <ram:LineOne>BUYER_ADDR_1</ram:LineOne>
+                         <ram:LineTwo>BUYER_ADDR_2</ram:LineTwo>
+                         <ram:LineThree>BUYER_ADDR_3</ram:LineThree>
+                         <ram:CityName>BUYER_CITY</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID schemeID="EM">operation@buyer.com</ram:URIID>
+                    </ram:URIUniversalCommunication>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR 05 987 654 321</ram:ID>
+                    </ram:SpecifiedTaxRegistration>
+               </ram:BuyerTradeParty>
+               <ram:ApplicableTradeDeliveryTerms>
+                    <ram:DeliveryTypeCode>FCA</ram:DeliveryTypeCode>
+                    <ram:FunctionCode>4</ram:FunctionCode>
+               </ram:ApplicableTradeDeliveryTerms>
+               <ram:BuyerOrderReferencedDocument>
+                    <ram:IssuerAssignedID>PO123456789</ram:IssuerAssignedID>
+               </ram:BuyerOrderReferencedDocument>
+               <ram:QuotationReferencedDocument>
+                    <ram:IssuerAssignedID>QUOT_125487</ram:IssuerAssignedID>
+               </ram:QuotationReferencedDocument>
+               <ram:ContractReferencedDocument>
+                    <ram:IssuerAssignedID>CONTRACT_2020-25987</ram:IssuerAssignedID>
+               </ram:ContractReferencedDocument>
+               <ram:BlanketOrderReferencedDocument>
+                    <ram:IssuerAssignedID>BLANKET_ORDER_ID</ram:IssuerAssignedID>
+               </ram:BlanketOrderReferencedDocument>
+          </ram:ApplicableHeaderTradeAgreement>
+          <ram:ApplicableHeaderTradeDelivery>
+               <ram:ShipToTradeParty>
+                    <ram:ID>SHIP_TO_ID</ram:ID>
+                    <ram:GlobalID schemeID="0088">5897546912</ram:GlobalID>
+                    <ram:Name>SHIP_TO_NAME</ram:Name>
+                    <ram:DefinedTradeContact>
+                         <ram:PersonName>SHIP_TO_CONTACT_NAME</ram:PersonName>
+                         <ram:DepartmentName>SHIP_TO_CONTACT_DEP</ram:DepartmentName>
+                         <ram:TelephoneUniversalCommunication>
+                              <ram:CompleteNumber>+33 6 85 96 32 41</ram:CompleteNumber>
+                         </ram:TelephoneUniversalCommunication>
+                         <ram:EmailURIUniversalCommunication>
+                              <ram:URIID>shipto@customer.com</ram:URIID>
+                         </ram:EmailURIUniversalCommunication>
+                    </ram:DefinedTradeContact>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>69003</ram:PostcodeCode>
+                         <ram:LineOne>SHIP_TO_ADDR_1</ram:LineOne>
+                         <ram:LineTwo>SHIP_TO_ADDR_2</ram:LineTwo>
+                         <ram:LineThree>SHIP_TO_ADDR_3</ram:LineThree>
+                         <ram:CityName>SHIP_TO_CITY</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID schemeID="EM">delivery@buyer.com</ram:URIID>
+                    </ram:URIUniversalCommunication>
+               </ram:ShipToTradeParty>
+               <ram:ShipFromTradeParty>
+                    <ram:ID>SHIP_FROM_ID</ram:ID>
+                    <ram:GlobalID schemeID="0088">875496123</ram:GlobalID>
+                    <ram:Name>SHIP_FROM_NAME</ram:Name>
+                    <ram:DefinedTradeContact>
+                         <ram:PersonName>SHIP_FROM_CONTACT_NAME</ram:PersonName>
+                         <ram:DepartmentName>SHIP_FROM_CONTACT_DEP</ram:DepartmentName>
+                         <ram:TelephoneUniversalCommunication>
+                              <ram:CompleteNumber>+33 6 85 96 32 41</ram:CompleteNumber>
+                         </ram:TelephoneUniversalCommunication>
+                         <ram:EmailURIUniversalCommunication>
+                              <ram:URIID>shipfrom@seller.com</ram:URIID>
+                         </ram:EmailURIUniversalCommunication>
+                    </ram:DefinedTradeContact>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>75003</ram:PostcodeCode>
+                         <ram:LineOne>SHIP_FROM_ADDR_1</ram:LineOne>
+                         <ram:LineTwo>SHIP_FROM_ADDR_2</ram:LineTwo>
+                         <ram:LineThree>SHIP_FROM_ADDR_3</ram:LineThree>
+                         <ram:CityName>SHIP_FROM_CITY</ram:CityName>
+                         <ram:CountryID>FR</ram:CountryID>
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID>warehouse@seller.com</ram:URIID>
+                    </ram:URIUniversalCommunication>
+               </ram:ShipFromTradeParty>
+               <ram:RequestedDespatchSupplyChainEvent>
+                    <ram:OccurrenceSpecifiedPeriod>
+                         <ram:StartDateTime>
+                              <udt:DateTimeString format="203">202004150900</udt:DateTimeString>
+                         </ram:StartDateTime>
+                         <ram:EndDateTime>
+                              <udt:DateTimeString format="203">202004300800</udt:DateTimeString>
+                         </ram:EndDateTime>
+                    </ram:OccurrenceSpecifiedPeriod>
+               </ram:RequestedDespatchSupplyChainEvent>
+          </ram:ApplicableHeaderTradeDelivery>
+          <ram:ApplicableHeaderTradeSettlement>
+               <ram:OrderCurrencyCode>EUR</ram:OrderCurrencyCode>
+               <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                    <ram:LineTotalAmount>310.00</ram:LineTotalAmount>
+                    <ram:ChargeTotalAmount>21.00</ram:ChargeTotalAmount>
+                    <ram:AllowanceTotalAmount>31.00</ram:AllowanceTotalAmount>
+                    <ram:TaxBasisTotalAmount>300.00</ram:TaxBasisTotalAmount>
+                    <ram:TaxTotalAmount currencyID="EUR">60.00</ram:TaxTotalAmount>
+                    <ram:GrandTotalAmount>360.00</ram:GrandTotalAmount>
+               </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+               <ram:ReceivableSpecifiedTradeAccountingAccount>
+                    <ram:ID>BUYER_ACCOUNT_REF</ram:ID>
+               </ram:ReceivableSpecifiedTradeAccountingAccount>
+          </ram:ApplicableHeaderTradeSettlement>
+     </rsm:SupplyChainTradeTransaction>
+</rsm:SCRDMCCBDACIOMessageStructure>

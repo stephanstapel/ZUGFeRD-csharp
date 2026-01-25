@@ -32,6 +32,18 @@ namespace s2industries.ZUGFeRD
         private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
 
 
+        public InvoiceDescriptor1Writer()
+        {
+            _Namespaces = new Dictionary<string, string>
+            {
+                { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
+                { "rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0" },
+                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" },
+                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15" }
+            };
+        } // !InvoiceDescriptor1Writer()
+
+
         /// <summary>
         /// Saves the given invoice to the given stream.
         /// Make sure that the stream is open and writeable. Otherwise, an IllegalStreamException will be thron.
@@ -39,6 +51,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="descriptor">The invoice object that should be saved</param>
         /// <param name="stream">The target stream for saving the invoice</param>
         /// <param name="format">Format of the target file</param>
+        /// <param name="options">Optional `InvoiceFormatOptions` for custom formatting of invoice file</param>
         public override void Save(InvoiceDescriptor descriptor, Stream stream, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             if (!stream.CanWrite || !stream.CanSeek)
@@ -62,13 +75,7 @@ namespace s2industries.ZUGFeRD
 
             this._Descriptor = descriptor;
             this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
-            this._Writer.SetNamespaces(new Dictionary<string, string>()
-            {
-                { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
-                { "rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0" },
-                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" },
-                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15" }
-            });
+            this._Writer.SetNamespaces(_Namespaces);
             _Writer.WriteStartDocument();
             _WriteHeaderComments(_Writer, options);
 
@@ -678,7 +685,7 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteEndElement(); // !ram:SpecifiedSupplyChainTradeSettlement
 
                 _Writer.WriteStartElement("ram", "SpecifiedTradeProduct");
-                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && tradeLineItem.GlobalID.SchemeID.HasValue && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
+                if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
                     _writeElementWithAttribute(_Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID);
                 }
@@ -922,7 +929,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && (Party.GlobalID.SchemeID.HasValue) && Party.GlobalID.SchemeID.HasValue)
+                if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && (Party.GlobalID.SchemeID.HasValue) )
                 {
                     writer.WriteStartElement("ram", "GlobalID");
                     writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID.Value.EnumToString());

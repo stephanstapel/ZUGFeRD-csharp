@@ -220,6 +220,12 @@ namespace s2industries.ZUGFeRD
         public Party Invoicer { get; set; }
 
         /// <summary>
+        /// Optional contact only used in Extended profile.
+        /// Detailed contact information of the invoicer BG-X-34
+        /// </summary>
+        public Contact InvoicerContact { get; set; }
+
+        /// <summary>
         /// This party is optional and is written in most profiles except Minimum profile
         ///
         /// BG-13
@@ -405,7 +411,7 @@ namespace s2industries.ZUGFeRD
         ///
         /// BG-23
         /// </summary>        
-        public  List<Tax> Taxes { get; internal set; } = new List<Tax>();
+        public List<Tax> Taxes { get; internal set; } = new List<Tax>();
 
 
         /// <summary>
@@ -1036,7 +1042,7 @@ namespace s2industries.ZUGFeRD
             };
         } // !SetContractReferencedDocument()
 
-        
+
         internal void _AddLogisticsServiceCharge(decimal amount, string description, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent)
         {
             this.ServiceCharges.Add(new ServiceCharge()
@@ -1095,7 +1101,7 @@ namespace s2industries.ZUGFeRD
         internal void _AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount,
                                          string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                          AllowanceReasonCodes? reasonCode = null)
-        { 
+        {
             this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Reason = reason,
@@ -1142,7 +1148,7 @@ namespace s2industries.ZUGFeRD
                                       decimal? chargePercentage,
                                       string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent,
                                       ChargeReasonCodes? reasonCode = null)
-        { 
+        {
             this.TradeAllowanceCharges.Add(new TradeCharge()
             {
                 Reason = reason,
@@ -1169,8 +1175,8 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="basisAmount">Base amount for calculation</param>
         /// <param name="currency">Currency code</param>
-        /// <param name="actualAmount">Actual amount of allowance/charge</param>
-        /// <param name="reason">Reason for allowance/charge</param>
+        /// <param name="actualAmount">Actual amount of charge</param>
+        /// <param name="reason">Reason for charge</param>
         /// <param name="taxTypeCode">Type of tax</param>
         /// <param name="taxCategoryCode">Tax category</param>
         /// <param name="taxPercent">Tax percentage</param>
@@ -1213,11 +1219,11 @@ namespace s2industries.ZUGFeRD
         /// </summary>        
         /// <param name="basisAmount">Base amount (basis of allowance)</param>
         /// <param name="currency">Curency of the allowance</param>
-        /// <param name="actualAmount">Actual allowance charge amount</param>
-        /// <param name="chargePercentage">Actual allowance charge percentage</param>
+        /// <param name="actualAmount">Actual allowance amount</param>
+        /// <param name="chargePercentage">Actual allowance percentage</param>
         /// <param name="reason">Reason for the allowance</param>
-        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
+        /// <param name="taxTypeCode">VAT type code for document level allowance</param>
+        /// <param name="taxCategoryCode">VAT type code for document level allowance</param>
         /// <param name="taxPercent">VAT rate for the allowance</param>
         /// <param name="reasonCode">Reason code for the allowance</param>
         public void AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
@@ -1227,7 +1233,7 @@ namespace s2industries.ZUGFeRD
 
 
         internal void _AddTradeAllowance(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes? taxTypeCode, TaxCategoryCodes? taxCategoryCode, decimal taxPercent, AllowanceReasonCodes? reasonCode = null)
-        { 
+        {
             this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
                 Reason = reason,
@@ -1253,20 +1259,21 @@ namespace s2industries.ZUGFeRD
         /// BG-21
         /// Allowance represents a discount whereas charge represents a surcharge.
         /// </summary>        
-        /// <param name="basisAmount">Base amount (basis of allowance)</param>
-        /// <param name="currency">Curency of the allowance</param>
-        /// <param name="actualAmount">Actual allowance charge amount</param>
-        /// <param name="chargePercentage">Actual allowance charge percentage</param>
-        /// <param name="reason">Reason for the allowance</param>
-        /// <param name="taxTypeCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxCategoryCode">VAT type code for document level allowance/ charge</param>
-        /// <param name="taxPercent">VAT rate for the allowance</param>
-        /// <param name="reasonCode">Reason code for the allowance</param>
+        /// <param name="basisAmount">Base amount (basis of charge)</param>
+        /// <param name="currency">Curency of the charge</param>
+        /// <param name="actualAmount">Actual charge amount</param>
+        /// <param name="chargePercentage">Actual charge percentage</param>
+        /// <param name="reason">Reason for the charge</param>
+        /// <param name="taxTypeCode">VAT type code for document level charge</param>
+        /// <param name="taxCategoryCode">VAT type code for document level charge</param>
+        /// <param name="taxPercent">VAT rate for the charge</param>
+        /// <param name="reasonCode">Reason code for the chargee/param>
+        [Obsolete("This function has a typo in the function name. Please use `AddTradeCharge` instead.", true)]
         public void AddTradeeCharge(decimal? basisAmount, CurrencyCodes currency, decimal actualAmount, decimal? chargePercentage, string reason, TaxTypes taxTypeCode, TaxCategoryCodes taxCategoryCode, decimal taxPercent, ChargeReasonCodes? reasonCode = null)
         {
             _AddTradeCharge(basisAmount, currency, actualAmount, chargePercentage, reason, taxTypeCode, taxCategoryCode, taxPercent, reasonCode);
         } // !AddTradeCharge()
-          
+
 
         /// <summary>
         /// Returns all existing trade allowances
@@ -1302,6 +1309,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="percentage">Optional percentage</param>
         /// <param name="baseAmount">Optional base amount</param>
         /// <param name="actualAmount">Optional actual amount</param>
+        /// <param name="maturityDate">Optional `DateTime?`</param>
         public void AddTradePaymentTerms(string description, DateTime? dueDate = null,
             PaymentTermsType? paymentTermsType = null, int? dueDays = null,
             decimal? percentage = null, decimal? baseAmount = null, decimal? actualAmount = null, DateTime? maturityDate = null)
@@ -1350,12 +1358,14 @@ namespace s2industries.ZUGFeRD
         /// </summary>
         /// <param name="id">Preceding invoice number</param>
         /// <param name="IssueDateTime">Preceding invoice date</param>
-        public void AddInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null)
+        /// <param name="TypeCode">Preceding invoice Type</param>
+        public void AddInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null, InvoiceType? TypeCode = null)
         {
             this._InvoiceReferencedDocuments.Add(new InvoiceReferencedDocument()
             {
                 ID = id,
-                IssueDateTime = IssueDateTime
+                IssueDateTime = IssueDateTime,
+                TypeCode = TypeCode
             });
         }
 
@@ -1515,6 +1525,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="version">ZUGFeRD version to use</param>
         /// <param name="profile">ZUGFeRD profile to use</param>
         /// <param name="format">Output format (CII or UBL)</param>
+        /// <param name="options">Optional `InvoiceFormatOptions`</param>
         public void Save(Stream stream, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             this.Profile = profile;
@@ -1530,6 +1541,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="version">ZUGFeRD version to use</param>
         /// <param name="profile">ZUGFeRD profile to use</param>
         /// <param name="format">Output format (CII or UBL)</param>
+        /// <param name="options">Optional `InvoiceFormatOptions`</param>
         public void Save(string filename, ZUGFeRDVersion version = ZUGFeRDVersion.Version23, Profile profile = Profile.Basic, ZUGFeRDFormats format = ZUGFeRDFormats.CII, InvoiceFormatOptions options = null)
         {
             this.Profile = profile;
@@ -1597,8 +1609,8 @@ namespace s2industries.ZUGFeRD
 
             item.AssociatedDocument.Notes.Add(new Note(
                 content: comment
-                // no subjectcode
-                // no contentcode
+            // no subjectcode
+            // no contentcode
             ));
 
             this.TradeLineItems.Add(item);
@@ -1638,7 +1650,7 @@ namespace s2industries.ZUGFeRD
         public TradeLineItem AddTradeLineItem(string name,
                                     decimal netUnitPrice,
                                     QuantityCodes unitCode,
-                                    string description = null,                                    
+                                    string description = null,
                                     decimal? unitQuantity = null,
                                     decimal? grossUnitPrice = null,
                                     decimal billedQuantity = 0,
@@ -1713,7 +1725,7 @@ namespace s2industries.ZUGFeRD
                                     string name,
                                     decimal netUnitPrice,
                                     QuantityCodes unitCode,
-                                    string description = null,                                    
+                                    string description = null,
                                     decimal? unitQuantity = null,
                                     decimal? grossUnitPrice = null,
                                     decimal billedQuantity = 0,
@@ -1775,7 +1787,7 @@ namespace s2industries.ZUGFeRD
                                     string buyerOrderLineID = "", string buyerOrderID = "", DateTime? buyerOrderDate = null,
                                     DateTime? billingPeriodStart = null, DateTime? billingPeriodEnd = null
                                     )
-        { 
+        {
             if (String.IsNullOrWhiteSpace(lineID))
             {
                 throw new ArgumentException("LineID cannot be Null or Empty");
@@ -2045,7 +2057,7 @@ namespace s2industries.ZUGFeRD
             return this.DebitorBankAccounts?.Any() == true;
         } // !AnyDebitorFinancialAccount()
 
-        
+
         /// <summary>
         /// Adds a receivable specified trade accounting account with ID and type code
         ///
@@ -2169,10 +2181,12 @@ namespace s2industries.ZUGFeRD
 
         private string _getNextLineId()
         {
-            int? highestLineId = this.GetTradeLineItems()?.Select(i => {
+            int? highestLineId = this.GetTradeLineItems()?.Select(i =>
+            {
                 if (Int32.TryParse(i.AssociatedDocument?.LineID, out int id) == true)
                     return id;
-                else return 0; }
+                else return 0;
+            }
                 ).DefaultIfEmpty(0).Max() ?? 0;
             return highestLineId == null ? "1" : (highestLineId + 1).ToString();
         } // !_getNextLineId()

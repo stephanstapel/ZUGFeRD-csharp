@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="utf-8"?>
+<n0:CrossIndustryInvoice xmlns:n0="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:prx="urn:sap.com:proxy:Q75:/1SAI/TASA78ABB6156583BE4C420:755" xmlns:n1="urn:un:unece:uncefact:data:standard:QualifiedDataType:100" xmlns:n2="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:n3="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+ <n0:ExchangedDocumentContext>
+  <n2:GuidelineSpecifiedDocumentContextParameter>
+   <n2:ID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</n2:ID>
+  </n2:GuidelineSpecifiedDocumentContextParameter>
+ </n0:ExchangedDocumentContext>
+ <n0:ExchangedDocument>
+  <n2:ID>0000000016</n2:ID>
+  <n2:TypeCode>380</n2:TypeCode>
+  <n2:IssueDateTime>
+   <n3:DateTimeString format="102">20251024</n3:DateTimeString>
+  </n2:IssueDateTime>
+  <n2:IncludedNote>
+   <n2:Content>000052842025REPP</n2:Content>
+  </n2:IncludedNote>
+ </n0:ExchangedDocument>
+ <n0:SupplyChainTradeTransaction>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000001</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>0101</n2:SellerAssignedID>
+    <n2:Name>&lt;01.08.2025-31.08.2025&gt; 0101 Büro</n2:Name>
+    <n2:Description>Grundmiete</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>10929.97</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250801</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250831</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>10929.97</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000002</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>1051</n2:SellerAssignedID>
+    <n2:Name>&lt;01.08.2025-31.08.2025&gt; 1051 Lager / Archive</n2:Name>
+    <n2:Description>Mieterlöse andere Erlöse</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>77.06</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250801</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250831</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>77.06</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000003</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.08.2025-31.08.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>2066.00</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250801</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250831</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>2066.00</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000004</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.08.2025-31.08.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>27.09</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250801</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250831</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>27.09</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000005</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>0101</n2:SellerAssignedID>
+    <n2:Name>&lt;01.09.2025-30.09.2025&gt; 0101 Büro</n2:Name>
+    <n2:Description>Grundmiete</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>10929.97</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250901</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250930</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>10929.97</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000006</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>1051</n2:SellerAssignedID>
+    <n2:Name>&lt;01.09.2025-30.09.2025&gt; 1051 Lager / Archive</n2:Name>
+    <n2:Description>Mieterlöse andere Erlöse</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>77.06</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250901</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250930</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>77.06</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000007</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.09.2025-30.09.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>2066.00</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250901</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250930</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>2066.00</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000008</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.09.2025-30.09.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>27.09</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20250901</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20250930</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>27.09</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000009</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>0101</n2:SellerAssignedID>
+    <n2:Name>&lt;01.10.2025-31.10.2025&gt; 0101 Büro</n2:Name>
+    <n2:Description>Grundmiete</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>10929.97</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251001</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251031</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>10929.97</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000010</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>1051</n2:SellerAssignedID>
+    <n2:Name>&lt;01.10.2025-31.10.2025&gt; 1051 Lager / Archive</n2:Name>
+    <n2:Description>Mieterlöse andere Erlöse</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>77.06</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251001</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251031</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>77.06</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000011</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.10.2025-31.10.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>2066.00</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251001</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251031</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>2066.00</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000012</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.10.2025-31.10.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>27.09</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251001</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251031</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>27.09</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000013</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>0101</n2:SellerAssignedID>
+    <n2:Name>&lt;01.11.2025-30.11.2025&gt; 0101 Büro</n2:Name>
+    <n2:Description>Grundmiete</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>10929.97</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251101</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251130</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>10929.97</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000014</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>1051</n2:SellerAssignedID>
+    <n2:Name>&lt;01.11.2025-30.11.2025&gt; 1051 Lager / Archive</n2:Name>
+    <n2:Description>Mieterlöse andere Erlöse</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>77.06</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251101</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251130</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>77.06</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000015</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.11.2025-30.11.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>2066.00</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251101</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251130</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>2066.00</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:IncludedSupplyChainTradeLineItem>
+   <n2:AssociatedDocumentLineDocument>
+    <n2:LineID>0000000016</n2:LineID>
+   </n2:AssociatedDocumentLineDocument>
+   <n2:SpecifiedTradeProduct>
+    <n2:SellerAssignedID>8000</n2:SellerAssignedID>
+    <n2:Name>&lt;01.11.2025-30.11.2025&gt; 8000 Betriebskostenakonto</n2:Name>
+    <n2:Description>Betr.Kostenvorauszahlung</n2:Description>
+   </n2:SpecifiedTradeProduct>
+   <n2:SpecifiedLineTradeAgreement>
+    <n2:NetPriceProductTradePrice>
+     <n2:ChargeAmount>27.09</n2:ChargeAmount>
+     <n2:BasisQuantity unitCode="EA">1</n2:BasisQuantity>
+    </n2:NetPriceProductTradePrice>
+   </n2:SpecifiedLineTradeAgreement>
+   <n2:SpecifiedLineTradeDelivery>
+    <n2:BilledQuantity unitCode="EA">1</n2:BilledQuantity>
+   </n2:SpecifiedLineTradeDelivery>
+   <n2:SpecifiedLineTradeSettlement>
+    <n2:ApplicableTradeTax>
+     <n2:TypeCode>VAT</n2:TypeCode>
+     <n2:CategoryCode>S</n2:CategoryCode>
+     <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+    </n2:ApplicableTradeTax>
+    <n2:BillingSpecifiedPeriod>
+     <n2:StartDateTime>
+      <n3:DateTimeString format="102">20251101</n3:DateTimeString>
+     </n2:StartDateTime>
+     <n2:EndDateTime>
+      <n3:DateTimeString format="102">20251130</n3:DateTimeString>
+     </n2:EndDateTime>
+    </n2:BillingSpecifiedPeriod>
+    <n2:SpecifiedTradeSettlementLineMonetarySummation>
+     <n2:LineTotalAmount>27.09</n2:LineTotalAmount>
+    </n2:SpecifiedTradeSettlementLineMonetarySummation>
+   </n2:SpecifiedLineTradeSettlement>
+  </n2:IncludedSupplyChainTradeLineItem>
+  <n2:ApplicableHeaderTradeAgreement>
+   <n2:BuyerReference>DE12345678</n2:BuyerReference>
+   <n2:SellerTradeParty>
+    <n2:Name>XYZ 7 GmbH &amp; Co. KG</n2:Name>
+    <n2:SpecifiedLegalOrganization>
+     <n2:ID>DE12345678</n2:ID>
+     <n2:TradingBusinessName>XYZ 7 GmbH &amp; Co. KG</n2:TradingBusinessName>
+    </n2:SpecifiedLegalOrganization>
+    <n2:DefinedTradeContact>
+     <n2:PersonName>XYZ 7</n2:PersonName>
+     <n2:TelephoneUniversalCommunication>
+      <n2:CompleteNumber>18254731</n2:CompleteNumber>
+     </n2:TelephoneUniversalCommunication>
+     <n2:EmailURIUniversalCommunication>
+      <n2:URIID>j.m@xyz.com</n2:URIID>
+     </n2:EmailURIUniversalCommunication>
+    </n2:DefinedTradeContact>
+    <n2:PostalTradeAddress>
+     <n2:PostcodeCode>20534</n2:PostcodeCode>
+     <n2:LineOne>Schulstr. 12</n2:LineOne>
+     <n2:CityName>Berlin</n2:CityName>
+     <n2:CountryID>DE</n2:CountryID>
+     <n2:CountrySubDivisionName>Berlin</n2:CountrySubDivisionName>
+    </n2:PostalTradeAddress>
+    <n2:URIUniversalCommunication>
+     <n2:URIID schemeID="9930">DE87654321</n2:URIID>
+    </n2:URIUniversalCommunication>
+    <n2:SpecifiedTaxRegistration>
+     <n2:ID schemeID="VA">DE87654321</n2:ID>
+    </n2:SpecifiedTaxRegistration>
+    <n2:SpecifiedTaxRegistration>
+     <n2:ID schemeID="FC">12/123/12345</n2:ID>
+    </n2:SpecifiedTaxRegistration>
+   </n2:SellerTradeParty>
+   <n2:BuyerTradeParty>
+    <n2:Name>Consulting GmbH</n2:Name>
+    <n2:SpecifiedLegalOrganization>
+     <n2:ID>DE12345678</n2:ID>
+     <n2:TradingBusinessName>Consulting GmbH</n2:TradingBusinessName>
+    </n2:SpecifiedLegalOrganization>
+    <n2:DefinedTradeContact>
+     <n2:EmailURIUniversalCommunication>
+      <n2:URIID>j.m@xyz.de</n2:URIID>
+     </n2:EmailURIUniversalCommunication>
+    </n2:DefinedTradeContact>
+    <n2:PostalTradeAddress>
+     <n2:PostcodeCode>11537</n2:PostcodeCode>
+     <n2:LineOne>Hauptweg 14</n2:LineOne>
+     <n2:CityName>Berlin</n2:CityName>
+     <n2:CountryID>DE</n2:CountryID>
+    </n2:PostalTradeAddress>
+    <n2:URIUniversalCommunication>
+     <n2:URIID schemeID="9930">DE12345678</n2:URIID>
+    </n2:URIUniversalCommunication>
+    <n2:SpecifiedTaxRegistration>
+     <n2:ID schemeID="VA">DE12345678</n2:ID>
+    </n2:SpecifiedTaxRegistration>
+   </n2:BuyerTradeParty>
+   <n2:ContractReferencedDocument>
+    <n2:IssuerAssignedID>0030/0000000000003</n2:IssuerAssignedID>
+   </n2:ContractReferencedDocument>
+  </n2:ApplicableHeaderTradeAgreement>
+  <n2:ApplicableHeaderTradeDelivery/>
+  <n2:ApplicableHeaderTradeSettlement>
+   <n2:CreditorReferenceID>DE35300308800016214019</n2:CreditorReferenceID>
+   <n2:PaymentReference>0000000016</n2:PaymentReference>
+   <n2:InvoiceCurrencyCode>EUR</n2:InvoiceCurrencyCode>
+   <n2:SpecifiedTradeSettlementPaymentMeans>
+    <n2:TypeCode>ZZZ</n2:TypeCode>
+    <n2:PayerPartyDebtorFinancialAccount>
+     <n2:IBANID>DE35302308300016214019</n2:IBANID>
+    </n2:PayerPartyDebtorFinancialAccount>
+    <n2:PayeePartyCreditorFinancialAccount>
+     <n2:IBANID>DE20500800300711318301</n2:IBANID>
+    </n2:PayeePartyCreditorFinancialAccount>
+    <n2:PayeeSpecifiedCreditorFinancialInstitution>
+     <n2:BICID>DRESDEFFXXX</n2:BICID>
+    </n2:PayeeSpecifiedCreditorFinancialInstitution>
+   </n2:SpecifiedTradeSettlementPaymentMeans>
+   <n2:ApplicableTradeTax>
+    <n2:CalculatedAmount>9956.08</n2:CalculatedAmount>
+    <n2:TypeCode>VAT</n2:TypeCode>
+    <n2:BasisAmount>52400.48</n2:BasisAmount>
+    <n2:CategoryCode>S</n2:CategoryCode>
+    <n2:RateApplicablePercent>19.00</n2:RateApplicablePercent>
+   </n2:ApplicableTradeTax>
+   <n2:BillingSpecifiedPeriod>
+    <n2:StartDateTime>
+     <n3:DateTimeString format="102">20251101</n3:DateTimeString>
+    </n2:StartDateTime>
+    <n2:EndDateTime>
+     <n3:DateTimeString format="102">20251130</n3:DateTimeString>
+    </n2:EndDateTime>
+   </n2:BillingSpecifiedPeriod>
+   <n2:SpecifiedTradePaymentTerms>
+    <n2:Description>sofort zahlbar ohne Abzug</n2:Description>
+    <n2:DueDateDateTime>
+     <n3:DateTimeString format="102">20251101</n3:DateTimeString>
+    </n2:DueDateDateTime>
+    <n2:DirectDebitMandateID>22-1083-2017001</n2:DirectDebitMandateID>
+   </n2:SpecifiedTradePaymentTerms>
+   <n2:SpecifiedTradeSettlementHeaderMonetarySummation>
+    <n2:LineTotalAmount>52400.48</n2:LineTotalAmount>
+    <n2:TaxBasisTotalAmount>52400.48</n2:TaxBasisTotalAmount>
+    <n2:TaxTotalAmount currencyID="EUR">9956.08</n2:TaxTotalAmount>
+    <n2:GrandTotalAmount>62356.56</n2:GrandTotalAmount>
+    <n2:DuePayableAmount>62356.56</n2:DuePayableAmount>
+   </n2:SpecifiedTradeSettlementHeaderMonetarySummation>
+  </n2:ApplicableHeaderTradeSettlement>
+ </n0:SupplyChainTradeTransaction>
+</n0:CrossIndustryInvoice>

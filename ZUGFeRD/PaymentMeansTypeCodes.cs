@@ -49,301 +49,301 @@ namespace s2industries.ZUGFeRD
         /// Instrument not defined
         /// </summary>
         [EnumStringValue("1")]
-        InstrumentNotDefined,
+        InstrumentNotDefined = 1,
 
         /// <summary>
         /// Automated clearing house (ACH) credit
         /// </summary>
         [EnumStringValue("2")]
-        AchCredit,
+        AchCredit = 2,
 
         /// <summary>
         /// Automated clearing house (ACH) debit
         /// </summary>
         [EnumStringValue("3")]
-        AchDebit,
+        AchDebit = 3,
 
         /// <summary>
         /// Automated clearing house (ACH) demand debit reversal
         /// </summary>
         [EnumStringValue("4")]
-        AchDemandDebitReversal,
+        AchDemandDebitReversal = 4,
 
         /// <summary>
         /// Automated clearing house (ACH) demand credit reversal
         /// </summary>
         [EnumStringValue("5")]
-        AchDemandCreditReversal,
+        AchDemandCreditReversal = 5,
 
         /// <summary>
         /// Automated clearing house (ACH) demand credit
         /// </summary>
         [EnumStringValue("6")]
-        AchDemandCredit,
+        AchDemandCredit = 6,
 
         /// <summary>
         /// Automated clearing house (ACH) demand debit
         /// </summary>
         [EnumStringValue("7")]
-        AchDemandDebit,
+        AchDemandDebit = 7,
 
         /// <summary>
         /// Hold
         /// </summary>
         [EnumStringValue("8")]
-        Hold,
+        Hold = 8,
 
         /// <summary>
         /// National or regional clearing
         /// </summary>
         [EnumStringValue("9")]
-        NationalOrRegionalClearing,
+        NationalOrRegionalClearing = 9,
 
         /// <summary>
         /// In cash
         /// </summary>
         [EnumStringValue("10")]
-        InCash,
+        InCash = 10,
 
         /// <summary>
         /// ACH savings credit reversal
         /// </summary>
         [EnumStringValue("11")]
-        AchSavingsCreditReversal,
+        AchSavingsCreditReversal = 11,
 
         /// <summary>
         /// ACH savings debit reversal
         /// </summary>
         [EnumStringValue("12")]
-        AchSavingsDebitReversal,
+        AchSavingsDebitReversal = 12,
 
         /// <summary>
         /// ACH savings credit
         /// </summary>
         [EnumStringValue("13")]
-        AchSavingsCredit,
+        AchSavingsCredit = 13,
 
         /// <summary>
         /// ACH savings debit
         /// </summary>
         [EnumStringValue("14")]
-        AchSavingsDebit,
+        AchSavingsDebit = 14,
 
         /// <summary>
         /// Bookentry credit
         /// </summary>
         [EnumStringValue("15")]
-        BookentryCredit,
+        BookentryCredit = 15,
 
         /// <summary>
         /// Bookentry debit
         /// </summary>
         [EnumStringValue("16")]
-        BookentryDebit,
+        BookentryDebit = 16,
 
         /// <summary>
         /// ACH demand cash concentration/disbursement (CCD) credit
         /// </summary>
         [EnumStringValue("17")]
-        AchDemandCcdCredit,
+        AchDemandCcdCredit = 17,
 
         /// <summary>
         /// ACH demand cash concentration/disbursement (CCD) debit
         /// </summary>
         [EnumStringValue("18")]
-        AchDemandCcdDebit,
+        AchDemandCcdDebit = 18,
 
         /// <summary>
         /// ACH demand corporate trade payment (CTP) credit
         /// </summary>
         [EnumStringValue("19")]
-        AchDemandCtpCredit,
+        AchDemandCtpCredit = 19,
 
         /// <summary>
         /// Cheque
         /// </summary>
         [EnumStringValue("20")]
-        Cheque,
+        Cheque = 20,
 
         /// <summary>
         /// Banker's draft
         /// </summary>
         [EnumStringValue("21")]
-        BankersDraft,
+        BankersDraft = 21,
 
         /// <summary>
         /// Certified banker's draft
         /// </summary>
         [EnumStringValue("22")]
-        CertifiedBankersDraft,
+        CertifiedBankersDraft = 22,
 
         /// <summary>
         /// Bank cheque (issued by a banking or similar establishment)
         /// </summary>
         [EnumStringValue("23")]
-        BankCheque,
+        BankCheque = 23,
 
         /// <summary>
         /// Bill of exchange awaiting acceptance
         /// </summary>
         [EnumStringValue("24")]
-        BillOfExchangeAwaitingAcceptance,
+        BillOfExchangeAwaitingAcceptance = 24,
 
         /// <summary>
         /// Certified cheque
         /// </summary>
         [EnumStringValue("25")]
-        CertifiedCheque,
+        CertifiedCheque = 25,
 
         /// <summary>
         /// Local cheque
         /// </summary>
         [EnumStringValue("26")]
-        LocalCheque,
+        LocalCheque = 26,
 
         /// <summary>
         /// ACH demand corporate trade payment (CTP) debit
         /// </summary>
         [EnumStringValue("27")]
-        AchDemandCtpDebit,
+        AchDemandCtpDebit = 27,
 
         /// <summary>
         /// ACH demand corporate trade exchange (CTX) credit
         /// </summary>
         [EnumStringValue("28")]
-        AchDemandCtxCredit,
+        AchDemandCtxCredit = 28,
 
         /// <summary>
         /// ACH demand corporate trade exchange (CTX) debit
         /// </summary>
         [EnumStringValue("29")]
-        AchDemandCtxDebit,
+        AchDemandCtxDebit = 29,
 
         /// <summary>
         /// Credit transfer (non-SEPA)
         /// </summary>
         [EnumStringValue("30")]
-        CreditTransferNonSEPA,
+        CreditTransferNonSEPA = 30,
 
         /// <summary>
         /// Debit transfer (non-SEPA)
         /// </summary>
         [EnumStringValue("31")]
-        DebitTransferNonSEPA,
+        DebitTransferNonSEPA = 31,
 
         /// <summary>
         /// ACH demand cash concentration/disbursement plus (CCD+)
         /// </summary>
         [EnumStringValue("32")]
-        AchDemandCcdPlus,
+        AchDemandCcdPlus = 32,
 
         /// <summary>
         /// ACH demand cash concentration/disbursement plus (CCD+)
         /// </summary>
         [EnumStringValue("33")]
-        AchDemandCcdPlusDuplicate,
+        AchDemandCcdPlusDuplicate = 33,
 
         /// <summary>
         /// ACH prearranged payment and deposit (PPD)
         /// </summary>
         [EnumStringValue("34")]
-        AchPrearrangedPaymentDepositPpd,
+        AchPrearrangedPaymentDepositPpd = 34,
 
         /// <summary>
         /// ACH savings cash concentration/disbursement (CCD) credit
         /// </summary>
         [EnumStringValue("35")]
-        AchSavingsCcdCredit,
+        AchSavingsCcdCredit = 35,
 
         /// <summary>
         /// ACH savings cash concentration/disbursement (CCD) debit
         /// </summary>
         [EnumStringValue("36")]
-        AchSavingsCcdDebit,
+        AchSavingsCcdDebit = 36,
 
         /// <summary>
         /// ACH savings corporate trade payment (CTP) credit
         /// </summary>
         [EnumStringValue("37")]
-        AchSavingsCtpCredit,
+        AchSavingsCtpCredit = 37,
 
         /// <summary>
         /// ACH savings corporate trade payment (CTP) debit
         /// </summary>
         [EnumStringValue("38")]
-        AchSavingsCtpDebit,
+        AchSavingsCtpDebit = 38,
 
         /// <summary>
         /// ACH savings corporate trade exchange (CTX) credit
         /// </summary>
         [EnumStringValue("39")]
-        AchSavingsCtxCredit,
+        AchSavingsCtxCredit = 39,
 
         /// <summary>
         /// ACH savings corporate trade exchange (CTX) debit
         /// </summary>
         [EnumStringValue("40")]
-        AchSavingsCtxDebit,
+        AchSavingsCtxDebit = 40,
 
         /// <summary>
         /// ACH savings cash concentration/disbursement plus (CCD+)
         /// </summary>
         [EnumStringValue("41")]
-        AchSavingsCcdPlus,
+        AchSavingsCcdPlus = 41,
 
         /// <summary>
         /// Payment to bank account
         /// </summary>
         [EnumStringValue("42")]
-        PaymentToBankAccount,
+        PaymentToBankAccount = 42,
 
         /// <summary>
         /// ACH savings cash concentration/disbursement plus (CCD+)
         /// </summary>
         [EnumStringValue("43")]
-        AchSavingsCcdPlusDuplicate,
+        AchSavingsCcdPlusDuplicate = 43,
 
         /// <summary>
         /// Accepted bill of exchange
         /// </summary>
         [EnumStringValue("44")]
-        AcceptedBillOfExchange,
+        AcceptedBillOfExchange = 44,
 
         /// <summary>
         /// Referenced home-banking credit transfer
         /// </summary>
         [EnumStringValue("45")]
-        ReferencedHomeBankingCreditTransfer,
+        ReferencedHomeBankingCreditTransfer = 45,
 
         /// <summary>
         /// Interbank debit transfer
         /// </summary>
         [EnumStringValue("46")]
-        InterbankDebitTransfer,
+        InterbankDebitTransfer = 46,
 
         /// <summary>
         /// Home-banking debit transfer
         /// </summary>
         [EnumStringValue("47")]
-        HomeBankingDebitTransfer,
+        HomeBankingDebitTransfer = 47,
 
         /// <summary>
         /// Bank card (Use for all payment cards)
         /// </summary>
         [EnumStringValue("48")]
-        BankCard,
+        BankCard = 48,
 
         /// <summary>
         /// Direct debit
         /// </summary>
         [EnumStringValue("49")]
-        DirectDebit,
+        DirectDebit = 49,
 
         /// <summary>
         /// Payment by postgiro
         /// </summary>
         [EnumStringValue("50")]
-        PaymentByPostgiro,
+        PaymentByPostgiro = 50,
 
         /// <summary>
         /// FR, norme 6 97-Telereglement CFONB (French Organisation for Banking Standards) -
@@ -352,73 +352,73 @@ namespace s2industries.ZUGFeRD
         /// will collect the money on the bank account of the debtor.
         /// </summary>
         [EnumStringValue("51")]
-        FrCfonb,
+        FrCfonb = 51,
 
         /// <summary>
         /// Urgent commercial payment
         /// </summary>
         [EnumStringValue("52")]
-        UrgentCommercialPayment,
+        UrgentCommercialPayment = 52,
 
         /// <summary>
         /// Urgent Treasury Payment
         /// </summary>
         [EnumStringValue("53")]
-        UrgentTreasuryPayment,
+        UrgentTreasuryPayment = 53,
 
         /// <summary>
         /// Credit card
         /// </summary>
         [EnumStringValue("54")]
-        CreditCard,
+        CreditCard = 54,
 
         /// <summary>
         /// Debit card
         /// </summary>
         [EnumStringValue("55")]
-        DebitCard,
+        DebitCard = 55,
 
         /// <summary>
         /// Bankgiro
         /// </summary>
         [EnumStringValue("56")]
-        Bankgiro,
+        Bankgiro = 56,
 
         /// <summary>
         /// Standing agreement (Contractual payment means)
         /// </summary>
         [EnumStringValue("57")]
-        StandingAgreement,
+        StandingAgreement = 57,
 
         /// <summary>
         /// SEPA credit transfer (SEPA)
         /// </summary>
         [EnumStringValue("58")]
-        SEPACreditTransfer,
+        SEPACreditTransfer = 58,
 
         /// <summary>
         /// SEPA direct debit (SEPA)
         /// </summary>
         [EnumStringValue("59")]
-        SEPADirectDebit,
+        SEPADirectDebit = 59,
 
         /// <summary>
         /// Promissory note
         /// </summary>
         [EnumStringValue("60")]
-        PromissoryNote,
+        PromissoryNote = 60,
 
         /// <summary>
         /// Promissory note signed by the debtor
         /// </summary>
         [EnumStringValue("61")]
-        PromissoryNoteSignedByDebtor,
+        PromissoryNoteSignedByDebtor = 61,
 
         /// <summary>
         /// Promissory note signed by the debtor and endorsed by a bank
         /// </summary>
         [EnumStringValue("62")]
-        PromissoryNoteSignedByDebtorEndorsedByBank,
+        PromissoryNoteSignedByDebtorEndorsedByBank = 62,
 
         /// <summary>
         /// Payment by an unconditional promise in writing made by the debtor
@@ -428,13 +428,13 @@ namespace s2industries.ZUGFeRD
         /// or to bearer.
         /// </summary>
         [EnumStringValue("63")]
-        PromissoryNoteSignedByDebtorEndorsedByOther,
+        PromissoryNoteSignedByDebtorEndorsedByOther = 63,
 
         /// <summary>
         /// Promissory note signed by a bank
         /// </summary>
         [EnumStringValue("64")]
-        PromissoryNoteSignedByBank,
+        PromissoryNoteSignedByBank = 64,
 
         /// <summary>
         /// Payment by an unconditional promise in writing made by the bank
@@ -443,13 +443,13 @@ namespace s2industries.ZUGFeRD
         /// future time a sum certain in money, to order or to bearer.
         /// </summary>
         [EnumStringValue("65")]
-        PromissoryNoteSignedByBankEndorsedByOther,
+        PromissoryNoteSignedByBankEndorsedByOther = 65,
 
         /// <summary>
         /// Promissory note signed by a third party
         /// </summary>
         [EnumStringValue("66")]
-        PromissoryNoteSignedByThirdParty,
+        PromissoryNoteSignedByThirdParty = 66,
 
         /// <summary>
         /// Payment by an unconditional promise in writing made by a
@@ -459,108 +459,108 @@ namespace s2industries.ZUGFeRD
         /// to order or to bearer.
         /// </summary>
         [EnumStringValue("67")]
-        PromissoryNoteSignedByThirdPartyEndorsedByOther,
+        PromissoryNoteSignedByThirdPartyEndorsedByOther = 67,
 
         /// <summary>
         /// Online payment service
         /// </summary>
         [EnumStringValue("68")]
-        OnlinePaymentService,
+        OnlinePaymentService = 68,
 
         /// <summary>
         /// Transfer Advice
         /// </summary>
         [EnumStringValue("69")]
-        TransferAdvice,
+        TransferAdvice = 69,
 
         /// <summary>
         /// Bill drawn by the creditor on the debtor
         /// </summary>
         [EnumStringValue("70")]
-        BillDrawnByCreditorOnDebtor,
+        BillDrawnByCreditorOnDebtor = 70,
 
         /// <summary>
         /// Bill drawn by the creditor on a bank
         /// </summary>
         [EnumStringValue("74")]
-        BillDrawnByCreditorOnBank,
+        BillDrawnByCreditorOnBank = 74,
 
         /// <summary>
         /// Bill drawn by the creditor, endorsed by another bank
         /// </summary>
         [EnumStringValue("75")]
-        BillDrawnByCreditorEndorsedByAnotherBank,
+        BillDrawnByCreditorEndorsedByAnotherBank = 75,
 
         /// <summary>
         /// Bill drawn by the creditor on a bank and endorsed by a third party.
         /// </summary>
         [EnumStringValue("76")]
-        BillDrawnByCreditorOnBankEndorsedByOther,
+        BillDrawnByCreditorOnBankEndorsedByOther = 76,
 
         /// <summary>
         /// Bill drawn by the creditor on a third party
         /// </summary>
         [EnumStringValue("77")]
-        BillDrawnByCreditorOnThirdParty,
+        BillDrawnByCreditorOnThirdParty = 77,
 
         /// <summary>
         /// Bill drawn by creditor on third party, accepted and endorsed by bank.
         /// </summary>
         [EnumStringValue("78")]
-        BillDrawnByCreditorOnThirdPartyAccepted,
+        BillDrawnByCreditorOnThirdPartyAccepted = 78,
 
         /// <summary>
         /// Not transferable banker's draft
         /// </summary>
         [EnumStringValue("91")]
-        NotTransferableBankersDraft,
+        NotTransferableBankersDraft = 91,
 
         /// <summary>
         /// Not transferable local cheque
         /// </summary>
         [EnumStringValue("92")]
-        NotTransferableLocalCheque,
+        NotTransferableLocalCheque = 92,
 
         /// <summary>
         /// Reference giro
         /// </summary>
         [EnumStringValue("93")]
-        ReferenceGiro,
+        ReferenceGiro = 93,
 
         /// <summary>
         /// Urgent giro
         /// </summary>
         [EnumStringValue("94")]
-        UrgentGiro,
+        UrgentGiro = 94,
 
         /// <summary>
         /// Free format giro
         /// </summary>
         [EnumStringValue("95")]
-        FreeFormatGiro,
+        FreeFormatGiro = 95,
 
         /// <summary>
         /// Requested method for payment was not used
         /// </summary>
         [EnumStringValue("96")]
-        RequestedMethodForPaymentNotUsed,
+        RequestedMethodForPaymentNotUsed = 96,
 
         /// <summary>
         /// Clearing between partners
         /// </summary>
         [EnumStringValue("97")]
-        ClearingBetweenPartners,
+        ClearingBetweenPartners = 97,
 
         /// <summary>
         /// JP, Electronically Recorded Monetary Claims
         /// </summary>
         [EnumStringValue("98")]
-        ElectronicallyRecordedMonetaryClaimsJP,
+        ElectronicallyRecordedMonetaryClaimsJP = 98,
 
         /// <summary>
         /// Mutually defined
         /// </summary>
         [EnumStringValue("ZZZ")]
-        MutuallyDefined
+        MutuallyDefined = 999
     }
 }

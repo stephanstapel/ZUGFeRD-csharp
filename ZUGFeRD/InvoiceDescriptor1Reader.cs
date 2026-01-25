@@ -25,6 +25,18 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor1Reader : IInvoiceDescriptorReader
     {
+        public InvoiceDescriptor1Reader()
+        {
+            _Namespaces = new Dictionary<string, string>
+            {
+                { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
+                { "rsm", "urn:ferd:CrossIndustryDocument:invoice:1p0" },
+                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" },
+                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15" }
+            };
+        } // !InvoiceDescriptor1Reader()
+
+
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
         ///
@@ -42,7 +54,7 @@ namespace s2industries.ZUGFeRD
 
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
-            XmlNamespaceManager nsmgr = _GenerateNamespaceManagerFromNode(doc.DocumentElement);
+            XmlNamespaceManager nsmgr = _CreateFixedNamespaceManager(doc);
 
             if (!nsmgr.HasNamespace("rsm"))
             {
@@ -100,7 +112,7 @@ namespace s2industries.ZUGFeRD
                 string schemeID = XmlUtils.NodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
 
                 retval.AddBuyerTaxRegistration(id, default(TaxRegistrationSchemeID).FromString(schemeID));
-            }            
+            }
 
             if (doc.SelectSingleNode("//ram:BuyerTradeParty/ram:DefinedTradeContact", nsmgr) != null)
             {
@@ -157,12 +169,6 @@ namespace s2industries.ZUGFeRD
             };
             retval.PaymentMeans = paymentMeans;
 
-            //Read TransportModeCodes --> BT-X-152
-            if (doc.SelectSingleNode("//ram:ApplicableHeaderTradeDelivery/ram:RelatedSupplyChainConsignment/ram:SpecifiedLogisticsTransportMovement/ram:ModeCode", nsmgr) != null)
-            {
-                retval.TransportMode = EnumExtensions.StringToEnum<TransportModeCodes>(XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeDelivery/ram:RelatedSupplyChainConsignment/ram:SpecifiedLogisticsTransportMovement/ram:ModeCode", nsmgr));
-            }
-
             retval.BillingPeriodStart = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime", nsmgr);
             retval.BillingPeriodEnd = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:EndDateTime", nsmgr);
 
@@ -189,11 +195,11 @@ namespace s2industries.ZUGFeRD
             {
                 for (int i = 0; i < debitorFinancialAccountNodes.Count; i++)
                 {
-                    retval.AddDebitorFinancialAccount(iban: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr),
-                                                      bic: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:BICID", nsmgr),
-                                                      id: XmlUtils.NodeAsString(creditorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr),
-                                                      bankleitzahl: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr),
-                                                      bankName: XmlUtils.NodeAsString(creditorFinancialInstitutions[i], ".//ram:Name", nsmgr));
+                    retval.AddDebitorFinancialAccount(iban: XmlUtils.NodeAsString(debitorFinancialAccountNodes[i], ".//ram:IBANID", nsmgr),
+                                                      bic: XmlUtils.NodeAsString(debitorFinancialInstitutions[i], ".//ram:BICID", nsmgr),
+                                                      id: XmlUtils.NodeAsString(debitorFinancialAccountNodes[i], ".//ram:ProprietaryID", nsmgr),
+                                                      bankleitzahl: XmlUtils.NodeAsString(debitorFinancialInstitutions[i], ".//ram:GermanBankleitzahlID", nsmgr),
+                                                      bankName: XmlUtils.NodeAsString(debitorFinancialInstitutions[i], ".//ram:Name", nsmgr));
                 } // !for(i)
             }
 
@@ -234,7 +240,7 @@ namespace s2industries.ZUGFeRD
                                               EnumExtensions.StringToNullableEnum<AllowanceReasonCodes>(XmlUtils.NodeAsString(node, "./ram:ReasonCode", nsmgr)));
                 }
 
-                    
+
             }
 
             foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedLogisticsServiceCharge", nsmgr))
@@ -326,7 +332,7 @@ namespace s2industries.ZUGFeRD
                 SellerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
                 BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BuyerAssignedID", nsmgr),
                 Name = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Name", nsmgr),
-                Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),                
+                Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
                 LineTotalAmount = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:LineTotalAmount", nsmgr, 0),
                 TaxCategoryCode = EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
@@ -360,7 +366,7 @@ namespace s2industries.ZUGFeRD
                 bool chargeIndicator = XmlUtils.NodeAsBool(appliedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
                 decimal basisAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, 0).Value;
                 string basisAmountCurrency = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
-                decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;                
+                decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
                 if (chargeIndicator) // charge
@@ -376,7 +382,7 @@ namespace s2industries.ZUGFeRD
                                            basisAmount,
                                            actualAmount,
                                            reason);
-                }                    
+                }
             }
 
             if (!item.UnitCode.HasValue)

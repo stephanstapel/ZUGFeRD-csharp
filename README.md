@@ -22,7 +22,7 @@ The library is meant to be as simple as possible, however it is not straight for
 # Consulting/ Commercial Support
 *Auf Deutsch:* Falls Sie kommerzielle Unterstützung bei der Umsetzung von ZUGFeRD/ XRechnung in Ihrem Unternehmen benötigen, schreiben Sie mir gerne an stephan@s2-industries.com
 
-*In English* In case you you consulting or commercial support for implementing ZUGFeRD/ XRechnung/ Factur-X in your company, please send an email to stephan@s2-industries.com
+*In English* In case you need consulting or commercial support for implementing ZUGFeRD/ XRechnung/ Factur-X in your company, please send an email to stephan@s2-industries.com
 
 # Relationship between the different standards
 Since there are a lot of terms and standards around electronic invoices, I'd like to lay out my understanding:
@@ -378,6 +378,12 @@ await InvoicePdfProcessor.SaveToPdfAsync("zugferd-invoice.pdf", ZUGFeRDVersion.V
 InvoicePdfProcessor.SaveToPdf("zugferd-invoice.pdf", ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, "input-invoice.pdf", descriptor);
 ```
 
+# FacturX and UBL overview
+Both formats yield quite complicated xml structures.
+If you like to dig into the structure, you find cure here:
+
+* FacturX: http://doc.factoorsharp.com/
+* UBL: https://docs.peppol.eu/poacc/billing/3.0/syntax/ubl-invoice/
 
 # Thanks
 

@@ -29,6 +29,20 @@ namespace s2industries.ZUGFeRD
 {
     internal class InvoiceDescriptor20Reader : IInvoiceDescriptorReader
     {
+        public InvoiceDescriptor20Reader()
+        {
+            _Namespaces = new Dictionary<string, string>()
+            {
+                { "a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
+                { "rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" },
+                { "qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100" },
+                { "ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" },
+                { "xs", "http://www.w3.org/2001/XMLSchema" },
+                { "udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" }
+            };
+        } // !InvoiceDescriptor20Reader()
+
+
         /// <summary>
         /// Parses the ZUGFeRD invoice from the given stream.
         ///
@@ -46,7 +60,7 @@ namespace s2industries.ZUGFeRD
 
             XmlDocument doc = new XmlDocument();
             doc.Load(stream);
-            XmlNamespaceManager nsmgr = _GenerateNamespaceManagerFromNode(doc.DocumentElement);
+            XmlNamespaceManager nsmgr = _CreateFixedNamespaceManager(doc);
 
             if (!nsmgr.HasNamespace("rsm"))
             {
@@ -164,6 +178,28 @@ namespace s2industries.ZUGFeRD
             }
 
             retval.Invoicee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty", nsmgr);
+            //BT-X-242-00
+            foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:InvoiceeTradeParty/ram:SpecifiedTaxRegistration", nsmgr))
+            {
+                string id = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr);
+                string schemeID = XmlUtils.NodeAsString(node, ".//ram:ID/@schemeID", nsmgr);
+
+                retval.AddInvoiceeTaxRegistration(id, EnumExtensions.StringToEnum<TaxRegistrationSchemeID>(schemeID));
+            }
+
+            retval.Invoicer = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:InvoicerTradeParty", nsmgr);
+            if (doc.SelectSingleNode("//ram:InvoicerTradeParty/ram:DefinedTradeContact", nsmgr) != null)
+            {
+                retval.InvoicerContact = new Contact()
+                {
+                    Name = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:PersonName", nsmgr),
+                    OrgUnit = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:DepartmentName", nsmgr),
+                    PhoneNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:TelephoneUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    FaxNo = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:FaxUniversalCommunication/ram:CompleteNumber", nsmgr),
+                    EmailAddress = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:InvoicerTradeParty/ram:DefinedTradeContact/ram:EmailURIUniversalCommunication/ram:URIID", nsmgr)
+                };
+            }
+
             retval.Payee = _nodeAsParty(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty", nsmgr);
 
             retval.PaymentReference = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeSettlement/ram:PaymentReference", nsmgr);
@@ -273,9 +309,10 @@ namespace s2industries.ZUGFeRD
                 bool chargeIndicator = XmlUtils.NodeAsBool(node, ".//ram:ChargeIndicator", nsmgr);
                 if (chargeIndicator) // charge
                 {
-                    retval._AddTradeCharge(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
+                    retval._AddTradeCharge(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
                                            retval.Currency,
                                            XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
+                                           XmlUtils.NodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr),
                                            XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
                                            EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                            EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
@@ -284,9 +321,10 @@ namespace s2industries.ZUGFeRD
                 }
                 else // allowance
                 {
-                    retval._AddTradeAllowance(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr, 0).Value,
+                    retval._AddTradeAllowance(XmlUtils.NodeAsDecimal(node, ".//ram:BasisAmount", nsmgr),
                                               retval.Currency,
                                               XmlUtils.NodeAsDecimal(node, ".//ram:ActualAmount", nsmgr, 0).Value,
+                                              XmlUtils.NodeAsDecimal(node, ".//ram:CalculationPercent", nsmgr),
                                               XmlUtils.NodeAsString(node, ".//ram:Reason", nsmgr),
                                               EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:TypeCode", nsmgr)),
                                               EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(node, ".//ram:CategoryTradeTax/ram:CategoryCode", nsmgr)),
@@ -363,7 +401,7 @@ namespace s2industries.ZUGFeRD
             var deliveryCodeStr = XmlUtils.NodeAsString(doc.DocumentElement, "//ram:ApplicableHeaderTradeAgreement/ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode", nsmgr);
             if (!string.IsNullOrWhiteSpace(deliveryCodeStr))
             {
-                TradeDeliveryTermCodes? tradeCode = EnumExtensions.StringToEnum<TradeDeliveryTermCodes>(deliveryCodeStr);
+                TradeDeliveryTermCodes? tradeCode = EnumExtensions.StringToNullableEnum<TradeDeliveryTermCodes>(deliveryCodeStr);
                 if (tradeCode != null)
                 {
                     retval.ApplicableTradeDeliveryTermsCode = tradeCode;
@@ -423,8 +461,10 @@ namespace s2industries.ZUGFeRD
                 SellerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", nsmgr),
                 BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:BuyerAssignedID", nsmgr),
                 Name = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Name", nsmgr),
-                Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),                
+                Description = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedTradeProduct/ram:Description", nsmgr),
                 BilledQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:BilledQuantity", nsmgr, 0).Value,
+                ChargeFreeQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:ChargeFreeQuantity", nsmgr),
+                PackageQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:PackageQuantity", nsmgr),
                 LineTotalAmount = XmlUtils.NodeAsDecimal(tradeLineItem, ".//ram:LineTotalAmount", nsmgr),
                 TaxCategoryCode = EnumExtensions.StringToNullableEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:CategoryCode", nsmgr)),
                 TaxType = EnumExtensions.StringToNullableEnum<TaxTypes>(XmlUtils.NodeAsString(tradeLineItem, ".//ram:ApplicableTradeTax/ram:TypeCode", nsmgr)),
@@ -456,7 +496,7 @@ namespace s2industries.ZUGFeRD
             }
 
             foreach (XmlNode includedItem in tradeLineItem.SelectNodes(".//ram:SpecifiedTradeProduct/ram:IncludedReferencedProduct", nsmgr))
-            {                
+            {
                 QuantityCodes? unitCode = null;
                 var unitCodeAsString = XmlUtils.NodeAsString(includedItem, ".//ram:UnitQuantity/@unitCode", nsmgr, null);
 
@@ -467,7 +507,12 @@ namespace s2industries.ZUGFeRD
 
                 item.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
                 {
+                    GlobalID = new GlobalID(EnumExtensions.StringToNullableEnum<GlobalIDSchemeIdentifiers>(XmlUtils.NodeAsString(includedItem, ".//ram:GlobalID/@schemeID", nsmgr)),
+                                        XmlUtils.NodeAsString(includedItem, ".//ram:GlobalID", nsmgr)),
+                    SellerAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:SellerAssignedID", nsmgr),
+                    BuyerAssignedID = XmlUtils.NodeAsString(includedItem, ".//ram:BuyerAssignedID", nsmgr),
                     Name = XmlUtils.NodeAsString(includedItem, ".//ram:Name", nsmgr),
+                    Description = XmlUtils.NodeAsString(includedItem, ".//ram:Description", nsmgr),
                     UnitQuantity = XmlUtils.NodeAsDecimal(includedItem, ".//ram:UnitQuantity", nsmgr, null),
                     UnitCode = unitCode
                 });
@@ -493,7 +538,7 @@ namespace s2industries.ZUGFeRD
                 bool chargeIndicator = XmlUtils.NodeAsBool(appliedTradeAllowanceChargeNode, "./ram:ChargeIndicator/udt:Indicator", nsmgr);
                 decimal basisAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:BasisAmount", nsmgr, 0).Value;
                 string basisAmountCurrency = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:BasisAmount/@currencyID", nsmgr);
-                decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;                
+                decimal actualAmount = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./ram:ActualAmount", nsmgr, 0).Value;
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./ram:Reason", nsmgr);
 
                 if (chargeIndicator) // charge
@@ -509,7 +554,7 @@ namespace s2industries.ZUGFeRD
                                            basisAmount,
                                            actualAmount,
                                            reason);
-                }                    
+                }
             }
 
             if (!item.UnitCode.HasValue)

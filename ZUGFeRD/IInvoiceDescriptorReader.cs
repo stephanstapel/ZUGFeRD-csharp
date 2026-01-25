@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
@@ -27,6 +28,7 @@ namespace s2industries.ZUGFeRD
 {
     internal abstract class IInvoiceDescriptorReader
     {
+        protected Dictionary<string, string> _Namespaces = new Dictionary<string, string>();
         public abstract InvoiceDescriptor Load(Stream stream);
         public abstract bool IsReadableByThisReaderVersion(Stream stream);
 
@@ -59,6 +61,7 @@ namespace s2industries.ZUGFeRD
         } // !IsReadableByThisReaderVersion()
 
 
+        /*
         protected XmlNamespaceManager _GenerateNamespaceManagerFromNode(XmlNode node)
         {
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(node.OwnerDocument.NameTable);
@@ -76,6 +79,38 @@ namespace s2industries.ZUGFeRD
 
             return nsmgr;
         } // !_GenerateNamespaceManagerFromNode()
+        */
+
+        protected XmlNamespaceManager _CreateFixedNamespaceManager(XmlDocument doc)
+        {
+            var nsmgr = new XmlNamespaceManager(doc.NameTable);
+
+            var declared = new Dictionary<string, string>();
+
+            // Alle deklarierten Namespaces aus dem Dokument einlesen
+            if (doc.DocumentElement != null)
+            {
+                foreach (XmlAttribute attr in doc.DocumentElement.Attributes)
+                {
+                    if (attr.Prefix == "xmlns")
+                    {
+                        declared[attr.LocalName] = attr.Value;
+                    }
+                    else if (attr.Name == "xmlns")
+                    {
+                        declared[string.Empty] = attr.Value;
+                    }
+                }
+            }
+
+            // Factur-X / ZUGFeRD relevante Namespaces
+            foreach(KeyValuePair<string,string> ns in _Namespaces)
+            {
+                nsmgr.AddNamespace(ns.Key, ns.Value);
+            }
+
+            return nsmgr;
+        } // !_CreateFixedNamespaceManager()
 
 
         protected bool _IsReadableByThisReaderVersion(Stream stream, IList<string> validURIs)

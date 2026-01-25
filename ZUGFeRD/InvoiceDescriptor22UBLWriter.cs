@@ -43,20 +43,7 @@ namespace s2industries.ZUGFeRD
 
             this._Descriptor = descriptor;
             this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
-            bool isInvoice = true;
-            if (this._Descriptor.Type == InvoiceType.Invoice || this._Descriptor.Type == InvoiceType.Correction)
-            {
-                // this is a duplicate, just to make sure: also a Correction is regarded as an Invoice
-                isInvoice = true;
-            }
-            else if (this._Descriptor.Type == InvoiceType.CreditNote)
-            {
-                isInvoice = false;
-            }
-            else
-            {
-                throw new NotImplementedException("Not implemented yet.");
-            }
+            bool isInvoice = _IsInvoiceAccordingToUBLSpecification(this._Descriptor.Type);
 
             Dictionary<string, string> namespaces = new Dictionary<string, string>()
             {
@@ -135,6 +122,22 @@ namespace s2industries.ZUGFeRD
             if (this._Descriptor.TaxCurrency.HasValue)
             {
                 _Writer.WriteElementString("cbc", "TaxCurrencyCode", this._Descriptor.TaxCurrency.Value.EnumToString());
+            }
+
+            //   BT-19
+            if (this._Descriptor.AnyReceivableSpecifiedTradeAccountingAccounts())
+            {
+                foreach (ReceivableSpecifiedTradeAccountingAccount traceAccountingAccount in this._Descriptor.GetReceivableSpecifiedTradeAccountingAccounts())
+                {
+                    if (string.IsNullOrWhiteSpace(traceAccountingAccount.TradeAccountID))
+                    {
+                        continue;
+                    }
+
+                    _Writer.WriteOptionalElementString("cbc", "AccountingCost", traceAccountingAccount.TradeAccountID);
+
+                    break; // Cardinality 0..1
+                }
             }
 
             _Writer.WriteOptionalElementString("cbc", "BuyerReference", this._Descriptor.ReferenceOrderNo);
@@ -458,7 +461,7 @@ namespace s2industries.ZUGFeRD
             }
 
             #region AllowanceCharge
-            foreach(TradeAllowance allowance in descriptor.GetTradeAllowances())
+            foreach (TradeAllowance allowance in descriptor.GetTradeAllowances())
             {
                 _WriteDocumentLevelAllowanceCharges(_Writer, allowance);
             } // !foreach(allowance)
@@ -484,7 +487,11 @@ namespace s2industries.ZUGFeRD
 
                     _Writer.WriteStartElement("cac", "TaxCategory");
                     _Writer.WriteElementString("cbc", "ID", tax.CategoryCode.ToString());
-                    _Writer.WriteElementString("cbc", "Percent", _formatDecimal(tax.Percent));
+
+                    if (tax.CategoryCode != TaxCategoryCodes.O) // BR-O-05
+                    {
+                        _Writer.WriteElementString("cbc", "Percent", _formatDecimal(tax.Percent));
+                    }
 
                     if (tax.ExemptionReasonCode.HasValue)
                     {
@@ -511,8 +518,8 @@ namespace s2industries.ZUGFeRD
             _writeOptionalAmount(_Writer, "cbc", "ChargeTotalAmount", this._Descriptor.ChargeTotalAmount, forceCurrency: true);
             //_writeOptionalAmount(_Writer, "cbc", "TaxAmount", this._Descriptor.TaxTotalAmount, forceCurrency: true);
             _writeOptionalAmount(_Writer, "cbc", "PrepaidAmount", this._Descriptor.TotalPrepaidAmount, forceCurrency: true);
-            _writeOptionalAmount(_Writer, "cbc", "PayableAmount", this._Descriptor.DuePayableAmount, forceCurrency: true);
-            //_writeOptionalAmount(_Writer, "cbc", "PayableAlternativeAmount", this._Descriptor.RoundingAmount, forceCurrency: true);
+            _writeOptionalAmount(_Writer, "cbc", "PayableRoundingAmount", this._Descriptor.RoundingAmount, forceCurrency: true);
+            _writeOptionalAmount(_Writer, "cbc", "PayableAmount", this._Descriptor.DuePayableAmount, forceCurrency: true);            
             _Writer.WriteEndElement(); //!LegalMonetaryTotal            
 
             foreach (TradeLineItem tradeLineItem in this._Descriptor.GetTradeLineItems())
@@ -650,6 +657,23 @@ namespace s2industries.ZUGFeRD
             _WriteComment(_Writer, options, InvoiceCommentConstants.SpecifiedTradeSettlementLineMonetarySummationComment);
             _writeOptionalAmount(_Writer, "cbc", "LineExtensionAmount", tradeLineItem.LineTotalAmount, forceCurrency: true);
 
+            if (tradeLineItem.BillingPeriodStart.HasValue || tradeLineItem.BillingPeriodEnd.HasValue)
+            {
+                _Writer.WriteStartElement("cac", "InvoicePeriod");
+
+                if (tradeLineItem.BillingPeriodStart.HasValue)
+                {
+                    _Writer.WriteElementString("cbc", "StartDate", _formatDate(tradeLineItem.BillingPeriodStart.Value, false, true));
+                }
+
+                if (tradeLineItem.BillingPeriodEnd.HasValue)
+                {
+                    _Writer.WriteElementString("cbc", "EndDate", _formatDate(tradeLineItem.BillingPeriodEnd.Value, false, true));
+                }
+
+                _Writer.WriteEndElement(); // !InvoicePeriod
+            }
+
             if (tradeLineItem.AdditionalReferencedDocuments.Count > 0)
             {
                 foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
@@ -678,7 +702,7 @@ namespace s2industries.ZUGFeRD
             {
                 _WriteItemLevelSpecifiedTradeAllowanceCharge(specifiedTradeAllowanceCharge);
             }
-            
+
             foreach (var specifiedTradeAllowanceCharge in tradeLineItem.GetSpecifiedTradeCharges())
             {
                 _WriteItemLevelSpecifiedTradeAllowanceCharge(specifiedTradeAllowanceCharge);
@@ -726,8 +750,8 @@ namespace s2industries.ZUGFeRD
             _WriteComment(_Writer, options, InvoiceCommentConstants.NetPriceProductTradePriceComment);
             _Writer.WriteStartElement("cbc", "PriceAmount");
             _Writer.WriteAttributeString("currencyID", this._Descriptor.Currency.EnumToString());
-			// UBL-DT-01 explicitly excempts the price amount from the 2 decimal rule for amount elements,
-			// thus allowing for 4 decimal places (needed for e.g. fuel prices)
+            // UBL-DT-01 explicitly excempts the price amount from the 2 decimal rule for amount elements,
+            // thus allowing for 4 decimal places (needed for e.g. fuel prices)
             _Writer.WriteValue(_formatDecimal(tradeLineItem.NetUnitPrice, 4));
             _Writer.WriteEndElement();
 
@@ -753,7 +777,7 @@ namespace s2industries.ZUGFeRD
                     else
                     {
                         _Writer.WriteElementString("cbc", "ChargeIndicator", "true");
-                    }                    
+                    }
 
                     _Writer.WriteStartElement("cbc", "Amount"); // BT-147
                     _Writer.WriteAttributeString("currencyID", this._Descriptor.Currency.EnumToString());
@@ -799,7 +823,7 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteOptionalElementString("cbc", "AllowanceChargeReasonCode", charge.ReasonCode.EnumToString()); // BT-145
                     break;
             }
-            
+
             _Writer.WriteOptionalElementString("cbc", "AllowanceChargeReason",
                 specifiedTradeAllowanceCharge.Reason); // BT-139, BT-144
 
@@ -884,7 +908,7 @@ namespace s2industries.ZUGFeRD
             {
                 switch (partyType)
                 {
-                    case PartyTypes.SellerTradeParty:                        
+                    case PartyTypes.SellerTradeParty:
                         writer.WriteStartElement("cac", "AccountingSupplierParty", this._Descriptor.Profile);
                         break;
                     case PartyTypes.BuyerTradeParty:
@@ -984,6 +1008,12 @@ namespace s2industries.ZUGFeRD
                     {
                         writer.WriteStartElement("cac", "PartyIdentification");
                         writer.WriteStartElement("cbc", "ID");
+
+                        if (party.ID.SchemeID.HasValue)
+                        {
+                            writer.WriteAttributeString("schemeID", party.ID.SchemeID.Value.EnumToString());
+                        }
+
                         writer.WriteValue(party.ID.ID);
                         writer.WriteEndElement();//!ID
                         writer.WriteEndElement();//!PartyIdentification
@@ -1029,22 +1059,32 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                writer.WriteStartElement("cac", "PartyLegalEntity");
-                writer.WriteElementString("cbc", "RegistrationName", party.Name);
-
-                if (party.GlobalID != null)
+                if ((party.SpecifiedLegalOrganization != null) || !String.IsNullOrWhiteSpace(party.Description))
                 {
-                    //Party legal registration identifier (BT-30)
-                    _Writer.WriteElementString("cbc", "CompanyID", party.GlobalID.ID);
-                }
+                    writer.WriteStartElement("cac", "PartyLegalEntity");
+                    writer.WriteOptionalElementString("cbc", "RegistrationName", party.SpecifiedLegalOrganization.TradingBusinessName);                    
 
-                if (party.Description != null)
-                {
-                    //Party additional legal information (BT-33)
-                    _Writer.WriteElementString("cbc", "CompanyLegalForm", party.Description);
-                }
+                    if (party.SpecifiedLegalOrganization?.ID != null && !String.IsNullOrWhiteSpace(party.SpecifiedLegalOrganization.ID.ID))
+                    { 
+                        //Party legal registration identifier (BT-30)
+                        _Writer.WriteStartElement("cbc", "CompanyID");
 
-                writer.WriteEndElement(); //!PartyLegalEntity
+                        if (party.SpecifiedLegalOrganization.ID.SchemeID.HasValue)
+                        {
+                            _Writer.WriteAttributeString("schemeID", party.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                        }
+                        _Writer.WriteValue(party.SpecifiedLegalOrganization.ID.ID);
+                        _Writer.WriteEndElement(); // !CompanyID
+                    }
+
+                    if (!String.IsNullOrWhiteSpace(party.Description))
+                    {
+                        //Party additional legal information (BT-33)
+                        _Writer.WriteElementString("cbc", "CompanyLegalForm", party.Description);
+                    }
+
+                    writer.WriteEndElement(); //!PartyLegalEntity
+                }
 
                 if (contact != null)
                 {
@@ -1096,7 +1136,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
         } // !_writeNotes()
-        
+
         private void _writeOptionalAmount(ProfileAwareXmlTextWriter writer, string prefix, string tagName, decimal? value, int numDecimals = 2, bool forceCurrency = false, Profile profile = Profile.Unknown)
         {
             if (!value.HasValue)
@@ -1118,5 +1158,49 @@ namespace s2industries.ZUGFeRD
         {
             throw new NotImplementedException();
         }
+
+
+        private bool _IsInvoiceAccordingToUBLSpecification(InvoiceType type)
+        {
+            switch (type)
+            {
+                case InvoiceType.RequestForPayment: // 71
+                case InvoiceType.DebitNoteRelatedToGoodsOrServices: // 80
+                case InvoiceType.MeteredServicesInvoice: // 82
+                case InvoiceType.DebitnoteRelatedToFinancialAdjustments: // 84
+                case InvoiceType.TaxNotification: // 102
+                case InvoiceType.FinalPaymentRequestBasedOnCompletionOfWork: // 218
+                case InvoiceType.PaymentRequestForCompletedUnits: // 219
+                case InvoiceType.PartialInvoice: // 326
+                case InvoiceType.CommercialInvoiceWithPackingList: // 331
+                case InvoiceType.Invoice: // 380
+                case InvoiceType.CommissionNote: // 382
+                case InvoiceType.DebitNote: // 383
+                case InvoiceType.Correction: // 384
+                case InvoiceType.PrepaymentInvoice: // 386
+                case InvoiceType.TaxInvoice: // 388
+                case InvoiceType.SelfBilledInvoice: // 389
+                case InvoiceType.FactoredInvoice: // 393
+                case InvoiceType.ConsignmentInvoice: // 395
+                case InvoiceType.ForwardersInvoiceDiscrepancyReport: // 553
+                case InvoiceType.InsurersInvoice: // 575
+                case InvoiceType.ForwardersInvoice: // 623
+                case InvoiceType.FreightInvoice: // 780
+                case InvoiceType.ClaimNotification: // 817
+                case InvoiceType.ConsularInvoice: // 870
+                case InvoiceType.PartialConstructionInvoice: // 875
+                case InvoiceType.PartialFinalConstructionInvoice: // 876
+                case InvoiceType.FinalConstructionInvoice: // 877
+                    return true;
+                case InvoiceType.CreditNoteRelatedToGoodsOrServices: // 81
+                case InvoiceType.CreditNoteRelatedToFinancialAdjustments: // 83
+                case InvoiceType.CreditNote: // 381
+                case InvoiceType.FactoredCreditNote: // 396
+                case InvoiceType.ForwardersCreditNote: // 532
+                    return false;
+                default:
+                    throw new NotImplementedException($"Invoice type {type} not implemented in UBL writer.");
+            }
+        } // !_IsInvoiceAccordingToUBLSpecification()
     }
 }

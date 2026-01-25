@@ -406,14 +406,12 @@ namespace s2industries.ZUGFeRD
             retval.TotalPrepaidAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PrepaidAmount", nsmgr);
             retval.DuePayableAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//cac:LegalMonetaryTotal/cbc:PayableAmount", nsmgr);
 
-            // TODO: Find value //foreach (XmlNode node in doc.SelectNodes("//ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount", nsmgr))
-            //{
-            //  retval._ReceivableSpecifiedTradeAccountingAccounts.Add(new ReceivableSpecifiedTradeAccountingAccount()
-            //  {
-            //    TradeAccountID = XmlUtils.NodeAsString(node, ".//ram:ID", nsmgr),
-            //    TradeAccountTypeCode = (AccountingAccountTypeCodes)_nodeAsInt(node, ".//ram:TypeCode", nsmgr),
-            //  });
-            //}
+            foreach (XmlNode node in doc.SelectNodes("//cbc:AccountingCost", nsmgr))
+            {
+                string content = XmlUtils.NodeAsString(node, ".", nsmgr);
+                if (string.IsNullOrWhiteSpace(content)) continue;
+                retval.AddReceivableSpecifiedTradeAccountingAccount(content);
+            }
 
             // TODO: Find value //retval.OrderDate = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cac:OrderReference/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString", nsmgr);
             retval.OrderNo = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:OrderReference/cbc:ID", nsmgr);

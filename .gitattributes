@@ -1,0 +1,7 @@
+# set the handling of line endings for this repository, for people who don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.cs text
+*.xml text
