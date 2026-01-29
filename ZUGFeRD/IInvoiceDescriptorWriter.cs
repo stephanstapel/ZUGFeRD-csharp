@@ -109,5 +109,10 @@ namespace s2industries.ZUGFeRD
                 return date.ToString("yyyy-MM-ddTHH:mm:ss");
             }
         } // !_formatDate()
+            
+        protected string _formatTime(DateTime date, bool formatAs102 = true, bool toUBLDate = false)
+        {
+            return date.ToString("HH:mm:ss");
+        } // !_formatDate()
     }
 }

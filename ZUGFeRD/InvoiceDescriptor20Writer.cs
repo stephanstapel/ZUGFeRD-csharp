@@ -32,7 +32,7 @@ namespace s2industries.ZUGFeRD
 
 
         private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
-        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
+        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice;
 
 
         public InvoiceDescriptor20Writer()
@@ -215,7 +215,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.BuyerOrderReferencedDocument != null)
                 {
-                    _Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _Writer.WriteStartElement("ram", "BuyerOrderReferencedDocument", Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                     // order number
                     _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.BuyerOrderReferencedDocument.ID);
 
@@ -289,7 +289,7 @@ namespace s2industries.ZUGFeRD
                 bool hasGrossUnitPrice = tradeLineItem.GrossUnitPrice.HasValue;
                 bool hasAllowanceCharges = tradeLineItem.GetTradeAllowanceCharges().Count > 0;
 
-                if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.XRechnung1) || (descriptor.Profile == Profile.Comfort))
+                if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.XRechnung1) || (descriptor.Profile == Profile.Comfort) || (descriptor.Profile == Profile.HRInvoice))
                 {
                     // PEPPOL-EN16931-R046: For XRechnung, both must be present
                     needToWriteGrossUnitPrice = hasGrossUnitPrice && hasAllowanceCharges;
@@ -417,7 +417,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.BillingPeriodStart.HasValue || tradeLineItem.BillingPeriodEnd.HasValue)
                 {
-                    _Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                     if (tradeLineItem.BillingPeriodStart.HasValue)
                     {
                         _Writer.WriteStartElement("ram", "StartDateTime");
@@ -640,7 +640,7 @@ namespace s2industries.ZUGFeRD
             //   1. CreditorReferenceID (optional)
             if (!String.IsNullOrWhiteSpace(this._Descriptor.PaymentMeans?.SEPACreditorIdentifier))
             {
-                _Writer.WriteOptionalElementString("ram", "CreditorReferenceID", _Descriptor.PaymentMeans?.SEPACreditorIdentifier, Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1);
+                _Writer.WriteOptionalElementString("ram", "CreditorReferenceID", _Descriptor.PaymentMeans?.SEPACreditorIdentifier, Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.XRechnung1 | Profile.HRInvoice);
             }
 
             //   2. PaymentReference (optional)
@@ -650,7 +650,7 @@ namespace s2industries.ZUGFeRD
             //   BT-6
             if (this._Descriptor.TaxCurrency.HasValue)
             {
-                _Writer.WriteElementString("ram", "TaxCurrencyCode", this._Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteElementString("ram", "TaxCurrencyCode", this._Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
             }
 
             //   4. InvoiceCurrencyCode (optional)
@@ -689,7 +689,7 @@ namespace s2industries.ZUGFeRD
 
                         if (this._Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            _Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                            _Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.HRInvoice);
                             _Writer.WriteElementString("ram", "ID", _Descriptor.PaymentMeans.FinancialCard.Id);
                             _Writer.WriteElementString("ram", "CardholderName", _Descriptor.PaymentMeans.FinancialCard.CardholderName);
                             _Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
@@ -712,7 +712,7 @@ namespace s2industries.ZUGFeRD
 
                         if (this._Descriptor.PaymentMeans.FinancialCard != null)
                         {
-                            _Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung);
+                            _Writer.WriteStartElement("ram", "ApplicableTradeSettlementFinancialCard", Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.HRInvoice);
                             _Writer.WriteElementString("ram", "ID", _Descriptor.PaymentMeans.FinancialCard.Id);
                             _Writer.WriteElementString("ram", "CardholderName", _Descriptor.PaymentMeans.FinancialCard.CardholderName);
                             _Writer.WriteEndElement(); // !ram:ApplicableTradeSettlementFinancialCard
@@ -779,7 +779,7 @@ namespace s2industries.ZUGFeRD
             //  12. BillingSpecifiedPeriod (optional)
             if (_Descriptor.BillingPeriodStart.HasValue || _Descriptor.BillingPeriodEnd.HasValue)
             {
-                _Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                 if (_Descriptor.BillingPeriodStart.HasValue)
                 {
                     _Writer.WriteStartElement("ram", "StartDateTime");
@@ -984,7 +984,7 @@ namespace s2industries.ZUGFeRD
             //  17. InvoiceReferencedDocument (optional)
             foreach (InvoiceReferencedDocument invoiceReferencedDocument in this._Descriptor.GetInvoiceReferencedDocuments())
             {
-                _Writer.WriteStartElement("ram", "InvoiceReferencedDocument", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteStartElement("ram", "InvoiceReferencedDocument", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                 _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", invoiceReferencedDocument.ID);
                 if (invoiceReferencedDocument.IssueDateTime.HasValue)
                 {

@@ -1435,7 +1435,13 @@ namespace s2industries.ZUGFeRD
         /// Register of legal persons (in French : Répertoire des personnes morales)
         /// </summary>
         [EnumStringValue("0240")]
-        RegisterOfLegalPersons
+        RegisterOfLegalPersons,
+
+        /// <summary>
+        /// HR invoice identifier
+        /// </summary>
+        [EnumStringValue("9934")]
+        HREInvoiceIdentifier
     }
 
 }

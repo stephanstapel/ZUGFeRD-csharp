@@ -49,13 +49,13 @@ namespace s2industries.ZUGFeRD
             {
                 writer = new InvoiceDescriptor23CIIWriter();
             }
-            else if ((format == ZUGFeRDFormats.UBL) && (descriptor.Profile == Profile.XRechnung))
+            else if ((format == ZUGFeRDFormats.UBL) && (new Profile[] { Profile.XRechnung, Profile.HRInvoice }.Contains(descriptor.Profile)))
             {
                 writer = new InvoiceDescriptor22UBLWriter();
             }
 
             if (writer == null)
-            {                
+            {
                 throw new UnsupportedException($"Profile {descriptor.Profile.ToString()} and format {format.EnumToString()} is not supported.");
             }
 
@@ -80,7 +80,7 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
-            if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.XRechnung1))
+            if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.XRechnung1) || (descriptor.Profile == Profile.HRInvoice))
             {
                 if (descriptor.Seller != null)
                 {

@@ -29,7 +29,7 @@ namespace s2industries.ZUGFeRD
     {
         private ProfileAwareXmlTextWriter _Writer;
         private InvoiceDescriptor _Descriptor;
-        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
+        private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice;
 
 
         public InvoiceDescriptor1Writer()
@@ -648,7 +648,7 @@ namespace s2industries.ZUGFeRD
 
                 if (tradeLineItem.BillingPeriodStart.HasValue && tradeLineItem.BillingPeriodEnd.HasValue)
                 {
-                    _Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _Writer.WriteStartElement("ram", "BillingSpecifiedPeriod", Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
 
                     _Writer.WriteStartElement("ram", "StartDateTime");
                     _writeElementWithAttribute(_Writer, "udt", "DateTimeString", "format", "102", _formatDate(tradeLineItem.BillingPeriodStart.Value));

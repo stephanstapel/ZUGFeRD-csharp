@@ -33,7 +33,7 @@ namespace s2industries.ZUGFeRD
 
 
         private readonly Profile PROFILE_COMFORT_EXTENDED_XRECHNUNG = Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
-        private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung;
+        private readonly Profile ALL_PROFILES = Profile.Minimum | Profile.BasicWL | Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice;
 
 
 
@@ -150,7 +150,7 @@ namespace s2industries.ZUGFeRD
                 //Gruppierung von allgemeinen Positionsangaben
                 if (tradeLineItem.AssociatedDocument != null)
                 {
-                    _Writer.WriteStartElement("ram", "AssociatedDocumentLineDocument", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _Writer.WriteStartElement("ram", "AssociatedDocumentLineDocument", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                     // Kennung der Rechnungsposition, BT-126
                     if (!String.IsNullOrWhiteSpace(tradeLineItem.AssociatedDocument.LineID))
                     {
@@ -188,10 +188,10 @@ namespace s2industries.ZUGFeRD
 
                 #region SpecifiedTradeProduct
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über die in Rechnung gestellten Waren und Dienstleistungen enthält
-                _Writer.WriteStartElement("ram", "SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteStartElement("ram", "SpecifiedTradeProduct", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                 if ((tradeLineItem.GlobalID != null) && (tradeLineItem.GlobalID.SchemeID.HasValue) && !String.IsNullOrWhiteSpace(tradeLineItem.GlobalID.ID))
                 {
-                    _writeElementWithAttributeWithPrefix(_Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _writeElementWithAttributeWithPrefix(_Writer, "ram", "GlobalID", "schemeID", tradeLineItem.GlobalID.SchemeID.Value.EnumToString(), tradeLineItem.GlobalID.ID, Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                 }
 
                 _Writer.WriteOptionalElementString("ram", "SellerAssignedID", tradeLineItem.SellerAssignedID, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
@@ -201,7 +201,7 @@ namespace s2industries.ZUGFeRD
 
                 // BT-153
                 _Writer.WriteOptionalElementString("ram", "Name", tradeLineItem.Name, Profile.Basic | Profile.Comfort | Profile.Extended);
-                _Writer.WriteOptionalElementString("ram", "Name", isCommentItem ? "TEXT" : tradeLineItem.Name, Profile.XRechnung1 | Profile.XRechnung); // XRechnung erfordert einen Item-Namen (BR-25)
+                _Writer.WriteOptionalElementString("ram", "Name", isCommentItem ? "TEXT" : tradeLineItem.Name, Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice); // XRechnung erfordert einen Item-Namen (BR-25)
 
                 _Writer.WriteOptionalElementString("ram", "Description", tradeLineItem.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG);
 
@@ -286,9 +286,9 @@ namespace s2industries.ZUGFeRD
                 #region SpecifiedLineTradeAgreement (Basic, Comfort, Extended, XRechnung)
                 //Eine Gruppe von betriebswirtschaftlichen Begriffen, die Informationen über den Preis für die in der betreffenden Rechnungsposition in Rechnung gestellten Waren und Dienstleistungen enthält
 
-                if (descriptor.Profile.In(Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung, Profile.XRechnung1))
+                if (descriptor.Profile.In(Profile.Basic, Profile.Comfort, Profile.Extended, Profile.XRechnung, Profile.XRechnung1, Profile.HRInvoice))
                 {
-                    _Writer.WriteStartElement("ram", "SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _Writer.WriteStartElement("ram", "SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
 
                     #region BuyerOrderReferencedDocument (Comfort, Extended, XRechnung)
                     // Detailangaben zur zugehörigen Bestellung
@@ -360,7 +360,7 @@ namespace s2industries.ZUGFeRD
                     bool hasGrossUnitPrice = tradeLineItem.GrossUnitPrice.HasValue;
                     bool hasAllowanceCharges = tradeLineItem.GetTradeAllowanceCharges().Count > 0;
 
-                    if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.XRechnung1) || (descriptor.Profile == Profile.Comfort))
+                    if ((descriptor.Profile == Profile.XRechnung) || (descriptor.Profile == Profile.HRInvoice) || (descriptor.Profile == Profile.XRechnung1) || (descriptor.Profile == Profile.Comfort))
                     {
                         // PEPPOL-EN16931-R046: For XRechnung, both must be present
                         needToWriteGrossUnitPrice = hasGrossUnitPrice && hasAllowanceCharges;
@@ -392,7 +392,7 @@ namespace s2industries.ZUGFeRD
                     #region NetPriceProductTradePrice
                     //Im Nettopreis sind alle Zu- und Abschläge enthalten, jedoch nicht die Umsatzsteuer.
                     _WriteComment(_Writer, options, InvoiceCommentConstants.NetPriceProductTradePriceComment);
-                    _Writer.WriteStartElement("ram", "NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                    _Writer.WriteStartElement("ram", "NetPriceProductTradePrice", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                     _writeOptionalAdaptiveAmount(_Writer, "ram", "ChargeAmount", tradeLineItem.NetUnitPrice, 2, 4); // BT-146
 
                     if (tradeLineItem.NetQuantity.HasValue)
@@ -410,7 +410,7 @@ namespace s2industries.ZUGFeRD
                 #endregion
 
                 #region SpecifiedLineTradeDelivery (Basic, Comfort, Extended)
-                _Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteStartElement("ram", "SpecifiedLineTradeDelivery", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                 _writeElementWithAttributeWithPrefix(_Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
                 if (tradeLineItem.ChargeFreeQuantity.HasValue)
                 {
@@ -467,10 +467,10 @@ namespace s2industries.ZUGFeRD
                 #endregion
 
                 #region SpecifiedLineTradeSettlement
-                _Writer.WriteStartElement("ram", "SpecifiedLineTradeSettlement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteStartElement("ram", "SpecifiedLineTradeSettlement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
 
                 #region ApplicableTradeTax
-                _Writer.WriteStartElement("ram", "ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung); // BG-30
+                _Writer.WriteStartElement("ram", "ApplicableTradeTax", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice); // BG-30
 
                 if (tradeLineItem.TaxType.HasValue)
                 {
@@ -552,7 +552,7 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                _Writer.WriteStartElement("ram", "LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteStartElement("ram", "LineTotalAmount", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
                 _Writer.WriteValue(_formatDecimal(total));
                 _Writer.WriteEndElement(); // !ram:LineTotalAmount
 
@@ -709,7 +709,7 @@ namespace s2industries.ZUGFeRD
                 _Writer.WriteElementString("ram", "IssuerAssignedID", this._Descriptor.ContractReferencedDocument.ID);
                 if (this._Descriptor.ContractReferencedDocument.IssueDateTime.HasValue)
                 {
-                    _Writer.WriteStartElement("ram", "FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                    _Writer.WriteStartElement("ram", "FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice));
                     _Writer.WriteStartElement("qdt", "DateTimeString");
                     _Writer.WriteAttributeString("format", "102");
                     _Writer.WriteValue(_formatDate(this._Descriptor.ContractReferencedDocument.IssueDateTime.Value));
@@ -761,7 +761,7 @@ namespace s2industries.ZUGFeRD
             }
 
             _writeOptionalParty(_Writer, PartyTypes.ShipToTradeParty, this._Descriptor.ShipTo, ALL_PROFILES ^ Profile.Minimum, this._Descriptor.ShipToContact, default, this._Descriptor.GetShipToTaxRegistration());
-            _writeOptionalParty(_Writer, PartyTypes.UltimateShipToTradeParty, this._Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung, this._Descriptor.UltimateShipToContact);
+            _writeOptionalParty(_Writer, PartyTypes.UltimateShipToTradeParty, this._Descriptor.UltimateShipTo, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice, this._Descriptor.UltimateShipToContact);
             _writeOptionalParty(_Writer, PartyTypes.ShipFromTradeParty, this._Descriptor.ShipFrom, Profile.Extended);
 
             #region ActualDeliverySupplyChainEvent
@@ -808,7 +808,7 @@ namespace s2industries.ZUGFeRD
 
                 if (this._Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.HasValue)
                 {
-                    _Writer.WriteStartElement("ram", "FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                    _Writer.WriteStartElement("ram", "FormattedIssueDateTime", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice));
                     _Writer.WriteStartElement("qdt", "DateTimeString");
                     _Writer.WriteAttributeString("format", "102");
                     _Writer.WriteValue(_formatDate(this._Descriptor.DeliveryNoteReferencedDocument.IssueDateTime.Value));
@@ -861,7 +861,7 @@ namespace s2industries.ZUGFeRD
             //   BT-6
             if (this._Descriptor.TaxCurrency.HasValue)
             {
-                _Writer.WriteElementString("ram", "TaxCurrencyCode", this._Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                _Writer.WriteElementString("ram", "TaxCurrencyCode", this._Descriptor.TaxCurrency.Value.EnumToString(), profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);
             }
 
             //   4. InvoiceCurrencyCode (optional), BT-5
@@ -1000,7 +1000,7 @@ namespace s2industries.ZUGFeRD
             //  14. SpecifiedLogisticsServiceCharge (optional)
             foreach (ServiceCharge serviceCharge in this._Descriptor.GetLogisticsServiceCharges())
             {
-                _Writer.WriteStartElement("ram", "SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung));
+                _Writer.WriteStartElement("ram", "SpecifiedLogisticsServiceCharge", ALL_PROFILES ^ (Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice));
                 _Writer.WriteOptionalElementString("ram", "Description", serviceCharge.Description);
                 _Writer.WriteElementString("ram", "AppliedAmount", _formatDecimal(serviceCharge.Amount));
                 if (serviceCharge.Tax != null)
@@ -1193,7 +1193,7 @@ namespace s2industries.ZUGFeRD
                 _writeOptionalAmount(_Writer, "ram", "TaxBasisTotalAmount", this._Descriptor.TaxBasisAmount);   // Rechnungsgesamtbetrag ohne Umsatzsteuer
             }
             _writeOptionalAmount(_Writer, "ram", "TaxTotalAmount", this._Descriptor.TaxTotalAmount, forceCurrency: true);               // Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
-            _writeOptionalAmount(_Writer, "ram", "RoundingAmount", this._Descriptor.RoundingAmount, profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);  // RoundingAmount  //Rundungsbetrag
+            _writeOptionalAmount(_Writer, "ram", "RoundingAmount", this._Descriptor.RoundingAmount, profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung | Profile.HRInvoice);  // RoundingAmount  //Rundungsbetrag
             _writeOptionalAmount(_Writer, "ram", "GrandTotalAmount", this._Descriptor.GrandTotalAmount);                                // Rechnungsgesamtbetrag einschließlich Umsatzsteuer
             _writeOptionalAmount(_Writer, "ram", "TotalPrepaidAmount", this._Descriptor.TotalPrepaidAmount);                            // Vorauszahlungsbetrag
             _writeOptionalAmount(_Writer, "ram", "DuePayableAmount", this._Descriptor.DuePayableAmount);                                // Fälliger Zahlungsbetrag
@@ -1455,7 +1455,7 @@ namespace s2industries.ZUGFeRD
             {
                 case "BT-18-00":
                 case "BG-24":
-                    subProfile = Profile.Comfort | Profile.Extended | Profile.XRechnung;
+                    subProfile = Profile.Comfort | Profile.Extended | Profile.XRechnung | Profile.HRInvoice;
                     break;
                 case "BG-X-3":
                     subProfile = Profile.Extended;
@@ -1730,7 +1730,7 @@ namespace s2industries.ZUGFeRD
             // filter according to https://github.com/stephanstapel/ZUGFeRD-csharp/pull/221
             if ((this._Descriptor.Profile == Profile.Extended) ||
                 ((partyType == PartyTypes.SellerTradeParty) && (this._Descriptor.Profile != Profile.Minimum)) ||
-                ((partyType == PartyTypes.BuyerTradeParty) && this._Descriptor.Profile.In(Profile.Comfort, Profile.XRechnung1, Profile.XRechnung, Profile.Extended)))
+                ((partyType == PartyTypes.BuyerTradeParty) && this._Descriptor.Profile.In(Profile.Comfort, Profile.XRechnung1, Profile.XRechnung, Profile.Extended, Profile.HRInvoice)))
             {
                 writer.WriteOptionalElementString("ram", "TradingBusinessName", legalOrganization.TradingBusinessName, this._Descriptor.Profile);
             }
