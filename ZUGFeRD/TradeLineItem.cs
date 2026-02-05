@@ -359,7 +359,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="reason">Reason for the allowance </param>
         /// <param name="reasonCode">Reason code for the allowance</param>
         public TradeLineItem AddTradeAllowance(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
-                                               string reason, AllowanceReasonCodes? reasonCode = null)
+                                               string reason, AllowanceReasonCodes? reasonCode = null, decimal? multiplierFactor = null)
         {
             this.TradeAllowanceCharges.Add(new TradeAllowance()
             {
@@ -367,7 +367,8 @@ namespace s2industries.ZUGFeRD
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
                 Reason = reason,
-                ReasonCode = reasonCode
+                ReasonCode = reasonCode,
+                MultiplierFactor = multiplierFactor
             });
             return this;
         } // !AddTradeAllowance()
@@ -384,7 +385,7 @@ namespace s2industries.ZUGFeRD
         /// <param name="reason">Reason for the surcharge</param>
         /// <param name="reasonCode">Optional reason code for the surcharge</param>
         public TradeLineItem AddTradeCharge(CurrencyCodes currency, decimal? basisAmount, decimal actualAmount,
-                                            string reason, ChargeReasonCodes? reasonCode = null)
+                                            string reason, ChargeReasonCodes? reasonCode = null, decimal? multiplierFactor = null)
         {
             this.TradeAllowanceCharges.Add(new TradeCharge()
             {
@@ -392,7 +393,8 @@ namespace s2industries.ZUGFeRD
                 ActualAmount = actualAmount,
                 BasisAmount = basisAmount,
                 Reason = reason,
-                ReasonCode = reasonCode
+                ReasonCode = reasonCode,
+                MultiplierFactor = multiplierFactor
             });
             return this;
         } // !AddTradeAllowanceCharge()        

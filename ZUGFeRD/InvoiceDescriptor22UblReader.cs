@@ -674,6 +674,7 @@ namespace s2industries.ZUGFeRD
                 string actualAmountCurrency = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:Amount/@currencyID", nsmgr);
                 string reason = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:AllowanceChargeReason", nsmgr);
                 string reasonCode = XmlUtils.NodeAsString(appliedTradeAllowanceChargeNode, "./cbc:AllowanceChargeReasonCode", nsmgr);
+                decimal? multiplierFactor = XmlUtils.NodeAsDecimal(appliedTradeAllowanceChargeNode, "./cbc:MultiplierFactorNumeric", nsmgr);                
 
                 if (chargeIndicator) // charge
                 {
@@ -681,7 +682,8 @@ namespace s2industries.ZUGFeRD
                                         basisAmount,
                                         actualAmount,
                                         reason,
-                                        EnumExtensions.StringToEnum<ChargeReasonCodes>(reasonCode));
+                                        EnumExtensions.StringToEnum<ChargeReasonCodes>(reasonCode),
+                                        multiplierFactor);
                 }
                 else // allowance
                 {
@@ -689,7 +691,8 @@ namespace s2industries.ZUGFeRD
                                            basisAmount,
                                            actualAmount,
                                            reason,
-                                           EnumExtensions.StringToEnum<AllowanceReasonCodes>(reasonCode));
+                                           EnumExtensions.StringToEnum<AllowanceReasonCodes>(reasonCode),
+                                           multiplierFactor);
                 }
             }
 
