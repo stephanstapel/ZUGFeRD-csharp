@@ -43,7 +43,7 @@ namespace s2industries.ZUGFeRD
 
             this._Descriptor = descriptor;
             this._Writer = new ProfileAwareXmlTextWriter(stream, descriptor.Profile, options?.AutomaticallyCleanInvalidCharacters ?? false);
-            bool isInvoice = _IsInvoiceAccordingToUBLSpecification(this._Descriptor.Type);
+            bool isInvoice = this._Descriptor.Profile == Profile.HRInvoice || _IsInvoiceAccordingToUBLSpecification(this._Descriptor.Type);
 
             Dictionary<string, string> namespaces = new Dictionary<string, string>()
             {
@@ -106,7 +106,13 @@ namespace s2industries.ZUGFeRD
 
 
             _Writer.WriteElementString("cbc", "CustomizationID", ProfileExtensions.EnumToString(descriptor.Profile, ZUGFeRDVersion.Version23));
-            _Writer.WriteElementString("cbc", "ProfileID", descriptor.Profile != Profile.HRInvoice ? "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0" : QuantityCodes.P1.ToString());
+
+            string strProfileID = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
+            if(descriptor.Profile == Profile.HRInvoice)
+            {
+                strProfileID = EnumExtensions.EnumToString<BusinessProcessType>(descriptor.BusinessProcessType);
+            }
+            _Writer.WriteElementString("cbc", "ProfileID", strProfileID);
 
             _Writer.WriteElementString("cbc", "ID", this._Descriptor.InvoiceNo); //Rechnungsnummer
             _Writer.WriteElementString("cbc", "IssueDate", _formatDate(this._Descriptor.InvoiceDate.Value, false, true));
