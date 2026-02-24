@@ -1077,11 +1077,8 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteEndElement(); // !CompanyID
                     }
 
-                    if (!String.IsNullOrWhiteSpace(party.Description))
-                    {
-                        //Party additional legal information (BT-33)
-                        _Writer.WriteElementString("cbc", "CompanyLegalForm", party.Description);
-                    }
+                    //Party additional legal information (BT-33)
+                    _Writer.WriteOptionalElementString("cbc", "CompanyLegalForm", party.Description);
 
                     writer.WriteEndElement(); //!PartyLegalEntity
                 }
