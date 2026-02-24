@@ -554,6 +554,8 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteElementString("udt", "Indicator", tradeAllowanceCharge.ChargeIndicator ? "true" : "false");
                         _Writer.WriteEndElement(); // !ram:ChargeIndicator
 
+                        _writeOptionalAmount(_Writer, "ram", "CalculationPercent", tradeAllowanceCharge.ChargePercentage);
+
                         if (tradeAllowanceCharge.BasisAmount.HasValue)
                         {
                             _Writer.WriteStartElement("ram", "BasisAmount", Profile.Extended);
