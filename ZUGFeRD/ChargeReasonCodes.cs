@@ -559,6 +559,10 @@ namespace s2industries.ZUGFeRD
         [EnumStringValue("IF")]
         Inspection,
 
+        // Charge for insurance.
+        [EnumStringValue("IN")]
+        Insurance,
+
         /// Installation and training
         [EnumStringValue("IR")]
         InstallationAndTraining,
