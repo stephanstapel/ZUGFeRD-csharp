@@ -376,10 +376,9 @@ namespace s2industries.ZUGFeRD.Test
             ms.Seek(0, SeekOrigin.Begin);
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.AreEqual(loadedInvoice.Invoicee, null);
-            Assert.AreNotEqual(loadedInvoice.Seller, null);
-            Assert.AreNotEqual(loadedInvoice.Seller.SpecifiedLegalOrganization, null);
-            Assert.AreEqual(loadedInvoice.Seller.SpecifiedLegalOrganization.TradingBusinessName, String.Empty);
+            Assert.IsNull(loadedInvoice.Invoicee);
+            Assert.IsNotNull(loadedInvoice.Seller);
+            Assert.IsNull(loadedInvoice.Seller.SpecifiedLegalOrganization);
         } // !TestMinimumInvoice()
 
 
@@ -1565,8 +1564,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.IsNotNull(loadedInvoice.TradeLineItems);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+            Assert.IsEmpty(loadedInvoice.TradeLineItems);
 
             // test basic
             ms = new MemoryStream();
@@ -1650,6 +1648,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual("DE987654321", loadedInvoice.GetInvoiceeTaxRegistration().First().No);
         }
 
+
         [TestMethod]
         public void TestUltimateShipToTradePartyOnItemLevel()
         {
@@ -1667,8 +1666,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             Assert.IsNotNull(loadedInvoice.TradeLineItems);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+            Assert.IsEmpty(loadedInvoice.TradeLineItems);
 
             // test basic
             ms = new MemoryStream();
@@ -2547,7 +2545,7 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
-        public void TestSpecifiedTradeAllowanceChargeNotWrittenInMinimum()
+        public void TestTradeLineItemsNotWrittenInMinimum()
         {
             InvoiceDescriptor invoice = _InvoiceProvider.CreateInvoice();
 
@@ -2558,8 +2556,8 @@ namespace s2industries.ZUGFeRD.Test
             ms.Position = 0;
 
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-            Assert.IsEmpty(loadedInvoice.TradeLineItems[0].GetSpecifiedTradeAllowances());
-            Assert.IsEmpty(loadedInvoice.TradeLineItems[0].GetSpecifiedTradeCharges());
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+            Assert.IsEmpty(loadedInvoice.TradeLineItems);
         } // !TestSpecifiedTradeAllowanceChargeNotWrittenInMinimum()
 
 

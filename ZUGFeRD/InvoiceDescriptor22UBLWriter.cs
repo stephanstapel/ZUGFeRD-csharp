@@ -90,7 +90,11 @@ namespace s2industries.ZUGFeRD
             _Writer.WriteElementString("cbc", "ProfileID", "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0");
 
             _Writer.WriteElementString("cbc", "ID", this._Descriptor.InvoiceNo); //Rechnungsnummer
-            _Writer.WriteElementString("cbc", "IssueDate", _formatDate(this._Descriptor.InvoiceDate.Value, false, true));
+
+            if (this._Descriptor.InvoiceDate.HasValue)
+            {
+                _Writer.WriteElementString("cbc", "IssueDate", _formatDate(this._Descriptor.InvoiceDate.Value, false, true));
+            }
 
 
             if (isInvoice)

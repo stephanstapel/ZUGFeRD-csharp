@@ -17,6 +17,8 @@
  * under the License.
  */
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace s2industries.ZUGFeRD.Test
 {
@@ -1127,5 +1129,63 @@ namespace s2industries.ZUGFeRD.Test
                 Assert.AreEqual(billingPeriodEnd, item.BillingPeriodEnd);
             }
         } // !TestBillingPeriodOnItemLevel()
+
+
+
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestAvoidEmptyElementsWithDemoInvoice(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceDescriptor desc = new InvoiceProvider().CreateInvoice();
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format);
+            ms.Position = 0;
+
+            // convert memory stream to string
+            string xmlContent = Encoding.UTF8.GetString(ms.ToArray());;
+
+            // load dom, find any empty elements (elements without child nodes and without value) and fail if any is found
+            var doc = XDocument.Parse(xmlContent, LoadOptions.SetLineInfo);
+            var emptyElements = doc.Descendants()
+                .Where(e => !e.Nodes().Any() && !e.Attributes().Any())
+                .ToList();
+            Assert.AreEqual(0, emptyElements.Count, $"Found empty elements in the XML: {string.Join("\r\n* ", emptyElements.Select(e => $"{e.Name.LocalName} (line {((IXmlLineInfo)e).LineNumber})"))}");
+        } // !TestAvoidEmptyElementsWithDemoInvoice()
+
+
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung)]
+        public void TestAvoidEmptyElementsWithMinimalInvoice(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile)
+        {
+            InvoiceDescriptor desc = new InvoiceDescriptor();
+            desc.Name = "Test";
+            desc.InvoiceNo = "R0001";
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format);
+            ms.Position = 0;
+
+            // convert memory stream to string
+            string xmlContent = Encoding.UTF8.GetString(ms.ToArray());
+
+            // load dom, find any empty elements (elements without child nodes and without value) and fail if any is found
+            var doc = XDocument.Parse(xmlContent, LoadOptions.SetLineInfo);
+            var emptyElements = doc.Descendants()
+                .Where(e => !e.Nodes().Any() && !e.Attributes().Any())
+                .ToList();
+            Assert.AreEqual(0, emptyElements.Count, $"Found empty elements in the XML: {string.Join("\r\n* ", emptyElements.Select(e => $"{e.Name.LocalName} (line {((IXmlLineInfo)e).LineNumber})"))}");
+        } // !TestAvoidEmptyElementsWithMinimalInvoice()
     }
 }

@@ -748,7 +748,7 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
-            _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery"); // Pflichteintrag
+            _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery");
 
             //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
             if (this._Descriptor.TransportMode != null)

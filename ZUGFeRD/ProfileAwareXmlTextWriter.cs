@@ -31,8 +31,102 @@ namespace s2industries.ZUGFeRD
     {
         public Profile Profile;
         public bool IsVisible;
+        public string Prefix;
+        public string LocalName;
+        public bool IsWritten;
     }
 
+    /// <summary>
+    /// Profilgesteuerter XML-Writer, der einen <see cref="XmlWriter"/> kapselt und zwei
+    /// zentrale Verhaltensweisen hinzufügt:
+    ///
+    /// <para><strong>1. Profilfilterung:</strong><br/>
+    /// Jedes XML-Element und -Attribut kann mit einem <see cref="Profile"/> verknüpft werden.
+    /// Elemente, deren Profil nicht zum <c>CurrentProfile</c> des Writers passt, werden
+    /// stillschweigend unterdrückt – einschließlich aller Kindelemente. Dadurch kann ein
+    /// einziger Codepfad XML für verschiedene ZUGFeRD-/XRechnungs-Profile erzeugen.</para>
+    ///
+    /// <para><strong>2. Unterdrückung leerer Elemente (verzögertes Schreiben):</strong><br/>
+    /// Start-Elemente werden <em>nicht</em> sofort in den zugrundeliegenden
+    /// <see cref="XmlWriter"/> geschrieben. Stattdessen speichert
+    /// <see cref="WriteStartElement"/> die Element-Informationen (Prefix, lokaler Name,
+    /// Profil, Sichtbarkeit) lediglich auf einem internen Stack.
+    /// Das eigentliche Start-Tag wird erst dann in die Ausgabe geschrieben, wenn
+    /// konkreter Inhalt innerhalb des Elements geschrieben wird – d.h. wenn eine der
+    /// folgenden Methoden aufgerufen wird:
+    /// <list type="bullet">
+    ///   <item><see cref="WriteElementString(string, string, string, string, Profile)"/></item>
+    ///   <item><see cref="WriteAttributeString(string, string, string, Profile)"/></item>
+    ///   <item><see cref="WriteValue"/></item>
+    ///   <item><see cref="WriteComment"/></item>
+    ///   <item><see cref="WriteRawString"/></item>
+    ///   <item><see cref="WriteRawIndention"/></item>
+    /// </list>
+    /// Wird <see cref="WriteEndElement"/> erreicht, ohne dass Inhalt geschrieben wurde,
+    /// werden weder Start- noch End-Tag ausgegeben – das leere Element wird damit
+    /// vollständig aus der Ausgabe entfernt.</para>
+    ///
+    /// <para><strong>Interne Funktionsweise:</strong><br/>
+    /// <see cref="StackInfo.IsWritten"/> verfolgt, ob ein Start-Tag bereits geschrieben
+    /// ("geflusht") wurde. Vor dem Schreiben jeglichen Inhalts durchläuft die private
+    /// Methode <c>_FlushPendingStartElements()</c> den Stack von der Wurzel bis zum
+    /// aktuellen Element und schreibt alle ausstehenden (sichtbaren, noch nicht
+    /// geschriebenen) Start-Tags in Dokumentreihenfolge. Dadurch wird sichergestellt,
+    /// dass Elternelemente vor ihren Kindelementen geöffnet werden.</para>
+    ///
+    /// <para><strong>Beispiele:</strong></para>
+    ///
+    /// <para><em>Beispiel 1 – Leeres Element wird unterdrückt:</em></para>
+    /// <code>
+    /// writer.WriteStartElement("ram", "PartyName");
+    /// // kein Inhalt geschrieben
+    /// writer.WriteEndElement();
+    /// // Ergebnis: es wird nichts in die Ausgabe geschrieben
+    /// </code>
+    ///
+    /// <para><em>Beispiel 2 – Element mit Inhalt wird normal geschrieben:</em></para>
+    /// <code>
+    /// writer.WriteStartElement("ram", "PartyName");
+    ///   writer.WriteElementString("ram", "Name", "Lieferant GmbH");
+    /// writer.WriteEndElement();
+    /// // Ergebnis: &lt;ram:PartyName&gt;&lt;ram:Name&gt;Lieferant GmbH&lt;/ram:Name&gt;&lt;/ram:PartyName&gt;
+    /// </code>
+    ///
+    /// <para><em>Beispiel 3 – Verschachtelte leere Elemente werden alle unterdrückt:</em></para>
+    /// <code>
+    /// writer.WriteStartElement("ram", "SellerTradeParty");
+    ///   writer.WriteStartElement("ram", "PostalTradeAddress");
+    ///     // kein Inhalt
+    ///   writer.WriteEndElement();
+    /// writer.WriteEndElement();
+    /// // Ergebnis: nichts wird geschrieben – beide Elemente werden unterdrückt,
+    /// //           da keines von ihnen Inhalt hat
+    /// </code>
+    ///
+    /// <para><em>Beispiel 4 – Verschachtelte Elemente, bei denen nur das innere Inhalt hat:</em></para>
+    /// <code>
+    /// writer.WriteStartElement("ram", "SellerTradeParty");
+    ///   writer.WriteStartElement("ram", "PostalTradeAddress");
+    ///     writer.WriteElementString("ram", "CityName", "Berlin");
+    ///   writer.WriteEndElement();
+    /// writer.WriteEndElement();
+    /// // Ergebnis: beide Elemente werden geschrieben, weil das innere Element Inhalt hat.
+    /// //           Das löst das Flushen aller Vorfahren-Start-Tags aus:
+    /// // &lt;ram:SellerTradeParty&gt;
+    /// //   &lt;ram:PostalTradeAddress&gt;
+    /// //     &lt;ram:CityName&gt;Berlin&lt;/ram:CityName&gt;
+    /// //   &lt;/ram:PostalTradeAddress&gt;
+    /// // &lt;/ram:SellerTradeParty&gt;
+    /// </code>
+    ///
+    /// <para><em>Beispiel 5 – Element nur mit Attribut wird geschrieben (Attribute zählen als Inhalt):</em></para>
+    /// <code>
+    /// writer.WriteStartElement("ram", "ID");
+    ///   writer.WriteAttributeString("schemeID", "0088");
+    /// writer.WriteEndElement();
+    /// // Ergebnis: &lt;ram:ID schemeID="0088" /&gt;
+    /// </code>
+    /// </summary>
     internal class ProfileAwareXmlTextWriter
     {
         private XmlWriter TextWriter;
@@ -90,40 +184,19 @@ namespace s2industries.ZUGFeRD
 
             if (!_IsNodeVisible() || !_DoesProfileFitToCurrentProfile(safeProfile))
             {
-                this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = false });
+                this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = false, Prefix = prefix, LocalName = localName });
                 return;
             }
             else
             {
-                this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = true });
-            }
-
-            if (this.TextWriter == null)
-            {
-                return;
-            }
-
-            string ns = Namespaces.ContainsKey(prefix) ? Namespaces[prefix] : null;
-
-            // write value
-            if (!String.IsNullOrWhiteSpace(prefix))
-            {
-                this.TextWriter.WriteStartElement(prefix, localName, ns);
-            }
-            else if (!String.IsNullOrWhiteSpace(ns))
-            {
-                this.TextWriter.WriteStartElement(localName, ns);
-            }
-            else
-            {
-                this.TextWriter.WriteStartElement(localName);
+                this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = true, Prefix = prefix, LocalName = localName });
             }
         } // !WriteStartElement()
 
         public void WriteEndElement()
         {
             StackInfo infoForCurrentXmlLevel = this.XmlStack.Pop();
-            if (_DoesProfileFitToCurrentProfile(infoForCurrentXmlLevel.Profile) && _IsNodeVisible())
+            if (infoForCurrentXmlLevel.IsWritten)
             {
                 if (_NeedToIndentEndElement)
                 {
@@ -182,6 +255,8 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
+            _FlushPendingStartElements();
+
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
             {
@@ -229,6 +304,8 @@ namespace s2industries.ZUGFeRD
                 }
             }
 
+            _FlushPendingStartElements();
+
             // write value
             if (!String.IsNullOrWhiteSpace(prefix))
             {
@@ -260,6 +337,8 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
+            _FlushPendingStartElements();
+
             // write value
             this.TextWriter?.WriteValue(value);
         } // !WriteAttributeString()
@@ -283,6 +362,8 @@ namespace s2industries.ZUGFeRD
             {
                 return;
             }
+
+            _FlushPendingStartElements();
 
             // write value
             this.TextWriter?.WriteComment(comment);
@@ -308,6 +389,7 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
+            _FlushPendingStartElements();
             _NeedToIndentEndElement = true;
 
             // write value
@@ -330,6 +412,7 @@ namespace s2industries.ZUGFeRD
                 return;
             }
 
+            _FlushPendingStartElements();
             _NeedToIndentEndElement = true;
 
             // write value
@@ -339,7 +422,51 @@ namespace s2industries.ZUGFeRD
             }
         } // !WriteRawIndention()
 
+
         #region Stack Management
+        private void _FlushPendingStartElements()
+        {
+            if (this.TextWriter == null)
+            {
+                return;
+            }
+
+            var items = this.XmlStack.ToArray();
+            // items[0] = top (current), items[Length-1] = bottom (root)
+            // iterate from root to current so start elements are written in document order
+            for (int i = items.Length - 1; i >= 0; i--)
+            {
+                var info = items[i];
+                if (!info.IsVisible)
+                {
+                    return;
+                }
+
+                if (info.IsWritten)
+                {
+                    continue;
+                }
+
+                string ns = Namespaces.ContainsKey(info.Prefix) ? Namespaces[info.Prefix] : null;
+
+                if (!String.IsNullOrWhiteSpace(info.Prefix))
+                {
+                    this.TextWriter.WriteStartElement(info.Prefix, info.LocalName, ns);
+                }
+                else if (!String.IsNullOrWhiteSpace(ns))
+                {
+                    this.TextWriter.WriteStartElement(info.LocalName, ns);
+                }
+                else
+                {
+                    this.TextWriter.WriteStartElement(info.LocalName);
+                }
+
+                info.IsWritten = true;
+            }
+        } // !_FlushPendingStartElements()
+
+
         private bool _DoesProfileFitToCurrentProfile(Profile profile)
         {
             if (profile != Profile.Unknown)
