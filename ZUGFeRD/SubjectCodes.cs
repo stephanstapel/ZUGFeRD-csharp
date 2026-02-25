@@ -171,6 +171,21 @@ namespace s2industries.ZUGFeRD
         ///
         /// Grund der Steuerbefreiung
         /// </summary>
-        TXD
+        TXD,
+
+        /// <summary>
+        /// Warehouse instruction/information
+        ///
+        /// Note contains warehouse information.
+        /// </summary>
+        WHI,
+
+        /// <summary>
+        /// Mutually defined
+        ///
+        /// Note contains information mutually defined by trading partners.
+        /// </summary>
+        ZZZ
+
     }
 }
