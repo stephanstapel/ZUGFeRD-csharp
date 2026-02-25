@@ -70,6 +70,11 @@ namespace s2industries.ZUGFeRD
         XRechnung = 32,
 
         /// <summary>
+        /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770)
+        /// </summary>
+        HRInvoice = 35,
+
+        /// <summary>
         /// Invoice format based on EU Directive 2014/55/EU, adopted to Germany in E-Invoice Law of April 4, 2017 (BGBl. I p. 770).
         /// Important note: using this profile will generate a version 1 XRechnung (as valid until 31/12/2020)
         /// </summary>
@@ -87,7 +92,7 @@ namespace s2industries.ZUGFeRD
 
     public static class ProfileExtensions
     {
-        internal static Profile FromString(this Profile _, string s)
+        public static Profile FromString(this Profile _, string s)
         {
             var profileMap = new Dictionary<string, Profile>(StringComparer.OrdinalIgnoreCase)
             {
@@ -121,6 +126,7 @@ namespace s2industries.ZUGFeRD
                 { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2", Profile.XRechnung },
                 { "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3", Profile.XRechnung },
                 { "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0", Profile.XRechnung },
+                { "urn:cen.eu:en16931:2017#compliant#urn:mfin.gov.hr:cius-2025:1.0#conformant#urn:mfin.gov.hr:ext-2025:1.0", Profile.HRInvoice },
                 { "urn.cpro.gouv.fr:1p0:ereporting", Profile.EReporting }
             };
 
@@ -135,7 +141,7 @@ namespace s2industries.ZUGFeRD
         } // !FromString()
 
 
-        internal static string EnumToString(this Profile profile, ZUGFeRDVersion version)
+        public static string EnumToString(this Profile profile, ZUGFeRDVersion version)
         {
             switch (version)
             {
@@ -178,6 +184,7 @@ namespace s2industries.ZUGFeRD
                                 }
                             }
                         case Profile.EReporting: return "urn.cpro.gouv.fr:1p0:ereporting";
+                        case Profile.HRInvoice: return "urn:cen.eu:en16931:2017#compliant#urn:mfin.gov.hr:cius-2025:1.0#conformant#urn:mfin.gov.hr:ext-2025:1.0";
                         default: throw new Exception("Unsupported profile for ZUGFeRD version 21");
                     }
                 default:

@@ -453,6 +453,12 @@ namespace s2industries.ZUGFeRD
         /// EN16931 interpretation: Invoice
         /// </summary>
         [EnumStringValue("877")]
-        FinalConstructionInvoice
+        FinalConstructionInvoice,
+
+        /// <summary>
+        /// Customs invoice 
+        /// </summary>
+        [EnumStringValue("935")]
+        CustomsInvoice
     }
 }

@@ -299,6 +299,11 @@ namespace s2industries.ZUGFeRD
         public Profile Profile { get; internal set; } = Profile.Basic;
 
         /// <summary>
+        /// HR invoice business process type
+        /// </summary>
+        public BusinessProcessType BusinessProcessType { get; set; } = BusinessProcessType.OrderBasedOnContract;
+
+        /// <summary>
         /// Document name (free text)
         /// </summary>
         public string Name { get; set; }

@@ -25,9 +25,9 @@ using System.Reflection;
 
 namespace s2industries.ZUGFeRD
 {
-    internal static class EnumExtensions
+    public static class EnumExtensions
     {
-        internal static string EnumToString<T>(this T value) where T : Enum
+        public static string EnumToString<T>(this T value) where T : Enum
         {
             if (typeof(T) == typeof(Profile))
             {
@@ -50,7 +50,7 @@ namespace s2industries.ZUGFeRD
         } // !EnumToString()
 
 
-        internal static string EnumToString<T>(this T? value) where T : struct, Enum
+        public static string EnumToString<T>(this T? value) where T : struct, Enum
         {
             if (typeof(T) == typeof(Profile))
             {
@@ -66,7 +66,7 @@ namespace s2industries.ZUGFeRD
         } // !EnumToString()
 
 
-        internal static T IntToEnum<T>(this int value) where T : Enum
+        public static T IntToEnum<T>(this int value) where T : Enum
         {
             if (Enum.IsDefined(typeof(T), value))
             {
@@ -78,7 +78,7 @@ namespace s2industries.ZUGFeRD
             }
         } // !IntToEnum()
 
-        internal static T StringToEnum<T>(this string value) where T : struct, Enum
+        public static T StringToEnum<T>(this string value) where T : struct, Enum
         {
             T? result = StringToNullableEnum<T>(value);
             if (result.HasValue)
@@ -92,7 +92,7 @@ namespace s2industries.ZUGFeRD
         } // !StringToEnum()
 
 
-        internal static T? StringToNullableEnum<T>(this string value) where T : struct, Enum
+        public static T? StringToNullableEnum<T>(this string value) where T : struct, Enum
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -125,45 +125,45 @@ namespace s2industries.ZUGFeRD
         } // !StringToNullableEnum()
 
 
-        internal static int EnumToInt<T>(this T value) where T : Enum
+        public static int EnumToInt<T>(this T value) where T : Enum
         {
             return (int)(object)value;
         } // !EnumToInt()
 
 
-/*
-        internal static string GetDescriptionAttribute<T>(this T value) where T : Enum
-        {
-            FieldInfo field = value.GetType().GetField(value.ToString());
-            if (field == null)
-            {
-                return null;
-            }
-            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
-            return attribute?.Description;
-        } // !GetDescriptionAttribute()
-
-
-        internal static T FromDescription<T>(string code) where T : Enum
-        {
-            if (string.IsNullOrEmpty(code))
-            {
-                return default;
-            }
-            foreach (T value in Enum.GetValues(typeof(T)))
-            {
-                var description = value.GetDescriptionAttribute();
-                if (description != null && description.Equals(code, StringComparison.OrdinalIgnoreCase))
+        /*
+                internal static string GetDescriptionAttribute<T>(this T value) where T : Enum
                 {
-                    return value;
-                }
-            }
-            return default;
-        } // !FromDescription()
-        */
+                    FieldInfo field = value.GetType().GetField(value.ToString());
+                    if (field == null)
+                    {
+                        return null;
+                    }
+                    DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
+                    return attribute?.Description;
+                } // !GetDescriptionAttribute()
 
 
-        internal static bool In<T>(this T? input, params T[] allowedValues) where T : struct, Enum
+                internal static T FromDescription<T>(string code) where T : Enum
+                {
+                    if (string.IsNullOrEmpty(code))
+                    {
+                        return default;
+                    }
+                    foreach (T value in Enum.GetValues(typeof(T)))
+                    {
+                        var description = value.GetDescriptionAttribute();
+                        if (description != null && description.Equals(code, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return value;
+                        }
+                    }
+                    return default;
+                } // !FromDescription()
+                */
+
+
+        public static bool In<T>(this T? input, params T[] allowedValues) where T : struct, Enum
         {
             if (input == null)
             {
