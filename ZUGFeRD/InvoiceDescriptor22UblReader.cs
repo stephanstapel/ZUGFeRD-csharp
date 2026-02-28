@@ -309,8 +309,8 @@ namespace s2industries.ZUGFeRD
 
             retval.PaymentMeans = tempPaymentMeans;
 
-            retval.BillingPeriodStart = XmlUtils.NodeAsDateTime(doc.DocumentElement, "/ubl:Invoice/cac:InvoicePeriod/cbc:StartDate", nsmgr); // do not find InvoicePeriod in <cac:InvoiceLine>
-            retval.BillingPeriodEnd = XmlUtils.NodeAsDateTime(doc.DocumentElement, "/ubl:Invoice/cac:InvoicePeriod/cbc:EndDate", nsmgr);
+            retval.BillingPeriodStart = XmlUtils.NodeAsDateTime(doc.DocumentElement, "/*[1]/cac:InvoicePeriod/cbc:StartDate", nsmgr); // do not find InvoicePeriod in <cac:InvoiceLine>
+            retval.BillingPeriodEnd = XmlUtils.NodeAsDateTime(doc.DocumentElement, "/*[1]/cac:InvoicePeriod/cbc:EndDate", nsmgr);
 
             XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//cac:PaymentMeans/cac:PayeeFinancialAccount", nsmgr);
             foreach (XmlNode node in creditorFinancialAccountNodes)
