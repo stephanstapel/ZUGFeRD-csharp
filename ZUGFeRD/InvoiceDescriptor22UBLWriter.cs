@@ -146,7 +146,7 @@ namespace s2industries.ZUGFeRD
 
             _Writer.WriteOptionalElementString("cbc", "BuyerReference", this._Descriptor.ReferenceOrderNo);
 
-            if (this._Descriptor.BillingPeriodEnd.HasValue || this._Descriptor.BillingPeriodEnd.HasValue)
+            if (this._Descriptor.BillingPeriodStart.HasValue || this._Descriptor.BillingPeriodEnd.HasValue)
             {
                 _Writer.WriteStartElement("cac", "InvoicePeriod");
 
