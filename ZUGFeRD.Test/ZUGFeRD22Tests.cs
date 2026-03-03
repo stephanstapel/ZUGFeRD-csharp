@@ -1650,6 +1650,32 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
+        public void TestBuyerFCTaxRegistrationFiltered()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            // CreateInvoice already adds Seller with FC + VA
+            // Add both FC + VA for Buyer as well
+            desc.AddBuyerTaxRegistration("99/999/99999", TaxRegistrationSchemeID.FC);
+            desc.AddBuyerTaxRegistration("DE987654321", TaxRegistrationSchemeID.VA);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Seller: both FC + VA written (Extended allows FC for Seller)
+            Assert.AreEqual(2, loadedInvoice.SellerTaxRegistration.Count,
+                "Seller should have 2 TaxRegistrations (FC + VA)");
+
+            // Buyer: only VA, FC was filtered out
+            Assert.AreEqual(1, loadedInvoice.BuyerTaxRegistration.Count,
+                "Buyer should have only 1 TaxRegistration (VA), FC is filtered");
+            Assert.AreEqual(TaxRegistrationSchemeID.VA, loadedInvoice.BuyerTaxRegistration.First().SchemeID);
+        }
+
+
+        [TestMethod]
         public void TestUltimateShipToTradePartyOnItemLevel()
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();

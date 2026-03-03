@@ -1850,6 +1850,13 @@ namespace s2industries.ZUGFeRD
                 // for buyer : BT-48
                 foreach (TaxRegistration taxRegistration in taxRegistrations.Where(tr => !String.IsNullOrWhiteSpace(tr.No)))
                 {
+                    // FC allowed only in Comfort and Extended profile for SellerTradeParty (and TODO: ItemSellerTradeParty)
+                    if (taxRegistration.SchemeID == TaxRegistrationSchemeID.FC
+                        && !(partyType == PartyTypes.SellerTradeParty && this._Descriptor.Profile.In(Profile.Extended, Profile.Comfort)))
+                    {
+                        continue;
+                    }
+
                     writer.WriteStartElement("ram", "SpecifiedTaxRegistration");
                     writer.WriteStartElement("ram", "ID");
                     writer.WriteAttributeString("schemeID", taxRegistration.SchemeID.EnumToString());
