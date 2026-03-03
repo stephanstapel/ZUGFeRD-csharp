@@ -128,6 +128,36 @@ namespace s2industries.ZUGFeRD.Test
 
 
         [TestMethod]
+        public void TestTaxRepresentativePartyNoNestedPartyElement()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.SellerTaxRepresentative = new Party()
+            {
+                Name = "Tax Rep GmbH",
+                Postcode = "12345",
+                City = "Berlin",
+                Country = CountryCodes.DE
+            };
+            desc.AddSellerTaxRepresentativeTaxRegistration("DE999999999", TaxRegistrationSchemeID.VA);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            // Verify XML structure: TaxRepresentativeParty must NOT contain nested cac:Party
+            string content = Encoding.UTF8.GetString(ms.ToArray());
+            Assert.IsTrue(content.Contains("<cac:TaxRepresentativeParty>"), "TaxRepresentativeParty element should exist");
+            Assert.IsFalse(Regex.IsMatch(content, @"<cac:TaxRepresentativeParty>\s*<cac:Party>"),
+                "TaxRepresentativeParty must not contain nested cac:Party element (UBL schema)");
+
+            // Verify roundtrip
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.IsNotNull(loadedInvoice.SellerTaxRepresentative);
+            Assert.AreEqual("Tax Rep GmbH", loadedInvoice.SellerTaxRepresentative.Name);
+        }
+
+
+        [TestMethod]
         public void TestInvoiceCreation()
         {
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
