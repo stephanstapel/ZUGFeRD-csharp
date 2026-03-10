@@ -956,7 +956,9 @@ namespace s2industries.ZUGFeRD
                         //    break;
                 }
 
-                writer.WriteStartElement("cac", "Party", this._Descriptor.Profile);
+                // TaxRepresentativeParty is already of type PartyType in UBL, no nested cac:Party needed
+                if (partyType != PartyTypes.SellerTaxRepresentativeTradeParty)
+                    writer.WriteStartElement("cac", "Party", this._Descriptor.Profile);
 
                 if (ElectronicAddress != null)
                 {
@@ -1096,8 +1098,9 @@ namespace s2industries.ZUGFeRD
                     writer.WriteEndElement(); // !Contact
                 }
 
-                writer.WriteEndElement(); //!Party
-                _Writer.WriteEndElement(); //Invoice
+                if (partyType != PartyTypes.SellerTaxRepresentativeTradeParty)
+                    writer.WriteEndElement(); //!Party
+                _Writer.WriteEndElement(); //!*TradeParty
             }
         } // !_writeOptionalParty()
 
