@@ -354,6 +354,11 @@ namespace s2industries.ZUGFeRD
                         _writeElementWithAttribute(_Writer, "ram", "PackageQuantity", "unitCode", tradeLineItem.PackageUnitCode.EnumToString(), _formatDecimal(tradeLineItem.PackageQuantity, 4));
                     }
 
+                    if (_Descriptor.Profile == Profile.Extended)
+                    {
+                        _writeOptionalParty(_Writer, "ram", "ShipToTradeParty", tradeLineItem.ShipTo);
+                    }
+
                     if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                     {
                         _Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument");

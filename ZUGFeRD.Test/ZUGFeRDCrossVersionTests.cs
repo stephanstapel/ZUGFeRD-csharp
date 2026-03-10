@@ -1186,5 +1186,52 @@ namespace s2industries.ZUGFeRD.Test
                 .ToList();
             Assert.IsEmpty(emptyElements, $"Found empty elements in the XML: {string.Join("\r\n* ", emptyElements.Select(e => $"{e.Name.LocalName} (line {((IXmlLineInfo)e).LineNumber})"))}");
         } // !TestAvoidEmptyElementsWithMinimalInvoice()
+
+
+        [TestMethod]        
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Minimum, false)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Minimum, false)]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Basic, false)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Basic, false)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Basic, false)]
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Comfort, false)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Comfort, false)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Comfort, false)]        
+        [DataRow(ZUGFeRDVersion.Version1, ZUGFeRDFormats.CII, Profile.Extended, true)]
+        [DataRow(ZUGFeRDVersion.Version20, ZUGFeRDFormats.CII, Profile.Extended, true)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.CII, Profile.Extended, true)]
+        [DataRow(ZUGFeRDVersion.Version23, ZUGFeRDFormats.UBL, Profile.XRechnung, false)]
+        public void TestShipToTradePartyOnItemLevel(ZUGFeRDVersion version, ZUGFeRDFormats format, Profile profile, bool shallBePresent)
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.TradeLineItems.First().ShipTo = new Party()
+            {
+                Name = "ShipTo",
+                City = "ShipToCity"
+            };            
+            
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile, format);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.IsNotNull(loadedInvoice.TradeLineItems);
+
+            if (shallBePresent)
+            {                
+                Assert.IsNotNull(loadedInvoice.TradeLineItems.First().ShipTo);
+                Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
+
+                Assert.AreEqual("ShipTo", loadedInvoice.TradeLineItems.First().ShipTo.Name);
+                Assert.AreEqual("ShipToCity", loadedInvoice.TradeLineItems.First().ShipTo.City);
+            }
+            else
+            {
+                if (profile != Profile.Minimum) // no tradelineitems in Minimum
+                {
+                    Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
+                }
+            }
+        } // !TestShipToTradePartyOnItemLevel()
     }
 }
