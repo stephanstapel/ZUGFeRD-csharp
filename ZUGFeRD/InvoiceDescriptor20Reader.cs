@@ -644,13 +644,14 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrWhiteSpace(lineTwo))
             {
+                retval.Street2 = lineOne;
                 retval.ContactName = lineOne;
                 retval.Street = lineTwo;
             }
             else
             {
                 retval.Street = lineOne;
-                retval.ContactName = null;
+                retval.Street2 = null;
             }
 
             retval.AddressLine3 = XmlUtils.NodeAsString(node, "ram:PostalTradeAddress/ram:LineThree", nsmgr);

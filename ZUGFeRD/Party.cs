@@ -60,9 +60,15 @@ namespace s2industries.ZUGFeRD
 
         /// <summary>
         /// Street name and number
-        /// e.g. used for BT-35
+        /// e.g. used for BT-35, BT-50
         /// </summary>
         public string Street { get; set; }
+
+        /// <summary>
+        /// Additional address line (LineTwo in CII, AddressLine2 in UBL)
+        /// e.g. used for BT-36, BT-51
+        /// </summary>
+        public string Street2 { get; set; }
         /// <summary>
         /// Global identifier
         /// </summary>

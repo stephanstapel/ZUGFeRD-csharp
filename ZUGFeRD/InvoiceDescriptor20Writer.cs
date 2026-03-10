@@ -1247,8 +1247,10 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteStartElement("ram", "PostalTradeAddress");
                 writer.WriteOptionalElementString("ram", "PostcodeCode", party.Postcode);
-                writer.WriteOptionalElementString("ram", "LineOne", string.IsNullOrWhiteSpace(party.ContactName) ? party.Street : party.ContactName);
-                if (!string.IsNullOrWhiteSpace(party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", party.Street); }
+                string lineOneValue = !string.IsNullOrWhiteSpace(party.Street2) ? party.Street2 : (!string.IsNullOrWhiteSpace(party.ContactName) ? party.ContactName : party.Street);
+                string lineTwoValue = (!string.IsNullOrWhiteSpace(party.Street2) || !string.IsNullOrWhiteSpace(party.ContactName)) ? party.Street : null;
+                writer.WriteOptionalElementString("ram", "LineOne", lineOneValue);
+                writer.WriteOptionalElementString("ram", "LineTwo", lineTwoValue);
 
                 writer.WriteOptionalElementString("ram", "LineThree", party.AddressLine3); // BT-163
 
