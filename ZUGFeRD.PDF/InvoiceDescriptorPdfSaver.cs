@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -28,6 +28,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using PdfSharp.Drawing;
+using PdfSharp.Fonts;
 using System.Linq;
 using System.Diagnostics;
 
@@ -343,16 +344,124 @@ namespace s2industries.ZUGFeRD.PDF
 
         private static void _EmbedFonts(PdfDocument pdfDocument)
         {
-            XGraphics gfx = XGraphics.FromPdfPage(pdfDocument.Pages[0]);
-            List<XFont> loadedFonts = _LoadFonts(pdfDocument);
+            List<InstalledFont> installedFonts = FontInfoProvider.GetInstalledFonts();
 
-            foreach (XFont usedFont in loadedFonts)
+            var postScriptToTrueTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                // Use the embedded font
-                XFont xFont = new XFont(usedFont.Name2, 1, usedFont.Style, new XPdfFontOptions(PdfFontEmbedding.EmbedCompleteFontFile));
-                gfx.DrawString(" ", xFont, XBrushes.Transparent, new XPoint(1, 1));
+                { "Arial-BoldMT", "Arial Bold" },
+                { "ArialMT", "Arial" },
+                { "Times-Roman", "Times New Roman" },
+                { "Courier-Bold", "Courier New" }
+            };
+
+            HashSet<int> processedDescriptors = new HashSet<int>();
+
+            for (int pageIndex = 0; pageIndex < pdfDocument.PageCount; pageIndex++)
+            {
+                PdfPage page = pdfDocument.Pages[pageIndex];
+                PdfDictionary resources = page.Resources;
+                if (resources == null || !resources.Elements.ContainsKey("/Font"))
+                {
+                    continue;
+                }
+
+                PdfDictionary fonts = resources.Elements.GetDictionary("/Font");
+                foreach (var fontKey in fonts.Elements.Keys)
+                {
+                    PdfDictionary font = fonts.Elements.GetDictionary(fontKey);
+                    if (font == null)
+                    {
+                        continue;
+                    }
+
+                    PdfDictionary fontDescriptor = font.Elements.GetDictionary("/FontDescriptor");
+                    if (fontDescriptor == null)
+                    {
+                        continue;
+                    }
+
+                    // skip if font data is already embedded
+                    if (fontDescriptor.Elements.ContainsKey("/FontFile") ||
+                        fontDescriptor.Elements.ContainsKey("/FontFile2") ||
+                        fontDescriptor.Elements.ContainsKey("/FontFile3"))
+                    {
+                        continue;
+                    }
+
+                    // avoid processing the same descriptor referenced from multiple pages
+                    if (fontDescriptor.Reference != null &&
+                        !processedDescriptors.Add(fontDescriptor.Reference.ObjectNumber))
+                    {
+                        continue;
+                    }
+
+                    string baseFont = font.Elements.GetString("/BaseFont");
+                    if (String.IsNullOrWhiteSpace(baseFont))
+                    {
+                        continue;
+                    }
+
+                    baseFont = baseFont.Split('+').Last();
+                    _ExtractFontValues(baseFont, fonts, out string fontFamily, out _);
+
+                    if (!installedFonts.Any(f => f.FamilyName.Equals(fontFamily, StringComparison.OrdinalIgnoreCase)) &&
+                        postScriptToTrueTypeMap.TryGetValue(fontFamily, out string mapped))
+                    {
+                        fontFamily = mapped;
+                    }
+
+                    if (String.IsNullOrWhiteSpace(fontFamily))
+                    {
+                        continue;
+                    }
+
+                    InstalledFont match = _FindInstalledFont(installedFonts, baseFont, fontFamily);
+                    if (match == null || !File.Exists(match.FilePath))
+                    {
+                        Debug.WriteLine("Could not find installed font file for '" + baseFont + "' (family: '" + fontFamily + "').");
+                        continue;
+                    }
+
+                    try
+                    {
+                        byte[] fontFileBytes = File.ReadAllBytes(match.FilePath);
+                        byte[] compressedBytes = PdfSharp.Pdf.Filters.Filtering.FlateDecode.Encode(fontFileBytes);
+
+                        PdfDictionary fontFileStream = new PdfDictionary();
+                        fontFileStream.CreateStream(compressedBytes);
+                        fontFileStream.Elements.Add("/Filter", new PdfName("/FlateDecode"));
+                        fontFileStream.Elements.Add("/Length1", new PdfInteger(fontFileBytes.Length));
+                        pdfDocument.Internals.AddObject(fontFileStream);
+
+                        fontDescriptor.Elements["/FontFile2"] = fontFileStream.Reference;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Could not embed font '" + fontFamily + "' from '" + match.FilePath + "'. Exception: " + ex);
+                    }
+                }
             }
-            gfx.Dispose();
+        }
+
+
+        /// <summary>
+        /// Finds the best matching installed font by trying the full font name first,
+        /// then falling back to the base family name.
+        /// </summary>
+        private static InstalledFont _FindInstalledFont(List<InstalledFont> installedFonts, string baseFont, string fontFamily)
+        {
+            // try full name (e.g. "Arial Bold" from "Arial,Bold")
+            string fullFontName = baseFont.TrimStart('/').Replace(',', ' ').Replace('-', ' ');
+            InstalledFont match = installedFonts.FirstOrDefault(f =>
+                f.FamilyName.Equals(fullFontName, StringComparison.OrdinalIgnoreCase));
+
+            if (match == null)
+            {
+                match = installedFonts.FirstOrDefault(f =>
+                    f.FamilyName.Equals(fontFamily, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return match;
         }
 
         private static List<XFont> _LoadFonts(PdfDocument pdfDocument)
