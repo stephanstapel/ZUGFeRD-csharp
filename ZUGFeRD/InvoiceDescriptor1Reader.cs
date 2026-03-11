@@ -478,12 +478,14 @@ namespace s2industries.ZUGFeRD
 
             if (!String.IsNullOrWhiteSpace(lineTwo))
             {
+                retval.Street2 = lineOne;
                 retval.ContactName = lineOne;
                 retval.Street = lineTwo;
             }
             else
             {
                 retval.Street = lineOne;
+                retval.Street2 = null;
                 retval.ContactName = null;
             }
 

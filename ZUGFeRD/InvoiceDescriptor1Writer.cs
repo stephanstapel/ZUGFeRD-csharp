@@ -952,8 +952,10 @@ namespace s2industries.ZUGFeRD
             _writeOptionalContact(writer, "ram", "DefinedTradeContact", Contact);
             writer.WriteStartElement("ram", "PostalTradeAddress");
             writer.WriteOptionalElementString("ram", "PostcodeCode", Party.Postcode);
-            writer.WriteOptionalElementString("ram", "LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
-            if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", Party.Street); }
+            string lineOneValue = !string.IsNullOrWhiteSpace(Party.Street2) ? Party.Street2 : (!string.IsNullOrWhiteSpace(Party.ContactName) ? Party.ContactName : Party.Street);
+            string lineTwoValue = (!string.IsNullOrWhiteSpace(Party.Street2) || !string.IsNullOrWhiteSpace(Party.ContactName)) ? Party.Street : null;
+            writer.WriteOptionalElementString("ram", "LineOne", lineOneValue);
+            writer.WriteOptionalElementString("ram", "LineTwo", lineTwoValue);
             writer.WriteOptionalElementString("ram", "CityName", Party.City);
 
             if (Party.Country.HasValue)

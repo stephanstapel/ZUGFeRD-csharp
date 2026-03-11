@@ -162,6 +162,142 @@ namespace s2industries.ZUGFeRD.Test
         } // !TestExtendedInvoiceWithIncludedItems()
 
 
+        /// <summary>
+        /// Roundtrip test for TradeLineItem product identification fields added in PR #863:
+        /// IndustryAssignedID, ModelID, BatchID, BrandName, ModelName
+        /// These fields are Extended profile only (CII 2.3).
+        /// </summary>
+        [TestMethod]
+        public void TestTradeLineItemProductFieldsRoundtrip()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+
+            var lineItem = desc.AddTradeLineItem(
+                lineID: "1",
+                name: "Test Product",
+                billedQuantity: 10m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 5.0m,
+                grossUnitPrice: 5.0m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            lineItem.SellerAssignedID = "SELLER-001";
+            lineItem.BuyerAssignedID = "BUYER-001";
+            lineItem.IndustryAssignedID = "IND-12345";
+            lineItem.ModelID = "MDL-67890";
+            lineItem.BatchID = "BATCH-2025-001";
+            lineItem.BrandName = "TestBrand";
+            lineItem.ModelName = "TestModel Pro";
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(1, loadedInvoice.TradeLineItems.Count);
+            var loadedLineItem = loadedInvoice.TradeLineItems[0];
+            Assert.AreEqual("Test Product", loadedLineItem.Name);
+            Assert.AreEqual("SELLER-001", loadedLineItem.SellerAssignedID);
+            Assert.AreEqual("BUYER-001", loadedLineItem.BuyerAssignedID);
+            Assert.AreEqual("IND-12345", loadedLineItem.IndustryAssignedID);
+            Assert.AreEqual("MDL-67890", loadedLineItem.ModelID);
+            Assert.AreEqual("BATCH-2025-001", loadedLineItem.BatchID);
+            Assert.AreEqual("TestBrand", loadedLineItem.BrandName);
+            Assert.AreEqual("TestModel Pro", loadedLineItem.ModelName);
+        } // !TestTradeLineItemProductFieldsRoundtrip()
+
+
+        /// <summary>
+        /// Roundtrip test for IncludedReferencedProduct fields added in PR #863:
+        /// GlobalID, SellerAssignedID, BuyerAssignedID, IndustryAssignedID, Description
+        /// </summary>
+        [TestMethod]
+        public void TestIncludedReferencedProductFieldsRoundtrip()
+        {
+            string path = @"..\..\..\..\demodata\zugferd21\zugferd_2p1_EXTENDED_Warenrechnung-factur-x.xml";
+            path = _makeSurePathIsCrossPlatformCompatible(path);
+
+            Stream s = File.Open(path, FileMode.Open);
+            InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
+            s.Close();
+
+            desc.TradeLineItems.Clear();
+
+            var lineItem = desc.AddTradeLineItem(
+                lineID: "1",
+                name: "Main Product",
+                billedQuantity: 5m,
+                unitCode: QuantityCodes.H87,
+                netUnitPrice: 20.0m,
+                grossUnitPrice: 20.0m,
+                categoryCode: TaxCategoryCodes.S,
+                taxPercent: 19.0m,
+                taxType: TaxTypes.VAT);
+
+            // Add included product with all new fields set
+            lineItem.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
+            {
+                GlobalID = new GlobalID(GlobalIDSchemeIdentifiers.EAN, "4012345999999"),
+                SellerAssignedID = "SEL-REF-001",
+                BuyerAssignedID = "BUY-REF-001",
+                IndustryAssignedID = "IND-REF-001",
+                Name = "Included Part A",
+                Description = "Description of included part A",
+                UnitQuantity = 2,
+                UnitCode = QuantityCodes.C62
+            });
+
+            // Add a second included product with minimal fields
+            lineItem.IncludedReferencedProducts.Add(new IncludedReferencedProduct()
+            {
+                Name = "Included Part B",
+                Description = "Description of included part B"
+            });
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            Assert.AreEqual(1, loadedInvoice.TradeLineItems.Count);
+            var loadedLineItem = loadedInvoice.TradeLineItems[0];
+            Assert.AreEqual(2, loadedLineItem.IncludedReferencedProducts.Count);
+
+            // Verify first included product (all fields)
+            var product1 = loadedLineItem.IncludedReferencedProducts[0];
+            Assert.AreEqual(GlobalIDSchemeIdentifiers.EAN, product1.GlobalID.SchemeID);
+            Assert.AreEqual("4012345999999", product1.GlobalID.ID);
+            Assert.AreEqual("SEL-REF-001", product1.SellerAssignedID);
+            Assert.AreEqual("BUY-REF-001", product1.BuyerAssignedID);
+            Assert.AreEqual("IND-REF-001", product1.IndustryAssignedID);
+            Assert.AreEqual("Included Part A", product1.Name);
+            Assert.AreEqual("Description of included part A", product1.Description);
+            Assert.AreEqual(2m, product1.UnitQuantity);
+            Assert.AreEqual(QuantityCodes.C62, product1.UnitCode);
+
+            // Verify second included product (minimal fields)
+            var product2 = loadedLineItem.IncludedReferencedProducts[1];
+            Assert.AreEqual("Included Part B", product2.Name);
+            Assert.AreEqual("Description of included part B", product2.Description);
+            Assert.AreEqual("", product2.SellerAssignedID);
+            Assert.AreEqual("", product2.BuyerAssignedID);
+            Assert.AreEqual("", product2.IndustryAssignedID);
+            Assert.AreEqual(false, product2.UnitQuantity.HasValue);
+            Assert.IsNull(product2.UnitCode);
+        } // !TestIncludedReferencedProductFieldsRoundtrip()
+
+
         [TestMethod]
         public void TestReferenceEReportingFacturXInvoice()
         {

@@ -850,24 +850,13 @@ namespace s2industries.ZUGFeRD
             Party retval = new Party()
             {
                 Street = XmlUtils.NodeAsString(node, "cbc:StreetName", nsmgr),
-                AddressLine3 = XmlUtils.NodeAsString(node, "cbc:AdditionalStreetName", nsmgr),
+                Street2 = XmlUtils.NodeAsString(node, "cbc:AdditionalStreetName", nsmgr),
+                AddressLine3 = XmlUtils.NodeAsString(node, "cac:AddressLine/cbc:Line", nsmgr),
                 City = XmlUtils.NodeAsString(node, "cbc:CityName", nsmgr),
                 Postcode = XmlUtils.NodeAsString(node, "cbc:PostalZone", nsmgr),
                 CountrySubdivisionName = XmlUtils.NodeAsString(node, "cbc:CountrySubentity", nsmgr),
                 Country = EnumExtensions.StringToNullableEnum<CountryCodes>(XmlUtils.NodeAsString(node, "cac:Country/cbc:IdentificationCode", nsmgr)),
             };
-            string addressLine2 = XmlUtils.NodeAsString(node, "cac:AddressLine/cbc:Line", nsmgr);
-            if (!string.IsNullOrWhiteSpace(addressLine2))
-            {
-                if (string.IsNullOrWhiteSpace(retval.AddressLine3))
-                {
-                    retval.AddressLine3 = addressLine2;
-                }
-                else if (!string.IsNullOrWhiteSpace(addressLine2) && string.IsNullOrWhiteSpace(retval.ContactName))
-                {
-                    retval.ContactName = addressLine2;
-                }
-            }
 
             return retval;
         } // !_nodeAsAddressParty()

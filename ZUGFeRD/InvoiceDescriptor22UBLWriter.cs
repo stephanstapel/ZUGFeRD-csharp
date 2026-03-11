@@ -1037,7 +1037,13 @@ namespace s2industries.ZUGFeRD
 
                 writer.WriteStartElement("cac", "PostalAddress");
                 _Writer.WriteOptionalElementString("cbc", "StreetName", party.Street);
-                _Writer.WriteOptionalElementString("cbc", "AdditionalStreetName", party.AddressLine3);
+                _Writer.WriteOptionalElementString("cbc", "AdditionalStreetName", party.Street2);
+                if (!string.IsNullOrWhiteSpace(party.AddressLine3))
+                {
+                    writer.WriteStartElement("cac", "AddressLine");
+                    _Writer.WriteOptionalElementString("cbc", "Line", party.AddressLine3);
+                    writer.WriteEndElement(); //!AddressLine
+                }
                 _Writer.WriteElementString("cbc", "CityName", party.City);
                 _Writer.WriteElementString("cbc", "PostalZone", party.Postcode);
                 _Writer.WriteOptionalElementString("cbc", "CountrySubentity", party.CountrySubdivisionName);
