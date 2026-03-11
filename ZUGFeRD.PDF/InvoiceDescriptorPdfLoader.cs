@@ -16,16 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-using PdfSharp.Pdf.Advanced;
-using PdfSharp.Pdf.IO;
-using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using static PdfSharp.Pdf.PdfDictionary;
+using System.Threading;
 using System.Threading.Tasks;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.Advanced;
+using PdfSharp.Pdf.IO;
+using static PdfSharp.Pdf.PdfDictionary;
 
 namespace s2industries.ZUGFeRD.PDF
 {

@@ -435,7 +435,14 @@ namespace s2industries.ZUGFeRD.PDF
 
             // Split by comma or hyphen to detect styles
             string[] fontParts = baseFont.Split(new[] { ',', '-' }, StringSplitOptions.RemoveEmptyEntries);
-            fontFamily = fontParts[0].TrimStart('/'); // Base font name (e.g., "Arial")
+            if (fontParts.Length > 0)
+            {
+                fontFamily = fontParts[0].TrimStart('/'); // Base font name (e.g., "Arial")
+            }
+            else
+            {
+                fontFamily = String.Empty;
+            }
 
             if (fontParts.Length > 1)
             {

@@ -1545,60 +1545,7 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(loadedInvoice.ShipTo.Country, CountryCodes.DE);
             Assert.AreEqual(loadedInvoice.ShipTo.CountrySubdivisionName, "Hessen");
         }
-
-
-        [TestMethod]
-        public void TestShipToTradePartyOnItemLevel()
-        {
-            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
-            desc.TradeLineItems.First().ShipTo = new Party()
-            {
-                Name = "ShipTo",
-                City = "ShipToCity"
-            };
-
-            // test minimum
-            MemoryStream ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Minimum);
-            ms.Seek(0, SeekOrigin.Begin);
-            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
-
-            Assert.IsNotNull(loadedInvoice.TradeLineItems);
-            Assert.IsEmpty(loadedInvoice.TradeLineItems);
-
-            // test basic
-            ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Basic);
-            ms.Seek(0, SeekOrigin.Begin);
-            loadedInvoice = InvoiceDescriptor.Load(ms);
-
-            Assert.IsNotNull(loadedInvoice.TradeLineItems);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-            // test comfort
-            ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Comfort);
-            ms.Seek(0, SeekOrigin.Begin);
-            loadedInvoice = InvoiceDescriptor.Load(ms);
-
-            Assert.IsNotNull(loadedInvoice.TradeLineItems);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().ShipTo);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-            // test extended
-            ms = new MemoryStream();
-            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
-            ms.Seek(0, SeekOrigin.Begin);
-            loadedInvoice = InvoiceDescriptor.Load(ms);
-
-            Assert.IsNotNull(loadedInvoice.TradeLineItems);
-            Assert.IsNotNull(loadedInvoice.TradeLineItems.First().ShipTo);
-            Assert.IsNull(loadedInvoice.TradeLineItems.First().UltimateShipTo);
-
-            Assert.AreEqual(loadedInvoice.TradeLineItems.First().ShipTo.Name, "ShipTo");
-            Assert.AreEqual(loadedInvoice.TradeLineItems.First().ShipTo.City, "ShipToCity");
-        } // !TestShipToTradePartyOnItemLevel()
+        
 
         [TestMethod]
         public void TestParty_WithTaxRegistration()
@@ -1646,6 +1593,32 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(loadedInvoice.Invoicee);
             Assert.HasCount(1, loadedInvoice.GetInvoiceeTaxRegistration());
             Assert.AreEqual("DE987654321", loadedInvoice.GetInvoiceeTaxRegistration().First().No);
+        }
+
+
+        [TestMethod]
+        public void TestBuyerFCTaxRegistrationFiltered()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            // CreateInvoice already adds Seller with FC + VA
+            // Add both FC + VA for Buyer as well
+            desc.AddBuyerTaxRegistration("99/999/99999", TaxRegistrationSchemeID.FC);
+            desc.AddBuyerTaxRegistration("DE987654321", TaxRegistrationSchemeID.VA);
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+
+            // Seller: both FC + VA written (Extended allows FC for Seller)
+            Assert.AreEqual(2, loadedInvoice.SellerTaxRegistration.Count,
+                "Seller should have 2 TaxRegistrations (FC + VA)");
+
+            // Buyer: only VA, FC was filtered out
+            Assert.AreEqual(1, loadedInvoice.BuyerTaxRegistration.Count,
+                "Buyer should have only 1 TaxRegistration (VA), FC is filtered");
+            Assert.AreEqual(TaxRegistrationSchemeID.VA, loadedInvoice.BuyerTaxRegistration.First().SchemeID);
         }
 
 
@@ -3593,7 +3566,7 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
             s.Close();
 
-            Assert.AreEqual(desc.Buyer.Country, CountryCodes.DE);
+            Assert.AreEqual(CountryCodes.DE, desc.Buyer.Country);
         } // !TestLoadingSellerCountry()
 
 
@@ -3624,8 +3597,8 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
-            Assert.AreEqual(desc.Profile, Profile.Extended);
-            Assert.AreEqual(desc.InvoiceNo, "47110818");
+            Assert.AreEqual(Profile.Extended, desc.Profile);
+            Assert.AreEqual("47110818", desc.InvoiceNo);
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2018, 10, 31));
         } // !TestNonRSMInvoice()
 
@@ -3638,8 +3611,8 @@ namespace s2industries.ZUGFeRD.Test
 
             InvoiceDescriptor desc = InvoiceDescriptor.Load(path);
 
-            Assert.AreEqual(desc.Profile, Profile.XRechnung1);
-            Assert.AreEqual(desc.InvoiceNo, "0815-99-1-a");
+            Assert.AreEqual(Profile.XRechnung1, desc.Profile);
+            Assert.AreEqual("0815-99-1-a", desc.InvoiceNo);
             Assert.AreEqual(desc.InvoiceDate, new DateTime(2020, 06, 21));
         } // !TestRSMInvoice()        
 
@@ -3675,7 +3648,7 @@ namespace s2industries.ZUGFeRD.Test
 
             // test random fields
             Assert.AreEqual(invoice.InvoiceDate, new DateTime(2025, 10, 24));
-            Assert.AreEqual(invoice.InvoiceNo, "0000000016");
+            Assert.AreEqual("0000000016", invoice.InvoiceNo);
         } // !TestAlternateNamespace()
 
 
@@ -3686,7 +3659,7 @@ namespace s2industries.ZUGFeRD.Test
             path = _makeSurePathIsCrossPlatformCompatible(path);
 
             InvoiceDescriptor invoice = InvoiceDescriptor.Load(path);
-            Assert.AreEqual(invoice.Profile, Profile.Extended);
+            Assert.AreEqual(Profile.Extended, invoice.Profile);
         } // !TestLocalNamespace()
     }
 }

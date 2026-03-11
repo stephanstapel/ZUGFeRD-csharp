@@ -19,18 +19,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using System.Xml;
-using s2industries.ZUGFeRD;
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
-using static PdfSharp.Pdf.PdfDictionary;
-using PdfSharp.Pdf.Advanced;
+using System.Xml.Serialization;
 using PdfSharp.Diagnostics;
-using System.Linq;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.Advanced;
+using PdfSharp.Pdf.IO;
+using s2industries.ZUGFeRD;
+using static PdfSharp.Pdf.PdfDictionary;
 
 namespace s2industries.ZUGFeRD.PDF
 {

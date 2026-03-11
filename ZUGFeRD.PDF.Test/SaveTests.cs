@@ -333,5 +333,22 @@ namespace s2industries.ZUGFeRD.PDF.Test
             Assert.IsTrue(pdfRawString.Contains($"<fx:DocumentFileName>{designatedFilename}</fx:DocumentFileName>"));
             Assert.IsTrue(pdfRawString.Contains($"<fx:Version>3.0</fx:Version>"));
         } // !TestFileWithPassword()
+
+
+        [TestMethod]
+        public async Task TestWithoutBasefont()
+        {
+            string sourcePath = @"..\..\..\PDF-without-basefont.pdf";
+            sourcePath = _makeSurePathIsCrossPlatformCompatible(sourcePath);
+            
+            InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
+            MemoryStream targetStream = new MemoryStream();
+            using (FileStream sourceStream = new FileStream(sourcePath, FileMode.Open, FileAccess.Read))
+            {
+                await InvoicePdfProcessor.SaveToPdfAsync(targetStream, ZUGFeRDVersion.Version23, Profile.Extended, ZUGFeRDFormats.CII, sourceStream, descriptor);
+            }
+
+            // no exception shall be thrown here, even if the source PDF is missing the BaseFont entry in its font definitions. The save process should be able to handle this gracefully and embed the necessary fonts as needed.
+        } // !TestWithoutBasefont()
     }
 }

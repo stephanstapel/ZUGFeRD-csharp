@@ -593,6 +593,11 @@ namespace s2industries.ZUGFeRD
                     _Writer.WriteStartElement("ram", "SpecifiedSupplyChainTradeDelivery");
                     _writeElementWithAttribute(_Writer, "ram", "BilledQuantity", "unitCode", tradeLineItem.UnitCode.EnumToString(), _formatDecimal(tradeLineItem.BilledQuantity, 4));
 
+                    if ((tradeLineItem.ShipTo != null) && (_Descriptor.Profile == Profile.Extended))
+                    {
+                        _writeOptionalParty(_Writer, "ram", "ShipToTradeParty", tradeLineItem.ShipTo);
+                    }
+
                     if (tradeLineItem.DeliveryNoteReferencedDocument != null)
                     {
                         _Writer.WriteStartElement("ram", "DeliveryNoteReferencedDocument");
@@ -912,66 +917,68 @@ namespace s2industries.ZUGFeRD
 
         private void _writeOptionalParty(ProfileAwareXmlTextWriter writer, string prefix, string PartyTag, Party Party, Contact Contact = null, List<TaxRegistration> TaxRegistrations = null)
         {
-            if (Party != null)
+            if (Party == null)
             {
-                writer.WriteStartElement(prefix, PartyTag);
+                return;
+            }
 
-                if ((Party.ID != null) && !String.IsNullOrWhiteSpace(Party.ID.ID))
-                {
-                    if ((Party.ID.SchemeID.HasValue) && Party.ID.SchemeID.HasValue)
-                    {
-                        writer.WriteStartElement("ram", "ID");
-                        writer.WriteAttributeString("schemeID", Party.ID.SchemeID.Value.EnumToString());
-                        writer.WriteValue(Party.ID.ID);
-                        writer.WriteEndElement();
-                    }
-                    else
-                    {
-                        writer.WriteElementString("ram", "ID", Party.ID.ID);
-                    }
-                }
+            writer.WriteStartElement(prefix, PartyTag);
 
-                if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && (Party.GlobalID.SchemeID.HasValue) )
+            if ((Party.ID != null) && !String.IsNullOrWhiteSpace(Party.ID.ID))
+            {
+                if ((Party.ID.SchemeID.HasValue) && Party.ID.SchemeID.HasValue)
                 {
-                    writer.WriteStartElement("ram", "GlobalID");
-                    writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID.Value.EnumToString());
-                    writer.WriteValue(Party.GlobalID.ID);
+                    writer.WriteStartElement("ram", "ID");
+                    writer.WriteAttributeString("schemeID", Party.ID.SchemeID.Value.EnumToString());
+                    writer.WriteValue(Party.ID.ID);
                     writer.WriteEndElement();
                 }
-
-                _Writer.WriteOptionalElementString("ram", "Name", Party.Name);
-                writer.WriteOptionalElementString("ram", "Description", Party.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG); // BT-33
-                _writeOptionalContact(writer, "ram", "DefinedTradeContact", Contact);
-                writer.WriteStartElement("ram", "PostalTradeAddress");
-                writer.WriteOptionalElementString("ram", "PostcodeCode", Party.Postcode);
-                writer.WriteOptionalElementString("ram", "LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
-                if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", Party.Street); }
-                writer.WriteOptionalElementString("ram", "CityName", Party.City);
-
-                if (Party.Country.HasValue)
+                else
                 {
-                    writer.WriteElementString("ram", "CountryID", Party.Country.Value.EnumToString());
+                    writer.WriteElementString("ram", "ID", Party.ID.ID);
                 }
+            }
 
-                writer.WriteEndElement(); // !PostalTradeAddress
+            if ((Party.GlobalID != null) && !String.IsNullOrWhiteSpace(Party.GlobalID.ID) && (Party.GlobalID.SchemeID.HasValue) )
+            {
+                writer.WriteStartElement("ram", "GlobalID");
+                writer.WriteAttributeString("schemeID", Party.GlobalID.SchemeID.Value.EnumToString());
+                writer.WriteValue(Party.GlobalID.ID);
+                writer.WriteEndElement();
+            }
 
-                if (TaxRegistrations != null)
+            _Writer.WriteOptionalElementString("ram", "Name", Party.Name);
+            writer.WriteOptionalElementString("ram", "Description", Party.Description, PROFILE_COMFORT_EXTENDED_XRECHNUNG); // BT-33
+            _writeOptionalContact(writer, "ram", "DefinedTradeContact", Contact);
+            writer.WriteStartElement("ram", "PostalTradeAddress");
+            writer.WriteOptionalElementString("ram", "PostcodeCode", Party.Postcode);
+            writer.WriteOptionalElementString("ram", "LineOne", string.IsNullOrWhiteSpace(Party.ContactName) ? Party.Street : Party.ContactName);
+            if (!string.IsNullOrWhiteSpace(Party.ContactName)) { writer.WriteOptionalElementString("ram", "LineTwo", Party.Street); }
+            writer.WriteOptionalElementString("ram", "CityName", Party.City);
+
+            if (Party.Country.HasValue)
+            {
+                writer.WriteElementString("ram", "CountryID", Party.Country.Value.EnumToString());
+            }
+
+            writer.WriteEndElement(); // !PostalTradeAddress
+
+            if (TaxRegistrations != null)
+            {
+                foreach (TaxRegistration taxRegistration in TaxRegistrations)
                 {
-                    foreach (TaxRegistration taxRegistration in TaxRegistrations)
+                    if (!String.IsNullOrWhiteSpace(taxRegistration.No))
                     {
-                        if (!String.IsNullOrWhiteSpace(taxRegistration.No))
-                        {
-                            writer.WriteStartElement("ram", "SpecifiedTaxRegistration");
-                            writer.WriteStartElement("ram", "ID");
-                            writer.WriteAttributeString("schemeID", taxRegistration.SchemeID.EnumToString());
-                            writer.WriteValue(taxRegistration.No);
-                            writer.WriteEndElement();
-                            writer.WriteEndElement();
-                        }
+                        writer.WriteStartElement("ram", "SpecifiedTaxRegistration");
+                        writer.WriteStartElement("ram", "ID");
+                        writer.WriteAttributeString("schemeID", taxRegistration.SchemeID.EnumToString());
+                        writer.WriteValue(taxRegistration.No);
+                        writer.WriteEndElement();
+                        writer.WriteEndElement();
                     }
                 }
-                writer.WriteEndElement(); // !*TradeParty
             }
+            writer.WriteEndElement(); // !*TradeParty
         } // !_writeOptionalParty()
 
 

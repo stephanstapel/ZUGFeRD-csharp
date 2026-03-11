@@ -196,7 +196,7 @@ namespace s2industries.ZUGFeRD
                     EmailAddress = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:ElectronicMail", nsmgr)
                 };
             }
-
+            
             retval.SellerTaxRepresentative = _nodeAsParty(doc.DocumentElement, "//cac:TaxRepresentativeParty", nsmgr);
 
             //Get all referenced and embedded documents (BG-24)
@@ -733,9 +733,10 @@ namespace s2industries.ZUGFeRD
             //Add main item to result list
             resultList.Add(item);
 
-            //Find sub invoice lines recursively
-            //Note that selectnodes also select the sub invoice line from other nodes
-            XmlNodeList subInvoiceLineNodes = tradeLineItem.SelectNodes(".//cac:SubInvoiceLine", nsmgr);
+            //Find sub invoice lines recursively - use direct children only (not .//)
+            //to avoid capturing grandchildren which would cause duplicate entries with wrong ParentLineIDs
+            string subSelector = isInvoice ? "cac:SubInvoiceLine" : "cac:SubCreditNoteLine";
+            XmlNodeList subInvoiceLineNodes = tradeLineItem.SelectNodes(subSelector, nsmgr);
             foreach (XmlNode subInvoiceLineNode in subInvoiceLineNodes)
             {
                 List<TradeLineItem> parseResultList = _parseTradeLineItem(subInvoiceLineNode, nsmgr, item.AssociatedDocument.LineID);
