@@ -196,8 +196,7 @@ namespace s2industries.ZUGFeRD
                     EmailAddress = XmlUtils.NodeAsString(doc.DocumentElement, "//cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:ElectronicMail", nsmgr)
                 };
             }
-
-            // TaxRepresentativeParty is directly of type PartyType in UBL, no nested cac:Party
+            
             retval.SellerTaxRepresentative = _nodeAsParty(doc.DocumentElement, "//cac:TaxRepresentativeParty", nsmgr);
 
             //Get all referenced and embedded documents (BG-24)
@@ -309,8 +308,8 @@ namespace s2industries.ZUGFeRD
 
             retval.PaymentMeans = tempPaymentMeans;
 
-            retval.BillingPeriodStart = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cac:InvoicePeriod/cbc:StartDate", nsmgr);
-            retval.BillingPeriodEnd = XmlUtils.NodeAsDateTime(doc.DocumentElement, "//cac:InvoicePeriod/cbc:EndDate", nsmgr);
+            retval.BillingPeriodStart = XmlUtils.NodeAsDateTime(doc.DocumentElement, "/*[1]/cac:InvoicePeriod/cbc:StartDate", nsmgr); // do not find InvoicePeriod in <cac:InvoiceLine>
+            retval.BillingPeriodEnd = XmlUtils.NodeAsDateTime(doc.DocumentElement, "/*[1]/cac:InvoicePeriod/cbc:EndDate", nsmgr);
 
             XmlNodeList creditorFinancialAccountNodes = doc.SelectNodes("//cac:PaymentMeans/cac:PayeeFinancialAccount", nsmgr);
             foreach (XmlNode node in creditorFinancialAccountNodes)
@@ -534,7 +533,7 @@ namespace s2industries.ZUGFeRD
                 BuyerAssignedID = XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cac:BuyersItemIdentification/cbc:ID", nsmgr),
                 Name = XmlUtils.NodeAsString(tradeLineItem, "./cac:Item/cbc:Name", nsmgr),
                 Description = XmlUtils.NodeAsString(tradeLineItem, ".//cac:Item/cbc:Description", nsmgr),
-                NetQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//cac:Price/cbc:BaseQuantity", nsmgr, 1),
+                NetQuantity = XmlUtils.NodeAsDecimal(tradeLineItem, ".//cac:Price/cbc:BaseQuantity", nsmgr),
                 BilledQuantity = billedQuantity ?? 0,
                 LineTotalAmount = XmlUtils.NodeAsDecimal(tradeLineItem, ".//cbc:LineExtensionAmount", nsmgr, 0),
                 TaxCategoryCode = EnumExtensions.StringToEnum<TaxCategoryCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//cac:Item/cac:ClassifiedTaxCategory/cbc:ID", nsmgr)),
@@ -696,8 +695,9 @@ namespace s2industries.ZUGFeRD
 
             if (!item.UnitCode.HasValue)
             {
-                // UnitCode alternativ aus BilledQuantity extrahieren
-                item.UnitCode = EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//cbc:InvoicedQuantity/@unitCode", nsmgr));
+                // UnitCode alternativ aus InvoicedQuantity oder CreditedQuantity extrahieren
+                item.UnitCode = EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//cbc:InvoicedQuantity/@unitCode", nsmgr))
+                    ?? EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(tradeLineItem, ".//cbc:CreditedQuantity/@unitCode", nsmgr));
             }
 
             // TODO: Find value //if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeDelivery/ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID", nsmgr) != null)
@@ -796,11 +796,6 @@ namespace s2industries.ZUGFeRD
             }
             retval.Name = XmlUtils.NodeAsString(node, "cac:PartyName/cbc:Name", nsmgr);
             retval.SpecifiedLegalOrganization = _nodeAsLegalOrganization(node, "cac:PartyLegalEntity", nsmgr);
-
-            if (string.IsNullOrWhiteSpace(retval.Name))
-            {
-                retval.Name = XmlUtils.NodeAsString(node, "cac:PartyLegalEntity/cbc:RegistrationName", nsmgr);
-            }
 
             if (string.IsNullOrWhiteSpace(retval.Description))
             {

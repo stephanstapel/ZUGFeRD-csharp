@@ -146,7 +146,7 @@ namespace s2industries.ZUGFeRD
 
             _Writer.WriteOptionalElementString("cbc", "BuyerReference", this._Descriptor.ReferenceOrderNo);
 
-            if (this._Descriptor.BillingPeriodEnd.HasValue || this._Descriptor.BillingPeriodEnd.HasValue)
+            if (this._Descriptor.BillingPeriodStart.HasValue || this._Descriptor.BillingPeriodEnd.HasValue)
             {
                 _Writer.WriteStartElement("cac", "InvoicePeriod");
 
@@ -960,7 +960,7 @@ namespace s2industries.ZUGFeRD
                 if (partyType != PartyTypes.SellerTaxRepresentativeTradeParty)
                     writer.WriteStartElement("cac", "Party", this._Descriptor.Profile);
 
-                if (ElectronicAddress != null)
+                if (!String.IsNullOrWhiteSpace(ElectronicAddress?.Address))
                 {
                     writer.WriteStartElement("cbc", "EndpointID");
                     writer.WriteAttributeString("schemeID", ElectronicAddress.ElectronicAddressSchemeID.EnumToString());

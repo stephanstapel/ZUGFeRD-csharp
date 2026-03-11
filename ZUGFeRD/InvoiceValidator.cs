@@ -127,7 +127,7 @@ namespace s2industries.ZUGFeRD
             // TODO
 
             // TODO ausgeben: Recalculating tax basis for tax percentages: [Key{percentage=7.00, code=[VAT] Value added tax, category=[S] Standard rate}, Key{percentage=19.00, code=[VAT] Value added tax, category=[S] Standard rate}]
-            retval.Messages.Add(String.Format("Recalculated tax basis = {0:0.0000}", lineTotal - allowanceTotal));
+            retval.Messages.Add(String.Format("Recalculated tax basis = {0:0.0000}", lineTotal - allowanceTotal + chargeTotal));
             retval.Messages.Add("Calculating tax total...");
 
             decimal taxTotal = 0.0m;
