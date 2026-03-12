@@ -3058,14 +3058,10 @@ namespace s2industries.ZUGFeRD.Test
             var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(firstPaymentTerm);
 
-            string paymentTermString = firstPaymentTerm.Description.TrimEnd(' '); // remove trailing whitespaces which are the first part in the newline before </ram:Description>
-
-            var paymentTermDescriptionLastChar = firstPaymentTerm.Description.Last();
-            var lastCharIsNewLine = paymentTermDescriptionLastChar == '\n';
-
-            var lastCharIsXMLNewLine = firstPaymentTerm.Description.LastIndexOf(XmlConstants.XmlNewLine) == firstPaymentTerm.Description.Length - XmlConstants.XmlNewLine.Length;
-
-            Assert.IsTrue(lastCharIsNewLine || lastCharIsXMLNewLine, "The last character of the payment term description should be a line break (\\n) or a XML Line break (&#10;) character.");
+            // #SKONTO# lines are now parsed structurally
+            Assert.AreEqual(PaymentTermsType.Skonto, firstPaymentTerm.PaymentTermsType);
+            Assert.AreEqual(14, firstPaymentTerm.DueDays);
+            Assert.AreEqual(2.25m, firstPaymentTerm.Percentage);
         }
 
 
@@ -3098,24 +3094,14 @@ namespace s2industries.ZUGFeRD.Test
             Assert.IsNotNull(paymentTerms);
             Assert.HasCount(1, paymentTerms);
 
+            // #SKONTO# lines are now parsed structurally
             var firstPaymentTerm = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
             Assert.IsNotNull(firstPaymentTerm);
 
-            var lines = firstPaymentTerm.Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            Assert.AreEqual(lines.Length, 2);
-
-            Assert.AreEqual(lines[0].Trim(), description); // Trim() to remove trailing line break
-
-            // Validates that the description contains the expected pattern,
-            // followed either by a real newline (\n or \r\n) or by the XML line break entity (&#10;).
-            //var pattern = @$"{description}(\r?\n)#SKONTO#TAGE=14#PROZENT=2\.25#(\r?\n)";
-            string pattern = @"#(SKONTO)#TAGE=([0-9]+)#PROZENT=([0-9]+\.[0-9]{2})(#BASISBETRAG=-?[0-9]+\.[0-9]{2})?#$";
-            Match match = Regex.Match(lines[1].Trim(), pattern); // Trim() to remove trailing line break
-
-            Assert.IsTrue(match.Success);
-            Assert.AreEqual(match.Groups[1].Value, "SKONTO");
-            Assert.AreEqual(match.Groups[2].Value, "14");
-            Assert.AreEqual(match.Groups[3].Value, "2.25");
+            Assert.AreEqual(description, firstPaymentTerm.Description);
+            Assert.AreEqual(PaymentTermsType.Skonto, firstPaymentTerm.PaymentTermsType);
+            Assert.AreEqual(14, firstPaymentTerm.DueDays);
+            Assert.AreEqual(2.25m, firstPaymentTerm.Percentage);
         }
 
 
@@ -3152,9 +3138,18 @@ namespace s2industries.ZUGFeRD.Test
 
             // Assert
             // PaymentTerms
+            // #SKONTO# lines are now parsed structurally into separate PaymentTerms
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.HasCount(1, paymentTerms);
+            Assert.HasCount(2, paymentTerms);
+
+            Assert.AreEqual(PaymentTermsType.Skonto, paymentTerms[0].PaymentTermsType);
+            Assert.AreEqual(14, paymentTerms[0].DueDays);
+            Assert.AreEqual(2.25m, paymentTerms[0].Percentage);
+
+            Assert.AreEqual(PaymentTermsType.Skonto, paymentTerms[1].PaymentTermsType);
+            Assert.AreEqual(28, paymentTerms[1].DueDays);
+            Assert.AreEqual(1m, paymentTerms[1].Percentage);
         }
 
         /**
@@ -3191,28 +3186,24 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
 
             // Assert
-            // PaymentTerms
+            // #SKONTO# lines are now parsed structurally into separate PaymentTerms
+            // Writer produces: "#SKONTO#TAGE=14#PROZENT=2.25#\nDescription2\n#SKONTO#TAGE=28#PROZENT=1.00#\n"
+            // All freetext lines are assigned to the first term's description
             var paymentTerms = loadedInvoice.GetTradePaymentTerms();
             Assert.IsNotNull(paymentTerms);
-            Assert.HasCount(1, paymentTerms); //Currently only one instance of SpecifiedTradePaymentTerms is allowed, the payment terms are concatenated in the description
+            Assert.HasCount(2, paymentTerms);
 
-            var structuredPaymentTerms = loadedInvoice.GetTradePaymentTerms().FirstOrDefault();
-            Assert.IsNotNull(structuredPaymentTerms);
+            Assert.AreEqual(PaymentTermsType.Skonto, paymentTerms[0].PaymentTermsType);
+            Assert.AreEqual(14, paymentTerms[0].DueDays);
+            Assert.AreEqual(2.25m, paymentTerms[0].Percentage);
+            Assert.AreEqual(timestamp.AddDays(14), paymentTerms[0].DueDate);
+            Assert.AreEqual("Description2", paymentTerms[0].Description); // freetext goes to first term
 
-            var separators = new[] { "\n", XmlConstants.XmlNewLine };
-            var structuredPaymentTermsList = structuredPaymentTerms.Description.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Replace("\r", ""));
-            Assert.AreEqual(3, structuredPaymentTermsList.Count()); //Spliting the description by line break should give us the two payment terms + one description line
+            Assert.AreEqual(PaymentTermsType.Skonto, paymentTerms[1].PaymentTermsType);
+            Assert.AreEqual(28, paymentTerms[1].DueDays);
+            Assert.AreEqual(1m, paymentTerms[1].Percentage);
 
-            var firstPaymentTerm = structuredPaymentTermsList.ElementAt(0);
-            Assert.AreEqual($"#SKONTO#TAGE=14#PROZENT=2.25#", firstPaymentTerm);
-
-            var descriptionLine = structuredPaymentTermsList.ElementAt(1);
-            Assert.AreEqual($"Description2", descriptionLine);
-
-            var secondPaymentTerm = structuredPaymentTermsList.ElementAt(2);
-            Assert.AreEqual($"#SKONTO#TAGE=28#PROZENT=1.00#", secondPaymentTerm);
-
-        } // !TestPaymentTermsSingleCardinalityStructured()
+        } // !TestPaymentTermsMultiCardinalityXRechnungStructured()
 
 
         /**
@@ -3286,17 +3277,25 @@ namespace s2industries.ZUGFeRD.Test
             InvoiceDescriptor desc = InvoiceDescriptor.Load(s);
             s.Close();
 
-            Assert.HasCount(1, desc.PaymentTerms);
+            // #SKONTO# lines are now parsed structurally: 3 PaymentTerms, description contains only freetext lines
+            Assert.HasCount(3, desc.PaymentTerms);
 
-            var paymentTermsLines = desc.PaymentTerms[0].Description.Split("\n");
-            Assert.AreEqual(paymentTermsLines.Length, 7);
-            Assert.AreEqual(paymentTermsLines[0].Trim(), "testentry");
-            Assert.AreEqual(paymentTermsLines[1].Trim(), "#SKONTO#TAGE=7#PROZENT=2.00#");
-            Assert.AreEqual(paymentTermsLines[2].Trim(), "testentry");
-            Assert.AreEqual(paymentTermsLines[3].Trim(), "#SKONTO#TAGE=14#PROZENT=1.00#");
-            Assert.AreEqual(paymentTermsLines[4].Trim(), "#SKONTO#TAGE=30#PROZENT=0.00#");
-            Assert.AreEqual(paymentTermsLines[5].Trim(), "testentry");
-            Assert.AreEqual(paymentTermsLines[6].Trim(), "");
+            // first term gets the freetext description and DueDate
+            Assert.AreEqual("testentry\r\ntestentry\r\ntestentry", desc.PaymentTerms[0].Description);
+            Assert.AreEqual(PaymentTermsType.Skonto, desc.PaymentTerms[0].PaymentTermsType);
+            Assert.AreEqual(7, desc.PaymentTerms[0].DueDays);
+            Assert.AreEqual(2.00m, desc.PaymentTerms[0].Percentage);
+            Assert.IsNull(desc.PaymentTerms[0].BaseAmount);
+
+            Assert.AreEqual(PaymentTermsType.Skonto, desc.PaymentTerms[1].PaymentTermsType);
+            Assert.AreEqual(14, desc.PaymentTerms[1].DueDays);
+            Assert.AreEqual(1.00m, desc.PaymentTerms[1].Percentage);
+            Assert.IsNull(desc.PaymentTerms[1].BaseAmount);
+
+            Assert.AreEqual(PaymentTermsType.Skonto, desc.PaymentTerms[2].PaymentTermsType);
+            Assert.AreEqual(30, desc.PaymentTerms[2].DueDays);
+            Assert.AreEqual(0.00m, desc.PaymentTerms[2].Percentage);
+            Assert.IsNull(desc.PaymentTerms[2].BaseAmount);
         } // !TestOfficialXRechnungFileForPaymentTerms()
 
 

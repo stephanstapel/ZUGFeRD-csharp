@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -414,38 +415,42 @@ namespace s2industries.ZUGFeRD
                 );
             }
 
-            foreach (XmlNode node in doc.SelectNodes("//ram:SpecifiedTradePaymentTerms", nsmgr))
+            XmlNodeList paymentTermNodes = doc.SelectNodes("//ram:SpecifiedTradePaymentTerms", nsmgr);
+            if (!_tryReadXRechnungPaymentTerms(retval, paymentTermNodes, nsmgr))
             {
-                decimal? discountPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:CalculationPercent", nsmgr, null);
-                int? discountDueDays = null;
-                if (QuantityCodes.DAY == EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
+                foreach (XmlNode node in paymentTermNodes)
                 {
-                    discountDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure", nsmgr);
+                    decimal? discountPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:CalculationPercent", nsmgr, null);
+                    int? discountDueDays = null;
+                    if (QuantityCodes.DAY == EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
+                    {
+                        discountDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisPeriodMeasure", nsmgr);
+                    }
+
+                    DateTime? discountMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); //BT-X-282-0
+                    decimal? discountBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisAmount", nsmgr, null);
+                    decimal? discountActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:ActualDiscountAmount", nsmgr, null);
+                    decimal? penaltyPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:CalculationPercent", nsmgr, null);
+                    int? penaltyDueDays = null;
+                    if (QuantityCodes.DAY == EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
+                        penaltyDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
+                    DateTime? penaltyMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); // BT-X-276-0
+                    decimal? penaltyBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisAmount", nsmgr, null);
+                    decimal? penaltyActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:ActualPenaltyAmount", nsmgr, null);
+                    PaymentTermsType? paymentTermsType = discountPercent.HasValue ? PaymentTermsType.Skonto :
+                        penaltyPercent.HasValue ? PaymentTermsType.Verzug :
+                        (PaymentTermsType?)null;
+
+                    string description = XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr).TrimEnd(' '); // remove trailing spaces before </ram:Description> tag
+                    retval.AddTradePaymentTerms(description,
+                                                XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime/udt:DateTimeString", nsmgr),
+                                                paymentTermsType,
+                                                discountDueDays ?? penaltyDueDays,
+                                                discountPercent ?? penaltyPercent,
+                                                discountBaseAmount ?? penaltyBaseAmount,
+                                                discountActualAmount ?? penaltyActualAmount,
+                                                discountMaturityDate ?? penaltyMaturityDate);
                 }
-
-                DateTime? discountMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); //BT-X-282-0
-                decimal? discountBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:BasisAmount", nsmgr, null);
-                decimal? discountActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentDiscountTerms/ram:ActualDiscountAmount", nsmgr, null);
-                decimal? penaltyPercent = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:CalculationPercent", nsmgr, null);
-                int? penaltyDueDays = null;
-                if (QuantityCodes.DAY == EnumExtensions.StringToNullableEnum<QuantityCodes>(XmlUtils.NodeAsString(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure/@unitCode", nsmgr)))
-                    penaltyDueDays = XmlUtils.NodeAsInt(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisPeriodMeasure", nsmgr);
-                DateTime? penaltyMaturityDate = XmlUtils.NodeAsDateTime(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisDateTime/udt:DateTimeString", nsmgr); // BT-X-276-0
-                decimal? penaltyBaseAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:BasisAmount", nsmgr, null);
-                decimal? penaltyActualAmount = XmlUtils.NodeAsDecimal(node, ".//ram:ApplicableTradePaymentPenaltyTerms/ram:ActualPenaltyAmount", nsmgr, null);
-                PaymentTermsType? paymentTermsType = discountPercent.HasValue ? PaymentTermsType.Skonto :
-                    penaltyPercent.HasValue ? PaymentTermsType.Verzug :
-                    (PaymentTermsType?)null;
-
-                string description = XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr).TrimEnd(' '); // remove trailing spaces before </ram:Description> tag
-                retval.AddTradePaymentTerms(description,
-                                            XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime/udt:DateTimeString", nsmgr),
-                                            paymentTermsType,
-                                            discountDueDays ?? penaltyDueDays,
-                                            discountPercent ?? penaltyPercent,
-                                            discountBaseAmount ?? penaltyBaseAmount,
-                                            discountActualAmount ?? penaltyActualAmount,
-                                            discountMaturityDate ?? penaltyMaturityDate);
             }
 
             retval.LineTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount", nsmgr);
@@ -899,6 +904,108 @@ namespace s2industries.ZUGFeRD
                 LineID = XmlUtils.NodeAsString(node, "ram:LineID", nsmgr, null)
             };
         } // !_readAdditionalReferencedDocument()
+
+
+        /// <summary>
+        /// Tries to parse payment terms from #SKONTO# / #VERZUG# format in the description field.
+        /// This format is used by XRechnung where structured XML elements (ApplicableTradePaymentDiscountTerms)
+        /// are not available.
+        ///
+        /// Example lines:
+        /// #SKONTO#TAGE=14#PROZENT=2.00#BASISBETRAG=252.94#
+        /// #VERZUG#TAGE=30#PROZENT=1.00#
+        /// </summary>
+        /// <returns>true if #SKONTO# or #VERZUG# format was found and parsed, false otherwise</returns>
+        private static bool _tryReadXRechnungPaymentTerms(InvoiceDescriptor invoice, XmlNodeList nodes, XmlNamespaceManager nsmgr)
+        {
+            // check if any node contains #SKONTO# or #VERZUG# in the description
+            bool found = false;
+            foreach (XmlNode node in nodes)
+            {
+                string desc = XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr);
+                if (desc.Contains("#SKONTO#") || desc.Contains("#VERZUG#"))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                return false;
+
+            foreach (XmlNode node in nodes)
+            {
+                string fullDescription = XmlUtils.NodeAsString(node, ".//ram:Description", nsmgr);
+                string[] allLines = fullDescription.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                List<string> terms = new List<string>();
+                string description = "";
+
+                foreach (string rawLine in allLines)
+                {
+                    string trimmedLine = rawLine.Trim();
+                    if (string.IsNullOrEmpty(trimmedLine))
+                        continue;
+
+                    if (trimmedLine[0] == '#')
+                    {
+                        terms.Add(trimmedLine);
+                    }
+                    else
+                    {
+                        // preserve text descriptions
+                        if (string.IsNullOrEmpty(description))
+                            description = trimmedLine;
+                        else
+                            description = description + "\r\n" + trimmedLine;
+                    }
+                }
+
+                bool first = true;
+                foreach (string term in terms)
+                {
+                    PaymentTerms paymentTerms = new PaymentTerms();
+
+                    if (first)
+                    {
+                        paymentTerms.Description = description;
+                        paymentTerms.DueDate = XmlUtils.NodeAsDateTime(node, ".//ram:DueDateDateTime/udt:DateTimeString", nsmgr);
+                        first = false;
+                    }
+
+                    string[] parts = term.Split('#'); // [0] empty, [1] SKONTO/VERZUG, [2] TAGE=, [3] PROZENT=, [4] empty or BASISBETRAG=
+                    if (parts.Length >= 4)
+                    {
+                        if (parts[1] == "SKONTO")
+                            paymentTerms.PaymentTermsType = ZUGFeRD.PaymentTermsType.Skonto;
+                        else if (parts[1] == "VERZUG")
+                            paymentTerms.PaymentTermsType = ZUGFeRD.PaymentTermsType.Verzug;
+
+                        if (parts[2].StartsWith("TAGE="))
+                        {
+                            if (int.TryParse(parts[2].Substring(5), out int dueDays))
+                                paymentTerms.DueDays = dueDays;
+                        }
+
+                        if (parts[3].StartsWith("PROZENT="))
+                        {
+                            if (decimal.TryParse(parts[3].Substring(8), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal percentage))
+                                paymentTerms.Percentage = percentage;
+                        }
+
+                        if (parts.Length > 4 && parts[4].StartsWith("BASISBETRAG="))
+                        {
+                            if (decimal.TryParse(parts[4].Substring(12), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal baseAmount))
+                                paymentTerms.BaseAmount = baseAmount;
+                        }
+                    }
+
+                    invoice.PaymentTerms.Add(paymentTerms);
+                }
+            }
+
+            return true;
+        } // !_tryReadXRechnungPaymentTerms()
 
     }
 }
