@@ -26,8 +26,35 @@ using System.Text.Json;
 namespace s2industries.ZUGFeRD.Spec
 {
     /// <summary>
+    /// Syntax binding that controls which XSD schema and schematron rules are extracted.
+    /// </summary>
+    public enum SyntaxBinding
+    {
+        /// <summary>
+        /// UN/CEFACT Cross Industry Invoice (CII) — used by ZUGFeRD / Factur-X.
+        /// XSD: EN16931 FACTUR-X XSD files (e.g. from documentation/zugferd211en/Schema/EN16931).
+        /// </summary>
+        Cii,
+
+        /// <summary>
+        /// OASIS UBL 2.1 Invoice — used by XRechnung UBL.
+        /// XSD: OASIS UBL 2.1 Invoice XSD files (UBL-Invoice-2.1.xsd + companions).
+        /// Download: http://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip
+        /// </summary>
+        UblInvoice,
+
+        /// <summary>
+        /// OASIS UBL 2.1 CreditNote — used by XRechnung UBL credit notes.
+        /// XSD: OASIS UBL 2.1 CreditNote XSD files (UBL-CreditNote-2.1.xsd + companions).
+        /// Download: http://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip
+        /// </summary>
+        UblCreditNote
+    }
+
+
+    /// <summary>
     /// Main entry point for extracting XRechnung specification documentation.
-    /// Combines information from EN16931 XSD schemas and XRechnung Schematron rules.
+    /// Combines information from EN16931 / UBL XSD schemas and XRechnung Schematron rules.
     /// </summary>
     public class SpecExtractor
     {
@@ -38,19 +65,50 @@ namespace s2industries.ZUGFeRD.Spec
         /// Path to the XRechnung version folder, e.g.
         /// "documentation/xRechnung/XRechnung 3.0.1"
         /// </param>
-        /// <param name="en16931XsdPath">
-        /// Path to the EN16931 CII XSD directory, e.g.
-        /// "documentation/zugferd211en/Schema/EN16931"
+        /// <param name="xsdPath">
+        /// Path to the XSD directory.
+        /// <list type="bullet">
+        ///   <item>For CII: path to the EN16931 FACTUR-X XSD directory
+        ///         (e.g. "documentation/zugferd211en/Schema/EN16931")</item>
+        ///   <item>For UBL: path to the directory containing the OASIS UBL 2.1 XSD files,
+        ///         specifically the one that contains <c>UBL-Invoice-2.1.xsd</c> or
+        ///         <c>UBL-CreditNote-2.1.xsd</c>.
+        ///         Download the full package from
+        ///         http://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip and point to the
+        ///         <c>xsd/maindoc</c> or <c>xsdrt/maindoc</c> directory.</item>
+        /// </list>
         /// </param>
-        /// <param name="version">Version label, e.g. "3.0.1"</param>
+        /// <param name="syntax">Whether to extract CII or UBL structure and rules.</param>
+        /// <param name="version">XRechnung version label, e.g. "3.0.1"</param>
         /// <returns>The fully populated <see cref="XRechnungSpec"/>.</returns>
-        public XRechnungSpec Extract(string xrechnungDocPath, string en16931XsdPath, string version = "3.0.1")
+        public XRechnungSpec Extract(
+            string xrechnungDocPath,
+            string xsdPath,
+            SyntaxBinding syntax = SyntaxBinding.Cii,
+            string version = "3.0.1")
         {
-            XRechnungSpec spec = new XRechnungSpec { Version = version };
+            XRechnungSpec spec = new XRechnungSpec
+            {
+                Version = version,
+                Syntax = syntax.ToString()
+            };
 
-            // ---- 1. Extract element hierarchy from EN16931 XSD ----
+            // ---- 1. Extract element hierarchy from XSD ----
             XsdParser xsdParser = new XsdParser();
-            List<SpecElement> rootElements = xsdParser.Parse(en16931XsdPath);
+
+            List<SpecElement> rootElements;
+            switch (syntax)
+            {
+                case SyntaxBinding.UblInvoice:
+                    rootElements = xsdParser.ParseUblInvoice(xsdPath);
+                    break;
+                case SyntaxBinding.UblCreditNote:
+                    rootElements = xsdParser.ParseUblCreditNote(xsdPath);
+                    break;
+                default:
+                    rootElements = xsdParser.ParseCii(xsdPath);
+                    break;
+            }
             spec.Elements = rootElements;
 
             // ---- 2. Extract business rules from XRechnung schematron ----
@@ -63,13 +121,13 @@ namespace s2industries.ZUGFeRD.Spec
 
             SchematronParser schParser = new SchematronParser();
 
-            if (File.Exists(ciiSchFile))
+            if (syntax == SyntaxBinding.Cii && File.Exists(ciiSchFile))
             {
                 List<SpecRule> ciiRules = schParser.Parse(ciiSchFile, "CII", commonSchFile);
                 spec.Rules.AddRange(ciiRules);
             }
-
-            if (File.Exists(ublSchFile))
+            else if ((syntax == SyntaxBinding.UblInvoice || syntax == SyntaxBinding.UblCreditNote)
+                     && File.Exists(ublSchFile))
             {
                 List<SpecRule> ublRules = schParser.Parse(ublSchFile, "UBL", commonSchFile);
                 spec.Rules.AddRange(ublRules);
@@ -80,6 +138,16 @@ namespace s2industries.ZUGFeRD.Spec
 
             return spec;
         } // !Extract()
+
+
+        /// <summary>
+        /// Convenience overload that keeps backward-compatible CII behaviour.
+        /// </summary>
+        [Obsolete("Use Extract(xrechnungDocPath, xsdPath, syntax, version) instead.")]
+        public XRechnungSpec Extract(string xrechnungDocPath, string en16931XsdPath, string version = "3.0.1")
+        {
+            return Extract(xrechnungDocPath, en16931XsdPath, SyntaxBinding.Cii, version);
+        }
 
 
         /// <summary>
@@ -129,17 +197,7 @@ namespace s2industries.ZUGFeRD.Spec
         {
             List<SpecElement> flat = FlattenElements(spec);
 
-            // Build a lookup: XPath → SpecElement
-            Dictionary<string, SpecElement> pathLookup = new Dictionary<string, SpecElement>(StringComparer.Ordinal);
-            foreach (SpecElement el in flat)
-            {
-                if (!pathLookup.ContainsKey(el.XPath))
-                {
-                    pathLookup[el.XPath] = el;
-                }
-            }
-
-            // For each rule context, try to find matching elements
+            // For each rule context, try to find matching elements by XPath suffix
             foreach (SpecRule rule in spec.Rules)
             {
                 // Normalize context: strip predicate expressions to get a clean path

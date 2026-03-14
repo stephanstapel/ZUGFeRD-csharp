@@ -29,9 +29,10 @@ namespace s2industries.ZUGFeRD.Spec.Test
         public static void Main(string[] args)
         {
             string? xrechnungDocPath = null;
-            string? en16931XsdPath = null;
+            string? xsdPath = null;
             string? outputJson = null;
             string version = "3.0.1";
+            string syntaxStr = "cii";
             bool showHelp = false;
             bool verbose = false;
 
@@ -42,9 +43,19 @@ namespace s2industries.ZUGFeRD.Spec.Test
                 {
                     { "?|help|h", "Print help and exit", _ => showHelp = true },
                     { "x|xrechnung=", "Path to the XRechnung version folder\n(e.g. documentation/xRechnung/XRechnung 3.0.1)", v => xrechnungDocPath = v },
-                    { "s|schema=", "Path to the EN16931 CII XSD directory\n(e.g. documentation/zugferd211en/Schema/EN16931)", v => en16931XsdPath = v },
+                    { "s|schema=", "Path to the XSD directory.\n" +
+                                   "  CII  : EN16931 FACTUR-X XSD directory\n" +
+                                   "         (e.g. documentation/zugferd211en/Schema/EN16931)\n" +
+                                   "  UBL  : OASIS UBL 2.1 XSD directory containing\n" +
+                                   "         UBL-Invoice-2.1.xsd / UBL-CreditNote-2.1.xsd.\n" +
+                                   "         Download: http://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip\n" +
+                                   "         (use the xsd/maindoc or xsdrt/maindoc subfolder)", v => xsdPath = v },
                     { "o|output=", "Output JSON file path", v => outputJson = v },
                     { "ver|version=", "XRechnung version label (default: 3.0.1)", v => version = v },
+                    { "syntax=", "Syntax binding to extract:\n" +
+                                 "  cii               : CII (ZUGFeRD/Factur-X, default)\n" +
+                                 "  ubl | ubl-invoice : UBL 2.1 Invoice (XRechnung UBL)\n" +
+                                 "  ubl-creditnote    : UBL 2.1 CreditNote", v => syntaxStr = v?.Trim().ToLowerInvariant() ?? "cii" },
                     { "v|verbose", "Print extracted statistics", _ => verbose = true },
                 };
             }
@@ -69,7 +80,7 @@ namespace s2industries.ZUGFeRD.Spec.Test
             {
                 Console.WriteLine("XRechnung Specification Extractor");
                 Console.WriteLine("Extracts element hierarchy, cardinalities, and business rules");
-                Console.WriteLine("from XRechnung schematron and EN16931 CII XSD files.");
+                Console.WriteLine("from XRechnung schematron and schema (CII XSD or OASIS UBL 2.1 XSD) files.");
                 Console.WriteLine();
                 options!.WriteOptionDescriptions(Console.Out);
                 return;
@@ -82,34 +93,81 @@ namespace s2industries.ZUGFeRD.Spec.Test
                 Environment.Exit(1);
             }
 
-            if (string.IsNullOrEmpty(en16931XsdPath))
+            if (string.IsNullOrEmpty(xsdPath))
             {
                 Console.Error.WriteLine("Error: -s/--schema is required.");
                 options!.WriteOptionDescriptions(Console.Error);
                 Environment.Exit(1);
             }
 
-            if (string.IsNullOrEmpty(outputJson))
+            // Parse syntax binding
+            SyntaxBinding syntax;
+            switch (syntaxStr)
             {
-                outputJson = Path.Combine(
-                    Path.GetDirectoryName(xrechnungDocPath) ?? ".",
-                    $"xrechnung-{version}-spec.json");
+                case "ubl":
+                case "ubl-invoice":
+                    syntax = SyntaxBinding.UblInvoice;
+                    break;
+                case "ubl-creditnote":
+                case "ubl-credit-note":
+                    syntax = SyntaxBinding.UblCreditNote;
+                    break;
+                default:
+                    syntax = SyntaxBinding.Cii;
+                    break;
             }
 
-            Console.WriteLine($"Extracting XRechnung {version} specification...");
+            if (string.IsNullOrEmpty(outputJson))
+            {
+                string syntaxSuffix = syntax == SyntaxBinding.Cii ? "cii" :
+                                      syntax == SyntaxBinding.UblCreditNote ? "ubl-cn" : "ubl";
+                outputJson = Path.Combine(
+                    Path.GetDirectoryName(xrechnungDocPath) ?? ".",
+                    $"xrechnung-{version}-{syntaxSuffix}-spec.json");
+            }
+
+            Console.WriteLine($"Extracting XRechnung {version} specification ({syntax})...");
             Console.WriteLine($"  XRechnung docs : {xrechnungDocPath}");
-            Console.WriteLine($"  EN16931 XSDs   : {en16931XsdPath}");
+            Console.WriteLine($"  XSD path       : {xsdPath}");
+            Console.WriteLine($"  Syntax         : {syntax}");
             Console.WriteLine($"  Output         : {outputJson}");
 
             SpecExtractor extractor = new SpecExtractor();
-            XRechnungSpec spec = extractor.Extract(xrechnungDocPath, en16931XsdPath, version);
+            XRechnungSpec spec;
+            try
+            {
+                spec = extractor.Extract(xrechnungDocPath!, xsdPath!, syntax, version);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.Error.WriteLine($"\nError: Schema file not found: {ex.FileName}");
+                if (syntax == SyntaxBinding.UblInvoice || syntax == SyntaxBinding.UblCreditNote)
+                {
+                    string rootFile = syntax == SyntaxBinding.UblCreditNote
+                        ? "UBL-CreditNote-2.1.xsd"
+                        : "UBL-Invoice-2.1.xsd";
+                    Console.Error.WriteLine($"\nThe OASIS UBL 2.1 XSD files are not included in this repository.");
+                    Console.Error.WriteLine($"Please download the UBL 2.1 package and extract it:");
+                    Console.Error.WriteLine($"  URL : http://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip");
+                    Console.Error.WriteLine($"Then point --schema to the directory containing '{rootFile}'");
+                    Console.Error.WriteLine($"  (usually the 'xsd/maindoc' or 'xsdrt/maindoc' subfolder)");
+                }
+                Environment.Exit(2);
+                return;
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                Console.Error.WriteLine($"\nError: XSD directory not found: {ex.Message}");
+                Environment.Exit(2);
+                return;
+            }
 
             if (verbose)
             {
                 List<SpecElement> flat = extractor.FlattenElements(spec);
                 Console.WriteLine($"\nExtracted:");
                 Console.WriteLine($"  Elements (total flattened) : {flat.Count}");
-                Console.WriteLine($"  Rules (CII + UBL)          : {spec.Rules.Count}");
+                Console.WriteLine($"  Rules                      : {spec.Rules.Count}");
 
                 int fatalRules = 0, warningRules = 0;
                 Dictionary<string, int> rulesByPattern = new Dictionary<string, int>(StringComparer.Ordinal);

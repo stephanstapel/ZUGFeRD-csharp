@@ -32,6 +32,11 @@ namespace s2industries.ZUGFeRD.Spec
         public string Version { get; set; } = string.Empty;
 
         /// <summary>
+        /// Syntax binding used for extraction: "Cii", "UblInvoice", or "UblCreditNote".
+        /// </summary>
+        public string Syntax { get; set; } = "Cii";
+
+        /// <summary>
         /// All XML elements defined in the EN16931 CII schema, with their
         /// hierarchy, types, and cardinalities.
         /// </summary>
