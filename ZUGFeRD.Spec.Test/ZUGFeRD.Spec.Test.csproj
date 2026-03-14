@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>s2industries.ZUGFeRD.JSON.Test</RootNamespace>
+    <RootNamespace>s2industries.ZUGFeRD.Spec.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZUGFeRD.JSON\ZUGFeRD.JSON.csproj" />
-    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
+    <ProjectReference Include="..\ZUGFeRD.Spec\ZUGFeRD.Spec.csproj" />
   </ItemGroup>
 
 </Project>

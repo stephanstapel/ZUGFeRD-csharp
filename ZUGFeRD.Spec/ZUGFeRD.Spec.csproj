@@ -2,15 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>s2industries.ZUGFeRD.JSON</RootNamespace>
+    <RootNamespace>s2industries.ZUGFeRD.Spec</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
   </ItemGroup>
 
 </Project>
