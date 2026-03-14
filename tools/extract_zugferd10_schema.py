@@ -310,6 +310,11 @@ class BtMappingParser:
         # elem_local → {"bts": [...], "description": "..."}   (fallback, single-context elems)
         self._elem_map: dict[str, dict[str, Any]] = {}
 
+    @property
+    def mapped_element_count(self) -> int:
+        """Number of distinct element local names that have BT/BG mappings."""
+        return len(self._elem_map)
+
     def parse_file(self, filepath: str) -> None:
         tree = ET.parse(filepath)
         root = tree.getroot()
@@ -318,7 +323,7 @@ class BtMappingParser:
             for rule in pattern.iter(f"{{{self.SCH_NS}}}rule"):
                 context = rule.get("context", "")
                 # Extract the local name of the innermost non-predicate element
-                ctx_local = self._context_tail(context)
+                ctx_local = _context_tail(context)
 
                 for a in rule.iter(f"{{{self.SCH_NS}}}assert"):
                     test = a.get("test", "")
@@ -369,25 +374,73 @@ class BtMappingParser:
             return exact
         return self._elem_map.get(elem_local, {"bts": [], "description": ""})
 
-    # ------------------------------------------------------------------
-    @staticmethod
-    def _context_tail(context: str) -> str:
-        """
-        Return the local name of the innermost element in an XPath context
-        expression, stripping predicates.
 
-        E.g. ``//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax``
-        → ``"ApplicableTradeTax"``
-        """
-        parts = [p for p in context.split("/") if p and ":" in p]
-        if not parts:
-            return ""
-        return parts[-1].split("[")[0].split(":")[-1]
+def _context_tail(context: str) -> str:
+    """
+    Return the local name of the innermost element in an XPath context
+    expression, stripping predicates.
+
+    E.g. ``//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax``
+    → ``"ApplicableTradeTax"``
+    """
+    parts = [p for p in context.split("/") if p and ":" in p]
+    if not parts:
+        return ""
+    return parts[-1].split("[")[0].split(":")[-1]
 
 
 # ---------------------------------------------------------------------------
 # Tree Builder
 # ---------------------------------------------------------------------------
+
+
+def _derive_profile_support(
+    assert_msgs: list[str], report_msgs: list[str]
+) -> list[str]:
+    """
+    Derive the list of ZUGFeRD profiles that support this element.
+
+    In ZUGFeRD 1.0 a single SCMT covers BASIC, COMFORT, and EXTENDED.
+    Elements with a 'not used' report are absent from all profiles.
+    Elements with assert rules are required; all others are optional but present.
+    """
+    if any("not used" in m.lower() for m in report_msgs):
+        return []
+    return ["BASIC", "COMFORT", "EXTENDED"]
+
+
+def _derive_cii_cardinality(
+    assert_msgs: list[str], report_msgs: list[str]
+) -> str:
+    """
+    Derive CII cardinality from Schematron assertion messages.
+
+    Examples:
+        "must occur exactly 1 times" → "1..1"
+        "must occur at least 1 times" → "1..*"
+        "may occur at maximum 1 times" → "0..1"
+        "is marked as not used"       → "0..0"
+    """
+    if any("not used" in m.lower() for m in report_msgs):
+        return "0..0"
+    for msg in assert_msgs:
+        m = re.search(r"must occur exactly (\d+) times?", msg, re.IGNORECASE)
+        if m:
+            n = m.group(1)
+            return f"{n}..{n}"
+        m = re.search(r"must occur at least (\d+) times?", msg, re.IGNORECASE)
+        if m:
+            return f"{m.group(1)}..*"
+        m = re.search(r"may occur at maximum (\d+) times?", msg, re.IGNORECASE)
+        if m:
+            return f"0..{m.group(1)}"
+    return ""
+
+
+def _format_cardinality(min_occurs: str, max_occurs: str) -> str:
+    max_str = "*" if max_occurs == "unbounded" else max_occurs
+    return f"{min_occurs}..{max_str}"
+
 
 def build_tree(
     xsd: XsdParser,
@@ -397,13 +450,16 @@ def build_tree(
     xpath: str,
     bt_map: "BtMappingParser | None" = None,
     parent_local: str = "",
+    xsd_cardinality: str = "",
     visited: set[str] | None = None,
 ) -> dict[str, Any]:
     """
     Recursively build an element tree node starting from type_name.
 
-    XPaths are built with namespace prefixes matching the Schematron file so
-    that Schematron constraints can be correlated to each node.
+    The returned dict matches the C# Element class structure:
+      name, typeName, xsdCardinality, xpath,
+      description, profileSupport, businessTerm, id,
+      businessRule, ciiCardinality, additionalData, children
 
     bt_map, when provided, enriches each node with BT/BG number annotations
     and EN16931 descriptions cross-referenced from the ZUGFeRD 2.x Schematron.
@@ -413,75 +469,77 @@ def build_tree(
     if visited is None:
         visited = set()
 
+    # Constraints from SCMT for this XPath
     constraints = scmt_map.get(xpath, [])
+    assert_msgs = [c["message"] for c in constraints if c.get("type") == "assert"]
+    report_msgs = [c["message"] for c in constraints if c.get("type") == "report"]
 
+    # BT/BG enrichment
     bt_info: dict[str, Any] = {"bts": [], "description": ""}
     if bt_map is not None:
         bt_info = bt_map.lookup(parent_local, element_name)
 
+    bt_only = [b for b in bt_info["bts"] if b.startswith("BT-")]
+    bg_only = [b for b in bt_info["bts"] if b.startswith("BG-")]
+
+    # Namespace-qualified element name (prefix comes from the parent type's namespace)
+    ns_prefix = type_name.split(":")[0] if ":" in type_name else ""
+    qualified_name = f"{ns_prefix}:{element_name}" if ns_prefix else element_name
+
     node: dict[str, Any] = {
-        "name": element_name,
-        "type": type_name,
+        "name": qualified_name,
+        "typeName": type_name,
+        "xsdCardinality": xsd_cardinality,
         "xpath": xpath,
-        "bt_numbers": bt_info["bts"],
-        "bt_description": bt_info["description"],
-        "constraints": constraints,
+        "description": bt_info["description"],
+        "profileSupport": _derive_profile_support(assert_msgs, report_msgs),
+        "businessTerm": ", ".join(bt_only),
+        "id": ", ".join(bg_only),
+        "businessRule": "; ".join(assert_msgs),
+        "ciiCardinality": _derive_cii_cardinality(assert_msgs, report_msgs),
+        "additionalData": {},
         "children": [],
     }
 
     if type_name in visited:
-        node["note"] = "circular reference – not expanded"
+        node["additionalData"]["note"] = "circular reference – not expanded"
         return node
 
     if type_name not in xsd.types:
         return node
 
-    # Derive the local name of the current type to use as the parent context
-    # for BT lookups of child elements.
-    type_local = type_name.split(":")[-1] if ":" in type_name else type_name
-    # Strip the "Type" suffix to get the element context name used in Schematron
+    # Derive the parent-local name used in BT lookups for children.
     # e.g. "ram:ApplicableTradeTaxType" → "ApplicableTradeTax"
-    bt_parent_local = type_local.removesuffix("Type")
+    type_local = type_name.split(":")[-1] if ":" in type_name else type_name
+    bt_parent_local = (
+        type_local[: -len("Type")] if type_local.endswith("Type") else type_local
+    )
 
     visited = visited | {type_name}
     for child_elem in xsd.types[type_name]:
         child_name = child_elem["name"]
         child_type = child_elem["type"]
-        # The XPath segment prefix comes from the namespace of the *parent type*
-        # (elementFormDefault="qualified" means local elements take the target namespace
-        # of the schema file that defines the enclosing complexType).
         child_ns_prefix = child_elem.get("nsPrefix", "")
+        child_min = child_elem["minOccurs"]
+        child_max = child_elem["maxOccurs"]
+        child_cardinality = _format_cardinality(child_min, child_max)
+
         if child_ns_prefix:
             child_xpath = f"{xpath}/{child_ns_prefix}:{child_name}"
         else:
             child_xpath = f"{xpath}/{child_name}"
 
-        child_bt_info: dict[str, Any] = {"bts": [], "description": ""}
-        if bt_map is not None:
-            child_bt_info = bt_map.lookup(bt_parent_local, child_name)
-
-        child_node: dict[str, Any] = {
-            "name": child_name,
-            "type": child_type,
-            "minOccurs": child_elem["minOccurs"],
-            "maxOccurs": child_elem["maxOccurs"],
-            "xpath": child_xpath,
-            "bt_numbers": child_bt_info["bts"],
-            "bt_description": child_bt_info["description"],
-            "constraints": scmt_map.get(child_xpath, []),
-            "children": [],
-        }
-        if "inlineType" in child_elem:
-            child_node["inlineElements"] = child_elem["inlineType"]
-
-        # Recurse into child type
-        if child_type and child_type in xsd.types:
-            subtree = build_tree(
-                xsd, scmt_map, child_type, child_name, child_xpath,
-                bt_map, bt_parent_local, visited
-            )
-            child_node["children"] = subtree["children"]
-
+        child_node = build_tree(
+            xsd,
+            scmt_map,
+            child_type,
+            child_name,
+            child_xpath,
+            bt_map,
+            bt_parent_local,
+            child_cardinality,
+            visited,
+        )
         node["children"].append(child_node)
 
     return node
@@ -496,30 +554,23 @@ def flatten_tree(
     rows: list[dict[str, Any]] | None = None,
     depth: int = 0,
 ) -> list[dict[str, Any]]:
-    """Convert the hierarchical tree into a flat list of rows."""
+    """Convert the hierarchical tree into a flat list of rows for Excel output."""
     if rows is None:
         rows = []
-
-    min_occ = node.get("minOccurs", "")
-    max_occ = node.get("maxOccurs", "")
-
-    assert_msgs = [
-        c["message"] for c in node.get("constraints", []) if c.get("type") == "assert"
-    ]
-    report_msgs = [
-        c["message"] for c in node.get("constraints", []) if c.get("type") == "report"
-    ]
 
     rows.append(
         {
             "depth": depth,
             "name": node.get("name", ""),
-            "type": node.get("type", ""),
+            "typeName": node.get("typeName", ""),
             "xpath": node.get("xpath", ""),
-            "minOccurs": min_occ,
-            "maxOccurs": max_occ,
-            "schematron_required": "; ".join(assert_msgs),
-            "schematron_not_used": "; ".join(report_msgs),
+            "xsdCardinality": node.get("xsdCardinality", ""),
+            "ciiCardinality": node.get("ciiCardinality", ""),
+            "businessTerm": node.get("businessTerm", ""),
+            "id": node.get("id", ""),
+            "description": node.get("description", ""),
+            "profileSupport": ", ".join(node.get("profileSupport", [])),
+            "businessRule": node.get("businessRule", ""),
         }
     )
 
@@ -559,14 +610,17 @@ def write_excel(rows: list[dict[str, Any]], output_path: str) -> None:
     ws.title = "ZUGFeRD 1.0 Schema"
 
     columns = [
-        ("XPath", 60),
-        ("Element Name", 40),
+        ("XPath", 62),
+        ("Element Name", 42),
         ("Data Type", 45),
-        ("minOccurs", 10),
-        ("maxOccurs", 10),
-        ("Depth", 8),
-        ("Schematron – Required (assert)", 50),
-        ("Schematron – Not Used (report)", 50),
+        ("XSD Cardinality", 14),
+        ("CII Cardinality", 14),
+        ("BT Number", 10),
+        ("BG Number", 10),
+        ("Depth", 7),
+        ("Profile Support", 28),
+        ("Description (EN16931)", 55),
+        ("Business Rule (SCMT)", 55),
     ]
 
     # Write header row
@@ -578,7 +632,7 @@ def write_excel(rows: list[dict[str, Any]], output_path: str) -> None:
             horizontal="center", vertical="center", wrap_text=True
         )
         ws.column_dimensions[cell.column_letter].width = width
-    ws.row_dimensions[1].height = 25
+    ws.row_dimensions[1].height = 30
 
     # Write data rows
     for row_idx, row in enumerate(rows, start=2):
@@ -592,12 +646,15 @@ def write_excel(rows: list[dict[str, Any]], output_path: str) -> None:
         values = [
             row["xpath"],
             indent + row["name"],
-            row["type"],
-            row["minOccurs"],
-            row["maxOccurs"],
+            row["typeName"],
+            row["xsdCardinality"],
+            row["ciiCardinality"],
+            row["businessTerm"],
+            row["id"],
             depth,
-            row["schematron_required"],
-            row["schematron_not_used"],
+            row["profileSupport"],
+            row["description"],
+            row["businessRule"],
         ]
 
         for col_idx, value in enumerate(values, start=1):
@@ -619,6 +676,15 @@ def parse_args() -> argparse.Namespace:
     repo_root = script_dir.parent
     default_schema = str(repo_root / "documentation" / "zugferd10" / "Schema")
     default_output = str(repo_root / "documentation" / "zugferd10")
+    default_en16931 = str(
+        repo_root
+        / "documentation"
+        / "zugferd211en"
+        / "Schema"
+        / "EN16931"
+        / "Schematron"
+        / "FACTUR-X_EN16931.sch"
+    )
 
     parser = argparse.ArgumentParser(
         description="Extract ZUGFeRD 1.0 XML schema structure to JSON and Excel."
@@ -626,12 +692,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--schema-dir",
         default=default_schema,
-        help=f"Path to Schema directory (default: {default_schema})",
+        help=f"Path to ZUGFeRD 1.0 Schema directory (default: {default_schema})",
     )
     parser.add_argument(
         "--output-dir",
         default=default_output,
         help=f"Path for output files (default: {default_output})",
+    )
+    parser.add_argument(
+        "--en16931-sch",
+        default=default_en16931,
+        help="Path to ZUGFeRD 2.x EN16931 Schematron file for BT/BG enrichment "
+             f"(default: {default_en16931})",
     )
     parser.add_argument(
         "--no-excel",
@@ -663,7 +735,7 @@ def main() -> None:
         f"{len(xsd.root_elements)} root elements."
     )
 
-    # ---- Parse Schematron ----
+    # ---- Parse ZUGFeRD 1.0 Schematron (SCMT) ----
     scmt_path = schema_dir / SCMT_FILE
     scmt_map: dict[str, list[dict[str, str]]] = {}
     if scmt_path.exists():
@@ -675,14 +747,29 @@ def main() -> None:
     else:
         print(f"Warning: Schematron file not found: {scmt_path}", file=sys.stderr)
 
+    # ---- Parse EN16931 Schematron for BT/BG enrichment ----
+    bt_map: BtMappingParser | None = None
+    en16931_path = Path(args.en16931_sch)
+    if en16931_path.exists():
+        print(f"Parsing EN16931 Schematron: {en16931_path.name}")
+        bt_parser = BtMappingParser()
+        bt_parser.parse_file(str(en16931_path))
+        bt_map = bt_parser
+        print(f"Loaded BT/BG mappings for {bt_parser.mapped_element_count} element names.")
+    else:
+        print(
+            f"Warning: EN16931 Schematron not found at {en16931_path}. "
+            "BT/BG numbers will be omitted.",
+            file=sys.stderr,
+        )
+
     # ---- Build element tree ----
-    # The root element is CrossIndustryDocument (rsm namespace)
     root_elem_name = "CrossIndustryDocument"
     root_type = xsd.root_elements.get(root_elem_name, "rsm:CrossIndustryDocumentType")
     root_xpath = f"/rsm:{root_elem_name}"
 
     print(f"Building element tree from root: {root_elem_name} ({root_type})")
-    tree = build_tree(xsd, scmt_map, root_type, root_elem_name, root_xpath)
+    tree = build_tree(xsd, scmt_map, root_type, root_elem_name, root_xpath, bt_map)
 
     # ---- JSON output ----
     json_path = output_dir / "schema_structure.json"
