@@ -8,6 +8,12 @@ documentation/zugferd10/Schema/ and extracts:
   - Cardinality (minOccurs / maxOccurs from XSD)
   - Profile-specific cardinality rules from Schematron (BASIC / COMFORT / EXTENDED)
 
+BT/BG numbers and textual descriptions are NOT present in the ZUGFeRD 1.0
+documentation files — they were introduced with the EN16931 standard (ZUGFeRD
+2.x / Factur-X).  This script cross-references the element names against the
+ZUGFeRD 2.x EN16931 Schematron file shipped with this repository to provide
+best-effort BT/BG number annotations and English descriptions.
+
 Outputs:
   - documentation/zugferd10/schema_structure.json
   - documentation/zugferd10/schema_structure.xlsx
@@ -64,6 +70,12 @@ XSD_FILES = [
 ]
 
 SCMT_FILE = "ZUGFeRD_1p0.scmt"
+
+# Path to the ZUGFeRD 2.x EN16931 Schematron file used for BT/BG number enrichment.
+# This path is relative to the repository root and resolved at runtime.
+EN16931_SCH_REL = (
+    "documentation/zugferd211en/Schema/EN16931/Schematron/FACTUR-X_EN16931.sch"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -265,6 +277,115 @@ class ScmtParser:
 
 
 # ---------------------------------------------------------------------------
+# BT/BG Number Parser (ZUGFeRD 2.x EN16931 Schematron)
+# ---------------------------------------------------------------------------
+
+class BtMappingParser:
+    """
+    Parses a ZUGFeRD 2.x / Factur-X EN16931 Schematron (.sch) file and
+    extracts BT (Business Term) and BG (Business Group) number associations.
+
+    ZUGFeRD 1.0 does not contain BT numbers — they were introduced with the
+    EN16931 standard.  However, because both ZUGFeRD 1.0 and 2.x are based on
+    the UN/CEFACT Cross Industry Invoice (CII) model, many element *local names*
+    in the ``ram:`` namespace are identical across versions.  This class builds a
+    best-effort mapping from element local names (and their parent context) to
+    BT/BG numbers so that the ZUGFeRD 1.0 schema export can include them.
+
+    Mapping key:
+        (parent_context_tail_local_name, element_local_name)  →  BtInfo
+
+    A fallback mapping keyed only on element local name is also provided for
+    elements that appear in a single context.
+    """
+
+    SCH_NS = "http://purl.oclc.org/dsdl/schematron"
+    BT_RE = re.compile(r"\(?(B[TG]-\d+)\)?")
+    # Matches a simple element reference in an assert test, e.g. "(ram:BasisAmount)"
+    SIMPLE_ELEM_RE = re.compile(r"^\s*\(?\s*([a-z]+:[A-Za-z0-9]+)\s*\)?\s*$")
+
+    def __init__(self) -> None:
+        # (parent_local, elem_local) → {"bts": [...], "description": "..."}
+        self._ctx_map: dict[tuple[str, str], dict[str, Any]] = {}
+        # elem_local → {"bts": [...], "description": "..."}   (fallback, single-context elems)
+        self._elem_map: dict[str, dict[str, Any]] = {}
+
+    def parse_file(self, filepath: str) -> None:
+        tree = ET.parse(filepath)
+        root = tree.getroot()
+
+        for pattern in root.iter(f"{{{self.SCH_NS}}}pattern"):
+            for rule in pattern.iter(f"{{{self.SCH_NS}}}rule"):
+                context = rule.get("context", "")
+                # Extract the local name of the innermost non-predicate element
+                ctx_local = self._context_tail(context)
+
+                for a in rule.iter(f"{{{self.SCH_NS}}}assert"):
+                    test = a.get("test", "")
+                    msg = re.sub(r"\[[A-Z0-9-]+\]-", "", (a.text or "")).strip()
+                    bts = self.BT_RE.findall(msg)
+                    if not bts:
+                        continue
+
+                    m = self.SIMPLE_ELEM_RE.match(test)
+                    if not m:
+                        continue
+                    elem_local = m.group(1).split(":")[-1]
+
+                    key = (ctx_local, elem_local)
+                    entry = self._ctx_map.setdefault(key, {"bts": [], "description": ""})
+                    for bt in bts:
+                        if bt not in entry["bts"]:
+                            entry["bts"].append(bt)
+                    if not entry["description"] and msg:
+                        entry["description"] = msg[:200]
+
+        # Build the fallback elem_map for elements that map to exactly one BT
+        elem_bt_count: dict[str, set[str]] = {}
+        elem_desc: dict[str, str] = {}
+        for (ctx_local, elem_local), entry in self._ctx_map.items():
+            elem_bt_count.setdefault(elem_local, set()).update(entry["bts"])
+            elem_desc.setdefault(elem_local, entry["description"])
+
+        for elem_local, bts in elem_bt_count.items():
+            self._elem_map[elem_local] = {
+                "bts": sorted(bts),
+                "description": elem_desc.get(elem_local, ""),
+            }
+
+    def lookup(
+        self, parent_local: str, elem_local: str
+    ) -> dict[str, Any]:
+        """
+        Return the best BT mapping for (parent_local, elem_local).
+
+        Priority:
+        1. Exact (parent, elem) key match
+        2. Fallback elem-only match
+        3. Empty result
+        """
+        exact = self._ctx_map.get((parent_local, elem_local))
+        if exact:
+            return exact
+        return self._elem_map.get(elem_local, {"bts": [], "description": ""})
+
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _context_tail(context: str) -> str:
+        """
+        Return the local name of the innermost element in an XPath context
+        expression, stripping predicates.
+
+        E.g. ``//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax``
+        → ``"ApplicableTradeTax"``
+        """
+        parts = [p for p in context.split("/") if p and ":" in p]
+        if not parts:
+            return ""
+        return parts[-1].split("[")[0].split(":")[-1]
+
+
+# ---------------------------------------------------------------------------
 # Tree Builder
 # ---------------------------------------------------------------------------
 
@@ -274,6 +395,8 @@ def build_tree(
     type_name: str,
     element_name: str,
     xpath: str,
+    bt_map: "BtMappingParser | None" = None,
+    parent_local: str = "",
     visited: set[str] | None = None,
 ) -> dict[str, Any]:
     """
@@ -282,6 +405,9 @@ def build_tree(
     XPaths are built with namespace prefixes matching the Schematron file so
     that Schematron constraints can be correlated to each node.
 
+    bt_map, when provided, enriches each node with BT/BG number annotations
+    and EN16931 descriptions cross-referenced from the ZUGFeRD 2.x Schematron.
+
     visited prevents infinite recursion for circular type references.
     """
     if visited is None:
@@ -289,10 +415,16 @@ def build_tree(
 
     constraints = scmt_map.get(xpath, [])
 
+    bt_info: dict[str, Any] = {"bts": [], "description": ""}
+    if bt_map is not None:
+        bt_info = bt_map.lookup(parent_local, element_name)
+
     node: dict[str, Any] = {
         "name": element_name,
         "type": type_name,
         "xpath": xpath,
+        "bt_numbers": bt_info["bts"],
+        "bt_description": bt_info["description"],
         "constraints": constraints,
         "children": [],
     }
@@ -303,6 +435,13 @@ def build_tree(
 
     if type_name not in xsd.types:
         return node
+
+    # Derive the local name of the current type to use as the parent context
+    # for BT lookups of child elements.
+    type_local = type_name.split(":")[-1] if ":" in type_name else type_name
+    # Strip the "Type" suffix to get the element context name used in Schematron
+    # e.g. "ram:ApplicableTradeTaxType" → "ApplicableTradeTax"
+    bt_parent_local = type_local.removesuffix("Type")
 
     visited = visited | {type_name}
     for child_elem in xsd.types[type_name]:
@@ -317,12 +456,18 @@ def build_tree(
         else:
             child_xpath = f"{xpath}/{child_name}"
 
+        child_bt_info: dict[str, Any] = {"bts": [], "description": ""}
+        if bt_map is not None:
+            child_bt_info = bt_map.lookup(bt_parent_local, child_name)
+
         child_node: dict[str, Any] = {
             "name": child_name,
             "type": child_type,
             "minOccurs": child_elem["minOccurs"],
             "maxOccurs": child_elem["maxOccurs"],
             "xpath": child_xpath,
+            "bt_numbers": child_bt_info["bts"],
+            "bt_description": child_bt_info["description"],
             "constraints": scmt_map.get(child_xpath, []),
             "children": [],
         }
@@ -332,7 +477,8 @@ def build_tree(
         # Recurse into child type
         if child_type and child_type in xsd.types:
             subtree = build_tree(
-                xsd, scmt_map, child_type, child_name, child_xpath, visited
+                xsd, scmt_map, child_type, child_name, child_xpath,
+                bt_map, bt_parent_local, visited
             )
             child_node["children"] = subtree["children"]
 
