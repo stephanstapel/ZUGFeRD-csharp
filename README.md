@@ -181,11 +181,17 @@ tradeLineItem3.SetLineStatus(LineStatusCodes.DocumentationClaim, LineStatusReaso
 
 ## Storing the invoice
 ```csharp
+// Save as CII (the default format for ZUGFeRD / Factur-X)
 FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write);
 desc.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung);
 stream.Flush();
-stream.Close();    
+stream.Close();
+
+// To save as XRechnung UBL instead, pass ZUGFeRDFormats.UBL:
+// desc.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
 ```
+
+See the [Support for XRechnung UBL](#support-for-xrechnung-ubl) section for a complete UBL example.
 
 # Support for ZUGFeRD 1.x, ZUGFeRD 2.x
 In order to load ZUGFeRD files, you call `InvoiceDescriptor.Load()`, passing a file path like this:
@@ -251,7 +257,7 @@ In general, creating XRechnung files is straight forward and just like creating 
 descriptor.Save("xrechnung.xml", ZUGFeRDVersion.Version23, Profile.XRechnung);
 ```
 
-This will save the invoice as XRechnung 3.0.1 as valid from 2024/02/01.
+This will save the invoice as XRechnung 3.0.1 (specification effective date: 2024/02/01). The default output format is **CII** (Cross Industry Invoice). See the next section if you need the **UBL** format instead.
 
 Make sure to also add a business process which is required starting with XRechnung 3.0.1:
 
@@ -284,6 +290,172 @@ Please note that there are only few mime-types supported by the XRechnung standa
 - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 - application/vnd.oasis.opendocument.spreadsheet
 - application/xml
+
+# Support for XRechnung UBL
+XRechnung supports two distinct XML syntaxes: **CII** (Cross Industry Invoice, the default) and **UBL** (Universal Business Language).
+Both are valid XRechnung outputs — the difference is purely the XML structure.
+UBL is often preferred for integration with Peppol networks and other European e-procurement systems.
+
+## Creating and saving an XRechnung UBL invoice
+
+To save as UBL, pass `ZUGFeRDFormats.UBL` as the `format` parameter:
+
+```csharp
+using s2industries.ZUGFeRD;
+
+// Step 1: Create the invoice
+InvoiceDescriptor desc = InvoiceDescriptor.CreateInvoice(
+    invoiceNo: "471102",
+    invoiceDate: new DateTime(2024, 6, 5),
+    currency: CurrencyCodes.EUR
+);
+
+// Required: business process identifier for XRechnung 3.0+
+desc.BusinessProcess = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0";
+
+// Required: buyer reference (Leitweg-ID for German public sector invoices)
+desc.ReferenceOrderNo = "04011000-12345-34";
+
+// Step 2: Set seller information
+desc.SetSeller(
+    name: "Lieferant GmbH",
+    postcode: "80333",
+    city: "München",
+    street: "Lieferantenstraße 20",
+    country: CountryCodes.DE,
+    id: "",
+    globalID: new GlobalID(GlobalIDSchemeIdentifiers.GLN, "4000001123452"),
+    legalOrganization: new LegalOrganization(GlobalIDSchemeIdentifiers.GLN, "4000001123452", "Lieferant GmbH")
+);
+desc.AddSellerTaxRegistration("201/113/40209", TaxRegistrationSchemeID.FC);
+desc.AddSellerTaxRegistration("DE123456789", TaxRegistrationSchemeID.VA);
+
+// Electronic address (required for Peppol / UBL)
+desc.SetSellerElectronicAddress("DE123456789", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
+
+// Step 3: Set buyer information
+desc.SetBuyer(
+    name: "Kunden AG Mitte",
+    postcode: "69876",
+    city: "Frankfurt",
+    street: "Kundenstraße 15",
+    country: CountryCodes.DE,
+    id: "GE2020211"
+);
+desc.SetBuyerElectronicAddress("DE2020211", ElectronicAddressSchemeIdentifiers.GermanyVatNumber);
+
+// Step 4: Add line items
+desc.AddTradeLineItem(
+    name: "Trennblätter A4",
+    unitCode: QuantityCodes.H87,
+    sellerAssignedID: "TB100A4",
+    grossUnitPrice: 9.9m,
+    netUnitPrice: 9.9m,
+    billedQuantity: 20m,
+    taxType: TaxTypes.VAT,
+    categoryCode: TaxCategoryCodes.S,
+    taxPercent: 19m
+);
+
+desc.AddTradeLineItem(
+    name: "Joghurt Banane",
+    unitCode: QuantityCodes.H87,
+    sellerAssignedID: "ARNR2",
+    grossUnitPrice: 5.5m,
+    netUnitPrice: 5.5m,
+    billedQuantity: 50m,
+    taxType: TaxTypes.VAT,
+    categoryCode: TaxCategoryCodes.S,
+    taxPercent: 7m
+);
+
+// Step 5: Set taxes and totals
+desc.AddApplicableTradeTax(
+    basisAmount: 198.0m,
+    percent: 19m,
+    taxAmount: 37.62m,
+    typeCode: TaxTypes.VAT,
+    categoryCode: TaxCategoryCodes.S
+);
+desc.AddApplicableTradeTax(
+    basisAmount: 275.0m,
+    percent: 7m,
+    taxAmount: 19.25m,
+    typeCode: TaxTypes.VAT,
+    categoryCode: TaxCategoryCodes.S
+);
+
+desc.SetTotals(
+    lineTotalAmount: 473.0m,
+    taxBasisAmount: 473.0m,
+    taxTotalAmount: 56.87m,
+    grandTotalAmount: 529.87m,
+    duePayableAmount: 529.87m
+);
+
+// Step 6: Set payment details
+desc.SetPaymentMeans(PaymentMeansTypeCodes.SEPACreditTransfer, "Zahlung per SEPA Überweisung.");
+desc.AddCreditorFinancialAccount(iban: "DE02120300000000202051", bic: "BYLADEM1001", name: "Kunden AG");
+desc.AddTradePaymentTerms("Zahlbar innerhalb 30 Tagen netto bis 04.07.2024");
+
+// Step 7: Save as XRechnung UBL
+// The key difference from CII is the ZUGFeRDFormats.UBL parameter:
+desc.Save(
+    filename: "xrechnung-ubl.xml",
+    version: ZUGFeRDVersion.Version23,
+    profile: Profile.XRechnung,
+    format: ZUGFeRDFormats.UBL   // <-- this switches from CII to UBL output
+);
+```
+
+Alternatively, save to a stream:
+
+```csharp
+using var stream = new FileStream("xrechnung-ubl.xml", FileMode.Create, FileAccess.Write);
+desc.Save(stream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+stream.Flush();
+```
+
+## Loading / reading a UBL invoice
+
+Loading works exactly the same as for CII — the library automatically detects the XML format:
+
+```csharp
+// Load from file (auto-detects CII or UBL)
+InvoiceDescriptor desc = InvoiceDescriptor.Load("xrechnung-ubl.xml");
+
+// Access invoice properties
+Console.WriteLine($"Invoice No:  {desc.InvoiceNo}");
+Console.WriteLine($"Invoice Date:{desc.InvoiceDate}");
+Console.WriteLine($"Seller:      {desc.Seller.Name}");
+Console.WriteLine($"Buyer:       {desc.Buyer.Name}");
+Console.WriteLine($"Grand Total: {desc.GrandTotalAmount} {desc.Currency}");
+
+foreach (TradeLineItem item in desc.TradeLineItems)
+{
+    Console.WriteLine($"  Line {item.AssociatedDocument.LineID}: {item.Name}, " +
+                      $"Qty={item.BilledQuantity} {item.UnitCode}, " +
+                      $"Price={item.NetUnitPrice}");
+}
+```
+
+## CII vs. UBL — what changes?
+
+The only change you need to make in your code is the `format` parameter:
+
+```csharp
+// Save as CII (default – ZUGFeRD / Factur-X compatible)
+desc.Save("invoice-cii.xml", ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.CII);
+
+// Save as UBL (XRechnung UBL – used in Peppol and many European systems)
+desc.Save("invoice-ubl.xml", ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+```
+
+The `InvoiceDescriptor` object, all its fields, and all reading/writing APIs are **identical** — only the XML serialization changes.
+Both formats comply with the XRechnung 3.0.1 and EN 16931 standards.
+
+More information about the UBL syntax binding is available here:
+https://docs.peppol.eu/poacc/billing/3.0/syntax/ubl-invoice/
 
 # Support for E-Reporting
 For french companies, a dedicated profile exists called E-Reporting. This profile is implemented on top of XRechnung/ Factur-X. It is used when transactions are done to customers who don't make use of VAT. One example are private customers (in B2C scenarios). The other example is when selling to entities beyond France.
