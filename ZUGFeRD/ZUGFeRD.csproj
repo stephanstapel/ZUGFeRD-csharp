@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
     <Version>18.0.0-beta3</Version>
-    <Authors>Stephan Stapel</Authors>
-    <Company>s2 industries</Company>
+    <Authors>iPlus tim (original by Stephan Stapel)</Authors>
+    <Company>gipSoft</Company>
     <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
 It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
 A special favor is the so-called XRechnung which is also supported by this library.
@@ -26,7 +26,7 @@ https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
     <FileVersion>18.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
+    <AssemblyName>iPlus.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ZUGFeRD.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -85,7 +85,7 @@ Thanks to all contributors!
 * Added new quantity codes
 * Prepared to make getters of lists private, please use Get() functions instead</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>ZUGFeRD-csharp</PackageId>
+    <PackageId>iPlus.ZUGFeRD</PackageId>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</RepositoryUrl>
     <UserSecretsId>ceeaa3c6-7c48-4061-b8f6-da26a9de5879</UserSecretsId>
