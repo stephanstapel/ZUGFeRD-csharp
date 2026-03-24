@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -81,36 +81,60 @@ namespace s2industries.ZUGFeRD
         } // !_GenerateNamespaceManagerFromNode()
         */
 
+        //protected XmlNamespaceManager _CreateFixedNamespaceManager(XmlDocument doc)
+        //{
+        //    var nsmgr = new XmlNamespaceManager(doc.NameTable);
+
+        //    var declared = new Dictionary<string, string>();
+
+        //    // Alle deklarierten Namespaces aus dem Dokument einlesen
+        //    if (doc.DocumentElement != null)
+        //    {
+        //        foreach (XmlAttribute attr in doc.DocumentElement.Attributes)
+        //        {
+        //            if (attr.Prefix == "xmlns")
+        //            {
+        //                declared[attr.LocalName] = attr.Value;
+        //            }
+        //            else if (attr.Name == "xmlns")
+        //            {
+        //                declared[string.Empty] = attr.Value;
+        //            }
+        //        }
+        //    }
+
+        //    // Factur-X / ZUGFeRD relevante Namespaces
+        //    foreach(KeyValuePair<string,string> ns in _Namespaces)
+        //    {
+        //        _AddNamespaceIfExists(nsmgr, declared, ns.Key, ns.Value);
+        //    }
+
+        //    return nsmgr;
+        //} // !_CreateFixedNamespaceManager()
         protected XmlNamespaceManager _CreateFixedNamespaceManager(XmlDocument doc)
         {
             var nsmgr = new XmlNamespaceManager(doc.NameTable);
 
-            var declared = new Dictionary<string, string>();
-
-            // Alle deklarierten Namespaces aus dem Dokument einlesen
-            if (doc.DocumentElement != null)
-            {
-                foreach (XmlAttribute attr in doc.DocumentElement.Attributes)
-                {
-                    if (attr.Prefix == "xmlns")
-                    {
-                        declared[attr.LocalName] = attr.Value;
-                    }
-                    else if (attr.Name == "xmlns")
-                    {
-                        declared[string.Empty] = attr.Value;
-                    }
-                }
-            }
-
-            // Factur-X / ZUGFeRD relevante Namespaces
-            foreach(KeyValuePair<string,string> ns in _Namespaces)
+            foreach (var ns in _Namespaces)
             {
                 nsmgr.AddNamespace(ns.Key, ns.Value);
             }
 
             return nsmgr;
-        } // !_CreateFixedNamespaceManager()
+        }
+
+
+
+        private void _AddNamespaceIfExists(XmlNamespaceManager mgr, Dictionary<string, string> declared, string prefix, string expectedUri)
+        {
+            // Prüfen, ob dieser Namespace im Dokument vorkommt
+            bool exists = declared.Values.Contains(expectedUri);
+
+            if (exists)
+            {
+                mgr.AddNamespace(prefix, expectedUri);
+            }
+        } //!_AddNamespaceIfExists()
 
 
         protected bool _IsReadableByThisReaderVersion(Stream stream, IList<string> validURIs)
