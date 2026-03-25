@@ -4,7 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>s2industries.ZUGFeRD.Render</RootNamespace>
 	<PreserveCompilationContext>true</PreserveCompilationContext>
-	<Version>17.3.0</Version>
+	<Version>18.0.0</Version>
+	<Copyright>STwo Industries GmbH, 2026</Copyright>
+	<Company>STwo Industries GmbH</Company>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Scriban" Version="7.0.3" />
-    <PackageReference Include="ZUGFeRD-csharp" Version="17.4.0" />
+    <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0" />
   </ItemGroup>
 
 </Project>
