@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="6.4.0" />
+    <PackageReference Include="Scriban" Version="7.0.3" />
     <PackageReference Include="ZUGFeRD-csharp" Version="17.4.0" />
   </ItemGroup>
 
