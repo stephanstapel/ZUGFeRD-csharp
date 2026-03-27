@@ -359,16 +359,22 @@ namespace s2industries.ZUGFeRD
         public decimal? TaxBasisAmount { get; set; } = null;
 
         /// <summary>
-        /// The total VAT amount for the invoice.
-        /// The VAT total amount expressed in the accounting currency accepted or required in the country of the seller
-        ///
-        /// To be used when the VAT accounting currency (BT-6) differs from the Invoice currency code (BT-5) in accordance
-        /// with article 230 of Directive 2006/112 / EC on VAT. The VAT amount in accounting currency is not used
-        /// in the calculation of the Invoice totals..
+        /// The total VAT amount for the invoice in invoice currency (BT-5).
         ///
         /// BT-110
         /// </summary>
         public decimal? TaxTotalAmount { get; set; } = null;
+
+        /// <summary>
+        /// The total VAT amount expressed in the accounting currency (BT-6).
+        ///
+        /// To be used when the VAT accounting currency (BT-6) differs from the Invoice currency code (BT-5) in accordance
+        /// with article 230 of Directive 2006/112 / EC on VAT. The VAT amount in accounting currency is not used
+        /// in the calculation of the Invoice totals.
+        ///
+        /// BT-111
+        /// </summary>
+        public decimal? TaxTotalAmountInAccountingCurrency { get; set; } = null;
 
         /// <summary>
         /// Invoice total amount with VAT
@@ -1389,16 +1395,17 @@ namespace s2industries.ZUGFeRD
         /// <param name="chargeTotalAmount">Sum of all charges</param>
         /// <param name="allowanceTotalAmount">Sum of all allowances</param>
         /// <param name="taxBasisAmount">Base amount for tax calculation</param>
-        /// <param name="taxTotalAmount">Total tax amount</param>
+        /// <param name="taxTotalAmount">Total tax amount in invoice currency (BT-110)</param>
         /// <param name="grandTotalAmount">Total amount including tax</param>
         /// <param name="totalPrepaidAmount">Amount already paid</param>
         /// <param name="duePayableAmount">Amount due for payment</param>
-        /// <param name="roundingAmount">Rounding adjustment amount</param>        
+        /// <param name="roundingAmount">Rounding adjustment amount</param>
+        /// <param name="taxTotalAmountInAccountingCurrency">Total tax amount in accounting currency (BT-111), only required when BT-6 differs from BT-5</param>
         public void SetTotals(decimal lineTotalAmount, decimal? chargeTotalAmount = null,
                               decimal? allowanceTotalAmount = null, decimal? taxBasisAmount = null,
                               decimal? taxTotalAmount = null, decimal? grandTotalAmount = null,
                               decimal? totalPrepaidAmount = null, decimal? duePayableAmount = null,
-                              decimal? roundingAmount = null)
+                              decimal? roundingAmount = null, decimal? taxTotalAmountInAccountingCurrency = null)
         {
             this.LineTotalAmount = lineTotalAmount;
             this.ChargeTotalAmount = chargeTotalAmount;
@@ -1409,6 +1416,7 @@ namespace s2industries.ZUGFeRD
             this.TotalPrepaidAmount = totalPrepaidAmount;
             this.DuePayableAmount = duePayableAmount;
             this.RoundingAmount = roundingAmount;
+            this.TaxTotalAmountInAccountingCurrency = taxTotalAmountInAccountingCurrency;
         }
 
 

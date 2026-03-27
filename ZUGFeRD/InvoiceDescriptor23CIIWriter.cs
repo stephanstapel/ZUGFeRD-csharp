@@ -1192,7 +1192,18 @@ namespace s2industries.ZUGFeRD
             {
                 _writeOptionalAmount(_Writer, "ram", "TaxBasisTotalAmount", this._Descriptor.TaxBasisAmount);   // Rechnungsgesamtbetrag ohne Umsatzsteuer
             }
-            _writeOptionalAmount(_Writer, "ram", "TaxTotalAmount", this._Descriptor.TaxTotalAmount, forceCurrency: true);               // Gesamtbetrag der Rechnungsumsatzsteuer, Steuergesamtbetrag in Buchungswährung
+            _writeOptionalAmount(_Writer, "ram", "TaxTotalAmount", this._Descriptor.TaxTotalAmount, forceCurrency: true);               // BT-110: Gesamtbetrag der Rechnungsumsatzsteuer in Rechnungswährung
+
+            // BT-111: TaxTotalAmount in accounting currency — only when BT-6 (TaxCurrency) differs from BT-5 (Currency)
+            if (this._Descriptor.TaxCurrency.HasValue &&
+                this._Descriptor.TaxCurrency.Value != this._Descriptor.Currency &&
+                this._Descriptor.TaxTotalAmountInAccountingCurrency.HasValue)
+            {
+                _Writer.WriteStartElement("ram", "TaxTotalAmount");
+                _Writer.WriteAttributeString("currencyID", this._Descriptor.TaxCurrency.Value.EnumToString());
+                _Writer.WriteValue(_formatDecimal(this._Descriptor.TaxTotalAmountInAccountingCurrency.Value, 2));
+                _Writer.WriteEndElement(); // !ram:TaxTotalAmount
+            }
             _writeOptionalAmount(_Writer, "ram", "RoundingAmount", this._Descriptor.RoundingAmount, profile: Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);  // RoundingAmount  //Rundungsbetrag
             _writeOptionalAmount(_Writer, "ram", "GrandTotalAmount", this._Descriptor.GrandTotalAmount);                                // Rechnungsgesamtbetrag einschließlich Umsatzsteuer
             _writeOptionalAmount(_Writer, "ram", "TotalPrepaidAmount", this._Descriptor.TotalPrepaidAmount);                            // Vorauszahlungsbetrag
