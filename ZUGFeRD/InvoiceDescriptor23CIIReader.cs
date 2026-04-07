@@ -470,6 +470,7 @@ namespace s2industries.ZUGFeRD
             {
                 retval.TaxTotalAmountInAccountingCurrency = XmlUtils.NodeAsDecimal(doc.DocumentElement, $"//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID='{retval.TaxCurrency.Value.EnumToString()}']", nsmgr);
             }
+
             retval.GrandTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount", nsmgr);
             retval.RoundingAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:RoundingAmount", nsmgr);
             retval.TotalPrepaidAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount", nsmgr);

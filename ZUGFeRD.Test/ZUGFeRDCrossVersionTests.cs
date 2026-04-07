@@ -1233,5 +1233,129 @@ namespace s2industries.ZUGFeRD.Test
                 }
             }
         } // !TestShipToTradePartyOnItemLevel()
+
+
+        /// <summary>
+        /// GitHub issue #886: When TaxCurrency (BT-6) is not set, only BT-110 must be written
+        /// with the invoice currency. No BT-111 element should be present.
+        /// </summary>
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]        
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.XRechnung)]
+        public void TestTaxTotalAmountBT110SingleCurrency(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
+            // Make sure no TaxCurrency (BT-6) is set → single currency invoice
+            desc.TaxCurrency = null;
+            desc.TaxTotalAmountInAccountingCurrency = null;
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            // Check raw XML: exactly one TaxTotalAmount element with invoice currencyID
+            string xml = new System.IO.StreamReader(ms).ReadToEnd();
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            var nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+
+            XmlNodeList taxTotalNodes = xmlDoc.SelectNodes("//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr);
+            Assert.AreEqual(1, taxTotalNodes.Count, "Exactly one TaxTotalAmount (BT-110) expected when no TaxCurrency is set");
+            Assert.AreEqual("EUR", taxTotalNodes[0].Attributes["currencyID"]?.Value, "BT-110 must use invoice currency");
+
+            // Verify round-trip
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount, "BT-110 value must survive round-trip");
+            Assert.IsNull(loadedInvoice.TaxTotalAmountInAccountingCurrency, "BT-111 must be null when TaxCurrency is not set");
+        } // !TestTaxTotalAmountBT110SingleCurrency()
+
+
+        /// <summary>
+        /// GitHub issue #886: When TaxCurrency (BT-6) differs from Currency (BT-5), both BT-110
+        /// (in invoice currency) and BT-111 (in accounting currency) must be written.
+        /// </summary>
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Comfort)]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended)]
+        public void TestTaxTotalAmountBT110AndBT111DualCurrency(ZUGFeRDVersion version, Profile profile)
+        {
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
+            // BT-5 = EUR (invoice currency), BT-6 = CHF (accounting currency)
+            desc.TaxCurrency = CurrencyCodes.CHF;
+            // BT-110: VAT total in invoice currency (EUR)
+            // BT-111: VAT total in accounting currency (CHF)
+            decimal taxTotalInAccountingCurrency = 62.50m;
+            desc.TaxTotalAmountInAccountingCurrency = taxTotalInAccountingCurrency;
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, profile);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            // Check raw XML: exactly two TaxTotalAmount elements
+            string xml = new System.IO.StreamReader(ms).ReadToEnd();
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            var nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+
+            XmlNodeList taxTotalNodes = xmlDoc.SelectNodes("//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr);
+            Assert.AreEqual(2, taxTotalNodes.Count, "Two TaxTotalAmount elements expected when TaxCurrency differs from Currency");
+
+            // BT-110 must use invoice currency (BT-5)
+            var bt110Node = xmlDoc.SelectSingleNode("//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID='EUR']", nsmgr);
+            Assert.IsNotNull(bt110Node, "BT-110 element with invoice currencyID='EUR' must be present");
+            Assert.AreEqual("56.87", bt110Node.InnerText);
+
+            // BT-111 must use accounting currency (BT-6)
+            var bt111Node = xmlDoc.SelectSingleNode("//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID='CHF']", nsmgr);
+            Assert.IsNotNull(bt111Node, "BT-111 element with accounting currencyID='CHF' must be present");
+            Assert.AreEqual("62.50", bt111Node.InnerText);
+
+            // Verify round-trip
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            Assert.AreEqual(56.87m, loadedInvoice.TaxTotalAmount, "BT-110 value must survive round-trip");
+            Assert.AreEqual(taxTotalInAccountingCurrency, loadedInvoice.TaxTotalAmountInAccountingCurrency, "BT-111 value must survive round-trip");
+            Assert.AreEqual(CurrencyCodes.CHF, loadedInvoice.TaxCurrency, "TaxCurrency (BT-6) must survive round-trip");
+        } // !TestTaxTotalAmountBT110AndBT111DualCurrency()
+
+
+        /// <summary>
+        /// GitHub issue #886: When TaxCurrency equals Currency, only one TaxTotalAmount (BT-110)
+        /// must be written, even if TaxTotalAmountInAccountingCurrency is set.
+        /// </summary>
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version20)]
+        [DataRow(ZUGFeRDVersion.Version23)]
+        public void TestTaxTotalAmountBT110OnlyWhenTaxCurrencyEqualsCurrency(ZUGFeRDVersion version)
+        {
+            InvoiceDescriptor desc = _InvoiceProvider.CreateInvoice();
+            // BT-6 explicitly set but same as BT-5 — should behave like single currency
+            desc.TaxCurrency = CurrencyCodes.EUR;
+            desc.TaxTotalAmountInAccountingCurrency = 56.87m;
+
+            MemoryStream ms = new MemoryStream();
+            desc.Save(ms, version, Profile.Comfort);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            string xml = new System.IO.StreamReader(ms).ReadToEnd();
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            var nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+
+            XmlNodeList taxTotalNodes = xmlDoc.SelectNodes("//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr);
+            Assert.AreEqual(1, taxTotalNodes.Count, "Only BT-110 expected when TaxCurrency equals Currency");
+        } // !TestTaxTotalAmountBT110OnlyWhenTaxCurrencyEqualsCurrency()
     }
 }

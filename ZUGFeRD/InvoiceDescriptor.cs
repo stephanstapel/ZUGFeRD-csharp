@@ -119,7 +119,7 @@ namespace s2industries.ZUGFeRD
         /// The lists of valid currencies are
         /// registered with the ISO 4217 Maintenance Agency „Codes for the
         /// representation of currencies and funds”. Please refer to Article 230
-        /// of the Council Directive 2006/112/EC [2] for further information.
+        /// of the Council Directive 2006/112/EC [2] for further information.                
         ///
         /// BT-6
         /// </summary>
@@ -1399,13 +1399,12 @@ namespace s2industries.ZUGFeRD
         /// <param name="grandTotalAmount">Total amount including tax</param>
         /// <param name="totalPrepaidAmount">Amount already paid</param>
         /// <param name="duePayableAmount">Amount due for payment</param>
-        /// <param name="roundingAmount">Rounding adjustment amount</param>
-        /// <param name="taxTotalAmountInAccountingCurrency">Total tax amount in accounting currency (BT-111), only required when BT-6 differs from BT-5</param>
+        /// <param name="roundingAmount">Rounding adjustment amount</param>        
         public void SetTotals(decimal lineTotalAmount, decimal? chargeTotalAmount = null,
                               decimal? allowanceTotalAmount = null, decimal? taxBasisAmount = null,
                               decimal? taxTotalAmount = null, decimal? grandTotalAmount = null,
                               decimal? totalPrepaidAmount = null, decimal? duePayableAmount = null,
-                              decimal? roundingAmount = null, decimal? taxTotalAmountInAccountingCurrency = null)
+                              decimal? roundingAmount = null)
         {
             this.LineTotalAmount = lineTotalAmount;
             this.ChargeTotalAmount = chargeTotalAmount;
@@ -1415,9 +1414,8 @@ namespace s2industries.ZUGFeRD
             this.GrandTotalAmount = grandTotalAmount;
             this.TotalPrepaidAmount = totalPrepaidAmount;
             this.DuePayableAmount = duePayableAmount;
-            this.RoundingAmount = roundingAmount;
-            this.TaxTotalAmountInAccountingCurrency = taxTotalAmountInAccountingCurrency;
-        }
+            this.RoundingAmount = roundingAmount;            
+        } // !SetTotals()
 
 
         /// <summary>
@@ -2185,6 +2183,20 @@ namespace s2industries.ZUGFeRD
         {
             return this.Notes;
         } // !GetNotes()
+
+
+        /// <summary>
+        /// For specific scenarios, it might be necessary to specify the tax total amount in the accounting currency of the buyer or seller (instead of the invoice currency).
+        /// This happens e.g. when the invoice is issued to a buyer in a foreign country and the tax authorities need to receive the tax total in the local currency
+        /// for tax reporting purposes.
+        /// </summary>
+        /// <param name="taxTotalInAccountingCurrency">Tax in accounting currency</param>
+        /// <param name="accountingCurrency">The accounting currency</param>
+        public void SetTaxTotalInAccountingCurrency(decimal taxTotalInAccountingCurrency, CurrencyCodes accountingCurrency)
+        {
+            this.TaxTotalAmountInAccountingCurrency = taxTotalInAccountingCurrency;
+            this.TaxCurrency = accountingCurrency;
+        } // !SetTaxTotalInAccountingCurrency()
 
 
         private string _getNextLineId()
