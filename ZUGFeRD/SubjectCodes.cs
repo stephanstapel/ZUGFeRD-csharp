@@ -129,6 +129,12 @@ namespace s2industries.ZUGFeRD
         PMD,
 
         /// <summary>
+        /// Delivery instructions
+        /// </summary>
+        /// The free text contains delivery instructions.
+        DIN,
+
+        /// <summary>
         /// Payment information
         ///
         /// Zahlungsinformation
