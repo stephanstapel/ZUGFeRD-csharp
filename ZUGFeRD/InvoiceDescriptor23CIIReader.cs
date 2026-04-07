@@ -457,7 +457,19 @@ namespace s2industries.ZUGFeRD
             retval.ChargeTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:ChargeTotalAmount", nsmgr);
             retval.AllowanceTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:AllowanceTotalAmount", nsmgr);
             retval.TaxBasisAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxBasisTotalAmount", nsmgr);
-            retval.TaxTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr);
+
+            // BT-110: TaxTotalAmount in invoice currency — prefer the element with matching currencyID, fall back to first element
+            retval.TaxTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, $"//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID='{retval.Currency.EnumToString()}']", nsmgr);
+            if (!retval.TaxTotalAmount.HasValue)
+            {
+                retval.TaxTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr);
+            }
+
+            // BT-111: TaxTotalAmount in accounting currency — only when BT-6 differs from BT-5
+            if (retval.TaxCurrency.HasValue && retval.TaxCurrency.Value != retval.Currency)
+            {
+                retval.TaxTotalAmountInAccountingCurrency = XmlUtils.NodeAsDecimal(doc.DocumentElement, $"//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID='{retval.TaxCurrency.Value.EnumToString()}']", nsmgr);
+            }
             retval.GrandTotalAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount", nsmgr);
             retval.RoundingAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:RoundingAmount", nsmgr);
             retval.TotalPrepaidAmount = XmlUtils.NodeAsDecimal(doc.DocumentElement, "//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount", nsmgr);
