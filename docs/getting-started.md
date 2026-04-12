@@ -1,4 +1,4 @@
-\# Introduction
+# Introduction
 
 The ZUGFeRD library allows to create XML files as required by German electronic invoice initiative ZUGFeRD as well invoices in the successor Factur-X. One special profile of Factur-X is the German XRechnung format.
 
@@ -6,45 +6,45 @@ The library is meant to be as simple as possible, however it is not straight for
 
 
 
-\# Consulting/ Commercial Support
+# Consulting/ Commercial Support
 
-\*Auf Deutsch:\* Falls Sie kommerzielle Unterstützung bei der Umsetzung von ZUGFeRD/ XRechnung in Ihrem Unternehmen benötigen, schreiben Sie mir gerne an stephan@s2-industries.com
-
-
-
-\*In English\* In case you need consulting or commercial support for implementing ZUGFeRD/ XRechnung/ Factur-X in your company, please send an email to stephan@s2-industries.com
+*Auf Deutsch:* Falls Sie kommerzielle Unterstützung bei der Umsetzung von ZUGFeRD/ XRechnung in Ihrem Unternehmen benötigen, schreiben Sie mir gerne an stephan@s2-industries.com
 
 
 
-\# Relationship between the different standards
+*In English* In case you need consulting or commercial support for implementing ZUGFeRD/ XRechnung/ Factur-X in your company, please send an email to stephan@s2-industries.com
+
+
+
+# Relationship between the different standards
 
 Since there are a lot of terms and standards around electronic invoices, I'd like to lay out my understanding:
 
 
 
-\- ZUGFeRD was developed by a German initiative as a standard for electronic invoices (https://www.ferd-net.de/).
+- ZUGFeRD was developed by a German initiative as a standard for electronic invoices (https://www.ferd-net.de/).
 
-\- ZUGFeRD 2.1 is identical to the German/French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0) (https://www.ferd-net.de/en/standards/zugferd/factur-x).
+- ZUGFeRD 2.1 is identical to the German/French cooperation Factur-X (ZUGFeRD 2.1 = Factur-X 1.0) (https://www.ferd-net.de/en/standards/zugferd/factur-x).
 
-\- The standard Factur-X 1.0 (respectively ZUGFeRD 2.1) is conform with the European norm EN 16931.
+- The standard Factur-X 1.0 (respectively ZUGFeRD 2.1) is conform with the European norm EN 16931.
 
-\- EN 16931 in turn is based on worldwide UN/CEFACT standard 'Cross Industry Invoice' (CII).
+- EN 16931 in turn is based on worldwide UN/CEFACT standard 'Cross Industry Invoice' (CII).
 
-\- XRechnung as another German standard is a subset of EN 16931. It is defined by another party called KoSIT (https://www.xoev.de/). It comes with its own validation rules (https://xeinkauf.de/dokumente/).
+- XRechnung as another German standard is a subset of EN 16931. It is defined by another party called KoSIT (https://www.xoev.de/). It comes with its own validation rules (https://xeinkauf.de/dokumente/).
 
-\- This means that both Factur-X 1.0 (respectively ZUGFeRD 2.1) and XRechnung are conform with EN 16931. This does not automatically result that those invoices are per se identical.
+- This means that both Factur-X 1.0 (respectively ZUGFeRD 2.1) and XRechnung are conform with EN 16931. This does not automatically result that those invoices are per se identical.
 
-\- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two sister formats.
+- To achieve compatibility, ZUGFeRD 2.1.1 introduced a XRechnung reference profile to guarantee compatibility between the two sister formats.
 
 
 
-\# License
+# License
 
 Subject to the Apache license http://www.apache.org/licenses/LICENSE-2.0.html
 
 
 
-\# Installation
+# Installation
 
 Just use nuget or Visual Studio Package Manager and download 'ZUGFeRD-csharp'.
 
@@ -54,7 +54,7 @@ You can find more information about the nuget package here:
 
 
 
-\[!\[NuGet](https://img.shields.io/nuget/v/ZUGFeRD-csharp?color=blue)](https://www.nuget.org/packages/ZUGFeRD-csharp/)
+[![NuGet](https://img.shields.io/nuget/v/ZUGFeRD-csharp?color=blue)](https://www.nuget.org/packages/ZUGFeRD-csharp/)
 
 
 
@@ -62,13 +62,13 @@ https://www.nuget.org/packages/ZUGFeRD-csharp/
 
 
 
-\# Building on your own
+# Building on your own
 
 Prerequisites:
 
-\* Visual Studio >= 2017
+* Visual Studio >= 2017
 
-\* .net Framework >= 4.6.1 (for .net Standard 2.0 support)
+* .net Framework >= 4.6.1 (for .net Standard 2.0 support)
 
 
 
@@ -80,7 +80,7 @@ For running the tests, open ZUGFeRD-Test/ZUGFeRD-Test.sln and run the unit tests
 
 
 
-\# Step-by-step guide for creating invoices
+# Step-by-step guide for creating invoices
 
 Central class for users is class `InvoiceDescriptor`.
 
@@ -92,7 +92,7 @@ However, the standard has become quite large during the recent years. So it is w
 
 
 
-\## Creating an invoice
+## Creating an invoice
 
 
 
@@ -162,7 +162,7 @@ A description of the fields can be found in the following documents:
 
 
 
-\[https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.3.0-2024-10-03.pdf](https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.3.0-2024-10-03.pdf)
+[https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.3.0-2024-10-03.pdf](https://docs.peppol.eu/edelivery/policies/PEPPOL-EDN-Policy-for-use-of-identifiers-4.3.0-2024-10-03.pdf)
 
 
 
@@ -172,7 +172,7 @@ In Luxembourg, it has been mandatory since this year to process all invoices via
 
 
 
-https://gouvernement.lu/de/dossiers.gouv\_digitalisation%2Bde%2Bdossiers%2B2021%2Bfacturation-electronique.html
+https://gouvernement.lu/de/dossiers.gouv/_digitalisation%2Bde%2Bdossiers%2B2021%2Bfacturation-electronique.html
 
 
 
@@ -184,9 +184,9 @@ https://www.e-rechnung-bund.de/ubertragungskanale/peppol/
 
 
 
-\## Adding line items
+## Adding line items
 
-\### Handling of line ids
+### Handling of line ids
 
 The library allows to operate in two modes: you can either let the library generate the line ids automatically or you can alternatively pass distinct line ids. This is helpful if you want to convert existing invoices, e.g. from ERP systems, to ZUGFeRD/ Factur-X.
 

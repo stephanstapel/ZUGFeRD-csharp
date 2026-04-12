@@ -2,7 +2,7 @@
 
 
 
-\# Support for ZUGFeRD 1.x, ZUGFeRD 2.x
+# Support for ZUGFeRD 1.x, ZUGFeRD 2.x
 
 In order to load ZUGFeRD files, you call `InvoiceDescriptor.Load()`, passing a file path like this:
 
@@ -116,7 +116,7 @@ For reading and writing XRechnung invoices, please see below.
 
 
 
-\# Support for XRechnung
+# Support for XRechnung
 
 In general, creating XRechnung files is straight forward and just like creating any other ZUGFeRD version and profile:
 
@@ -152,9 +152,9 @@ Furthermore, XRechnung comes with some special features. One of these features i
 
 ```csharp
 
-InvoiceDescriptor desc = \_createInvoice();
+InvoiceDescriptor desc = _createInvoice();
 
-byte\[] data = System.IO.File.ReadAllBytes("my-calculation.xlsx");
+byte[] data = System.IO.File.ReadAllBytes("my-calculation.xlsx");
 
 desc.AddAdditionalReferencedDocument(
 
@@ -182,23 +182,23 @@ Please note that there are only few mime-types supported by the XRechnung standa
 
 
 
-\- application/pdf
+- application/pdf
 
-\- image/png
+- image/png
 
-\- image/jpeg
+- image/jpeg
 
-\- text/csv
+- text/csv
 
-\- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 
-\- application/vnd.oasis.opendocument.spreadsheet
+- application/vnd.oasis.opendocument.spreadsheet
 
-\- application/xml
+- application/xml
 
 
 
-\# Support for E-Reporting
+# Support for E-Reporting
 
 For french companies, a dedicated profile exists called E-Reporting. This profile is implemented on top of XRechnung/ Factur-X. It is used when transactions are done to customers who don't make use of VAT. One example are private customers (in B2C scenarios). The other example is when selling to entities beyond France.
 
@@ -208,7 +208,7 @@ And here: https://www.roedl.de/themen/frankreich-e-invoice-reporting-umsatzsteue
 
 
 
-Thanks to \[@Athilla](https://github.com/Athilla), this profile is also supported by ZUGFeRD-csharp.
+Thanks to [@Athilla](https://github.com/Athilla), this profile is also supported by ZUGFeRD-csharp.
 
 
 
@@ -228,7 +228,7 @@ This information needs to be sent to the tax authorities. Different due dates ap
 
 
 
-\# Support for profiles
+# Support for profiles
 
 The library contains support for all profiles that are supported by the ZUGFeRD formats:
 

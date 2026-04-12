@@ -1,4 +1,4 @@
-\### Working with product characteristics
+# Working with product characteristics
 
 Product characteristics are used to add information for the specified trade product in the 'ApplicableProductCharacteristic' section.
 
@@ -36,7 +36,7 @@ One trade product can have one or more product characteristics, which can contai
 
 
 
-\## Document references
+# Document references
 
 The library allows to add special references to an invoice which are pretty rare but nevertheless supported:
 
@@ -58,7 +58,7 @@ desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1
 
 
 
-\## Invoice Line Status
+# Invoice Line Status
 
 The library supports setting a status code and a reason for each line item. This feature helps clarifying whether a line item contributes to the invoice total or is for information only. It can be useful for marking items as informational, subtotal lines, or fully processed items, adding context to each invoiced item.
 
