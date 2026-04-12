@@ -149,4 +149,5 @@ All new features are part of the commercial FactoorSharp product.
 
 # Documentation
 The full documentation for the open-source version can be found here:
+
 https://github.com/stephanstapel/ZUGFeRD-csharp/tree/master/docs
