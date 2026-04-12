@@ -7,15 +7,22 @@
 
 ## TL;DR
 
+**Deutsch**
 - ZUGFeRD-CSharp bleibt Open Source  
 - Bugfixes und Stabilitätsverbesserungen bleiben öffentlich verfügbar  
 - Neue Features gibt es ausschließlich in der kommerziellen Version  
-- Commercial Version: https://www.nuget.org/packages/FactoorSharp.FacturX  
+- Commercial Version: https://www.nuget.org/packages/FactoorSharp.FacturX
+
+**English**
+- ZUGFeRD-CSharp remains Open Source  
+- Bug fixes and stability improvements remain publicly available  
+- New features are only available in the commercial version  
+- Commercial version: https://www.nuget.org/packages/FactoorSharp.FacturX  
 
 
 ## Deutsch
 
-### Ein neues Kapitel für ZUGFeRD-CSharp
+### Ein neues Kapitel für ZUGFeRD-CSharp!
 
 ZUGFeRD-CSharp wurde 2013 als Hobbyprojekt gestartet – mit dem Ziel, die Erstellung und Verarbeitung von ZUGFeRD-Rechnungen zu vereinfachen.  
 Heute setzen hunderte Unternehmen diese Bibliothek produktiv ein.
@@ -85,7 +92,7 @@ Diese Erweiterungen helfen dabei, Fehler frühzeitig zu erkennen, Risiken im pro
 
 ## English
 
-### A New Chapter for ZUGFeRD-CSharp
+### A New Chapter for ZUGFeRD-CSharp!
 
 ZUGFeRD-CSharp started in 2013 as a hobby project, aiming to simplify the creation and processing of ZUGFeRD invoices.  
 Today, hundreds of companies rely on this library in production.
