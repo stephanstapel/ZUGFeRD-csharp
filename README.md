@@ -4,7 +4,6 @@
 ![Model](https://img.shields.io/badge/model-open%20core-blue)
 ![Status](https://img.shields.io/badge/status-active-success)
 
----
 
 ## TL;DR
 
@@ -13,7 +12,6 @@
 - Neue Features gibt es ausschließlich in der kommerziellen Version  
 - Commercial Version: https://www.nuget.org/packages/FactoorSharp.FacturX  
 
----
 
 ## Deutsch
 
@@ -51,7 +49,6 @@ Dieses Modell stellt sicher, dass:
 Ein großes Dankeschön an alle Contributors und Nutzer, die dieses Projekt seit 2013 begleitet haben.  
 Eure Beiträge, Bugreports und Ideen sind ein wesentlicher Bestandteil dieses Erfolgs.
 
----
 
 ## Kommerzielle Version
 
@@ -66,7 +63,6 @@ https://github.com/S2-Industries/FactoorSharp.FacturX
 Website:  
 https://www.factoorsharp.de/  
 
----
 
 ## Why Upgrade?
 
@@ -86,7 +82,6 @@ Die kommerzielle Version bietet zusätzliche Funktionen, die über die reine Ver
 
 Diese Erweiterungen helfen dabei, Fehler frühzeitig zu erkennen, Risiken im produktiven Einsatz zu reduzieren und die Verarbeitung elektronischer Rechnungen langfristig stabil zu betreiben.
 
----
 
 ## English
 
@@ -124,7 +119,7 @@ This approach ensures that:
 A big thank-you to all contributors and users who have supported this project since 2013.  
 Your feedback, bug reports, and contributions made this project what it is today.
 
----
+
 
 ## Commercial Version
 
@@ -139,14 +134,12 @@ https://github.com/S2-Industries/FactoorSharp.FacturX
 Website:  
 https://www.factoorsharp.de/  
 
----
-
 Summary:
 
 ZUGFeRD-CSharp remains Open Source for stability and bug fixes.  
 All new features are part of the commercial FactoorSharp product.
 
-
+---
 
 
 # Introduction
