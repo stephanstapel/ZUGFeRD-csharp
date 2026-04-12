@@ -70,10 +70,7 @@ https://github.com/S2-Industries/FactoorSharp.FacturX
 Website:  
 https://www.factoorsharp.de/  
 
-
-## Why Upgrade?
-
-### Deutsch
+## Warum lohnt sich die kommerzielle Version?
 
 Die kommerzielle Version bietet zusätzliche Funktionen, die über die reine Verarbeitung von ZUGFeRD-Dateien hinausgehen und speziell auf produktive Einsatzszenarien ausgerichtet sind:
 
@@ -145,6 +142,21 @@ Summary:
 
 ZUGFeRD-CSharp remains Open Source for stability and bug fixes.  
 All new features are part of the commercial FactoorSharp product.
+
+## Features of the commercial version
+The commercial version provides additional capabilities beyond basic ZUGFeRD processing, designed for production-grade environments:
+
+- Validation component  
+  Validate ZUGFeRD and PDF documents using established tools such as Mustang, Valitool, and VeraPDF  
+
+- Integration of upcoming standards  
+  Early support for new regulatory requirements and evolving e-invoicing standards  
+
+- Online tools & services  
+  Additional utilities for analyzing and processing ZUGFeRD files available at:  
+  https://www.factoorsharp.de/  
+
+These features help improve quality, compliance, and efficiency when working with electronic invoices.
 
 
 # Documentation
