@@ -1096,6 +1096,12 @@ namespace s2industries.ZUGFeRD
                     }
                     break;
                 case Profile.Extended:
+                {
+                    // The SEPA mandate reference (BT-89) is stored in the PaymentMeans and not in the individual PaymentTerms, but it schould be
+                    // written only once and not multiple time. Therefore, we write it only in the first "SpecifiedTradePaymentTerms" section.
+                    // See https://github.com/stephanstapel/ZUGFeRD-csharp/issues/907
+                    bool bSEPAMandateReferenceWritten = false;
+
                     foreach (PaymentTerms paymentTerms in this._Descriptor.GetTradePaymentTerms())
                     {
                         _Writer.WriteStartElement("ram", "SpecifiedTradePaymentTerms");
@@ -1106,7 +1112,11 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttributeWithPrefix(_Writer, "udt", "DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
                             _Writer.WriteEndElement(); // !ram:DueDateDateTime
                         }
-                        _Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", _Descriptor.PaymentMeans?.SEPAMandateReference);
+                        if ( ! bSEPAMandateReferenceWritten)
+                        {
+                            _Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", _Descriptor.PaymentMeans?.SEPAMandateReference);
+                            bSEPAMandateReferenceWritten = true;
+                        }
                         if (paymentTerms.PaymentTermsType.HasValue)
                         {
                             if (paymentTerms.PaymentTermsType == PaymentTermsType.Skonto)
@@ -1148,14 +1158,21 @@ namespace s2industries.ZUGFeRD
                         }
                         _Writer.WriteEndElement(); // !ram:SpecifiedTradePaymentTerms
                     }
-                    if (this._Descriptor.GetTradePaymentTerms().Count == 0 && !string.IsNullOrWhiteSpace(_Descriptor.PaymentMeans?.SEPAMandateReference))
+                    // If BT-89 has not been written and a SEPA mandate reference exists, write it in an own "SpecifiedTradePaymentTerms" section without a description and due date.
+                    if (!bSEPAMandateReferenceWritten && !string.IsNullOrWhiteSpace(_Descriptor.PaymentMeans?.SEPAMandateReference))
                     {
                         _Writer.WriteStartElement("ram", "SpecifiedTradePaymentTerms");
                         _Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", _Descriptor.PaymentMeans?.SEPAMandateReference);
                         _Writer.WriteEndElement();
                     }
                     break;
+                }
                 default:
+                {
+                    // The SEPA mandate reference (BT-89) is stored in the PaymentMeans and not in the individual PaymentTerms, but it schould be
+                    // written only once and not multiple time. Therefore, we write it only in the first "SpecifiedTradePaymentTerms" section.
+                    // See https://github.com/stephanstapel/ZUGFeRD-csharp/issues/907
+                    bool bSEPAMandateReferenceWritten = false;
                     foreach (PaymentTerms paymentTerms in this._Descriptor.GetTradePaymentTerms())
                     {
                         _Writer.WriteStartElement("ram", "SpecifiedTradePaymentTerms");
@@ -1166,10 +1183,15 @@ namespace s2industries.ZUGFeRD
                             _writeElementWithAttributeWithPrefix(_Writer, "udt", "DateTimeString", "format", "102", _formatDate(paymentTerms.DueDate.Value));
                             _Writer.WriteEndElement(); // !ram:DueDateDateTime
                         }
-                        _Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", _Descriptor.PaymentMeans?.SEPAMandateReference, ALL_PROFILES ^ Profile.Minimum);
+                        if ( ! bSEPAMandateReferenceWritten)
+                        {
+                            _Writer.WriteOptionalElementString("ram", "DirectDebitMandateID", _Descriptor.PaymentMeans?.SEPAMandateReference, ALL_PROFILES ^ Profile.Minimum);
+                            bSEPAMandateReferenceWritten = true;
+                        }
                         _Writer.WriteEndElement(); // !ram:SpecifiedTradePaymentTerms
                     }
                     break;
+                }
             }
 
             #region SpecifiedTradeSettlementHeaderMonetarySummation
