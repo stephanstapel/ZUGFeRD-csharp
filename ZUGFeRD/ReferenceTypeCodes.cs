@@ -71,6 +71,15 @@ namespace s2industries.ZUGFeRD
         AAS,
 
         /// <summary>
+        /// Declarant's Customs identity number
+        /// 
+        /// Reference to the party whose posted bond or security is
+        /// being declared in order to accept responsibility for a
+        /// goods declaration and the applicable duties and taxes.
+        /// </summary>
+        ABP,
+
+        /// <summary>
         /// Zollerklärungsnummer
         /// </summary>
         ABT,
