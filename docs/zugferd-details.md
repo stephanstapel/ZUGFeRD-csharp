@@ -10,26 +10,16 @@ One trade product can have one or more product characteristics, which can contai
 
 // you can optionally add product characteristics:
 
-&#x20;desc.TradeLineItems.Add(new TradeLineItem("0003")
-
+desc.TradeLineItems.Add(new TradeLineItem("0003")
 {
-
-&#x20;   ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>
-
-&#x20;   {
-
-&#x20;       new ApplicableProductCharacteristic()
-
-&#x20;       {
-
-&#x20;           Description = "Description",
-
-&#x20;           Value = "Value"
-
-&#x20;       }
-
-&#x20;   }
-
+    ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>
+    {
+        new ApplicableProductCharacteristic()
+        { 
+            Description = "Description",
+            Value = "Value"
+        }
+    }
 });
 
 ```
