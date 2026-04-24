@@ -6,7 +6,7 @@ One trade product can have one or more product characteristics, which can contai
 
 
 
-&#x20;```csharp
+```csharp
 
 // you can optionally add product characteristics:
 
