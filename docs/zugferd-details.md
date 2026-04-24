@@ -54,6 +54,24 @@ desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt 
 
 desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", IssueDateTime = new DateTime(2013,1,1)};
 
+
+
+// you can optionally reference an order confirmation (seller's order) at invoice level
+
+desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument {ID = "SO-2013-471331", IssueDateTime = new DateTime(2013, 3, 1)};
+
+```
+
+
+
+Order confirmations can also be referenced at the trade line item level:
+
+
+
+```csharp
+// reference an order confirmation at line item level:
+TradeLineItem item = desc.AddTradeLineItem(...);
+item.SellerOrderReferencedDocument = new SellerOrderReferencedDocument {ID = "SO-2013-471331-001", IssueDateTime = new DateTime(2013, 3, 1)};
 ```
 
 
