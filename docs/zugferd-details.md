@@ -75,21 +75,13 @@ The library supports setting a status code and a reason for each line item. This
 // Example: Adding a trade line item with a specific status and reason
 
 TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
-
-&#x20;   name: "Abschlagsrechnung vom 01.01.2024",
-
-&#x20;   netUnitPrice: 500,
-
-&#x20;   unitCode: QuantityCodes.H87,
-
-&#x20;   billedQuantity: -1m,
-
-&#x20;   categoryCode: TaxCategoryCodes.S,
-
-&#x20;   taxPercent: 19.0m,
-
-&#x20;   taxType: TaxTypes.VAT
-
+    name: "Abschlagsrechnung vom 01.01.2024",
+    netUnitPrice: 500,
+    unitCode: QuantityCodes.H87,
+    billedQuantity: -1m,
+    categoryCode: TaxCategoryCodes.S,
+    taxPercent: 19.0m,
+    taxType: TaxTypes.VAT
 );
 
 
