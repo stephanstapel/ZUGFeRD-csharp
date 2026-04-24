@@ -322,6 +322,27 @@ namespace s2industries.ZUGFeRD
                     }
                     #endregion
 
+                    #region SellerOrderReferencedDocument (Comfort, Extended, XRechnung)
+                    if (tradeLineItem.SellerOrderReferencedDocument != null &&
+                        !string.IsNullOrWhiteSpace(tradeLineItem.SellerOrderReferencedDocument.ID))
+                    {
+                        _Writer.WriteStartElement("ram", "SellerOrderReferencedDocument", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                        _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.SellerOrderReferencedDocument.ID);
+
+                        if (tradeLineItem.SellerOrderReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            _Writer.WriteStartElement("ram", "FormattedIssueDateTime", Profile.Extended);
+                            _Writer.WriteStartElement("qdt", "DateTimeString");
+                            _Writer.WriteAttributeString("format", "102");
+                            _Writer.WriteValue(_formatDate(tradeLineItem.SellerOrderReferencedDocument.IssueDateTime.Value));
+                            _Writer.WriteEndElement(); // !qdt:DateTimeString
+                            _Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                        }
+
+                        _Writer.WriteEndElement(); // !ram:SellerOrderReferencedDocument
+                    }
+                    #endregion
+
                     #region ContractReferencedDocument
                     //Detailangaben zum zugehörigen Vertrag
                     if (tradeLineItem.ContractReferencedDocument != null)

@@ -3312,6 +3312,25 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.GetTradeLineItems().First().BuyerOrderReferencedDocument.LineID, "1");
             Assert.AreEqual(desc.GetTradeLineItems().First().BuyerOrderReferencedDocument.ID, "ORDER84359");
         }
+        
+        [TestMethod]
+        public void TestSellerOrderReferenceLineId()
+        {
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+
+            desc.TradeLineItems[0].SellerOrderReferencedDocument = new SellerOrderReferencedDocument { ID = "ORDER84359" , IssueDateTime = new DateTime(2024, 6, 1)};
+
+            MemoryStream ms = new MemoryStream();
+
+            desc.Save(ms, ZUGFeRDVersion.Version23, Profile.Extended);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            InvoiceDescriptor loadedInvoice = InvoiceDescriptor.Load(ms);
+            List<TradeLineItem> items = loadedInvoice.GetTradeLineItems();
+
+            Assert.AreEqual(items[0].SellerOrderReferencedDocument.IssueDateTime, new DateTime(2024, 6, 1));
+            Assert.AreEqual(items[0].SellerOrderReferencedDocument.ID, "ORDER84359");
+        }
 
         [TestMethod]
         public void TestRequiredDirectDebitFieldsShouldExist()
