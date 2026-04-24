@@ -1678,7 +1678,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram", "IncludedNote", profile);
                 if (note.ContentCode.HasValue)
                 {
-                    writer.WriteElementString("ram", "ContentCode", note.ContentCode.EnumToString());
+                    writer.WriteElementString("ram", "ContentCode", note.ContentCode.EnumToString(), Profile.Extended);
                 }
                 writer.WriteOptionalElementString("ram", "Content", note.Content);
                 if (note.SubjectCode.HasValue)
