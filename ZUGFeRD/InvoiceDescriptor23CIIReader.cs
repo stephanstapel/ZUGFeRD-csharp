@@ -646,6 +646,15 @@ namespace s2industries.ZUGFeRD
                 };
             }
 
+            if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:SellerOrderReferencedDocument", nsmgr) != null)
+            {
+                item.SellerOrderReferencedDocument = new SellerOrderReferencedDocument()
+                {
+                    ID = XmlUtils.NodeAsString(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:SellerOrderReferencedDocument/ram:IssuerAssignedID", nsmgr),
+                    IssueDateTime = DataTypeReader.ReadFormattedIssueDateTime(tradeLineItem, ".//ram:SpecifiedLineTradeAgreement/ram:SellerOrderReferencedDocument/ram:FormattedIssueDateTime", nsmgr)
+                };
+            }
+
             if (tradeLineItem.SelectSingleNode(".//ram:SpecifiedLineTradeAgreement/ram:ContractReferencedDocument", nsmgr) != null)
             {
                 item.ContractReferencedDocument = new ContractReferencedDocument()

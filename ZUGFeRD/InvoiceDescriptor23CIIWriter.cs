@@ -290,6 +290,27 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteStartElement("ram", "SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
+                    #region SellerOrderReferencedDocument (Comfort, Extended, XRechnung)
+                    if (tradeLineItem.SellerOrderReferencedDocument != null &&
+                        !string.IsNullOrWhiteSpace(tradeLineItem.SellerOrderReferencedDocument.ID))
+                    {
+                        _Writer.WriteStartElement("ram", "SellerOrderReferencedDocument", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                        _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.SellerOrderReferencedDocument.ID);
+
+                        if (tradeLineItem.SellerOrderReferencedDocument.IssueDateTime.HasValue)
+                        {
+                            _Writer.WriteStartElement("ram", "FormattedIssueDateTime", Profile.Extended);
+                            _Writer.WriteStartElement("qdt", "DateTimeString");
+                            _Writer.WriteAttributeString("format", "102");
+                            _Writer.WriteValue(_formatDate(tradeLineItem.SellerOrderReferencedDocument.IssueDateTime.Value));
+                            _Writer.WriteEndElement(); // !qdt:DateTimeString
+                            _Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+                        }
+
+                        _Writer.WriteEndElement(); // !ram:SellerOrderReferencedDocument
+                    }
+                    #endregion
+
                     #region BuyerOrderReferencedDocument (Comfort, Extended, XRechnung)
                     // Detailangaben zur zugehörigen Bestellung
                     bool hasLineID = !string.IsNullOrWhiteSpace(tradeLineItem.BuyerOrderReferencedDocument?.LineID);
@@ -1678,7 +1699,7 @@ namespace s2industries.ZUGFeRD
                 writer.WriteStartElement("ram", "IncludedNote", profile);
                 if (note.ContentCode.HasValue)
                 {
-                    writer.WriteElementString("ram", "ContentCode", note.ContentCode.EnumToString());
+                    writer.WriteElementString("ram", "ContentCode", note.ContentCode.EnumToString(), Profile.Extended);
                 }
                 writer.WriteOptionalElementString("ram", "Content", note.Content);
                 if (note.SubjectCode.HasValue)

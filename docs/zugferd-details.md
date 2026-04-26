@@ -6,30 +6,20 @@ One trade product can have one or more product characteristics, which can contai
 
 
 
-&#x20;```csharp
+```csharp
 
 // you can optionally add product characteristics:
 
-&#x20;desc.TradeLineItems.Add(new TradeLineItem("0003")
-
+desc.TradeLineItems.Add(new TradeLineItem("0003")
 {
-
-&#x20;   ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>
-
-&#x20;   {
-
-&#x20;       new ApplicableProductCharacteristic()
-
-&#x20;       {
-
-&#x20;           Description = "Description",
-
-&#x20;           Value = "Value"
-
-&#x20;       }
-
-&#x20;   }
-
+    ApplicableProductCharacteristics = new List<ApplicableProductCharacteristic>
+    {
+        new ApplicableProductCharacteristic()
+        { 
+            Description = "Description",
+            Value = "Value"
+        }
+    }
 });
 
 ```
@@ -54,6 +44,24 @@ desc.SpecifiedProcuringProject = new SpecifiedProcuringProject {Name = "Projekt 
 
 desc.ContractReferencedDocument = new ContractReferencedDocument {ID = "AB-312-1", IssueDateTime = new DateTime(2013,1,1)};
 
+
+
+// you can optionally reference an order confirmation (seller's order) at invoice level
+
+desc.SellerOrderReferencedDocument = new SellerOrderReferencedDocument {ID = "SO-2013-471331", IssueDateTime = new DateTime(2013, 3, 1)};
+
+```
+
+
+
+Order confirmations can also be referenced at the trade line item level:
+
+
+
+```csharp
+// reference an order confirmation at line item level:
+TradeLineItem item = desc.AddTradeLineItem(...);
+item.SellerOrderReferencedDocument = new SellerOrderReferencedDocument {ID = "SO-2013-471331-001", IssueDateTime = new DateTime(2013, 3, 1)};
 ```
 
 
@@ -67,21 +75,13 @@ The library supports setting a status code and a reason for each line item. This
 // Example: Adding a trade line item with a specific status and reason
 
 TradeLineItem tradeLineItem3 = desc.AddTradeLineItem(
-
-&#x20;   name: "Abschlagsrechnung vom 01.01.2024",
-
-&#x20;   netUnitPrice: 500,
-
-&#x20;   unitCode: QuantityCodes.H87,
-
-&#x20;   billedQuantity: -1m,
-
-&#x20;   categoryCode: TaxCategoryCodes.S,
-
-&#x20;   taxPercent: 19.0m,
-
-&#x20;   taxType: TaxTypes.VAT
-
+    name: "Abschlagsrechnung vom 01.01.2024",
+    netUnitPrice: 500,
+    unitCode: QuantityCodes.H87,
+    billedQuantity: -1m,
+    categoryCode: TaxCategoryCodes.S,
+    taxPercent: 19.0m,
+    taxType: TaxTypes.VAT
 );
 
 
