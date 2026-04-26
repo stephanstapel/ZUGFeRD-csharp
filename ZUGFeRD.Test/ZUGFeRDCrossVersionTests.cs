@@ -1357,5 +1357,71 @@ namespace s2industries.ZUGFeRD.Test
             XmlNodeList taxTotalNodes = xmlDoc.SelectNodes("//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount", nsmgr);
             Assert.AreEqual(1, taxTotalNodes.Count, "Only BT-110 expected when TaxCurrency equals Currency");
         } // !TestTaxTotalAmountBT110OnlyWhenTaxCurrencyEqualsCurrency()
+
+
+        [TestMethod]
+        public void BT27Bt44PuzzlingInUBLandCII()
+        {
+            string buyerTradingBusinessName = System.Guid.NewGuid().ToString();
+            string sellerTradingBusinessName = System.Guid.NewGuid().ToString();
+
+            InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Buyer.SpecifiedLegalOrganization = new LegalOrganization()
+            {
+                TradingBusinessName = buyerTradingBusinessName
+            };
+            desc.Seller.SpecifiedLegalOrganization = new LegalOrganization()
+            {
+                TradingBusinessName = sellerTradingBusinessName
+            };
+
+            MemoryStream ublStream = new MemoryStream();
+            desc.Save(ublStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.UBL);
+
+            XmlDocument ublDoc = new XmlDocument();
+            ublDoc.Load(ublStream);
+
+            XmlNamespaceManager ublNsMgr = new XmlNamespaceManager(ublDoc.DocumentElement.OwnerDocument.NameTable);
+            ublNsMgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            ublNsMgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            ublNsMgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+
+            string ublSellerName = ublDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name", ublNsMgr).InnerText;
+            string ublSellerLegalEntityName = ublDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName", ublNsMgr).InnerText;
+
+            Assert.AreEqual(sellerTradingBusinessName, ublSellerName);
+            Assert.AreEqual(desc.Seller.Name, ublSellerLegalEntityName);
+
+            string ublBuyerName = ublDoc.SelectSingleNode("//cac:AccountingCustomerParty/cac:Party/cac:PartyName/cbc:Name", ublNsMgr).InnerText;
+            string ublBuyerLegalEntityName = ublDoc.SelectSingleNode("//cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName", ublNsMgr).InnerText;
+
+            Assert.AreEqual(buyerTradingBusinessName, ublBuyerName);
+            Assert.AreEqual(desc.Buyer.Name, ublBuyerLegalEntityName);
+
+            // same for CII
+            MemoryStream ciiStream = new MemoryStream();
+            desc.Save(ciiStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.CII);
+            XmlDocument ciiDoc = new XmlDocument();
+            ciiDoc.Load(ciiStream);
+
+            XmlNamespaceManager ciiNsMgr = new XmlNamespaceManager(ciiDoc.DocumentElement.OwnerDocument.NameTable);
+            ciiNsMgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
+            ciiNsMgr.AddNamespace("ram", "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100");
+            ciiNsMgr.AddNamespace("udt", "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100");
+            ciiNsMgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+            ciiNsMgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
+
+            string ciiSellerName = ciiDoc.SelectSingleNode("//ram:SellerTradeParty/ram:Name", ciiNsMgr).InnerText;
+            string ciiSellerLegalEntityName = ciiDoc.SelectSingleNode("//ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName", ciiNsMgr).InnerText;
+
+            Assert.AreEqual(sellerTradingBusinessName, ciiSellerLegalEntityName);
+            Assert.AreEqual(desc.Seller.Name, ciiSellerName);
+
+            string ciiBuyerName = ciiDoc.SelectSingleNode("//ram:BuyerTradeParty/ram:Name", ciiNsMgr).InnerText;
+            string ciiBuyerLegalEntityName = ciiDoc.SelectSingleNode("//ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName", ciiNsMgr).InnerText;
+
+            Assert.AreEqual(buyerTradingBusinessName, ciiBuyerLegalEntityName);
+            Assert.AreEqual(desc.Buyer.Name, ciiBuyerName);
+        } // !BT27Bt44PuzzlingInUBLandCII()
     }
 }
