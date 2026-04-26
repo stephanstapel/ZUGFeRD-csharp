@@ -251,6 +251,13 @@ namespace s2industries.ZUGFeRD
         public BuyerOrderReferencedDocument BuyerOrderReferencedDocument { get; set; }
 
         /// <summary>
+        /// Details of the associated order confirmation (seller's order)
+        ///
+        /// BT-X (item level)
+        /// </summary>
+        public SellerOrderReferencedDocument SellerOrderReferencedDocument { get; set; }
+
+        /// <summary>
         /// Detailed information about the corresponding delivery note
         ///
         /// BG-X-83
