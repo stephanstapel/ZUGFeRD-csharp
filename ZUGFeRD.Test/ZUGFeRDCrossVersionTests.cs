@@ -1362,14 +1362,19 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void BT27Bt44PuzzlingInUBLandCII()
         {
-            string buyerTradingBusinessName = System.Guid.NewGuid().ToString();
+            string buyerLegalName = System.Guid.NewGuid().ToString();
+            string buyerTradingName = System.Guid.NewGuid().ToString();
+            string sellerLegalName = System.Guid.NewGuid().ToString();
             string sellerTradingBusinessName = System.Guid.NewGuid().ToString();
 
             InvoiceDescriptor desc = this._InvoiceProvider.CreateInvoice();
+            desc.Buyer.Name = buyerLegalName;
             desc.Buyer.SpecifiedLegalOrganization = new LegalOrganization()
             {
-                TradingBusinessName = buyerTradingBusinessName
+                TradingBusinessName = buyerTradingName
             };
+
+            desc.Seller.Name = sellerLegalName;
             desc.Seller.SpecifiedLegalOrganization = new LegalOrganization()
             {
                 TradingBusinessName = sellerTradingBusinessName
@@ -1381,28 +1386,40 @@ namespace s2industries.ZUGFeRD.Test
             XmlDocument ublDoc = new XmlDocument();
             ublDoc.Load(ublStream);
 
+            if (ublDoc.DocumentElement?.OwnerDocument?.NameTable == null)
+            {
+                Assert.Fail("UBL XML document is not well-formed.");
+                return;
+            }
+
             XmlNamespaceManager ublNsMgr = new XmlNamespaceManager(ublDoc.DocumentElement.OwnerDocument.NameTable);
             ublNsMgr.AddNamespace("ubl", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
             ublNsMgr.AddNamespace("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
             ublNsMgr.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+            
+            string? ublSellerTradingNameBT28 = ublDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name", ublNsMgr)?.InnerText; // BT-28
+            string? ublSellerLegalEntityNameBT27 = ublDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName", ublNsMgr)?.InnerText; // BT-27
 
-            string ublSellerName = ublDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name", ublNsMgr).InnerText;
-            string ublSellerLegalEntityName = ublDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName", ublNsMgr).InnerText;
+            Assert.AreEqual(sellerTradingBusinessName, ublSellerTradingNameBT28);
+            Assert.AreEqual(sellerLegalName, ublSellerLegalEntityNameBT27);
 
-            Assert.AreEqual(sellerTradingBusinessName, ublSellerName);
-            Assert.AreEqual(desc.Seller.Name, ublSellerLegalEntityName);
+            string? ublBuyerTradingNameBT45 = ublDoc.SelectSingleNode("//cac:AccountingCustomerParty/cac:Party/cac:PartyName/cbc:Name", ublNsMgr)?.InnerText; // BT-45
+            string? ublBuyerLegalNameBT44 = ublDoc.SelectSingleNode("//cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName", ublNsMgr)?.InnerText; // BT-44
 
-            string ublBuyerName = ublDoc.SelectSingleNode("//cac:AccountingCustomerParty/cac:Party/cac:PartyName/cbc:Name", ublNsMgr).InnerText;
-            string ublBuyerLegalEntityName = ublDoc.SelectSingleNode("//cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName", ublNsMgr).InnerText;
-
-            Assert.AreEqual(buyerTradingBusinessName, ublBuyerName);
-            Assert.AreEqual(desc.Buyer.Name, ublBuyerLegalEntityName);
+            Assert.AreEqual(buyerTradingName, ublBuyerTradingNameBT45);
+            Assert.AreEqual(buyerLegalName, ublBuyerLegalNameBT44);
 
             // same for CII
             MemoryStream ciiStream = new MemoryStream();
             desc.Save(ciiStream, ZUGFeRDVersion.Version23, Profile.XRechnung, ZUGFeRDFormats.CII);
             XmlDocument ciiDoc = new XmlDocument();
             ciiDoc.Load(ciiStream);
+
+            if (ciiDoc.DocumentElement?.OwnerDocument?.NameTable == null)
+            {
+                Assert.Fail("CII XML document is not well-formed.");
+                return;
+            }
 
             XmlNamespaceManager ciiNsMgr = new XmlNamespaceManager(ciiDoc.DocumentElement.OwnerDocument.NameTable);
             ciiNsMgr.AddNamespace("rsm", "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100");
@@ -1411,16 +1428,16 @@ namespace s2industries.ZUGFeRD.Test
             ciiNsMgr.AddNamespace("qdt", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
             ciiNsMgr.AddNamespace("a", "urn:un:unece:uncefact:data:standard:QualifiedDataType:100");
 
-            string ciiSellerName = ciiDoc.SelectSingleNode("//ram:SellerTradeParty/ram:Name", ciiNsMgr).InnerText;
-            string ciiSellerLegalEntityName = ciiDoc.SelectSingleNode("//ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName", ciiNsMgr).InnerText;
+            string? ciiSellerName = ciiDoc.SelectSingleNode("//ram:SellerTradeParty/ram:Name", ciiNsMgr)?.InnerText;
+            string? ciiSellerLegalEntityName = ciiDoc.SelectSingleNode("//ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName", ciiNsMgr)?.InnerText;
 
             Assert.AreEqual(sellerTradingBusinessName, ciiSellerLegalEntityName);
             Assert.AreEqual(desc.Seller.Name, ciiSellerName);
 
-            string ciiBuyerName = ciiDoc.SelectSingleNode("//ram:BuyerTradeParty/ram:Name", ciiNsMgr).InnerText;
-            string ciiBuyerLegalEntityName = ciiDoc.SelectSingleNode("//ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName", ciiNsMgr).InnerText;
+            string? ciiBuyerName = ciiDoc.SelectSingleNode("//ram:BuyerTradeParty/ram:Name", ciiNsMgr)?.InnerText;
+            string? ciiBuyerLegalEntityName = ciiDoc.SelectSingleNode("//ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName", ciiNsMgr)?.InnerText;
 
-            Assert.AreEqual(buyerTradingBusinessName, ciiBuyerLegalEntityName);
+            Assert.AreEqual(buyerTradingName, ciiBuyerLegalEntityName);
             Assert.AreEqual(desc.Buyer.Name, ciiBuyerName);
         } // !BT27Bt44PuzzlingInUBLandCII()
     }

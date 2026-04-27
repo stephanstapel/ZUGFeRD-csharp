@@ -1143,23 +1143,23 @@ namespace s2industries.ZUGFeRD.Test
             Assert.AreEqual(desc.OrderNo, "0815-99-1");
             Assert.AreEqual(desc.Currency, CurrencyCodes.EUR);
 
-            Assert.AreEqual(desc.Buyer.Name, "");
+            Assert.AreEqual(desc.Buyer.Name, "Rechnungs Roulette GmbH & Co KG");
             Assert.AreEqual(desc.Buyer.City, "Klein Schlappstadt a.d. Lusche");
             Assert.AreEqual(desc.Buyer.Postcode, "12345");
             Assert.AreEqual(desc.Buyer.Country, CountryCodes.DE);
             Assert.AreEqual(desc.Buyer.Street, "Beispielgasse 17b");
-            Assert.AreEqual(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName, "Rechnungs Roulette GmbH & Co KG");
+            Assert.IsEmpty(desc.Buyer.SpecifiedLegalOrganization.TradingBusinessName);
 
             Assert.AreEqual(desc.BuyerContact.Name, "Manfred Mustermann");
             Assert.AreEqual(desc.BuyerContact.EmailAddress, "manfred.mustermann@rr.de");
             Assert.AreEqual(desc.BuyerContact.PhoneNo, "012345 98 765 - 44");
 
-            Assert.AreEqual(desc.Seller.Name, "");
+            Assert.AreEqual(desc.Seller.Name, "Harry Hirsch Holz- und Trockenbau");
             Assert.AreEqual(desc.Seller.City, "Klein Schlappstadt a.d. Lusche");
             Assert.AreEqual(desc.Seller.Postcode, "12345");
             Assert.AreEqual(desc.Seller.Country, CountryCodes.DE);
             Assert.AreEqual(desc.Seller.Street, "Beispielgasse 17a");
-            Assert.AreEqual(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName, "Harry Hirsch Holz- und Trockenbau");
+            Assert.IsEmpty(desc.Seller.SpecifiedLegalOrganization.TradingBusinessName);
 
             Assert.AreEqual(desc.SellerContact.Name, "Harry Hirsch");
             Assert.AreEqual(desc.SellerContact.EmailAddress, "harry.hirsch@hhhtb.de");

@@ -1026,11 +1026,11 @@ namespace s2industries.ZUGFeRD
                     }
                 }
 
-                if (!string.IsNullOrWhiteSpace(party.Name))
+                if (!string.IsNullOrWhiteSpace(party.SpecifiedLegalOrganization?.TradingBusinessName))
                 {
                     writer.WriteStartElement("cac", "PartyName");
                     writer.WriteStartElement("cbc", "Name");
-                    writer.WriteValue(party.Name);
+                    writer.WriteValue(party.SpecifiedLegalOrganization.TradingBusinessName);
                     writer.WriteEndElement();//!Name
                     writer.WriteEndElement();//!PartyName
                 }
@@ -1070,23 +1070,27 @@ namespace s2industries.ZUGFeRD
                         _Writer.WriteEndElement(); //!PartyTaxScheme
                     }
                 }
-
-                if ((party.SpecifiedLegalOrganization != null) || !String.IsNullOrWhiteSpace(party.Description))
+                
+                if ((party.SpecifiedLegalOrganization != null) || !String.IsNullOrWhiteSpace(party.Description) || !String.IsNullOrWhiteSpace(party.Name))
                 {
                     writer.WriteStartElement("cac", "PartyLegalEntity");
-                    writer.WriteOptionalElementString("cbc", "RegistrationName", party.SpecifiedLegalOrganization.TradingBusinessName);                    
 
-                    if (party.SpecifiedLegalOrganization?.ID != null && !String.IsNullOrWhiteSpace(party.SpecifiedLegalOrganization.ID.ID))
-                    { 
-                        //Party legal registration identifier (BT-30)
-                        _Writer.WriteStartElement("cbc", "CompanyID");
+                    if ((party.SpecifiedLegalOrganization != null) || !String.IsNullOrWhiteSpace(party.Name))
+                    {
+                        writer.WriteOptionalElementString("cbc", "RegistrationName", party.Name);
 
-                        if (party.SpecifiedLegalOrganization.ID.SchemeID.HasValue)
+                        if (party.SpecifiedLegalOrganization?.ID != null && !String.IsNullOrWhiteSpace(party.SpecifiedLegalOrganization.ID.ID))
                         {
-                            _Writer.WriteAttributeString("schemeID", party.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                            //Party legal registration identifier (BT-30)
+                            _Writer.WriteStartElement("cbc", "CompanyID");
+
+                            if (party.SpecifiedLegalOrganization.ID.SchemeID.HasValue)
+                            {
+                                _Writer.WriteAttributeString("schemeID", party.SpecifiedLegalOrganization.ID.SchemeID.Value.EnumToString());
+                            }
+                            _Writer.WriteValue(party.SpecifiedLegalOrganization.ID.ID);
+                            _Writer.WriteEndElement(); // !CompanyID
                         }
-                        _Writer.WriteValue(party.SpecifiedLegalOrganization.ID.ID);
-                        _Writer.WriteEndElement(); // !CompanyID
                     }
 
                     //Party additional legal information (BT-33)

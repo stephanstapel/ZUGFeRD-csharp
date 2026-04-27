@@ -754,21 +754,29 @@ namespace s2industries.ZUGFeRD
         } // !_parseTradeLineItem()
 
 
-        private static LegalOrganization _nodeAsLegalOrganization(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
+        private static LegalOrganization _nodeAsLegalOrganization(XmlNode partyNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
-            if (baseNode == null)
+            if (partyNode == null)
+            {
                 return null;
-            XmlNode node = baseNode.SelectSingleNode(xpath, nsmgr);
+            }
+
+            XmlNode node = partyNode.SelectSingleNode(xpath, nsmgr);
             if (node == null)
+            {
                 return null;
+            }
+
             var retval = new LegalOrganization()
             {
                 ID = new GlobalID(EnumExtensions.StringToNullableEnum<GlobalIDSchemeIdentifiers>(XmlUtils.NodeAsString(node, "cbc:CompanyID/@schemeID", nsmgr)),
                                         XmlUtils.NodeAsString(node, "cbc:CompanyID", nsmgr)),
-                TradingBusinessName = XmlUtils.NodeAsString(node, "cbc:RegistrationName", nsmgr),
+                TradingBusinessName = XmlUtils.NodeAsString(partyNode, "cac:PartyName/cbc:Name", nsmgr),
             };
             return retval;
-        }
+        } // !_nodeAsLegalOrganization()
+
+
         private static Party _nodeAsParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
             if (baseNode == null)
@@ -794,7 +802,7 @@ namespace s2industries.ZUGFeRD
                 retval.ID = id;
                 retval.GlobalID = new GlobalID();
             }
-            retval.Name = XmlUtils.NodeAsString(node, "cac:PartyName/cbc:Name", nsmgr);
+            retval.Name = XmlUtils.NodeAsString(node, "cac:PartyLegalEntity/cbc:RegistrationName", nsmgr);
             retval.SpecifiedLegalOrganization = _nodeAsLegalOrganization(node, "cac:PartyLegalEntity", nsmgr);
 
             if (string.IsNullOrWhiteSpace(retval.Description))
@@ -834,6 +842,8 @@ namespace s2industries.ZUGFeRD
 
             return retval;
         } // !_nodeAsParty()
+
+
         private static Party _nodeAsAddressParty(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
             if (baseNode == null)
@@ -860,6 +870,8 @@ namespace s2industries.ZUGFeRD
 
             return retval;
         } // !_nodeAsAddressParty()
+
+
         private static BankAccount _nodeAsBankAccount(XmlNode baseNode, string xpath, XmlNamespaceManager nsmgr = null)
         {
             if (baseNode == null)
