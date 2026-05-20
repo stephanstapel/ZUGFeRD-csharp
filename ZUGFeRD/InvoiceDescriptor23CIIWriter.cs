@@ -290,11 +290,11 @@ namespace s2industries.ZUGFeRD
                 {
                     _Writer.WriteStartElement("ram", "SpecifiedLineTradeAgreement", Profile.Basic | Profile.Comfort | Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
 
-                    #region SellerOrderReferencedDocument (Comfort, Extended, XRechnung)
+                    #region SellerOrderReferencedDocument (Extended)
                     if (tradeLineItem.SellerOrderReferencedDocument != null &&
                         !string.IsNullOrWhiteSpace(tradeLineItem.SellerOrderReferencedDocument.ID))
                     {
-                        _Writer.WriteStartElement("ram", "SellerOrderReferencedDocument", PROFILE_COMFORT_EXTENDED_XRECHNUNG);
+                        _Writer.WriteStartElement("ram", "SellerOrderReferencedDocument", Profile.Extended);
                         _Writer.WriteOptionalElementString("ram", "IssuerAssignedID", tradeLineItem.SellerOrderReferencedDocument.ID);
 
                         if (tradeLineItem.SellerOrderReferencedDocument.IssueDateTime.HasValue)
