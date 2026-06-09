@@ -370,7 +370,7 @@ namespace s2industries.ZUGFeRD
                     #region AdditionalReferencedDocument (Extended)
 
                     //Detailangaben zu einer zusätzlichen Dokumentenreferenz
-                    foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments)
+                    foreach (AdditionalReferencedDocument document in tradeLineItem.AdditionalReferencedDocuments.Where(x => x.TypeCode != AdditionalReferencedDocumentTypeCode.InvoiceDataSheet))
                     {
                         _writeAdditionalReferencedDocument(document, Profile.Extended, "BG-X-3");
                     } // !foreach(document)
