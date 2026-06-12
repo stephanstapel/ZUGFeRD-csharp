@@ -106,6 +106,11 @@ namespace s2industries.ZUGFeRD
         AET,
 
         /// <summary>
+        /// Processing Instructions
+        /// </summary>
+        BAR,
+
+        /// <summary>
         /// Waste information
         /// </summary>
         /// Text describing waste related information.
