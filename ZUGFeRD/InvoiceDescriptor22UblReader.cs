@@ -51,8 +51,7 @@ namespace s2industries.ZUGFeRD
             string firstPartOfDocument = System.Text.Encoding.UTF8.GetString(firstPartOfDocumentBuffer);
             bool isInvoice = true;
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(stream);
+            XmlDocument doc = XmlSecurityHelper.LoadSecureDocument(stream);
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.DocumentElement.OwnerDocument.NameTable);
 
             if ((firstPartOfDocument.IndexOf("<CreditNote", StringComparison.OrdinalIgnoreCase) > -1) ||
