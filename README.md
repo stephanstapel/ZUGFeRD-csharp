@@ -11,13 +11,13 @@
 - ZUGFeRD-CSharp bleibt Open Source  
 - Bugfixes und Stabilitätsverbesserungen bleiben öffentlich verfügbar  
 - Neue Features gibt es ausschließlich in der kommerziellen Version  
-- Commercial Version: https://www.nuget.org/packages/FactoorSharp.FacturX
+- Commercial Version: https://www.factoorsharp.de
 
 **English**
 - ZUGFeRD-CSharp remains Open Source  
 - Bug fixes and stability improvements remain publicly available  
 - New features are only available in the commercial version  
-- Commercial version: https://www.nuget.org/packages/FactoorSharp.FacturX  
+- Commercial version: https://www.factoorsharp.de
 
 
 ## Deutsch
