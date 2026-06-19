@@ -194,7 +194,7 @@ namespace s2industries.ZUGFeRD
         public Party SellerTaxRepresentative { get; set; }
 
         /// <summary>
-        /// List of tax registration numbers for the seller.
+        /// List of tax registration numbers for the seller tax representative.
         ///
         /// BT-63
         /// </summary>        
