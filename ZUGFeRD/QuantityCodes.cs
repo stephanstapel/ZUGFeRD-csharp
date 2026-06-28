@@ -917,6 +917,86 @@ namespace s2industries.ZUGFeRD
         XUN,
 
         /// <summary>
+        /// inch
+        /// </summary>
+        INH,
+
+        /// <summary>
+        /// square inch
+        /// </summary>
+        INK,
+
+        /// <summary>
+        /// cubic inch
+        /// </summary>
+        INQ,
+
+        /// <summary>
+        /// bar [unit of pressure]
+        /// </summary>
+        BAR,
+
+        /// <summary>
+        /// gigawatt hour
+        /// </summary>
+        GWH,
+
+        /// <summary>
+        /// Container, not otherwise specified as transport equipment
+        /// </summary>
+        XCN,
+
+        /// <summary>
+        /// Cylinder
+        /// </summary>
+        XCY,
+
+        /// <summary>
+        /// Coil
+        /// </summary>
+        XCL,
+
+        /// <summary>
+        /// Envelope
+        /// </summary>
+        XEN,
+
+        /// <summary>
+        /// Jar
+        /// </summary>
+        XJR,
+
+        /// <summary>
+        /// Keg
+        /// </summary>
+        XKG,
+
+        /// <summary>
+        /// Pail
+        /// </summary>
+        XPL,
+
+        /// <summary>
+        /// Reel
+        /// </summary>
+        XRL,
+
+        /// <summary>
+        /// Sachet
+        /// </summary>
+        XSH,
+
+        /// <summary>
+        /// Vat
+        /// </summary>
+        XVA,
+
+        /// <summary>
+        /// Vial
+        /// </summary>
+        XVI,
+
+        /// <summary>
         /// ton-force (US short)
         /// </summary>
         L94
