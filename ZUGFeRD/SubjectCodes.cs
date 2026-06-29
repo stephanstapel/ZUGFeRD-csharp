@@ -106,6 +106,12 @@ namespace s2industries.ZUGFeRD
         AET,
 
         /// <summary>
+        /// Consignment routing
+        /// </summary>
+        /// Information on routing of the consignment.
+        AIN,
+
+        /// <summary>
         /// Processing Instructions
         /// </summary>
         BAR,
