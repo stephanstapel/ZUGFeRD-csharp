@@ -185,6 +185,27 @@ namespace s2industries.ZUGFeRD
         ///
         /// Note contains information mutually defined by trading partners.
         /// </summary>
-        ZZZ
+        ZZZ,
+
+        /// <summary>
+        /// Delivery instructions
+        ///
+        /// [4492] Instructions regarding the delivery of the cargo. Used here for
+        /// Lieferbedingung / Incoterm.
+        /// </summary>
+        /// VOLFI fork addition: valid UNTDID 4451 code (verified against UNECE d23a/d24a), merged
+        /// upstream (PR #905) after the 18.0.0 release was cut, so absent from the 18.0.0 source we
+        /// vendor. Serialized via ToString().
+        DIN,
+
+        /// <summary>
+        /// Consignment routing
+        ///
+        /// Information on routing of the consignment. Used here for abweichende Lieferanschrift /
+        /// Streckenlieferung (free-text carrier).
+        /// </summary>
+        /// VOLFI fork addition: valid UNTDID 4451 code (verified against UNECE d23a/d24a), not
+        /// present in the curated upstream enum.
+        AIN
     }
 }

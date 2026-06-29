@@ -48,8 +48,10 @@ A special favor is the so-called XRechnung which is also supported by this libra
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PDFsharp-extended" Version="1.3.0" />	  
-	  <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0" />
+    <PackageReference Include="PDFsharp-extended" Version="1.3.0" />
+	  <!-- VOLFI fork: reference the sibling (patched) core project instead of the unpatched nupkg,
+	       so the PDF assembly binds to our SubjectCodes additions (DIN/AIN/BOA). -->
+	  <ProjectReference Include="..\ZUGFeRD\ZUGFeRD.csproj" />
   </ItemGroup>
 
 	<!-- netstandard: minimal & stabil -->
