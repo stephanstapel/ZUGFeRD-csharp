@@ -215,7 +215,7 @@ namespace s2industries.ZUGFeRD
                         int weekNumber = Int32.Parse(week);
                         if (weekNumber < 1 || weekNumber > 53)
                         {
-                            throw new Exception("Invalid week in datetime element (format 616)");
+                            return null;
                         }
 
                         // code from https://capens.net/content/get-first-day-given-week-iso-8601
@@ -226,7 +226,7 @@ namespace s2industries.ZUGFeRD
                         // An ISO week belongs to the year of its Thursday. Week 53 of 2024 is not a week of 2024.
                         if (monday.AddDays(3).Year != yearNumber)
                         {
-                            throw new Exception("Invalid week in datetime element (format 616)");
+                            return null;
                         }
 
                         return monday;
