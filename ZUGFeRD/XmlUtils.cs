@@ -219,7 +219,7 @@ namespace s2industries.ZUGFeRD
                         }
 
                         // code from https://capens.net/content/get-first-day-given-week-iso-8601
-                        DateTime jan4 = new DateTime(yearNumber, 1, 4);
+                        DateTime jan4 = new DateTime(yearNumber, 1, 4, 0, 0, 0, DateTimeKind.Unspecified);
                         DateTime day = jan4.AddDays((weekNumber - 1) * 7); // get a day in the requested week
                         int dayOfWeek = ((int)day.DayOfWeek + 6) % 7; // get day of week, with [mon = 0 ... sun = 6] instead of [sun = 0 ... sat = 6]
                         DateTime monday = day.AddDays(-dayOfWeek);

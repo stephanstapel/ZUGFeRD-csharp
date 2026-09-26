@@ -45,7 +45,9 @@ namespace s2industries.ZUGFeRD.Test
         [TestMethod]
         public void Format616Week1Of2024IsTheMonday()
         {
-            Assert.AreEqual(new DateTime(2024, 1, 1), LoadWeek("202401").InvoiceDate);
+            DateTime? invoiceDate = LoadWeek("202401").InvoiceDate;
+            Assert.AreEqual(new DateTime(2024, 1, 1), invoiceDate);
+            Assert.AreEqual(DateTimeKind.Unspecified, invoiceDate.Value.Kind);
         }
 
         [TestMethod]
