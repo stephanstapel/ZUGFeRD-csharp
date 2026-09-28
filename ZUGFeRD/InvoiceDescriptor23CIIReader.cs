@@ -57,8 +57,7 @@ namespace s2industries.ZUGFeRD
                 throw new IllegalStreamException("Cannot read from stream");
             }
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(stream);
+            XmlDocument doc = XmlSecurityHelper.LoadSecureDocument(stream);
             XmlNamespaceManager nsmgr = _CreateFixedNamespaceManager(doc);
 
             if (!nsmgr.HasNamespace("rsm"))
