@@ -16,19 +16,13 @@
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>	
     <RootNamespace>s2industries.ZUGFeRD.PDF</RootNamespace>	
-    <Version>18.0.0</Version>	
-    <PackageReleaseNotes>18.0.0
-* Updated dependency on ZUGFeRD-chsarp 18.0.0
-
-This is the last major version of ZUGFeRD-csharp. For new features, go to https://www.factoorsharp.de</PackageReleaseNotes>	
+    <Version>18.0.1</Version>	
+    <PackageReleaseNotes>18.0.1
+Depreciation notice</PackageReleaseNotes>	
     <AssemblyName>s2industries.ZUGFeRD.PDF</AssemblyName>	
-    <AssemblyVersion>18.0.0</AssemblyVersion>	
-    <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
-It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
-A special favor is the so-called XRechnung which is also supported by this library.
-
-      This library allows to load and create PDF/A files.
-    </Description>
+    <AssemblyVersion>18.0.1</AssemblyVersion>	
+    <Description>Open-source .NET library for reading and creating ZUGFeRD, Factur-X and XRechnung documents. Maintainer support ends on November 30, 2026. From December 1, 2026, this package will be deprecated (Legacy). Existing versions remain available under their existing open-source license. 
+Active development continues in FactoorSharp, the commercial successor: https://www.factoorsharp.de</Description>
     <Copyright>STwo Industries GmbH, 2026</Copyright>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -49,7 +43,7 @@ A special favor is the so-called XRechnung which is also supported by this libra
 
   <ItemGroup>
     <PackageReference Include="PDFsharp-extended" Version="1.3.0" />	  
-	  <PackageReference Include="ZUGFeRD-csharp" Version="18.0.0" />
+	  <PackageReference Include="ZUGFeRD-csharp" Version="18.0.1" />
   </ItemGroup>
 
 	<!-- netstandard: minimal & stabil -->

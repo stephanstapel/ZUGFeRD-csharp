@@ -60,6 +60,7 @@ namespace s2industries.ZUGFeRD.PDF.Test
 
             InvoiceDescriptor descriptor = new InvoiceProvider().CreateInvoice();
             await InvoicePdfProcessor.SaveToPdfAsync(targetPath, ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor);
+            await InvoicePdfProcessor.SaveToPdfAsync("e:\\out.pdf", ZUGFeRDVersion.Version23, Profile.Comfort, ZUGFeRDFormats.CII, sourcePath, descriptor);
 
             // very basic test
             string result = System.IO.File.ReadAllText(targetPath);

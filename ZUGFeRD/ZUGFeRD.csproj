@@ -1,30 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net461;net480;net8.0</TargetFrameworks>
-    <Version>18.0.0</Version>
+    <Version>18.0.1</Version>
     <Authors>Stephan Stapel</Authors>
     <Company>STwo Industries GmbH</Company>
-    <Description>ZUGFeRD and it's successor Factur-X/ XRechnung are initiatives from German (respectively European) government to foster electronic invoices.
-It is based on using PDF/A-3 to store invoices along with embedded xml descriptor for easy processing.
-A special favor is the so-called XRechnung which is also supported by this library.
-
-This library allows to create these xml descriptors in an easy way.
-
-To help developing the library, please become a sponsor:
-https://github.com/sponsors/stephanstapel
-
-You find the release notes here:
-https://github.com/stephanstapel/ZUGFeRD-csharp/releases
-
-Find more about the library here:
-https://github.com/stephanstapel/ZUGFeRD-csharp</Description>
+    <Description>Open-source .NET library for reading and creating ZUGFeRD, Factur-X and XRechnung documents. Maintainer support ends on November 30, 2026. From December 1, 2026, this package will be deprecated (Legacy). Existing versions remain available under their existing open-source license. 
+Active development continues in FactoorSharp, the commercial successor: https://www.factoorsharp.de</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/stephanstapel/ZUGFeRD-csharp/</PackageProjectUrl>
     <PackageTags>zugferd xml xrechnung pdf invoice</PackageTags>
     <Copyright>STwo Industries GmbH, 2026</Copyright>
-    <AssemblyVersion>18.0.0</AssemblyVersion>
+    <AssemblyVersion>18.0.1</AssemblyVersion>
     <AssemblyTrademark>http://www.s2-industries.com</AssemblyTrademark>
-    <FileVersion>18.0.0</FileVersion>
+    <FileVersion>18.0.1</FileVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyName>s2industries.ZUGFeRD</AssemblyName>
     <SignAssembly>true</SignAssembly>
