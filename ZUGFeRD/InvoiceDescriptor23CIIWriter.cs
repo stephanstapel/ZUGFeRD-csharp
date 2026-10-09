@@ -771,7 +771,8 @@ namespace s2industries.ZUGFeRD
 
             #region ApplicableHeaderTradeDelivery
             _WriteComment(_Writer, options, InvoiceCommentConstants.ApplicableHeaderTradeDeliveryComment);
-            _Writer.WriteStartElement("ram", "ApplicableHeaderTradeDelivery");
+            // CII-XSD: Der Container ist auch ohne Lieferdatum oder Lieferadresse obligatorisch.
+            _Writer.WriteStartRequiredElement("ram", "ApplicableHeaderTradeDelivery");
 
             //RelatedSupplyChainConsignment --> SpecifiedLogisticsTransportMovement --> ModeCode // Only in extended profile
             if (this._Descriptor.TransportMode != null)
