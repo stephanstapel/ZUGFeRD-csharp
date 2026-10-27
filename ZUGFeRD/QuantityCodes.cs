@@ -999,6 +999,18 @@ namespace s2industries.ZUGFeRD
         /// <summary>
         /// ton-force (US short)
         /// </summary>
-        L94
+        L94,
+
+        /// <summary>
+        /// stere
+        /// A unit of volume for stacked firewood: one cubic metre of stacked logs including the air gaps (German: Ster, Raummeter).
+        /// </summary>
+        G26,
+
+        /// <summary>
+        /// cord (128 ft3)
+        /// A unit of volume for stacked firewood: 128 cubic feet (approximately 3.62 cubic metres).
+        /// </summary>
+        M68
     }
 }
