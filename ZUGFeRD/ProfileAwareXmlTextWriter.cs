@@ -66,6 +66,10 @@ namespace s2industries.ZUGFeRD
     /// werden weder Start- noch End-Tag ausgegeben – das leere Element wird damit
     /// vollständig aus der Ausgabe entfernt.</para>
     ///
+    /// <para>Ausnahme: <see cref="WriteStartRequiredElement"/> erhält ausdrücklich markierte
+    /// Pflichtcontainer auch ohne Inhalt. Die Profilfilterung gilt weiterhin für das Element
+    /// und alle seine Eltern; optionale leere Elemente bleiben unterdrückt.</para>
+    ///
     /// <para><strong>Interne Funktionsweise:</strong><br/>
     /// <see cref="StackInfo.IsWritten"/> verfolgt, ob ein Start-Tag bereits geschrieben
     /// ("geflusht") wurde. Vor dem Schreiben jeglichen Inhalts durchläuft die private
@@ -192,6 +196,19 @@ namespace s2industries.ZUGFeRD
                 this.XmlStack.Push(new StackInfo() { Profile = safeProfile, IsVisible = true, Prefix = prefix, LocalName = localName });
             }
         } // !WriteStartElement()
+
+        /// <summary>
+        /// Erhält auch leere Pflichtcontainer, sofern sie und ihre Eltern im aktuellen Profil sichtbar sind.
+        /// </summary>
+        public void WriteStartRequiredElement(string prefix, string localName, Profile profile = Profile.Unknown)
+        {
+            WriteStartElement(prefix, localName, profile);
+            // Ausgeblendete Kinder dürfen keine noch leeren optionalen Eltern materialisieren.
+            if (_IsNodeVisible())
+            {
+                _FlushPendingStartElements();
+            }
+        } // !WriteStartRequiredElement()
 
         public void WriteEndElement()
         {

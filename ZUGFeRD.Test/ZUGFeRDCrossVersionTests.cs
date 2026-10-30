@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -1291,11 +1292,172 @@ namespace s2industries.ZUGFeRD.Test
 
             // load dom, find any empty elements (elements without child nodes and without value) and fail if any is found
             var doc = XDocument.Parse(xmlContent, LoadOptions.SetLineInfo);
+            XNamespace aggregateNamespace = "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100";
+            XNamespace invoiceNamespace = "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100";
+            // Nur der vom CII-XSD vorgeschriebene Liefercontainer darf ohne Lieferdaten leer bleiben.
             var emptyElements = doc.Descendants()
-                .Where(e => !e.Nodes().Any() && !e.Attributes().Any())
+                .Where(element => !element.Nodes().Any() && !element.Attributes().Any())
+                .Where(element => !(format == ZUGFeRDFormats.CII && version != ZUGFeRDVersion.Version1 &&
+                    element.Name == aggregateNamespace + "ApplicableHeaderTradeDelivery" &&
+                    element.Parent?.Name == invoiceNamespace + "SupplyChainTradeTransaction"))
                 .ToList();
             Assert.IsEmpty(emptyElements, $"Found empty elements in the XML: {string.Join("\r\n* ", emptyElements.Select(e => $"{e.Name.LocalName} (line {((IXmlLineInfo)e).LineNumber})"))}");
         } // !TestAvoidEmptyElementsWithMinimalInvoice()
+
+
+        /// <summary>
+        /// Pflichtcontainer dürfen die Profilfilterung und die Unterdrückung optionaler Leerelemente nicht umgehen.
+        /// </summary>
+        [TestMethod]
+        public void TestRequiredElementsRespectProfiles()
+        {
+            using MemoryStream stream = new();
+            Type writerType = typeof(InvoiceDescriptor).Assembly.GetType("s2industries.ZUGFeRD.ProfileAwareXmlTextWriter", true)!;
+            object writer = Activator.CreateInstance(writerType, stream, Profile.Extended, false)!;
+            // Der interne Writer bleibt intern; Reflection entspricht den vorhandenen DataTypeReader-Tests.
+            void Write(string methodName, params object[] arguments) => writerType.InvokeMember(methodName,
+                BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance | BindingFlags.OptionalParamBinding,
+                null, writer, arguments);
+
+            try
+            {
+                Write("WriteStartElement", "", "root");
+                Write("WriteStartElement", "", "optional");
+                Write("WriteEndElement");
+                Write("WriteStartRequiredElement", "", "required");
+                Write("WriteStartElement", "", "optionalChild");
+                Write("WriteEndElement");
+                Write("WriteEndElement");
+                Write("WriteStartRequiredElement", "", "withContent");
+                Write("WriteElementString", "", "child", "value");
+                Write("WriteEndElement");
+                Write("WriteStartRequiredElement", "", "withAttribute");
+                Write("WriteAttributeString", "id", "123");
+                Write("WriteEndElement");
+                Write("WriteStartRequiredElement", "", "excluded", Profile.Basic);
+                Write("WriteEndElement");
+                Write("WriteStartElement", "", "optionalParent");
+                Write("WriteStartRequiredElement", "", "excludedChild", Profile.Basic);
+                Write("WriteEndElement");
+                Write("WriteEndElement");
+                Write("WriteStartElement", "", "excludedParent", Profile.Basic);
+                Write("WriteStartRequiredElement", "", "requiredBelowExcludedParent", Profile.Extended);
+                Write("WriteEndElement");
+                Write("WriteEndElement");
+                Write("WriteElementString", "", "sibling", "ok");
+                Write("WriteEndElement");
+                Write("Flush");
+            }
+            finally
+            {
+                Write("Close");
+            }
+
+            XDocument document = XDocument.Parse(Encoding.UTF8.GetString(stream.ToArray()));
+            XElement root = document.Root!;
+            Assert.HasCount(4, root.Elements());
+            Assert.HasCount(1, root.Elements("required"));
+            Assert.IsEmpty(root.Element("required")!.Nodes());
+            Assert.AreEqual("value", root.Element("withContent")?.Element("child")?.Value);
+            Assert.AreEqual("123", root.Element("withAttribute")?.Attribute("id")?.Value);
+            Assert.AreEqual("ok", root.Element("sibling")?.Value);
+            Assert.IsFalse(root.Descendants().Any(element => element.Name.LocalName.StartsWith("optional") ||
+                element.Name.LocalName.StartsWith("excluded") || element.Name.LocalName == "requiredBelowExcludedParent"));
+        } // !TestRequiredElementsRespectProfiles()
+
+
+        /// <summary>
+        /// BG-14/BG-26 ersetzen BT-72 nicht; CII 2.x verlangt trotzdem genau einen Liefercontainer.
+        /// </summary>
+        [TestMethod]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended, "empty")]
+        [DataRow(ZUGFeRDVersion.Version1, Profile.Extended, "date")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Minimum, "empty")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.BasicWL, "empty")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Basic, "empty")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Comfort, "empty")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended, "empty")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended, "header")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended, "line")]
+        [DataRow(ZUGFeRDVersion.Version20, Profile.Extended, "date")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Minimum, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.BasicWL, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Basic, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Comfort, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.XRechnung1, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.XRechnung, "empty")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended, "header")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended, "line")]
+        [DataRow(ZUGFeRDVersion.Version23, Profile.Extended, "date")]
+        public void TestHeaderDeliveryCII(ZUGFeRDVersion version, Profile profile, string scenario)
+        {
+            InvoiceDescriptor descriptor = this._InvoiceProvider.CreateInvoice();
+            descriptor.ActualDeliveryDate = null;
+            Assert.IsNull(descriptor.ShipTo);
+            Assert.IsNull(descriptor.ShipFrom);
+            Assert.IsNull(descriptor.UltimateShipTo);
+            if (scenario == "date")
+            {
+                descriptor.ActualDeliveryDate = new DateTime(2026, 9, 18);
+            }
+            else if (scenario == "header")
+            {
+                descriptor.BillingPeriodStart = new DateTime(2026, 9, 1);
+                descriptor.BillingPeriodEnd = new DateTime(2026, 9, 30);
+            }
+            else if (scenario == "line")
+            {
+                descriptor.TradeLineItems[0].SetBillingPeriod(new DateTime(2026, 9, 1), new DateTime(2026, 9, 30));
+            }
+
+            using MemoryStream stream = new();
+            descriptor.Save(stream, version, profile, ZUGFeRDFormats.CII);
+            stream.Position = 0;
+            XDocument document = XDocument.Load(stream);
+            bool isVersion1 = version == ZUGFeRDVersion.Version1;
+            XElement transaction = document.Root!.Elements().Single(element => element.Name.LocalName ==
+                (isVersion1 ? "SpecifiedSupplyChainTradeTransaction" : "SupplyChainTradeTransaction"));
+            XNamespace aggregateNamespace = isVersion1 ? transaction.Elements().First().Name.Namespace :
+                "urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100";
+            string deliveryName = isVersion1 ? "ApplicableSupplyChainTradeDelivery" : "ApplicableHeaderTradeDelivery";
+            List<XElement> deliveries = transaction.Elements(aggregateNamespace + deliveryName).ToList();
+            if (isVersion1 && scenario == "empty")
+            {
+                // ZUGFeRD 1.0 erlaubt im XSD minOccurs="0"; dieses Verhalten bleibt unverändert.
+                Assert.IsEmpty(deliveries);
+                return;
+            }
+
+            Assert.HasCount(1, deliveries);
+            XElement delivery = deliveries[0];
+            string agreementName = isVersion1 ? "ApplicableSupplyChainTradeAgreement" : "ApplicableHeaderTradeAgreement";
+            string settlementName = isVersion1 ? "ApplicableSupplyChainTradeSettlement" : "ApplicableHeaderTradeSettlement";
+            Assert.AreEqual(aggregateNamespace + agreementName, delivery.ElementsBeforeSelf().Last().Name);
+            Assert.AreEqual(aggregateNamespace + settlementName, delivery.ElementsAfterSelf().First().Name);
+            if (scenario == "date")
+            {
+                Assert.HasCount(1, delivery.Elements(aggregateNamespace + "ActualDeliverySupplyChainEvent"));
+                Assert.AreEqual("20260918", delivery.Descendants().Single(element => element.Name.LocalName == "DateTimeString").Value);
+            }
+            else
+            {
+                Assert.IsEmpty(delivery.Nodes());
+                Assert.IsEmpty(delivery.Attributes());
+                Assert.IsFalse(document.Descendants().Any(element => element.Name.LocalName == "ActualDeliverySupplyChainEvent"));
+            }
+
+            if (scenario == "header" || scenario == "line")
+            {
+                XElement settlement = scenario == "header" ? transaction.Element(aggregateNamespace + settlementName)! :
+                    transaction.Elements(aggregateNamespace + "IncludedSupplyChainTradeLineItem").First()
+                        .Element(aggregateNamespace + "SpecifiedLineTradeSettlement")!;
+                XElement? period = settlement.Element(aggregateNamespace + "BillingSpecifiedPeriod");
+                Assert.IsNotNull(period);
+                Assert.AreEqual("20260901", period.Element(aggregateNamespace + "StartDateTime")?.Elements().Single().Value);
+                Assert.AreEqual("20260930", period.Element(aggregateNamespace + "EndDateTime")?.Elements().Single().Value);
+            }
+        } // !TestHeaderDeliveryCII()
 
 
         [TestMethod]        
